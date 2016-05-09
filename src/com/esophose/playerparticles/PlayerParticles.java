@@ -43,7 +43,7 @@ public class PlayerParticles extends JavaPlugin {
 		getCommand("pp").setTabCompleter(new ParticleCommandCompleter());
 		Bukkit.getPluginManager().registerEvents(new ParticleCreator(), this);
 		Bukkit.getPluginManager().registerEvents(new PluginUpdateListener(), this);
-		if(getConfig().getDouble("version") < Double.parseDouble(getDescription().getVersion())){
+		if(getConfig().getDouble("version") < Double.parseDouble(getDescription().getVersion())) {
 			File configFile = new File(getDataFolder(), "config.yml");
 			configFile.delete();
 			saveDefaultConfig();
@@ -56,18 +56,21 @@ public class PlayerParticles extends JavaPlugin {
 		startTasks();
 		
 		// Check for an update
-		if(MessageManager.getInstance().shouldCheckUpdates()) {
+		if(shouldCheckUpdates()) {
 			Updater updater = new Updater(this, 82823, this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
 			if(Double.parseDouble(updater.getLatestName().replaceAll("PlayerParticles v", "")) > Double.parseDouble(getPlugin().getDescription().getVersion())) {
 				updateVersion = updater.getLatestName().replaceAll("PlayerParticles v", "");
-				System.out.println("[PlayerParticles] An update (v" + updateVersion + ") is available! You are running v" + getPlugin().getDescription().getVersion());
+				getLogger().info("[PlayerParticles] An update (v" + updateVersion + ") is available! You are running v" + getPlugin().getDescription().getVersion());
 			}
 		}
 	}
 	
-	
 	public static Plugin getPlugin(){
 		return Bukkit.getPluginManager().getPlugin("PlayerParticles");
+	}
+	
+	public boolean shouldCheckUpdates() {
+		return getConfig().getBoolean("check-updates");
 	}
 	
 	private void checkDatabase() {
@@ -85,13 +88,13 @@ public class PlayerParticles extends JavaPlugin {
 				useMySQL = true;
 			} catch (ClassNotFoundException | SQLException e) {
 				e.printStackTrace();
-				System.out.println("Failed to connect to MySQL Database! Check to see if your config is correct!");
+				getLogger().info("Failed to connect to MySQL Database! Check to see if your config is correct!");
 				useMySQL = false;
 			}
 		}else{
 			useMySQL = false;
 		}
-		System.out.println("[PlayerParticles] Using mySQL for data storage: " + useMySQL);
+		getLogger().info("[PlayerParticles] Using mySQL for data storage: " + useMySQL);
 	}
 	
 	private void startTasks() {

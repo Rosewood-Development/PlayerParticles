@@ -11,10 +11,10 @@
 # ====================================================#
 
 # DO NOT CHANGE THIS UNDER ANY CIRCUMSTANCE (Will reset your config)
-version: 3.7
+version: 3.8
 
 # There are 20 minecraft ticks per second
-# The default value of 20 means a particle will be displayed every tick
+# The default value of 1 means a particle will be displayed once every tick
 # That means 20 particles will be displayed per second
 # If ticks-per-particle was set to 5, then 4 particles would be displayed per second since 20/5 is 4
 # If your server is experiencing lag after installing this plugin, raising this value should help

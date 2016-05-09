@@ -67,11 +67,4 @@ public class PermissionHandler {
 		return list;
 	}
 	
-	public static boolean canReload(Player p) {
-		if(p.hasPermission("playerparticles.reload") || p.hasPermission("playerparticles.*")) {
-			return true;
-		}
-		return false;
-	}
-	
 }

@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 public class MessageManager {
 
 	private static MessageManager instance = new MessageManager();
-	private boolean messagesEnabled, prefix, checkForUpdates;
+	private boolean messagesEnabled, prefix;
 	private String messagePrefix;
 	
 	private MessageManager() {
@@ -22,23 +22,10 @@ public class MessageManager {
 		prefix = PlayerParticles.getPlugin().getConfig().getBoolean("use-message-prefix");
 		messagePrefix = PlayerParticles.getPlugin().getConfig().getString("message-prefix");
 		messagePrefix = messagePrefix.replace("&", "§");
-		checkForUpdates = PlayerParticles.getPlugin().getConfig().getBoolean("check-updates");
-	}
-	
-	public void reload() {
-		messagesEnabled = PlayerParticles.getPlugin().getConfig().getBoolean("messages-enabled");
-		prefix = PlayerParticles.getPlugin().getConfig().getBoolean("use-message-prefix");
-		messagePrefix = PlayerParticles.getPlugin().getConfig().getString("message-prefix");
-		messagePrefix = messagePrefix.replace("&", "§");
-		checkForUpdates = PlayerParticles.getPlugin().getConfig().getBoolean("check-updates");
 	}
 	
 	public static MessageManager getInstance() {
 		return instance;
-	}
-	
-	public boolean shouldCheckUpdates() {
-		return checkForUpdates;
 	}
 	
 	public void sendMessage(Player player, String message, ChatColor color) {

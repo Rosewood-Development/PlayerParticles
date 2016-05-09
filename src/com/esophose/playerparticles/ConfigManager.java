@@ -10,14 +10,19 @@ package com.esophose.playerparticles;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Scanner;
 
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import com.esophose.playerparticles.libraries.particles.ParticleEffect.ParticleType;
 
@@ -182,5 +187,52 @@ public class ConfigManager {
 			return ((ArrayList<String>) PlayerParticles.getPlugin().getConfig().get("disabled-worlds"));
 		}else return null;
 	}
+	
+	public void updateConfig(JavaPlugin plugin) {
+        HashMap<String, Object> newConfig = getConfigVals();
+        FileConfiguration c = plugin.getConfig();
+        for (String var : c.getKeys(false)) {
+            newConfig.remove(var);
+        }
+        if (newConfig.size() != 0) {
+            for (String key : newConfig.keySet()) {
+                c.set(key, newConfig.get(key));
+            }
+            try {
+            	
+                c.set("version", getVersion());
+                c.save(new File(plugin.getDataFolder(), "config.yml"));
+            } catch (IOException e) {}
+        }
+    }
+	
+    public HashMap<String, Object> getConfigVals() {
+        HashMap<String, Object> var = new HashMap<>();
+        YamlConfiguration config = new YamlConfiguration();
+        try {
+            config.loadFromString(stringFromInputStream(PlayerParticles.class.getResourceAsStream("/config.yml")));
+        } catch (InvalidConfigurationException e) {}
+        for (String key : config.getKeys(false)) {
+            var.put(key, config.get(key));
+        }
+        return var;
+    }
+    
+    public double getVersion() {
+    	double version = -1;
+    	try {
+    		YamlConfiguration config = new YamlConfiguration();
+    		config.loadFromString(stringFromInputStream(PlayerParticles.class.getResourceAsStream("/config.yml")));
+    		version = config.getDouble("version");
+    	}catch(InvalidConfigurationException e) { }
+    	return version;
+    }
+    
+    public String stringFromInputStream(InputStream in) {
+    	Scanner scanner = new Scanner(in);
+    	String string = scanner.useDelimiter("\\A").next();
+    	scanner.close();
+        return string;
+    }
 	
 }

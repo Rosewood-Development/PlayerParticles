@@ -46,7 +46,7 @@ public class ParticleCreator extends BukkitRunnable implements Listener {
 			ResultSet res = null;
 			try {
 				s = PlayerParticles.c.createStatement();
-				 res = s.executeQuery("SELECT * FROM playerparticles WHERE player_name = '" + e.getPlayer().getName() + "';");
+				res = s.executeQuery("SELECT * FROM playerparticles WHERE player_name = '" + e.getPlayer().getName() + "';");
 				if(!res.next()) {
 					statement = PlayerParticles.c.createStatement();
 					statement.executeUpdate("INSERT INTO playerparticles SET player_name = '" + e.getPlayer().getName() + "', particle = NULL, style = 'none';");
@@ -80,9 +80,11 @@ public class ParticleCreator extends BukkitRunnable implements Listener {
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent e) {
 		if(map.containsKey(e.getPlayer().getName()) && styleMap.get(e.getPlayer().getName()) == ParticleStyle.MOVE) {
-			Location loc = e.getPlayer().getLocation();
-			loc.setY(loc.getY() + 1);
-			handleStyleNone(map.get(e.getPlayer().getName()), loc);
+			if(PermissionHandler.hasStylePermission(e.getPlayer(), ParticleStyle.MOVE)) {
+				Location loc = e.getPlayer().getLocation();
+				loc.setY(loc.getY() + 1);
+				handleStyleNone(map.get(e.getPlayer().getName()), loc);
+			}
 		}
 	}
 	
@@ -188,7 +190,6 @@ public class ParticleCreator extends BukkitRunnable implements Listener {
 				Location newLocation = new Location(location.getWorld(), newX, newY, newZ);
 				particle.display(newLocation);
 			}
-			return;
 		}else if(style == ParticleStyle.HALO) {
 			if(step % 2 == 0) return;
 			ParticleEffect particle = null;
@@ -205,13 +206,11 @@ public class ParticleCreator extends BukkitRunnable implements Listener {
 				Location newLocation = new Location(location.getWorld(), newX, newY, newZ);
 				particle.display(newLocation);
 			}
-			return;
 		}else if(style == ParticleStyle.POINT) {
 			ParticleEffect particle = null;
 			if(effect == ParticleType.RAINBOW || effect == ParticleType.NOTE) particle = new ParticleEffect(effect, 0.0F, 0.0F, 0.0F, 1.0F, 1);
 			else particle = new ParticleEffect(effect, 0.0F, 0.0F, 0.0F, 0.0F, 1);
 			particle.display(location.add(0.0, 1.5, 0.0));
-			return;
 		}else if(style == ParticleStyle.SPIN) {
 			ParticleEffect particle = null;
 			if(effect == ParticleType.RAINBOW || effect == ParticleType.NOTE) particle = new ParticleEffect(effect, 0.0F, 0.0F, 0.0F, 1.0F, 1);
@@ -235,7 +234,15 @@ public class ParticleCreator extends BukkitRunnable implements Listener {
 				double dz = -(Math.sin((helixStep / 90) * (Math.PI * 2) + ((Math.PI / 2) * i))) * ((60 - Math.abs(helixYStep)) / 60);
 				particle.display(new Location(location.getWorld(), location.getX() + dx, location.getY() + dy, location.getZ() + dz));
 			}
-			return;
+		}else if(style == ParticleStyle.ORB) {
+			ParticleEffect particle = null;
+			if(effect == ParticleType.RAINBOW || effect == ParticleType.NOTE) particle = new ParticleEffect(effect, 0.0F, 0.0F, 0.0F, 1.0F, 1);
+			else particle = new ParticleEffect(effect, 0.0F, 0.0F, 0.0F, 0.0F, 1);
+			for(int i = 0; i < 4; i++) {
+				double dx = -(Math.cos((helixStep / 90) * (Math.PI * 2) + ((Math.PI / 2) * i)));
+				double dz = -(Math.sin((helixStep / 90) * (Math.PI * 2) + ((Math.PI / 2) * i)));
+				particle.display(new Location(location.getWorld(), location.getX() + dx, location.getY(), location.getZ() + dz));
+			}
 		}
 	}
 	

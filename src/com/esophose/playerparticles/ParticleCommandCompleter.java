@@ -19,13 +19,9 @@ public class ParticleCommandCompleter implements TabCompleter {
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
-		
 		if(cmd.getName().equalsIgnoreCase("pp")) {
-			
 			if(args.length == 1) {
-				
 				List<String> list = PermissionHandler.getParticlesUserHasPermissionFor((Player)sender);
-				if(PermissionHandler.canReload((Player)sender)) list.add("reload");
 				list.add("list");
 				list.add("styles");
 				list.add("style");
@@ -33,17 +29,9 @@ public class ParticleCommandCompleter implements TabCompleter {
 				list.add("worlds");
 				list.add("help");
 				return list;
-				
 			}
-			
-			if(args.length == 2) {
-				
-				return PermissionHandler.getStylesUserHasPermissionFor((Player)sender);
-				
-			}
-			
+			if(args.length == 2) return PermissionHandler.getStylesUserHasPermissionFor((Player)sender);
 		}
-		
 		return null;
 	}
 

@@ -16,7 +16,8 @@ public enum ParticleStyle {
 	POINT,
 	MOVE,
 	SPIN,
-	QUADHELIX;
+	QUADHELIX,
+	ORB;
 	
 	public static ParticleStyle styleFromString(String particle){
 		for(ParticleStyle style : ParticleStyle.values()){
