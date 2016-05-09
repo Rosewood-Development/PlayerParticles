@@ -1,0 +1,7 @@
+name: PlayerParticles
+main: com.esophose.playerparticles.PlayerParticles
+version: 3.7
+description: Make Particles Around Players
+commands:
+    pp:
+        description: Particles Command.

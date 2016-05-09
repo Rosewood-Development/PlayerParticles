@@ -14,9 +14,6 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 
-# Windows shortcuts
-*.lnk
-
 # =========================
 # Operating System Files
 # =========================
@@ -28,8 +25,17 @@ $RECYCLE.BIN/
 .AppleDouble
 .LSOverride
 
+# Icon must end with two \r
+Icon
+
 # Thumbnails
 ._*
+
+# Personal stuff
+*.project
+*.classpath
+/bin
+/.settings
 
 # Files that might appear on external disk
 .Spotlight-V100

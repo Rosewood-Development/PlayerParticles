@@ -1,0 +1,178 @@
+# __________.__                           __________                __  .__       .__                              ________  
+# \______   \  | _____  ___.__. __________\______   \_____ ________/  |_|__| ____ |  |   ____   ______       ___  _\_____  \ 
+#  |     ___/  | \__  \<   |  |/ __ \_  __ \     ___/\__  \\_  __ \   __\  |/ ___\|  | _/ __ \ /  ___/       \  \/ / _(__  < 
+#  |    |   |  |__/ __ \\___  \  ___/|  | \/    |     / __ \|  | \/|  | |  \  \___|  |_\  ___/ \___ \         \   / /       \
+#  |____|   |____(____  / ____|\___  >__|  |____|    (____  /__|   |__| |__|\___  >____/\___  >____  >         \_/ /______  /
+#                     \/\/         \/                     \/                    \/          \/     \/                     \/ 
+
+# ====================================================#
+#                PlayerParticles Config               #
+#      DO NOT DELETE OR EDIT THE FIELD "version"!     #
+# ====================================================#
+
+# DO NOT CHANGE THIS UNDER ANY CIRCUMSTANCE (Will reset your config)
+version: 3.7
+
+# There are 20 minecraft ticks per second
+# The default value of 20 means a particle will be displayed every tick
+# That means 20 particles will be displayed per second
+# If ticks-per-particle was set to 5, then 4 particles would be displayed per second since 20/5 is 4
+# If your server is experiencing lag after installing this plugin, raising this value should help
+# Setting this value to 0.5 will cause 40 particles to appear per second. Be warned this could cause strain on the server.
+# Changing this 'may' cause style timing to get messed up
+# Only use integer values, excluding 0.5
+# Default: 1
+ticks-per-particle: 1
+
+# Check for new versions of the plugin
+# Default: true
+check-updates: true
+
+# The worlds which this plugin is disabled in
+# Default: []
+disabled-worlds: []
+#  - your_world_name_here
+#  - add_more_under_these
+  
+# If you're using other plugins to execute commands you may wish to turn off messages
+# Default: true
+messages-enabled: true
+
+# Whether or not to use the message-prefix field when displaying messages
+# Default: true
+use-message-prefix: true
+
+# The prefix to use for all PlayerParticle messages
+# Use & to set color / format
+# This is useless if use-message-prefix is set to false
+# Default: '&c[&ePlayerParticles&c]'
+message-prefix: '&7[&3PlayerParticles&7]'
+
+# ================================================================ #
+#                     MESSAGE CONFIGURATION                        #
+# Important Notes:                                                 #
+# * {PARTICLE} displays the particle argument used in the command  #
+# * {STYLE} displays the style argument used in the command        #
+# * You can not use the apostrophe character! ( ' )                #
+# ================================================================ #
+
+#################
+#   Particles   #
+#################
+
+# No Particle Permission
+# Default: 'You do not have permission to use type {PARTICLE} particles!'
+message-no-permission: 'You do not have permission to use type {PARTICLE} particles!'
+
+# /pp list No Particles
+# Default: 'You do not have permission to use any particles!'
+message-no-particles: 'You do not have permission to use any particles!'
+
+# Now Using Particles
+# Default: 'Now using type {PARTICLE} particles!'
+message-now-using: 'Now using type {PARTICLE} particles!'
+
+# Cleared Particles
+# Default: 'Cleared your particles!'
+message-cleared-particles: 'Cleared your particles!'
+
+# You Can Use Particles
+# Default: 'You can use:'
+message-use: 'You can use:'
+
+# Invalid Particle Type
+# Default: 'Invalid particle type!'
+message-invalid-type: 'Invalid particle type!'
+
+##################
+#     Styles     #
+##################
+
+# No Style Permission
+# Default: 'You do not have permission to use the style type {STYLE}!'
+message-no-permission-style: 'You do not have permission to use the style type {STYLE}!'
+
+# /pp styles No Styles
+# Default: 'You do not have permission to use any particles!'
+message-no-styles: 'You do not have permission to use any styles!'
+
+# Now Using Style
+# Default: 'Now using style type {STYLE}!'
+message-now-using-style: 'Now using style type {STYLE}!'
+
+# Cleared Style
+# Default: 'Cleared your particles!'
+message-cleared-style: 'Cleared your style!'
+
+# You Can Use Styles
+# Default: 'You can use:'
+message-use-style: 'You can use:'
+
+# Invalid Style Type
+# Default: 'Invalid style type!'
+message-invalid-type-style: 'Invalid style type!'
+
+#################
+#     Other     #
+#################
+
+# Usage
+# Default: 'Usage:'
+message-usage: 'Usage:'
+
+# Invalid Arguments
+# Default: 'Invalid arguments!'
+message-invalid-arguments: 'Invalid Arguments!'
+
+# Reload
+# Default: 'Reloaded Config!'
+message-reload: 'Reloaded Config!'
+
+# Available Commands
+# Default: 'Available Commands:'
+message-available-commands: 'Available Commands:'
+
+# Disabled Worlds None
+# Default: 'Particles are not disabled in any worlds!'
+message-disabled-worlds-none: 'Particles are not disabled in any worlds!'
+
+# Disabled Worlds
+# Default: 'Particles are disabled in these worlds:'
+message-disabled-worlds: 'Particles are disabled in these worlds:'
+
+# ================================================================ #
+#                     DATABASE CONFIGURATION                       #
+# Information:                                                     #
+# * This is meant for people who have multiple servers connected   #
+#   together through BungeeCord. Unless you have multiple servers, #
+#   it is recommended to keep the database storage disabled for    #
+#   the best performance!                                          #
+# ================================================================ #
+
+# Enable Database
+# Default: false
+database-enable: false
+
+# =================================================================== #
+# The following are only required if database-enable is set to 'true' #
+# =================================================================== #
+
+# Database Hostname
+# Default: ''
+database-hostname: ''
+
+# Database Port
+# Default: 3306
+database-port: 3306
+
+# Database Name
+# Default: ''
+database-name: ''
+
+# Database User Name
+# Default: ''
+database-user-name: ''
+
+# Database User Password
+# Default: ''
+database-user-password: ''
