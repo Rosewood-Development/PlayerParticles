@@ -31,13 +31,31 @@ import com.esophose.playerparticles.updater.Updater;
 
 public class PlayerParticles extends JavaPlugin {
 	
+	/**
+	 * The version a new update has, will be null if the config has it disabled or if there is no new version
+	 */
 	public static String updateVersion = null;
 	
+	/**
+	 * The MySQL connection
+	 */
 	public static MySQL mySQL = null;
 	public static Connection c = null;
 	
+	/**
+	 * Whether or not to use MySQL as determined in the config
+	 */
 	public static boolean useMySQL = false;
 	
+	/**
+	 * Saves the default config if it doesn't exist
+	 * Registers the tab completer and the event listeners
+	 * Checks if the config needs to be updated to the new version
+	 * Makes sure the database is accessable
+	 * Updates the map and styleMap @see ParticleCreator
+	 * Starts the particle spawning task
+	 * Checks for any updates if checking is enabled in the config
+	 */
 	public void onEnable(){
 		saveDefaultConfig();
 		getCommand("pp").setTabCompleter(new ParticleCommandCompleter());
@@ -48,7 +66,7 @@ public class PlayerParticles extends JavaPlugin {
 			configFile.delete();
 			saveDefaultConfig();
 			reloadConfig();
-			getLogger().warning("config.yml has been updated!");
+			getLogger().warning("[PlayerParticles] config.yml has been updated!");
 		}
 		checkDatabase();
 		ParticleCreator.updateMap();
@@ -57,22 +75,41 @@ public class PlayerParticles extends JavaPlugin {
 		
 		// Check for an update
 		if(shouldCheckUpdates()) {
+			getLogger().info("[PlayerParticles] Checking for an update...");
 			Updater updater = new Updater(this, 82823, this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
 			if(Double.parseDouble(updater.getLatestName().replaceAll("PlayerParticles v", "")) > Double.parseDouble(getPlugin().getDescription().getVersion())) {
 				updateVersion = updater.getLatestName().replaceAll("PlayerParticles v", "");
 				getLogger().info("[PlayerParticles] An update (v" + updateVersion + ") is available! You are running v" + getPlugin().getDescription().getVersion());
+			} else {
+				getLogger().info("[PlayerParticles] No update was found");
 			}
 		}
 	}
 	
+	/**
+	 * Gets the instance of the plugin running on the server
+	 * 
+	 * @return The PlayerParticles plugin instance
+	 */
 	public static Plugin getPlugin(){
 		return Bukkit.getPluginManager().getPlugin("PlayerParticles");
 	}
 	
+	/**
+	 * Checks the config if the plugin can look for updates
+	 * 
+	 * @return True if check-updates is set to true in the config
+	 */
 	public boolean shouldCheckUpdates() {
 		return getConfig().getBoolean("check-updates");
 	}
 	
+	/**
+	 * Checks if database-enable is true in the config, if it is then continue
+	 * Gets the database connection information from the config and tries to connect to the server
+	 * Creates a new table if it doesn't exist called playerparticles
+	 * Sets useMySQL to true if it connects successfully, and false if it fails or isn't enabled
+	 */
 	private void checkDatabase() {
 		if(getConfig().getBoolean("database-enable")) {
 			String hostname = getConfig().getString("database-hostname");
@@ -88,7 +125,7 @@ public class PlayerParticles extends JavaPlugin {
 				useMySQL = true;
 			} catch (ClassNotFoundException | SQLException e) {
 				e.printStackTrace();
-				getLogger().info("Failed to connect to MySQL Database! Check to see if your config is correct!");
+				getLogger().info("[PlayerParticles] Failed to connect to MySQL Database! Check to see if your config is correct!");
 				useMySQL = false;
 			}
 		}else{
@@ -97,6 +134,10 @@ public class PlayerParticles extends JavaPlugin {
 		getLogger().info("[PlayerParticles] Using mySQL for data storage: " + useMySQL);
 	}
 	
+	/**
+	 * Starts the task reponsible for spawning particles
+	 * Starts two with 1 tick delay if ticks-per-particle is set to 0.5
+	 */
 	private void startTasks() {
 		double ticks = getConfig().getDouble("ticks-per-particle");
 		if(ticks == 0.5){
@@ -106,8 +147,21 @@ public class PlayerParticles extends JavaPlugin {
 			new ParticleCreator().runTaskTimer(this, 20, (long) ticks);
 	}
 	
-	@Override
+	/**
+	 * Called when a player does a command and continues if the command is /pp
+	 * Executes all the commands and methods 
+	 * Does some sorcery 
+	 * 
+	 * Needs to be rewritten as a separate CommandManager
+	 * 
+	 * @param sender Who executed the command
+	 * @param cmd The command
+	 * @param label The command label
+	 * @param args The arguments following the command
+	 * @return True if everything went as planned (should always be true)
+	 */
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		if(!(sender instanceof Player)) return true;
 		Player p = (Player) sender;
 		if(args.length == 1 && args[0].equalsIgnoreCase("worlds")) {
 			String worlds = "";

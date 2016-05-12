@@ -19,6 +19,12 @@ public enum ParticleStyle {
 	QUADHELIX,
 	ORB;
 	
+	/**
+	 * Gets the ParticleStyle with the name given, returns null if not found
+	 * 
+	 * @param particle The string of the style to search for
+	 * @return The ParticleStyle with the name requested
+	 */
 	public static ParticleStyle styleFromString(String particle){
 		for(ParticleStyle style : ParticleStyle.values()){
 			if(style.toString().toLowerCase().replace("_", "").equals(particle)) return style;

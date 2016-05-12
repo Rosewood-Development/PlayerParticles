@@ -18,6 +18,11 @@ import com.esophose.playerparticles.PlayerParticles;
 
 public class PluginUpdateListener implements Listener {
 
+	/**
+	 * Called when a player joins and notifies ops if an update is available
+	 * 
+	 * @param e The event
+	 */
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		if(e.getPlayer().isOp()) {

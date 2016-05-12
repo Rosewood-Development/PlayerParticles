@@ -10,37 +10,53 @@ package com.esophose.playerparticles;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
 
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import com.esophose.playerparticles.libraries.particles.ParticleEffect.ParticleType;
 
 public class ConfigManager {
 	
+	/**
+	 * The instance of the ConfigManager used for effect data
+	 */
 	private static ConfigManager instance = new ConfigManager("effectData");
+	/**
+	 * The instance of the ConfigManager used for style data
+	 */
 	private static ConfigManager styleInstance = new ConfigManager("styleData");
+	/**
+	 * The file the data is located in for the instance
+	 */
 	private File file;
+	/**
+	 * The configuration used to edit the .yaml file
+	 */
 	private FileConfiguration config;
 	
+	/**
+	 * @return The instance of the config for effects
+	 */
 	public static ConfigManager getInstance() {
 		return instance;
 	}
 	
+	/**
+	 * @return The instance of the config for styles
+	 */
 	public static ConfigManager getStyleInstance() {
 		return styleInstance;
 	}
 	
+	/**
+	 * @param fileName Will either be "effectData" or "styleData"
+	 */
 	private ConfigManager(String fileName) {		
 		if (!PlayerParticles.getPlugin().getDataFolder().exists()) PlayerParticles.getPlugin().getDataFolder().mkdir();
 		
@@ -54,6 +70,10 @@ public class ConfigManager {
 		config = YamlConfiguration.loadConfiguration(file);
 	}
 	
+	/**
+	 * Removes any data contained within the current config instance
+	 * Never used
+	 */
 	public void flushData() {
 		for(String key : config.getKeys(false)) {
 			config.set(key, null);
@@ -62,6 +82,10 @@ public class ConfigManager {
 		catch (IOException e) {e.printStackTrace();}
 	}
 	
+	/**
+	 * Removes all the player, effect, and style data from the connected database
+	 * Never used
+	 */
 	public static void flushDatabase() {
 		if(PlayerParticles.useMySQL) {
 			Statement statement;
@@ -74,6 +98,13 @@ public class ConfigManager {
 		}
 	}
 	
+	/**
+	 * Saves the particle effect to the player's name in either the database or config
+	 * Should only be called from the effectData instance
+	 * 
+	 * @param type The type of the particle
+	 * @param player The player to save the particle to
+	 */
 	public void setParticle(ParticleType type, Player player){
 		if(PlayerParticles.useMySQL) {
 			Statement statement;
@@ -90,6 +121,12 @@ public class ConfigManager {
 		}
 	}
 	
+	/**
+	 * Removes the particle effect from the player's name in either the database or config
+	 * Should only be called from the effectData instance
+	 * 
+	 * @param player The player to clear the particle effect from
+	 */
 	public void resetParticle(Player player){
 		if(PlayerParticles.useMySQL) {
 			Statement statement;
@@ -106,6 +143,12 @@ public class ConfigManager {
 		}
 	}
 	
+	/**
+	 * Gets the particle effect saved in either the database or config for the player
+	 * 
+	 * @param player The player to get the particle effect data for
+	 * @return The particle effect for the player
+	 */
 	public ParticleType getParticle(Player player){
 		if(PlayerParticles.useMySQL) {
 			Statement statement;
@@ -124,6 +167,13 @@ public class ConfigManager {
 		return null;
 	}
 	
+	/**
+	 * Saves the style effect to the player's name in either the database or config
+	 * Should only be called from the effectData instance
+	 * 
+	 * @param style The style to save for the player
+	 * @param player The player to save the style to
+	 */
 	public void setStyle(ParticleStyle style, Player player) {
 		if(PlayerParticles.useMySQL) {
 			Statement statement;
@@ -140,6 +190,12 @@ public class ConfigManager {
 		}
 	}
 	
+	/**
+	 * Removes the particle effect from the player's name in either the database or config
+	 * Should only be called from the effectData instance
+	 * 
+	 * @param player The player to reset the style for
+	 */
 	public void resetStyle(Player player) {
 		if(PlayerParticles.useMySQL) {
 			Statement statement;
@@ -156,6 +212,12 @@ public class ConfigManager {
 		}
 	}
 	
+	/**
+	 * Gets the particle effect saved in either the database or config for the player
+	 * 
+	 * @param player The player to get the particle style for
+	 * @return The particle style for the player
+	 */
 	public ParticleStyle getStyle(Player player) {
 		if(PlayerParticles.useMySQL) {
 			Statement statement;
@@ -174,6 +236,12 @@ public class ConfigManager {
 		return ParticleStyle.NONE;
 	}
 	
+	/**
+	 * Checks if a world is disabled for particles to spawn in
+	 * 
+	 * @param world The world name to check
+	 * @return True if the world is disabled
+	 */
 	@SuppressWarnings("unchecked")
 	public boolean isWorldDisabled(String world) {
 		if(PlayerParticles.getPlugin().getConfig().get("disabled-worlds") != null && ((ArrayList<String>) PlayerParticles.getPlugin().getConfig().get("disabled-worlds")).contains(world)) {
@@ -181,58 +249,16 @@ public class ConfigManager {
 		}else return false;
 	}
 	
+	/**
+	 * Gets all the worlds that are disabled
+	 * 
+	 * @return All world names that are disabled
+	 */
 	@SuppressWarnings("unchecked")
 	public ArrayList<String> getDisabledWorlds() {
 		if(PlayerParticles.getPlugin().getConfig().get("disabled-worlds") != null) {
 			return ((ArrayList<String>) PlayerParticles.getPlugin().getConfig().get("disabled-worlds"));
 		}else return null;
 	}
-	
-	public void updateConfig(JavaPlugin plugin) {
-        HashMap<String, Object> newConfig = getConfigVals();
-        FileConfiguration c = plugin.getConfig();
-        for (String var : c.getKeys(false)) {
-            newConfig.remove(var);
-        }
-        if (newConfig.size() != 0) {
-            for (String key : newConfig.keySet()) {
-                c.set(key, newConfig.get(key));
-            }
-            try {
-            	
-                c.set("version", getVersion());
-                c.save(new File(plugin.getDataFolder(), "config.yml"));
-            } catch (IOException e) {}
-        }
-    }
-	
-    public HashMap<String, Object> getConfigVals() {
-        HashMap<String, Object> var = new HashMap<>();
-        YamlConfiguration config = new YamlConfiguration();
-        try {
-            config.loadFromString(stringFromInputStream(PlayerParticles.class.getResourceAsStream("/config.yml")));
-        } catch (InvalidConfigurationException e) {}
-        for (String key : config.getKeys(false)) {
-            var.put(key, config.get(key));
-        }
-        return var;
-    }
-    
-    public double getVersion() {
-    	double version = -1;
-    	try {
-    		YamlConfiguration config = new YamlConfiguration();
-    		config.loadFromString(stringFromInputStream(PlayerParticles.class.getResourceAsStream("/config.yml")));
-    		version = config.getDouble("version");
-    	}catch(InvalidConfigurationException e) { }
-    	return version;
-    }
-    
-    public String stringFromInputStream(InputStream in) {
-    	Scanner scanner = new Scanner(in);
-    	String string = scanner.useDelimiter("\\A").next();
-    	scanner.close();
-        return string;
-    }
 	
 }

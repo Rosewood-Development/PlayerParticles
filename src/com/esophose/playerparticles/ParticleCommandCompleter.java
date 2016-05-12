@@ -17,7 +17,15 @@ import org.bukkit.entity.Player;
 
 public class ParticleCommandCompleter implements TabCompleter {
 
-	@Override
+	/**
+	 * Activated when a user pushes tab in chat prefixed with /pp 
+	 * 
+	 * @param sender The sender that hit tab, should always be a player
+	 * @param cmd The command the player is executing
+	 * @param alias The possible alias for the command
+	 * @param args All arguments following the command
+	 * @return A list of commands available to the sender
+	 */
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
 		if(cmd.getName().equalsIgnoreCase("pp")) {
 			if(args.length == 1) {

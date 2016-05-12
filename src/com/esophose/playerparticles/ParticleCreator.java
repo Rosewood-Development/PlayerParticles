@@ -28,16 +28,43 @@ import com.esophose.playerparticles.libraries.particles.ParticleEffect.ParticleT
 
 public class ParticleCreator extends BukkitRunnable implements Listener {
 	
+	/**
+	 * The map containing all the effects for players
+	 */
 	private static HashMap<String, ParticleType> map = new HashMap<String, ParticleType>();
+	/**
+	 * The map containing all the styles for players
+	 */
 	private static HashMap<String, ParticleStyle> styleMap = new HashMap<String, ParticleStyle>();
+	
+	/**
+	 * The timing system used for the styles HALO and SPIRAL
+	 */
 	private double step = 0;
 	
+	/**
+	 * The timing system used for the styles QUAD_HELIX and ORB
+	 */
 	private double helixStep = 0;
 	private double helixYStep = 0;
 	private boolean reverse = false;
 	
+	/**
+	 * Used to check for the database timing out
+	 */
 	private double mysqltimer = 0;
 	
+	/**
+	 * First checks if the player is in the database (if it is enabled), if they are not then add them to the database
+	 * Checks to see if that player has any effects or styles saved in either the database or config
+	 * If so add the values to the map and/or styleMap
+	 * 
+	 * Problematically clears the map and style map every time a player joins and refills the values
+	 * Why does it do this?
+	 * Figure out why or remove updateMap() and updateStyleMap()
+	 * 
+	 * @param e The event
+	 */
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e){
 		if(PlayerParticles.useMySQL) {
@@ -50,7 +77,7 @@ public class ParticleCreator extends BukkitRunnable implements Listener {
 				if(!res.next()) {
 					statement = PlayerParticles.c.createStatement();
 					statement.executeUpdate("INSERT INTO playerparticles SET player_name = '" + e.getPlayer().getName() + "', particle = NULL, style = 'none';");
-					System.out.println("New player added to PlayerParticles database: " + e.getPlayer().getName());
+					PlayerParticles.getPlugin().getLogger().info("[PlayerParticles] New player added to database: " + e.getPlayer().getName());
 				}
 			} catch (SQLException e2) {
 				e2.printStackTrace();
@@ -67,6 +94,12 @@ public class ParticleCreator extends BukkitRunnable implements Listener {
 		updateStyleMap();
 	}
 	
+	/**
+	 * Removes the player from the map and styleMap if they have any values in them
+	 * Prevents spawning particles at a null location
+	 * 
+	 * @param e The event
+	 */
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent e){
 		if(map.containsKey(e.getPlayer().getName())){
@@ -77,6 +110,11 @@ public class ParticleCreator extends BukkitRunnable implements Listener {
 		}
 	}
 	
+	/**
+	 * A somewhat costly solution to updating the MOVE style and displaying the appropriate particles
+	 * 
+	 * @param e The event
+	 */
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent e) {
 		if(map.containsKey(e.getPlayer().getName()) && styleMap.get(e.getPlayer().getName()) == ParticleStyle.MOVE) {
@@ -88,15 +126,30 @@ public class ParticleCreator extends BukkitRunnable implements Listener {
 		}
 	}
 	
+	/**
+	 * Adds the player with the given effect to the map
+	 * 
+	 * @param player The player to add the effect to
+	 * @param effect The effect
+	 */
 	public static void addMap(Player player, ParticleType effect){
 		map.remove(player.getName());
 		map.put(player.getName(), effect);
 	}
 	
+	/**
+	 * Removes the player from the map
+	 * 
+	 * @param player The player to remove
+	 */
 	public static void removeMap(Player player){
 		map.remove(player.getName());
 	}
 	
+	/**
+	 * Clears the map then adds everybody on the server if they have effects saved
+	 * Used for when the server reloads and we can't rely on players rejoining
+	 */
 	public static void updateMap(){
 		map.clear();
 		for(Player player : Bukkit.getOnlinePlayers()){
@@ -105,15 +158,30 @@ public class ParticleCreator extends BukkitRunnable implements Listener {
 		}
 	}
 	
+	/**
+	 * Adds the player with the given style to the styleMap
+	 * 
+	 * @param player The player to add the style to
+	 * @param style The style
+	 */
 	public static void addStyleMap(Player player, ParticleStyle style) {
 		styleMap.remove(player.getName());
 		styleMap.put(player.getName(), style);
 	}
 	
+	/**
+	 * Removes the player from the styleMap
+	 * 
+	 * @param player The player to remove
+	 */
 	public static void removeStyleMap(Player player){
 		styleMap.remove(player.getName());
 	}
 	
+	/**
+	 * Clears the styleMap then adds everybody on the server if they have effects saved
+	 * Used for when the server reloads and we can't rely on the players rejoining
+	 */
 	public static void updateStyleMap(){
 		styleMap.clear();
 		for(Player player : Bukkit.getOnlinePlayers()){
@@ -121,14 +189,25 @@ public class ParticleCreator extends BukkitRunnable implements Listener {
 		}
 	}
 	
-	public static ParticleType particleFromString(String particle){
+	/**
+	 * Gets a particle type from a string, used for getting ParticleType's from the saved data
+	 * 
+	 * @param particle The name of the particle to check for
+	 * @return The ParticleType with the given name, will be null if name was not found
+	 */
+	public static ParticleType particleFromString(String particle) {
 		for(ParticleType effect : ParticleType.values()){
 			if(effect.toString().toLowerCase().replace("_", "").equals(particle)) return effect;
 		}
 		return null;
 	}
 
-	@Override
+	/**
+	 * The main loop to display all the particles
+	 * Updates all the timing variables
+	 * Refreshes the database connection if it is enabled and it has been 30 seconds since last refresh
+	 * Displays the particles for all players on the server
+	 */
 	public void run() {
 		step++;
 		if(step > 30) {
@@ -152,7 +231,7 @@ public class ParticleCreator extends BukkitRunnable implements Listener {
 					if(PlayerParticles.c != null && PlayerParticles.c.isClosed()) {
 						PlayerParticles.c = PlayerParticles.mySQL.openConnection();
 						if(PlayerParticles.c.isClosed()) {
-							System.out.println("[PlayerParticles] Cannot connect to database! Is the database available and is your connection information correct?");
+							PlayerParticles.getPlugin().getLogger().info("[PlayerParticles] Cannot connect to database! Is the database available and is your connection information correct?");
 						}
 					}
 				} catch (SQLException | ClassNotFoundException e) {
@@ -172,6 +251,14 @@ public class ParticleCreator extends BukkitRunnable implements Listener {
 		}
 	}
 	
+	/**
+	 * Displays particles at the given player location with the effect and style given
+	 * Checks all the effects and styles to make sure we display what is requested
+	 * 
+	 * @param effect The effect to display
+	 * @param style The style to display 
+	 * @param location The location to display at
+	 */
 	private void displayParticle(ParticleType effect, ParticleStyle style, Location location){
 		if(style == null || style == ParticleStyle.NONE) {
 			handleStyleNone(effect, location);
@@ -246,6 +333,13 @@ public class ParticleCreator extends BukkitRunnable implements Listener {
 		}
 	}
 	
+	/**
+	 * Displays particles at the given location with the default spread out style, NONE
+	 * Only check against every type to make sure they look nice, it isn't completely required
+	 * 
+	 * @param effect The effect to display as
+	 * @param location The locatio to display at
+	 */
 	public void handleStyleNone(ParticleType effect, Location location) {
 		if(effect == null || location == null) return;
 		if(effect.equals(ParticleType.ANGRY_VILLAGER)){
