@@ -1,4 +1,4 @@
-package com.esophose.playerparticles.libraries.databases;
+package com.esophose.playerparticles.library.database;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

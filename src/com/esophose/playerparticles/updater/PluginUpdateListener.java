@@ -13,8 +13,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import com.esophose.playerparticles.MessageManager;
 import com.esophose.playerparticles.PlayerParticles;
+import com.esophose.playerparticles.manager.MessageManager;
 
 public class PluginUpdateListener implements Listener {
 

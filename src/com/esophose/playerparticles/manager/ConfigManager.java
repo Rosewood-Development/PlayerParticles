@@ -6,7 +6,7 @@
  * be distributed to any person by any means.
  */
 
-package com.esophose.playerparticles;
+package com.esophose.playerparticles.manager;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +19,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import com.esophose.playerparticles.ParticleCreator;
+import com.esophose.playerparticles.ParticleStyle;
+import com.esophose.playerparticles.PlayerParticles;
 import com.esophose.playerparticles.libraries.particles.ParticleEffect.ParticleType;
 
 public class ConfigManager {

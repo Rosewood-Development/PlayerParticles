@@ -6,16 +6,17 @@
  * be distributed to any person by any means.
  */
 
-package com.esophose.playerparticles;
+package com.esophose.playerparticles.manager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.entity.Player;
 
+import com.esophose.playerparticles.ParticleStyle;
 import com.esophose.playerparticles.libraries.particles.ParticleEffect.ParticleType;
 
-public class PermissionHandler {
+public class PermissionManager {
 
 	/**
 	 * Checks if a player has permission to use an effect

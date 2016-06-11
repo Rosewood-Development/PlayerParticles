@@ -73,35 +73,27 @@ public class ParticleEffect {
 		double v = 0;
 		if (!vString.isEmpty()){
 			String[] array = vString.split("_");
-			v = Double.parseDouble(array[0] + "." + array[1]);
+			v = Integer.parseInt(array[1]); // Take the second value to fix MC 1.10 looking like 1.1 and failing to be greater than 1.7
 		}
 		try {
-			if (v < 1.7) {
+			if (v < 7) { // Maintain support for versions below 1.6 (Probably doesn't even work)
 				netty = false;
 				packetClass = getNmsClass("Packet63WorldParticles");
 				packetConstructor = packetClass.getConstructor();
 				fields = packetClass.getDeclaredFields();
-			}
-			else {
+			} else { // Use the greater than 1.7 particle packet class
 				packetClass = getNmsClass("PacketPlayOutWorldParticles");
-				if (v < 1.8){
-					Bukkit.getLogger().info("[PlayerParticles] Server is < 1.8 - Falling back to old version");
-					packetConstructor = packetClass.getConstructor(String.class, float.class, float.class, float.class,
-							float.class, float.class, float.class, float.class, int.class);
-				}
-				else { // use the new constructor for 1.8
-					Bukkit.getLogger().info("[PlayerParticles] Server is >= 1.8 - Using new version");
+				if (v < 8){
+					packetConstructor = packetClass.getConstructor(String.class, float.class, float.class, float.class, float.class, float.class, float.class, float.class, int.class);
+				} else { // use the new constructor for 1.8
 					newParticlePacketConstructor = true;
 					enumParticle = (Class<Enum>)getNmsClass("EnumParticle");
-					packetConstructor = packetClass.getDeclaredConstructor(enumParticle, boolean.class, float.class,
-							float.class, float.class, float.class, float.class, float.class, float.class, int.class,
-							int[].class);
+					packetConstructor = packetClass.getDeclaredConstructor(enumParticle, boolean.class, float.class, float.class, float.class, float.class, float.class, float.class, float.class, int.class, int[].class);
 				}
 			}
-		}
-		catch (Exception ex){
+		} catch (Exception ex) {
 			ex.printStackTrace();
-			Bukkit.getLogger().severe("[ParticleLib] Failed to initialize NMS components!");
+			Bukkit.getLogger().severe("[PlayerParticles] Failed to initialize NMS components! This occurs if you are running the plugin on a version of Minecraft that is not supported!");
 			compatible = false;
 		}
 	}
@@ -192,7 +184,7 @@ public class ParticleEffect {
 	}
 
 	/**
-	 * Constructs a new particle packet.
+	 * Constructs a new particle packet
 	 * @param location the location to spawn the particle effect at
 	 * @return the constructed packet
 	 */
@@ -245,15 +237,15 @@ public class ParticleEffect {
 		}
 		catch (IllegalAccessException ex){
 			ex.printStackTrace();
-			Bukkit.getLogger().severe("[ParticleLib] Failed to construct particle effect packet!");
+			Bukkit.getLogger().severe("[PlayerParticles] Failed to construct particle effect packet!");
 		}
 		catch (InstantiationException ex){
 			ex.printStackTrace();
-			Bukkit.getLogger().severe("[ParticleLib] Failed to construct particle effect packet!");
+			Bukkit.getLogger().severe("[PlayerParticles] Failed to construct particle effect packet!");
 		}
 		catch (InvocationTargetException ex){
 			ex.printStackTrace();
-			Bukkit.getLogger().severe("[ParticleLib] Failed to construct particle effect packet!");
+			Bukkit.getLogger().severe("[PlayerParticles] Failed to construct particle effect packet!");
 		}
 		return null;
 	}
@@ -281,15 +273,15 @@ public class ParticleEffect {
 		}
 		catch (IllegalAccessException ex){
 			ex.printStackTrace();
-			Bukkit.getLogger().severe("[ParticleLib] Failed to send packet!");
+			Bukkit.getLogger().severe("[PlayerParticles] Failed to send packet!");
 		}
 		catch (InvocationTargetException ex){
 			ex.printStackTrace();
-			Bukkit.getLogger().severe("[ParticleLib] Failed to send packet!");
+			Bukkit.getLogger().severe("[PlayerParticles] Failed to send packet!");
 		}
 		catch (NoSuchFieldException ex){
 			ex.printStackTrace();
-			Bukkit.getLogger().severe("[ParticleLib] Failed to send packet!");
+			Bukkit.getLogger().severe("[PlayerParticles] Failed to send packet!");
 		}
 	}
 
@@ -328,7 +320,7 @@ public class ParticleEffect {
 		}
 		catch (ClassNotFoundException ex){
 			ex.printStackTrace();
-			Bukkit.getLogger().severe("[ParticleLib] Failed to load NMS class " + name + "!");
+			Bukkit.getLogger().severe("[PlayerParticles] Failed to load NMS class " + name + "!");
 		}
 		return clazz;
 	}
@@ -345,15 +337,15 @@ public class ParticleEffect {
 	}
 
 	/**
-	 * Gets whether ParticleLib is compatible with the server software.
-	 * @return whether ParticleLib is compatible with the server software.
+	 * Gets whether PlayerParticles is compatible with the server software.
+	 * @return whether PlayerParticles is compatible with the server software.
 	 */
 	public static boolean isCompatible(){
 		return compatible;
 	}
 
 	/**
-	 * Enum representing valid particle types in Minecraft 1.8
+	 * Enum representing valid particle types in Minecraft 1.10 minus a few which are too similar or too spammy
 	 */
 	public enum ParticleType {
 

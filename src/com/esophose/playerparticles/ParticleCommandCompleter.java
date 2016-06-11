@@ -15,6 +15,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
+import com.esophose.playerparticles.manager.PermissionManager;
+
 public class ParticleCommandCompleter implements TabCompleter {
 
 	/**
@@ -29,7 +31,7 @@ public class ParticleCommandCompleter implements TabCompleter {
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
 		if(cmd.getName().equalsIgnoreCase("pp")) {
 			if(args.length == 1) {
-				List<String> list = PermissionHandler.getParticlesUserHasPermissionFor((Player)sender);
+				List<String> list = PermissionManager.getParticlesUserHasPermissionFor((Player)sender);
 				list.add("list");
 				list.add("styles");
 				list.add("style");
@@ -38,7 +40,7 @@ public class ParticleCommandCompleter implements TabCompleter {
 				list.add("help");
 				return list;
 			}
-			if(args.length == 2) return PermissionHandler.getStylesUserHasPermissionFor((Player)sender);
+			if(args.length == 2) return PermissionManager.getStylesUserHasPermissionFor((Player)sender);
 		}
 		return null;
 	}

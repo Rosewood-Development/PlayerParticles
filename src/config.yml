@@ -11,7 +11,7 @@
 # ====================================================#
 
 # DO NOT CHANGE THIS UNDER ANY CIRCUMSTANCE (Will reset your config)
-version: 3.8
+version: 3.9
 
 # There are 20 minecraft ticks per second
 # The default value of 1 means a particle will be displayed once every tick

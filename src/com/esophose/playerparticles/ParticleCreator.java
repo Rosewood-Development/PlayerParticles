@@ -25,6 +25,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.esophose.playerparticles.libraries.particles.ParticleEffect;
 import com.esophose.playerparticles.libraries.particles.ParticleEffect.ParticleType;
+import com.esophose.playerparticles.manager.ConfigManager;
+import com.esophose.playerparticles.manager.PermissionManager;
 
 public class ParticleCreator extends BukkitRunnable implements Listener {
 	
@@ -118,7 +120,7 @@ public class ParticleCreator extends BukkitRunnable implements Listener {
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent e) {
 		if(map.containsKey(e.getPlayer().getName()) && styleMap.get(e.getPlayer().getName()) == ParticleStyle.MOVE) {
-			if(PermissionHandler.hasStylePermission(e.getPlayer(), ParticleStyle.MOVE)) {
+			if(PermissionManager.hasStylePermission(e.getPlayer(), ParticleStyle.MOVE)) {
 				Location loc = e.getPlayer().getLocation();
 				loc.setY(loc.getY() + 1);
 				handleStyleNone(map.get(e.getPlayer().getName()), loc);
@@ -243,7 +245,7 @@ public class ParticleCreator extends BukkitRunnable implements Listener {
 		for(Player player : Bukkit.getOnlinePlayers()){
 			if(!map.containsKey(player.getName()) || ConfigManager.getInstance().isWorldDisabled(player.getWorld().getName())) continue;
 			ParticleType effect = map.get(player.getName());
-			if(PermissionHandler.hasPermission(player, effect)){
+			if(PermissionManager.hasPermission(player, effect)){
 				Location loc = player.getLocation();
 				loc.setY(loc.getY() + 1);
 				displayParticle(effect, styleMap.get(player.getName()), loc);
