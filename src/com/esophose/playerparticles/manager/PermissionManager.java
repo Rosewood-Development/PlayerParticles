@@ -13,8 +13,10 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
-import com.esophose.playerparticles.ParticleStyle;
-import com.esophose.playerparticles.libraries.particles.ParticleEffect.ParticleType;
+import com.esophose.playerparticles.library.ParticleEffect;
+import com.esophose.playerparticles.styles.DefaultStyles;
+import com.esophose.playerparticles.styles.api.ParticleStyle;
+import com.esophose.playerparticles.styles.api.ParticleStyleManager;
 
 public class PermissionManager {
 
@@ -22,76 +24,57 @@ public class PermissionManager {
 	 * Checks if a player has permission to use an effect
 	 * 
 	 * @param player The player to check the permission for
-	 * @param effect The effect to check 
+	 * @param effect The effect to check
 	 * @return True if the player has permission to use the effect
 	 */
-	public static boolean hasPermission(Player player, ParticleType effect) {
-		if(player.hasPermission("playerparticles.*") || player.hasPermission("playerparticles.particles.*")) return true;
-		if(effect.equals(ParticleType.RED_DUST) && player.hasPermission("playerparticles.reddust")) {
-			return true;
-		}else{
-			if(effect.equals(ParticleType.RED_DUST)) return false;
-		}
-		if(effect.equals(ParticleType.RAINBOW) && player.hasPermission("playerparticles.rainbow")) {
-			return true; 
-		}else{
-			if(effect.equals(ParticleType.RAINBOW)) return false;
-		}
-		if(player.hasPermission("playerparticles." + effect.getName().toLowerCase().replace("_", ""))) return true;
+	public static boolean hasEffectPermission(Player player, ParticleEffect effect) {
+		if (player.hasPermission("playerparticles.*") || player.hasPermission("playerparticles.effect.*")) return true;
+		if (player.hasPermission("playerparticles.effect." + effect.getName().toLowerCase().replace("_", ""))) return true;
+		if (effect == ParticleEffect.NONE) return true;
 		return false;
 	}
-	
+
 	/**
 	 * Checks if a player has permission to use a style
+	 * Always returns true for 'none' so they can be reset
 	 * 
 	 * @param player The player to check the permission for
-	 * @param effect The style to check 
+	 * @param effect The style to check
 	 * @return True if the player has permission to use the style
 	 */
 	public static boolean hasStylePermission(Player player, ParticleStyle style) {
-		if(player.hasPermission("playerparticles.*") || player.hasPermission("playerparticles.styles.*") || style == ParticleStyle.NONE) return true;
-		if(player.hasPermission("playerparticles.style." + style.toString().toLowerCase().replace("_", ""))) return true;
+		if (player.hasPermission("playerparticles.*") || player.hasPermission("playerparticles.style.*")) return true;
+		if (player.hasPermission("playerparticles.style." + style.getName().toLowerCase().replace("_", ""))) return true;
+		if (style == DefaultStyles.NONE) return true;
 		return false;
 	}
-	
+
 	/**
 	 * Gets a List<String> of all effect names a player has permission for
 	 * 
-	 * @param p The player to get names for
+	 * @param p The player to get effect names for
 	 * @return A List<String> of all effect names the given player has permission for
 	 */
 	public static List<String> getParticlesUserHasPermissionFor(Player p) {
 		List<String> list = new ArrayList<String>();
-		if(p.hasPermission("playerparticles.*") || p.hasPermission("playerparticles.particles.*")) {
-			for(ParticleType pt : ParticleType.values()) {
-				list.add(pt.toString().toLowerCase().replace("_", ""));
-			}
-		}else{
-			for(ParticleType pt : ParticleType.values()) {
-				if(p.hasPermission("playerparticles." + pt.toString().toLowerCase().replace("_", ""))) list.add(pt.toString().toLowerCase().replace("_", ""));
-			}
+		for (ParticleEffect pe : ParticleEffect.getSupportedEffects()) {
+			if (hasEffectPermission(p, pe)) list.add(pe.getName().toLowerCase().replace("_", ""));
 		}
 		return list;
 	}
-	
+
 	/**
 	 * Gets a List<String> of all style names a player has permission for
 	 * 
-	 * @param p The player to get names for
+	 * @param p The player to get style names for
 	 * @return A List<String> of all style names the given player has permission for
 	 */
 	public static List<String> getStylesUserHasPermissionFor(Player p) {
 		List<String> list = new ArrayList<String>();
-		if(p.hasPermission("playerparticles.*") || p.hasPermission("playerparticles.styles.*")) {
-			for(ParticleStyle ps : ParticleStyle.values()) {
-				list.add(ps.toString().toLowerCase());
-			}
-		}else{
-			for(ParticleStyle pt : ParticleStyle.values()) {
-				if(p.hasPermission("playerparticles.style." + pt.toString().toLowerCase())) list.add(pt.toString().toLowerCase());
-			}
+		for (ParticleStyle ps : ParticleStyleManager.getStyles()) {
+			if (hasStylePermission(p, ps)) list.add(ps.getName().toLowerCase().replace("_", ""));
 		}
 		return list;
 	}
-	
+
 }

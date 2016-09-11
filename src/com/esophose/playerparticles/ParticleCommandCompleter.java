@@ -8,6 +8,7 @@
 
 package com.esophose.playerparticles;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.command.Command;
@@ -20,7 +21,7 @@ import com.esophose.playerparticles.manager.PermissionManager;
 public class ParticleCommandCompleter implements TabCompleter {
 
 	/**
-	 * Activated when a user pushes tab in chat prefixed with /pp 
+	 * Activated when a user pushes tab in chat prefixed with /pp
 	 * 
 	 * @param sender The sender that hit tab, should always be a player
 	 * @param cmd The command the player is executing
@@ -29,18 +30,24 @@ public class ParticleCommandCompleter implements TabCompleter {
 	 * @return A list of commands available to the sender
 	 */
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
-		if(cmd.getName().equalsIgnoreCase("pp")) {
-			if(args.length == 1) {
-				List<String> list = PermissionManager.getParticlesUserHasPermissionFor((Player)sender);
-				list.add("list");
-				list.add("styles");
-				list.add("style");
-				list.add("version");
-				list.add("worlds");
+		if (cmd.getName().equalsIgnoreCase("pp")) {
+			if (args.length == 0) {
+				List<String> list = new ArrayList<String>();
 				list.add("help");
+				list.add("effect");
+				list.add("effects");
+				list.add("style");
+				list.add("styles");
+				list.add("worlds");
+				list.add("version");
 				return list;
+			} else if (args.length == 1) {
+				if (args[0].equalsIgnoreCase("effect")) {
+					return PermissionManager.getParticlesUserHasPermissionFor((Player) sender);
+				} else if (args[0].equalsIgnoreCase("style")) {
+					return PermissionManager.getStylesUserHasPermissionFor((Player) sender);
+				}
 			}
-			if(args.length == 2) return PermissionManager.getStylesUserHasPermissionFor((Player)sender);
 		}
 		return null;
 	}
