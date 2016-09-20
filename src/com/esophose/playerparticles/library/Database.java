@@ -1,4 +1,4 @@
-package com.esophose.playerparticles.library.database;
+package com.esophose.playerparticles.library;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -28,20 +28,16 @@ public abstract class Database {
 	 * Opens a connection with the database
 	 * 
 	 * @return Opened connection
-	 * @throws SQLException
-	 *             if the connection can not be opened
-	 * @throws ClassNotFoundException
-	 *             if the driver cannot be found
+	 * @throws SQLException if the connection can not be opened
+	 * @throws ClassNotFoundException if the driver cannot be found
 	 */
-	public abstract Connection openConnection() throws SQLException,
-			ClassNotFoundException;
+	public abstract Connection openConnection() throws SQLException, ClassNotFoundException;
 
 	/**
 	 * Checks if a connection is open with the database
 	 * 
 	 * @return true if the connection is open
-	 * @throws SQLException
-	 *             if the connection cannot be checked
+	 * @throws SQLException if the connection cannot be checked
 	 */
 	public boolean checkConnection() throws SQLException {
 		return connection != null && !connection.isClosed();
@@ -60,8 +56,7 @@ public abstract class Database {
 	 * Closes the connection with the database
 	 * 
 	 * @return true if successful
-	 * @throws SQLException
-	 *             if the connection cannot be closed
+	 * @throws SQLException if the connection cannot be closed
 	 */
 	public boolean closeConnection() throws SQLException {
 		if (connection == null) {
@@ -71,22 +66,18 @@ public abstract class Database {
 		return true;
 	}
 
-
 	/**
 	 * Executes a SQL Query<br>
 	 * 
 	 * If the connection is closed, it will be opened
 	 * 
-	 * @param query
-	 *            Query to be run
+	 * @param query Query to be run
 	 * @return the results of the query
-	 * @throws SQLException
-	 *             If the query cannot be executed
-	 * @throws ClassNotFoundException
-	 *             If the driver cannot be found; see {@link #openConnection()}
+	 * @throws SQLException If the query cannot be executed
+	 * @throws ClassNotFoundException If the driver cannot be found; see
+	 *             {@link #openConnection()}
 	 */
-	public ResultSet querySQL(String query) throws SQLException,
-			ClassNotFoundException {
+	public ResultSet querySQL(String query) throws SQLException, ClassNotFoundException {
 		if (!checkConnection()) {
 			openConnection();
 		}
@@ -103,16 +94,13 @@ public abstract class Database {
 	 * See {@link java.sql.Statement#executeUpdate(String)}<br>
 	 * If the connection is closed, it will be opened
 	 * 
-	 * @param query
-	 *            Query to be run
+	 * @param query Query to be run
 	 * @return Result Code, see {@link java.sql.Statement#executeUpdate(String)}
-	 * @throws SQLException
-	 *             If the query cannot be executed
-	 * @throws ClassNotFoundException
-	 *             If the driver cannot be found; see {@link #openConnection()}
+	 * @throws SQLException If the query cannot be executed
+	 * @throws ClassNotFoundException If the driver cannot be found; see
+	 *             {@link #openConnection()}
 	 */
-	public int updateSQL(String query) throws SQLException,
-			ClassNotFoundException {
+	public int updateSQL(String query) throws SQLException, ClassNotFoundException {
 		if (!checkConnection()) {
 			openConnection();
 		}
@@ -120,6 +108,8 @@ public abstract class Database {
 		Statement statement = connection.createStatement();
 
 		int result = statement.executeUpdate(query);
+
+		statement.close();
 
 		return result;
 	}
