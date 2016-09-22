@@ -1,26 +1,24 @@
-# __________.__                           __________                __  .__       .__                              ________  
-# \______   \  | _____  ___.__. __________\______   \_____ ________/  |_|__| ____ |  |   ____   ______       ___  _\_____  \ 
-#  |     ___/  | \__  \<   |  |/ __ \_  __ \     ___/\__  \\_  __ \   __\  |/ ___\|  | _/ __ \ /  ___/       \  \/ / _(__  < 
-#  |    |   |  |__/ __ \\___  \  ___/|  | \/    |     / __ \|  | \/|  | |  \  \___|  |_\  ___/ \___ \         \   / /       \
-#  |____|   |____(____  / ____|\___  >__|  |____|    (____  /__|   |__| |__|\___  >____/\___  >____  >         \_/ /______  /
-#                     \/\/         \/                     \/                    \/          \/     \/                     \/ 
+# __________.__                           __________                __  .__       .__                              _____  
+# \______   \  | _____  ___.__. __________\______   \_____ ________/  |_|__| ____ |  |   ____   ______     ___  __/  |  | 
+# |     ___/  | \__  \<   |  |/ __ \_  __ \     ___/\__  \\_  __ \   __\  |/ ___\|  | _/ __ \ /  ___/     \  \/ /   |  |_
+# |    |   |  |__/ __ \\___  \  ___/|  | \/    |     / __ \|  | \/|  | |  \  \___|  |_\  ___/ \___ \       \   /    ^   /
+# |____|   |____(____  / ____|\___  >__|  |____|    (____  /__|   |__| |__|\___  >____/\___  >____  >       \_/\____   | 
+#                    \/\/         \/                     \/                    \/          \/     \/                |__|
+# Please excuse the cheesy ASCII Art
 
 # ====================================================#
 #                PlayerParticles Config               #
 #      DO NOT DELETE OR EDIT THE FIELD "version"!     #
 # ====================================================#
 
-# DO NOT CHANGE THIS UNDER ANY CIRCUMSTANCE (Will reset your config)
-version: 3.9
+# Changing this value will reset your config on the next server reload/restart. 
+# I don't recommend changing it
+version: 4
 
-# There are 20 minecraft ticks per second
-# The default value of 1 means a particle will be displayed once every tick
-# That means 20 particles will be displayed per second
-# If ticks-per-particle was set to 5, then 4 particles would be displayed per second since 20/5 is 4
-# If your server is experiencing lag after installing this plugin, raising this value should help
-# Setting this value to 0.5 will cause 40 particles to appear per second. Be warned this could cause strain on the server.
-# Changing this 'may' cause style timing to get messed up
-# Only use integer values, excluding 0.5
+# How many ticks to wait before spawning more particles
+# Increasing this value may cause less lag, but will decrease prettiness
+# The lowest possible value is 1
+# Going over 5 will likely look terrible
 # Default: 1
 ticks-per-particle: 1
 
@@ -51,30 +49,29 @@ message-prefix: '&7[&3PlayerParticles&7]'
 # ================================================================ #
 #                     MESSAGE CONFIGURATION                        #
 # Important Notes:                                                 #
-# * {PARTICLE} displays the particle argument used in the command  #
-# * {STYLE} displays the style argument used in the command        #
+# * {TYPE} Will be replaced with whatever that message requires    #
 # * You can not use the apostrophe character! ( ' )                #
 # ================================================================ #
 
-#################
+# ------------- #
 #   Particles   #
-#################
+# ------------- #
 
 # No Particle Permission
-# Default: 'You do not have permission to use type {PARTICLE} particles!'
-message-no-permission: 'You do not have permission to use type {PARTICLE} particles!'
+# Default: 'You do not have permission to use {TYPE} particles!'
+message-no-permission: 'You do not have permission to use {TYPE} particles!'
 
 # /pp list No Particles
 # Default: 'You do not have permission to use any particles!'
 message-no-particles: 'You do not have permission to use any particles!'
 
 # Now Using Particles
-# Default: 'Now using type {PARTICLE} particles!'
-message-now-using: 'Now using type {PARTICLE} particles!'
+# Default: 'Now using {TYPE} particles!'
+message-now-using: 'Now using {TYPE} particles!'
 
 # Cleared Particles
-# Default: 'Cleared your particles!'
-message-cleared-particles: 'Cleared your particles!'
+# Default: 'Your particles have been cleared!'
+message-cleared-particles: 'Your particles have been cleared!'
 
 # You Can Use Particles
 # Default: 'You can use:'
@@ -84,25 +81,25 @@ message-use: 'You can use:'
 # Default: 'Invalid particle type!'
 message-invalid-type: 'Invalid particle type!'
 
-##################
+# -------------- #
 #     Styles     #
-##################
+# -------------- #
 
 # No Style Permission
-# Default: 'You do not have permission to use the style type {STYLE}!'
-message-no-permission-style: 'You do not have permission to use the style type {STYLE}!'
+# Default: 'You do not have permission to use the style type {TYPE}!'
+message-no-permission-style: 'You do not have permission to use the style type {TYPE}!'
 
 # /pp styles No Styles
 # Default: 'You do not have permission to use any particles!'
 message-no-styles: 'You do not have permission to use any styles!'
 
 # Now Using Style
-# Default: 'Now using style type {STYLE}!'
-message-now-using-style: 'Now using style type {STYLE}!'
+# Default: 'Now using the style type {TYPE}!'
+message-now-using-style: 'Now using the style type {TYPE}!'
 
 # Cleared Style
 # Default: 'Cleared your particles!'
-message-cleared-style: 'Cleared your style!'
+message-cleared-style: 'Your style has been cleared!'
 
 # You Can Use Styles
 # Default: 'You can use:'
@@ -112,25 +109,91 @@ message-use-style: 'You can use:'
 # Default: 'Invalid style type!'
 message-invalid-type-style: 'Invalid style type!'
 
-#################
+# ------------ #
+#     Data     #
+# ------------ #
+
+# Note Data Usage
+# Default: 'Your current effect requires note data.'
+message-note-data-usage: 'Your current effect requires note data.'
+
+# Color Data Usage
+# Default: 'Your current effect requires color data.'
+message-color-data-usage: 'Your current effect requires color data.'
+
+# Block Data Usage
+# Default: 'Your current effect requires block data.'
+message-block-data-usage: 'Your current effect requires block data.'
+
+# Item Data Usage
+# Default: 'Your current effect requires item data.'
+message-item-data-usage: 'Your current effect requires item data.'
+
+# No Data Required
+# Default: 'Your current effect does not use any data.'
+message-no-data-usage: 'Your current effect does not use any data.'
+
+# Note Data Applied
+# Default: 'Your note data has been applied!'
+message-note-data-applied: 'Your note data has been applied!'
+
+# Color Data Applied
+# Default: 'Your color data has been applied!'
+message-color-data-applied: 'Your color data has been applied!'
+
+# Block Data Applied
+# Default: 'Your block data has been applied!'
+message-block-data-applied: 'Your block data has been applied!'
+
+# Item Data Applied
+# Default: 'Your item data has been applied!'
+message-item-data-applied: 'Your item data has been applied!'
+
+# Invalid Note Data Arguments
+# Default: 'Invalid note data arguments!'
+message-note-data-invalid-arguments: 'Invalid note data arguments!'
+
+# Invalid Color Data Arguments
+# Default: 'Invalid color data arguments!'
+message-color-data-invalid-arguments: 'Invalid color data arguments!'
+
+# Invalid Block Data Arguments
+# Default: 'Invalid block data arguments!'
+message-block-data-invalid-arguments: 'Invalid block data arguments!'
+
+# Invalid Item Data Arguments
+# Default: 'Invalid item data arguments!'
+message-item-data-invalid-arguments: 'Invalid item data arguments!'
+
+# Unknown Block Material
+# Default: 'The block name you supplied is invalid'
+message-block-data-material-unknown: 'The block name you supplied is invalid'
+
+# Unknown Item Material
+# Default: 'The item name you supplied is invalid'
+message-item-data-material-unknown: 'The item name you supplied is invalid'
+
+
+
+# ------------- #
 #     Other     #
-#################
+# ------------- #
 
 # Usage
 # Default: 'Usage:'
 message-usage: 'Usage:'
 
+# Reset
+# Default: 'Your effect, style, and data have all been reset!'
+message-reset: 'Your effect, style, and data have all been reset!'
+
 # Invalid Arguments
 # Default: 'Invalid arguments!'
-message-invalid-arguments: 'Invalid Arguments!'
-
-# Reload
-# Default: 'Reloaded Config!'
-message-reload: 'Reloaded Config!'
+message-invalid-arguments: 'Invalid arguments!'
 
 # Available Commands
-# Default: 'Available Commands:'
-message-available-commands: 'Available Commands:'
+# Default: 'Available commands:'
+message-available-commands: 'Available commands:'
 
 # Disabled Worlds None
 # Default: 'Particles are not disabled in any worlds!'
@@ -153,9 +216,9 @@ message-disabled-worlds: 'Particles are disabled in these worlds:'
 # Default: false
 database-enable: false
 
-# =================================================================== #
+# ------------------------------------------------------------------- #
 # The following are only required if database-enable is set to 'true' #
-# =================================================================== #
+# ------------------------------------------------------------------- #
 
 # Database Hostname
 # Default: ''

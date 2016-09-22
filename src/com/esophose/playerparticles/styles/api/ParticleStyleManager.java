@@ -1,0 +1,72 @@
+package com.esophose.playerparticles.styles.api;
+
+import java.util.ArrayList;
+
+public class ParticleStyleManager {
+
+	private static ArrayList<ParticleStyle> styles = new ArrayList<ParticleStyle>();
+	private static ArrayList<ParticleStyle> customHandledStyles = new ArrayList<ParticleStyle>();
+
+	public static void registerStyle(ParticleStyle style) {
+		for (ParticleStyle testAgainst : styles) {
+			if (testAgainst.getName().replace("_", "").equalsIgnoreCase(style.getName())) {
+				throw new ParticleStyleAlreadyRegisteredException("Tried to register two styles with the same name!");
+			} else if (testAgainst.equals(style)) {
+				throw new ParticleStyleAlreadyRegisteredException("Tried to register the same style twice!");
+			}
+		}
+		styles.add(style);
+	}
+
+	public static void registerCustomHandledStyle(ParticleStyle style) {
+		registerStyle(style);
+		customHandledStyles.add(style);
+	}
+
+	public static boolean isCustomHandled(ParticleStyle style) {
+		return customHandledStyles.contains(style);
+	}
+
+	public static ArrayList<ParticleStyle> getStyles() {
+		return styles;
+	}
+
+	/**
+	 * Gets the ParticleStyle with the name given, returns null if not found
+	 * 
+	 * @param particle The string of the style to search for
+	 * @return The ParticleStyle with the name requested
+	 */
+	public static ParticleStyle styleFromString(String styleName) {
+		for (ParticleStyle style : styles) {
+			if (style.getName().toLowerCase().replace("_", "").equals(styleName)) return style;
+		}
+		return null;
+	}
+
+	/**
+	 * Updates all the timers for the particle styles to make the animations
+	 * 
+	 * Do not call this in your plugin, it will mess with other styles
+	 */
+	public static void updateTimers() {
+		for (ParticleStyle style : styles) {
+			style.updateTimers();
+		}
+	}
+	
+	/**
+	 * The exception to throw if a style is already registered
+	 */
+	private static final class ParticleStyleAlreadyRegisteredException extends RuntimeException {
+
+		private static final long serialVersionUID = -6116170395810178020L;
+
+		private ParticleStyleAlreadyRegisteredException(String message) {
+			super(message);
+		}
+
+	}
+
+}
+
