@@ -82,6 +82,8 @@ public abstract class Database {
 			openConnection();
 		}
 
+		System.out.println("Running Query: " + query);
+
 		Statement statement = connection.createStatement();
 
 		ResultSet result = statement.executeQuery(query);
@@ -93,6 +95,8 @@ public abstract class Database {
 	 * Executes an Update SQL Query<br>
 	 * See {@link java.sql.Statement#executeUpdate(String)}<br>
 	 * If the connection is closed, it will be opened
+	 * 
+	 * Executes multiple updates broken up by semi-colons
 	 * 
 	 * @param query Query to be run
 	 * @return Result Code, see {@link java.sql.Statement#executeUpdate(String)}
@@ -106,11 +110,22 @@ public abstract class Database {
 		}
 
 		Statement statement = connection.createStatement();
+		int[] results;
 
-		int result = statement.executeUpdate(query);
+		if (query.indexOf(';') != -1) {
+			String[] queries = query.split(";");
+			for (String q : queries) {
+				statement.addBatch(q);
+				System.out.println("Running query: " + q);
+			}
+			results = statement.executeBatch();
+		} else {
+			System.out.println("Running query: " + query);
+			results = new int[] { statement.executeUpdate(query) };
+		}
 
 		statement.close();
 
-		return result;
+		return results[0];
 	}
 }

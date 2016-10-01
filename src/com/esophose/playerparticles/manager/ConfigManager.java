@@ -125,29 +125,30 @@ public class ConfigManager {
 				return new PPlayer(playerUUID, particleEffect, particleStyle, particleItemData, particleBlockData, particleColorData, particleNoteColorData);
 			} else {
 				PPlayer pplayer = PPlayer.getNewPPlayer(playerUUID);
-				saveEntirePPlayer(pplayer);
+				saveNewPPlayer(pplayer);
 				return pplayer;
 			}
 		} else {
 			String id = playerUUID.toString(); // @formatter:off
 			try (ResultSet res = PlayerParticles.mySQL.querySQL("SELECT * FROM pp_users u " + 
 																"JOIN pp_data_item i ON u.player_uuid = i.player_uuid " + 
-																"JOIN pp_data_block b ON u.player_uuid = b.player_uuid" +
-																"JOIN pp_data_color c ON u.player_uuid = c.player_uuid" +
-																"JOIN pp_data_note n ON u.player_uuid = n.player_uuid" +
-																"WHERE player_uuid = '" + id + "'")) { // @formatter:on
+																"JOIN pp_data_block b ON u.player_uuid = b.player_uuid " +
+																"JOIN pp_data_color c ON u.player_uuid = c.player_uuid " +
+																"JOIN pp_data_note n ON u.player_uuid = n.player_uuid " +
+																"WHERE u.player_uuid = '" + id + "'")) { // @formatter:on
+
 				if (res.next()) {
 					ParticleEffect particleEffect = ParticleEffect.fromName(res.getString("u.effect"));
 					ParticleStyle particleStyle = ParticleStyleManager.styleFromString(res.getString("u.style"));
 					ItemData particleItemData = new ItemData(Material.matchMaterial(res.getString("i.material")), res.getByte("i.data"));
 					BlockData particleBlockData = new BlockData(Material.matchMaterial(res.getString("b.material")), res.getByte("b.data"));
-					OrdinaryColor particleColorData = new OrdinaryColor(Color.fromRGB(res.getByte("c.r"), res.getByte("c.g"), res.getByte("c.b")));
+					OrdinaryColor particleColorData = new OrdinaryColor(Color.fromRGB(res.getInt("c.r"), res.getInt("c.g"), res.getInt("c.b")));
 					NoteColor particleNoteColorData = new NoteColor(res.getByte("n.note"));
 
 					return new PPlayer(playerUUID, particleEffect, particleStyle, particleItemData, particleBlockData, particleColorData, particleNoteColorData);
 				} else {
 					PPlayer pplayer = PPlayer.getNewPPlayer(playerUUID);
-					saveEntirePPlayer(pplayer);
+					saveNewPPlayer(pplayer);
 					return pplayer;
 				}
 			} catch (ClassNotFoundException | SQLException e) {
@@ -155,18 +156,16 @@ public class ConfigManager {
 			}
 		}
 
-		return null; // This should never get called unless there is a database error
+		// This should only be returned if there is a database or config error
+		return null;
 	}
 
 	/**
-	 * Saves an entire PPlayer to the database
-	 * This is mainly used for when PPlayers are being created for the first time
-	 * It can also be called when a player is getting reset with /pp reset
-	 * Use the singular methods for updating individual parts of the PPlayer
+	 * Saves a new PPlayer to the database or the file
 	 * 
 	 * @param pplayer The PPlayer to save
 	 */
-	public void saveEntirePPlayer(PPlayer pplayer) {
+	public void saveNewPPlayer(PPlayer pplayer) {
 		if (!PlayerParticles.useMySQL) {
 			if (!config.isConfigurationSection(pplayer.getUniqueId().toString())) {
 				String id = pplayer.getUniqueId().toString();
@@ -200,49 +199,33 @@ public class ConfigManager {
 
 			save();
 		} else {
-			try (ResultSet res = PlayerParticles.mySQL.querySQL("SELECT COUNT(*) FROM pp_users WHERE player_uuid = '" + pplayer.getUniqueId() + "'")) {
-				if (res.next()) { // @formatter:off
-					PlayerParticles.mySQL.updateSQL("UPDATE pp_users SET " + 
-													"effect = '" + pplayer.getParticleEffect().getName() + "', " + 
-													"style = '" + pplayer.getParticleStyle().getName() + "' " + 
-													"WHERE player_uuid = " + pplayer.getUniqueId().toString() + "; " +
-													"UPDATE pp_data_item SET " +
-													"material = '" + pplayer.getItemData().getMaterial().name() + "', " +
-													"data = " + pplayer.getItemData().getData() + " " +
-													"WHERE player_uuid = " + pplayer.getUniqueId().toString() + "; " +
-													"UPDATE pp_date_block SET " +
-													"material = '" + pplayer.getBlockData().getMaterial().name() + "', " +
-													"data = " + pplayer.getBlockData().getData() + " " +
-													"WHERE player_uuid = " + pplayer.getUniqueId().toString() + "; " +
-													"UPDATE pp_data_color SET " +
-													"r = " + pplayer.getColorData().getRed() + ", " +
-													"g = " + pplayer.getColorData().getGreen() + ", " +
-													"b = " + pplayer.getColorData().getBlue() + " " +
-													"WHERE player_uuid = " + pplayer.getUniqueId().toString() + "; " +
-													"UPDATE pp_data_note SET" + 
-													"note = " + (byte) (pplayer.getNoteColorData().getValueX() * 24) + " " +
-													"WHERE player_uuid = " + pplayer.getUniqueId().toString() + ";"
-													);
-				} else {
+			try (ResultSet res = PlayerParticles.mySQL.querySQL("SELECT * FROM pp_users WHERE player_uuid = '" + pplayer.getUniqueId() + "'")) {
+				if (res.next()) {
+					throw new RuntimeException("The user " + pplayer.getUniqueId() + " is already in the database. They can not be added.");
+				} else { // @formatter:off
 					PlayerParticles.mySQL.updateSQL("INSERT INTO pp_users (player_uuid, effect, style) VALUES (" +
 													"'" + pplayer.getUniqueId().toString() + "', " +
 													"'" + pplayer.getParticleEffect().getName() + "', " +
 													"'" + pplayer.getParticleStyle().getName() + "'" +
 													"); " +
-													"INSERT INTO pp_data_item (material, data) VALUES (" +
+													"INSERT INTO pp_data_item (player_uuid, material, data) VALUES (" +
+													"'" + pplayer.getUniqueId().toString() + "', " +
 													"'" + pplayer.getItemData().getMaterial().name() + "', " +
 													      pplayer.getItemData().getData() + 
 													"); " +
-													"INSERT INTO pp_data_block (material, data) VALUES (" +
+													"INSERT INTO pp_data_block (player_uuid, material, data) VALUES (" +
+													"'" + pplayer.getUniqueId().toString() + "', " +
 													"'" + pplayer.getBlockData().getMaterial().name() + "', " +
 												          pplayer.getBlockData().getData() + 
 												    "); " +
-												    "INSERT INTO pp_data_color (r, g, b) VALUES (" +
+												    "INSERT INTO pp_data_color (player_uuid, r, g, b) VALUES (" +
+												    "'" + pplayer.getUniqueId().toString() + "', " +
 												    	  pplayer.getColorData().getRed() + ", " +
 												    	  pplayer.getColorData().getGreen() + ", " +
 												    	  pplayer.getColorData().getBlue() + 
 												    "); " +
-												    "INSERT INTO pp_data_note (note) VALUES (" +
+												    "INSERT INTO pp_data_note (player_uuid, note) VALUES (" +
+												    "'" + pplayer.getUniqueId().toString() + "', " +
 												    	  (byte) (pplayer.getNoteColorData().getValueX() * 24) +
 												    ");"
 												    );
@@ -253,6 +236,22 @@ public class ConfigManager {
 		}
 
 		ParticleCreator.updateIfContains(pplayer); // Update the player in case this is a /pp reset
+	}
+
+	/**
+	 * Resets all saved information about a PPlayer
+	 * This should be made into a single batch query in the future
+	 * 
+	 * @param playerUUID
+	 */
+	public void resetPPlayer(UUID playerUUID) {
+		PPlayer pplayer = PPlayer.getNewPPlayer(playerUUID);
+		savePPlayer(playerUUID, pplayer.getParticleEffect());
+		savePPlayer(playerUUID, pplayer.getParticleStyle());
+		savePPlayer(playerUUID, pplayer.getItemData());
+		savePPlayer(playerUUID, pplayer.getBlockData());
+		savePPlayer(playerUUID, pplayer.getColorData());
+		savePPlayer(playerUUID, pplayer.getNoteColorData());
 	}
 
 	/**
@@ -268,7 +267,7 @@ public class ConfigManager {
 			save();
 		} else {
 			try {
-				PlayerParticles.mySQL.updateSQL("UPDATE pp_users SET effect = '" + particleEffect.getName() + "' WHERE player_uuid = " + playerUUID + ";");
+				PlayerParticles.mySQL.updateSQL("UPDATE pp_users SET effect = '" + particleEffect.getName() + "' WHERE player_uuid = '" + playerUUID + "';");
 			} catch (ClassNotFoundException | SQLException e) {
 				e.printStackTrace();
 			}
@@ -289,7 +288,7 @@ public class ConfigManager {
 			save();
 		} else {
 			try {
-				PlayerParticles.mySQL.updateSQL("UPDATE pp_users SET style = '" + particleStyle.getName() + "' WHERE player_uuid = " + playerUUID + ";");
+				PlayerParticles.mySQL.updateSQL("UPDATE pp_users SET style = '" + particleStyle.getName() + "' WHERE player_uuid = '" + playerUUID + "';");
 			} catch (ClassNotFoundException | SQLException e) {
 				e.printStackTrace();
 			}
@@ -311,7 +310,7 @@ public class ConfigManager {
 			save();
 		} else {
 			try {
-				PlayerParticles.mySQL.updateSQL("UPDATE pp_data_item SET material = '" + particleItemData.getMaterial().name() + "', data = '" + particleItemData.getData() + "' WHERE player_uuid = " + playerUUID + ";");
+				PlayerParticles.mySQL.updateSQL("UPDATE pp_data_item SET material = '" + particleItemData.getMaterial().name() + "', data = '" + particleItemData.getData() + "' WHERE player_uuid = '" + playerUUID + "';");
 			} catch (ClassNotFoundException | SQLException e) {
 				e.printStackTrace();
 			}
@@ -333,7 +332,7 @@ public class ConfigManager {
 			save();
 		} else {
 			try {
-				PlayerParticles.mySQL.updateSQL("UPDATE pp_data_block SET material = '" + particleBlockData.getMaterial().name() + "', data = '" + particleBlockData.getData() + "' WHERE player_uuid = " + playerUUID + ";");
+				PlayerParticles.mySQL.updateSQL("UPDATE pp_data_block SET material = '" + particleBlockData.getMaterial().name() + "', data = '" + particleBlockData.getData() + "' WHERE player_uuid = '" + playerUUID + "';");
 			} catch (ClassNotFoundException | SQLException e) {
 				e.printStackTrace();
 			}
@@ -356,7 +355,7 @@ public class ConfigManager {
 			save();
 		} else {
 			try {
-				PlayerParticles.mySQL.updateSQL("UPDATE pp_data_color SET r = " + particleColorData.getRed() + ", g = " + particleColorData.getGreen() + ", b = " + particleColorData.getBlue() + " WHERE player_uuid = " + playerUUID + ";");
+				PlayerParticles.mySQL.updateSQL("UPDATE pp_data_color SET r = " + particleColorData.getRed() + ", g = " + particleColorData.getGreen() + ", b = " + particleColorData.getBlue() + " WHERE player_uuid = '" + playerUUID + "';");
 			} catch (ClassNotFoundException | SQLException e) {
 				e.printStackTrace();
 			}
@@ -377,7 +376,7 @@ public class ConfigManager {
 			save();
 		} else {
 			try {
-				PlayerParticles.mySQL.updateSQL("UPDATE pp_data_color SET note = " + (byte) (particleNoteColorData.getValueX() * 24) + " WHERE player_uuid = " + playerUUID + ";");
+				PlayerParticles.mySQL.updateSQL("UPDATE pp_data_note SET note = " + (byte) (particleNoteColorData.getValueX() * 24) + " WHERE player_uuid = '" + playerUUID + "';");
 			} catch (ClassNotFoundException | SQLException e) {
 				e.printStackTrace();
 			}

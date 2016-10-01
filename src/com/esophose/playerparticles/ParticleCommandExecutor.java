@@ -129,7 +129,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 	 */
 	private void onData(Player p, String[] args) {
 		ParticleEffect effect = ConfigManager.getInstance().getPPlayer(p.getUniqueId()).getParticleEffect();
-		if (args.length == 1) {
+		if ((!effect.hasProperty(ParticleProperty.REQUIRES_DATA) && !effect.hasProperty(ParticleProperty.COLORABLE)) || args.length == 1) {
 			if (effect.hasProperty(ParticleProperty.COLORABLE)) {
 				if (effect == ParticleEffect.NOTE) {
 					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-note-data-usage", null), ChatColor.YELLOW);
@@ -234,7 +234,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 				}
 				
 				if (data < 0 || data > 15) {
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-item-data-usage", null), ChatColor.RED);
+					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-item-data-invalid-arguments", null), ChatColor.RED);
 					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp data <itemName> <0-15>", ChatColor.YELLOW);
 					return;
 				}
@@ -270,7 +270,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 				}
 				
 				if (data < 0 || data > 15) {
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-block-data-usage", null), ChatColor.RED);
+					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-block-data-invalid-arguments", null), ChatColor.RED);
 					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp data <blockName> <0-15>", ChatColor.YELLOW);
 					return;
 				}
@@ -288,7 +288,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 	 * @param args The arguments for the command
 	 */
 	private void onReset(Player p, String[] args) {
-		ConfigManager.getInstance().saveEntirePPlayer(PPlayer.getNewPPlayer(p.getUniqueId()));
+		ConfigManager.getInstance().resetPPlayer(p.getUniqueId());
 		MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-reset", null), ChatColor.GREEN);
 	}
 
