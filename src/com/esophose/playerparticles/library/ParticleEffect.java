@@ -47,9 +47,14 @@ import com.esophose.playerparticles.library.ReflectionUtils.PackageType;
 
 /**
  * Modified a couple things for the plugin
+<<<<<<< HEAD
  * Updated to 1.10
  * 
  * @author (of changes) Esophose
+=======
+ * 
+ * @author Esophose
+>>>>>>> refs/remotes/origin/master
  */
 public enum ParticleEffect {
 

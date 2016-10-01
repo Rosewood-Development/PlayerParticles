@@ -173,6 +173,11 @@ message-block-data-material-unknown: 'The block name you supplied is invalid'
 # Default: 'The item name you supplied is invalid'
 message-item-data-material-unknown: 'The item name you supplied is invalid'
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> refs/remotes/origin/master
 # ------------- #
 #     Other     #
 # ------------- #
