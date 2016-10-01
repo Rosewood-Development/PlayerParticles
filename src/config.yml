@@ -173,8 +173,11 @@ message-block-data-material-unknown: 'The block name you supplied is invalid'
 # Default: 'The item name you supplied is invalid'
 message-item-data-material-unknown: 'The item name you supplied is invalid'
 
+<<<<<<< HEAD
+=======
 
 
+>>>>>>> refs/remotes/origin/master
 # ------------- #
 #     Other     #
 # ------------- #
@@ -239,3 +242,6 @@ database-user-name: ''
 # Database User Password
 # Default: ''
 database-user-password: ''
+
+# That's everything! You reached the end of the configuration
+# Enjoy the plugin!

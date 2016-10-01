@@ -113,7 +113,7 @@ public class PlayerParticles extends JavaPlugin {
 			String user = getConfig().getString("database-user-name");
 			String pass = getConfig().getString("database-user-password");
 			mySQL = new MySQL(hostname, port, database, user, pass);
-			try (ResultSet res = mySQL.querySQL("SHOW TABLES LIKE 'playerparticles'")) {
+			try (ResultSet res = mySQL.querySQL("SHOW TABLES LIKE 'playerparticles'")) { // Clean up the old mess
 				if (res.next()) {
 					mySQL.updateSQL("DROP TABLE playerparticles");
 				}
@@ -125,15 +125,16 @@ public class PlayerParticles extends JavaPlugin {
 			try (ResultSet res = mySQL.querySQL("SHOW TABLES LIKE 'pp_users'")) {
 				if (!res.next()) { // @formatter:off
 					mySQL.updateSQL("CREATE TABLE pp_users (player_uuid VARCHAR(36), effect VARCHAR(32), style VARCHAR(32));" + 
-									"CREATE TABLE pp_data_item (player_uuid VARCHAR(36), material VARCHAR(32), data TINYINT);" + 
-									"CREATE TABLE pp_data_block (player_uuid VARCHAR(36), material VARCHAR(32), data TINYINT);" +
-									"CREATE TABLE pp_data_color (player_uuid VARCHAR(36), r TINYINT, g TINYINT, b TINYINT)" + 
-									"CREATE TABLE pp_data_note (player_uuid VARCHAR(36), note TINYINT)"
+									"CREATE TABLE pp_data_item (player_uuid VARCHAR(36), material VARCHAR(32), data SMALLINT);" + 
+									"CREATE TABLE pp_data_block (player_uuid VARCHAR(36), material VARCHAR(32), data SMALLINT);" +
+									"CREATE TABLE pp_data_color (player_uuid VARCHAR(36), r SMALLINT, g SMALLINT, b SMALLINT);" + 
+									"CREATE TABLE pp_data_note (player_uuid VARCHAR(36), note SMALLINT);"
 					); // @formatter:on
 				}
 				useMySQL = true;
 			} catch (ClassNotFoundException | SQLException e) {
 				getLogger().info("[PlayerParticles] Failed to connect to the MySQL Database! Check to see if your login information is correct!");
+				getLogger().info("Additional information: " + e.getMessage());
 				useMySQL = false;
 			}
 		} else {
