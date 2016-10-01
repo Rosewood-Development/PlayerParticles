@@ -129,11 +129,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 	 */
 	private void onData(Player p, String[] args) {
 		ParticleEffect effect = ConfigManager.getInstance().getPPlayer(p.getUniqueId()).getParticleEffect();
-<<<<<<< HEAD
 		if ((!effect.hasProperty(ParticleProperty.REQUIRES_DATA) && !effect.hasProperty(ParticleProperty.COLORABLE)) || args.length == 1) {
-=======
-		if (args.length == 1) {
->>>>>>> refs/remotes/origin/master
 			if (effect.hasProperty(ParticleProperty.COLORABLE)) {
 				if (effect == ParticleEffect.NOTE) {
 					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-note-data-usage", null), ChatColor.YELLOW);
@@ -214,50 +210,32 @@ public class ParticleCommandExecutor implements CommandExecutor {
 				int data = -1;
 
 				try {
-<<<<<<< HEAD
 					material = ParticlesUtil.closestMatch(args[1]);
 					if (material == null) material = Material.matchMaterial(args[1]);
 					if (material == null) throw new Exception();
 				} catch (Exception e) {
 					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-item-data-unknown", args[1]), ChatColor.RED);
 					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp data <itemName> <0-15>", ChatColor.YELLOW);
-=======
-					material = Material.matchMaterial(args[1]);
-				} catch (Exception e) {
-					// Unknown item
->>>>>>> refs/remotes/origin/master
 					return;
 				}
 
 				try {
 					data = Integer.parseInt(args[2]);
 				} catch (Exception e) {
-<<<<<<< HEAD
 					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-item-data-usage", null), ChatColor.RED);
 					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp data <itemName> <0-15>", ChatColor.YELLOW);
-=======
-					// Invalid data
->>>>>>> refs/remotes/origin/master
 					return;
 				}
 
 				if (material.isBlock()) {
-<<<<<<< HEAD
 					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-item-data-mismatch", material.name()), ChatColor.RED);
 					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp data <itemName> <0-15>", ChatColor.YELLOW);
-=======
-					// Material must be an item
->>>>>>> refs/remotes/origin/master
 					return;
 				}
 				
 				if (data < 0 || data > 15) {
-<<<<<<< HEAD
 					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-item-data-invalid-arguments", null), ChatColor.RED);
 					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp data <itemName> <0-15>", ChatColor.YELLOW);
-=======
-					// Error data range must be between 0-15
->>>>>>> refs/remotes/origin/master
 					return;
 				}
 				
@@ -268,25 +246,18 @@ public class ParticleCommandExecutor implements CommandExecutor {
 				int data = -1;
 
 				try {
-<<<<<<< HEAD
 					material = ParticlesUtil.closestMatch(args[1]);
 					if (material == null) material = Material.matchMaterial(args[1]);
 					if (material == null) throw new Exception();
 				} catch (Exception e) {
 					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-block-data-unknown", args[1]), ChatColor.RED);
 					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp data <blockName> <0-15>", ChatColor.YELLOW);
-=======
-					material = Material.matchMaterial(args[1]);
-				} catch (Exception e) {
-					// Unknown block
->>>>>>> refs/remotes/origin/master
 					return;
 				}
 
 				try {
 					data = Integer.parseInt(args[2]);
 				} catch (Exception e) {
-<<<<<<< HEAD
 					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-block-data-usage", null), ChatColor.RED);
 					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp data <blockName> <0-15>", ChatColor.YELLOW);
 					return;
@@ -295,24 +266,12 @@ public class ParticleCommandExecutor implements CommandExecutor {
 				if (!material.isBlock()) {
 					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-block-data-mismatch", material.name()), ChatColor.RED);
 					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp data <blockName> <0-15>", ChatColor.YELLOW);
-=======
-					// Invalid data
-					return;
-				}
-
-				if (material.isBlock()) {
-					// Material must be a block
->>>>>>> refs/remotes/origin/master
 					return;
 				}
 				
 				if (data < 0 || data > 15) {
-<<<<<<< HEAD
 					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-block-data-invalid-arguments", null), ChatColor.RED);
 					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp data <blockName> <0-15>", ChatColor.YELLOW);
-=======
-					// Error data range must be between 0-15
->>>>>>> refs/remotes/origin/master
 					return;
 				}
 				
@@ -329,11 +288,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 	 * @param args The arguments for the command
 	 */
 	private void onReset(Player p, String[] args) {
-<<<<<<< HEAD
 		ConfigManager.getInstance().resetPPlayer(p.getUniqueId());
-=======
-		ConfigManager.getInstance().saveEntirePPlayer(PPlayer.getNewPPlayer(p.getUniqueId()));
->>>>>>> refs/remotes/origin/master
 		MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-reset", null), ChatColor.GREEN);
 	}
 

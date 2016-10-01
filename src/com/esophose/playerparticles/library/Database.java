@@ -96,11 +96,8 @@ public abstract class Database {
 	 * See {@link java.sql.Statement#executeUpdate(String)}<br>
 	 * If the connection is closed, it will be opened
 	 * 
-<<<<<<< HEAD:src/com/esophose/playerparticles/library/Database.java
 	 * Executes multiple updates broken up by semi-colons
 	 * 
-=======
->>>>>>> refs/remotes/origin/master:src/com/esophose/playerparticles/library/Database.java
 	 * @param query Query to be run
 	 * @return Result Code, see {@link java.sql.Statement#executeUpdate(String)}
 	 * @throws SQLException If the query cannot be executed
@@ -129,12 +126,6 @@ public abstract class Database {
 
 		statement.close();
 
-<<<<<<< HEAD:src/com/esophose/playerparticles/library/Database.java
 		return results[0];
-=======
-		statement.close();
-
-		return result;
->>>>>>> refs/remotes/origin/master:src/com/esophose/playerparticles/library/Database.java
 	}
 }
