@@ -1,5 +1,5 @@
-# __________.__                           __________                __  .__       .__                              _____  
-# \______   \  | _____  ___.__. __________\______   \_____ ________/  |_|__| ____ |  |   ____   ______     ___  __/  |  | 
+# ____________                           __________                __   __        __                              _____  
+# \______  \  | _____  ___ __  __________\______   \_____ ________/  |_|__| ____ |  |   ____   ______     ___  __/  |  | 
 # |     ___/  | \__  \<   |  |/ __ \_  __ \     ___/\__  \\_  __ \   __\  |/ ___\|  | _/ __ \ /  ___/     \  \/ /   |  |_
 # |    |   |  |__/ __ \\___  \  ___/|  | \/    |     / __ \|  | \/|  | |  \  \___|  |_\  ___/ \___ \       \   /    ^   /
 # |____|   |____(____  / ____|\___  >__|  |____|    (____  /__|   |__| |__|\___  >____/\___  >____  >       \_/\____   | 
@@ -13,7 +13,7 @@
 
 # Changing this value will reset your config on the next server reload/restart. 
 # I don't recommend changing it
-version: 4
+version: 4.1
 
 # How many ticks to wait before spawning more particles
 # Increasing this value may cause less lag, but will decrease prettiness
@@ -27,6 +27,7 @@ ticks-per-particle: 1
 check-updates: true
 
 # The worlds which this plugin is disabled in
+# Remove the [] before you enter worlds names
 # Default: []
 disabled-worlds: []
 #  - your_world_name_here
@@ -43,12 +44,13 @@ use-message-prefix: true
 # The prefix to use for all PlayerParticle messages
 # Use & to set color / format
 # This is useless if use-message-prefix is set to false
-# Default: '&c[&ePlayerParticles&c]'
+# Default: '&7[&3PlayerParticles&7]'
 message-prefix: '&7[&3PlayerParticles&7]'
 
 # ================================================================ #
 #                     MESSAGE CONFIGURATION                        #
 # Important Notes:                                                 #
+# * You can use the & symbol to color the messages                 #
 # * {TYPE} Will be replaced with whatever that message requires    #
 # * You can not use the apostrophe character! ( ' )                #
 # ================================================================ #
@@ -58,153 +60,146 @@ message-prefix: '&7[&3PlayerParticles&7]'
 # ------------- #
 
 # No Particle Permission
-# Default: 'You do not have permission to use {TYPE} particles!'
-message-no-permission: 'You do not have permission to use {TYPE} particles!'
+# Default: '&cYou do not have permission to use &b{TYPE} &cparticles!'
+message-no-permission: '&cYou do not have permission to use &b{TYPE} &cparticles!'
 
 # /pp list No Particles
-# Default: 'You do not have permission to use any particles!'
-message-no-particles: 'You do not have permission to use any particles!'
+# Default: '&cYou do not have permission to use any particles!'
+message-no-particles: '&cYou do not have permission to use any particles!'
 
 # Now Using Particles
-# Default: 'Now using {TYPE} particles!'
-message-now-using: 'Now using {TYPE} particles!'
+# Default: '&aNow using &b{TYPE} &aparticles!'
+message-now-using: '&aNow using &b{TYPE} &aparticles!'
 
 # Cleared Particles
-# Default: 'Your particles have been cleared!'
-message-cleared-particles: 'Your particles have been cleared!'
-
-# You Can Use Particles
-# Default: 'You can use:'
-message-use: 'You can use:'
+# Default: '&aYour particles have been cleared!'
+message-cleared-particles: '&aYour particles have been cleared!'
 
 # Invalid Particle Type
-# Default: 'Invalid particle type!'
-message-invalid-type: 'Invalid particle type!'
+# Default: '&cInvalid particle type! &b/pp effects'
+message-invalid-type: '&cInvalid particle type! &b/pp effects &c| &b/pp effect <type>'
+
+# Particle Command Usage
+# You should not change the text here, only the coloring
+# Default: '&b/pp effect <type>'
+message-particle-usage: '&b/pp effect <type>'
 
 # -------------- #
 #     Styles     #
 # -------------- #
 
 # No Style Permission
-# Default: 'You do not have permission to use the style type {TYPE}!'
-message-no-permission-style: 'You do not have permission to use the style type {TYPE}!'
+# Default: '&cYou do not have permission to use the style type &b{TYPE}&c!'
+message-no-permission-style: '&cYou do not have permission to use the style type &b{TYPE}&c!'
 
 # /pp styles No Styles
-# Default: 'You do not have permission to use any particles!'
-message-no-styles: 'You do not have permission to use any styles!'
+# Default: '&cYou do not have permission to use any styles!'
+message-no-styles: '&cYou do not have permission to use any styles!'
 
 # Now Using Style
-# Default: 'Now using the style type {TYPE}!'
-message-now-using-style: 'Now using the style type {TYPE}!'
+# Default: '&aNow using the style type &b{TYPE}&a!'
+message-now-using-style: '&aNow using the style type &b{TYPE}&a!'
 
 # Cleared Style
-# Default: 'Cleared your particles!'
-message-cleared-style: 'Your style has been cleared!'
-
-# You Can Use Styles
-# Default: 'You can use:'
-message-use-style: 'You can use:'
+# Default: '&aYour style has been cleared!'
+message-cleared-style: '&aYour style has been cleared!'
 
 # Invalid Style Type
-# Default: 'Invalid style type!'
-message-invalid-type-style: 'Invalid style type!'
+# Default: '&cInvalid style type! &b/pp styles &c| &b/pp style <type>'
+message-invalid-type-style: '&cInvalid style type! &b/pp styles &c| &b/pp style <type>'
+
+# Style Command Usage
+# You should not change the text here, only the coloring
+# Default: '&b/pp style <type>'
+message-style-usage: '&b/pp style <type>'
 
 # ------------ #
 #     Data     #
 # ------------ #
 
-# Note Data Usage
-# Default: 'Your current effect requires note data.'
-message-note-data-usage: 'Your current effect requires note data.'
-
-# Color Data Usage
-# Default: 'Your current effect requires color data.'
-message-color-data-usage: 'Your current effect requires color data.'
-
-# Block Data Usage
-# Default: 'Your current effect requires block data.'
-message-block-data-usage: 'Your current effect requires block data.'
-
-# Item Data Usage
-# Default: 'Your current effect requires item data.'
-message-item-data-usage: 'Your current effect requires item data.'
+# Data Usage
+# Default: '&eYour current effect requires &b{TYPE} &edata!'
+message-data-usage: '&eYour current effect requires &b{TYPE} &edata!'
 
 # No Data Required
-# Default: 'Your current effect does not use any data.'
-message-no-data-usage: 'Your current effect does not use any data.'
+# Default: '&eYour current effect does not use any data!'
+message-no-data-usage: '&eYour current effect does not use any data!'
 
-# Note Data Applied
-# Default: 'Your note data has been applied!'
-message-note-data-applied: 'Your note data has been applied!'
+# Data Applied
+# Default: '&aYour &b{TYPE} &adata has been applied!'
+message-data-applied: '&aYour &b{TYPE} &adata has been applied!'
 
-# Color Data Applied
-# Default: 'Your color data has been applied!'
-message-color-data-applied: 'Your color data has been applied!'
+# Invalid Data Arguments
+# Default: '&cInvalid &b{TYPE} &cdata arguments!'
+message-data-invalid-arguments: '&cInvalid &b{TYPE} &cdata arguments!'
 
-# Block Data Applied
-# Default: 'Your block data has been applied!'
-message-block-data-applied: 'Your block data has been applied!'
+# Unknown Material
+# Default: '&cThe {TYPE} name you supplied is invalid!'
+message-data-material-unknown: '&cThe &b{TYPE} &cname you supplied is invalid!'
 
-# Item Data Applied
-# Default: 'Your item data has been applied!'
-message-item-data-applied: 'Your item data has been applied!'
+# Mismatched Material
+# Default: '&cThe material supplied is not of type &b{TYPE}&c!'
+message-data-material-mismatch: '&cThe material supplied is not of type &b{TYPE}&c!'
 
-# Invalid Note Data Arguments
-# Default: 'Invalid note data arguments!'
-message-note-data-invalid-arguments: 'Invalid note data arguments!'
+# Note Data Usage
+# You should not change the text here, only the coloring
+# Default: '&b/pp data <0-23>'
+message-note-data-usage: '&b/pp data <0-23>'
 
-# Invalid Color Data Arguments
-# Default: 'Invalid color data arguments!'
-message-color-data-invalid-arguments: 'Invalid color data arguments!'
+# Color Data Usage
+# You should not change the text here, only the coloring
+# Default: '&b/pp data <0-255> <0-255> <0-255>'
+message-color-data-usage: '&b/pp data <0-255> <0-255> <0-255>'
 
-# Invalid Block Data Arguments
-# Default: 'Invalid block data arguments!'
-message-block-data-invalid-arguments: 'Invalid block data arguments!'
+# Item Data Usage
+# You should not change the text here, only the coloring
+# Default: '&b/pp data <itemName> <0-15>'
+message-item-data-usage: '&b/pp data <itemName> <0-15>'
 
-# Invalid Item Data Arguments
-# Default: 'Invalid item data arguments!'
-message-item-data-invalid-arguments: 'Invalid item data arguments!'
+# Block Data Usage
+# You should not change the text here, only the coloring
+# Default: '&b/pp data <blockName> <0-15>'
+message-block-data-usage: '&b/pp data <blockName> <0-15>'
 
-# Unknown Block Material
-# Default: 'The block name you supplied is invalid'
-message-block-data-material-unknown: 'The block name you supplied is invalid'
+# ---------------- #
+#     Prefixes     #
+# ---------------- #
 
-# Unknown Item Material
-# Default: 'The item name you supplied is invalid'
-message-item-data-material-unknown: 'The item name you supplied is invalid'
+# You Can Use Particles
+# Default: '&eYou can use:'
+message-use: '&eYou can use:&b'
 
-<<<<<<< HEAD
-=======
+# Usage
+# Default: '&eUsage:'
+message-usage: '&eUsage:'
 
+# Available Commands
+# Default: '&eAvailable commands: &beffect, effects, style, styles, data, reset, worlds, version, help'
+message-available-commands: '&eAvailable commands: &beffect, effects, style, styles, data, reset, worlds, version, help'
 
->>>>>>> refs/remotes/origin/master
+# Disabled Worlds
+# Default: '&eParticles are disabled in these worlds:&b'
+message-disabled-worlds: '&eParticles are disabled in these worlds:&b'
+
 # ------------- #
 #     Other     #
 # ------------- #
 
-# Usage
-# Default: 'Usage:'
-message-usage: 'Usage:'
-
 # Reset
-# Default: 'Your effect, style, and data have all been reset!'
-message-reset: 'Your effect, style, and data have all been reset!'
+# Default: '&aYour effect, style, and data have all been reset!'
+message-reset: '&aYour effect, style, and data have all been reset!'
 
 # Invalid Arguments
-# Default: 'Invalid arguments!'
-message-invalid-arguments: 'Invalid arguments!'
-
-# Available Commands
-# Default: 'Available commands:'
-message-available-commands: 'Available commands:'
+# Default: '&cInvalid arguments! &a/pp help'
+message-invalid-arguments: '&cInvalid arguments! &b/pp help'
 
 # Disabled Worlds None
-# Default: 'Particles are not disabled in any worlds!'
-message-disabled-worlds-none: 'Particles are not disabled in any worlds!'
+# Default: '&eParticles are not disabled in any worlds!'
+message-disabled-worlds-none: '&eParticles are not disabled in any worlds!'
 
-# Disabled Worlds
-# Default: 'Particles are disabled in these worlds:'
-message-disabled-worlds: 'Particles are disabled in these worlds:'
+# Command Usage
+# Default: '&eCommand Usage: /pp <command>'
+message-command-usage: '&eCommand Usage: &b/pp <command>'
 
 # ================================================================ #
 #                     DATABASE CONFIGURATION                       #

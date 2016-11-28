@@ -47,14 +47,10 @@ import com.esophose.playerparticles.library.ReflectionUtils.PackageType;
 
 /**
  * Modified a couple things for the plugin
-<<<<<<< HEAD
+ *
  * Updated to 1.10
  * 
  * @author (of changes) Esophose
-=======
- * 
- * @author Esophose
->>>>>>> refs/remotes/origin/master
  */
 public enum ParticleEffect {
 
@@ -106,7 +102,9 @@ public enum ParticleEffect {
 	END_ROD("endrod", 43, 9),
 	DAMAGE_INDICATOR("damageindicator", 44, 9),
 	SWEEP_ATTACK("sweepattack", 45, 9),
-	FALLING_DUST("fallingdust", 46, 10, ParticleProperty.DIRECTIONAL, ParticleProperty.REQUIRES_DATA);
+	FALLING_DUST("fallingdust", 46, 10, ParticleProperty.DIRECTIONAL, ParticleProperty.REQUIRES_DATA),
+	TOTEM("totem", 47, 11, ParticleProperty.DIRECTIONAL),
+	SPIT("spit", 48, 11, ParticleProperty.DIRECTIONAL);
 
 	private static final Map<String, ParticleEffect> NAME_MAP = new HashMap<String, ParticleEffect>();
 	private static final Map<Integer, ParticleEffect> ID_MAP = new HashMap<Integer, ParticleEffect>();

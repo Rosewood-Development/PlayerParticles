@@ -11,6 +11,7 @@ package com.esophose.playerparticles;
 import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -63,7 +64,7 @@ public class ParticleCreator extends BukkitRunnable implements Listener {
 			ConfigManager.getInstance().getPPlayer(player.getUniqueId());
 		}
 	}
-	
+
 	public static void updateIfContains(PPlayer pplayer) {
 		for (PPlayer pp : particlePlayers) {
 			if (pp.getUniqueId() == pplayer.getUniqueId()) {
@@ -89,15 +90,14 @@ public class ParticleCreator extends BukkitRunnable implements Listener {
 
 	/**
 	 * The main loop to display all the particles
-	 * Updates all the timing variables
-	 * Refreshes the database connection if it is enabled and it has been 30 seconds since last refresh
-	 * Displays the particles for all players on the server
+	 * Does not display particles if the world is disabled or if the player is in spectator mode
 	 */
 	public void run() {
 		ParticleStyleManager.updateTimers();
 
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (ConfigManager.getInstance().isWorldDisabled(player.getWorld().getName())) continue;
+			if (player.getGameMode() == GameMode.SPECTATOR) continue;
 			PPlayer pplayer = ConfigManager.getInstance().getPPlayer(player.getUniqueId());
 			if (PermissionManager.hasEffectPermission(player, pplayer.getParticleEffect())) {
 				Location loc = player.getLocation();

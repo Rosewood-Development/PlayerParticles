@@ -1,9 +1,20 @@
+/**
+ * Copyright Esophose 2016
+ * While using any of the code provided by this plugin
+ * you must not claim it as your own. This plugin may
+ * be modified and installed on a server, but may not
+ * be distributed to any person by any means.
+ */
+
 package com.esophose.playerparticles.styles.api;
 
 import org.bukkit.Location;
 
 public class PParticle {
 
+	/**
+	 * Data that affects the particle
+	 */
 	private Location location;
 	private float speed;
 	private float xOff, yOff, zOff;

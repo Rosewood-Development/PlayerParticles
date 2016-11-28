@@ -1,12 +1,28 @@
+/**
+ * Copyright Esophose 2016
+ * While using any of the code provided by this plugin
+ * you must not claim it as your own. This plugin may
+ * be modified and installed on a server, but may not
+ * be distributed to any person by any means.
+ */
+
 package com.esophose.playerparticles.styles.api;
 
 import java.util.ArrayList;
 
 public class ParticleStyleManager {
 
+	/**
+	 * Arrays that contain all registered styles
+	 */
 	private static ArrayList<ParticleStyle> styles = new ArrayList<ParticleStyle>();
 	private static ArrayList<ParticleStyle> customHandledStyles = new ArrayList<ParticleStyle>();
 
+	/**
+	 * Registers a style that is put into the plugin's update loop
+	 * 
+	 * @param style The style to add
+	 */
 	public static void registerStyle(ParticleStyle style) {
 		for (ParticleStyle testAgainst : styles) {
 			if (testAgainst.getName().replace("_", "").equalsIgnoreCase(style.getName())) {
@@ -18,15 +34,30 @@ public class ParticleStyleManager {
 		styles.add(style);
 	}
 
+	/**
+	 * Registers a style that isn't updated on the normal update loop
+	 * 
+	 * @param style The style to register
+	 */
 	public static void registerCustomHandledStyle(ParticleStyle style) {
 		registerStyle(style);
 		customHandledStyles.add(style);
 	}
 
+	/**
+	 * Returns if a given style is customly handled
+	 * 
+	 * @param style The style to check
+	 * @return If the style is handled in a custom manner
+	 */
 	public static boolean isCustomHandled(ParticleStyle style) {
 		return customHandledStyles.contains(style);
 	}
 
+	/**
+	 * Gets all registered styles
+	 * @return An ArrayList of all registered styles
+	 */
 	public static ArrayList<ParticleStyle> getStyles() {
 		return styles;
 	}

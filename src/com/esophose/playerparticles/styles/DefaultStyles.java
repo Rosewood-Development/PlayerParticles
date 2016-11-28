@@ -9,6 +9,9 @@ import com.esophose.playerparticles.styles.api.ParticleStyleManager;
 
 public class DefaultStyles {
 
+	/**
+	 * All the styles that are available by default from this plugin
+	 */
 	public static ParticleStyle NONE = new ParticleStyleNone();
 	public static ParticleStyle SPIRAL = new ParticleStyleSpiral();
 	public static ParticleStyle HALO = new ParticleStyleHalo();
@@ -18,7 +21,11 @@ public class DefaultStyles {
 	public static ParticleStyle QUADHELIX = new ParticleStyleQuadhelix();
 	public static ParticleStyle ORBIT = new ParticleStyleOrbit();
 	public static ParticleStyle FEET = new ParticleStyleFeet();
+	public static ParticleStyle CUBE = new ParticleStyleCube();
 
+	/**
+	 * Registers all the default styles to the ParticleStyleManager
+	 */
 	public static void registerStyles() {
 		ParticleStyleManager.registerStyle(NONE);
 		ParticleStyleManager.registerStyle(SPIRAL);
@@ -29,8 +36,9 @@ public class DefaultStyles {
 		ParticleStyleManager.registerStyle(QUADHELIX);
 		ParticleStyleManager.registerStyle(ORBIT);
 		ParticleStyleManager.registerStyle(FEET);
+		ParticleStyleManager.registerStyle(CUBE);
 		
-		Bukkit.getServer().getPluginManager().registerEvents((Listener) MOVE, PlayerParticles.getPlugin());
+		Bukkit.getPluginManager().registerEvents((Listener) MOVE, PlayerParticles.getPlugin());
 	}
 
 }

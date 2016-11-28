@@ -109,6 +109,10 @@ public class ParticleStyleNone implements ParticleStyle {
 			for (int i = 0; i < 2; i++)
 				particles[i] = new PParticle(location.add(0, 0.75, 0), 0.6F, 0.4F, 0.6F, 0.0F);
 			return particles;
+		} else if (particleEffect.equals(ParticleEffect.TOTEM)) {
+			return new PParticle[] { new PParticle(location, 0.6F, 0.6F, 0.6F, 0.0F) };
+		} else if (particleEffect.equals(ParticleEffect.SPIT)) {
+			return new PParticle[] { new PParticle(location, 0.6F, 0.6F, 0.6F, 0.0F) };
 		} else {
 			return new PParticle[] { new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F) };
 		}

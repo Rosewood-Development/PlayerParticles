@@ -22,6 +22,7 @@ public class PermissionManager {
 
 	/**
 	 * Checks if a player has permission to use an effect
+	 * Always returns true for 'none'
 	 * 
 	 * @param player The player to check the permission for
 	 * @param effect The effect to check

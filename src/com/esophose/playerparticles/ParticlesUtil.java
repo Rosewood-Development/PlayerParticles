@@ -1,3 +1,11 @@
+/**
+ * Copyright Esophose 2016
+ * While using any of the code provided by this plugin
+ * you must not claim it as your own. This plugin may
+ * be modified and installed on a server, but may not
+ * be distributed to any person by any means.
+ */
+
 package com.esophose.playerparticles;
 
 import java.util.ArrayList;
@@ -6,7 +14,13 @@ import org.bukkit.Material;
 
 public class ParticlesUtil {
 
-	// TODO: Find a more reliable way of doing this that works better
+	/**
+	 * Finds a block/item as a material from a string
+	 * There must be some better way to do this that reliably gets the correct material
+	 * 
+	 * @param input The material name as a string
+	 * @return The material from the string
+	 */
 	@SuppressWarnings("deprecation")
 	public static Material closestMatch(String input) {
         ArrayList<Material> matchList = new ArrayList<Material>();

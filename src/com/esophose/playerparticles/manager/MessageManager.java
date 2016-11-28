@@ -9,6 +9,7 @@
 package com.esophose.playerparticles.manager;
 
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import com.esophose.playerparticles.PlayerParticles;
@@ -16,80 +17,148 @@ import com.esophose.playerparticles.PlayerParticles;
 public class MessageManager {
 
 	/**
-	 * The instance of the MessageManager, we only need one of these
+	 * Contains the location in the config of every chat message
 	 */
-	private static MessageManager instance = new MessageManager();
+	public static enum MessageType {
+
+		// Particles
+		NO_PERMISSION("message-no-permission"),
+		NO_PARTICLES("message-no-particles"),
+		NOW_USING("message-now-using"),
+		CLEARED_PARTICLES("message-cleared-particles"),
+		INVALID_TYPE("message-invalid-type"),
+		PARTICLE_USAGE("message-particle-usage"),
+		
+		// Styles
+		NO_PERMISSION_STYLE("message-no-permission-style"),
+		NO_STYLES("message-no-styles"),
+		NOW_USING_STYLE("message-now-using-style"),
+		CLEARED_STYLE("message-cleared-style"),
+		USE_STYLE("message-use-style"),
+		INVALID_TYPE_STYLE("message-invalid-type-style"),
+		STYLE_USAGE("message-style-usage"),
+		
+		// Data
+		DATA_USAGE("message-data-usage"),
+		NO_DATA_USAGE("message-no-data-usage"),
+		DATA_APPLIED("message-data-applied"),
+		DATA_INVALID_ARGUMENTS("message-data-invalid-arguments"),
+		DATA_MATERIAL_UNKNOWN("message-data-material-unknown"),
+		DATA_MATERIAL_MISMATCH("message-data-material-mismatch"),
+		NOTE_DATA_USAGE("message-note-data-usage"),
+		COLOR_DATA_USAGE("message-color-data-usage"),
+		ITEM_DATA_USAGE("message-item-data-usage"),
+		BLOCK_DATA_USAGE("message-block-data-usage"),
+		
+		// Prefixes
+		USE("message-use"),
+		USAGE("message-usage"),
+		RESET("message-reset"),
+		
+		// Other
+		INVALID_ARGUMENTS("message-invalid-arguments"),
+		AVAILABLE_COMMANDS("message-available-commands"),
+		DISABLED_WORLDS_NONE("message-disabled-worlds-none"),
+		DISABLED_WORLDS("message-disabled-worlds"),
+		COMMAND_USAGE("message-command-usage");
+
+		public String configLocation;
+
+		MessageType(String configLocation) {
+			this.configLocation = configLocation;
+		}
+
+		/**
+		 * Gets the message with the given config path
+		 * 
+		 * @return The message from the config
+		 */
+		public String getMessage() {
+			return ChatColor.translateAlternateColorCodes('&', config.getString(this.configLocation));
+		}
+	}
+
 	/**
-	 * Values contained in the config used for custom messages
+	 * Stores the main config for quick access
 	 */
-	private boolean messagesEnabled, prefixEnabled;
+	private static FileConfiguration config;
+	/**
+	 * Stores if messages and their prefixes should be displayed
+	 */
+	private static boolean messagesEnabled, prefixEnabled;
 	/**
 	 * The prefix to place before all sent messages contained in the config
 	 */
-	private String messagePrefix;
+	private static String messagePrefix;
 
 	/**
-	 * Sets up all the above variables with values from the plugin config
+	 * Used to set up the MessageManager
+	 * This should only get called once by the PlayerParticles class, however
+	 * calling it multiple times wont affect anything negatively
 	 */
-	private MessageManager() {
-		this.messagesEnabled = PlayerParticles.getPlugin().getConfig().getBoolean("messages-enabled");
-		this.prefixEnabled = PlayerParticles.getPlugin().getConfig().getBoolean("use-message-prefix");
-		this.messagePrefix = PlayerParticles.getPlugin().getConfig().getString("message-prefix");
-		this.messagePrefix = ChatColor.translateAlternateColorCodes('&', this.messagePrefix);
+	public static void setup() {
+		config = PlayerParticles.getPlugin().getConfig();
+		messagesEnabled = config.getBoolean("messages-enabled");
+		prefixEnabled = config.getBoolean("use-message-prefix");
+		messagePrefix = parseColors(config.getString("message-prefix"));
 	}
 
 	/**
-	 * Gets the instance of the MessageManager
+	 * Sends a message to the given player
 	 * 
-	 * @return The instance of the MessageManager
+	 * @param player The player to send the message to
+	 * @param messageType The message to send to the player
 	 */
-	public static MessageManager getInstance() {
-		return instance;
+	public static void sendMessage(Player player, MessageType messageType) {
+		if (!messagesEnabled) return;
+		
+		String message = messageType.getMessage();
+		if (prefixEnabled) {
+			message = messagePrefix + " " + message;
+		}
+		player.sendMessage(message);
 	}
-
+	
 	/**
-	 * Sends a message to a player
+	 * Sends a message to the given player and allows for replacing {TYPE}
+	 * @param player The player to send the message to
+	 * @param messageType The message to send to the player
+	 * @param typeReplacement What {TYPE} should be replaced with
+	 */
+	public static void sendMessage(Player player, MessageType messageType, String typeReplacement) {
+		if (!messagesEnabled) return;
+		
+		String message = messageType.getMessage().replaceAll("\\{TYPE\\}", typeReplacement);
+		if (prefixEnabled) {
+			message = messagePrefix + " " + message;
+		}
+		player.sendMessage(message);
+	}
+	
+	/**
+	 * Sends a custom message
+	 * Used in cases of string building
 	 * 
 	 * @param player The player to send the message to
 	 * @param message The message to send to the player
-	 * @param color The chat color to put before the message
 	 */
-	public void sendMessage(Player player, String message, ChatColor color) {
-		if (!this.messagesEnabled) return;
-		if (this.prefixEnabled) {
-			message = this.messagePrefix + color + " " + message;
-		} else {
-			message = color + message;
+	public static void sendCustomMessage(Player player, String message) {
+		if (!messagesEnabled) return;
+
+		if (prefixEnabled) {
+			message = messagePrefix + " " + message;
 		}
 		player.sendMessage(message);
 	}
 
 	/**
-	 * Sends a player a message without any custom coloring
-	 * This will become the default in v4.1
+	 * Translates all & symbols into the Minecraft chat color symbol
 	 * 
-	 * @param player The player to send the message to
-	 * @param message The message to send to the player
+	 * @param message The input
+	 * @return The output, parsed
 	 */
-	public void sendMessage(Player player, String message) {
-		if (!this.messagesEnabled) return;
-		if (this.prefixEnabled) {
-			message = this.messagePrefix + message;
-		}
-		player.sendMessage(message);
-	}
-
-	/**
-	 * Gets a message from the config with the formatting specified
-	 * 
-	 * @param target The string to find in the config
-	 * @param replacement The replacement for {TYPE}, can be null
-	 * @return The message requested with the applied formatting
-	 */
-	public static String getMessageFromConfig(String target, String replacement) {
-		String message = ChatColor.translateAlternateColorCodes('&', PlayerParticles.getPlugin().getConfig().getString(target));
-		if (replacement != null) message = message.replaceAll("\\{TYPE\\}", replacement);
-		return message;
+	public static String parseColors(String message) {
+		return ChatColor.translateAlternateColorCodes('&', message);
 	}
 
 }

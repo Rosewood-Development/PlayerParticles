@@ -14,6 +14,13 @@ import com.esophose.playerparticles.PPlayer;
 
 public interface ParticleStyle {
 
+	/**
+	 * Gets all the particles to display based on the style's logic
+	 * 
+	 * @param pplayer The PPlayer to display the particles for
+	 * @param location The central location of the particles
+	 * @return A list of all PParticles' to spawn
+	 */
 	public PParticle[] getParticles(PPlayer pplayer, Location location);
 
 	public void updateTimers();

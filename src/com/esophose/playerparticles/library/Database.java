@@ -116,11 +116,9 @@ public abstract class Database {
 			String[] queries = query.split(";");
 			for (String q : queries) {
 				statement.addBatch(q);
-				System.out.println("Running query: " + q);
 			}
 			results = statement.executeBatch();
 		} else {
-			System.out.println("Running query: " + query);
 			results = new int[] { statement.executeUpdate(query) };
 		}
 

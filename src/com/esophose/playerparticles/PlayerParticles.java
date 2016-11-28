@@ -7,6 +7,8 @@
  * 
  * TODO: Make sure copyright notice is on all files
  * TODO: Make sure all the comments are properly formatted still
+ * TODO: Add option to config to show particles in spectator mode or not - Disabled by default
+ * TODO: Add message configuration for data usage
  */
 
 package com.esophose.playerparticles;
@@ -20,6 +22,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.esophose.playerparticles.library.MySQL;
+import com.esophose.playerparticles.manager.MessageManager;
 import com.esophose.playerparticles.styles.DefaultStyles;
 import com.esophose.playerparticles.updater.PluginUpdateListener;
 import com.esophose.playerparticles.updater.Updater;
@@ -55,6 +58,7 @@ public class PlayerParticles extends JavaPlugin {
 	 */
 	public void onEnable() {
 		DefaultStyles.registerStyles();
+		MessageManager.setup();
 		saveDefaultConfig();
 		getCommand("pp").setTabCompleter(new ParticleCommandCompleter());
 		getCommand("pp").setExecutor(new ParticleCommandExecutor());

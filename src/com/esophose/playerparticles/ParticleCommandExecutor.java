@@ -1,3 +1,11 @@
+/**
+ * Copyright Esophose 2016
+ * While using any of the code provided by this plugin
+ * you must not claim it as your own. This plugin may
+ * be modified and installed on a server, but may not
+ * be distributed to any person by any means.
+ */
+
 package com.esophose.playerparticles;
 
 import org.bukkit.ChatColor;
@@ -15,6 +23,7 @@ import com.esophose.playerparticles.library.ParticleEffect.OrdinaryColor;
 import com.esophose.playerparticles.library.ParticleEffect.ParticleProperty;
 import com.esophose.playerparticles.manager.ConfigManager;
 import com.esophose.playerparticles.manager.MessageManager;
+import com.esophose.playerparticles.manager.MessageManager.MessageType;
 import com.esophose.playerparticles.manager.PermissionManager;
 import com.esophose.playerparticles.styles.DefaultStyles;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
@@ -37,7 +46,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 		Player p = (Player) sender;
 
 		if (args.length == 0) {
-			MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-invalid-arguments", null) + ChatColor.GREEN + " /pp help", ChatColor.RED);
+			MessageManager.sendMessage(p, MessageType.INVALID_ARGUMENTS);
 			return true;
 		} else {
 			switch (args[0].toLowerCase()) {
@@ -69,7 +78,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 				onReset(p, args);
 				break;
 			default:
-				MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-invalid-arguments", null) + ChatColor.GREEN + " /pp help", ChatColor.RED);
+				MessageManager.sendMessage(p, MessageType.INVALID_ARGUMENTS);
 			}
 			return true;
 		}
@@ -82,9 +91,8 @@ public class ParticleCommandExecutor implements CommandExecutor {
 	 * @param args The arguments for the command
 	 */
 	private void onHelp(Player p, String[] args) {
-		MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-available-commands", null), ChatColor.GREEN);
-		MessageManager.getInstance().sendMessage(p, "effect, effects, style, styles, data, reset, worlds, version, help", ChatColor.AQUA);
-		MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp <command>", ChatColor.YELLOW);
+		MessageManager.sendMessage(p, MessageType.AVAILABLE_COMMANDS);
+		MessageManager.sendMessage(p, MessageType.COMMAND_USAGE);
 	}
 
 	/**
@@ -94,20 +102,18 @@ public class ParticleCommandExecutor implements CommandExecutor {
 	 * @param args The arguments for the command
 	 */
 	private void onWorlds(Player p, String[] args) {
-		String worlds = "";
-		if (ConfigManager.getInstance().getDisabledWorlds() == null) {
-			MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-disabled-worlds-none", null), ChatColor.GREEN);
+		if (ConfigManager.getInstance().getDisabledWorlds() == null || ConfigManager.getInstance().getDisabledWorlds().isEmpty()) {
+			MessageManager.sendMessage(p, MessageType.DISABLED_WORLDS_NONE);
+			return;
 		}
+		
+		String worlds = "";
 		for (String s : ConfigManager.getInstance().getDisabledWorlds()) {
 			worlds += s + ", ";
 		}
 		if (worlds.length() > 2) worlds = worlds.substring(0, worlds.length() - 2);
-		if (worlds.equals("")) {
-			worlds = MessageManager.getMessageFromConfig("message-disabled-worlds-none", null);
-		} else {
-			worlds = MessageManager.getMessageFromConfig("message-disabled-worlds", null) + " " + ChatColor.AQUA + worlds;
-		}
-		MessageManager.getInstance().sendMessage(p, worlds, ChatColor.GREEN);
+		
+		MessageManager.sendCustomMessage(p, MessageType.DISABLED_WORLDS.getMessage() + " " + worlds);
 	}
 
 	/**
@@ -117,8 +123,8 @@ public class ParticleCommandExecutor implements CommandExecutor {
 	 * @param args The arguments for the command
 	 */
 	private void onVersion(Player p, String[] args) {
-		MessageManager.getInstance().sendMessage(p, "Running PlayerParticles v" + PlayerParticles.getPlugin().getDescription().getVersion(), ChatColor.GOLD);
-		MessageManager.getInstance().sendMessage(p, "Plugin created by: Esophose", ChatColor.GOLD);
+		MessageManager.sendCustomMessage(p, ChatColor.GOLD + "Running PlayerParticles v" + PlayerParticles.getPlugin().getDescription().getVersion());
+		MessageManager.sendCustomMessage(p, ChatColor.GOLD + "Plugin created by: Esophose");
 	}
 
 	/**
@@ -132,22 +138,22 @@ public class ParticleCommandExecutor implements CommandExecutor {
 		if ((!effect.hasProperty(ParticleProperty.REQUIRES_DATA) && !effect.hasProperty(ParticleProperty.COLORABLE)) || args.length == 1) {
 			if (effect.hasProperty(ParticleProperty.COLORABLE)) {
 				if (effect == ParticleEffect.NOTE) {
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-note-data-usage", null), ChatColor.YELLOW);
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp data <0-23>", ChatColor.YELLOW);
+					MessageManager.sendMessage(p, MessageType.DATA_USAGE, "note");
+					MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.NOTE_DATA_USAGE.getMessage());
 				} else {
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-color-data-usage", null), ChatColor.YELLOW);
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp data <0-255> <0-255> <0-255>", ChatColor.YELLOW);
+					MessageManager.sendMessage(p, MessageType.DATA_USAGE, "color");
+					MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.COLOR_DATA_USAGE.getMessage());
 				}
 			} else if (effect.hasProperty(ParticleProperty.REQUIRES_DATA)) {
 				if (effect == ParticleEffect.ITEM_CRACK) {
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-item-data-usage", null), ChatColor.YELLOW);
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp data <itemName> <0-15>", ChatColor.YELLOW);
+					MessageManager.sendMessage(p, MessageType.DATA_USAGE, "item");
+					MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.ITEM_DATA_USAGE.getMessage());
 				} else {
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-block-data-usage", null), ChatColor.YELLOW);
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp data <blockName> <0-15>", ChatColor.YELLOW);
+					MessageManager.sendMessage(p, MessageType.DATA_USAGE, "block");
+					MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.BLOCK_DATA_USAGE.getMessage());
 				}
 			} else {
-				MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-no-data-usage", null), ChatColor.YELLOW);
+				MessageManager.sendMessage(p, MessageType.NO_DATA_USAGE);
 			}
 			return;
 		}
@@ -158,22 +164,22 @@ public class ParticleCommandExecutor implements CommandExecutor {
 					try {
 						note = Integer.parseInt(args[1]);
 					} catch (Exception e) {
-						MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-note-data-invalid-arguments", null), ChatColor.RED);
-						MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp data <0-23>", ChatColor.YELLOW);
+						MessageManager.sendMessage(p, MessageType.DATA_INVALID_ARGUMENTS, "note");
+						MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.NOTE_DATA_USAGE.getMessage());
 						return;
 					}
 					
 					if (note < 0 || note > 23) {
-						MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-note-data-invalid-arguments", null), ChatColor.RED);
-						MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp data <0-23>", ChatColor.YELLOW);
+						MessageManager.sendMessage(p, MessageType.DATA_INVALID_ARGUMENTS, "note");
+						MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.NOTE_DATA_USAGE.getMessage());
 						return;
 					}
 					
 					ConfigManager.getInstance().savePPlayer(p.getUniqueId(), new NoteColor(note));
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-note-data-applied", null), ChatColor.GREEN);
+					MessageManager.sendMessage(p, MessageType.DATA_APPLIED, "note");
 				} else {
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-note-data-invalid-arguments", null), ChatColor.RED);
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp data <0-23>", ChatColor.YELLOW);
+					MessageManager.sendMessage(p, MessageType.DATA_INVALID_ARGUMENTS, "note");
+					MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.NOTE_DATA_USAGE.getMessage());
 				}
 			} else {
 				if (args.length >= 4) {
@@ -186,22 +192,22 @@ public class ParticleCommandExecutor implements CommandExecutor {
 						g = Integer.parseInt(args[2]);
 						b = Integer.parseInt(args[3]);
 					} catch (Exception e) {
-						MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-color-data-invalid-arguments", null), ChatColor.RED);
-						MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp data <0-255> <0-255> <0-255>", ChatColor.YELLOW);
+						MessageManager.sendMessage(p, MessageType.DATA_INVALID_ARGUMENTS, "color");
+						MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.COLOR_DATA_USAGE.getMessage());
 						return;
 					}
 					
 					if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
-						MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-color-data-invalid-arguments", null), ChatColor.RED);
-						MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp data <0-255> <0-255> <0-255>", ChatColor.YELLOW);
+						MessageManager.sendMessage(p, MessageType.DATA_INVALID_ARGUMENTS, "color");
+						MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.COLOR_DATA_USAGE.getMessage());
 						return;
 					}
 					
 					ConfigManager.getInstance().savePPlayer(p.getUniqueId(), new OrdinaryColor(r, g, b));
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-color-data-applied", null), ChatColor.GREEN);
+					MessageManager.sendMessage(p, MessageType.DATA_APPLIED, "color");
 				} else {
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-color-data-invalid-arguments", null), ChatColor.RED);
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp data <0-255> <0-255> <0-255>", ChatColor.YELLOW);
+					MessageManager.sendMessage(p, MessageType.DATA_INVALID_ARGUMENTS, "color");
+					MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.COLOR_DATA_USAGE.getMessage());
 				}
 			}
 		} else if (effect.hasProperty(ParticleProperty.REQUIRES_DATA)) {
@@ -214,33 +220,33 @@ public class ParticleCommandExecutor implements CommandExecutor {
 					if (material == null) material = Material.matchMaterial(args[1]);
 					if (material == null) throw new Exception();
 				} catch (Exception e) {
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-item-data-unknown", args[1]), ChatColor.RED);
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp data <itemName> <0-15>", ChatColor.YELLOW);
+					MessageManager.sendMessage(p, MessageType.DATA_MATERIAL_UNKNOWN, "item");
+					MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.ITEM_DATA_USAGE.getMessage());
 					return;
 				}
 
 				try {
 					data = Integer.parseInt(args[2]);
 				} catch (Exception e) {
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-item-data-usage", null), ChatColor.RED);
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp data <itemName> <0-15>", ChatColor.YELLOW);
+					MessageManager.sendMessage(p, MessageType.DATA_INVALID_ARGUMENTS, "item");
+					MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.ITEM_DATA_USAGE.getMessage());
 					return;
 				}
 
 				if (material.isBlock()) {
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-item-data-mismatch", material.name()), ChatColor.RED);
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp data <itemName> <0-15>", ChatColor.YELLOW);
+					MessageManager.sendMessage(p, MessageType.DATA_MATERIAL_MISMATCH, "item");
+					MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.ITEM_DATA_USAGE.getMessage());
 					return;
 				}
 				
 				if (data < 0 || data > 15) {
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-item-data-invalid-arguments", null), ChatColor.RED);
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp data <itemName> <0-15>", ChatColor.YELLOW);
+					MessageManager.sendMessage(p, MessageType.DATA_INVALID_ARGUMENTS, "item");
+					MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.ITEM_DATA_USAGE.getMessage());
 					return;
 				}
 				
 				ConfigManager.getInstance().savePPlayer(p.getUniqueId(), new ItemData(material, (byte) data));
-				MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-item-data-applied", null), ChatColor.GREEN);
+				MessageManager.sendMessage(p, MessageType.DATA_APPLIED, "item");
 			} else {
 				Material material = null;
 				int data = -1;
@@ -250,33 +256,33 @@ public class ParticleCommandExecutor implements CommandExecutor {
 					if (material == null) material = Material.matchMaterial(args[1]);
 					if (material == null) throw new Exception();
 				} catch (Exception e) {
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-block-data-unknown", args[1]), ChatColor.RED);
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp data <blockName> <0-15>", ChatColor.YELLOW);
+					MessageManager.sendMessage(p, MessageType.DATA_MATERIAL_UNKNOWN, "block");
+					MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.BLOCK_DATA_USAGE.getMessage());
 					return;
 				}
 
 				try {
 					data = Integer.parseInt(args[2]);
 				} catch (Exception e) {
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-block-data-usage", null), ChatColor.RED);
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp data <blockName> <0-15>", ChatColor.YELLOW);
+					MessageManager.sendMessage(p, MessageType.DATA_INVALID_ARGUMENTS, "block");
+					MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.BLOCK_DATA_USAGE.getMessage());
 					return;
 				}
 
 				if (!material.isBlock()) {
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-block-data-mismatch", material.name()), ChatColor.RED);
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp data <blockName> <0-15>", ChatColor.YELLOW);
+					MessageManager.sendMessage(p, MessageType.DATA_MATERIAL_MISMATCH, "block");
+					MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.BLOCK_DATA_USAGE.getMessage());
 					return;
 				}
 				
 				if (data < 0 || data > 15) {
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-block-data-invalid-arguments", null), ChatColor.RED);
-					MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp data <blockName> <0-15>", ChatColor.YELLOW);
+					MessageManager.sendMessage(p, MessageType.DATA_INVALID_ARGUMENTS, "block");
+					MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.BLOCK_DATA_USAGE.getMessage());
 					return;
 				}
 				
 				ConfigManager.getInstance().savePPlayer(p.getUniqueId(), new BlockData(material, (byte) data));
-				MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-block-data-applied", null), ChatColor.GREEN);
+				MessageManager.sendMessage(p, MessageType.DATA_APPLIED, "block");
 			}
 		}
 	}
@@ -289,7 +295,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 	 */
 	private void onReset(Player p, String[] args) {
 		ConfigManager.getInstance().resetPPlayer(p.getUniqueId());
-		MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-reset", null), ChatColor.GREEN);
+		MessageManager.sendMessage(p, MessageType.RESET);
 	}
 
 	/**
@@ -300,25 +306,25 @@ public class ParticleCommandExecutor implements CommandExecutor {
 	 */
 	private void onEffect(Player p, String[] args) {
 		if (args.length == 1) {
-			MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-invalid-type", null) + ChatColor.GREEN + " /pp effects | /pp effect <type>", ChatColor.RED);
+			MessageManager.sendMessage(p, MessageType.INVALID_TYPE);
 			return;
 		}
 		String argument = args[1].replace("_", "");
 		if (ParticleCreator.particleFromString(argument) != null) {
 			ParticleEffect effect = ParticleCreator.particleFromString(argument);
 			if (!PermissionManager.hasEffectPermission(p, effect)) {
-				MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-no-permission", ChatColor.AQUA + effect.getName().toLowerCase() + ChatColor.RED), ChatColor.RED);
+				MessageManager.sendMessage(p, MessageType.NO_PERMISSION, effect.getName().toLowerCase());
 				return;
 			}
 			ConfigManager.getInstance().savePPlayer(p.getUniqueId(), effect);
 			if (effect != ParticleEffect.NONE) {
-				MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-now-using", ChatColor.AQUA + effect.getName().toLowerCase() + ChatColor.GREEN), ChatColor.GREEN);
+				MessageManager.sendMessage(p, MessageType.NOW_USING, effect.getName().toLowerCase());
 			} else {
-				MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-cleared-particles", null), ChatColor.GREEN);
+				MessageManager.sendMessage(p, MessageType.CLEARED_PARTICLES);
 			}
 			return;
 		}
-		MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-invalid-type", null) + ChatColor.GREEN + " /pp effects", ChatColor.RED);
+		MessageManager.sendMessage(p, MessageType.INVALID_TYPE);
 	}
 
 	/**
@@ -328,20 +334,22 @@ public class ParticleCommandExecutor implements CommandExecutor {
 	 * @param args The arguments for the command
 	 */
 	private void onEffects(Player p, String[] args) {
-		String toSend = MessageManager.getMessageFromConfig("message-use", null) + " ";
+		String toSend = MessageType.USE.getMessage() + " ";
 		for (ParticleEffect effect : ParticleEffect.getSupportedEffects()) {
 			if (PermissionManager.hasEffectPermission(p, effect)) {
 				toSend += effect.getName().toLowerCase().replace("_", "") + ", ";
 				continue;
 			}
 		}
-		if (toSend.equals(MessageManager.getMessageFromConfig("message-use", null) + " ")) {
-			MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-no-particles", null), ChatColor.RED);
+		if (toSend.endsWith(", ")) {
+			toSend = toSend.substring(0, toSend.length() - 2);
+		}
+		if (toSend.equals(MessageType.USE.getMessage() + " " + ParticleEffect.NONE.getName())) {
+			MessageManager.sendMessage(p, MessageType.NO_PARTICLES);
 			return;
 		}
-		toSend = toSend + "clear";
-		MessageManager.getInstance().sendMessage(p, toSend, ChatColor.GREEN);
-		MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp effect <type>", ChatColor.YELLOW);
+		MessageManager.sendCustomMessage(p, toSend);
+		MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.PARTICLE_USAGE.getMessage());
 	}
 
 	/**
@@ -352,25 +360,25 @@ public class ParticleCommandExecutor implements CommandExecutor {
 	 */
 	private void onStyle(Player p, String[] args) {
 		if (args.length == 1) {
-			MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp style <type>", ChatColor.YELLOW);
+			MessageManager.sendMessage(p, MessageType.INVALID_TYPE_STYLE);
 			return;
 		}
 		String argument = args[1].replace("_", "");
 		if (ParticleStyleManager.styleFromString(argument) != null) {
 			ParticleStyle style = ParticleStyleManager.styleFromString(argument);
 			if (!PermissionManager.hasStylePermission(p, style)) {
-				MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-no-permission-style", ChatColor.AQUA + style.getName().toLowerCase() + ChatColor.RED), ChatColor.RED);
+				MessageManager.sendMessage(p, MessageType.NO_PERMISSION_STYLE, style.getName().toLowerCase());
 				return;
 			}
 			ConfigManager.getInstance().savePPlayer(p.getUniqueId(), style);
 			if (style != DefaultStyles.NONE) {
-				MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-now-using-style", ChatColor.AQUA + style.getName().toLowerCase() + ChatColor.GREEN), ChatColor.GREEN);
+				MessageManager.sendMessage(p, MessageType.NOW_USING_STYLE, style.getName().toLowerCase());
 			} else {
-				MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-cleared-style", null), ChatColor.GREEN);
+				MessageManager.sendMessage(p, MessageType.CLEARED_STYLE);
 			}
 			return;
 		}
-		MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-invalid-type-style", null) + ChatColor.GREEN + " /pp styles", ChatColor.RED);
+		MessageManager.sendMessage(p, MessageType.INVALID_TYPE_STYLE);
 	}
 
 	/**
@@ -380,7 +388,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 	 * @param args The arguments for the command
 	 */
 	private void onStyles(Player p, String[] args) {
-		String toSend = MessageManager.getMessageFromConfig("message-use-style", null) + " ";
+		String toSend = MessageType.USE.getMessage() + " ";
 		for (ParticleStyle style : ParticleStyleManager.getStyles()) {
 			if (PermissionManager.hasStylePermission(p, style)) {
 				toSend += style.getName().toLowerCase();
@@ -390,12 +398,12 @@ public class ParticleCommandExecutor implements CommandExecutor {
 		if (toSend.endsWith(", ")) {
 			toSend = toSend.substring(0, toSend.length() - 2);
 		}
-		if (toSend.equals(MessageManager.getMessageFromConfig("message-use-style", null) + " " + DefaultStyles.NONE.getName().toLowerCase())) {
-			MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-no-styles", null), ChatColor.RED);
+		if (toSend.equals(MessageType.USE.getMessage() + " " + DefaultStyles.NONE.getName().toLowerCase())) {
+			MessageManager.sendMessage(p, MessageType.NO_STYLES);
 			return;
 		}
-		MessageManager.getInstance().sendMessage(p, toSend, ChatColor.GREEN);
-		MessageManager.getInstance().sendMessage(p, MessageManager.getMessageFromConfig("message-usage", null) + ChatColor.AQUA + " /pp style <type>", ChatColor.YELLOW);
+		MessageManager.sendCustomMessage(p, toSend);
+		MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.STYLE_USAGE.getMessage());
 	}
 
 }

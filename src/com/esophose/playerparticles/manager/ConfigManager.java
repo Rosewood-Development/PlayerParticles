@@ -12,7 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Color;
@@ -399,10 +399,9 @@ public class ConfigManager {
 	 * 
 	 * @return All world names that are disabled
 	 */
-	@SuppressWarnings("unchecked")
-	public ArrayList<String> getDisabledWorlds() {
+	public List<String> getDisabledWorlds() {
 		if (PlayerParticles.getPlugin().getConfig().get("disabled-worlds") != null) {
-			return ((ArrayList<String>) PlayerParticles.getPlugin().getConfig().get("disabled-worlds"));
+			return PlayerParticles.getPlugin().getConfig().getStringList("disabled-worlds");
 		} else return null;
 	}
 
