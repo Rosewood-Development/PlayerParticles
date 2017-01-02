@@ -1,0 +1,106 @@
+== UPDATING WILL DELETE YOUR CONFIG.YML ==
+* Create a backup of your config.yml if you wish to import all your old settings!
+=== v4.2 ===
+* Rainbow particles are back! /pp data rainbow (for colorable particles)
+* Added new style 'arrows'
+* Renamed style 'spiral' to 'beam'
+* Added new style 'spiral'
+* Spawning particles is now more efficient
+* You can now view the spawned particles from 2x as far away
+* Checking disabled worlds is now taken from cache
+=== v4.1 ===
+Added support for the 1.11 particles 'totem' and 'spit'
+Added new style 'cube' - it should be self explanatory
+Added full plugin message configuration
+Fixed odd coloring of some messages
+Fixed missing message entry in config, nobody probably noticed
+Maintains support for 1.11, 1.10, 1.9, 1.8, and 1.7 - that's a lot!
+=== v4 ===
+Changes some permissions, make sure to update those
+Changed some commands, make sure you check up on those
+Added four new particles, fallingdust, blockcrack, iconcrack, blockdust
+Added new command /pp data - Allows you to modify effect data
+Colorable particles can now be colored!
+Particles no longer show up in spectator mode
+Added Styles API, a way for developers to add more styles to the plugin
+v4.1 will come out relatively soon with any found bugs fixes and the remainder of the features
+=== v3.9 ===
+Added 1.10+ support (Still support with 1.7, 1.8, and 1.9)
+Fixed a bug preventing the message-no-styles from not displaying
+Removed leading comma from /pp styles
+Reorganized command executors in code
+Reorganized how customized messages work in code
+Did not add the new particle 'fallingdust' (Will be in PlayerParticles v4 update)
+Changed GitHub Repository name from 'PlayerParticles-3' to 'PlayerParticles' (https://github.com/Esophose/PlayerParticles)
+This version was not tested on any other version than 1.10. If you have problems on >1.10 versions post a comment.
+=== v3.8 ===
+Added new style 'orb' (Same as 'quadhelix' except it doesn't go up and down)
+Fixed a bug with the 'move' style relating to permissions
+Added some stuff to the plugin.yml, will affect nothing
+Cleaned up some code
+=== v3.7 ===
+Added new update checking system (Can be disabled by setting check-updates to false in config.yml)
+Update system will notify OPs when they join the server, and will be shown in the console when the plugin loads
+Added new style "quadhelix" - Try it out!
+Removed /pp reload (This never worked properly, restart or reload your server instead)
+Changed default config value for disabled-worlds
+Changed colors for the default prefix
+Fixed some possible console errors
+=== v3.6 ===
+Added new 1.9 particles
+Added tab completion
+Removed useless reset command that caused a NPE
+Got version numbers back on track
+=== v3.0.5 ===
+Fixed issue where particles would be displayed in ALL worlds
+Added new style "spin" - Displays in a spinning fashion above head
+Added new style "move" - Displays only when player is moving
+This update won't reset your config.yml
+=== v3.0.3 ===
+Fixed major issue where plugin wouldn't work unless connected to a database
+Fixed particles not working until you choose a style (Uses 'None' by default)
+=== v3.0.2 ===
+Probably fixed masses of errors printed by disconnecting from database issue
+=== v3.0.1 ===
+Fixed NullPointerException when players logged in while database is disabled
+Fixed incorrect colors for no permission messages
+Fixed issue with particles not showing up when logging in sometimes
+=== v3 ===
+Added new Styles! Try them with /pp style [style]
+Added command '/pp styles' which lists all styles available to you
+Added command '/pp help' which displays all commands available
+Added mySQL database support for those of you into that sort of thing
+Removed failed attempt at negative permissions, nothing changed here
+Fixed some bugs
+Added more hugs
+=== v2.7 ===
+Fixed issues with reddust and rainbow permissions
+Added support for disabling particles in specific worlds (Found in config)
+Added command '/pp worlds' to see what worlds are disabled in-game
+Added command '/pp version' to see the current installed plugin version
+=== v2.6 ===
+Added complete message configuration!
+Added reload command /pp reload
+Footstep particles now display at your feet
+=== v2.5 ===
+Added support for Minecraft 1.8
+Added backwards compatibility for Minecraft 1.6 and 1.7
+Added new particles (Only visible when using Minecraft 1.8)
+Removed some particles that did nothing
+Edited the config a little bit, it will be reset upon updating the plugin
+Fixed a few bugs
+Added extra hugs
+=== v2.3 Fix ===
+Fixed permission playerparticles.* not correctly rendering particles around player
+=== v2.2 ===
+Support for 40 particles a second by setting "ticks-per-particle" to a value of 0.5
+=== v2.1 Fix ===
+Should now be compatible with Java 7 servers
+=== v2.0 ===
+Rewrote entire plugin from scratch
+Now more efficient
+37 total particles types!
+New customization
+Particle effect data now stored in effectData.yml
+config.yml added that allows for customization of message prefix, and particle count
+Removed permission playerparticles.clearall and command /pp clearall (To clear all particles of everyone delete effectData.yml and /reload)

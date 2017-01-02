@@ -15,7 +15,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -46,6 +45,11 @@ public class ConfigManager {
 	 * The configuration used to edit the .yaml file
 	 */
 	private FileConfiguration config;
+	
+	/**
+	 * The disabled worlds cached for quick access
+	 */
+	private List<String> disabledWorlds = null;
 
 	/**
 	 * @return The instance of the config for effects
@@ -119,7 +123,7 @@ public class ConfigManager {
 				ParticleStyle particleStyle = ParticleStyleManager.styleFromString(styleSection.getString("name"));
 				ItemData particleItemData = new ItemData(Material.matchMaterial(itemDataSection.getString("material")), (byte) itemDataSection.getInt("data"));
 				BlockData particleBlockData = new BlockData(Material.matchMaterial(blockDataSection.getString("material")), (byte) blockDataSection.getInt("data"));
-				OrdinaryColor particleColorData = new OrdinaryColor(Color.fromRGB(colorDataSection.getInt("r"), colorDataSection.getInt("g"), colorDataSection.getInt("b")));
+				OrdinaryColor particleColorData = new OrdinaryColor(colorDataSection.getInt("r"), colorDataSection.getInt("g"), colorDataSection.getInt("b"));
 				NoteColor particleNoteColorData = new NoteColor(noteColorDataSection.getInt("note"));
 
 				return new PPlayer(playerUUID, particleEffect, particleStyle, particleItemData, particleBlockData, particleColorData, particleNoteColorData);
@@ -142,7 +146,7 @@ public class ConfigManager {
 					ParticleStyle particleStyle = ParticleStyleManager.styleFromString(res.getString("u.style"));
 					ItemData particleItemData = new ItemData(Material.matchMaterial(res.getString("i.material")), res.getByte("i.data"));
 					BlockData particleBlockData = new BlockData(Material.matchMaterial(res.getString("b.material")), res.getByte("b.data"));
-					OrdinaryColor particleColorData = new OrdinaryColor(Color.fromRGB(res.getInt("c.r"), res.getInt("c.g"), res.getInt("c.b")));
+					OrdinaryColor particleColorData = new OrdinaryColor(res.getInt("c.r"), res.getInt("c.g"), res.getInt("c.b"));
 					NoteColor particleNoteColorData = new NoteColor(res.getByte("n.note"));
 
 					return new PPlayer(playerUUID, particleEffect, particleStyle, particleItemData, particleBlockData, particleColorData, particleNoteColorData);
@@ -400,9 +404,10 @@ public class ConfigManager {
 	 * @return All world names that are disabled
 	 */
 	public List<String> getDisabledWorlds() {
-		if (PlayerParticles.getPlugin().getConfig().get("disabled-worlds") != null) {
-			return PlayerParticles.getPlugin().getConfig().getStringList("disabled-worlds");
-		} else return null;
+		if (disabledWorlds == null) {
+			disabledWorlds = PlayerParticles.getPlugin().getConfig().getStringList("disabled-worlds");
+		}
+		return disabledWorlds;
 	}
 
 }

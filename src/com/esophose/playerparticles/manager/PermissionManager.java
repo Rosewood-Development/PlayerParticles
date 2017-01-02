@@ -78,4 +78,8 @@ public class PermissionManager {
 		return list;
 	}
 
+	public static boolean canExecuteForOthers(Player player) {
+		return player.hasPermission("playerparticles.other");
+	}
+
 }

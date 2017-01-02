@@ -60,7 +60,10 @@ public class MessageManager {
 		AVAILABLE_COMMANDS("message-available-commands"),
 		DISABLED_WORLDS_NONE("message-disabled-worlds-none"),
 		DISABLED_WORLDS("message-disabled-worlds"),
-		COMMAND_USAGE("message-command-usage");
+		COMMAND_USAGE("message-command-usage"),
+		EXECUTED_FOR_PLAYER("message-executed-for-player"),
+		FAILED_EXECUTE_NOT_FOUND("message-failed-execute-not-found"),
+		FAILED_EXECUTE_NO_PERMISSION("message-failed-execute-no-permission");
 
 		public String configLocation;
 

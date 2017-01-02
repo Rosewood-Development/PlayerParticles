@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -922,36 +921,33 @@ public enum ParticleEffect {
 		 *             or higher than 255
 		 */
 		public OrdinaryColor(int red, int green, int blue) throws IllegalArgumentException {
-			if (red < 0) {
-				throw new IllegalArgumentException("The red value is lower than 0");
+			if (red == 999 && green == 999 && blue == 999) {
+				this.red = red;
+				this.green = green;
+				this.blue = blue;
+			} else {
+				if (red < 0) {
+					throw new IllegalArgumentException("The red value is lower than 0");
+				}
+				if (red > 255) {
+					throw new IllegalArgumentException("The red value is higher than 255");
+				}
+				this.red = red;
+				if (green < 0) {
+					throw new IllegalArgumentException("The green value is lower than 0");
+				}
+				if (green > 255) {
+					throw new IllegalArgumentException("The green value is higher than 255");
+				}
+				this.green = green;
+				if (blue < 0) {
+					throw new IllegalArgumentException("The blue value is lower than 0");
+				}
+				if (blue > 255) {
+					throw new IllegalArgumentException("The blue value is higher than 255");
+				}
+				this.blue = blue;
 			}
-			if (red > 255) {
-				throw new IllegalArgumentException("The red value is higher than 255");
-			}
-			this.red = red;
-			if (green < 0) {
-				throw new IllegalArgumentException("The green value is lower than 0");
-			}
-			if (green > 255) {
-				throw new IllegalArgumentException("The green value is higher than 255");
-			}
-			this.green = green;
-			if (blue < 0) {
-				throw new IllegalArgumentException("The blue value is lower than 0");
-			}
-			if (blue > 255) {
-				throw new IllegalArgumentException("The blue value is higher than 255");
-			}
-			this.blue = blue;
-		}
-
-		/**
-		 * Construct a new ordinary color
-		 * 
-		 * @param color Bukkit color
-		 */
-		public OrdinaryColor(Color color) {
-			this(color.getRed(), color.getGreen(), color.getBlue());
 		}
 
 		/**
@@ -988,6 +984,7 @@ public enum ParticleEffect {
 		 */
 		@Override
 		public float getValueX() {
+			if (red == 999) return 0F;
 			return (float) red / 255F;
 		}
 
@@ -998,6 +995,7 @@ public enum ParticleEffect {
 		 */
 		@Override
 		public float getValueY() {
+			if (green == 999) return 0F;
 			return (float) green / 255F;
 		}
 
@@ -1008,6 +1006,7 @@ public enum ParticleEffect {
 		 */
 		@Override
 		public float getValueZ() {
+			if (blue == 999) return 0F;
 			return (float) blue / 255F;
 		}
 	}
@@ -1032,13 +1031,17 @@ public enum ParticleEffect {
 		 *             higher than 24
 		 */
 		public NoteColor(int note) throws IllegalArgumentException {
-			if (note < 0) {
-				throw new IllegalArgumentException("The note value is lower than 0");
+			if (note == 99) {
+				this.note = note; 
+			} else {
+				if (note < 0) {
+					throw new IllegalArgumentException("The note value is lower than 0");
+				}
+				if (note > 24) {
+					throw new IllegalArgumentException("The note value is higher than 24");
+				}
+				this.note = note;
 			}
-			if (note > 24) {
-				throw new IllegalArgumentException("The note value is higher than 24");
-			}
-			this.note = note;
 		}
 
 		/**

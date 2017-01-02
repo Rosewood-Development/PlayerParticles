@@ -13,10 +13,10 @@
 
 # Changing this value will reset your config on the next server reload/restart. 
 # I don't recommend changing it
-version: 4.1
+version: 4.2
 
 # How many ticks to wait before spawning more particles
-# Increasing this value may cause less lag, but will decrease prettiness
+# Increasing this value may cause less lag (if there was any), but will decrease prettiness
 # The lowest possible value is 1
 # Going over 5 will likely look terrible
 # Default: 1
@@ -27,12 +27,20 @@ ticks-per-particle: 1
 check-updates: true
 
 # The worlds which this plugin is disabled in
-# Remove the [] before you enter worlds names
+# Remove the [] before you enter world names
 # Default: []
 disabled-worlds: []
 #  - your_world_name_here
 #  - add_more_under_these
-  
+
+# ================================================================ #
+#                     MESSAGE CONFIGURATION                        #
+# Important Notes:                                                 #
+# * You can use the & symbol to color the messages                 #
+# * {TYPE} Will be replaced with whatever that message requires    #
+# * You can not use the apostrophe character! ( ' )                #
+# ================================================================ #
+
 # If you're using other plugins to execute commands you may wish to turn off messages
 # Default: true
 messages-enabled: true
@@ -42,18 +50,9 @@ messages-enabled: true
 use-message-prefix: true
 
 # The prefix to use for all PlayerParticle messages
-# Use & to set color / format
 # This is useless if use-message-prefix is set to false
 # Default: '&7[&3PlayerParticles&7]'
 message-prefix: '&7[&3PlayerParticles&7]'
-
-# ================================================================ #
-#                     MESSAGE CONFIGURATION                        #
-# Important Notes:                                                 #
-# * You can use the & symbol to color the messages                 #
-# * {TYPE} Will be replaced with whatever that message requires    #
-# * You can not use the apostrophe character! ( ' )                #
-# ================================================================ #
 
 # ------------- #
 #   Particles   #
@@ -149,7 +148,7 @@ message-note-data-usage: '&b/pp data <0-23>'
 # Color Data Usage
 # You should not change the text here, only the coloring
 # Default: '&b/pp data <0-255> <0-255> <0-255>'
-message-color-data-usage: '&b/pp data <0-255> <0-255> <0-255>'
+message-color-data-usage: '&b/pp data [<0-255> <0-255> <0-255>] [rainbow]'
 
 # Item Data Usage
 # You should not change the text here, only the coloring
@@ -200,6 +199,18 @@ message-disabled-worlds-none: '&eParticles are not disabled in any worlds!'
 # Command Usage
 # Default: '&eCommand Usage: /pp <command>'
 message-command-usage: '&eCommand Usage: &b/pp <command>'
+
+# Executed For Player
+# Default: '&aCommand executed for &b{TYPE}'
+message-executed-for-player: '&aCommand executed for &b{TYPE}'
+
+# Failed Execute Not Found
+# Default: '&cFailed to execute for &b{TYPE}&c! Player not found!'
+message-failed-execute-not-found: '&cFailed to execute for &b{TYPE}&c! Player not found!'
+
+# Failed Execute No Permission
+# Default: '&cFailed to execute for &b{TYPE}&c! You do not have permission!'
+message-failed-execute-no-permission: '&cFailed to execute for &b{TYPE}&c! You do not have permission!'
 
 # ================================================================ #
 #                     DATABASE CONFIGURATION                       #

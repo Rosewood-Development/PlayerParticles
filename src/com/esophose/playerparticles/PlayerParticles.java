@@ -4,12 +4,25 @@
  * you must not claim it as your own. This plugin may
  * be modified and installed on a server, but may not
  * be distributed to any person by any means.
- * 
- * TODO: Make sure copyright notice is on all files
- * TODO: Make sure all the comments are properly formatted still
- * TODO: Add option to config to show particles in spectator mode or not - Disabled by default
- * TODO: Add message configuration for data usage
  */
+
+/*
+ v4.2 Changelog
+ 
+ + Added new style 'arrows'
+ * Renamed style 'spiral' to 'beam'
+ + Added new style 'spiral'
+ * Spawning particles is now more efficient
+ * Checking disabled worlds is now taken from cache
+ + Rainbow colorable particles - /pp data rainbow for any colorable particle
+  
+ TODO: 
+ + Add player variable in commands
+ + Add new style 'tornado'
+ + Add new style 'atom'
+ + Fixed particle spawn locations
+ + GUI for styles and effects
+*/
 
 package com.esophose.playerparticles;
 

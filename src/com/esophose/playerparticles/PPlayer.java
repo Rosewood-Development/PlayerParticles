@@ -206,8 +206,17 @@ public class PPlayer {
 	public ParticleColor getParticleSpawnColor() {
 		if (particleEffect.hasProperty(ParticleProperty.COLORABLE)) {
 			if (particleEffect == ParticleEffect.NOTE) {
+				if (particleNoteColorData.getValueX() * 24 == 99) {
+					return ParticleCreator.getRainbowNoteParticleColor();
+				}
 				return particleNoteColorData;
-			} else return particleColorData;
+			} else {
+				if (particleColorData.getRed() == 999 && particleColorData.getGreen() == 999 && particleColorData.getBlue() == 999) {
+					return ParticleCreator.getRainbowParticleColor();
+				} else {
+					return particleColorData;
+				}
+			}
 		}
 		return null;
 	}
