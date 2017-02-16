@@ -16,18 +16,18 @@ import com.esophose.playerparticles.styles.api.PParticle;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class ParticleStyleArrows implements ParticleStyle, Listener {
-	
+
 	private List<Arrow> arrows = new ArrayList<Arrow>();
 
 	public PParticle[] getParticles(PPlayer pplayer, Location location) {
 		List<PParticle> particles = new ArrayList<PParticle>();
-		
+
 		for (Arrow arrow : arrows) {
 			if (((Player) arrow.getShooter()).getUniqueId() == pplayer.getUniqueId()) {
 				particles.add(new PParticle(arrow.getLocation(), 0.05F, 0.05F, 0.05F, 0.0F));
 			}
 		}
-		
+
 		return particles.toArray(new PParticle[particles.size()]);
 	}
 
@@ -36,15 +36,19 @@ public class ParticleStyleArrows implements ParticleStyle, Listener {
 	 */
 	public void updateTimers() {
 		for (int i = arrows.size() - 1; i >= 0; i--) {
-			if (arrows.get(i).isDead())
-				arrows.remove(i);
+			Arrow arrow = arrows.get(i);
+			if (arrow.getTicksLived() >= 1200 || arrow.isDead() || !arrow.isValid()) arrows.remove(i);
 		}
 	}
 
 	public String getName() {
 		return "arrows";
 	}
-	
+
+	public boolean canBeFixed() {
+		return false;
+	}
+
 	/**
 	 * The event used to get all arrows fired by players
 	 * Adds all arrows fired from players to the array
@@ -54,7 +58,7 @@ public class ParticleStyleArrows implements ParticleStyle, Listener {
 	@EventHandler
 	public void onArrowFired(EntityShootBowEvent e) {
 		if (e.getEntityType() == EntityType.PLAYER && e.getProjectile().getType() == EntityType.ARROW) {
-			arrows.add((Arrow) e.getProjectile()); 
+			arrows.add((Arrow) e.getProjectile());
 		}
 	}
 

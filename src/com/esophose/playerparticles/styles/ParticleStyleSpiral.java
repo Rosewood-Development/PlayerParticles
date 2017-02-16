@@ -31,5 +31,9 @@ public class ParticleStyleSpiral implements ParticleStyle {
 	public String getName() {
 		return "spiral";
 	}
+	
+	public boolean canBeFixed() {
+		return true;
+	}
 
 }

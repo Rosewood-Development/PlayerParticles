@@ -6,8 +6,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.esophose.playerparticles.PPlayer;
-import com.esophose.playerparticles.ParticleCreator;
 import com.esophose.playerparticles.manager.ConfigManager;
+import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.manager.PermissionManager;
 
 public class ParticleStyleMove extends ParticleStyleNone implements Listener {
@@ -23,14 +23,18 @@ public class ParticleStyleMove extends ParticleStyleNone implements Listener {
 	 */
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent e) {
-		PPlayer pplayer = ConfigManager.getInstance().getPPlayer(e.getPlayer().getUniqueId());
+		PPlayer pplayer = ConfigManager.getInstance().getPPlayer(e.getPlayer().getUniqueId(), false);
 		if (pplayer.getParticleStyle() == DefaultStyles.MOVE) {
 			if (PermissionManager.hasStylePermission(e.getPlayer(), DefaultStyles.MOVE)) {
 				Location loc = e.getPlayer().getLocation();
 				loc.setY(loc.getY() + 0.05);
-				ParticleCreator.displayParticles(pplayer, DefaultStyles.MOVE.getParticles(pplayer, loc));
+				ParticleManager.displayParticles(pplayer, DefaultStyles.MOVE.getParticles(pplayer, loc));
 			}
 		}
+	}
+	
+	public boolean canBeFixed() {
+		return false;
 	}
 
 }

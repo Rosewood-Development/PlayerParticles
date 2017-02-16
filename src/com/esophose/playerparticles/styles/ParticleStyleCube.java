@@ -30,9 +30,9 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 import com.esophose.playerparticles.PPlayer;
-import com.esophose.playerparticles.library.VectorUtils;
 import com.esophose.playerparticles.styles.api.PParticle;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
+import com.esophose.playerparticles.util.VectorUtils;
 
 /**
  * Credit goes to Slikey who made all this logic for drawing a cube out of particles
@@ -88,6 +88,10 @@ public class ParticleStyleCube implements ParticleStyle {
 
 	public String getName() {
 		return "cube";
+	}
+	
+	public boolean canBeFixed() {
+		return true;
 	}
 
 }

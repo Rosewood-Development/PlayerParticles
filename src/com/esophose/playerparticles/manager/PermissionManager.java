@@ -78,8 +78,24 @@ public class PermissionManager {
 		return list;
 	}
 
+	/**
+	 * Checks if a player has permission to execute commands for other players
+	 * 
+	 * @param player The player to check the permission for
+	 * @return True if the player has permission
+	 */
 	public static boolean canExecuteForOthers(Player player) {
-		return player.hasPermission("playerparticles.other");
+		return player.hasPermission("playerparticles.*") || player.hasPermission("playerparticles.altexecute");
+	}
+	
+	/**
+	 * Checks if a player has permission to created fixed effects
+	 * 
+	 * @param player The player to check the permission for
+	 * @return True if the player has permission
+	 */
+	public static boolean canUseFixedEffects(Player player) {
+		return player.hasPermission("playerparticles.*") || player.hasPermission("playerparticles.fixed");
 	}
 
 }

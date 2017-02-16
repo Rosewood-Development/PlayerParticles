@@ -35,5 +35,9 @@ public class ParticleStyleBeam implements ParticleStyle {
 	public String getName() {
 		return "beam";
 	}
+	
+	public boolean canBeFixed() {
+		return true;
+	}
 
 }

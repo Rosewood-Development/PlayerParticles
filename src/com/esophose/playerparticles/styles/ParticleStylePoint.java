@@ -18,5 +18,9 @@ public class ParticleStylePoint implements ParticleStyle {
 	public String getName() {
 		return "point";
 	}
+	
+	public boolean canBeFixed() {
+		return true;
+	}
 
 }

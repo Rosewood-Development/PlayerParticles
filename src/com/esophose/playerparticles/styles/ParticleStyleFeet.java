@@ -19,5 +19,9 @@ public class ParticleStyleFeet implements ParticleStyle {
 	public String getName() {
 		return "feet";
 	}
+	
+	public boolean canBeFixed() {
+		return true;
+	}
 
 }

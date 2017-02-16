@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.esophose.playerparticles.library;
+package com.esophose.playerparticles.util;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;

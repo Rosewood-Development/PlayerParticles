@@ -24,6 +24,7 @@ public class DefaultStyles {
 	public static ParticleStyle CUBE = new ParticleStyleCube();
 	public static ParticleStyle ARROWS = new ParticleStyleArrows();
 	public static ParticleStyle SPIRAL = new ParticleStyleSpiral();
+	public static ParticleStyle THICK = new ParticleStyleThick();
 
 	/**
 	 * Registers all the default styles to the ParticleStyleManager
@@ -41,6 +42,7 @@ public class DefaultStyles {
 		ParticleStyleManager.registerStyle(CUBE);
 		ParticleStyleManager.registerStyle(ARROWS);
 		ParticleStyleManager.registerStyle(SPIRAL);
+		ParticleStyleManager.registerStyle(THICK);
 
 		Bukkit.getPluginManager().registerEvents((Listener) MOVE, PlayerParticles.getPlugin());
 		Bukkit.getPluginManager().registerEvents((Listener) ARROWS, PlayerParticles.getPlugin());

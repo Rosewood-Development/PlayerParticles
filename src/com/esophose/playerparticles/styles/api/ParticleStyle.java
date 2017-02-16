@@ -23,8 +23,23 @@ public interface ParticleStyle {
 	 */
 	public PParticle[] getParticles(PPlayer pplayer, Location location);
 
+	/**
+	 * Used to update timers for animations, called once per particle tick
+	 */
 	public void updateTimers();
 
+	/**
+	 * The name of the style
+	 * 
+	 * @return The style's name
+	 */
 	public String getName();
+	
+	/**
+	 * Gets if the style can be used in a FixedParticleEffect
+	 * 
+	 * @return If the style can be used in a FixedParticleEffect
+	 */
+	public boolean canBeFixed();
 
 }

@@ -20,6 +20,7 @@ import com.esophose.playerparticles.library.ParticleEffect.OrdinaryColor;
 import com.esophose.playerparticles.library.ParticleEffect.ParticleColor;
 import com.esophose.playerparticles.library.ParticleEffect.ParticleData;
 import com.esophose.playerparticles.library.ParticleEffect.ParticleProperty;
+import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.styles.DefaultStyles;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
 
@@ -57,12 +58,12 @@ public class PPlayer {
 	 */
 	public PPlayer(UUID uuid, ParticleEffect effect, ParticleStyle style, ItemData itemData, BlockData blockData, OrdinaryColor colorData, NoteColor noteColorData) {
 		this.playerUUID = uuid;
-		this.particleEffect = effect;
-		this.particleStyle = style;
-		this.particleItemData = itemData;
-		this.particleBlockData = blockData;
-		this.particleColorData = colorData;
-		this.particleNoteColorData = noteColorData;
+		this.setParticleEffect(effect);
+		this.setParticleStyle(style);
+		this.setItemData(itemData);
+		this.setBlockData(blockData);
+		this.setColorData(colorData);
+		this.setNoteColorData(noteColorData);
 	}
 	
 	/**
@@ -134,6 +135,7 @@ public class PPlayer {
 	 * @param effect The player's new particle effect
 	 */
 	public void setParticleEffect(ParticleEffect effect) {
+		if (effect == null) effect = ParticleEffect.NONE;
 		this.particleEffect = effect;
 	}
 
@@ -143,6 +145,7 @@ public class PPlayer {
 	 * @param effect The player's new particle style
 	 */
 	public void setParticleStyle(ParticleStyle style) {
+		if (style == null) style = DefaultStyles.NONE;
 		this.particleStyle = style;
 	}
 	
@@ -152,6 +155,7 @@ public class PPlayer {
 	 * @param effect The player's new item data
 	 */
 	public void setItemData(ItemData itemData) {
+		if (itemData == null) itemData = new ItemData(Material.IRON_SPADE, (byte) 0);
 		this.particleItemData = itemData;
 	}
 	
@@ -161,6 +165,7 @@ public class PPlayer {
 	 * @param effect The player's new block data
 	 */
 	public void setBlockData(BlockData blockData) {
+		if (blockData == null) blockData = new BlockData(Material.STONE, (byte) 0);
 		this.particleBlockData = blockData;
 	}
 	
@@ -170,6 +175,7 @@ public class PPlayer {
 	 * @param effect The player's new color data
 	 */
 	public void setColorData(OrdinaryColor colorData) {
+		if (colorData == null) colorData = new OrdinaryColor(0, 0, 0);
 		this.particleColorData = colorData;
 	}
 	
@@ -179,6 +185,7 @@ public class PPlayer {
 	 * @param effect The player's new note color data
 	 */
 	public void setNoteColorData(NoteColor noteColorData) {
+		if (noteColorData == null) noteColorData = new NoteColor(0);
 		this.particleNoteColorData = noteColorData;
 	}
 
@@ -188,11 +195,11 @@ public class PPlayer {
 	 * @return The ParticleData the current particle effect requires
 	 */
 	public ParticleData getParticleSpawnData() {
-		if (particleEffect.hasProperty(ParticleProperty.REQUIRES_DATA)) {
-			if (particleEffect == ParticleEffect.BLOCK_CRACK || particleEffect == ParticleEffect.BLOCK_DUST || particleEffect == ParticleEffect.FALLING_DUST) {
+		if (this.particleEffect.hasProperty(ParticleProperty.REQUIRES_DATA)) {
+			if (this.particleEffect == ParticleEffect.BLOCK_CRACK || this.particleEffect == ParticleEffect.BLOCK_DUST || this.particleEffect == ParticleEffect.FALLING_DUST) {
 				return particleBlockData;
-			} else if (particleEffect == ParticleEffect.ITEM_CRACK) {
-				return particleItemData;
+			} else if (this.particleEffect == ParticleEffect.ITEM_CRACK) {
+				return this.particleItemData;
 			}
 		}
 		return null;
@@ -204,17 +211,17 @@ public class PPlayer {
 	 * @return Gets the ParticleColor the current particle effect will spawn with
 	 */
 	public ParticleColor getParticleSpawnColor() {
-		if (particleEffect.hasProperty(ParticleProperty.COLORABLE)) {
-			if (particleEffect == ParticleEffect.NOTE) {
-				if (particleNoteColorData.getValueX() * 24 == 99) {
-					return ParticleCreator.getRainbowNoteParticleColor();
+		if (this.particleEffect.hasProperty(ParticleProperty.COLORABLE)) {
+			if (this.particleEffect == ParticleEffect.NOTE) {
+				if (this.particleNoteColorData.getValueX() * 24 == 99) {
+					return ParticleManager.getRainbowNoteParticleColor();
 				}
-				return particleNoteColorData;
+				return this.particleNoteColorData;
 			} else {
-				if (particleColorData.getRed() == 999 && particleColorData.getGreen() == 999 && particleColorData.getBlue() == 999) {
-					return ParticleCreator.getRainbowParticleColor();
+				if (this.particleColorData.getRed() == 999 && this.particleColorData.getGreen() == 999 && this.particleColorData.getBlue() == 999) {
+					return ParticleManager.getRainbowParticleColor();
 				} else {
-					return particleColorData;
+					return this.particleColorData;
 				}
 			}
 		}

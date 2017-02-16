@@ -40,5 +40,9 @@ public class ParticleStyleQuadhelix implements ParticleStyle {
 	public String getName() {
 		return "quadhelix";
 	}
+	
+	public boolean canBeFixed() {
+		return true;
+	}
 
 }

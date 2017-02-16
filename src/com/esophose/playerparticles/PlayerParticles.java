@@ -7,21 +7,30 @@
  */
 
 /*
- v4.2 Changelog
+ v4.3 Changelog
+ * Fix effects and styles not defaulting to 'none' if the player no longer has permission
+ * Fix errors printing to console resulting from offline players trying to spawn particles
+ * Fix arrow style particles staying after an arrow is considered dead (in rare cases this occurred)
+ * Fix SQL queries getting logged to console when database-enable is set to true
+ * Added new style 'thick'
  
- + Added new style 'arrows'
- * Renamed style 'spiral' to 'beam'
- + Added new style 'spiral'
- * Spawning particles is now more efficient
- * Checking disabled worlds is now taken from cache
- + Rainbow colorable particles - /pp data rainbow for any colorable particle
-  
  TODO: 
+  + Add command /pp fixed - 
+   /pp fixed create <x> <y> <z> <effect> <style> [data] - Creates a fixed effect and assigns it an id
+   /pp fixed remove <id> - Removes a fixed effect by its id
+   /pp fixed list - Lists the location, and id of all fixed effects
+   /pp fixed info <id> - Lists all information about the fixed effect with the matching id
+   Requires permission playerparticles.fixed
+   Maximum number of fixed effects defined in config.yml, default value 5
  + Add player variable in commands
+   Requires permission playerparticles.altexecute
  + Add new style 'tornado'
  + Add new style 'atom'
- + Fixed particle spawn locations
  + GUI for styles and effects
+   /pp gui - Shows GUI that tells you your current effect, style, and data and lets you choose new ones
+   /pp gui effect - Shows GUI that lets you select a new effect, also shows your current one
+   /pp gui style - Shows GUI that lets you select a new style, also shows your current one
+   /pp gui data - Shows GUI that lets you choose from preset data based on your current effect, also shows your current data
 */
 
 package com.esophose.playerparticles;
@@ -36,6 +45,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.esophose.playerparticles.library.MySQL;
 import com.esophose.playerparticles.manager.MessageManager;
+import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.styles.DefaultStyles;
 import com.esophose.playerparticles.updater.PluginUpdateListener;
 import com.esophose.playerparticles.updater.Updater;
@@ -75,17 +85,18 @@ public class PlayerParticles extends JavaPlugin {
 		saveDefaultConfig();
 		getCommand("pp").setTabCompleter(new ParticleCommandCompleter());
 		getCommand("pp").setExecutor(new ParticleCommandExecutor());
-		Bukkit.getPluginManager().registerEvents(new ParticleCreator(), this);
+		Bukkit.getPluginManager().registerEvents(new ParticleManager(), this);
 		Bukkit.getPluginManager().registerEvents(new PluginUpdateListener(), this);
 		if (getConfig().getDouble("version") < Double.parseDouble(getDescription().getVersion())) {
 			File configFile = new File(getDataFolder(), "config.yml");
 			configFile.delete();
 			saveDefaultConfig();
 			reloadConfig();
-			getLogger().warning("[PlayerParticles] config.yml has been updated!");
+			getLogger().warning("The config.yml has been updated to v" + getDescription().getVersion() + "!");
 		}
 		checkDatabase();
-		ParticleCreator.refreshPPlayers();
+		ParticleManager.refreshPPlayers();
+		ParticleManager.addAllFixedEffects();
 		startTask();
 
 		if (shouldCheckUpdates()) {
@@ -130,30 +141,38 @@ public class PlayerParticles extends JavaPlugin {
 			String user = getConfig().getString("database-user-name");
 			String pass = getConfig().getString("database-user-password");
 			mySQL = new MySQL(hostname, port, database, user, pass);
-			try (ResultSet res = mySQL.querySQL("SHOW TABLES LIKE 'playerparticles'")) { // Clean up the old mess
-				if (res.next()) {
-					mySQL.updateSQL("DROP TABLE playerparticles");
-				}
-			} catch (ClassNotFoundException | SQLException e1) {
-				getLogger().info("[PlayerParticles] Failed to connect to the MySQL Database! Check to see if your login information is correct!");
-				useMySQL = false;
-				return;
-			}
+			
+			useMySQL = true; // If something goes wrong this will be set to false
+
+			// @formatter:off
 			try (ResultSet res = mySQL.querySQL("SHOW TABLES LIKE 'pp_users'")) {
-				if (!res.next()) { // @formatter:off
+				if (res.next()) { // Add the new fixed table and rename some columns
+					try (ResultSet res2 = mySQL.querySQL("SHOW TABLES LIKE 'pp_fixed'")) {
+						if (!res2.next()) { // Using an old database, update to the new one
+							mySQL.updateSQL("CREATE TABLE pp_fixed (uuid VARCHAR(36), player_uuid VARCHAR(36), id SMALLINT, effect VARCHAR(32), style VARCHAR(32), worldName VARCHAR(50), xPos DOUBLE, yPos DOUBLE, zPos DOUBLE);" +
+										    "ALTER TABLE pp_data_item CHANGE player_uuid uuid VARCHAR(36);" +
+										    "ALTER TABLE pp_data_block CHANGE player_uuid uuid VARCHAR(36);" +
+										    "ALTER TABLE pp_data_color CHANGE player_uuid uuid VARCHAR(36);" +
+										    "ALTER TABLE pp_data_note CHANGE player_uuid uuid VARCHAR(36);");
+						}
+					} catch (Exception e) {
+						throw e; // Try-catch block here is just for auto closure
+					}
+				} else { // No database is set up yet, create it
 					mySQL.updateSQL("CREATE TABLE pp_users (player_uuid VARCHAR(36), effect VARCHAR(32), style VARCHAR(32));" + 
-									"CREATE TABLE pp_data_item (player_uuid VARCHAR(36), material VARCHAR(32), data SMALLINT);" + 
-									"CREATE TABLE pp_data_block (player_uuid VARCHAR(36), material VARCHAR(32), data SMALLINT);" +
-									"CREATE TABLE pp_data_color (player_uuid VARCHAR(36), r SMALLINT, g SMALLINT, b SMALLINT);" + 
-									"CREATE TABLE pp_data_note (player_uuid VARCHAR(36), note SMALLINT);"
-					); // @formatter:on
+									"CREATE TABLE pp_fixed (uuid VARCHAR(36), player_uuid VARCHAR(36), id SMALLINT, effect VARCHAR(32), style VARCHAR(32), worldName VARCHAR(50), xPos DOUBLE, yPos DOUBLE, zPos DOUBLE);" +
+									"CREATE TABLE pp_data_item (uuid VARCHAR(36), material VARCHAR(32), data SMALLINT);" + 
+									"CREATE TABLE pp_data_block (uuid VARCHAR(36), material VARCHAR(32), data SMALLINT);" +
+									"CREATE TABLE pp_data_color (uuid VARCHAR(36), r SMALLINT, g SMALLINT, b SMALLINT);" + 
+									"CREATE TABLE pp_data_note (uuid VARCHAR(36), note SMALLINT);"
+							       );
 				}
-				useMySQL = true;
 			} catch (ClassNotFoundException | SQLException e) {
 				getLogger().info("[PlayerParticles] Failed to connect to the MySQL Database! Check to see if your login information is correct!");
 				getLogger().info("Additional information: " + e.getMessage());
 				useMySQL = false;
-			}
+				return;
+			} // @formatter:on
 		} else {
 			useMySQL = false;
 		}
@@ -164,7 +183,7 @@ public class PlayerParticles extends JavaPlugin {
 	 */
 	private void startTask() {
 		double ticks = getConfig().getInt("ticks-per-particle");
-		new ParticleCreator().runTaskTimer(this, 20, (long) ticks);
+		new ParticleManager().runTaskTimer(this, 20, (long) ticks);
 	}
 
 }

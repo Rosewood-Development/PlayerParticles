@@ -27,10 +27,12 @@ import com.esophose.playerparticles.library.ParticleEffect.ParticleProperty;
 import com.esophose.playerparticles.manager.ConfigManager;
 import com.esophose.playerparticles.manager.MessageManager;
 import com.esophose.playerparticles.manager.MessageManager.MessageType;
+import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.manager.PermissionManager;
 import com.esophose.playerparticles.styles.DefaultStyles;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
 import com.esophose.playerparticles.styles.api.ParticleStyleManager;
+import com.esophose.playerparticles.util.ParticlesUtils;
 
 public class ParticleCommandExecutor implements CommandExecutor {
 
@@ -79,6 +81,9 @@ public class ParticleCommandExecutor implements CommandExecutor {
 				break;
 			case "data":
 				onData(p, cmdArgs);
+				break;
+			case "fixed":
+				onFixed(p, cmdArgs);
 				break;
 			case "reset":
 				onReset(p, cmdArgs);
@@ -149,7 +154,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 	 * @param args The arguments for the command
 	 */
 	private void onData(Player p, String[] args) {
-		ParticleEffect effect = ConfigManager.getInstance().getPPlayer(p.getUniqueId()).getParticleEffect();
+		ParticleEffect effect = ConfigManager.getInstance().getPPlayer(p.getUniqueId(), false).getParticleEffect();
 		if ((!effect.hasProperty(ParticleProperty.REQUIRES_DATA) && !effect.hasProperty(ParticleProperty.COLORABLE)) || args.length == 0) {
 			if (effect.hasProperty(ParticleProperty.COLORABLE)) {
 				if (effect == ParticleEffect.NOTE) {
@@ -235,7 +240,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 				int data = -1;
 
 				try {
-					material = ParticlesUtil.closestMatch(args[0]);
+					material = ParticlesUtils.closestMatch(args[0]);
 					if (material == null) material = Material.matchMaterial(args[0]);
 					if (material == null) throw new Exception();
 				} catch (Exception e) {
@@ -271,7 +276,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 				int data = -1;
 
 				try {
-					material = ParticlesUtil.closestMatch(args[0]);
+					material = ParticlesUtils.closestMatch(args[0]);
 					if (material == null) material = Material.matchMaterial(args[0]);
 					if (material == null) throw new Exception();
 				} catch (Exception e) {
@@ -308,11 +313,11 @@ public class ParticleCommandExecutor implements CommandExecutor {
 
 	/**
 	 * Called when a player uses /pp reset
+	 * Can be executed for another player by having their name as the final command argument
 	 * 
 	 * @param p The player who used the command
-	 * @param altPlayer The alternate player to reset
 	 */
-	private void onReset(Player p, String[] args) { // TODO: Apply this to effects, styles, and data(?)
+	private void onReset(Player p, String[] args) {
 		if (args.length >= 1) {
 			String altPlayerName = args[0];
 			if (!PermissionManager.canExecuteForOthers(p)) {
@@ -320,7 +325,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 			} else {
 				Player altPlayer = getOnlinePlayerByName(altPlayerName);
 				if (altPlayer == null) {
-					MessageManager.sendMessage(p, MessageType.FAILED_EXECUTE_NOT_FOUND);
+					MessageManager.sendMessage(p, MessageType.FAILED_EXECUTE_NOT_FOUND, altPlayerName);
 				} else {
 					ConfigManager.getInstance().resetPPlayer(altPlayer.getUniqueId());
 					MessageManager.sendMessage(altPlayer, MessageType.RESET);
@@ -339,7 +344,6 @@ public class ParticleCommandExecutor implements CommandExecutor {
 	 * 
 	 * @param p The player who used the command
 	 * @param args The arguments for the command
-	 * @param altPlayer The alternate player to give the effect
 	 */
 	private void onEffect(Player p, String[] args) {
 		if (args.length == 0) {
@@ -347,8 +351,8 @@ public class ParticleCommandExecutor implements CommandExecutor {
 			return;
 		}
 		String argument = args[0].replace("_", "");
-		if (ParticleCreator.particleFromString(argument) != null) {
-			ParticleEffect effect = ParticleCreator.particleFromString(argument);
+		if (ParticleManager.particleFromString(argument) != null) {
+			ParticleEffect effect = ParticleManager.particleFromString(argument);
 			if (!PermissionManager.hasEffectPermission(p, effect)) {
 				MessageManager.sendMessage(p, MessageType.NO_PERMISSION, effect.getName().toLowerCase());
 				return;
@@ -393,7 +397,6 @@ public class ParticleCommandExecutor implements CommandExecutor {
 	 * 
 	 * @param p The player who used the command
 	 * @param args The arguments for the command
-	 * @param altPlayer The alternate player to give the style
 	 */
 	private void onStyle(Player p, String[] args) {
 		if (args.length == 0) {
@@ -440,6 +443,62 @@ public class ParticleCommandExecutor implements CommandExecutor {
 		}
 		MessageManager.sendCustomMessage(p, toSend);
 		MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.STYLE_USAGE.getMessage());
+	}
+	
+	/*
+	
+   	
+   	
+    
+     Requires permission playerparticles.fixed
+     Maximum number of fixed effects defined in config.yml, default value 5
+	 */
+	
+	/**
+	 * Called when a player uses /pp fixed
+	 * 
+	 * @param p The player who used the command
+	 * @param args The arguments for the command
+	 */
+	private void onFixed(Player p, String[] args) {
+		if (!PermissionManager.canUseFixedEffects(p)) {
+			MessageManager.sendMessage(p, MessageType.NO_PERMISSION_FIXED);
+			return;
+		}
+		
+		if (args.length == 0) { // General information on command
+			MessageManager.sendMessage(p, MessageType.INVALID_FIXED_COMMAND);
+			MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_CREATE);
+			MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_REMOVE);
+			MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_LIST);
+			MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_INFO);
+			return;
+		}
+		
+		String cmd = args[0];
+		
+		if (cmd.equalsIgnoreCase("create")) {
+			if (ConfigManager.getInstance().getNumberOfFixedEffectsForPlayer(p.getUniqueId()) > PlayerParticles.getPlugin().getConfig().getInt("max-fixed-effects")) {
+				
+			}
+
+			// /pp fixed create <x> <y> <z> <effect> <style> [data] - Creates a fixed effect and assigns it an id
+		} else if (cmd.equalsIgnoreCase("remove")) {
+			// /pp fixed remove <id> - Removes a fixed effect by its id
+		} else if (cmd.equalsIgnoreCase("list")) {
+			// /pp fixed list - Lists the location, and id of all fixed effects
+		} else if (cmd.equalsIgnoreCase("info")) {
+			// /pp fixed info <id> - Lists all information about the fixed effect with the matching id
+		} else {
+			MessageManager.sendMessage(p, MessageType.INVALID_FIXED_COMMAND);
+			MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_CREATE);
+			MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_REMOVE);
+			MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_LIST);
+			MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_INFO);
+		}
+		
+		// Test data
+		//ConfigManager.getInstance().saveFixedEffect(new FixedParticleEffect(p.getUniqueId(), ConfigManager.getInstance().getNextFixedEffectId(p.getUniqueId()), p.getLocation().getWorld().getName(), p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ(), ParticleEffect.RED_DUST, DefaultStyles.ARROWS, null, null, new OrdinaryColor(999, 999, 999), null));
 	}
 
 }

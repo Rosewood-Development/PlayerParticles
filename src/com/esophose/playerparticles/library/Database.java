@@ -82,8 +82,6 @@ public abstract class Database {
 			openConnection();
 		}
 
-		System.out.println("Running Query: " + query);
-
 		Statement statement = connection.createStatement();
 
 		ResultSet result = statement.executeQuery(query);
@@ -117,6 +115,7 @@ public abstract class Database {
 			for (String q : queries) {
 				statement.addBatch(q);
 			}
+			
 			results = statement.executeBatch();
 		} else {
 			results = new int[] { statement.executeUpdate(query) };

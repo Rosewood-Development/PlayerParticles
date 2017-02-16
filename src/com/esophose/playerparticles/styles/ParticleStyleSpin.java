@@ -31,5 +31,9 @@ public class ParticleStyleSpin implements ParticleStyle {
 	public String getName() {
 		return "spin";
 	}
+	
+	public boolean canBeFixed() {
+		return true;
+	}
 
 }

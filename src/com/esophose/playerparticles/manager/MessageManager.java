@@ -50,6 +50,14 @@ public class MessageManager {
 		ITEM_DATA_USAGE("message-item-data-usage"),
 		BLOCK_DATA_USAGE("message-block-data-usage"),
 		
+		// Fixed Effects
+		NO_PERMISSION_FIXED("message-no-permission-fixed"),
+		INVALID_FIXED_COMMAND("message-invalid-fixed-command"),
+		FIXED_COMMAND_DESC_CREATE("message-fixed-command-desc-create"),
+		FIXED_COMMAND_DESC_REMOVE("message-fixed-command-desc-remove"),
+		FIXED_COMMAND_DESC_LIST("message-fixed-command-desc-list"),
+		FIXED_COMMAND_DESC_INFO("message-fixed-command-desc-info"),
+		
 		// Prefixes
 		USE("message-use"),
 		USAGE("message-usage"),

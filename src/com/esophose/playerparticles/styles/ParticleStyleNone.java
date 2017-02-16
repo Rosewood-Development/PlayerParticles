@@ -125,5 +125,9 @@ public class ParticleStyleNone implements ParticleStyle {
 	public String getName() {
 		return "none";
 	}
+	
+	public boolean canBeFixed() {
+		return true;
+	}
 
 }

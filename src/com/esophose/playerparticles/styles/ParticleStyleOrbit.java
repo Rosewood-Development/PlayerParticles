@@ -31,5 +31,9 @@ public class ParticleStyleOrbit implements ParticleStyle {
 	public String getName() {
 		return "orbit";
 	}
+	
+	public boolean canBeFixed() {
+		return true;
+	}
 
 }

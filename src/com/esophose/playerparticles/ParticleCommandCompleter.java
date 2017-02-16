@@ -40,6 +40,8 @@ public class ParticleCommandCompleter implements TabCompleter {
 				list.add("styles");
 				list.add("worlds");
 				list.add("version");
+				list.add("fixed");
+				list.add("reset");
 				return list;
 			} else if (args.length == 1) {
 				if (args[0].equalsIgnoreCase("effect")) {

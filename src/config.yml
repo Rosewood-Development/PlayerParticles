@@ -4,6 +4,7 @@
 # |    |   |  |__/ __ \\___  \  ___/|  | \/    |     / __ \|  | \/|  | |  \  \___|  |_\  ___/ \___ \       \   /    ^   /
 # |____|   |____(____  / ____|\___  >__|  |____|    (____  /__|   |__| |__|\___  >____/\___  >____  >       \_/\____   | 
 #                    \/\/         \/                     \/                    \/          \/     \/                |__|
+
 # Please excuse the cheesy ASCII Art
 
 # ====================================================#
@@ -13,7 +14,7 @@
 
 # Changing this value will reset your config on the next server reload/restart. 
 # I don't recommend changing it
-version: 4.2
+version: 4.3
 
 # How many ticks to wait before spawning more particles
 # Increasing this value may cause less lag (if there was any), but will decrease prettiness
@@ -32,6 +33,10 @@ check-updates: true
 disabled-worlds: []
 #  - your_world_name_here
 #  - add_more_under_these
+
+# Max fixed effects per player
+# Default: 5
+max-fixed-effects: 5
 
 # ================================================================ #
 #                     MESSAGE CONFIGURATION                        #
@@ -180,6 +185,51 @@ message-available-commands: '&eAvailable commands: &beffect, effects, style, sty
 # Default: '&eParticles are disabled in these worlds:&b'
 message-disabled-worlds: '&eParticles are disabled in these worlds:&b'
 
+# ------------------ #
+#   Alt. Execution
+# ------------------ #
+
+# Executed For Player
+# Default: '&aCommand executed for &b{TYPE}'
+message-executed-for-player: '&aCommand executed for &b{TYPE}'
+
+# Failed Execute Not Found
+# Default: '&cFailed to execute for &b{TYPE}&c! Player not found!'
+message-failed-execute-not-found: '&cFailed to execute command for &b{TYPE}&c! Player not found!'
+
+# Failed Execute No Permission
+# Default: '&cFailed to execute for &b{TYPE}&c! You do not have permission!'
+message-failed-execute-no-permission: '&cFailed to execute command for &b{TYPE}&c! You do not have permission!'
+
+# ----------------- #
+#   Fixed Effects
+# ----------------- #
+
+# No Permission Fixed
+# Default: '&cYou do not have permission to use fixed effects!'
+message-no-permission-fixed: '&cYou do not have permission to use fixed effects!'
+
+# Invalid Fixed Command
+# Default: '&cInvalid sub-command for &b/pp fixed&c!'
+message-invalid-fixed-command: '&cInvalid subcommand for &b/pp fixed&c! &eCommands: '
+
+# Fixed Command Description For Create
+# Default '&e/pp fixed create <x> <y> <z> <effect> <style> [data]'
+message-fixed-command-desc-create: '&e/pp fixed create <x> <y> <z> <effect> <style> [data] - Creates a new fixed effect'
+
+# Fixed Command Description For Remove
+# Default: '&e/pp fixed remove <id>'
+message-fixed-command-desc-remove: '&e/pp fixed remove <id> - Removes a fixed effect by its id'
+
+# Fixed Command Description For List
+# Default: '&e/pp fixed list - Lists all ids of your fixed effects'
+message-fixed-command-desc-list: '&e/pp fixed list - Lists all ids of your fixed effects'
+
+# Fixed Command Description For Information
+# Default: '&e/pp fixed info <id> - Gets info on one of your fixed effects'
+message-fixed-command-desc-info: '&e/pp fixed info <id> - Gets info on one of your fixed effects'
+
+
 # ------------- #
 #     Other     #
 # ------------- #
@@ -199,18 +249,6 @@ message-disabled-worlds-none: '&eParticles are not disabled in any worlds!'
 # Command Usage
 # Default: '&eCommand Usage: /pp <command>'
 message-command-usage: '&eCommand Usage: &b/pp <command>'
-
-# Executed For Player
-# Default: '&aCommand executed for &b{TYPE}'
-message-executed-for-player: '&aCommand executed for &b{TYPE}'
-
-# Failed Execute Not Found
-# Default: '&cFailed to execute for &b{TYPE}&c! Player not found!'
-message-failed-execute-not-found: '&cFailed to execute for &b{TYPE}&c! Player not found!'
-
-# Failed Execute No Permission
-# Default: '&cFailed to execute for &b{TYPE}&c! You do not have permission!'
-message-failed-execute-no-permission: '&cFailed to execute for &b{TYPE}&c! You do not have permission!'
 
 # ================================================================ #
 #                     DATABASE CONFIGURATION                       #

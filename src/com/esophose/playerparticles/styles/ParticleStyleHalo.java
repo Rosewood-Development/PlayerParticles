@@ -36,5 +36,9 @@ public class ParticleStyleHalo implements ParticleStyle {
 	public String getName() {
 		return "halo";
 	}
+	
+	public boolean canBeFixed() {
+		return true;
+	}
 
 }
