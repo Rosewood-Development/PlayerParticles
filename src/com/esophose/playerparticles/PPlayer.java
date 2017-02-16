@@ -142,7 +142,7 @@ public class PPlayer {
 	/**
 	 * Sets the player's particle style
 	 * 
-	 * @param effect The player's new particle style
+	 * @param style The player's new particle style
 	 */
 	public void setParticleStyle(ParticleStyle style) {
 		if (style == null) style = DefaultStyles.NONE;
@@ -152,7 +152,7 @@ public class PPlayer {
 	/**
 	 * Sets the player's item data
 	 * 
-	 * @param effect The player's new item data
+	 * @param itemData The player's new item data
 	 */
 	public void setItemData(ItemData itemData) {
 		if (itemData == null) itemData = new ItemData(Material.IRON_SPADE, (byte) 0);
@@ -162,7 +162,7 @@ public class PPlayer {
 	/**
 	 * Sets the player's  block data
 	 * 
-	 * @param effect The player's new block data
+	 * @param blockData The player's new block data
 	 */
 	public void setBlockData(BlockData blockData) {
 		if (blockData == null) blockData = new BlockData(Material.STONE, (byte) 0);
@@ -172,7 +172,7 @@ public class PPlayer {
 	/**
 	 * Sets the player's color data
 	 * 
-	 * @param effect The player's new color data
+	 * @param colorData The player's new color data
 	 */
 	public void setColorData(OrdinaryColor colorData) {
 		if (colorData == null) colorData = new OrdinaryColor(0, 0, 0);
@@ -182,7 +182,7 @@ public class PPlayer {
 	/**
 	 * Sets the player's note color data
 	 * 
-	 * @param effect The player's new note color data
+	 * @param noteColorData The player's new note color data
 	 */
 	public void setNoteColorData(NoteColor noteColorData) {
 		if (noteColorData == null) noteColorData = new NoteColor(0);

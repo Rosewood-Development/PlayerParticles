@@ -94,6 +94,10 @@ public class ConfigManager {
 
 	/**
 	 * Gets a player from the save data, creates one if it doesn't exist and adds it to the list
+	 * 
+	 * @param playerUUID The pplayer to get
+	 * @param addIfNotFound Adds the pplayer to the processing queue if they are not already in it
+	 * @return The found pplayer, or a newly generated one
 	 */
 	public PPlayer getPPlayer(UUID playerUUID, boolean addIfNotFound) {
 		for (PPlayer pp : ParticleManager.particlePlayers) {
@@ -114,7 +118,7 @@ public class ConfigManager {
 	 * One will be created if it doesn't exist
 	 * 
 	 * @param playerUUID The UUID to match the PPlayer to
-	 * @return
+	 * @return A newly built pplayer
 	 */
 	private PPlayer buildPPlayer(UUID playerUUID) {
 		if (!PlayerParticles.useMySQL) {
@@ -254,7 +258,7 @@ public class ConfigManager {
 	 * Resets all saved information about a PPlayer
 	 * This should be made into a single batch query in the future
 	 * 
-	 * @param playerUUID
+	 * @param playerUUID The pplayer to reset
 	 */
 	public void resetPPlayer(UUID playerUUID) {
 		PPlayer pplayer = PPlayer.getNewPPlayer(playerUUID);
@@ -270,7 +274,7 @@ public class ConfigManager {
 	 * Saves the effect to the player's save file or database entry
 	 * 
 	 * @param playerUUID The UUID of the player
-	 * @param particleStyle The effect that is being saved
+	 * @param particleEffect The effect that is being saved
 	 */
 	public void savePPlayer(UUID playerUUID, ParticleEffect particleEffect) {
 		if (!PlayerParticles.useMySQL) {
@@ -628,6 +632,12 @@ public class ConfigManager {
 		return null; // Something went wrong somewhere
 	}
 	
+	/**
+	 * Gets the number of fixed effects a player has created
+	 * 
+	 * @param pplayerUUID The player to check
+	 * @return The number of fixed effects the player has created
+	 */
 	public int getNumberOfFixedEffectsForPlayer(UUID pplayerUUID) {
 		if (!PlayerParticles.useMySQL) {
 			if (config.isConfigurationSection(pplayerUUID.toString() + ".fixedEffect")) {

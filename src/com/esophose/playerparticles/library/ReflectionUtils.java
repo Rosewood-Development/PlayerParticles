@@ -71,8 +71,6 @@ public final class ReflectionUtils {
 	 * @throws ClassNotFoundException ClassNotFoundException If the desired
 	 *             target class with the specified name and package cannot be
 	 *             found
-	 * @see #getClass(String, PackageType)
-	 * @see #getConstructor(Class, Class...)
 	 */
 	public static Constructor<?> getConstructor(String className, PackageType packageType, Class<?>... parameterTypes) throws NoSuchMethodException, ClassNotFoundException {
 		return getConstructor(packageType.getClass(className), parameterTypes);
@@ -125,8 +123,6 @@ public final class ReflectionUtils {
 	 *             specified arguments cannot be found
 	 * @throws ClassNotFoundException If the desired target class with the
 	 *             specified name and package cannot be found
-	 * @see #getClass(String, PackageType)
-	 * @see #instantiateObject(Class, Object...)
 	 */
 	public static Object instantiateObject(String className, PackageType packageType, Object... arguments) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException {
 		return instantiateObject(packageType.getClass(className), arguments);
@@ -170,8 +166,6 @@ public final class ReflectionUtils {
 	 *             found
 	 * @throws ClassNotFoundException If the desired target class with the
 	 *             specified name and package cannot be found
-	 * @see #getClass(String, PackageType)
-	 * @see #getMethod(Class, String, Class...)
 	 */
 	public static Method getMethod(String className, PackageType packageType, String methodName, Class<?>... parameterTypes) throws NoSuchMethodException, ClassNotFoundException {
 		return getMethod(packageType.getClass(className), methodName, parameterTypes);
@@ -195,8 +189,6 @@ public final class ReflectionUtils {
 	 * @throws NoSuchMethodException If the desired method of the class of the
 	 *             target object with the specified name and arguments cannot be
 	 *             found
-	 * @see #getMethod(Class, String, Class...)
-	 * @see DataType#getPrimitive(Object[])
 	 */
 	public static Object invokeMethod(Object instance, String methodName, Object... arguments) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException {
 		return getMethod(instance.getClass(), methodName, DataType.getPrimitive(arguments)).invoke(instance, arguments);
@@ -249,8 +241,6 @@ public final class ReflectionUtils {
 	 *             class with the specified name and arguments cannot be found
 	 * @throws ClassNotFoundException If the desired target class with the
 	 *             specified name and package cannot be found
-	 * @see #getClass(String, PackageType)
-	 * @see #invokeMethod(Object, Class, String, Object...)
 	 */
 	public static Object invokeMethod(Object instance, String className, PackageType packageType, String methodName, Object... arguments) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException {
 		return invokeMethod(instance, packageType.getClass(className), methodName, arguments);
@@ -607,7 +597,7 @@ public final class ReflectionUtils {
 		/**
 		 * Returns the primitive class array of the given object array
 		 * 
-		 * @param object Given object array
+		 * @param objects Given object array
 		 * @return The primitive class array
 		 */
 		public static Class<?>[] getPrimitive(Object[] objects) {
@@ -622,7 +612,7 @@ public final class ReflectionUtils {
 		/**
 		 * Returns the reference class array of the given object array
 		 * 
-		 * @param object Given object array
+		 * @param objects Given object array
 		 * @return The reference class array
 		 */
 		public static Class<?>[] getReference(Object[] objects) {

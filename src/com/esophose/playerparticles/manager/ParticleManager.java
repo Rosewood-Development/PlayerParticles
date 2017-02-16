@@ -245,7 +245,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
 	 * An alternative method used for custom handled styles
 	 * 
 	 * @param pplayer The PPlayer to use for getting particle settings
-	 * @param location The location to display at
+	 * @param particles The particles to display
 	 */
 	public static void displayParticles(PPlayer pplayer, PParticle[] particles) {
 		ParticleEffect effect = pplayer.getParticleEffect();

@@ -148,8 +148,8 @@ public final class VectorUtils {
 	/**
 	 * Gets the angle toward the X axis
 	 * 
-	 * @param vector
-	 * @return
+	 * @param vector The vector to check
+	 * @return The angle toward the X axis
 	 */
 	public static final double angleToXAxis(Vector vector) {
 		return Math.atan2(vector.getX(), vector.getY());

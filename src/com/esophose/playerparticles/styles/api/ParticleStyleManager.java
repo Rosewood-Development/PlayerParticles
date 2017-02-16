@@ -65,7 +65,7 @@ public class ParticleStyleManager {
 	/**
 	 * Gets the ParticleStyle with the name given, returns null if not found
 	 * 
-	 * @param particle The string of the style to search for
+	 * @param styleName The string of the style to search for
 	 * @return The ParticleStyle with the name requested
 	 */
 	public static ParticleStyle styleFromString(String styleName) {

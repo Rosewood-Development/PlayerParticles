@@ -209,6 +209,10 @@ message-failed-execute-no-permission: '&cFailed to execute command for &b{TYPE}&
 # Default: '&cYou do not have permission to use fixed effects!'
 message-no-permission-fixed: '&cYou do not have permission to use fixed effects!'
 
+# Reached Max Allowed
+# Default: '&cYou have reached the maximum allowed fixed effects!'
+message-max-fixed-effects-reached: '&cYou have reached the maximum allowed fixed effects!'
+
 # Invalid Fixed Command
 # Default: '&cInvalid sub-command for &b/pp fixed&c!'
 message-invalid-fixed-command: '&cInvalid subcommand for &b/pp fixed&c! &eCommands: '

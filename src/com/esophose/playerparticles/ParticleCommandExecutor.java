@@ -316,6 +316,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 	 * Can be executed for another player by having their name as the final command argument
 	 * 
 	 * @param p The player who used the command
+	 * @param args Additional arguments
 	 */
 	private void onReset(Player p, String[] args) {
 		if (args.length >= 1) {
@@ -478,7 +479,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 		String cmd = args[0];
 		
 		if (cmd.equalsIgnoreCase("create")) {
-			if (ConfigManager.getInstance().getNumberOfFixedEffectsForPlayer(p.getUniqueId()) > PlayerParticles.getPlugin().getConfig().getInt("max-fixed-effects")) {
+			if (ConfigManager.getInstance().getNumberOfFixedEffectsForPlayer(p.getUniqueId()) >= PlayerParticles.getPlugin().getConfig().getInt("max-fixed-effects")) {
 				
 			}
 

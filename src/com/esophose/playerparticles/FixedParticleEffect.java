@@ -63,13 +63,17 @@ public class FixedParticleEffect {
 	 * This is basically the same thing as a PPlayer, maybe we can extend it in the future?
 	 * 
 	 * @param pplayerUUID The UUID of the player who owns the effect
+	 * @param id The id this effect has, unique to the owner pplayer
 	 * @param worldName The world name this effect will be displayed in
 	 * @param xPos The X position in the world 
 	 * @param yPos The Y position in the world 
 	 * @param zPos The Z position in the world 
 	 * @param particleEffect The particle effect to use
 	 * @param particleStyle The particle style to use
-	 * @param particleData The particle data to use with the effect
+	 * @param itemData The item data for the effect
+	 * @param blockData The block data for the effect
+	 * @param colorData The color data for the effect
+	 * @param noteColorData The note color data for the effect
 	 */
 	public FixedParticleEffect(UUID pplayerUUID, int id, String worldName, double xPos, double yPos, double zPos, ParticleEffect particleEffect, ParticleStyle particleStyle, ItemData itemData, BlockData blockData, OrdinaryColor colorData, NoteColor noteColorData) {
 		this.pplayerUUID = pplayerUUID;

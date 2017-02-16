@@ -40,8 +40,8 @@ public class PermissionManager {
 	 * Always returns true for 'none' so they can be reset
 	 * 
 	 * @param player The player to check the permission for
-	 * @param effect The style to check
-	 * @return True if the player has permission to use the style
+	 * @param style The style to check
+	 * @return If the player has permission to use the style
 	 */
 	public static boolean hasStylePermission(Player player, ParticleStyle style) {
 		if (player.hasPermission("playerparticles.*") || player.hasPermission("playerparticles.style.*")) return true;
@@ -51,10 +51,10 @@ public class PermissionManager {
 	}
 
 	/**
-	 * Gets a List<String> of all effect names a player has permission for
+	 * Gets a String List of all effect names a player has permission for
 	 * 
 	 * @param p The player to get effect names for
-	 * @return A List<String> of all effect names the given player has permission for
+	 * @return A String List of all effect names the given player has permission for
 	 */
 	public static List<String> getParticlesUserHasPermissionFor(Player p) {
 		List<String> list = new ArrayList<String>();
@@ -65,10 +65,10 @@ public class PermissionManager {
 	}
 
 	/**
-	 * Gets a List<String> of all style names a player has permission for
+	 * Gets a String List of all style names a player has permission for
 	 * 
 	 * @param p The player to get style names for
-	 * @return A List<String> of all style names the given player has permission for
+	 * @return A String List of all style names the given player has permission for
 	 */
 	public static List<String> getStylesUserHasPermissionFor(Player p) {
 		List<String> list = new ArrayList<String>();

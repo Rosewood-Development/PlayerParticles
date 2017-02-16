@@ -52,6 +52,7 @@ public class MessageManager {
 		
 		// Fixed Effects
 		NO_PERMISSION_FIXED("message-no-permission-fixed"),
+		MAX_FIXED_EFFECTS_REACHED("message-max-fixed-effects-reached"),
 		INVALID_FIXED_COMMAND("message-invalid-fixed-command"),
 		FIXED_COMMAND_DESC_CREATE("message-fixed-command-desc-create"),
 		FIXED_COMMAND_DESC_REMOVE("message-fixed-command-desc-remove"),
@@ -163,7 +164,7 @@ public class MessageManager {
 	}
 
 	/**
-	 * Translates all & symbols into the Minecraft chat color symbol
+	 * Translates all ampersand symbols into the Minecraft chat color symbol
 	 * 
 	 * @param message The input
 	 * @return The output, parsed

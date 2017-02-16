@@ -53,7 +53,7 @@ public class ParticleStyleArrows implements ParticleStyle, Listener {
 	 * The event used to get all arrows fired by players
 	 * Adds all arrows fired from players to the array
 	 * 
-	 * @param e
+	 * @param e The EntityShootBowEvent
 	 */
 	@EventHandler
 	public void onArrowFired(EntityShootBowEvent e) {
