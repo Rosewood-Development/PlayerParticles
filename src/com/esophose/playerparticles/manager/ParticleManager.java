@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -193,7 +192,13 @@ public class ParticleManager extends BukkitRunnable implements Listener {
 				valid = false;
 			}
 			
-			if (ConfigManager.getInstance().isWorldDisabled(player.getWorld().getName()) || player.getGameMode() == GameMode.SPECTATOR) {
+			// Check for the string matching to maintain support for 1.7
+			// This was checking GameMode.SPECTATOR before and was throwing errors
+			if (player.getGameMode().name().equalsIgnoreCase("spectator")) {
+				valid = false;
+			}
+			
+			if (ConfigManager.getInstance().isWorldDisabled(player.getWorld().getName())) {
 				valid = false;
 			}
 			

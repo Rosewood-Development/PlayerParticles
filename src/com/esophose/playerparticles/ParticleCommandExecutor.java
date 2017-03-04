@@ -8,10 +8,14 @@
 
 package com.esophose.playerparticles;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -184,7 +188,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 					MessageManager.sendMessage(p, MessageType.DATA_APPLIED, "note");
 					return;
 				}
-				
+
 				int note = -1;
 				try {
 					note = Integer.parseInt(args[0]);
@@ -330,7 +334,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 				} else {
 					ConfigManager.getInstance().resetPPlayer(altPlayer.getUniqueId());
 					MessageManager.sendMessage(altPlayer, MessageType.RESET);
-					
+
 					MessageManager.sendMessage(p, MessageType.EXECUTED_FOR_PLAYER, altPlayer.getName());
 				}
 			}
@@ -445,16 +449,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 		MessageManager.sendCustomMessage(p, toSend);
 		MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.STYLE_USAGE.getMessage());
 	}
-	
-	/*
-	
-   	
-   	
-    
-     Requires permission playerparticles.fixed
-     Maximum number of fixed effects defined in config.yml, default value 5
-	 */
-	
+
 	/**
 	 * Called when a player uses /pp fixed
 	 * 
@@ -466,7 +461,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 			MessageManager.sendMessage(p, MessageType.NO_PERMISSION_FIXED);
 			return;
 		}
-		
+
 		if (args.length == 0) { // General information on command
 			MessageManager.sendMessage(p, MessageType.INVALID_FIXED_COMMAND);
 			MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_CREATE);
@@ -475,21 +470,267 @@ public class ParticleCommandExecutor implements CommandExecutor {
 			MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_INFO);
 			return;
 		}
-		
+
 		String cmd = args[0];
-		
+
+		String[] cmdArgs = new String[args.length - 1];
+		for (int i = 1; i < args.length; i++) {
+			cmdArgs[i - 1] = args[i];
+		}
+		args = cmdArgs;
+
 		if (cmd.equalsIgnoreCase("create")) {
-			if (ConfigManager.getInstance().getNumberOfFixedEffectsForPlayer(p.getUniqueId()) >= PlayerParticles.getPlugin().getConfig().getInt("max-fixed-effects")) {
-				
+			if (ConfigManager.getInstance().hasPlayerReachedMaxFixedEffects(p.getUniqueId())) {
+				MessageManager.sendMessage(p, MessageType.MAX_FIXED_EFFECTS_REACHED);
+				return;
 			}
 
-			// /pp fixed create <x> <y> <z> <effect> <style> [data] - Creates a fixed effect and assigns it an id
+			if (args.length < 5) {
+				MessageManager.sendMessage(p, MessageType.CREATE_FIXED_MISSING_ARGS, (5 - args.length) + "");
+				return;
+			}
+
+			double xPos = -1, yPos = -1, zPos = -1;
+			try {
+				if (args[0].startsWith("~")) {
+					if (args[0].equals("~")) xPos = p.getLocation().getX();
+					else xPos = p.getLocation().getX() + Double.parseDouble(args[0].substring(1));
+				} else {
+					xPos = Double.parseDouble(args[0]);
+				}
+
+				if (args[1].startsWith("~")) {
+					if (args[1].equals("~")) yPos = p.getLocation().getY() + 1;
+					else yPos = p.getLocation().getY() + 1 + Double.parseDouble(args[1].substring(1));
+				} else {
+					yPos = Double.parseDouble(args[1]);
+				}
+
+				if (args[2].startsWith("~")) {
+					if (args[2].equals("~")) zPos = p.getLocation().getZ();
+					else zPos = p.getLocation().getZ() + Double.parseDouble(args[2].substring(1));
+				} else {
+					zPos = Double.parseDouble(args[2]);
+				}
+			} catch (Exception e) {
+				MessageManager.sendMessage(p, MessageType.CREATE_FIXED_INVALID_COORDS);
+				return;
+			}
+
+			double distanceFromEffect = p.getLocation().distance(new Location(p.getWorld(), xPos, yPos, zPos));
+			int maxCreationDistance = ConfigManager.getInstance().getMaxFixedEffectCreationDistance();
+			if (maxCreationDistance != 0 && distanceFromEffect > maxCreationDistance) {
+				MessageManager.sendMessage(p, MessageType.CREATE_FIXED_OUT_OF_RANGE, maxCreationDistance + "");
+				return;
+			}
+
+			ParticleEffect effect = ParticleManager.particleFromString(args[3]);
+			if (effect == null) {
+				MessageManager.sendMessage(p, MessageType.CREATE_FIXED_INVALID_EFFECT, args[3]);
+				return;
+			} else if (!PermissionManager.hasEffectPermission(p, effect)) {
+				MessageManager.sendMessage(p, MessageType.CREATE_FIXED_NO_PERMISSION_EFFECT, effect.getName());
+				return;
+			}
+
+			ParticleStyle style = ParticleStyleManager.styleFromString(args[4]);
+			if (style == null) {
+				MessageManager.sendMessage(p, MessageType.CREATE_FIXED_INVALID_STYLE, args[4]);
+				return;
+			} else if (!PermissionManager.hasStylePermission(p, style)) {
+				MessageManager.sendMessage(p, MessageType.CREATE_FIXED_NO_PERMISSION_STYLE, args[4]);
+				return;
+			}
+			
+			if (!style.canBeFixed()) {
+				MessageManager.sendMessage(p, MessageType.CREATE_FIXED_NON_FIXABLE_STYLE, style.getName());
+				return;
+			}
+
+			ItemData itemData = null;
+			BlockData blockData = null;
+			OrdinaryColor colorData = null;
+			NoteColor noteColorData = null;
+
+			if (args.length > 5) {
+				if (effect.hasProperty(ParticleProperty.COLORABLE)) {
+					if (effect == ParticleEffect.NOTE) {
+						if (args[5].equalsIgnoreCase("rainbow")) {
+							noteColorData = new NoteColor(99);
+						} else {
+							int note = -1;
+							try {
+								note = Integer.parseInt(args[5]);
+							} catch (Exception e) {
+								MessageManager.sendMessage(p, MessageType.CREATE_FIXED_DATA_ERROR, "note");
+								return;
+							}
+
+							if (note < 0 || note > 23) {
+								MessageManager.sendMessage(p, MessageType.CREATE_FIXED_DATA_ERROR, "note");
+								return;
+							}
+							
+							noteColorData = new NoteColor(note);
+						}
+					} else {
+						if (args[5].equalsIgnoreCase("rainbow")) {
+							colorData = new OrdinaryColor(999, 999, 999);
+						} else {
+							int r = -1;
+							int g = -1;
+							int b = -1;
+
+							try {
+								r = Integer.parseInt(args[5]);
+								g = Integer.parseInt(args[6]);
+								b = Integer.parseInt(args[7]);
+							} catch (Exception e) {
+								MessageManager.sendMessage(p, MessageType.CREATE_FIXED_DATA_ERROR, "colr");
+								return;
+							}
+
+							if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
+								MessageManager.sendMessage(p, MessageType.CREATE_FIXED_DATA_ERROR, "color");
+								return;
+							}
+
+							colorData = new OrdinaryColor(r, g, b);
+						}
+					}
+				} else if (effect.hasProperty(ParticleProperty.REQUIRES_DATA)) {
+					if (effect == ParticleEffect.BLOCK_CRACK || effect == ParticleEffect.BLOCK_DUST || effect == ParticleEffect.FALLING_DUST) {
+						Material material = null;
+						int data = -1;
+
+						try {
+							material = ParticlesUtils.closestMatch(args[5]);
+							if (material == null) material = Material.matchMaterial(args[5]);
+							if (material == null) throw new Exception();
+						} catch (Exception e) {
+							MessageManager.sendMessage(p, MessageType.CREATE_FIXED_DATA_ERROR, "block");
+							return;
+						}
+
+						try {
+							data = Integer.parseInt(args[6]);
+						} catch (Exception e) {
+							MessageManager.sendMessage(p, MessageType.CREATE_FIXED_DATA_ERROR, "block");
+							return;
+						}
+
+						if (data < 0 || data > 15 || !material.isBlock()) {
+							MessageManager.sendMessage(p, MessageType.CREATE_FIXED_DATA_ERROR, "block");
+							return;
+						}
+
+						blockData = new BlockData(material, (byte) data);
+					} else if (effect == ParticleEffect.ITEM_CRACK) {
+						Material material = null;
+						int data = -1;
+
+						try {
+							material = ParticlesUtils.closestMatch(args[5]);
+							if (material == null) material = Material.matchMaterial(args[5]);
+							if (material == null) throw new Exception();
+						} catch (Exception e) {
+							MessageManager.sendMessage(p, MessageType.CREATE_FIXED_DATA_ERROR, "item");
+							return;
+						}
+
+						try {
+							data = Integer.parseInt(args[6]);
+						} catch (Exception e) {
+							MessageManager.sendMessage(p, MessageType.CREATE_FIXED_DATA_ERROR, "item");
+							return;
+						}
+
+						if (data < 0 || data > 15 || material.isBlock()) {
+							MessageManager.sendMessage(p, MessageType.CREATE_FIXED_DATA_ERROR, "item");
+							return;
+						}
+
+						itemData = new ItemData(material, (byte) data);
+					}
+				}
+			}
+
+			FixedParticleEffect fixedEffect = new FixedParticleEffect(p.getUniqueId(), // @formatter:off
+																	  ConfigManager.getInstance().getNextFixedEffectId(p.getUniqueId()), 
+																	  p.getLocation().getWorld().getName(), xPos, yPos, zPos, 
+																	  effect, style, itemData, blockData, colorData, noteColorData); // @formatter:on
+
+			MessageManager.sendMessage(p, MessageType.CREATE_FIXED_SUCCESS);
+			ConfigManager.getInstance().saveFixedEffect(fixedEffect);
 		} else if (cmd.equalsIgnoreCase("remove")) {
-			// /pp fixed remove <id> - Removes a fixed effect by its id
+			if (args.length < 1) {
+				MessageManager.sendMessage(p, MessageType.REMOVE_FIXED_NO_ARGS);
+				return;
+			}
+
+			int id = -1;
+			try {
+				id = Integer.parseInt(args[0]);
+			} catch (Exception e) {
+				MessageManager.sendMessage(p, MessageType.REMOVE_FIXED_INVALID_ARGS);
+				return;
+			}
+
+			if (ConfigManager.getInstance().removeFixedEffect(p.getUniqueId(), id)) {
+				MessageManager.sendMessage(p, MessageType.REMOVE_FIXED_SUCCESS, id + "");
+			} else {
+				MessageManager.sendMessage(p, MessageType.REMOVE_FIXED_NONEXISTANT, id + "");
+			}
 		} else if (cmd.equalsIgnoreCase("list")) {
-			// /pp fixed list - Lists the location, and id of all fixed effects
+			List<Integer> ids = ConfigManager.getInstance().getFixedEffectIdsForPlayer(p.getUniqueId());
+			Collections.sort(ids);
+
+			if (ids.isEmpty()) {
+				MessageManager.sendMessage(p, MessageType.LIST_FIXED_NONE);
+				return;
+			}
+
+			String msg = MessageType.LIST_FIXED_SUCCESS.getMessage();
+			boolean first = true;
+			for (int id : ids) {
+				if (!first) msg += ", ";
+				else first = false;
+				msg += id;
+			}
+
+			MessageManager.sendCustomMessage(p, msg);
 		} else if (cmd.equalsIgnoreCase("info")) {
-			// /pp fixed info <id> - Lists all information about the fixed effect with the matching id
+			if (args.length < 1) {
+				MessageManager.sendMessage(p, MessageType.INFO_FIXED_NO_ARGS);
+				return;
+			}
+
+			int id = -1;
+			try {
+				id = Integer.parseInt(args[0]);
+			} catch (Exception e) {
+				MessageManager.sendMessage(p, MessageType.INFO_FIXED_INVALID_ARGS);
+				return;
+			}
+
+			FixedParticleEffect fixedEffect = ConfigManager.getInstance().getFixedEffectForPlayerById(p.getUniqueId(), id);
+
+			if (fixedEffect == null) {
+				MessageManager.sendMessage(p, MessageType.INFO_FIXED_NONEXISTANT, id + "");
+				return;
+			}
+
+			DecimalFormat df = new DecimalFormat("0.##"); // Decimal formatter so the coords aren't super long
+			String listMessage = MessageType.INFO_FIXED_INFO.getMessage() // @formatter:off
+								 .replaceAll("\\{0\\}", fixedEffect.getId() + "")
+								 .replaceAll("\\{1\\}", fixedEffect.getLocation().getWorld().getName())
+								 .replaceAll("\\{2\\}", df.format(fixedEffect.getLocation().getX()) + "")
+								 .replaceAll("\\{3\\}", df.format(fixedEffect.getLocation().getY()) + "")
+								 .replaceAll("\\{4\\}", df.format(fixedEffect.getLocation().getZ()) + "")
+								 .replaceAll("\\{5\\}", fixedEffect.getParticleEffect().getName())
+								 .replaceAll("\\{6\\}", fixedEffect.getParticleStyle().getName())
+								 .replaceAll("\\{7\\}", fixedEffect.getParticleDataString()); // @formatter:on
+			MessageManager.sendCustomMessage(p, listMessage);
 		} else {
 			MessageManager.sendMessage(p, MessageType.INVALID_FIXED_COMMAND);
 			MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_CREATE);
@@ -497,9 +738,6 @@ public class ParticleCommandExecutor implements CommandExecutor {
 			MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_LIST);
 			MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_INFO);
 		}
-		
-		// Test data
-		//ConfigManager.getInstance().saveFixedEffect(new FixedParticleEffect(p.getUniqueId(), ConfigManager.getInstance().getNextFixedEffectId(p.getUniqueId()), p.getLocation().getWorld().getName(), p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ(), ParticleEffect.RED_DUST, DefaultStyles.ARROWS, null, null, new OrdinaryColor(999, 999, 999), null));
 	}
 
 }

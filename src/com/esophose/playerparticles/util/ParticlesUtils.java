@@ -25,9 +25,9 @@ public class ParticlesUtils {
 	public static Material closestMatch(String input) {
         ArrayList<Material> matchList = new ArrayList<Material>();
         for (Material material : Material.values())
-            if (material.name().replace("_", " ").toLowerCase().equals(input.toLowerCase()) || String.valueOf(material.getId()).equals(input))
+            if (material.name().replaceAll("_", " ").toLowerCase().equals(input.toLowerCase()) || String.valueOf(material.getId()).equals(input))
                 return material;
-            else if (material.name().replace("_", " ").toLowerCase().contains(input.toLowerCase()))
+            else if (material.name().replaceAll("_", " ").toLowerCase().contains(input.toLowerCase()))
                 matchList.add(material);
         
         if (matchList.size() == 1) return matchList.get(0);

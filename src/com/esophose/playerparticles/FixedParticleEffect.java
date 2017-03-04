@@ -215,6 +215,37 @@ public class FixedParticleEffect {
 	}
 	
 	/**
+	 * Gets the particle data as a string
+	 * 
+	 * @return A string of the current effect's data
+	 */
+	public String getParticleDataString() {
+		if (this.particleEffect.hasProperty(ParticleProperty.COLORABLE)) {
+			if (this.particleEffect == ParticleEffect.NOTE) {
+				if (this.particleNoteColorData.getValueX() * 24 == 99) {
+					return "rainbow";
+				} else {
+					return (this.particleNoteColorData.getValueX() * 24) + "";
+				}
+			} else {
+				if (this.particleColorData.getRed() == 999 && this.particleColorData.getGreen() == 999 && this.particleColorData.getBlue() == 999) {
+					return "rainbow";
+				} else {
+					return this.particleColorData.getRed() + " " + this.particleColorData.getGreen() + " " + this.particleColorData.getBlue();
+				}
+			}
+		} else if (this.particleEffect.hasProperty(ParticleProperty.REQUIRES_DATA)) {
+			if (this.particleEffect == ParticleEffect.BLOCK_CRACK || this.particleEffect == ParticleEffect.BLOCK_DUST || this.particleEffect == ParticleEffect.FALLING_DUST) {
+				return this.particleBlockData.getMaterial() + " " + this.particleBlockData.getData();
+			} else if (this.particleEffect == ParticleEffect.ITEM_CRACK) {
+				return this.particleItemData.getMaterial() + " " + this.particleItemData.getData();
+			}
+		}
+		
+		return "None";
+	}
+	
+	/**
 	 * Gets the location this effect will be displayed at
 	 * 
 	 * @return The effect's location

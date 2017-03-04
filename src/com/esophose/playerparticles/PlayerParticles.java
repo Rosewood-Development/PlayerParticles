@@ -12,6 +12,7 @@
  * Fix errors printing to console resulting from offline players trying to spawn particles
  * Fix arrow style particles staying after an arrow is considered dead (in rare cases this occurred)
  * Fix SQL queries getting logged to console when database-enable is set to true
+ * Fix tab completion, it stopped working at one point and I didn't notice until now
  * Added new style 'thick'
  
  TODO: 

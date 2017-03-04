@@ -54,6 +54,16 @@ public class ConfigManager {
 	 * The disabled worlds cached for quick access
 	 */
 	private List<String> disabledWorlds = null;
+	
+	/**
+	 * The max number of fixed effects a player can have, defined in the config
+	 */
+	private int maxFixedEffects = -1;
+	
+	/**
+	 * The max distance a fixed effect can be created relative to the player
+	 */
+	private int maxFixedEffectCreationDistance = -1;
 
 	/**
 	 * @return The instance of the config for effects
@@ -499,12 +509,12 @@ public class ConfigManager {
 	 * 
 	 * @param playerUUID The player who owns the effect
 	 * @param id The id of the effect to remove
+	 * @return If the effect was removed
 	 */
-	public void deleteFixedEffect(UUID playerUUID, int id) {
+	public boolean removeFixedEffect(UUID playerUUID, int id) {
 		if (!PlayerParticles.useMySQL) {
 			if (!config.isConfigurationSection(playerUUID.toString() + ".fixedEffect." + id)) {
-				System.out.println("Tried to remove a fixed effect with ID " + id + " that doesn't exists!");
-				return;
+				return false;
 			}
 
 			config.set(playerUUID.toString() + ".fixedEffect." + id, null);
@@ -513,8 +523,7 @@ public class ConfigManager {
 		} else {
 			try (ResultSet res = PlayerParticles.mySQL.querySQL("SELECT uuid FROM pp_fixed WHERE player_uuid = '" + playerUUID.toString() + "' AND id = " + id)) {
 				if (!res.next()) {
-					System.out.println("Tried to remove a fixed effect with ID " + id + " doesn't exist in the database!");
-					return;
+					return false;
 				} else { // @formatter:off
 					String uuid = res.getString("uuid");
 					PlayerParticles.mySQL.updateSQL("DELETE FROM pp_fixed WHERE uuid = '" + uuid + "';" + 
@@ -526,10 +535,12 @@ public class ConfigManager {
 				} // @formatter:on
 			} catch (ClassNotFoundException | SQLException e) {
 				e.printStackTrace();
+				return false;
 			}
 		}
 
 		ParticleManager.removeFixedEffectForPlayer(playerUUID, id);
+		return true;
 	}
 
 	/**
@@ -633,27 +644,119 @@ public class ConfigManager {
 	}
 	
 	/**
-	 * Gets the number of fixed effects a player has created
+	 * Gets a fixed effect for a pplayer by its id
 	 * 
-	 * @param pplayerUUID The player to check
-	 * @return The number of fixed effects the player has created
+	 * @param pplayerUUID The player who owns the effect
+	 * @param id The id for the effect to get
+	 * @return The effect if one exists
 	 */
-	public int getNumberOfFixedEffectsForPlayer(UUID pplayerUUID) {
+	public FixedParticleEffect getFixedEffectForPlayerById(UUID pplayerUUID, int id) {
 		if (!PlayerParticles.useMySQL) {
-			if (config.isConfigurationSection(pplayerUUID.toString() + ".fixedEffect")) {
-				return config.getConfigurationSection(pplayerUUID.toString() + ".fixedEffect").getKeys(false).size();
-			} else return 0;
-		} else {
-			try (ResultSet res = PlayerParticles.mySQL.querySQL("SELECT COUNT(1) FROM pp_fixed WHERE player_uuid = '" + pplayerUUID.toString() + "'")) {
+			if (config.isConfigurationSection(pplayerUUID.toString() + ".fixedEffect." + id)) {
+				ConfigurationSection section = config.getConfigurationSection(pplayerUUID + ".fixedEffect." + id);
+				ConfigurationSection effectSection = section.getConfigurationSection("effect");
+				ConfigurationSection styleSection = section.getConfigurationSection("style");
+				ConfigurationSection itemDataSection = section.getConfigurationSection("itemData");
+				ConfigurationSection blockDataSection = section.getConfigurationSection("blockData");
+				ConfigurationSection colorDataSection = section.getConfigurationSection("colorData");
+				ConfigurationSection noteColorDataSection = section.getConfigurationSection("noteColorData");
+
+				String worldName = section.getString("worldName");
+				double xPos = section.getDouble("xPos");
+				double yPos = section.getDouble("yPos");
+				double zPos = section.getDouble("zPos");
+				ParticleEffect particleEffect = ParticleEffect.fromName(effectSection.getString("name"));
+				ParticleStyle particleStyle = ParticleStyleManager.styleFromString(styleSection.getString("name"));
+				ItemData particleItemData = new ItemData(Material.matchMaterial(itemDataSection.getString("material")), (byte) itemDataSection.getInt("data"));
+				BlockData particleBlockData = new BlockData(Material.matchMaterial(blockDataSection.getString("material")), (byte) blockDataSection.getInt("data"));
+				OrdinaryColor particleColorData = new OrdinaryColor(colorDataSection.getInt("r"), colorDataSection.getInt("g"), colorDataSection.getInt("b"));
+				NoteColor particleNoteColorData = new NoteColor(noteColorDataSection.getInt("note"));
+				return new FixedParticleEffect(pplayerUUID, id, worldName, xPos, yPos, zPos, particleEffect, particleStyle, particleItemData, particleBlockData, particleColorData, particleNoteColorData);
+			}
+		} else { // @formatter:off
+			try (ResultSet res = PlayerParticles.mySQL.querySQL("SELECT * FROM pp_fixed f " + 
+																"JOIN pp_data_item i ON f.uuid = i.uuid " +
+																"JOIN pp_data_block b ON f.uuid = b.uuid " +
+																"JOIN pp_data_color c ON f.uuid = c.uuid " +
+																"JOIN pp_data_note n ON f.uuid = n.uuid " +
+															    "WHERE f.player_uuid = '" + pplayerUUID.toString() + "' AND f.id = '" + id + "'")) { // @formatter:on
+				
 				if (res.next()) {
-					return res.getInt(1);
-				} else return 0;
+					String worldName = res.getString("f.worldName");
+					double xPos = res.getDouble("f.xPos");
+					double yPos = res.getDouble("f.yPos");
+					double zPos = res.getDouble("f.zPos");
+					ParticleEffect particleEffect = ParticleManager.particleFromString(res.getString("f.effect"));
+					ParticleStyle particleStyle = ParticleStyleManager.styleFromString(res.getString("f.style"));
+					ItemData particleItemData = new ItemData(Material.matchMaterial(res.getString("i.material")), res.getByte("i.data"));
+					BlockData particleBlockData = new BlockData(Material.matchMaterial(res.getString("b.material")), res.getByte("b.data"));
+					OrdinaryColor particleColorData = new OrdinaryColor(res.getInt("c.r"), res.getInt("c.g"), res.getInt("c.b"));
+					NoteColor particleNoteColorData = new NoteColor(res.getByte("n.note"));
+					return new FixedParticleEffect(pplayerUUID, id, worldName, xPos, yPos, zPos, particleEffect, particleStyle, particleItemData, particleBlockData, particleColorData, particleNoteColorData);
+				}
 			} catch (ClassNotFoundException | SQLException e) {
 				e.printStackTrace();
 			}
 		}
 		
-		return 0;
+		return null; // No effect was found with the id specified
+	}
+	
+	/**
+	 * Gets a list of all fixed effect ids for a player
+	 * 
+	 * @param pplayerUUID The player 
+	 * @return A list of all fixed effect ids for the given player
+	 */
+	public List<Integer> getFixedEffectIdsForPlayer(UUID pplayerUUID) {
+		List<Integer> ids = new ArrayList<Integer>();
+		
+		if (!PlayerParticles.useMySQL) {
+			if (config.isConfigurationSection(pplayerUUID.toString() + ".fixedEffect")) {
+				Set<String> keys = config.getConfigurationSection(pplayerUUID.toString() + ".fixedEffect").getKeys(false);
+				for (String key : keys) {
+					ids.add(Integer.parseInt(key));
+				}
+			}
+		} else {
+			try (ResultSet res = PlayerParticles.mySQL.querySQL("SELECT id FROM pp_fixed WHERE player_uuid = '" + pplayerUUID.toString() + "'")) {
+				while (res.next()) {
+					ids.add(res.getInt(1));
+				}
+			} catch (ClassNotFoundException | SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return ids;
+	}
+	
+	/**
+	 * Checks if the given player has reached the max number of fixed effects
+	 * 
+	 * @param pplayerUUID The player to check
+	 * @return If the player can create any more fixed effects
+	 */
+	public boolean hasPlayerReachedMaxFixedEffects(UUID pplayerUUID) {
+		if (maxFixedEffects == -1) { // Initialize on the fly
+			maxFixedEffects = PlayerParticles.getPlugin().getConfig().getInt("max-fixed-effects");
+		}
+		
+		if (!PlayerParticles.useMySQL) {
+			if (config.isConfigurationSection(pplayerUUID.toString() + ".fixedEffect")) {
+				return config.getConfigurationSection(pplayerUUID.toString() + ".fixedEffect").getKeys(false).size() >= maxFixedEffects;
+			} else return false;
+		} else {
+			try (ResultSet res = PlayerParticles.mySQL.querySQL("SELECT COUNT(1) FROM pp_fixed WHERE player_uuid = '" + pplayerUUID.toString() + "'")) {
+				if (res.next()) {
+					return res.getInt(1) >= maxFixedEffects;
+				} else return false;
+			} catch (ClassNotFoundException | SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return true; // Something went wrong, pretend they reached the max
 	}
 
 	/**
@@ -684,6 +787,18 @@ public class ConfigManager {
 		}
 
 		return -1;
+	}
+	
+	/**
+	 * Gets the max distance a fixed effect can be created from the player
+	 * 
+	 * @return The max distance a fixed effect can be created from the player
+	 */
+	public int getMaxFixedEffectCreationDistance() {
+		if (maxFixedEffectCreationDistance == -1) {
+			maxFixedEffectCreationDistance = PlayerParticles.getPlugin().getConfig().getInt("max-fixed-effect-creation-distance");
+		}
+		return maxFixedEffectCreationDistance;
 	}
 
 	/**

@@ -7,12 +7,12 @@
 
 # Please excuse the cheesy ASCII Art
 
-# ====================================================#
-#                PlayerParticles Config               #
-#      DO NOT DELETE OR EDIT THE FIELD "version"!     #
-# ====================================================#
+# ==================================================== #
+#                PlayerParticles Config                #
+#               Welcome to the beginning               #
+# ==================================================== #
 
-# Changing this value will reset your config on the next server reload/restart. 
+# Changing this value will reset your config on the next server reload / restart. 
 # I don't recommend changing it
 version: 4.3
 
@@ -37,6 +37,13 @@ disabled-worlds: []
 # Max fixed effects per player
 # Default: 5
 max-fixed-effects: 5
+
+# Max fixed effect creation distance
+# Determines how far away a player may create a fixed effect from themselves
+# This measurement is in blocks
+# Set to 0 for infinite distance
+# Default: 256
+max-fixed-effect-creation-distance: 256
 
 # ================================================================ #
 #                     MESSAGE CONFIGURATION                        #
@@ -147,13 +154,13 @@ message-data-material-mismatch: '&cThe material supplied is not of type &b{TYPE}
 
 # Note Data Usage
 # You should not change the text here, only the coloring
-# Default: '&b/pp data <0-23>'
-message-note-data-usage: '&b/pp data <0-23>'
+# Default: '&b/pp data [<0-23>]|[rainbow]'
+message-note-data-usage: '&b/pp data [<0-23>]|[rainbow]'
 
 # Color Data Usage
 # You should not change the text here, only the coloring
-# Default: '&b/pp data <0-255> <0-255> <0-255>'
-message-color-data-usage: '&b/pp data [<0-255> <0-255> <0-255>] [rainbow]'
+# Default: '&b/pp data [<0-255> <0-255> <0-255>]|[rainbow]'
+message-color-data-usage: '&b/pp data [<0-255> <0-255> <0-255>]|[rainbow]'
 
 # Item Data Usage
 # You should not change the text here, only the coloring
@@ -205,6 +212,105 @@ message-failed-execute-no-permission: '&cFailed to execute command for &b{TYPE}&
 #   Fixed Effects
 # ----------------- #
 
+# -- Create -- #
+
+# Missing Creation Arguments
+# Default: '&cUnable to create fixed effect, you are missing &b{TYPE} &crequired arguments!'
+message-create-fixed-missing-args: '&cUnable to create fixed effect, you are missing &b{TYPE} &crequired arguments!'
+
+# Invalid Coordinates
+# Default: '&cUnable to create fixed effect, one or more coordinates you entered is invalid!'
+message-create-fixed-invalid-coords: '&cUnable to create fixed effect, one or more coordinates you entered is invalid!'
+
+# Coords Out Of Range
+# Default: '&cUnable to create fixed effect, you must be within &b{TYPE}&c blocks of your desired location!'
+message-create-fixed-out-of-range: '&cUnable to create fixed effect, you must be within &b{TYPE}&c blocks of your desired location!'
+
+# Invalid Effect
+# Default: '&cUnable to create fixed effect, an effect with the name &b{TYPE} &cdoes not exist!'
+message-create-fixed-invalid-effect: '&cUnable to create fixed effect, an effect with the name &b{TYPE} &cdoes not exist!'
+
+# No Permission Effect
+# Default: '&cUnable to create fixed effect, you do not have permission to use the effect &b{TYPE}&c!'
+message-create-fixed-no-permission-effect: '&cUnable to create fixed effect, you do not have permission to use the effect &b{TYPE}&c!'
+
+# Invalid Style
+# Default: '&cUnable to create fixed effect, a style with the name &b{TYPE} &cdoes not exist!'
+message-create-fixed-invalid-style: '&cUnable to create fixed effect, a style with the name &b{TYPE} &cdoes not exist!'
+
+# No Permission Style
+# Default: '&cUnable to create fixed effect, you do not have permission to use the style &b{TYPE}&c!'
+message-create-fixed-no-permission-style: '&cUnable to create fixed effect, you do not have permission to use the style &b{TYPE}&c!'
+
+# Style Not Fixable
+# Default: '&cThe style &b{TYPE} &cprovided can not be used in fixed effects!'
+message-create-fixed-non-fixable-style: '&cThe style &b{TYPE} &ccan not be used in fixed effects!'
+
+# Data Error
+# Default: '&cUnable to create fixed effect, the data provided is not correct! This effect requires &b{TYPE}&c!'
+message-create-fixed-data-error: '&cUnable to create fixed effect, the data provided is not correct! This effect requires &b{TYPE}&c data!'
+
+# Creation Success
+# Default: '&aYour fixed effect has been created!'
+message-create-fixed-success: '&aYour fixed effect has been created!'
+
+# -- Remove -- #
+
+# Could Not Remove
+# Default: '&cUnable to remove, you do not have a fixed effect with the id of &b{TYPE}&c!'
+message-remove-fixed-nonexistant: '&cUnable to remove, you do not have a fixed effect with the id of &b{TYPE}&c!'
+
+# No Args Remove
+# Default: '&cYou did not specify an id to remove!'
+message-remove-fixed-no-args: '&cYou did not specify an id to remove!'
+
+# Invalid Args Remove
+# Default: '&cUnable to remove, the id specified must be a number!'
+message-remove-fixed-invalid-args: '&cUnable to remove, the id specified must be a number!'
+
+# Effect Removed
+# Default: '&aYour fixed effect with the id &b{TYPE}&a has been removed!'
+message-remove-fixed-success: '&aYour fixed effect with the id &b{TYPE}&a has been removed!'
+
+# -- List -- #
+
+# List Success
+# Default: '&eYou have fixed effects with these ids: &b'
+message-list-fixed-success: '&eYou have fixed effects with these ids: &b'
+
+# List None
+# Default: '&eYou do not have any fixed effects!'
+message-list-fixed-none: '&eYou do not have any fixed effects!'
+
+# -- Info -- #
+
+# Could Not Get Info
+# Default: '&cUnable to get info, you do not have a fixed effect with the id of &b{TYPE}&c!'
+message-info-fixed-nonexistant: '&cUnable to get info, you do not have a fixed effect with the id of &b{TYPE}&c!'
+
+# No Args Info
+# Default: '&cYou did not specify an id to display info for!'
+message-info-fixed-no-args: '&cYou did not specify an id to display info for!'
+
+# Invalid Args Info
+# Default: '&cUnable to get info, the id specified must be a number!'
+message-info-fixed-invalid-args: '&cUnable to get info, the id specified must be a number!'
+
+# Fixed Effect Info
+# Key:
+#   {0} = ID
+#   {1} = World Name
+#   {2} = World X Position
+#   {3} = World Y Position
+#   {4} = World Z Position
+#   {5} = Effect Name
+#   {6} = Style Name
+#   {7} = Data
+# Default: '&eID: &b{0} &eWorld: &b{1} &eX: &b{2} &eY: &b{3} &eZ: &b{4} &eEffect: &b{5} &eStyle: &b{6} &eData: &b{7}'
+message-info-fixed-info: '&eID: &b{0} &eWorld: &b{1} &eX: &b{2} &eY: &b{3} &eZ: &b{4} &eEffect: &b{5} &eStyle: &b{6} &eData: &b{7}'
+
+# -- Other -- #
+
 # No Permission Fixed
 # Default: '&cYou do not have permission to use fixed effects!'
 message-no-permission-fixed: '&cYou do not have permission to use fixed effects!'
@@ -216,6 +322,8 @@ message-max-fixed-effects-reached: '&cYou have reached the maximum allowed fixed
 # Invalid Fixed Command
 # Default: '&cInvalid sub-command for &b/pp fixed&c!'
 message-invalid-fixed-command: '&cInvalid subcommand for &b/pp fixed&c! &eCommands: '
+
+# -- Command Descriptions -- #
 
 # Fixed Command Description For Create
 # Default '&e/pp fixed create <x> <y> <z> <effect> <style> [data]'
@@ -232,7 +340,6 @@ message-fixed-command-desc-list: '&e/pp fixed list - Lists all ids of your fixed
 # Fixed Command Description For Information
 # Default: '&e/pp fixed info <id> - Gets info on one of your fixed effects'
 message-fixed-command-desc-info: '&e/pp fixed info <id> - Gets info on one of your fixed effects'
-
 
 # ------------- #
 #     Other     #

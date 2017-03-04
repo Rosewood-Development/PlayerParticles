@@ -9,16 +9,21 @@
 package com.esophose.playerparticles;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 
 import com.esophose.playerparticles.manager.PermissionManager;
 
 public class ParticleCommandCompleter implements TabCompleter {
+
+	private final String[] COMMANDS = { "help", "effect", "effects", "style", "styles", "worlds", "version", "fixed", "reset" };
+	private final String[] FIXED_COMMANDS = { "create", "remove", "list", "info" };
 
 	/**
 	 * Activated when a user pushes tab in chat prefixed with /pp
@@ -30,28 +35,27 @@ public class ParticleCommandCompleter implements TabCompleter {
 	 * @return A list of commands available to the sender
 	 */
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
+		List<String> completions = new ArrayList<String>();
 		if (cmd.getName().equalsIgnoreCase("pp")) {
-			if (args.length == 0) {
-				List<String> list = new ArrayList<String>();
-				list.add("help");
-				list.add("effect");
-				list.add("effects");
-				list.add("style");
-				list.add("styles");
-				list.add("worlds");
-				list.add("version");
-				list.add("fixed");
-				list.add("reset");
-				return list;
-			} else if (args.length == 1) {
+			if (args.length > 1) {
 				if (args[0].equalsIgnoreCase("effect")) {
-					return PermissionManager.getParticlesUserHasPermissionFor((Player) sender);
+					List<String> commands = PermissionManager.getParticlesUserHasPermissionFor((Player) sender);
+					StringUtil.copyPartialMatches(args[1], commands, completions);
+					return completions;
 				} else if (args[0].equalsIgnoreCase("style")) {
-					return PermissionManager.getStylesUserHasPermissionFor((Player) sender);
+					List<String> commands = PermissionManager.getStylesUserHasPermissionFor((Player) sender);
+					StringUtil.copyPartialMatches(args[1], commands, completions);
+					return completions;
+				} else if (args[0].equalsIgnoreCase("fixed")) {
+					List<String> commands = Arrays.asList(FIXED_COMMANDS);
+					StringUtil.copyPartialMatches(args[1], commands, completions);
 				}
+			} else {
+				List<String> commands = new ArrayList<String>(Arrays.asList(COMMANDS));
+				StringUtil.copyPartialMatches(args[0], commands, completions);
 			}
 		}
-		return null;
+		return completions;
 	}
 
 }

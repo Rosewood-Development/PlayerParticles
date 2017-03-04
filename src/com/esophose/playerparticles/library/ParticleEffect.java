@@ -47,7 +47,7 @@ import com.esophose.playerparticles.library.ReflectionUtils.PackageType;
 /**
  * Modified a couple things for the plugin
  *
- * Updated to 1.10
+ * Updated to 1.11
  * 
  * @author (of changes) Esophose
  */
