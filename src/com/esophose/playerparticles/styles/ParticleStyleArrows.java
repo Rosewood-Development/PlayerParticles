@@ -57,7 +57,7 @@ public class ParticleStyleArrows implements ParticleStyle, Listener {
 	 */
 	@EventHandler
 	public void onArrowFired(EntityShootBowEvent e) {
-		if (e.getEntityType() == EntityType.PLAYER && e.getProjectile().getType() == EntityType.ARROW) {
+		if (e.getEntityType() == EntityType.PLAYER && (e.getProjectile().getType() == EntityType.ARROW) || e.getProjectile().getType() == EntityType.SPECTRAL_ARROW || e.getProjectile().getType() == EntityType.TIPPED_ARROW) {
 			arrows.add((Arrow) e.getProjectile());
 		}
 	}

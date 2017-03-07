@@ -1,5 +1,5 @@
 /**
- * Copyright Esophose 2016
+ * Copyright Esophose 2017
  * While using any of the code provided by this plugin
  * you must not claim it as your own. This plugin may
  * be modified and installed on a server, but may not
@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -33,7 +34,7 @@ import com.esophose.playerparticles.library.ParticleEffect.NoteColor;
 import com.esophose.playerparticles.library.ParticleEffect.OrdinaryColor;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
 import com.esophose.playerparticles.styles.api.ParticleStyleManager;
-import com.esophose.playerparticles.util.ParticlesUtils;
+import com.esophose.playerparticles.util.ParticleUtils;
 
 public class ConfigManager {
 
@@ -530,7 +531,7 @@ public class ConfigManager {
 													"DELETE FROM pp_data_item WHERE uuid = '" + uuid + "';" +
 													"DELETE FROM pp_data_block WHERE uuid = '" + uuid + "';" +
 													"DELETE FROM pp_data_color WHERE uuid = '" + uuid + "';" +
-													"DELETE FROM pp_data_note WHERE uuid '" + uuid + "';"
+													"DELETE FROM pp_data_note WHERE uuid = '" + uuid + "';"
 												    );
 				} // @formatter:on
 			} catch (ClassNotFoundException | SQLException e) {
@@ -742,6 +743,8 @@ public class ConfigManager {
 			maxFixedEffects = PlayerParticles.getPlugin().getConfig().getInt("max-fixed-effects");
 		}
 		
+		if (Bukkit.getPlayer(pplayerUUID).hasPermission("playerparticles.fixed.unlimited")) return false;
+		
 		if (!PlayerParticles.useMySQL) {
 			if (config.isConfigurationSection(pplayerUUID.toString() + ".fixedEffect")) {
 				return config.getConfigurationSection(pplayerUUID.toString() + ".fixedEffect").getKeys(false).size() >= maxFixedEffects;
@@ -762,33 +765,32 @@ public class ConfigManager {
 	/**
 	 * Gets the next Id for a player's fixed effects
 	 * 
-	 * @param playerUUID The player to get the Id for
+	 * @param pplayerUUID The player to get the Id for
 	 * @return The smallest available Id the player can use
 	 */
-	public int getNextFixedEffectId(UUID playerUUID) {
+	public int getNextFixedEffectId(UUID pplayerUUID) {
+		Set<String> idsSet = new HashSet<String>();
 		if (!PlayerParticles.useMySQL) {
-			if (!config.isConfigurationSection(playerUUID.toString() + ".fixedEffect")) return 0;
-			Set<String> keys = config.getConfigurationSection(playerUUID.toString() + ".fixedEffect").getKeys(false);
-			int[] ids = new int[keys.size()];
-			int i = 0;
-			for (String key : keys)
-				ids[i++] = Integer.parseInt(key);
-			return ParticlesUtils.getSmallestPositiveInt(ids);
-		} else { // @formatter:off
-			try (ResultSet res = PlayerParticles.mySQL.querySQL("SELECT MIN(t1.id + 1) AS nextId FROM pp_fixed t1 " + 
-																"LEFT JOIN pp_fixed t2 ON t1.id + 1 = t2.id " + 
-																"WHERE t2.id IS NULL AND t1.player_uuid = '" + playerUUID.toString() + "'")) {
-				if (res.next()) { // @formatter:on
-					return res.getInt(1);
+			if (!config.isConfigurationSection(pplayerUUID.toString() + ".fixedEffect")) return 1;
+			idsSet = config.getConfigurationSection(pplayerUUID.toString() + ".fixedEffect").getKeys(false);
+		} else {
+			try (ResultSet res = PlayerParticles.mySQL.querySQL("SELECT id FROM pp_fixed WHERE player_uuid = '" + pplayerUUID.toString() + "'")) {
+				while (res.next()) {
+					idsSet.add(res.getInt(1) + "");
 				}
 			} catch (ClassNotFoundException | SQLException e) {
 				e.printStackTrace();
 			}
 		}
 
-		return -1;
+		if (idsSet.isEmpty()) return 1;
+		int[] ids = new int[idsSet.size()];
+		int i = 0;
+		for (String key : idsSet) 
+			ids[i++] = Integer.parseInt(key);
+		return ParticleUtils.getSmallestPositiveInt(ids);
 	}
-	
+
 	/**
 	 * Gets the max distance a fixed effect can be created from the player
 	 * 

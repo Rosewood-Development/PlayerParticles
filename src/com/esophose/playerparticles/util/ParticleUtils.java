@@ -1,5 +1,5 @@
 /**
- * Copyright Esophose 2016
+ * Copyright Esophose 2017
  * While using any of the code provided by this plugin
  * you must not claim it as your own. This plugin may
  * be modified and installed on a server, but may not
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 import org.bukkit.Material;
 
-public class ParticlesUtils {
+public class ParticleUtils {
 
 	/**
 	 * Finds a block/item as a material from a string

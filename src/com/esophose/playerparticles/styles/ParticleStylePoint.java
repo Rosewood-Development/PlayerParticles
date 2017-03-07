@@ -13,12 +13,13 @@ public class ParticleStylePoint implements ParticleStyle {
 	}
 
 	public void updateTimers() {
+
 	}
 
 	public String getName() {
 		return "point";
 	}
-	
+
 	public boolean canBeFixed() {
 		return true;
 	}

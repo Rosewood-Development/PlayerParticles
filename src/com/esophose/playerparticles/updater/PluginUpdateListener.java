@@ -1,5 +1,5 @@
 /**
- * Copyright Esophose 2016
+ * Copyright Esophose 2017
  * While using any of the code provided by this plugin
  * you must not claim it as your own. This plugin may
  * be modified and installed on a server, but may not
@@ -28,7 +28,7 @@ public class PluginUpdateListener implements Listener {
 		if (e.getPlayer().isOp()) {
 			if (PlayerParticles.updateVersion != null) {
 				MessageManager.sendCustomMessage(e.getPlayer(), ChatColor.YELLOW + "An update (" + ChatColor.AQUA + "v" + PlayerParticles.updateVersion + ChatColor.YELLOW + ") is available! You are running " + ChatColor.AQUA + "v" + PlayerParticles.getPlugin().getDescription().getVersion());
-				MessageManager.sendCustomMessage(e.getPlayer(), ChatColor.YELLOW + "Download from: http://dev.bukkit.org/bukkit-plugins/playerparticles/");
+				MessageManager.sendCustomMessage(e.getPlayer(), ChatColor.YELLOW + "Download from: https://dev.bukkit.org/projects/playerparticles");
 			}
 		}
 	}

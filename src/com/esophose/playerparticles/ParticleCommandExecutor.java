@@ -1,5 +1,5 @@
 /**
- * Copyright Esophose 2016
+ * Copyright Esophose 2017
  * While using any of the code provided by this plugin
  * you must not claim it as your own. This plugin may
  * be modified and installed on a server, but may not
@@ -36,7 +36,7 @@ import com.esophose.playerparticles.manager.PermissionManager;
 import com.esophose.playerparticles.styles.DefaultStyles;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
 import com.esophose.playerparticles.styles.api.ParticleStyleManager;
-import com.esophose.playerparticles.util.ParticlesUtils;
+import com.esophose.playerparticles.util.ParticleUtils;
 
 public class ParticleCommandExecutor implements CommandExecutor {
 
@@ -244,7 +244,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 				int data = -1;
 
 				try {
-					material = ParticlesUtils.closestMatch(args[0]);
+					material = ParticleUtils.closestMatch(args[0]);
 					if (material == null) material = Material.matchMaterial(args[0]);
 					if (material == null) throw new Exception();
 				} catch (Exception e) {
@@ -280,7 +280,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 				int data = -1;
 
 				try {
-					material = ParticlesUtils.closestMatch(args[0]);
+					material = ParticleUtils.closestMatch(args[0]);
 					if (material == null) material = Material.matchMaterial(args[0]);
 					if (material == null) throw new Exception();
 				} catch (Exception e) {
@@ -586,7 +586,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 								g = Integer.parseInt(args[6]);
 								b = Integer.parseInt(args[7]);
 							} catch (Exception e) {
-								MessageManager.sendMessage(p, MessageType.CREATE_FIXED_DATA_ERROR, "colr");
+								MessageManager.sendMessage(p, MessageType.CREATE_FIXED_DATA_ERROR, "color");
 								return;
 							}
 
@@ -604,7 +604,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 						int data = -1;
 
 						try {
-							material = ParticlesUtils.closestMatch(args[5]);
+							material = ParticleUtils.closestMatch(args[5]);
 							if (material == null) material = Material.matchMaterial(args[5]);
 							if (material == null) throw new Exception();
 						} catch (Exception e) {
@@ -630,7 +630,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 						int data = -1;
 
 						try {
-							material = ParticlesUtils.closestMatch(args[5]);
+							material = ParticleUtils.closestMatch(args[5]);
 							if (material == null) material = Material.matchMaterial(args[5]);
 							if (material == null) throw new Exception();
 						} catch (Exception e) {

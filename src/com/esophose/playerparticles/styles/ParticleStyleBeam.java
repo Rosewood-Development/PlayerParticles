@@ -9,6 +9,7 @@ import com.esophose.playerparticles.styles.api.ParticleStyle;
 public class ParticleStyleBeam implements ParticleStyle {
 
 	private float step = 0;
+	private boolean reversed = false;
 
 	public PParticle[] getParticles(PPlayer pplayer, Location location) {
 		int points = 16;
@@ -26,9 +27,13 @@ public class ParticleStyleBeam implements ParticleStyle {
 	}
 
 	public void updateTimers() {
-		step++;
-		if (step > 30) {
-			step = 0;
+		if (!reversed) step++;
+		else step--;
+		
+		if (step >= 30) {
+			reversed = true;
+		} else if (step <= 0) {
+			reversed = false;
 		}
 	}
 

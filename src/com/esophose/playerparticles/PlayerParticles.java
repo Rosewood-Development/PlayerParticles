@@ -1,5 +1,5 @@
 /**
- * Copyright Esophose 2016
+ * Copyright Esophose 2017
  * While using any of the code provided by this plugin
  * you must not claim it as your own. This plugin may
  * be modified and installed on a server, but may not
@@ -13,16 +13,13 @@
  * Fix arrow style particles staying after an arrow is considered dead (in rare cases this occurred)
  * Fix SQL queries getting logged to console when database-enable is set to true
  * Fix tab completion, it stopped working at one point and I didn't notice until now
+ * Fix style 'arrows' not working with tipped/spectral arrows
+ * Added fixed particle effects, see how to use them on the main plugin page
+ *   Requires permission playerparticles.fixed or playerparticles.*
+ *   Infinite fixed effects with permission playerparticles.fixed.unlimited (playerparticles.* does not grant this permission)
  * Added new style 'thick'
  
  TODO: 
-  + Add command /pp fixed - 
-   /pp fixed create <x> <y> <z> <effect> <style> [data] - Creates a fixed effect and assigns it an id
-   /pp fixed remove <id> - Removes a fixed effect by its id
-   /pp fixed list - Lists the location, and id of all fixed effects
-   /pp fixed info <id> - Lists all information about the fixed effect with the matching id
-   Requires permission playerparticles.fixed
-   Maximum number of fixed effects defined in config.yml, default value 5
  + Add player variable in commands
    Requires permission playerparticles.altexecute
  + Add new style 'tornado'
