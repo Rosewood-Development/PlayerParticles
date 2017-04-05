@@ -17,6 +17,7 @@ import com.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class ParticleStyleArrows implements ParticleStyle, Listener {
 
+	private String[] arrowEntityNames = new String[] { "ARROW", "SPECTRAL_ARROW", "TIPPED_ARROW" };
 	private List<Arrow> arrows = new ArrayList<Arrow>();
 
 	public PParticle[] getParticles(PPlayer pplayer, Location location) {
@@ -57,8 +58,17 @@ public class ParticleStyleArrows implements ParticleStyle, Listener {
 	 */
 	@EventHandler
 	public void onArrowFired(EntityShootBowEvent e) {
-		if (e.getEntityType() == EntityType.PLAYER && (e.getProjectile().getType() == EntityType.ARROW) || e.getProjectile().getType() == EntityType.SPECTRAL_ARROW || e.getProjectile().getType() == EntityType.TIPPED_ARROW) {
-			arrows.add((Arrow) e.getProjectile());
+		if (e.getEntityType() == EntityType.PLAYER) {
+			String entityName = e.getProjectile().getType().toString();
+			boolean match = false;
+			for (String name : arrowEntityNames) {
+				if (entityName.equalsIgnoreCase(name)) {
+					match = true;
+					break;
+				}
+			}
+			
+			if (match) arrows.add((Arrow) e.getProjectile());
 		}
 	}
 

@@ -309,6 +309,27 @@ message-info-fixed-invalid-args: '&cUnable to get info, the id specified must be
 # Default: '&eID: &b{0} &eWorld: &b{1} &eX: &b{2} &eY: &b{3} &eZ: &b{4} &eEffect: &b{5} &eStyle: &b{6} &eData: &b{7}'
 message-info-fixed-info: '&eID: &b{0} &eWorld: &b{1} &eX: &b{2} &eY: &b{3} &eZ: &b{4} &eEffect: &b{5} &eStyle: &b{6} &eData: &b{7}'
 
+# -- Clear -- #
+
+# No Permission Clear
+# Default: '&cYou do not have permission to clear fixed effects of other players!'
+message-clear-no-permission: '&cYou do not have permission to clear fixed effects of other players!'
+
+# No Arguments Clear
+# Default: '&cYou did not provide a radius to clear fixed effects for!'
+message-clear-no-args: '&cYou did not provide a radius to clear fixed effects for!'
+
+# Invalid Arguments Clear
+# Default: '&cThe radius you provided is invalid. Make sure it is a positive whole number!'
+message-clear-invalid-args: '&cThe radius you provided is invalid. Make sure it is a positive whole number!'
+
+# Successfully Cleared
+# Key:
+#   {0} = Number of effects cleared
+#   {1} = The provided radius
+# Default: '&aCleared &b{0} &afixed effects within &b{1} &ablocks of your location!'
+message-clear-success: '&aCleared &b{0} &afixed effects within &b{1} &ablocks of your location!'
+
 # -- Other -- #
 
 # No Permission Fixed
@@ -340,6 +361,10 @@ message-fixed-command-desc-list: '&e/pp fixed list - Lists all ids of your fixed
 # Fixed Command Description For Information
 # Default: '&e/pp fixed info <id> - Gets info on one of your fixed effects'
 message-fixed-command-desc-info: '&e/pp fixed info <id> - Gets info on one of your fixed effects'
+
+# Fixed Command Description For Clear
+# Default: '&e/pp fixed clear <radius> - Clears all fixed effects of all players within the given radius'
+message-fixed-command-desc-clear: '&e/pp fixed clear <radius> - Clears all fixed effects of all players within the given radius'
 
 # ------------- #
 #     Other     #

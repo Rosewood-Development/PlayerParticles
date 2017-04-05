@@ -84,8 +84,8 @@ public class PermissionManager {
 	 * @param player The player to check the permission for
 	 * @return True if the player has permission
 	 */
-	public static boolean canExecuteForOthers(Player player) {
-		return player.hasPermission("playerparticles.*") || player.hasPermission("playerparticles.altexecute");
+	public static boolean canUseForceReset(Player player) {
+		return player.hasPermission("playerparticles.*") || player.hasPermission("playerparticles.forcereset");
 	}
 	
 	/**

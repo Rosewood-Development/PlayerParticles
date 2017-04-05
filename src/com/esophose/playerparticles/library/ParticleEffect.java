@@ -89,7 +89,6 @@ public enum ParticleEffect {
 	SNOW_SHOVEL("snowshovel", 32, -1, ParticleProperty.DIRECTIONAL),
 	SLIME("slime", 33, -1),
 	HEART("heart", 34, -1),
-	// RAINBOW("rainbow", 30, -1),
 	BARRIER("barrier", 35, 8),
 	ITEM_CRACK("iconcrack", 36, -1, ParticleProperty.DIRECTIONAL, ParticleProperty.REQUIRES_DATA),
 	BLOCK_CRACK("blockcrack", 37, -1, ParticleProperty.REQUIRES_DATA),

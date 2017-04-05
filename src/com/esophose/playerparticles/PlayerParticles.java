@@ -7,24 +7,10 @@
  */
 
 /*
- v4.3 Changelog
- * Fix effects and styles not defaulting to 'none' if the player no longer has permission
- * Fix errors printing to console resulting from offline players trying to spawn particles
- * Fix arrow style particles staying after an arrow is considered dead (in rare cases this occurred)
- * Fix SQL queries getting logged to console when database-enable is set to true
- * Fix tab completion, it stopped working at one point and I didn't notice until now
- * Fix style 'arrows' not working with tipped/spectral arrows
- * Added fixed particle effects, see how to use them on the main plugin page
- *   Requires permission playerparticles.fixed or playerparticles.*
- *   Infinite fixed effects with permission playerparticles.fixed.unlimited (playerparticles.* does not grant this permission)
- * Added new style 'thick'
- 
- TODO: 
- + Add player variable in commands
-   Requires permission playerparticles.altexecute
+ TODO: v4.4 
  + Add new style 'tornado'
  + Add new style 'atom'
- + GUI for styles and effects
+ + GUI for styles and effects - Requires no additional permissions
    /pp gui - Shows GUI that tells you your current effect, style, and data and lets you choose new ones
    /pp gui effect - Shows GUI that lets you select a new effect, also shows your current one
    /pp gui style - Shows GUI that lets you select a new style, also shows your current one

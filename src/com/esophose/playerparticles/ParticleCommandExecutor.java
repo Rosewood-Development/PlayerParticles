@@ -9,6 +9,7 @@
 package com.esophose.playerparticles;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -325,7 +326,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 	private void onReset(Player p, String[] args) {
 		if (args.length >= 1) {
 			String altPlayerName = args[0];
-			if (!PermissionManager.canExecuteForOthers(p)) {
+			if (!PermissionManager.canUseForceReset(p)) {
 				MessageManager.sendMessage(p, MessageType.FAILED_EXECUTE_NO_PERMISSION, altPlayerName);
 			} else {
 				Player altPlayer = getOnlinePlayerByName(altPlayerName);
@@ -468,6 +469,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 			MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_REMOVE);
 			MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_LIST);
 			MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_INFO);
+			if (p.hasPermission("playerparticles.fixed.clear")) MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_CLEAR);
 			return;
 		}
 
@@ -541,7 +543,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 				MessageManager.sendMessage(p, MessageType.CREATE_FIXED_NO_PERMISSION_STYLE, args[4]);
 				return;
 			}
-			
+
 			if (!style.canBeFixed()) {
 				MessageManager.sendMessage(p, MessageType.CREATE_FIXED_NON_FIXABLE_STYLE, style.getName());
 				return;
@@ -570,7 +572,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 								MessageManager.sendMessage(p, MessageType.CREATE_FIXED_DATA_ERROR, "note");
 								return;
 							}
-							
+
 							noteColorData = new NoteColor(note);
 						}
 					} else {
@@ -731,12 +733,45 @@ public class ParticleCommandExecutor implements CommandExecutor {
 								 .replaceAll("\\{6\\}", fixedEffect.getParticleStyle().getName())
 								 .replaceAll("\\{7\\}", fixedEffect.getParticleDataString()); // @formatter:on
 			MessageManager.sendCustomMessage(p, listMessage);
+		} else if (cmd.equalsIgnoreCase("clear")) {
+			if (!p.hasPermission("playerparticles.fixed.clear")) {
+				MessageManager.sendMessage(p, MessageType.CLEAR_FIXED_NO_PERMISSION);
+				return;
+			}
+
+			if (args.length < 1) {
+				MessageManager.sendMessage(p, MessageType.CLEAR_FIXED_NO_ARGS);
+				return;
+			}
+
+			int radius = -1;
+			try {
+				radius = Math.abs(Integer.parseInt(args[0]));
+			} catch (Exception e) {
+				MessageManager.sendMessage(p, MessageType.CLEAR_FIXED_INVALID_ARGS);
+				return;
+			}
+
+			ArrayList<FixedParticleEffect> fixedEffectsToRemove = new ArrayList<FixedParticleEffect>();
+
+			for (FixedParticleEffect fixedEffect : ParticleManager.fixedParticleEffects)
+				if (fixedEffect.getLocation().getWorld() == p.getLocation().getWorld() && fixedEffect.getLocation().distance(p.getLocation()) <= radius) fixedEffectsToRemove.add(fixedEffect);
+
+			for (FixedParticleEffect fixedEffect : fixedEffectsToRemove)
+				ConfigManager.getInstance().removeFixedEffect(fixedEffect.getOwnerUniqueId(), fixedEffect.getId());
+
+			String clearMessage = MessageType.CLEAR_FIXED_SUCCESS.getMessage() // @formatter:off
+								  .replaceAll("\\{0\\}", fixedEffectsToRemove.size() + "")
+								  .replaceAll("\\{1\\}", radius + ""); // @formatter:on
+			MessageManager.sendCustomMessage(p, clearMessage);
+			return;
 		} else {
 			MessageManager.sendMessage(p, MessageType.INVALID_FIXED_COMMAND);
 			MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_CREATE);
 			MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_REMOVE);
 			MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_LIST);
 			MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_INFO);
+			if (p.hasPermission("playerparticles.fixed.clear")) MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_CLEAR);
 		}
 	}
 
