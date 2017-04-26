@@ -10,6 +10,7 @@
  TODO: v4.4 
  + Add new style 'tornado'
  + Add new style 'atom'
+ + Add new style 'wings'
  + GUI for styles and effects - Requires no additional permissions
    /pp gui - Shows GUI that tells you your current effect, style, and data and lets you choose new ones
    /pp gui effect - Shows GUI that lets you select a new effect, also shows your current one

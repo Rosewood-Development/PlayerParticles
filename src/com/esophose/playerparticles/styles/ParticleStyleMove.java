@@ -24,7 +24,7 @@ public class ParticleStyleMove extends ParticleStyleNone implements Listener {
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent e) {
 		PPlayer pplayer = ConfigManager.getInstance().getPPlayer(e.getPlayer().getUniqueId(), false);
-		if (pplayer.getParticleStyle() == DefaultStyles.MOVE) {
+		if (pplayer != null && pplayer.getParticleStyle() == DefaultStyles.MOVE) {
 			if (PermissionManager.hasStylePermission(e.getPlayer(), DefaultStyles.MOVE)) {
 				Location loc = e.getPlayer().getLocation();
 				loc.setY(loc.getY() + 0.05);

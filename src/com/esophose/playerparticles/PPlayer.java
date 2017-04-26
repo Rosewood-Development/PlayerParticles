@@ -10,7 +10,9 @@ package com.esophose.playerparticles;
 
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 
 import com.esophose.playerparticles.library.ParticleEffect;
 import com.esophose.playerparticles.library.ParticleEffect.BlockData;
@@ -73,6 +75,15 @@ public class PPlayer {
 	 */
 	public UUID getUniqueId() {
 		return this.playerUUID;
+	}
+	
+	/**
+	 * Gets the Player from their UUID
+	 * 
+	 * @return The player if they are online, null if they are offline
+	 */
+	public Player getPlayer() {
+		return Bukkit.getPlayer(this.playerUUID);
 	}
 
 	/**

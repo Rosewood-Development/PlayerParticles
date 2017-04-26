@@ -1,5 +1,9 @@
 == UPDATING WILL DELETE YOUR CONFIG.YML ==
 * Create a backup of your config.yml if you wish to import all your old settings!
+=== v4.3.1 ===
+ * Fix players with the permission playerparticles.* being able to force reset other player's particles when they weren't supposed to be able to
+ * Fix players being saved in the config/database even if they haven't used the plugin
+ * Other internal changes & optimizations
 === v4.3 ===
 * Fix effects and styles not defaulting to 'none' if the player no longer has permission
 * Fix errors printing to console resulting from offline players trying to spawn particles

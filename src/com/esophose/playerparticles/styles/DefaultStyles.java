@@ -12,19 +12,19 @@ public class DefaultStyles {
 	/**
 	 * All the styles that are available by default from this plugin
 	 */
-	public static ParticleStyle NONE = new ParticleStyleNone();
-	public static ParticleStyle BEAM = new ParticleStyleBeam();
-	public static ParticleStyle HALO = new ParticleStyleHalo();
-	public static ParticleStyle POINT = new ParticleStylePoint();
-	public static ParticleStyle MOVE = new ParticleStyleMove();
-	public static ParticleStyle SPIN = new ParticleStyleSpin();
-	public static ParticleStyle QUADHELIX = new ParticleStyleQuadhelix();
-	public static ParticleStyle ORBIT = new ParticleStyleOrbit();
-	public static ParticleStyle FEET = new ParticleStyleFeet();
-	public static ParticleStyle CUBE = new ParticleStyleCube();
-	public static ParticleStyle ARROWS = new ParticleStyleArrows();
-	public static ParticleStyle SPIRAL = new ParticleStyleSpiral();
-	public static ParticleStyle THICK = new ParticleStyleThick();
+	public static final ParticleStyle NONE = new ParticleStyleNone();
+	public static final ParticleStyle BEAM = new ParticleStyleBeam();
+	public static final ParticleStyle HALO = new ParticleStyleHalo();
+	public static final ParticleStyle POINT = new ParticleStylePoint();
+	public static final ParticleStyle MOVE = new ParticleStyleMove();
+	public static final ParticleStyle SPIN = new ParticleStyleSpin();
+	public static final ParticleStyle QUADHELIX = new ParticleStyleQuadhelix();
+	public static final ParticleStyle ORBIT = new ParticleStyleOrbit();
+	public static final ParticleStyle FEET = new ParticleStyleFeet();
+	public static final ParticleStyle CUBE = new ParticleStyleCube();
+	public static final ParticleStyle ARROWS = new ParticleStyleArrows();
+	public static final ParticleStyle SPIRAL = new ParticleStyleSpiral();
+	public static final ParticleStyle THICK = new ParticleStyleThick();
 
 	/**
 	 * Registers all the default styles to the ParticleStyleManager

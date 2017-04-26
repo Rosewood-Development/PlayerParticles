@@ -77,19 +77,21 @@ public class ConfigManager {
 	 * @param fileName The name of the file
 	 */
 	private ConfigManager(String fileName) {
-		if (!PlayerParticles.getPlugin().getDataFolder().exists()) PlayerParticles.getPlugin().getDataFolder().mkdir();
+		if (!PlayerParticles.useMySQL) { // Don't bother creating the playerData.yml file if we aren't going to use it
+			if (!PlayerParticles.getPlugin().getDataFolder().exists()) PlayerParticles.getPlugin().getDataFolder().mkdir();
 
-		file = new File(PlayerParticles.getPlugin().getDataFolder(), fileName + ".yml");
+			file = new File(PlayerParticles.getPlugin().getDataFolder(), fileName + ".yml");
 
-		if (!file.exists()) {
-			try {
-				file.createNewFile();
-			} catch (Exception e) {
-				e.printStackTrace();
+			if (!file.exists()) {
+				try {
+					file.createNewFile();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
-		}
 
-		config = YamlConfiguration.loadConfiguration(file);
+			config = YamlConfiguration.loadConfiguration(file);
+		}
 	}
 
 	/**
@@ -110,18 +112,24 @@ public class ConfigManager {
 	 * @param addIfNotFound Adds the pplayer to the processing queue if they are not already in it
 	 * @return The found pplayer, or a newly generated one
 	 */
-	public PPlayer getPPlayer(UUID playerUUID, boolean addIfNotFound) {
+	public PPlayer getPPlayer(UUID playerUUID, boolean createIfNotFound) {
 		for (PPlayer pp : ParticleManager.particlePlayers) {
 			if (pp.getUniqueId() == playerUUID) return pp;
 		}
-
-		PPlayer pplayer = buildPPlayer(playerUUID);
-
-		if (addIfNotFound && Bukkit.getPlayer(playerUUID) != null) {
-			ParticleManager.particlePlayers.add(pplayer);
+		
+		PPlayer alreadySavedPPlayer = buildPPlayer(playerUUID, false); // If they exist, get them from the database
+		if (alreadySavedPPlayer != null) {
+			ParticleManager.particlePlayers.add(alreadySavedPPlayer);
+			return alreadySavedPPlayer;
 		}
 
-		return pplayer;
+		if (createIfNotFound && Bukkit.getPlayer(playerUUID) != null) {
+			PPlayer pplayer = buildPPlayer(playerUUID, true); // Build a new PPlayer and store them in the config
+			ParticleManager.particlePlayers.add(pplayer);
+			return pplayer;
+		}
+
+		return null; // Not requesting a new PPlayer and nothing was found, return null
 	}
 
 	/**
@@ -131,7 +139,7 @@ public class ConfigManager {
 	 * @param playerUUID The UUID to match the PPlayer to
 	 * @return A newly built pplayer
 	 */
-	private PPlayer buildPPlayer(UUID playerUUID) {
+	private PPlayer buildPPlayer(UUID playerUUID, boolean createIfNotFound) {
 		if (!PlayerParticles.useMySQL) {
 			if (config.getString(playerUUID.toString() + ".style.name") != null) {
 				ConfigurationSection section = config.getConfigurationSection(playerUUID.toString());
@@ -150,7 +158,7 @@ public class ConfigManager {
 				NoteColor particleNoteColorData = new NoteColor(noteColorDataSection.getInt("note"));
 
 				return new PPlayer(playerUUID, particleEffect, particleStyle, particleItemData, particleBlockData, particleColorData, particleNoteColorData);
-			} else {
+			} else if (createIfNotFound) {
 				PPlayer pplayer = PPlayer.getNewPPlayer(playerUUID);
 				saveNewPPlayer(pplayer);
 				return pplayer;
@@ -173,7 +181,7 @@ public class ConfigManager {
 					NoteColor particleNoteColorData = new NoteColor(res.getByte("n.note"));
 
 					return new PPlayer(playerUUID, particleEffect, particleStyle, particleItemData, particleBlockData, particleColorData, particleNoteColorData);
-				} else {
+				} else if (createIfNotFound) {
 					PPlayer pplayer = PPlayer.getNewPPlayer(playerUUID);
 					saveNewPPlayer(pplayer);
 					return pplayer;
@@ -288,6 +296,7 @@ public class ConfigManager {
 	 * @param particleEffect The effect that is being saved
 	 */
 	public void savePPlayer(UUID playerUUID, ParticleEffect particleEffect) {
+		PPlayer pplayer = getPPlayer(playerUUID, true);
 		if (!PlayerParticles.useMySQL) {
 			ConfigurationSection section = config.getConfigurationSection(playerUUID.toString() + ".effect");
 			section.set("name", particleEffect.getName());
@@ -299,7 +308,7 @@ public class ConfigManager {
 				e.printStackTrace();
 			}
 		}
-		getPPlayer(playerUUID, false).setParticleEffect(particleEffect);
+		pplayer.setParticleEffect(particleEffect);
 	}
 
 	/**
@@ -309,6 +318,7 @@ public class ConfigManager {
 	 * @param particleStyle The style that is being saved
 	 */
 	public void savePPlayer(UUID playerUUID, ParticleStyle particleStyle) {
+		PPlayer pplayer = getPPlayer(playerUUID, true);
 		if (!PlayerParticles.useMySQL) {
 			ConfigurationSection section = config.getConfigurationSection(playerUUID.toString() + ".style");
 			section.set("name", particleStyle.getName());
@@ -320,7 +330,7 @@ public class ConfigManager {
 				e.printStackTrace();
 			}
 		}
-		getPPlayer(playerUUID, false).setParticleStyle(particleStyle);
+		pplayer.setParticleStyle(particleStyle);
 	}
 
 	/**
@@ -330,6 +340,7 @@ public class ConfigManager {
 	 * @param particleItemData The data that is being saved
 	 */
 	public void savePPlayer(UUID playerUUID, ItemData particleItemData) {
+		PPlayer pplayer = getPPlayer(playerUUID, true);
 		if (!PlayerParticles.useMySQL) {
 			ConfigurationSection section = config.getConfigurationSection(playerUUID.toString() + ".itemData");
 			section.set("material", particleItemData.getMaterial().name());
@@ -342,7 +353,7 @@ public class ConfigManager {
 				e.printStackTrace();
 			}
 		}
-		getPPlayer(playerUUID, false).setItemData(particleItemData);
+		pplayer.setItemData(particleItemData);
 	}
 
 	/**
@@ -352,6 +363,7 @@ public class ConfigManager {
 	 * @param particleBlockData The data that is being saved
 	 */
 	public void savePPlayer(UUID playerUUID, BlockData particleBlockData) {
+		PPlayer pplayer = getPPlayer(playerUUID, true);
 		if (!PlayerParticles.useMySQL) {
 			ConfigurationSection section = config.getConfigurationSection(playerUUID.toString() + ".blockData");
 			section.set("material", particleBlockData.getMaterial().name());
@@ -364,7 +376,7 @@ public class ConfigManager {
 				e.printStackTrace();
 			}
 		}
-		getPPlayer(playerUUID, false).setBlockData(particleBlockData);
+		pplayer.setBlockData(particleBlockData);
 	}
 
 	/**
@@ -374,6 +386,7 @@ public class ConfigManager {
 	 * @param particleColorData The data that is being saved
 	 */
 	public void savePPlayer(UUID playerUUID, OrdinaryColor particleColorData) {
+		PPlayer pplayer = getPPlayer(playerUUID, true);
 		if (!PlayerParticles.useMySQL) {
 			ConfigurationSection section = config.getConfigurationSection(playerUUID.toString() + ".colorData");
 			section.set("r", particleColorData.getRed());
@@ -387,7 +400,7 @@ public class ConfigManager {
 				e.printStackTrace();
 			}
 		}
-		getPPlayer(playerUUID, false).setColorData(particleColorData);
+		pplayer.setColorData(particleColorData);
 	}
 
 	/**
@@ -397,6 +410,7 @@ public class ConfigManager {
 	 * @param particleNoteColorData The data that is being saved
 	 */
 	public void savePPlayer(UUID playerUUID, NoteColor particleNoteColorData) {
+		PPlayer pplayer = getPPlayer(playerUUID, true);
 		if (!PlayerParticles.useMySQL) {
 			ConfigurationSection section = config.getConfigurationSection(playerUUID.toString() + ".noteColorData");
 			section.set("note", (byte) (particleNoteColorData.getValueX() * 24));
@@ -408,7 +422,7 @@ public class ConfigManager {
 				e.printStackTrace();
 			}
 		}
-		getPPlayer(playerUUID, false).setNoteColorData(particleNoteColorData);
+		pplayer.setNoteColorData(particleNoteColorData);
 	}
 
 	/**
@@ -797,7 +811,7 @@ public class ConfigManager {
 	 * @return The max distance a fixed effect can be created from the player
 	 */
 	public int getMaxFixedEffectCreationDistance() {
-		if (maxFixedEffectCreationDistance == -1) {
+		if (maxFixedEffectCreationDistance == -1) { // Initialize on the fly
 			maxFixedEffectCreationDistance = PlayerParticles.getPlugin().getConfig().getInt("max-fixed-effect-creation-distance");
 		}
 		return maxFixedEffectCreationDistance;
