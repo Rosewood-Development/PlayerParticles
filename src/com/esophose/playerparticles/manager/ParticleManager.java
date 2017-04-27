@@ -175,6 +175,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
 
 			if (player == null) { // Skip and remove, why are they still in the array if they are offline?
 				particlePlayers.remove(i);
+				continue;
 			}
 
 			// Perform permission and validity checks

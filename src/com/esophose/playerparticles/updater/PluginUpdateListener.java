@@ -27,8 +27,9 @@ public class PluginUpdateListener implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		if (e.getPlayer().isOp()) {
 			if (PlayerParticles.updateVersion != null) {
-				MessageManager.sendCustomMessage(e.getPlayer(), ChatColor.YELLOW + "An update (" + ChatColor.AQUA + "v" + PlayerParticles.updateVersion + ChatColor.YELLOW + ") is available! You are running " + ChatColor.AQUA + "v" + PlayerParticles.getPlugin().getDescription().getVersion());
-				MessageManager.sendCustomMessage(e.getPlayer(), ChatColor.YELLOW + "Download from: https://dev.bukkit.org/projects/playerparticles");
+				MessageManager.sendCustomMessage(e.getPlayer(), ChatColor.YELLOW + "An update (" + ChatColor.AQUA + "v" + PlayerParticles.updateVersion + ChatColor.YELLOW + ") is available! " + 
+																				   "You are running " + ChatColor.AQUA + "v" + PlayerParticles.getPlugin().getDescription().getVersion() + ChatColor.YELLOW + 
+																				   ". https://dev.bukkit.org/projects/playerparticles");
 			}
 		}
 	}

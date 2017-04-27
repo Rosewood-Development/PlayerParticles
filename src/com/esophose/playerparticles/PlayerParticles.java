@@ -27,6 +27,7 @@ import java.sql.SQLException;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.esophose.playerparticles.library.MySQL;
 import com.esophose.playerparticles.manager.MessageManager;
@@ -72,7 +73,7 @@ public class PlayerParticles extends JavaPlugin {
 		getCommand("pp").setExecutor(new ParticleCommandExecutor());
 		Bukkit.getPluginManager().registerEvents(new ParticleManager(), this);
 		Bukkit.getPluginManager().registerEvents(new PluginUpdateListener(), this);
-		if (getConfig().getDouble("version") < Double.parseDouble(getDescription().getVersion())) {
+		if (getConfig().getDouble("version") < Double.parseDouble(getDescription().getVersion().substring(0, 3))) {
 			File configFile = new File(getDataFolder(), "config.yml");
 			configFile.delete();
 			saveDefaultConfig();
@@ -80,13 +81,11 @@ public class PlayerParticles extends JavaPlugin {
 			getLogger().warning("The config.yml has been updated to v" + getDescription().getVersion() + "!");
 		}
 		checkDatabase();
-		ParticleManager.refreshPPlayers();
-		ParticleManager.addAllFixedEffects();
 		startTask();
 
 		if (shouldCheckUpdates()) {
 			Updater updater = new Updater(this, 82823, this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
-			if (Double.parseDouble(updater.getLatestName().replaceAll("PlayerParticles v", "")) > Double.parseDouble(getPlugin().getDescription().getVersion())) {
+			if (Double.parseDouble(updater.getLatestName().replaceAll("PlayerParticles v", "").replaceAll("\\.", "")) > Double.parseDouble(getPlugin().getDescription().getVersion().replaceAll("\\.", ""))) {
 				updateVersion = updater.getLatestName().replaceAll("PlayerParticles v", "");
 				getLogger().info("[PlayerParticles] An update (v" + updateVersion + ") is available! You are running v" + getPlugin().getDescription().getVersion());
 			}
@@ -165,10 +164,19 @@ public class PlayerParticles extends JavaPlugin {
 
 	/**
 	 * Starts the task reponsible for spawning particles
+	 * Run in the synchronous task so it starts after all plugins have loaded, including extensions
 	 */
 	private void startTask() {
-		double ticks = getConfig().getInt("ticks-per-particle");
-		new ParticleManager().runTaskTimer(this, 20, (long) ticks);
+		final Plugin playerParticles = this;
+		new BukkitRunnable() {
+			public void run() {
+				ParticleManager.refreshPPlayers(); // Add any online players who have particles
+				ParticleManager.addAllFixedEffects(); // Add all fixed effects
+				
+				double ticks = getConfig().getInt("ticks-per-particle");
+				new ParticleManager().runTaskTimer(playerParticles, 20, (long) ticks);
+			}
+		}.runTaskLater(playerParticles, 20);
 	}
 
 }
