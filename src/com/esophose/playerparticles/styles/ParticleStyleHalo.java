@@ -11,7 +11,7 @@ public class ParticleStyleHalo implements ParticleStyle {
 	private float step = 0;
 
 	public PParticle[] getParticles(PPlayer pplayer, Location location) {
-		if (step % 2 == 0) return null;
+		if (step % 2 == 0) return new PParticle[0];
 		int points = 16;
 		double radius = .65;
 		double slice = 2 * Math.PI / points;

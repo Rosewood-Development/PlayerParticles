@@ -84,10 +84,14 @@ public class PlayerParticles extends JavaPlugin {
 		startTask();
 
 		if (shouldCheckUpdates()) {
-			Updater updater = new Updater(this, 82823, this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
-			if (Double.parseDouble(updater.getLatestName().replaceAll("PlayerParticles v", "").replaceAll("\\.", "")) > Double.parseDouble(getPlugin().getDescription().getVersion().replaceAll("\\.", ""))) {
-				updateVersion = updater.getLatestName().replaceAll("PlayerParticles v", "");
-				getLogger().info("[PlayerParticles] An update (v" + updateVersion + ") is available! You are running v" + getPlugin().getDescription().getVersion());
+			try { // For some reason this can throw an exception sometimes. I suppose it happens when you run the server without an internet connection?
+				Updater updater = new Updater(this, 82823, this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
+				if (Double.parseDouble(updater.getLatestName().replaceAll("PlayerParticles v", "").replaceAll("\\.", "")) > Double.parseDouble(getPlugin().getDescription().getVersion().replaceAll("\\.", ""))) {
+					updateVersion = updater.getLatestName().replaceAll("PlayerParticles v", "");
+					getLogger().info("[PlayerParticles] An update (v" + updateVersion + ") is available! You are running v" + getPlugin().getDescription().getVersion());
+				}
+			} catch (Exception e) {
+				getLogger().warning("[PlayerParticles] An error occurred checking for an update. There is either no established internet connection or the Curse API is down.");
 			}
 		}
 	}

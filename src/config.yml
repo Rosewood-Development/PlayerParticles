@@ -14,7 +14,7 @@
 
 # Changing this value will reset your config on the next server reload / restart. 
 # I don't recommend changing it
-version: 4.4
+version: 4.5
 
 # How many ticks to wait before spawning more particles
 # Increasing this value may cause less lag (if there was any), but will decrease prettiness
