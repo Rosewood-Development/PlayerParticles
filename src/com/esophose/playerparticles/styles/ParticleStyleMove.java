@@ -12,29 +12,29 @@ import com.esophose.playerparticles.manager.PermissionManager;
 
 public class ParticleStyleMove extends ParticleStyleNone implements Listener {
 
-	public String getName() {
-		return "move";
-	}
-	
-	/**
-	 * The event used to update the move style
-	 * 
-	 * @param e The event
-	 */
-	@EventHandler
-	public void onPlayerMove(PlayerMoveEvent e) {
-		PPlayer pplayer = ConfigManager.getInstance().getPPlayer(e.getPlayer().getUniqueId(), false);
-		if (pplayer != null && pplayer.getParticleStyle() == DefaultStyles.MOVE) {
-			if (PermissionManager.hasStylePermission(e.getPlayer(), DefaultStyles.MOVE)) {
-				Location loc = e.getPlayer().getLocation();
-				loc.setY(loc.getY() + 0.05);
-				ParticleManager.displayParticles(pplayer, DefaultStyles.MOVE.getParticles(pplayer, loc));
-			}
-		}
-	}
-	
-	public boolean canBeFixed() {
-		return false;
-	}
+    public String getName() {
+        return "move";
+    }
+
+    /**
+     * The event used to update the move style
+     * 
+     * @param e The event
+     */
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent e) {
+        PPlayer pplayer = ConfigManager.getInstance().getPPlayer(e.getPlayer().getUniqueId(), false);
+        if (pplayer != null && pplayer.getParticleStyle() == DefaultStyles.MOVE) {
+            if (PermissionManager.hasStylePermission(e.getPlayer(), DefaultStyles.MOVE)) {
+                Location loc = e.getPlayer().getLocation();
+                loc.setY(loc.getY() + 0.05);
+                ParticleManager.displayParticles(pplayer, DefaultStyles.MOVE.getParticles(pplayer, loc));
+            }
+        }
+    }
+
+    public boolean canBeFixed() {
+        return false;
+    }
 
 }

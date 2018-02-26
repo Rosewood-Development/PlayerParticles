@@ -8,20 +8,20 @@ import com.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class ParticleStylePoint implements ParticleStyle {
 
-	public PParticle[] getParticles(PPlayer pplayer, Location location) {
-		return new PParticle[] { new PParticle(location.add(0.0, 1.5, 0.0)) };
-	}
+    public PParticle[] getParticles(PPlayer pplayer, Location location) {
+        return new PParticle[] { new PParticle(location.add(0.0, 1.5, 0.0)) };
+    }
 
-	public void updateTimers() {
+    public void updateTimers() {
 
-	}
+    }
 
-	public String getName() {
-		return "point";
-	}
+    public String getName() {
+        return "point";
+    }
 
-	public boolean canBeFixed() {
-		return true;
-	}
+    public boolean canBeFixed() {
+        return true;
+    }
 
 }

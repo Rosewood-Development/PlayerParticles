@@ -34,6 +34,6 @@ public class ParticleStyleSpin implements ParticleStyle {
 	
 	public boolean canBeFixed() {
 		return true;
-	}
+    }
 
 }

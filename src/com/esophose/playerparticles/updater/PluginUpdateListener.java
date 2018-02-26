@@ -18,20 +18,20 @@ import com.esophose.playerparticles.manager.MessageManager;
 
 public class PluginUpdateListener implements Listener {
 
-	/**
-	 * Called when a player joins and notifies ops if an update is available
-	 * 
-	 * @param e The join event
-	 */
-	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent e) {
-		if (e.getPlayer().isOp()) {
-			if (PlayerParticles.updateVersion != null) {
-				MessageManager.sendCustomMessage(e.getPlayer(), ChatColor.YELLOW + "An update (" + ChatColor.AQUA + "v" + PlayerParticles.updateVersion + ChatColor.YELLOW + ") is available! " + 
-																				   "You are running " + ChatColor.AQUA + "v" + PlayerParticles.getPlugin().getDescription().getVersion() + ChatColor.YELLOW + 
-																				   ". https://dev.bukkit.org/projects/playerparticles");
-			}
-		}
-	}
+    /**
+     * Called when a player joins and notifies ops if an update is available
+     * 
+     * @param e The join event
+     */
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent e) {
+        if (e.getPlayer().isOp()) {
+            if (PlayerParticles.updateVersion != null) { // @formatter:off
+                MessageManager.sendCustomMessage(e.getPlayer(), ChatColor.YELLOW + "An update (" + ChatColor.AQUA + "v" + PlayerParticles.updateVersion + ChatColor.YELLOW + ") is available! " + 
+                                                                                    "You are running " + ChatColor.AQUA + "v" + PlayerParticles.getPlugin().getDescription().getVersion() + ChatColor.YELLOW + 
+                                                                                    ". https://dev.bukkit.org/projects/playerparticles");
+			} // @formatter:on
+        }
+    }
 
 }
