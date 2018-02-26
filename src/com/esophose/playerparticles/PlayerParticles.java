@@ -89,7 +89,6 @@ public class PlayerParticles extends JavaPlugin {
     public void onEnable() {
         DefaultStyles.registerStyles();
         MessageManager.setup();
-        PlayerParticlesGui.setup();
         saveDefaultConfig();
         getCommand("pp").setTabCompleter(new ParticleCommandCompleter());
         getCommand("pp").setExecutor(new ParticleCommandExecutor());
@@ -98,7 +97,7 @@ public class PlayerParticles extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlayerParticlesGui(), this);
         if (getConfig().getDouble("version") < Double.parseDouble(getDescription().getVersion())) {
             File configFile = new File(getDataFolder(), "config.yml");
-            configFile.delete();
+            if (configFile.exists()) configFile.delete();
             saveDefaultConfig();
             reloadConfig();
             getLogger().warning("The config.yml has been updated to v" + getDescription().getVersion() + "!");
@@ -107,15 +106,20 @@ public class PlayerParticles extends JavaPlugin {
         startTask();
 
         if (shouldCheckUpdates()) {
-            try { // For some reason this can throw an exception sometimes. I suppose it happens when you run the server without an internet connection?
-                Updater updater = new Updater(this, 82823, this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
-                if (Double.parseDouble(updater.getLatestName().replaceAll("PlayerParticles v", "")) > Double.parseDouble(getPlugin().getDescription().getVersion())) {
-                    updateVersion = updater.getLatestName().replaceAll("PlayerParticles v", "");
-                    getLogger().info("An update (v" + updateVersion + ") is available! You are running v" + getPlugin().getDescription().getVersion());
+            new BukkitRunnable() {
+                public void run() {
+                    final File file = getFile();
+                    try { // This can throw an exception if the server has no internet connection or if the Curse API is down
+                        Updater updater = new Updater(getPlugin(), 82823, file, Updater.UpdateType.NO_DOWNLOAD, false);
+                        if (Double.parseDouble(updater.getLatestName().replaceAll("PlayerParticles v", "")) > Double.parseDouble(getPlugin().getDescription().getVersion())) {
+                            updateVersion = updater.getLatestName().replaceAll("PlayerParticles v", "");
+                            getLogger().info("An update (v" + updateVersion + ") is available! You are running v" + getPlugin().getDescription().getVersion());
+                        }
+                    } catch (Exception e) {
+                        getLogger().warning("An error occurred checking for an update. There is either no established internet connection or the Curse API is down.");
+                    }
                 }
-            } catch (Exception e) {
-                getLogger().warning("An error occurred checking for an update. There is either no established internet connection or the Curse API is down.");
-            }
+            }.runTaskAsynchronously(this);
         }
     }
 
@@ -132,6 +136,8 @@ public class PlayerParticles extends JavaPlugin {
                 getLogger().warning("An error occurred while cleaning up the mySQL database connection.");
             }
         }
+        
+        PlayerParticlesGui.forceCloseAllOpenGUIs();
     }
 
     /**
@@ -214,11 +220,12 @@ public class PlayerParticles extends JavaPlugin {
             public void run() {
                 ParticleManager.refreshPPlayers(); // Add any online players who have particles
                 ParticleManager.addAllFixedEffects(); // Add all fixed effects
+                PlayerParticlesGui.setup();
 
                 long ticks = getConfig().getLong("ticks-per-particle");
-                new ParticleManager().runTaskTimer(playerParticles, 20, ticks);
+                new ParticleManager().runTaskTimer(playerParticles, 0, ticks);
             }
-        }.runTaskLater(playerParticles, 20);
+        }.runTaskLater(playerParticles, 1);
     }
 
 }

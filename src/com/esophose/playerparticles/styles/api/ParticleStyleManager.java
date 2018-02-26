@@ -32,6 +32,7 @@ public class ParticleStyleManager {
             }
         }
         styles.add(style);
+        System.out.println("[PlayerParticles] Registered style: " + style.getName());
     }
 
     /**

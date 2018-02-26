@@ -13,7 +13,7 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
-import com.esophose.playerparticles.library.ParticleEffect;
+import com.esophose.playerparticles.particles.ParticleEffect;
 import com.esophose.playerparticles.styles.DefaultStyles;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
 import com.esophose.playerparticles.styles.api.ParticleStyleManager;

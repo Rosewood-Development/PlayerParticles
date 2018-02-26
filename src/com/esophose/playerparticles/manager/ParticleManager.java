@@ -21,23 +21,17 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.esophose.playerparticles.FixedParticleEffect;
 import com.esophose.playerparticles.PPlayer;
-import com.esophose.playerparticles.library.ParticleEffect;
-import com.esophose.playerparticles.library.ParticleEffect.NoteColor;
-import com.esophose.playerparticles.library.ParticleEffect.OrdinaryColor;
-import com.esophose.playerparticles.library.ParticleEffect.ParticleProperty;
+import com.esophose.playerparticles.particles.FixedParticleEffect;
+import com.esophose.playerparticles.particles.ParticleEffect;
+import com.esophose.playerparticles.particles.ParticleEffect.NoteColor;
+import com.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
+import com.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
 import com.esophose.playerparticles.styles.DefaultStyles;
 import com.esophose.playerparticles.styles.api.PParticle;
 import com.esophose.playerparticles.styles.api.ParticleStyleManager;
 
 public class ParticleManager extends BukkitRunnable implements Listener {
-
-    /**
-     * How far away particles will spawn from players
-     */
-    public static final int PLAYER_PARTICLE_RANGE = 128;
-    public static final int FIXED_EFFECT_PARTICLE_RANGE = 256;
 
     /**
      * The list containing all the player effect info
@@ -238,11 +232,11 @@ public class ParticleManager extends BukkitRunnable implements Listener {
             if (effect == ParticleEffect.NONE) return;
             for (PParticle particle : pplayer.getParticleStyle().getParticles(pplayer, location)) {
                 if (effect.hasProperty(ParticleProperty.REQUIRES_DATA)) {
-                    effect.display(pplayer.getParticleSpawnData(), particle.getXOff(), particle.getYOff(), particle.getZOff(), particle.getSpeed(), 1, particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)), PLAYER_PARTICLE_RANGE);
+                    effect.display(pplayer.getParticleSpawnData(), particle.getXOff(), particle.getYOff(), particle.getZOff(), particle.getSpeed(), 1, particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
                 } else if (effect.hasProperty(ParticleProperty.COLORABLE)) {
-                    effect.display(pplayer.getParticleSpawnColor(), particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)), PLAYER_PARTICLE_RANGE);
+                    effect.display(pplayer.getParticleSpawnColor(), particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
                 } else {
-                    effect.display(particle.getXOff(), particle.getYOff(), particle.getZOff(), particle.getSpeed(), 1, particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)), PLAYER_PARTICLE_RANGE);
+                    effect.display(particle.getXOff(), particle.getYOff(), particle.getZOff(), particle.getSpeed(), 1, particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
                 }
             }
         }
@@ -259,11 +253,11 @@ public class ParticleManager extends BukkitRunnable implements Listener {
         if (effect == ParticleEffect.NONE) return;
         for (PParticle particle : particles) {
             if (effect.hasProperty(ParticleProperty.REQUIRES_DATA)) {
-                effect.display(pplayer.getParticleSpawnData(), particle.getXOff(), particle.getYOff(), particle.getZOff(), particle.getSpeed(), 1, particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)), PLAYER_PARTICLE_RANGE);
+                effect.display(pplayer.getParticleSpawnData(), particle.getXOff(), particle.getYOff(), particle.getZOff(), particle.getSpeed(), 1, particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
             } else if (effect.hasProperty(ParticleProperty.COLORABLE)) {
-                effect.display(pplayer.getParticleSpawnColor(), particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)), PLAYER_PARTICLE_RANGE);
+                effect.display(pplayer.getParticleSpawnColor(), particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
             } else {
-                effect.display(particle.getXOff(), particle.getYOff(), particle.getZOff(), particle.getSpeed(), 1, particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)), PLAYER_PARTICLE_RANGE);
+                effect.display(particle.getXOff(), particle.getYOff(), particle.getZOff(), particle.getSpeed(), 1, particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
             }
         }
     }
@@ -278,11 +272,11 @@ public class ParticleManager extends BukkitRunnable implements Listener {
         ParticleEffect effect = fixedEffect.getParticleEffect();
         for (PParticle particle : fixedEffect.getParticleStyle().getParticles(fakePPlayer, fixedEffect.getLocation())) {
             if (effect.hasProperty(ParticleProperty.REQUIRES_DATA)) {
-                effect.display(fixedEffect.getParticleSpawnData(), particle.getXOff(), particle.getYOff(), particle.getZOff(), particle.getSpeed(), 1, particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)), FIXED_EFFECT_PARTICLE_RANGE);
+                effect.display(fixedEffect.getParticleSpawnData(), particle.getXOff(), particle.getYOff(), particle.getZOff(), particle.getSpeed(), 1, particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
             } else if (effect.hasProperty(ParticleProperty.COLORABLE)) {
-                effect.display(fixedEffect.getParticleSpawnColor(), particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)), FIXED_EFFECT_PARTICLE_RANGE);
+                effect.display(fixedEffect.getParticleSpawnColor(), particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
             } else {
-                effect.display(particle.getXOff(), particle.getYOff(), particle.getZOff(), particle.getSpeed(), 1, particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)), FIXED_EFFECT_PARTICLE_RANGE);
+                effect.display(particle.getXOff(), particle.getYOff(), particle.getZOff(), particle.getSpeed(), 1, particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
             }
         }
     }

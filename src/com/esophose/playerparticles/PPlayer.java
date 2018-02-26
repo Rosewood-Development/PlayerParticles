@@ -16,15 +16,15 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import com.esophose.playerparticles.gui.PlayerParticlesGui;
-import com.esophose.playerparticles.library.ParticleEffect;
-import com.esophose.playerparticles.library.ParticleEffect.BlockData;
-import com.esophose.playerparticles.library.ParticleEffect.ItemData;
-import com.esophose.playerparticles.library.ParticleEffect.NoteColor;
-import com.esophose.playerparticles.library.ParticleEffect.OrdinaryColor;
-import com.esophose.playerparticles.library.ParticleEffect.ParticleColor;
-import com.esophose.playerparticles.library.ParticleEffect.ParticleData;
-import com.esophose.playerparticles.library.ParticleEffect.ParticleProperty;
 import com.esophose.playerparticles.manager.ParticleManager;
+import com.esophose.playerparticles.particles.ParticleEffect;
+import com.esophose.playerparticles.particles.ParticleEffect.BlockData;
+import com.esophose.playerparticles.particles.ParticleEffect.ItemData;
+import com.esophose.playerparticles.particles.ParticleEffect.NoteColor;
+import com.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
+import com.esophose.playerparticles.particles.ParticleEffect.ParticleColor;
+import com.esophose.playerparticles.particles.ParticleEffect.ParticleData;
+import com.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
 import com.esophose.playerparticles.styles.DefaultStyles;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
 

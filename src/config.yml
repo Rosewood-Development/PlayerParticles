@@ -380,8 +380,8 @@ message-fixed-command-desc-clear: '&e/pp fixed clear <radius> - Clears all fixed
 message-gui-disabled: '&cThe server administrator has disabled the GUI.'
 
 # Opened By Default
-# Default: '&eWe opened the GUI for you because you did not specify a command. If you are looking to use a specific command, view them with &b/pp help'
-message-gui-by-default: '&eWe opened the GUI for you because you did not specify a command. If you are looking to use a specific command, view them with &b/pp help'
+# Default: '&eWe opened the GUI for you because you did not specify a command. View other commands with &b/pp help&e or use &b/pp gui&e to avoid this message.'
+message-gui-by-default: '&eWe opened the GUI for you because you did not specify a command. View other commands with &b/pp help&e or use &b/pp gui&e to avoid this message.'
 
 # Back Button
 # Default: '&eGo Back'
@@ -496,8 +496,8 @@ gui-icon:
     HUGE_EXPLOSION: TNT
     FIREWORKS_SPARK: FIREWORK
     BUBBLE: GLASS
-    WAKE: WATER_LILY
-    SUSPENDED: RAW_FISH
+    WAKE: BOAT
+    SUSPENDED: WATER_LILY
     DEPTH_SUSPEND: BEDROCK
     CRIT: IRON_SWORD
     MAGIC_CRIT: NETHER_STALK
@@ -516,7 +516,7 @@ gui-icon:
     PORTAL: OBSIDIAN
     ENCHANTMENT_TABLE: ENCHANTMENT_TABLE
     FLAME: BLAZE_POWDER
-    LAVA: NETHER_BRICK
+    LAVA: MAGMA_CREAM
     FOOTSTEP: GRASS
     CLOUD: WOOL
     RED_DUST: REDSTONE

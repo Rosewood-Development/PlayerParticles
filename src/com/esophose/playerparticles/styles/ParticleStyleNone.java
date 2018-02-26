@@ -3,7 +3,7 @@ package com.esophose.playerparticles.styles;
 import org.bukkit.Location;
 
 import com.esophose.playerparticles.PPlayer;
-import com.esophose.playerparticles.library.ParticleEffect;
+import com.esophose.playerparticles.particles.ParticleEffect;
 import com.esophose.playerparticles.styles.api.PParticle;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
 

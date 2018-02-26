@@ -24,14 +24,14 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import com.esophose.playerparticles.FixedParticleEffect;
 import com.esophose.playerparticles.PPlayer;
 import com.esophose.playerparticles.PlayerParticles;
-import com.esophose.playerparticles.library.ParticleEffect;
-import com.esophose.playerparticles.library.ParticleEffect.BlockData;
-import com.esophose.playerparticles.library.ParticleEffect.ItemData;
-import com.esophose.playerparticles.library.ParticleEffect.NoteColor;
-import com.esophose.playerparticles.library.ParticleEffect.OrdinaryColor;
+import com.esophose.playerparticles.particles.FixedParticleEffect;
+import com.esophose.playerparticles.particles.ParticleEffect;
+import com.esophose.playerparticles.particles.ParticleEffect.BlockData;
+import com.esophose.playerparticles.particles.ParticleEffect.ItemData;
+import com.esophose.playerparticles.particles.ParticleEffect.NoteColor;
+import com.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
 import com.esophose.playerparticles.styles.api.ParticleStyleManager;
 import com.esophose.playerparticles.util.ParticleUtils;
@@ -109,7 +109,7 @@ public class ConfigManager {
      * Gets a player from the save data, creates one if it doesn't exist and adds it to the list
      * 
      * @param playerUUID The pplayer to get
-     * @param addIfNotFound Adds the pplayer to the processing queue if they are not already in it
+     * @param createIfNotFound Creates the pplayer to the processing queue if they are not already in it
      * @return The found pplayer, or a newly generated one
      */
     public PPlayer getPPlayer(UUID playerUUID, boolean createIfNotFound) {

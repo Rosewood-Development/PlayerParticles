@@ -6,7 +6,7 @@
  * be distributed to any person by any means.
  */
 
-package com.esophose.playerparticles;
+package com.esophose.playerparticles.particles;
 
 import java.util.UUID;
 
@@ -14,16 +14,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import com.esophose.playerparticles.library.ParticleEffect;
-import com.esophose.playerparticles.library.ParticleEffect.BlockData;
-import com.esophose.playerparticles.library.ParticleEffect.ItemData;
-import com.esophose.playerparticles.library.ParticleEffect.NoteColor;
-import com.esophose.playerparticles.library.ParticleEffect.OrdinaryColor;
-import com.esophose.playerparticles.library.ParticleEffect.ParticleColor;
-import com.esophose.playerparticles.library.ParticleEffect.ParticleData;
-import com.esophose.playerparticles.library.ParticleEffect.ParticleProperty;
+import com.esophose.playerparticles.PPlayer;
 import com.esophose.playerparticles.manager.ConfigManager;
 import com.esophose.playerparticles.manager.ParticleManager;
+import com.esophose.playerparticles.particles.ParticleEffect.BlockData;
+import com.esophose.playerparticles.particles.ParticleEffect.ItemData;
+import com.esophose.playerparticles.particles.ParticleEffect.NoteColor;
+import com.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
+import com.esophose.playerparticles.particles.ParticleEffect.ParticleColor;
+import com.esophose.playerparticles.particles.ParticleEffect.ParticleData;
+import com.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class FixedParticleEffect {
@@ -60,7 +60,6 @@ public class FixedParticleEffect {
     /**
      * Constructs a new FixedParticleEffect
      * FixedParticleEffects can NOT use custom handled styles
-     * This is basically the same thing as a PPlayer, maybe we can extend it in the future?
      * 
      * @param pplayerUUID The UUID of the player who owns the effect
      * @param id The id this effect has, unique to the owner pplayer

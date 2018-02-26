@@ -29,6 +29,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -39,14 +40,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.esophose.playerparticles.PPlayer;
 import com.esophose.playerparticles.PlayerParticles;
-import com.esophose.playerparticles.library.ParticleEffect;
-import com.esophose.playerparticles.library.ParticleEffect.BlockData;
-import com.esophose.playerparticles.library.ParticleEffect.ItemData;
-import com.esophose.playerparticles.library.ParticleEffect.NoteColor;
-import com.esophose.playerparticles.library.ParticleEffect.OrdinaryColor;
-import com.esophose.playerparticles.library.ParticleEffect.ParticleProperty;
 import com.esophose.playerparticles.manager.ConfigManager;
 import com.esophose.playerparticles.manager.MessageManager.MessageType;
+import com.esophose.playerparticles.particles.ParticleEffect;
+import com.esophose.playerparticles.particles.ParticleEffect.BlockData;
+import com.esophose.playerparticles.particles.ParticleEffect.ItemData;
+import com.esophose.playerparticles.particles.ParticleEffect.NoteColor;
+import com.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
+import com.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
 import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.manager.PermissionManager;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
@@ -64,11 +65,11 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
      * Used to figure out what the InventoryClickEvent should do
      */
     public enum GuiState { // @formatter:off
-		DEFAULT, 
-		EFFECT, 
-		STYLE, 
-		DATA
-	} // @formatter:on
+        DEFAULT, 
+        EFFECT, 
+        STYLE, 
+        DATA
+    } // @formatter:on
 
     public static final String rainbowName = ChatColor.RED + "r" + ChatColor.GOLD + "a" + ChatColor.YELLOW + "i" + ChatColor.GREEN + "n" + ChatColor.AQUA + "b" + ChatColor.BLUE + "o" + ChatColor.LIGHT_PURPLE + "w";
 
@@ -286,6 +287,27 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
      */
     public static boolean isGuiDisabled() {
         return !guiEnabled;
+    }
+    
+    /**
+     * Forcefully closes all open PlayerParticles GUIs
+     * Used for when the plugin unloads so players can't take items from the GUI
+     */
+    public static void forceCloseAllOpenGUIs() {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            InventoryView openInventory = p.getOpenInventory();
+            if (openInventory == null) continue;
+            Inventory topInventory = openInventory.getTopInventory();
+            if (topInventory == null) continue;
+
+            // Check if any of the inventories are the one the user has open, close if true
+            for (GuiInventory guiInventory : playerGuiInventories.values()) {
+                if (topInventory.equals(guiInventory.getInventory())) {
+                    p.closeInventory();
+                    break;
+                }
+            }
+        }
     }
 
     /**
