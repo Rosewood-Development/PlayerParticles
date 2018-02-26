@@ -1,5 +1,5 @@
 /**
- * Copyright Esophose 2017
+ * Copyright Esophose 2018
  * While using any of the code provided by this plugin
  * you must not claim it as your own. This plugin may
  * be modified and installed on a server, but may not
@@ -80,7 +80,7 @@ public class PParticle {
 	}
 
 	/**
-	 * Gets the offset on the x axis for the particle
+	 * Gets the offset on the x-axis for the particle
 	 * 
 	 * @return The x-axis offset
 	 */

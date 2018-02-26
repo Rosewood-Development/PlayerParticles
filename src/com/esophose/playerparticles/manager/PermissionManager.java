@@ -1,5 +1,5 @@
 /**
- * Copyright Esophose 2017
+ * Copyright Esophose 2018
  * While using any of the code provided by this plugin
  * you must not claim it as your own. This plugin may
  * be modified and installed on a server, but may not
@@ -56,7 +56,7 @@ public class PermissionManager {
 	 * @param p The player to get effect names for
 	 * @return A String List of all effect names the given player has permission for
 	 */
-	public static List<String> getParticlesUserHasPermissionFor(Player p) {
+	public static List<String> getEffectsUserHasPermissionFor(Player p) {
 		List<String> list = new ArrayList<String>();
 		for (ParticleEffect pe : ParticleEffect.getSupportedEffects()) {
 			if (hasEffectPermission(p, pe)) list.add(pe.getName().toLowerCase().replace("_", ""));
@@ -96,6 +96,17 @@ public class PermissionManager {
 	 */
 	public static boolean canUseFixedEffects(Player player) {
 		return player.hasPermission("playerparticles.*") || player.hasPermission("playerparticles.fixed");
+	}
+	
+	/**
+	 * Checks if a player has permission to open the GUI
+	 * Access is restricted if they have the following permission
+	 * 
+	 * @param player The player to check the permission for
+	 * @return False if the player's access to the GUI is revoked
+	 */
+	public static boolean canUseGui(Player player) {
+		return !player.hasPermission("playerparticles.gui.revoke");
 	}
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright Esophose 2017
+ * Copyright Esophose 2018
  * While using any of the code provided by this plugin
  * you must not claim it as your own. This plugin may
  * be modified and installed on a server, but may not
@@ -7,16 +7,36 @@
  */
 
 /*
- TODO: v4.4 
+ TODO: v5
  + Add new style 'tornado'
+ + Add new style 'fairy'
  + Add new style 'atom'
- + Add new style 'wings'
- + GUI for styles and effects - Requires no additional permissions
-   /pp gui - Shows GUI that tells you your current effect, style, and data and lets you choose new ones
-   /pp gui effect - Shows GUI that lets you select a new effect, also shows your current one
-   /pp gui style - Shows GUI that lets you select a new style, also shows your current one
-   /pp gui data - Shows GUI that lets you choose from preset data based on your current effect, also shows your current data
+ + Add new style 'rings'
+ + Add new style 'jump'
+ + Add new style 'blockbreak'
+ + Add new style 'blockplace'
+ + Add new style 'hurt'
+ + Add new style 'swords'
+ + Switch over to Spigot Particle API
+ + Switch database management system, make async
+ + Command to force set an effect/style for a player
 */
+
+/*
+ Changelog v5:
+ + Added GUI. Opens with /pp or /pp gui. Icons and messages are completely customizable from the config.
+ + Added a way to disable the GUI, because I know somebody will ask
+ + Added new style 'wings'
+ + Added new style 'sphere'
+ - Minecraft 1.7 and 1.8 are no longer supported. There is no reason to still be on a version that old.
+ * Fixed a bug where typing /pp data when you haven't been added to the playerData.yml/database yet threw an error
+ * Switched over to the Spigot Particle API
+ * Plugin is now built against Java 1.8.0_161 and Spigot 1.9.4
+ * Servers running Java 7 are no longer supported. Please upgrade to Java 8 if you haven't yet.
+ * Rewrote database connection system, should fix any memory leaks from before
+ * Reduced particle render distance from 512 to 150, you won't notice a difference
+ * Performance improvements with database loading
+ */
 
 package com.esophose.playerparticles;
 
@@ -29,6 +49,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.esophose.playerparticles.gui.PlayerParticlesGui;
 import com.esophose.playerparticles.library.MySQL;
 import com.esophose.playerparticles.manager.MessageManager;
 import com.esophose.playerparticles.manager.ParticleManager;
@@ -68,12 +89,14 @@ public class PlayerParticles extends JavaPlugin {
 	public void onEnable() {
 		DefaultStyles.registerStyles();
 		MessageManager.setup();
+		PlayerParticlesGui.setup();
 		saveDefaultConfig();
 		getCommand("pp").setTabCompleter(new ParticleCommandCompleter());
 		getCommand("pp").setExecutor(new ParticleCommandExecutor());
 		Bukkit.getPluginManager().registerEvents(new ParticleManager(), this);
 		Bukkit.getPluginManager().registerEvents(new PluginUpdateListener(), this);
-		if (getConfig().getDouble("version") < Double.parseDouble(getDescription().getVersion().substring(0, 3))) {
+		Bukkit.getPluginManager().registerEvents(new PlayerParticlesGui(), this);
+		if (getConfig().getDouble("version") < Double.parseDouble(getDescription().getVersion())) {
 			File configFile = new File(getDataFolder(), "config.yml");
 			configFile.delete();
 			saveDefaultConfig();
@@ -86,12 +109,27 @@ public class PlayerParticles extends JavaPlugin {
 		if (shouldCheckUpdates()) {
 			try { // For some reason this can throw an exception sometimes. I suppose it happens when you run the server without an internet connection?
 				Updater updater = new Updater(this, 82823, this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
-				if (Double.parseDouble(updater.getLatestName().replaceAll("PlayerParticles v", "").replaceAll("\\.", "")) > Double.parseDouble(getPlugin().getDescription().getVersion().replaceAll("\\.", ""))) {
+				if (Double.parseDouble(updater.getLatestName().replaceAll("PlayerParticles v", "")) > Double.parseDouble(getPlugin().getDescription().getVersion())) {
 					updateVersion = updater.getLatestName().replaceAll("PlayerParticles v", "");
-					getLogger().info("[PlayerParticles] An update (v" + updateVersion + ") is available! You are running v" + getPlugin().getDescription().getVersion());
+					getLogger().info("An update (v" + updateVersion + ") is available! You are running v" + getPlugin().getDescription().getVersion());
 				}
 			} catch (Exception e) {
-				getLogger().warning("[PlayerParticles] An error occurred checking for an update. There is either no established internet connection or the Curse API is down.");
+				getLogger().warning("An error occurred checking for an update. There is either no established internet connection or the Curse API is down.");
+			}
+		}
+	}
+
+	/**
+	 * Clean up MySQL connection if it's open
+	 */
+	public void onDisable() {
+		if (useMySQL) {
+			try {
+				if (mySQL.checkConnection()) {
+					mySQL.closeConnection();
+				}
+			} catch (SQLException ex) {
+				getLogger().warning("An error occurred while cleaning up the mySQL database connection.");
 			}
 		}
 	}
@@ -129,7 +167,7 @@ public class PlayerParticles extends JavaPlugin {
 			String user = getConfig().getString("database-user-name");
 			String pass = getConfig().getString("database-user-password");
 			mySQL = new MySQL(hostname, port, database, user, pass);
-			
+
 			useMySQL = true; // If something goes wrong this will be set to false
 
 			// @formatter:off
@@ -156,7 +194,7 @@ public class PlayerParticles extends JavaPlugin {
 							       );
 				}
 			} catch (ClassNotFoundException | SQLException e) {
-				getLogger().info("[PlayerParticles] Failed to connect to the MySQL Database! Check to see if your login information is correct!");
+				getLogger().info("Failed to connect to the MySQL Database! Check to see if your login information is correct!");
 				getLogger().info("Additional information: " + e.getMessage());
 				useMySQL = false;
 				return;
@@ -176,9 +214,9 @@ public class PlayerParticles extends JavaPlugin {
 			public void run() {
 				ParticleManager.refreshPPlayers(); // Add any online players who have particles
 				ParticleManager.addAllFixedEffects(); // Add all fixed effects
-				
-				double ticks = getConfig().getInt("ticks-per-particle");
-				new ParticleManager().runTaskTimer(playerParticles, 20, (long) ticks);
+
+				long ticks = getConfig().getLong("ticks-per-particle");
+				new ParticleManager().runTaskTimer(playerParticles, 20, ticks);
 			}
 		}.runTaskLater(playerParticles, 20);
 	}

@@ -46,9 +46,7 @@ import com.esophose.playerparticles.library.ReflectionUtils.PackageType;
 
 /**
  * Modified a couple things for the plugin
- *
- * Updated to 1.11
- * 
+ * Updated to 1.12
  * @author (of changes) Esophose
  */
 public enum ParticleEffect {
@@ -738,8 +736,8 @@ public enum ParticleEffect {
 
 	/**
 	 * Represents the particle data for effects like
-	 * {@link ParticleEffect#ITEM_CRACK}, {@link ParticleEffect#BLOCK_CRACK} and
-	 * {@link ParticleEffect#BLOCK_DUST}
+	 * {@link ParticleEffect#ITEM_CRACK}, {@link ParticleEffect#BLOCK_CRACK},
+	 * {@link ParticleEffect#BLOCK_DUST}, and {@link ParticleEffect#FALLING_DUST}
 	 * <p>
 	 * This class is part of the <b>ParticleEffect Library</b> and follows the
 	 * same usage conditions

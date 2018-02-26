@@ -1,11 +1,9 @@
-# ____________                           __________                __   __        __                              _____  
-# \______  \  | _____  ___ __  __________\______   \_____ ________/  |_|__| ____ |  |   ____   ______     ___  __/  |  | 
-# |     ___/  | \__  \<   |  |/ __ \_  __ \     ___/\__  \\_  __ \   __\  |/ ___\|  | _/ __ \ /  ___/     \  \/ /   |  |_
-# |    |   |  |__/ __ \\___  \  ___/|  | \/    |     / __ \|  | \/|  | |  \  \___|  |_\  ___/ \___ \       \   /    ^   /
-# |____|   |____(____  / ____|\___  >__|  |____|    (____  /__|   |__| |__|\___  >____/\___  >____  >       \_/\____   | 
-#                    \/\/         \/                     \/                    \/          \/     \/                |__|
-
-# Please excuse the cheesy ASCII Art
+# __________ __                           __________                __   __        __                            ________
+# \______   \  | _____  ___ __  __________\______   \_____ ________/  |_|__| ____ |  |   ____   ______    ___  _|   ____/
+#  |     ___/  | \__  \<   |  |/ __ \_  __ \     ___/\__  \\_  __ \   __\  |/ ___\|  | _/ __ \ /  ___/    \  \/ /____  \ 
+#  |    |   |  |__/ __ \\___  \  ___/|  | \/    |     / __ \|  | \/|  | |  \  \___|  |_\  ___/ \___ \      \   //       \
+#  |____|   |____(____  / ____|\___  >__|  |____|    (____  /__|   |__| |__|\___  >____/\___  >____  >      \_//______  /
+#                     \/\/         \/                     \/                    \/          \/     \/                 \/ 
 
 # ==================================================== #
 #                PlayerParticles Config                #
@@ -14,18 +12,18 @@
 
 # Changing this value will reset your config on the next server reload / restart. 
 # I don't recommend changing it
-version: 4.5
-
-# How many ticks to wait before spawning more particles
-# Increasing this value may cause less lag (if there was any), but will decrease prettiness
-# The lowest possible value is 1
-# Going over 5 will likely look terrible
-# Default: 1
-ticks-per-particle: 1
+# NOTE: Updating to a new version of the plugin will change this number and delete your config. 
+#       Make sure you create a backup each time before you update!
+version: 5.0
 
 # Check for new versions of the plugin
 # Default: true
 check-updates: true
+
+# If the command /pp gui is enabled
+# Disable this if you have your own custom GUI through another plugin
+# Default: true
+gui-enabled: true
 
 # The worlds which this plugin is disabled in
 # Remove the [] before you enter world names
@@ -42,15 +40,22 @@ max-fixed-effects: 5
 # Determines how far away a player may create a fixed effect from themselves
 # This measurement is in blocks
 # Set to 0 for infinite distance
-# Default: 256
-max-fixed-effect-creation-distance: 256
+# Default: 128
+max-fixed-effect-creation-distance: 128
+
+# How many ticks to wait before spawning more particles
+# Increasing this value may cause less lag (if there was any), but will decrease prettiness
+# Only use whole numbers greater than or equal to 1
+# Going over 3 will likely look terrible
+# Default: 1
+ticks-per-particle: 1
 
 # ================================================================ #
 #                     MESSAGE CONFIGURATION                        #
 # Important Notes:                                                 #
 # * You can use the & symbol to color the messages                 #
 # * {TYPE} Will be replaced with whatever that message requires    #
-# * You can not use the apostrophe character! ( ' )                #
+# * You cannot use the apostrophe character! ( ' )                 #
 # ================================================================ #
 
 # If you're using other plugins to execute commands you may wish to turn off messages
@@ -164,12 +169,12 @@ message-color-data-usage: '&b/pp data [<0-255> <0-255> <0-255>]|[rainbow]'
 
 # Item Data Usage
 # You should not change the text here, only the coloring
-# Default: '&b/pp data <itemName> <0-15>'
+# Default: '&b/pp data <itemName/ID> <0-15>'
 message-item-data-usage: '&b/pp data <itemName> <0-15>'
 
 # Block Data Usage
 # You should not change the text here, only the coloring
-# Default: '&b/pp data <blockName> <0-15>'
+# Default: '&b/pp data <blockName/ID> <0-15>'
 message-block-data-usage: '&b/pp data <blockName> <0-15>'
 
 # ---------------- #
@@ -185,8 +190,8 @@ message-use: '&eYou can use:&b'
 message-usage: '&eUsage:'
 
 # Available Commands
-# Default: '&eAvailable commands: &beffect, effects, style, styles, data, reset, worlds, version, help'
-message-available-commands: '&eAvailable commands: &beffect, effects, style, styles, data, reset, worlds, version, help'
+# Default: '&eAvailable commands: &beffect, effects, style, styles, data, reset, gui, worlds, version, help'
+message-available-commands: '&eAvailable commands: &beffect, effects, style, styles, data, reset, gui, worlds, version, help'
 
 # Disabled Worlds
 # Default: '&eParticles are disabled in these worlds:&b'
@@ -367,6 +372,47 @@ message-fixed-command-desc-info: '&e/pp fixed info <id> - Gets info on one of yo
 message-fixed-command-desc-clear: '&e/pp fixed clear <radius> - Clears all fixed effects of all players within the given radius'
 
 # ------------- #
+#      GUI      #
+# ------------- #
+
+# Disabled
+# Default: '&cThe server administrator has disabled the GUI.'
+message-gui-disabled: '&cThe server administrator has disabled the GUI.'
+
+# Opened By Default
+# Default: '&eWe opened the GUI for you because you did not specify a command. If you are looking to use a specific command, view them with &b/pp help'
+message-gui-by-default: '&eWe opened the GUI for you because you did not specify a command. If you are looking to use a specific command, view them with &b/pp help'
+
+# Back Button
+# Default: '&eGo Back'
+message-gui-back-button: '&eGo Back'
+
+# Icon Name Color
+# Default: '&a'
+message-gui-icon-name-color: '&a'
+
+# Currently Active Effect/Style
+# Default: '&d- Your current {TYPE} -'
+message-gui-icon-current-active: '&d- Your current {TYPE} -'
+
+# Sets your style/effect to {effect name}
+# The effect/style name will be added to the end
+# Default: '&eSets your {TYPE} to '
+message-gui-icon-sets-to: '&eSets your {TYPE} to &b'
+
+# Select Your 
+# Default: '&eSelect your {TYPE}'
+message-gui-icon-set-your: '&eSelect your {TYPE}'
+
+# No Access To
+# Default: '&cYou have no access to any {TYPE}!'
+message-gui-no-access-to: '&cYou have no access to any {TYPE}!'
+
+# No Data
+# Default: '&cYour effect does not use any data!'
+message-gui-no-data: '&cYour effect does not use any data!'
+
+# ------------- #
 #     Other     #
 # ------------- #
 
@@ -423,5 +469,90 @@ database-user-name: ''
 # Default: ''
 database-user-password: ''
 
-# That's everything! You reached the end of the configuration
+# =================================================================== #
+#                        GUI ICON SETTINGS                            #
+# This configuration option allows you to change any of the GUI       #
+# icons to whatever block/item you want.                              #
+#                                                                     #
+# Important Notes:                                                    #
+# * If any of the block/item names are invalid it will notify you     #
+#   in console and the icon in the GUI will be the barrier icon to    #
+#   show that it failed to load.                                      #
+# * Do NOT change the particle/style name                             #
+# * You MUST use the Spigot-given name for it to work. You can see    #
+#   all the Spigot-given names at the link below:                     #
+#   https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html #
+# =================================================================== #
+
+gui-icon: 
+  main-menu:
+    EFFECT: BLAZE_POWDER
+    STYLE: NETHER_STAR
+    DATA: BOOK
+  effect: 
+    NONE: THIN_GLASS
+    EXPLODE: SULPHUR
+    LARGE_EXPLODE: FIREBALL
+    HUGE_EXPLOSION: TNT
+    FIREWORKS_SPARK: FIREWORK
+    BUBBLE: GLASS
+    WAKE: WATER_LILY
+    SUSPENDED: RAW_FISH
+    DEPTH_SUSPEND: BEDROCK
+    CRIT: IRON_SWORD
+    MAGIC_CRIT: NETHER_STALK
+    SMOKE: TORCH
+    LARGE_SMOKE: WEB
+    SPELL: GLASS_BOTTLE
+    INSTANT_SPELL: POTION
+    MOB_SPELL: GLOWSTONE_DUST
+    MOB_SPELL_AMBIENT: BEACON
+    WITCH_MAGIC: CAULDRON_ITEM
+    DRIP_WATER: WATER_BUCKET
+    DRIP_LAVA: LAVA_BUCKET
+    ANGRY_VILLAGER: IRON_DOOR
+    HAPPY_VILLAGER: WOOD_DOOR
+    NOTE: NOTE_BLOCK
+    PORTAL: OBSIDIAN
+    ENCHANTMENT_TABLE: ENCHANTMENT_TABLE
+    FLAME: BLAZE_POWDER
+    LAVA: NETHER_BRICK
+    FOOTSTEP: GRASS
+    CLOUD: WOOL
+    RED_DUST: REDSTONE
+    SNOWBALL_POOF: SNOW_BALL
+    SNOW_SHOVEL: SNOW
+    SLIME: SLIME_BALL
+    HEART: RED_ROSE
+    BARRIER: BARRIER
+    ITEM_CRACK: STICK
+    BLOCK_CRACK: DEAD_BUSH
+    BLOCK_DUST: SOUL_SAND
+    DROPLET: LAPIS_ORE
+    DRAGON_BREATH: DRAGONS_BREATH
+    END_ROD: END_ROD
+    DAMAGE_INDICATOR: BOW
+    SWEEP_ATTACK: GOLD_SWORD
+    FALLING_DUST: SAND
+    TOTEM: TOTEM
+    SPIT: PUMPKIN_SEEDS
+  style: 
+    NONE: THIN_GLASS
+    BEAM: POWERED_RAIL
+    HALO: ENDER_PORTAL_FRAME
+    POINT: STONE_BUTTON
+    MOVE: PISTON_BASE
+    SPIN: BEACON
+    QUADHELIX: ACTIVATOR_RAIL
+    ORBIT: ENCHANTMENT_TABLE
+    FEET: GRASS
+    CUBE: STONE
+    ARROWS: BOW
+    SPIRAL: HOPPER
+    THICK: VINE
+    WINGS: ELYTRA
+    SPHERE: SNOW_BALL
+
+
+# That's everything! You reached the end of the configuration.
 # Enjoy the plugin!

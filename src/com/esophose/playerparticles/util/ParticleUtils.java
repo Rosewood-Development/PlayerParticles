@@ -1,5 +1,5 @@
 /**
- * Copyright Esophose 2017
+ * Copyright Esophose 2018
  * While using any of the code provided by this plugin
  * you must not claim it as your own. This plugin may
  * be modified and installed on a server, but may not
@@ -8,30 +8,28 @@
 
 package com.esophose.playerparticles.util;
 
-import java.util.ArrayList;
-
 import org.bukkit.Material;
 
 public class ParticleUtils {
 
 	/**
 	 * Finds a block/item as a material from a string
-	 * There must be some better way to do this that reliably gets the correct material
 	 * 
 	 * @param input The material name as a string
 	 * @return The material from the string
 	 */
-	@SuppressWarnings("deprecation")
 	public static Material closestMatch(String input) {
-        ArrayList<Material> matchList = new ArrayList<Material>();
-        for (Material material : Material.values())
-            if (material.name().replaceAll("_", " ").toLowerCase().equals(input.toLowerCase()) || String.valueOf(material.getId()).equals(input))
-                return material;
-            else if (material.name().replaceAll("_", " ").toLowerCase().contains(input.toLowerCase()))
-                matchList.add(material);
-        
-        if (matchList.size() == 1) return matchList.get(0);
-        else return null;
+		if (input == null) return null;
+		for (Material material : Material.values()) // First check for exact matches
+		    if (material.name().equalsIgnoreCase(input) ||
+	        	material.toString().equalsIgnoreCase(input)) return material;
+        for (Material material : Material.values()) // Then check for partial matches
+            if (material.name().toLowerCase().contains(input.toLowerCase()) || 
+        		material.toString().toLowerCase().contains(input.toLowerCase()) ||
+        		material.name().replaceAll("_", "").toLowerCase().contains(input.toLowerCase()) || 
+        		material.toString().replaceAll("_", "").toLowerCase().contains(input.toLowerCase())) 
+            	return material;
+        return null;
     }
 	
 	/**

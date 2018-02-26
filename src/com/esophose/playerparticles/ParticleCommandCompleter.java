@@ -1,5 +1,5 @@
 /**
- * Copyright Esophose 2017
+ * Copyright Esophose 2018
  * While using any of the code provided by this plugin
  * you must not claim it as your own. This plugin may
  * be modified and installed on a server, but may not
@@ -22,7 +22,7 @@ import com.esophose.playerparticles.manager.PermissionManager;
 
 public class ParticleCommandCompleter implements TabCompleter {
 
-	private final String[] COMMANDS = { "help", "effect", "effects", "style", "styles", "worlds", "version", "fixed", "reset" };
+	private final String[] COMMANDS = { "help", "gui", "effect", "effects", "style", "styles", "worlds", "version", "fixed", "reset" };
 	private final String[] FIXED_COMMANDS = { "create", "remove", "list", "info" };
 
 	/**
@@ -39,7 +39,7 @@ public class ParticleCommandCompleter implements TabCompleter {
 		if (cmd.getName().equalsIgnoreCase("pp")) {
 			if (args.length > 1) {
 				if (args[0].equalsIgnoreCase("effect")) {
-					List<String> commands = PermissionManager.getParticlesUserHasPermissionFor((Player) sender);
+					List<String> commands = PermissionManager.getEffectsUserHasPermissionFor((Player) sender);
 					StringUtil.copyPartialMatches(args[1], commands, completions);
 					return completions;
 				} else if (args[0].equalsIgnoreCase("style")) {

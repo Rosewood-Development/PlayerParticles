@@ -1,5 +1,5 @@
 /**
- * Copyright Esophose 2017
+ * Copyright Esophose 2018
  * While using any of the code provided by this plugin
  * you must not claim it as your own. This plugin may
  * be modified and installed on a server, but may not
@@ -640,7 +640,7 @@ public class ConfigManager {
 					double xPos = res.getDouble("f.xPos");
 					double yPos = res.getDouble("f.yPos");
 					double zPos = res.getDouble("f.zPos");
-					ParticleEffect particleEffect = ParticleManager.particleFromString(res.getString("f.effect"));
+					ParticleEffect particleEffect = ParticleManager.effectFromString(res.getString("f.effect"));
 					ParticleStyle particleStyle = ParticleStyleManager.styleFromString(res.getString("f.style"));
 					ItemData particleItemData = new ItemData(Material.matchMaterial(res.getString("i.material")), res.getByte("i.data"));
 					BlockData particleBlockData = new BlockData(Material.matchMaterial(res.getString("b.material")), res.getByte("b.data"));
@@ -701,7 +701,7 @@ public class ConfigManager {
 					double xPos = res.getDouble("f.xPos");
 					double yPos = res.getDouble("f.yPos");
 					double zPos = res.getDouble("f.zPos");
-					ParticleEffect particleEffect = ParticleManager.particleFromString(res.getString("f.effect"));
+					ParticleEffect particleEffect = ParticleManager.effectFromString(res.getString("f.effect"));
 					ParticleStyle particleStyle = ParticleStyleManager.styleFromString(res.getString("f.style"));
 					ItemData particleItemData = new ItemData(Material.matchMaterial(res.getString("i.material")), res.getByte("i.data"));
 					BlockData particleBlockData = new BlockData(Material.matchMaterial(res.getString("b.material")), res.getByte("b.data"));

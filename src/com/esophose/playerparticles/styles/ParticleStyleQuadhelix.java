@@ -16,7 +16,7 @@ public class ParticleStyleQuadhelix implements ParticleStyle {
 		PParticle[] particles = new PParticle[4];
 		for (int i = 0; i < 4; i++) {
 			double dx = -(Math.cos((stepX / 90) * (Math.PI * 2) + ((Math.PI / 2) * i))) * ((60 - Math.abs(stepY)) / 60);
-			double dy = ((stepY) / 60) * 1.5;
+			double dy = (stepY / 60) * 1.5;
 			double dz = -(Math.sin((stepX / 90) * (Math.PI * 2) + ((Math.PI / 2) * i))) * ((60 - Math.abs(stepY)) / 60);
 			particles[i] = new PParticle(new Location(location.getWorld(), location.getX() + dx, location.getY() + dy, location.getZ() + dz));
 		}

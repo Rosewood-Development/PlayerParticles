@@ -1,5 +1,5 @@
 /**
- * Copyright Esophose 2017
+ * Copyright Esophose 2018
  * While using any of the code provided by this plugin
  * you must not claim it as your own. This plugin may
  * be modified and installed on a server, but may not
@@ -23,6 +23,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.esophose.playerparticles.gui.PlayerParticlesGui;
+import com.esophose.playerparticles.gui.PlayerParticlesGui.GuiState;
 import com.esophose.playerparticles.library.ParticleEffect;
 import com.esophose.playerparticles.library.ParticleEffect.BlockData;
 import com.esophose.playerparticles.library.ParticleEffect.ItemData;
@@ -56,7 +58,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 		Player p = (Player) sender;
 
 		if (args.length == 0) {
-			MessageManager.sendMessage(p, MessageType.INVALID_ARGUMENTS);
+			onGUI(p, true);
 			return true;
 		} else {
 			String[] cmdArgs = new String[0];
@@ -92,6 +94,9 @@ public class ParticleCommandExecutor implements CommandExecutor {
 				break;
 			case "reset":
 				onReset(p, cmdArgs);
+				break;
+			case "gui":
+				onGUI(p, false);
 				break;
 			default:
 				MessageManager.sendMessage(p, MessageType.INVALID_ARGUMENTS);
@@ -159,7 +164,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 	 * @param args The arguments for the command
 	 */
 	private void onData(Player p, String[] args) {
-		ParticleEffect effect = ConfigManager.getInstance().getPPlayer(p.getUniqueId(), false).getParticleEffect();
+		ParticleEffect effect = ConfigManager.getInstance().getPPlayer(p.getUniqueId(), true).getParticleEffect();
 		if ((!effect.hasProperty(ParticleProperty.REQUIRES_DATA) && !effect.hasProperty(ParticleProperty.COLORABLE)) || args.length == 0) {
 			if (effect.hasProperty(ParticleProperty.COLORABLE)) {
 				if (effect == ParticleEffect.NOTE) {
@@ -357,8 +362,8 @@ public class ParticleCommandExecutor implements CommandExecutor {
 			return;
 		}
 		String argument = args[0].replace("_", "");
-		if (ParticleManager.particleFromString(argument) != null) {
-			ParticleEffect effect = ParticleManager.particleFromString(argument);
+		if (ParticleManager.effectFromString(argument) != null) {
+			ParticleEffect effect = ParticleManager.effectFromString(argument);
 			if (!PermissionManager.hasEffectPermission(p, effect)) {
 				MessageManager.sendMessage(p, MessageType.NO_PERMISSION, effect.getName().toLowerCase());
 				return;
@@ -526,7 +531,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 				return;
 			}
 
-			ParticleEffect effect = ParticleManager.particleFromString(args[3]);
+			ParticleEffect effect = ParticleManager.effectFromString(args[3]);
 			if (effect == null) {
 				MessageManager.sendMessage(p, MessageType.CREATE_FIXED_INVALID_EFFECT, args[3]);
 				return;
@@ -773,6 +778,32 @@ public class ParticleCommandExecutor implements CommandExecutor {
 			MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_INFO);
 			if (p.hasPermission("playerparticles.fixed.clear")) MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_CLEAR);
 		}
+	}
+	
+	private void onGUI(Player p, boolean byDefault) {
+		if (PlayerParticlesGui.isGuiDisabled()) {
+			if (byDefault) {
+				onHelp(p);
+			} else {
+				MessageManager.sendMessage(p, MessageType.GUI_DISABLED);
+			}
+			return;
+		}
+		
+		if (PermissionManager.getEffectsUserHasPermissionFor(p).size() == 1) {
+			if (byDefault) {
+				onHelp(p);
+			} else {
+				MessageManager.sendMessage(p, MessageType.NO_PARTICLES);
+			}
+			return;
+		}
+		
+		if (byDefault) {
+			MessageManager.sendMessage(p, MessageType.GUI_BY_DEFAULT);
+		}
+		
+		PlayerParticlesGui.changeState(ConfigManager.getInstance().getPPlayer(p.getUniqueId(), true), GuiState.DEFAULT);
 	}
 
 }

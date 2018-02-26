@@ -1,5 +1,5 @@
 /**
- * Copyright Esophose 2017
+ * Copyright Esophose 2018
  * While using any of the code provided by this plugin
  * you must not claim it as your own. This plugin may
  * be modified and installed on a server, but may not
@@ -69,9 +69,8 @@ public class ParticleStyleManager {
 	 * @return The ParticleStyle with the name requested
 	 */
 	public static ParticleStyle styleFromString(String styleName) {
-		for (ParticleStyle style : styles) {
+		for (ParticleStyle style : styles) 
 			if (style.getName().toLowerCase().replace("_", "").equals(styleName)) return style;
-		}
 		return null;
 	}
 
@@ -81,9 +80,8 @@ public class ParticleStyleManager {
 	 * Do not call this in your plugin, it will mess with other styles
 	 */
 	public static void updateTimers() {
-		for (ParticleStyle style : styles) {
+		for (ParticleStyle style : styles) 
 			style.updateTimers();
-		}
 	}
 	
 	/**

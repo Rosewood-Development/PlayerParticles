@@ -1,5 +1,5 @@
 /**
- * Copyright Esophose 2017
+ * Copyright Esophose 2018
  * While using any of the code provided by this plugin
  * you must not claim it as your own. This plugin may
  * be modified and installed on a server, but may not
@@ -34,7 +34,6 @@ public class MessageManager {
 		NO_STYLES("message-no-styles"),
 		NOW_USING_STYLE("message-now-using-style"),
 		CLEARED_STYLE("message-cleared-style"),
-		USE_STYLE("message-use-style"),
 		INVALID_TYPE_STYLE("message-invalid-type-style"),
 		STYLE_USAGE("message-style-usage"),
 		
@@ -84,6 +83,17 @@ public class MessageManager {
 		MAX_FIXED_EFFECTS_REACHED("message-max-fixed-effects-reached"),
 		INVALID_FIXED_COMMAND("message-invalid-fixed-command"),
 		
+		// GUI
+		GUI_DISABLED("message-gui-disabled"),
+		GUI_BY_DEFAULT("message-gui-by-default"),
+		GUI_BACK_BUTTON("message-gui-back-button"),
+		GUI_ICON_NAME_COLOR("message-gui-icon-name-color"),
+		GUI_ICON_CURRENT_ACTIVE("message-gui-icon-current-active"),
+		GUI_ICON_SETS_TO("message-gui-icon-sets-to"),
+		GUI_ICON_SET_YOUR("message-gui-icon-set-your"),
+		GUI_NO_ACCESS_TO("message-gui-no-access-to"),
+		GUI_NO_DATA("message-gui-no-data"),
+		
 		// Prefixes
 		USE("message-use"),
 		USAGE("message-usage"),
@@ -99,19 +109,48 @@ public class MessageManager {
 		FAILED_EXECUTE_NOT_FOUND("message-failed-execute-not-found"),
 		FAILED_EXECUTE_NO_PERMISSION("message-failed-execute-no-permission");
 
-		public String configLocation;
+		private String configLocation;
+		private String message;
 
 		MessageType(String configLocation) {
 			this.configLocation = configLocation;
 		}
+		
+		/**
+		 * Sets the message from the config
+		 * 
+		 * @param config The config to pull the message from
+		 */
+		protected void setMessage(FileConfiguration config) {
+			try {
+				String messageFromConfig = config.getString(configLocation);
+				if (messageFromConfig == null || messageFromConfig.length() == 0) {
+					messageFromConfig = "&cMissing message in config.yml. Contact a server administrator.";
+					PlayerParticles.getPlugin().getLogger().warning("Missing message in config.yml: " + this.configLocation);
+				}
+				this.message = ChatColor.translateAlternateColorCodes('&', messageFromConfig);
+			} catch (Exception ex) {
+				System.out.println(this.name());
+			}
+		}
 
 		/**
-		 * Gets the message with the given config path
+		 * Gets the message this enum represents
 		 * 
-		 * @return The message from the config
+		 * @return The message 
 		 */
 		public String getMessage() {
-			return ChatColor.translateAlternateColorCodes('&', config.getString(this.configLocation));
+			return this.message;
+		}
+		
+		/**
+		 * Gets the message this enum represents and replace {TYPE} with a replacement value
+		 * 
+		 * @param replacement The text to replace {TYPE} with
+		 * @return The message with {TYPE} replaced with the replacement value
+		 */
+		public String getMessageReplaced(String replacement) {
+			return this.message.replaceAll("\\{TYPE\\}", replacement);
 		}
 	}
 
@@ -138,6 +177,10 @@ public class MessageManager {
 		messagesEnabled = config.getBoolean("messages-enabled");
 		prefixEnabled = config.getBoolean("use-message-prefix");
 		messagePrefix = parseColors(config.getString("message-prefix"));
+		
+		for (MessageType messageType : MessageType.values()) {
+			messageType.setMessage(config);
+		}
 	}
 
 	/**
@@ -153,11 +196,15 @@ public class MessageManager {
 		if (prefixEnabled) {
 			message = messagePrefix + " " + message;
 		}
+		
+		if (message.trim().equals("")) return;
+		
 		player.sendMessage(message);
 	}
 	
 	/**
 	 * Sends a message to the given player and allows for replacing {TYPE}
+	 * 
 	 * @param player The player to send the message to
 	 * @param messageType The message to send to the player
 	 * @param typeReplacement What {TYPE} should be replaced with
@@ -165,10 +212,13 @@ public class MessageManager {
 	public static void sendMessage(Player player, MessageType messageType, String typeReplacement) {
 		if (!messagesEnabled) return;
 		
-		String message = messageType.getMessage().replaceAll("\\{TYPE\\}", typeReplacement);
+		String message = messageType.getMessageReplaced(typeReplacement);
 		if (prefixEnabled) {
 			message = messagePrefix + " " + message;
 		}
+		
+		if (message.trim().equals("")) return;
+		
 		player.sendMessage(message);
 	}
 	
@@ -185,14 +235,17 @@ public class MessageManager {
 		if (prefixEnabled) {
 			message = messagePrefix + " " + message;
 		}
+		
+		if (message.trim().equals("")) return;
+		
 		player.sendMessage(message);
 	}
 
 	/**
 	 * Translates all ampersand symbols into the Minecraft chat color symbol
 	 * 
-	 * @param message The input
-	 * @return The output, parsed
+	 * @param message The input string
+	 * @return The output string, parsed
 	 */
 	public static String parseColors(String message) {
 		return ChatColor.translateAlternateColorCodes('&', message);

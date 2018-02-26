@@ -1,5 +1,5 @@
 /**
- * Copyright Esophose 2017
+ * Copyright Esophose 2018
  * While using any of the code provided by this plugin
  * you must not claim it as your own. This plugin may
  * be modified and installed on a server, but may not
@@ -11,9 +11,11 @@ package com.esophose.playerparticles;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
+import com.esophose.playerparticles.gui.PlayerParticlesGui;
 import com.esophose.playerparticles.library.ParticleEffect;
 import com.esophose.playerparticles.library.ParticleEffect.BlockData;
 import com.esophose.playerparticles.library.ParticleEffect.ItemData;
@@ -48,7 +50,7 @@ public class PPlayer {
 	private NoteColor particleNoteColorData;
 
 	/**
-	 * Constructs a new PPlayer 
+	 * Constructs a new PPlayer
 	 * 
 	 * @param uuid The player UUID
 	 * @param effect The player's effect
@@ -67,7 +69,7 @@ public class PPlayer {
 		this.setColorData(colorData);
 		this.setNoteColorData(noteColorData);
 	}
-	
+
 	/**
 	 * Gets the player's UUID
 	 * 
@@ -76,7 +78,7 @@ public class PPlayer {
 	public UUID getUniqueId() {
 		return this.playerUUID;
 	}
-	
+
 	/**
 	 * Gets the Player from their UUID
 	 * 
@@ -160,7 +162,7 @@ public class PPlayer {
 		if (style == null) style = DefaultStyles.NONE;
 		this.particleStyle = style;
 	}
-	
+
 	/**
 	 * Sets the player's item data
 	 * 
@@ -170,9 +172,9 @@ public class PPlayer {
 		if (itemData == null) itemData = new ItemData(Material.IRON_SPADE, (byte) 0);
 		this.particleItemData = itemData;
 	}
-	
+
 	/**
-	 * Sets the player's  block data
+	 * Sets the player's block data
 	 * 
 	 * @param blockData The player's new block data
 	 */
@@ -180,7 +182,7 @@ public class PPlayer {
 		if (blockData == null) blockData = new BlockData(Material.STONE, (byte) 0);
 		this.particleBlockData = blockData;
 	}
-	
+
 	/**
 	 * Sets the player's color data
 	 * 
@@ -190,7 +192,7 @@ public class PPlayer {
 		if (colorData == null) colorData = new OrdinaryColor(0, 0, 0);
 		this.particleColorData = colorData;
 	}
-	
+
 	/**
 	 * Sets the player's note color data
 	 * 
@@ -208,10 +210,10 @@ public class PPlayer {
 	 */
 	public ParticleData getParticleSpawnData() {
 		if (this.particleEffect.hasProperty(ParticleProperty.REQUIRES_DATA)) {
-			if (this.particleEffect == ParticleEffect.BLOCK_CRACK || this.particleEffect == ParticleEffect.BLOCK_DUST || this.particleEffect == ParticleEffect.FALLING_DUST) {
-				return particleBlockData;
-			} else if (this.particleEffect == ParticleEffect.ITEM_CRACK) {
+			if (this.particleEffect == ParticleEffect.ITEM_CRACK) {
 				return this.particleItemData;
+			} else {
+				return particleBlockData;
 			}
 		}
 		return null;
@@ -238,6 +240,33 @@ public class PPlayer {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Gets the current particle data as a string
+	 * 
+	 * @return The particle data in a human-readable string
+	 */
+	public String getParticleDataString() {
+		if (this.particleEffect == ParticleEffect.BLOCK_CRACK || this.particleEffect == ParticleEffect.BLOCK_DUST || this.particleEffect == ParticleEffect.FALLING_DUST) {
+			return particleBlockData.getMaterial().toString().toLowerCase() + ":" + particleBlockData.getData();
+		} else if (this.particleEffect == ParticleEffect.ITEM_CRACK) {
+			return particleItemData.getMaterial().toString().toLowerCase() + ":" + particleItemData.getData();
+		} else if (this.particleEffect.hasProperty(ParticleProperty.COLORABLE)) {
+			if (this.particleEffect == ParticleEffect.NOTE) {
+				if (this.particleNoteColorData.getValueX() * 24 == 99) {
+					return PlayerParticlesGui.rainbowName;
+				}
+				return "note #" + (int)(this.particleNoteColorData.getValueX() * 24);
+			} else {
+				if (this.particleColorData.getRed() == 999 && this.particleColorData.getGreen() == 999 && this.particleColorData.getBlue() == 999) {
+					return PlayerParticlesGui.rainbowName;
+				} else {
+					return ChatColor.RED + "" + this.particleColorData.getRed() + " " + ChatColor.GREEN + this.particleColorData.getGreen() + " " + ChatColor.AQUA + this.particleColorData.getBlue();
+				}
+			}
+		}
+		return "None";
 	}
 
 	/**
