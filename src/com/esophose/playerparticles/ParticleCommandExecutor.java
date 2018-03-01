@@ -28,6 +28,8 @@ import com.esophose.playerparticles.gui.PlayerParticlesGui.GuiState;
 import com.esophose.playerparticles.manager.ConfigManager;
 import com.esophose.playerparticles.manager.MessageManager;
 import com.esophose.playerparticles.manager.MessageManager.MessageType;
+import com.esophose.playerparticles.manager.ParticleManager;
+import com.esophose.playerparticles.manager.PermissionManager;
 import com.esophose.playerparticles.particles.FixedParticleEffect;
 import com.esophose.playerparticles.particles.ParticleEffect;
 import com.esophose.playerparticles.particles.ParticleEffect.BlockData;
@@ -35,8 +37,6 @@ import com.esophose.playerparticles.particles.ParticleEffect.ItemData;
 import com.esophose.playerparticles.particles.ParticleEffect.NoteColor;
 import com.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
 import com.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
-import com.esophose.playerparticles.manager.ParticleManager;
-import com.esophose.playerparticles.manager.PermissionManager;
 import com.esophose.playerparticles.styles.DefaultStyles;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
 import com.esophose.playerparticles.styles.api.ParticleStyleManager;
@@ -662,7 +662,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
                     }
                 }
             }
-
+            
             FixedParticleEffect fixedEffect = new FixedParticleEffect(p.getUniqueId(), // @formatter:off
 																	  ConfigManager.getInstance().getNextFixedEffectId(p.getUniqueId()), 
 																	  p.getLocation().getWorld().getName(), xPos, yPos, zPos, 

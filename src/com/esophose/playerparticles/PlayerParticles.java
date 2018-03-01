@@ -50,7 +50,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.esophose.playerparticles.gui.PlayerParticlesGui;
-import com.esophose.playerparticles.library.MySQL;
+import com.esophose.playerparticles.manager.DatabaseManager;
 import com.esophose.playerparticles.manager.MessageManager;
 import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.styles.DefaultStyles;
@@ -66,9 +66,9 @@ public class PlayerParticles extends JavaPlugin {
     public static String updateVersion = null;
 
     /**
-     * The MySQL connection
+     * The MySQL database connection manager
      */
-    public static MySQL mySQL = null;
+    public static DatabaseManager mySQL = null;
 
     /**
      * Whether or not to use MySQL as determined in the config
@@ -128,13 +128,7 @@ public class PlayerParticles extends JavaPlugin {
      */
     public void onDisable() {
         if (useMySQL) {
-            try {
-                if (mySQL.checkConnection()) {
-                    mySQL.closeConnection();
-                }
-            } catch (SQLException ex) {
-                getLogger().warning("An error occurred while cleaning up the mySQL database connection.");
-            }
+            mySQL.closeConnection();
         }
         
         PlayerParticlesGui.forceCloseAllOpenGUIs();
@@ -167,12 +161,7 @@ public class PlayerParticles extends JavaPlugin {
      */
     private void checkDatabase() {
         if (getConfig().getBoolean("database-enable")) {
-            String hostname = getConfig().getString("database-hostname");
-            String port = getConfig().getString("database-port");
-            String database = getConfig().getString("database-name");
-            String user = getConfig().getString("database-user-name");
-            String pass = getConfig().getString("database-user-password");
-            mySQL = new MySQL(hostname, port, database, user, pass);
+            mySQL = new DatabaseManager(getConfig());
 
             useMySQL = true; // If something goes wrong this will be set to false
 
@@ -199,7 +188,7 @@ public class PlayerParticles extends JavaPlugin {
                                     "CREATE TABLE pp_data_note (uuid VARCHAR(36), note SMALLINT);"
                                     );
                 }
-            } catch (ClassNotFoundException | SQLException e) {
+            } catch (SQLException e) {
                 getLogger().info("Failed to connect to the MySQL Database! Check to see if your login information is correct!");
                 getLogger().info("Additional information: " + e.getMessage());
                 useMySQL = false;

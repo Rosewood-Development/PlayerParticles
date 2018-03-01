@@ -34,10 +34,10 @@ Icon
 # Personal stuff
 *.project
 *.classpath
-*.jardesc
 /bin
 /.settings
 /doc
+/target
 
 # Files that might appear on external disk
 .Spotlight-V100

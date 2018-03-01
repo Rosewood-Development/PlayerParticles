@@ -245,7 +245,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
 
     /**
      * Updates all color/note data inventories to display the rainbow icon
-     * Removes any players who are no longer online from playerGuiInventories
+     * Removes any players who are no longer online from playerGuiInventoriesd
      */
     public void run() {
         List<UUID> toRemoveList = new ArrayList<UUID>();
@@ -288,7 +288,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
     public static boolean isGuiDisabled() {
         return !guiEnabled;
     }
-    
+
     /**
      * Forcefully closes all open PlayerParticles GUIs
      * Used for when the plugin unloads so players can't take items from the GUI
@@ -399,10 +399,11 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         dataIconMeta.setDisplayName(ChatColor.GREEN + "Data");
         ParticleEffect pe = p.getParticleEffect();
         String dataType = "data";
-        if (pe.hasProperty(ParticleProperty.COLORABLE)) if (pe == ParticleEffect.NOTE) dataType = "note " + dataType;
-        else dataType = "color " + dataType;
-        else if (pe.hasProperty(ParticleProperty.REQUIRES_DATA)) if (pe == ParticleEffect.ITEM_CRACK) dataType = "item " + dataType;
-        else dataType = "block " + dataType;
+        if (pe.hasProperty(ParticleProperty.COLORABLE)) // @formatter:off
+            if (pe == ParticleEffect.NOTE) dataType = "note " + dataType;
+                else dataType = "color " + dataType;
+            else if (pe.hasProperty(ParticleProperty.REQUIRES_DATA)) if (pe == ParticleEffect.ITEM_CRACK) dataType = "item " + dataType;
+        else dataType = "block " + dataType; // @formatter:on
         dataIconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SET_YOUR.getMessageReplaced(dataType)));
         if (p.getParticleSpawnData() == null && p.getParticleSpawnColor() == null) {
             dataIconMeta.setLore(Arrays.asList(MessageType.GUI_NO_DATA.getMessage()));
@@ -423,7 +424,6 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
     private static void populateEffect(PPlayer p) {
         Player player = p.getPlayer();
         Inventory inventory = player.getOpenInventory().getTopInventory();
-
         inventory.clear(); // Make sure the inventory is always empty before we start adding items
 
         List<String> effectsUserHasPermissionFor = PermissionManager.getEffectsUserHasPermissionFor(player);

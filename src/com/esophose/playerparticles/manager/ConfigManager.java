@@ -186,7 +186,7 @@ public class ConfigManager {
                     saveNewPPlayer(pplayer);
                     return pplayer;
                 }
-            } catch (ClassNotFoundException | SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
@@ -265,7 +265,7 @@ public class ConfigManager {
                                                     ");"
                                                     );
 				} // @formatter:on
-            } catch (ClassNotFoundException | SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
@@ -304,7 +304,7 @@ public class ConfigManager {
         } else {
             try {
                 PlayerParticles.mySQL.updateSQL("UPDATE pp_users SET effect = '" + particleEffect.getName() + "' WHERE player_uuid = '" + playerUUID + "';");
-            } catch (ClassNotFoundException | SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
@@ -326,7 +326,7 @@ public class ConfigManager {
         } else {
             try {
                 PlayerParticles.mySQL.updateSQL("UPDATE pp_users SET style = '" + particleStyle.getName() + "' WHERE player_uuid = '" + playerUUID + "';");
-            } catch (ClassNotFoundException | SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
@@ -349,7 +349,7 @@ public class ConfigManager {
         } else {
             try {
                 PlayerParticles.mySQL.updateSQL("UPDATE pp_data_item SET material = '" + particleItemData.getMaterial().name() + "', data = '" + particleItemData.getData() + "' WHERE uuid = '" + playerUUID + "';");
-            } catch (ClassNotFoundException | SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
@@ -372,7 +372,7 @@ public class ConfigManager {
         } else {
             try {
                 PlayerParticles.mySQL.updateSQL("UPDATE pp_data_block SET material = '" + particleBlockData.getMaterial().name() + "', data = '" + particleBlockData.getData() + "' WHERE uuid = '" + playerUUID + "';");
-            } catch (ClassNotFoundException | SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
@@ -396,7 +396,7 @@ public class ConfigManager {
         } else {
             try {
                 PlayerParticles.mySQL.updateSQL("UPDATE pp_data_color SET r = " + particleColorData.getRed() + ", g = " + particleColorData.getGreen() + ", b = " + particleColorData.getBlue() + " WHERE uuid = '" + playerUUID + "';");
-            } catch (ClassNotFoundException | SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
@@ -418,7 +418,7 @@ public class ConfigManager {
         } else {
             try {
                 PlayerParticles.mySQL.updateSQL("UPDATE pp_data_note SET note = " + (byte) (particleNoteColorData.getValueX() * 24) + " WHERE uuid = '" + playerUUID + "';");
-            } catch (ClassNotFoundException | SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
@@ -511,7 +511,7 @@ public class ConfigManager {
                                                     ");"
                                                     );
                 } // @formatter:on
-            } catch (ClassNotFoundException | SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
@@ -548,7 +548,7 @@ public class ConfigManager {
                                                     "DELETE FROM pp_data_note WHERE uuid = '" + uuid + "';"
                                                     );
                 } // @formatter:on
-            } catch (ClassNotFoundException | SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
                 return false;
             }
@@ -575,7 +575,7 @@ public class ConfigManager {
                                                 "DELETE FROM pp_data_note WHERE uuid IN (SELECT uuid FROM pp_fixed WHERE player_uuid = '" + playerUUID.toString() + "');" +
                                                 "DELETE FROM pp_fixed WHERE player_uuid = '" + playerUUID.toString() + "';"
                                                 ); // @formatter:on
-            } catch (ClassNotFoundException | SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
@@ -650,7 +650,7 @@ public class ConfigManager {
                 }
 
                 return fixedEffects;
-            } catch (ClassNotFoundException | SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
@@ -709,7 +709,7 @@ public class ConfigManager {
                     NoteColor particleNoteColorData = new NoteColor(res.getByte("n.note"));
                     return new FixedParticleEffect(pplayerUUID, id, worldName, xPos, yPos, zPos, particleEffect, particleStyle, particleItemData, particleBlockData, particleColorData, particleNoteColorData);
                 }
-            } catch (ClassNotFoundException | SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
@@ -738,7 +738,7 @@ public class ConfigManager {
                 while (res.next()) {
                     ids.add(res.getInt(1));
                 }
-            } catch (ClassNotFoundException | SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
@@ -768,7 +768,7 @@ public class ConfigManager {
                 if (res.next()) {
                     return res.getInt(1) >= maxFixedEffects;
                 } else return false;
-            } catch (ClassNotFoundException | SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
@@ -792,7 +792,7 @@ public class ConfigManager {
                 while (res.next()) {
                     idsSet.add(res.getInt(1) + "");
                 }
-            } catch (ClassNotFoundException | SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
