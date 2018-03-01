@@ -7,9 +7,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
@@ -96,7 +98,8 @@ public enum ParticleEffect {
     FALLING_DUST("fallingdust", "FALLING_DUST", ParticleProperty.REQUIRES_DATA),
     TOTEM("totem", "TOTEM"),
     SPIT("spit", "SPIT");
-
+    
+    private static final int PARTICLE_DISPLAY_RANGE_SQUARED = 36864; // (12 chunks * 16 blocks per chunk)^2
     private static final Map<String, ParticleEffect> NAME_MAP = new HashMap<String, ParticleEffect>();
     private static final Map<Integer, ParticleEffect> ID_MAP = new HashMap<Integer, ParticleEffect>();
     private final String name;
@@ -261,7 +264,9 @@ public enum ParticleEffect {
         if (hasProperty(ParticleProperty.REQUIRES_DATA)) {
             throw new ParticleDataException("This particle effect requires additional data");
         }
-        center.getWorld().spawnParticle(spigotEnum, center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed);
+        
+        for (Player player : getPlayersInRange(center))
+            player.spawnParticle(spigotEnum, center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed);
     }
 
     /**
@@ -278,8 +283,10 @@ public enum ParticleEffect {
         if (!isColorCorrect(this, color)) {
             throw new ParticleColorException("The particle color type is incorrect");
         }
-        // Minecraft clients require that you pass Float.MIN_VALUE if the Red value is 0
-        center.getWorld().spawnParticle(spigotEnum, center.getX(), center.getY(), center.getZ(), 0, this == ParticleEffect.RED_DUST && color.getValueX() == 0 ? Float.MIN_VALUE : color.getValueX(), color.getValueY(), color.getValueZ(), 1);
+        
+        for (Player player : getPlayersInRange(center))
+            // Minecraft clients require that you pass Float.MIN_VALUE if the Red value is 0
+            player.spawnParticle(spigotEnum, center.getX(), center.getY(), center.getZ(), 0, this == ParticleEffect.RED_DUST && color.getValueX() == 0 ? Float.MIN_VALUE : color.getValueX(), color.getValueY(), color.getValueZ(), 1);
     }
 
     /**
@@ -313,7 +320,28 @@ public enum ParticleEffect {
             extraData = null;
             System.out.println(spigotEnum.getDataType().getName());
         }
-        center.getWorld().spawnParticle(spigotEnum, center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed, extraData);
+        
+        for (Player player : getPlayersInRange(center))
+            player.spawnParticle(spigotEnum, center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed, extraData);
+    }
+    
+    /**
+     * Gets a List<Player> of players within the particle display range
+     * 
+     * @param center The center of the radius to check around
+     * @return A List<Player> of the players within the particle display range
+     */
+    private List<Player> getPlayersInRange(Location center) {
+        List<Player> players = new ArrayList<Player>();
+        
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (!p.getWorld().equals(center.getWorld())) continue;
+            if (center.distanceSquared(p.getLocation()) <= PARTICLE_DISPLAY_RANGE_SQUARED) {
+                players.add(p);
+            }
+        }
+        
+        return players;
     }
 
     /**
