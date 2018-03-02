@@ -17,9 +17,9 @@
  * + Add new style 'blockplace'
  * + Add new style 'hurt'
  * + Add new style 'swords'
- * + Switch over to Spigot Particle API
- * + Switch database management system, make async
+ * + Make database queries async
  * + Command to force set an effect/style for a player
+ * + Tab completion for fixed effects
  */
 
 /*
@@ -34,8 +34,10 @@
  * Plugin is now built against Java 1.8.0_161 and Spigot 1.9.4
  * Servers running Java 7 are no longer supported. Please upgrade to Java 8 if you haven't yet.
  * Rewrote database connection system, should fix any memory leaks from before
- * Reduced particle render distance from 512 to 150, you won't notice a difference
- * Performance improvements with database loading
+ * Reduced particle render distance from 512 to 192 (12 chunks), you won't notice a difference
+ * Database management should no longer contain memory leaks
+ * Fixed missing command 'fixed' from '/pp help' list
+ * Fixed missing command 'fixed' from tab completion
  */
 
 package com.esophose.playerparticles;
@@ -43,6 +45,7 @@ package com.esophose.playerparticles;
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -130,7 +133,7 @@ public class PlayerParticles extends JavaPlugin {
         if (useMySQL) {
             mySQL.closeConnection();
         }
-        
+
         PlayerParticlesGui.forceCloseAllOpenGUIs();
     }
 
@@ -163,40 +166,44 @@ public class PlayerParticles extends JavaPlugin {
         if (getConfig().getBoolean("database-enable")) {
             mySQL = new DatabaseManager(getConfig());
 
-            useMySQL = true; // If something goes wrong this will be set to false
+            useMySQL = mySQL.isInitialized(); // If something goes wrong, this will be set to false
+            if (!useMySQL) return; // Break out, couldn't set up the database connection
 
-            // @formatter:off
-            try (ResultSet res = mySQL.querySQL("SHOW TABLES LIKE 'pp_users'")) {
-                if (res.next()) { // Add the new fixed table and rename some columns
-                    try (ResultSet res2 = mySQL.querySQL("SHOW TABLES LIKE 'pp_fixed'")) {
-                        if (!res2.next()) { // Using an old database, update to the new one
-                            mySQL.updateSQL("CREATE TABLE pp_fixed (uuid VARCHAR(36), player_uuid VARCHAR(36), id SMALLINT, effect VARCHAR(32), style VARCHAR(32), worldName VARCHAR(50), xPos DOUBLE, yPos DOUBLE, zPos DOUBLE);" +
-                                            "ALTER TABLE pp_data_item CHANGE player_uuid uuid VARCHAR(36);" +
-                                            "ALTER TABLE pp_data_block CHANGE player_uuid uuid VARCHAR(36);" +
-                                            "ALTER TABLE pp_data_color CHANGE player_uuid uuid VARCHAR(36);" +
-                                            "ALTER TABLE pp_data_note CHANGE player_uuid uuid VARCHAR(36);");
+            // Queries are purposely not run in an asynchronous task, this is on plugin startup and shouldn't affect the end users
+            mySQL.connect((connection) -> { // @formatter:off
+                try (Statement statement = connection.createStatement();
+                     ResultSet res = statement.executeQuery("SHOW TABLES LIKE 'pp_users'")) {
+                    
+                    if (res.next()) { // Database is already created
+                        try (Statement statement2 = connection.createStatement();
+                             ResultSet res2 = statement2.executeQuery("SHOW TABLES LIKE 'pp_fixed'")) {
+                            
+                            if (!res2.next()) { // Is the current database of an old version?
+                                mySQL.updateSQL("CREATE TABLE pp_fixed (uuid VARCHAR(36), player_uuid VARCHAR(36), id SMALLINT, effect VARCHAR(32), style VARCHAR(32), worldName VARCHAR(50), xPos DOUBLE, yPos DOUBLE, zPos DOUBLE);" +
+                                                "ALTER TABLE pp_data_item CHANGE player_uuid uuid VARCHAR(36);" +
+                                                "ALTER TABLE pp_data_block CHANGE player_uuid uuid VARCHAR(36);" +
+                                                "ALTER TABLE pp_data_color CHANGE player_uuid uuid VARCHAR(36);" +
+                                                "ALTER TABLE pp_data_note CHANGE player_uuid uuid VARCHAR(36);");
+                            }
                         }
-                    } catch (Exception e) {
-                        throw e; // Try-catch block here is just for auto closure
+                    } else { // Database isn't created yet
+                        mySQL.updateSQL("CREATE TABLE pp_users (player_uuid VARCHAR(36), effect VARCHAR(32), style VARCHAR(32));" + 
+                                        "CREATE TABLE pp_fixed (uuid VARCHAR(36), player_uuid VARCHAR(36), id SMALLINT, effect VARCHAR(32), style VARCHAR(32), worldName VARCHAR(50), xPos DOUBLE, yPos DOUBLE, zPos DOUBLE);" +
+                                        "CREATE TABLE pp_data_item (uuid VARCHAR(36), material VARCHAR(32), data SMALLINT);" + 
+                                        "CREATE TABLE pp_data_block (uuid VARCHAR(36), material VARCHAR(32), data SMALLINT);" +
+                                        "CREATE TABLE pp_data_color (uuid VARCHAR(36), r SMALLINT, g SMALLINT, b SMALLINT);" + 
+                                        "CREATE TABLE pp_data_note (uuid VARCHAR(36), note SMALLINT);");
                     }
-                } else { // No database is set up yet, create it
-                    mySQL.updateSQL("CREATE TABLE pp_users (player_uuid VARCHAR(36), effect VARCHAR(32), style VARCHAR(32));" + 
-                                    "CREATE TABLE pp_fixed (uuid VARCHAR(36), player_uuid VARCHAR(36), id SMALLINT, effect VARCHAR(32), style VARCHAR(32), worldName VARCHAR(50), xPos DOUBLE, yPos DOUBLE, zPos DOUBLE);" +
-                                    "CREATE TABLE pp_data_item (uuid VARCHAR(36), material VARCHAR(32), data SMALLINT);" + 
-                                    "CREATE TABLE pp_data_block (uuid VARCHAR(36), material VARCHAR(32), data SMALLINT);" +
-                                    "CREATE TABLE pp_data_color (uuid VARCHAR(36), r SMALLINT, g SMALLINT, b SMALLINT);" + 
-                                    "CREATE TABLE pp_data_note (uuid VARCHAR(36), note SMALLINT);"
-                                    );
+                    
+                } catch (SQLException e) {
+                    getLogger().info("Failed to connect to the MySQL Database! Check to see if your login information is correct!");
+                    getLogger().info("Additional information: " + e.getMessage());
+                    useMySQL = false;
                 }
-            } catch (SQLException e) {
-                getLogger().info("Failed to connect to the MySQL Database! Check to see if your login information is correct!");
-                getLogger().info("Additional information: " + e.getMessage());
-                useMySQL = false;
-                return;
-            } // @formatter:on
+            });
         } else {
             useMySQL = false;
-        }
+        } // @formatter:on
     }
 
     /**

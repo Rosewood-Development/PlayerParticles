@@ -251,11 +251,16 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         List<UUID> toRemoveList = new ArrayList<UUID>();
 
         for (Map.Entry<UUID, GuiInventory> entry : playerGuiInventories.entrySet()) {
-            PPlayer pplayer = ConfigManager.getInstance().getPPlayer(entry.getKey(), false);
-            Player player = Bukkit.getPlayer(pplayer.getUniqueId());
+            UUID playerUUID = entry.getKey();
+            PPlayer pplayer = ConfigManager.getInstance().getPPlayer(playerUUID);
+            if (pplayer == null) {
+                toRemoveList.add(playerUUID);
+                continue;
+            }
 
+            Player player = Bukkit.getPlayer(playerUUID);
             if (player == null) {
-                toRemoveList.add(pplayer.getUniqueId());
+                toRemoveList.add(playerUUID);
                 continue;
             }
 
@@ -570,9 +575,15 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
 
         if (guiInventory == null || !guiInventory.getInventory().equals(e.getView().getTopInventory())) return; // Make sure it is the right inventory
 
-        PPlayer pplayer = ConfigManager.getInstance().getPPlayer(player.getUniqueId(), false);
+        e.setCancelled(true); // In the PlayerParticles GUI, can't let them take anything out
+        
+        if (!guiInventory.getInventory().equals(e.getClickedInventory())) return; // Clicked bottom inventory
 
-        e.setCancelled(true);
+        PPlayer pplayer = ConfigManager.getInstance().getPPlayer(player.getUniqueId());
+        if (pplayer == null) {
+            player.closeInventory();
+            return;
+        }
 
         ItemStack clicked = e.getCurrentItem();
         if (clicked == null || clicked.getType() == Material.AIR) return; // Clicked on an empty slot, do nothing

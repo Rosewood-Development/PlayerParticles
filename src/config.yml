@@ -190,8 +190,8 @@ message-use: '&eYou can use:&b'
 message-usage: '&eUsage:'
 
 # Available Commands
-# Default: '&eAvailable commands: &beffect, effects, style, styles, data, reset, gui, worlds, version, help'
-message-available-commands: '&eAvailable commands: &beffect, effects, style, styles, data, reset, gui, worlds, version, help'
+# Default: '&eAvailable commands: &beffect, effects, style, styles, data, fixed, reset, gui, worlds, version, help'
+message-available-commands: '&eAvailable commands: &beffect, effects, style, styles, data, fixed, reset, gui, worlds, version, help'
 
 # Disabled Worlds
 # Default: '&eParticles are disabled in these worlds:&b'

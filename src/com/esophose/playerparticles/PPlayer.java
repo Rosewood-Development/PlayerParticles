@@ -266,7 +266,7 @@ public class PPlayer {
                 }
             }
         }
-        return "None";
+        return "none";
     }
 
     /**

@@ -86,7 +86,9 @@ public class FixedParticleEffect {
         this.particleColorData = colorData;
         this.particleNoteColorData = noteColorData;
 
-        PPlayer owner = ConfigManager.getInstance().getPPlayer(this.pplayerUUID, true);
+        // The PPlayer must be loaded
+        ConfigManager.getInstance().loadPPlayer(pplayerUUID);
+        PPlayer owner = ConfigManager.getInstance().getPPlayer(this.pplayerUUID);
 
         // Check nulls, if any are null set them to the PPlayer's values
         if (this.particleItemData == null) this.particleItemData = owner.getItemData();

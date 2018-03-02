@@ -57,7 +57,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      */
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
-        ConfigManager.getInstance().getPPlayer(e.getPlayer().getUniqueId(), false);
+        ConfigManager.getInstance().loadPPlayer(e.getPlayer().getUniqueId());
     }
 
     /**
@@ -67,14 +67,18 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      */
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
-        particlePlayers.remove(ConfigManager.getInstance().getPPlayer(e.getPlayer().getUniqueId(), false));
+        PPlayer pplayer = ConfigManager.getInstance().getPPlayer(e.getPlayer().getUniqueId());
+        if (pplayer != null)
+            particlePlayers.remove(pplayer);
     }
 
     /**
      * Adds all fixed effects from the config
      */
     public static void addAllFixedEffects() {
-        fixedParticleEffects.addAll(ConfigManager.getInstance().getAllFixedEffects());
+        ConfigManager.getInstance().getAllFixedEffects((fixedEffects) -> {
+            fixedParticleEffects.addAll(fixedEffects);
+        });
     }
 
     /**
@@ -83,9 +87,9 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      * @param pplayerUUID The pplayer to remove the fixed effects from
      */
     public static void removeAllFixedEffectsForPlayer(UUID pplayerUUID) {
-        for (int i = fixedParticleEffects.size() - 1; i >= 0; i--) {
-            if (fixedParticleEffects.get(i).getOwnerUniqueId().equals(pplayerUUID)) fixedParticleEffects.remove(i);
-        }
+        for (int i = fixedParticleEffects.size() - 1; i >= 0; i--) 
+            if (fixedParticleEffects.get(i).getOwnerUniqueId().equals(pplayerUUID)) 
+                fixedParticleEffects.remove(i);
     }
 
     /**
@@ -104,9 +108,9 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      * @param id The id of the fixed effect to remove
      */
     public static void removeFixedEffectForPlayer(UUID pplayerUUID, int id) {
-        for (int i = fixedParticleEffects.size() - 1; i >= 0; i--) {
-            if (fixedParticleEffects.get(i).getOwnerUniqueId().equals(pplayerUUID) && fixedParticleEffects.get(i).getId() == id) fixedParticleEffects.remove(i);
-        }
+        for (int i = fixedParticleEffects.size() - 1; i >= 0; i--) 
+            if (fixedParticleEffects.get(i).getOwnerUniqueId().equals(pplayerUUID) && fixedParticleEffects.get(i).getId() == id) 
+                fixedParticleEffects.remove(i);
     }
 
     /**
@@ -115,9 +119,8 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      */
     public static void refreshPPlayers() {
         particlePlayers.clear();
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            ConfigManager.getInstance().getPPlayer(player.getUniqueId(), false);
-        }
+        for (Player player : Bukkit.getOnlinePlayers()) 
+            ConfigManager.getInstance().loadPPlayer(player.getUniqueId());
     }
 
     /**

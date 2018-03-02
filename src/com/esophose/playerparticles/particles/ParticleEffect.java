@@ -334,12 +334,9 @@ public enum ParticleEffect {
     private List<Player> getPlayersInRange(Location center) {
         List<Player> players = new ArrayList<Player>();
         
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            if (!p.getWorld().equals(center.getWorld())) continue;
-            if (center.distanceSquared(p.getLocation()) <= PARTICLE_DISPLAY_RANGE_SQUARED) {
+        for (Player p : Bukkit.getOnlinePlayers()) 
+            if (p.getWorld().equals(center.getWorld()) && center.distanceSquared(p.getLocation()) <= PARTICLE_DISPLAY_RANGE_SQUARED) 
                 players.add(p);
-            }
-        }
         
         return players;
     }

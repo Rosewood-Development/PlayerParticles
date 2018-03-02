@@ -22,8 +22,8 @@ import com.esophose.playerparticles.manager.PermissionManager;
 
 public class ParticleCommandCompleter implements TabCompleter {
 
-    private final String[] COMMANDS = { "help", "gui", "effect", "effects", "style", "styles", "worlds", "version", "fixed", "reset" };
-    private final String[] FIXED_COMMANDS = { "create", "remove", "list", "info" };
+    private static final String[] COMMANDS = { "help", "gui", "effect", "effects", "style", "styles", "data", "fixed", "reset", "worlds", "version" };
+    private static final String[] FIXED_COMMANDS = { "create", "remove", "list", "info" };
 
     /**
      * Activated when a user pushes tab in chat prefixed with /pp
@@ -56,6 +56,10 @@ public class ParticleCommandCompleter implements TabCompleter {
             }
         }
         return completions;
+    }
+    
+    public static String[] getCommandsList() {
+        return COMMANDS;
     }
 
 }
