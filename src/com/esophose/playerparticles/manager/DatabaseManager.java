@@ -53,13 +53,9 @@ public class DatabaseManager {
     }
     
     /**
-     * Executes a callback with a Connection passed
-     * Automatically closes connection
-     * You need to close any resulting Statements or ResultSets on your own
+     * Executes a callback with a Connection passed and automatically closes it
      * 
      * @param callback The callback to execute once the connection is retrieved
-     * @return 
-     * @throws SQLException
      */
     public void connect(ConnectionCallback callback) {
         try (Connection connection = hikari.getConnection()) {
@@ -73,8 +69,8 @@ public class DatabaseManager {
      * Executes an update statement and cleans up all resources
      * 
      * @param query The update statement to run
-     * @return
-     * @throws SQLException
+     * @return An int with the status of the first statement in the query
+     * @throws SQLException If an SQL problem occurs executing the statement
      */
     public int updateSQL(String query) throws SQLException {
         Connection connection = null;

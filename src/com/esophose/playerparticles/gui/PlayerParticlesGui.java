@@ -332,10 +332,8 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         if (playerGuiInventories.containsKey(p.getUniqueId())) {
             GuiInventory guiInventory = playerGuiInventories.get(p.getUniqueId());
             guiInventory.setGuiState(state);
-            if (player.getOpenInventory().getTopInventory() != guiInventory.getInventory()) {
-                Inventory ppInventory = Bukkit.createInventory(null, INVENTORY_SIZE, "PlayerParticles");
-                player.openInventory(ppInventory);
-                guiInventory.setInventory(ppInventory);
+            if (!player.getOpenInventory().getTopInventory().equals(guiInventory.getInventory())) {
+                player.openInventory(guiInventory.getInventory());
             }
         } else {
             Inventory ppInventory = Bukkit.createInventory(null, INVENTORY_SIZE, "PlayerParticles");

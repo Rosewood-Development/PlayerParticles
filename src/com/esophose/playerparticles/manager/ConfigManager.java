@@ -24,6 +24,7 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.esophose.playerparticles.PPlayer;
 import com.esophose.playerparticles.PlayerParticles;
@@ -46,7 +47,7 @@ public class ConfigManager {
     /**
      * The file the data is located in for the instance
      */
-    private File file;
+    private File playerDataYamlFile;
     /**
      * The configuration used to edit the .yaml file
      */
@@ -81,17 +82,17 @@ public class ConfigManager {
         if (!PlayerParticles.useMySQL) { // Don't bother creating the playerData.yml file if we aren't going to use it
             if (!PlayerParticles.getPlugin().getDataFolder().exists()) PlayerParticles.getPlugin().getDataFolder().mkdir();
 
-            file = new File(PlayerParticles.getPlugin().getDataFolder(), fileName + ".yml");
+            playerDataYamlFile = new File(PlayerParticles.getPlugin().getDataFolder(), fileName + ".yml");
 
-            if (!file.exists()) {
+            if (!playerDataYamlFile.exists()) {
                 try {
-                    file.createNewFile();
+                    playerDataYamlFile.createNewFile();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
 
-            playerDataYaml = YamlConfiguration.loadConfiguration(file);
+            playerDataYaml = YamlConfiguration.loadConfiguration(playerDataYamlFile);
         }
     }
 
@@ -100,7 +101,7 @@ public class ConfigManager {
      */
     private void save() {
         try {
-            playerDataYaml.save(file);
+            playerDataYaml.save(playerDataYamlFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -180,37 +181,38 @@ public class ConfigManager {
                 callback.execute(pplayer);
             }
         } else {
-            String id = playerUUID.toString(); // @formatter:off
-            PlayerParticles.mySQL.connect((connection) -> {
-                String query = "SELECT * FROM pp_users u " + 
-                               "JOIN pp_data_item i ON u.player_uuid = i.uuid " + 
-                               "JOIN pp_data_block b ON u.player_uuid = b.uuid " +
-                               "JOIN pp_data_color c ON u.player_uuid = c.uuid " +
-                               "JOIN pp_data_note n ON u.player_uuid = n.uuid " +
-                               "WHERE u.player_uuid = '" + id + "'";
-                
-                try (Statement statement = connection.createStatement();
-                     ResultSet res = statement.executeQuery(query)) {
+            async(() -> {
+                String id = playerUUID.toString(); // @formatter:off
+                PlayerParticles.mySQL.connect((connection) -> {
+                    String query = "SELECT * FROM pp_users u " + 
+                                   "JOIN pp_data_item i ON u.player_uuid = i.uuid " + 
+                                   "JOIN pp_data_block b ON u.player_uuid = b.uuid " +
+                                   "JOIN pp_data_color c ON u.player_uuid = c.uuid " +
+                                   "JOIN pp_data_note n ON u.player_uuid = n.uuid " +
+                                   "WHERE u.player_uuid = '" + id + "'";
                     
-                    if (res.next()) {
-                        ParticleEffect particleEffect = ParticleEffect.fromName(res.getString("u.effect"));
-                        ParticleStyle particleStyle = ParticleStyleManager.styleFromString(res.getString("u.style"));
-                        ItemData particleItemData = new ItemData(Material.matchMaterial(res.getString("i.material")), res.getByte("i.data"));
-                        BlockData particleBlockData = new BlockData(Material.matchMaterial(res.getString("b.material")), res.getByte("b.data"));
-                        OrdinaryColor particleColorData = new OrdinaryColor(res.getInt("c.r"), res.getInt("c.g"), res.getInt("c.b"));
-                        NoteColor particleNoteColorData = new NoteColor(res.getByte("n.note"));
+                    try (Statement statement = connection.createStatement();
+                         ResultSet res = statement.executeQuery(query)) {
+                        
+                        if (res.next()) {
+                            ParticleEffect particleEffect = ParticleEffect.fromName(res.getString("u.effect"));
+                            ParticleStyle particleStyle = ParticleStyleManager.styleFromString(res.getString("u.style"));
+                            ItemData particleItemData = new ItemData(Material.matchMaterial(res.getString("i.material")), res.getByte("i.data"));
+                            BlockData particleBlockData = new BlockData(Material.matchMaterial(res.getString("b.material")), res.getByte("b.data"));
+                            OrdinaryColor particleColorData = new OrdinaryColor(res.getInt("c.r"), res.getInt("c.g"), res.getInt("c.b"));
+                            NoteColor particleNoteColorData = new NoteColor(res.getByte("n.note"));
 
-                        callback.execute(new PPlayer(playerUUID, particleEffect, particleStyle, particleItemData, particleBlockData, particleColorData, particleNoteColorData));
-                        return;
+                            sync(() -> callback.execute(new PPlayer(playerUUID, particleEffect, particleStyle, particleItemData, particleBlockData, particleColorData, particleNoteColorData)));
+                            return;
+                        }
+                        
+                        if (createIfNotFound) { // Didn't find an existing PPlayer, create and return a new one
+                            PPlayer pplayer = PPlayer.getNewPPlayer(playerUUID);
+                            saveNewPPlayer(pplayer);
+                            sync(() -> callback.execute(pplayer));
+                        }
                     }
-                    
-                    if (createIfNotFound) {
-                        // Didn't find an existing PPlayer, create and return a new one
-                        PPlayer pplayer = PPlayer.getNewPPlayer(playerUUID);
-                        saveNewPPlayer(pplayer);
-                        callback.execute(pplayer);
-                    }
-                }
+                });
             });
         }
     }
@@ -254,41 +256,43 @@ public class ConfigManager {
 
             save();
         } else {
-            PlayerParticles.mySQL.connect((connection) -> {
-                try (Statement statement = connection.createStatement();
-                     ResultSet res = statement.executeQuery("SELECT * FROM pp_users WHERE player_uuid = '" + pplayer.getUniqueId() + "'")) {
-                    
-                    if (!res.next()) {
-                        PlayerParticles.mySQL.updateSQL("INSERT INTO pp_users (player_uuid, effect, style) VALUES (" +
-                                                        "'" + pplayer.getUniqueId().toString() + "', " +
-                                                        "'" + pplayer.getParticleEffect().getName() + "', " +
-                                                        "'" + pplayer.getParticleStyle().getName() + "'" +
-                                                        "); " +
-                                                        "INSERT INTO pp_data_item (uuid, material, data) VALUES (" +
-                                                        "'" + pplayer.getUniqueId().toString() + "', " +
-                                                        "'" + pplayer.getItemData().getMaterial().name() + "', " +
-                                                        pplayer.getItemData().getData() + 
-                                                        "); " +
-                                                        "INSERT INTO pp_data_block (uuid, material, data) VALUES (" +
-                                                        "'" + pplayer.getUniqueId().toString() + "', " +
-                                                        "'" + pplayer.getBlockData().getMaterial().name() + "', " +
-                                                        pplayer.getBlockData().getData() + 
-                                                        "); " +
-                                                        "INSERT INTO pp_data_color (uuid, r, g, b) VALUES (" +
-                                                        "'" + pplayer.getUniqueId().toString() + "', " +
-                                                        pplayer.getColorData().getRed() + ", " +
-                                                        pplayer.getColorData().getGreen() + ", " +
-                                                        pplayer.getColorData().getBlue() + 
-                                                        "); " +
-                                                        "INSERT INTO pp_data_note (uuid, note) VALUES (" +
-                                                        "'" + pplayer.getUniqueId().toString() + "', " +
-                                                        (byte) (pplayer.getNoteColorData().getValueX() * 24) +
-                                                        ");"
-                                                        );
-                    } else {
-                        throw new RuntimeException("The user " + pplayer.getUniqueId() + " is already in the database. They can not be added.");
+            async(() -> {
+                PlayerParticles.mySQL.connect((connection) -> {
+                    try (Statement statement = connection.createStatement();
+                         ResultSet res = statement.executeQuery("SELECT * FROM pp_users WHERE player_uuid = '" + pplayer.getUniqueId() + "'")) {
+                        
+                        if (!res.next()) {
+                            PlayerParticles.mySQL.updateSQL("INSERT INTO pp_users (player_uuid, effect, style) VALUES (" +
+                                                            "'" + pplayer.getUniqueId().toString() + "', " +
+                                                            "'" + pplayer.getParticleEffect().getName() + "', " +
+                                                            "'" + pplayer.getParticleStyle().getName() + "'" +
+                                                            "); " +
+                                                            "INSERT INTO pp_data_item (uuid, material, data) VALUES (" +
+                                                            "'" + pplayer.getUniqueId().toString() + "', " +
+                                                            "'" + pplayer.getItemData().getMaterial().name() + "', " +
+                                                            pplayer.getItemData().getData() + 
+                                                            "); " +
+                                                            "INSERT INTO pp_data_block (uuid, material, data) VALUES (" +
+                                                            "'" + pplayer.getUniqueId().toString() + "', " +
+                                                            "'" + pplayer.getBlockData().getMaterial().name() + "', " +
+                                                            pplayer.getBlockData().getData() + 
+                                                            "); " +
+                                                            "INSERT INTO pp_data_color (uuid, r, g, b) VALUES (" +
+                                                            "'" + pplayer.getUniqueId().toString() + "', " +
+                                                            pplayer.getColorData().getRed() + ", " +
+                                                            pplayer.getColorData().getGreen() + ", " +
+                                                            pplayer.getColorData().getBlue() + 
+                                                            "); " +
+                                                            "INSERT INTO pp_data_note (uuid, note) VALUES (" +
+                                                            "'" + pplayer.getUniqueId().toString() + "', " +
+                                                            (byte) (pplayer.getNoteColorData().getValueX() * 24) +
+                                                            ");"
+                                                            );
+                        } else {
+                            throw new RuntimeException("The user " + pplayer.getUniqueId() + " is already in the database. They can not be added.");
+                        }
                     }
-                }
+                });
             });
         }
 
@@ -338,11 +342,13 @@ public class ConfigManager {
             section.set("name", particleEffect.getName());
             save();
         } else {
-            try {
-                PlayerParticles.mySQL.updateSQL("UPDATE pp_users SET effect = '" + particleEffect.getName() + "' WHERE player_uuid = '" + playerUUID + "';");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            async(() -> {
+                try {
+                    PlayerParticles.mySQL.updateSQL("UPDATE pp_users SET effect = '" + particleEffect.getName() + "' WHERE player_uuid = '" + playerUUID + "';");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            });
         }
         
         getPPlayer(playerUUID, (pplayer) -> {
@@ -362,11 +368,13 @@ public class ConfigManager {
             section.set("name", particleStyle.getName());
             save();
         } else {
-            try {
-                PlayerParticles.mySQL.updateSQL("UPDATE pp_users SET style = '" + particleStyle.getName() + "' WHERE player_uuid = '" + playerUUID + "';");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            async(() -> {
+                try {
+                    PlayerParticles.mySQL.updateSQL("UPDATE pp_users SET style = '" + particleStyle.getName() + "' WHERE player_uuid = '" + playerUUID + "';");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            });
         }
         
         getPPlayer(playerUUID, (pplayer) -> {
@@ -387,11 +395,13 @@ public class ConfigManager {
             section.set("data", particleItemData.getData());
             save();
         } else {
-            try {
-                PlayerParticles.mySQL.updateSQL("UPDATE pp_data_item SET material = '" + particleItemData.getMaterial().name() + "', data = '" + particleItemData.getData() + "' WHERE uuid = '" + playerUUID + "';");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            async(() -> {
+                try {
+                    PlayerParticles.mySQL.updateSQL("UPDATE pp_data_item SET material = '" + particleItemData.getMaterial().name() + "', data = '" + particleItemData.getData() + "' WHERE uuid = '" + playerUUID + "';");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            });
         }
         
         getPPlayer(playerUUID, (pplayer) -> {
@@ -412,11 +422,13 @@ public class ConfigManager {
             section.set("data", particleBlockData.getData());
             save();
         } else {
-            try {
-                PlayerParticles.mySQL.updateSQL("UPDATE pp_data_block SET material = '" + particleBlockData.getMaterial().name() + "', data = '" + particleBlockData.getData() + "' WHERE uuid = '" + playerUUID + "';");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            async(() -> {
+                try {
+                    PlayerParticles.mySQL.updateSQL("UPDATE pp_data_block SET material = '" + particleBlockData.getMaterial().name() + "', data = '" + particleBlockData.getData() + "' WHERE uuid = '" + playerUUID + "';");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            });
         }
         
         getPPlayer(playerUUID, (pplayer) -> {
@@ -438,11 +450,13 @@ public class ConfigManager {
             section.set("b", particleColorData.getBlue());
             save();
         } else {
-            try {
-                PlayerParticles.mySQL.updateSQL("UPDATE pp_data_color SET r = " + particleColorData.getRed() + ", g = " + particleColorData.getGreen() + ", b = " + particleColorData.getBlue() + " WHERE uuid = '" + playerUUID + "';");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            async(() -> {
+                try {
+                    PlayerParticles.mySQL.updateSQL("UPDATE pp_data_color SET r = " + particleColorData.getRed() + ", g = " + particleColorData.getGreen() + ", b = " + particleColorData.getBlue() + " WHERE uuid = '" + playerUUID + "';");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            });
         }
         
         getPPlayer(playerUUID, (pplayer) -> {
@@ -462,11 +476,13 @@ public class ConfigManager {
             section.set("note", (byte) (particleNoteColorData.getValueX() * 24));
             save();
         } else {
-            try {
-                PlayerParticles.mySQL.updateSQL("UPDATE pp_data_note SET note = " + (byte) (particleNoteColorData.getValueX() * 24) + " WHERE uuid = '" + playerUUID + "';");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            async(() -> {
+                try {
+                    PlayerParticles.mySQL.updateSQL("UPDATE pp_data_note SET note = " + (byte) (particleNoteColorData.getValueX() * 24) + " WHERE uuid = '" + playerUUID + "';");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            });
         }
         
         getPPlayer(playerUUID, (pplayer) -> {
@@ -522,52 +538,54 @@ public class ConfigManager {
             save();
             ParticleManager.addFixedEffect(fixedEffect);
         } else {
-            PlayerParticles.mySQL.connect((connection) -> {
-                try (Statement statement = connection.createStatement();
-                     ResultSet res = statement.executeQuery("SELECT * FROM pp_fixed WHERE player_uuid = '" + fixedEffect.getOwnerUniqueId() + "' AND id = " + fixedEffect.getId())) {
-                    
-                    if (res.next()) {
-                        System.out.println("Tried to create a fixed effect with ID " + fixedEffect.getId() + " that already in the database!");
-                        return;
-                    }
-                    
-                    String fixedEffectUUID = UUID.randomUUID().toString();
+            async(() -> {
+                PlayerParticles.mySQL.connect((connection) -> {
+                    try (Statement statement = connection.createStatement();
+                         ResultSet res = statement.executeQuery("SELECT * FROM pp_fixed WHERE player_uuid = '" + fixedEffect.getOwnerUniqueId() + "' AND id = " + fixedEffect.getId())) {
+                        
+                        if (res.next()) {
+                            System.out.println("Tried to create a fixed effect with ID " + fixedEffect.getId() + " that already in the database!");
+                            return;
+                        }
+                        
+                        String fixedEffectUUID = UUID.randomUUID().toString();
 
-                    PlayerParticles.mySQL.updateSQL("INSERT INTO pp_fixed (uuid, player_uuid, id, effect, style, worldName, xPos, yPos, zPos) VALUES (" +
-                                                    "'" + fixedEffectUUID + "', " +
-                                                    "'" + fixedEffect.getOwnerUniqueId().toString() + "', " +
-                                                    fixedEffect.getId() + ", " +
-                                                    "'" + fixedEffect.getParticleEffect().getName() + "', " +
-                                                    "'" + fixedEffect.getParticleStyle().getName() + "', " +
-                                                    "'" + fixedEffect.getLocation().getWorld().getName() + "', " +
-                                                    fixedEffect.getLocation().getX() + ", " +
-                                                    fixedEffect.getLocation().getY() + ", " +
-                                                    fixedEffect.getLocation().getZ() +
-                                                    "); " +
-                                                    "INSERT INTO pp_data_item (uuid, material, data) VALUES (" +
-                                                    "'" + fixedEffectUUID + "', " +
-                                                    "'" + fixedEffect.getItemData().getMaterial().name() + "', " +
-                                                    fixedEffect.getItemData().getData() + 
-                                                    "); " +
-                                                    "INSERT INTO pp_data_block (uuid, material, data) VALUES (" +
-                                                    "'" + fixedEffectUUID + "', " +
-                                                    "'" + fixedEffect.getBlockData().getMaterial().name() + "', " +
-                                                    fixedEffect.getBlockData().getData() + 
-                                                    "); " +
-                                                    "INSERT INTO pp_data_color (uuid, r, g, b) VALUES (" +
-                                                    "'" + fixedEffectUUID + "', " +
-                                                    fixedEffect.getColorData().getRed() + ", " +
-                                                    fixedEffect.getColorData().getGreen() + ", " +
-                                                    fixedEffect.getColorData().getBlue() + 
-                                                    "); " +
-                                                    "INSERT INTO pp_data_note (uuid, note) VALUES (" +
-                                                    "'" + fixedEffectUUID + "', " +
-                                                    (byte) (fixedEffect.getNoteColorData().getValueX() * 24) +
-                                                    ");"
-                                                    );
-                    
-                    ParticleManager.addFixedEffect(fixedEffect);
-                }
+                        PlayerParticles.mySQL.updateSQL("INSERT INTO pp_fixed (uuid, player_uuid, id, effect, style, worldName, xPos, yPos, zPos) VALUES (" +
+                                                        "'" + fixedEffectUUID + "', " +
+                                                        "'" + fixedEffect.getOwnerUniqueId().toString() + "', " +
+                                                        fixedEffect.getId() + ", " +
+                                                        "'" + fixedEffect.getParticleEffect().getName() + "', " +
+                                                        "'" + fixedEffect.getParticleStyle().getName() + "', " +
+                                                        "'" + fixedEffect.getLocation().getWorld().getName() + "', " +
+                                                        fixedEffect.getLocation().getX() + ", " +
+                                                        fixedEffect.getLocation().getY() + ", " +
+                                                        fixedEffect.getLocation().getZ() +
+                                                        "); " +
+                                                        "INSERT INTO pp_data_item (uuid, material, data) VALUES (" +
+                                                        "'" + fixedEffectUUID + "', " +
+                                                        "'" + fixedEffect.getItemData().getMaterial().name() + "', " +
+                                                        fixedEffect.getItemData().getData() + 
+                                                        "); " +
+                                                        "INSERT INTO pp_data_block (uuid, material, data) VALUES (" +
+                                                        "'" + fixedEffectUUID + "', " +
+                                                        "'" + fixedEffect.getBlockData().getMaterial().name() + "', " +
+                                                        fixedEffect.getBlockData().getData() + 
+                                                        "); " +
+                                                        "INSERT INTO pp_data_color (uuid, r, g, b) VALUES (" +
+                                                        "'" + fixedEffectUUID + "', " +
+                                                        fixedEffect.getColorData().getRed() + ", " +
+                                                        fixedEffect.getColorData().getGreen() + ", " +
+                                                        fixedEffect.getColorData().getBlue() + 
+                                                        "); " +
+                                                        "INSERT INTO pp_data_note (uuid, note) VALUES (" +
+                                                        "'" + fixedEffectUUID + "', " +
+                                                        (byte) (fixedEffect.getNoteColorData().getValueX() * 24) +
+                                                        ");"
+                                                        );
+                        
+                        sync(() -> ParticleManager.addFixedEffect(fixedEffect));
+                    }
+                });
             });
         }
     }
@@ -577,7 +595,7 @@ public class ConfigManager {
      * 
      * @param playerUUID The player who owns the effect
      * @param id The id of the effect to remove
-     * @return If the effect was removed
+     * @param callback The callback to execute with if the fixed effect was removed or not
      */
     public void removeFixedEffect(UUID playerUUID, int id, ConfigurationCallback<Boolean> callback) {
         if (!PlayerParticles.useMySQL) {
@@ -592,25 +610,30 @@ public class ConfigManager {
             ParticleManager.removeFixedEffectForPlayer(playerUUID, id);
             callback.execute(true);
         } else {
-            PlayerParticles.mySQL.connect((connection) -> {
-                try (Statement statement = connection.createStatement();
-                     ResultSet res = statement.executeQuery("SELECT uuid FROM pp_fixed WHERE player_uuid = '" + playerUUID.toString() + "' AND id = " + id)) {
-                    
-                    if (!res.next()) {
-                        callback.execute(false);
-                        return;
+            async(() -> {
+                PlayerParticles.mySQL.connect((connection) -> {
+                    try (Statement statement = connection.createStatement();
+                         ResultSet res = statement.executeQuery("SELECT uuid FROM pp_fixed WHERE player_uuid = '" + playerUUID.toString() + "' AND id = " + id)) {
+                        
+                        if (!res.next()) {
+                            callback.execute(false);
+                            return;
+                        }
+                        
+                        String uuid = res.getString("uuid");
+                        PlayerParticles.mySQL.updateSQL("DELETE FROM pp_fixed WHERE uuid = '" + uuid + "';" + 
+                                                        "DELETE FROM pp_data_item WHERE uuid = '" + uuid + "';" +
+                                                        "DELETE FROM pp_data_block WHERE uuid = '" + uuid + "';" +
+                                                        "DELETE FROM pp_data_color WHERE uuid = '" + uuid + "';" +
+                                                        "DELETE FROM pp_data_note WHERE uuid = '" + uuid + "';"
+                                                        );
+                        
+                        sync(() -> {
+                            ParticleManager.removeFixedEffectForPlayer(playerUUID, id);
+                            callback.execute(true);
+                        });
                     }
-                    
-                    String uuid = res.getString("uuid");
-                    PlayerParticles.mySQL.updateSQL("DELETE FROM pp_fixed WHERE uuid = '" + uuid + "';" + 
-                                                    "DELETE FROM pp_data_item WHERE uuid = '" + uuid + "';" +
-                                                    "DELETE FROM pp_data_block WHERE uuid = '" + uuid + "';" +
-                                                    "DELETE FROM pp_data_color WHERE uuid = '" + uuid + "';" +
-                                                    "DELETE FROM pp_data_note WHERE uuid = '" + uuid + "';"
-                                                    );
-                    ParticleManager.removeFixedEffectForPlayer(playerUUID, id);
-                    callback.execute(true);
-                }
+                });
             });
         }
     }
@@ -625,16 +648,18 @@ public class ConfigManager {
             playerDataYaml.set(playerUUID.toString() + ".fixedEffect", null);
             save();
         } else {
-            try { // @formatter:off
-                PlayerParticles.mySQL.updateSQL("DELETE FROM pp_data_item WHERE uuid IN (SELECT uuid FROM pp_fixed WHERE player_uuid = '" + playerUUID.toString() + "');" +
-                                                "DELETE FROM pp_data_block WHERE uuid IN (SELECT uuid FROM pp_fixed WHERE player_uuid = '" + playerUUID.toString() + "');" +
-                                                "DELETE FROM pp_data_color WHERE uuid IN (SELECT uuid FROM pp_fixed WHERE player_uuid = '" + playerUUID.toString() + "');" +
-                                                "DELETE FROM pp_data_note WHERE uuid IN (SELECT uuid FROM pp_fixed WHERE player_uuid = '" + playerUUID.toString() + "');" +
-                                                "DELETE FROM pp_fixed WHERE player_uuid = '" + playerUUID.toString() + "';"
-                                                ); // @formatter:on
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            async(() -> {
+                try { // @formatter:off
+                    PlayerParticles.mySQL.updateSQL("DELETE FROM pp_data_item WHERE uuid IN (SELECT uuid FROM pp_fixed WHERE player_uuid = '" + playerUUID.toString() + "');" +
+                                                    "DELETE FROM pp_data_block WHERE uuid IN (SELECT uuid FROM pp_fixed WHERE player_uuid = '" + playerUUID.toString() + "');" +
+                                                    "DELETE FROM pp_data_color WHERE uuid IN (SELECT uuid FROM pp_fixed WHERE player_uuid = '" + playerUUID.toString() + "');" +
+                                                    "DELETE FROM pp_data_note WHERE uuid IN (SELECT uuid FROM pp_fixed WHERE player_uuid = '" + playerUUID.toString() + "');" +
+                                                    "DELETE FROM pp_fixed WHERE player_uuid = '" + playerUUID.toString() + "';"
+                                                    ); // @formatter:on
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            });
         }
 
         ParticleManager.removeAllFixedEffectsForPlayer(playerUUID);
@@ -643,7 +668,7 @@ public class ConfigManager {
     /**
      * Gets a list of all saved fixed particle effects
      * 
-     * @return A list of all saved fixed particle effects
+     * @param callback The callback to execute with a list of all saved fixed particle effects
      */
     public void getAllFixedEffects(ConfigurationCallback<List<FixedParticleEffect>> callback) {
         if (!PlayerParticles.useMySQL) {
@@ -682,36 +707,38 @@ public class ConfigManager {
 
             callback.execute(fixedEffects);
         } else { // @formatter:off
-            PlayerParticles.mySQL.connect((connection) -> {
-                String query = "SELECT * FROM pp_fixed f " + 
-                               "JOIN pp_data_item i ON f.uuid = i.uuid " + 
-                               "JOIN pp_data_block b ON f.uuid = b.uuid " +
-                               "JOIN pp_data_color c ON f.uuid = c.uuid " +
-                               "JOIN pp_data_note n ON f.uuid = n.uuid";
-                try (Statement statement = connection.createStatement();
-                     ResultSet res = statement.executeQuery(query)) {
-                    
-                    List<FixedParticleEffect> fixedEffects = new ArrayList<FixedParticleEffect>();
-
-                    while (res.next()) {
-                        UUID pplayerUUID = UUID.fromString(res.getString("f.player_uuid"));
-                        int id = res.getInt("f.id");
-                        String worldName = res.getString("f.worldName");
-                        double xPos = res.getDouble("f.xPos");
-                        double yPos = res.getDouble("f.yPos");
-                        double zPos = res.getDouble("f.zPos");
-                        ParticleEffect particleEffect = ParticleManager.effectFromString(res.getString("f.effect"));
-                        ParticleStyle particleStyle = ParticleStyleManager.styleFromString(res.getString("f.style"));
-                        ItemData particleItemData = new ItemData(Material.matchMaterial(res.getString("i.material")), res.getByte("i.data"));
-                        BlockData particleBlockData = new BlockData(Material.matchMaterial(res.getString("b.material")), res.getByte("b.data"));
-                        OrdinaryColor particleColorData = new OrdinaryColor(res.getInt("c.r"), res.getInt("c.g"), res.getInt("c.b"));
-                        NoteColor particleNoteColorData = new NoteColor(res.getByte("n.note"));
+            async(() -> {
+                PlayerParticles.mySQL.connect((connection) -> {
+                    String query = "SELECT * FROM pp_fixed f " + 
+                                   "JOIN pp_data_item i ON f.uuid = i.uuid " + 
+                                   "JOIN pp_data_block b ON f.uuid = b.uuid " +
+                                   "JOIN pp_data_color c ON f.uuid = c.uuid " +
+                                   "JOIN pp_data_note n ON f.uuid = n.uuid";
+                    try (Statement statement = connection.createStatement();
+                         ResultSet res = statement.executeQuery(query)) {
                         
-                        fixedEffects.add(new FixedParticleEffect(pplayerUUID, id, worldName, xPos, yPos, zPos, particleEffect, particleStyle, particleItemData, particleBlockData, particleColorData, particleNoteColorData));
-                    }
+                        List<FixedParticleEffect> fixedEffects = new ArrayList<FixedParticleEffect>();
 
-                    callback.execute(fixedEffects);
-                }
+                        while (res.next()) {
+                            UUID pplayerUUID = UUID.fromString(res.getString("f.player_uuid"));
+                            int id = res.getInt("f.id");
+                            String worldName = res.getString("f.worldName");
+                            double xPos = res.getDouble("f.xPos");
+                            double yPos = res.getDouble("f.yPos");
+                            double zPos = res.getDouble("f.zPos");
+                            ParticleEffect particleEffect = ParticleManager.effectFromString(res.getString("f.effect"));
+                            ParticleStyle particleStyle = ParticleStyleManager.styleFromString(res.getString("f.style"));
+                            ItemData particleItemData = new ItemData(Material.matchMaterial(res.getString("i.material")), res.getByte("i.data"));
+                            BlockData particleBlockData = new BlockData(Material.matchMaterial(res.getString("b.material")), res.getByte("b.data"));
+                            OrdinaryColor particleColorData = new OrdinaryColor(res.getInt("c.r"), res.getInt("c.g"), res.getInt("c.b"));
+                            NoteColor particleNoteColorData = new NoteColor(res.getByte("n.note"));
+                            
+                            fixedEffects.add(new FixedParticleEffect(pplayerUUID, id, worldName, xPos, yPos, zPos, particleEffect, particleStyle, particleItemData, particleBlockData, particleColorData, particleNoteColorData));
+                        }
+
+                        sync(() -> callback.execute(fixedEffects));
+                    }
+                });
             });
         }
     }
@@ -721,7 +748,7 @@ public class ConfigManager {
      * 
      * @param pplayerUUID The player who owns the effect
      * @param id The id for the effect to get
-     * @return The effect if one exists
+     * @param callback The callback to execute with the effect, if one exists
      */
     public void getFixedEffectForPlayerById(UUID pplayerUUID, int id, ConfigurationCallback<FixedParticleEffect> callback) {
         if (!PlayerParticles.useMySQL) {
@@ -748,31 +775,33 @@ public class ConfigManager {
                 callback.execute(new FixedParticleEffect(pplayerUUID, id, worldName, xPos, yPos, zPos, particleEffect, particleStyle, particleItemData, particleBlockData, particleColorData, particleNoteColorData));
             }
         } else { 
-            PlayerParticles.mySQL.connect((connection) -> { // @formatter:off
-                String query = "SELECT * FROM pp_fixed f " +  
-                               "JOIN pp_data_item i ON f.uuid = i.uuid " +
-                               "JOIN pp_data_block b ON f.uuid = b.uuid " +
-                               "JOIN pp_data_color c ON f.uuid = c.uuid " +
-                               "JOIN pp_data_note n ON f.uuid = n.uuid " +
-                               "WHERE f.player_uuid = '" + pplayerUUID.toString() + "' AND f.id = '" + id + "'"; // @formatter:on
-                try (Statement statement = connection.createStatement();
-                     ResultSet res = statement.executeQuery(query)) {
-                    
-                    if (res.next()) {
-                        String worldName = res.getString("f.worldName");
-                        double xPos = res.getDouble("f.xPos");
-                        double yPos = res.getDouble("f.yPos");
-                        double zPos = res.getDouble("f.zPos");
-                        ParticleEffect particleEffect = ParticleManager.effectFromString(res.getString("f.effect"));
-                        ParticleStyle particleStyle = ParticleStyleManager.styleFromString(res.getString("f.style"));
-                        ItemData particleItemData = new ItemData(Material.matchMaterial(res.getString("i.material")), res.getByte("i.data"));
-                        BlockData particleBlockData = new BlockData(Material.matchMaterial(res.getString("b.material")), res.getByte("b.data"));
-                        OrdinaryColor particleColorData = new OrdinaryColor(res.getInt("c.r"), res.getInt("c.g"), res.getInt("c.b"));
-                        NoteColor particleNoteColorData = new NoteColor(res.getByte("n.note"));
+            async(() -> {
+                PlayerParticles.mySQL.connect((connection) -> { // @formatter:off
+                    String query = "SELECT * FROM pp_fixed f " +  
+                                   "JOIN pp_data_item i ON f.uuid = i.uuid " +
+                                   "JOIN pp_data_block b ON f.uuid = b.uuid " +
+                                   "JOIN pp_data_color c ON f.uuid = c.uuid " +
+                                   "JOIN pp_data_note n ON f.uuid = n.uuid " +
+                                   "WHERE f.player_uuid = '" + pplayerUUID.toString() + "' AND f.id = '" + id + "'"; // @formatter:on
+                    try (Statement statement = connection.createStatement();
+                         ResultSet res = statement.executeQuery(query)) {
+                        
+                        if (res.next()) {
+                            String worldName = res.getString("f.worldName");
+                            double xPos = res.getDouble("f.xPos");
+                            double yPos = res.getDouble("f.yPos");
+                            double zPos = res.getDouble("f.zPos");
+                            ParticleEffect particleEffect = ParticleManager.effectFromString(res.getString("f.effect"));
+                            ParticleStyle particleStyle = ParticleStyleManager.styleFromString(res.getString("f.style"));
+                            ItemData particleItemData = new ItemData(Material.matchMaterial(res.getString("i.material")), res.getByte("i.data"));
+                            BlockData particleBlockData = new BlockData(Material.matchMaterial(res.getString("b.material")), res.getByte("b.data"));
+                            OrdinaryColor particleColorData = new OrdinaryColor(res.getInt("c.r"), res.getInt("c.g"), res.getInt("c.b"));
+                            NoteColor particleNoteColorData = new NoteColor(res.getByte("n.note"));
 
-                        callback.execute(new FixedParticleEffect(pplayerUUID, id, worldName, xPos, yPos, zPos, particleEffect, particleStyle, particleItemData, particleBlockData, particleColorData, particleNoteColorData));
+                            sync(() -> callback.execute(new FixedParticleEffect(pplayerUUID, id, worldName, xPos, yPos, zPos, particleEffect, particleStyle, particleItemData, particleBlockData, particleColorData, particleNoteColorData)));
+                        }
                     }
-                }
+                });
             });
         }
     }
@@ -781,7 +810,7 @@ public class ConfigManager {
      * Gets a list of all fixed effect ids for a player
      * 
      * @param pplayerUUID The player
-     * @return A list of all fixed effect ids for the given player
+     * @param callback The callback to execute with a list of all fixed effect ids for the given player
      */
     public void getFixedEffectIdsForPlayer(UUID pplayerUUID, ConfigurationCallback<List<Integer>> callback) {
         if (!PlayerParticles.useMySQL) {
@@ -796,18 +825,20 @@ public class ConfigManager {
             
             callback.execute(ids);
         } else {
-            PlayerParticles.mySQL.connect((connection) -> {
-                try (Statement statement = connection.createStatement();
-                     ResultSet res = statement.executeQuery("SELECT id FROM pp_fixed WHERE player_uuid = '" + pplayerUUID.toString() + "'")) {
-                    
-                    List<Integer> ids = new ArrayList<Integer>();
-                    
-                    while (res.next()) {
-                        ids.add(res.getInt(1));
+            async(() -> {
+                PlayerParticles.mySQL.connect((connection) -> {
+                    try (Statement statement = connection.createStatement();
+                         ResultSet res = statement.executeQuery("SELECT id FROM pp_fixed WHERE player_uuid = '" + pplayerUUID.toString() + "'")) {
+                        
+                        List<Integer> ids = new ArrayList<Integer>();
+                        
+                        while (res.next()) {
+                            ids.add(res.getInt(1));
+                        }
+                        
+                        sync(() -> callback.execute(ids));
                     }
-                    
-                    callback.execute(ids);
-                }
+                });
             });
         }
     }
@@ -816,7 +847,7 @@ public class ConfigManager {
      * Checks if the given player has reached the max number of fixed effects
      * 
      * @param pplayerUUID The player to check
-     * @return If the player can create any more fixed effects
+     * @param callback The callback to execute with if the player can create any more fixed effects
      */
     public void hasPlayerReachedMaxFixedEffects(UUID pplayerUUID, ConfigurationCallback<Boolean> callback) {
         if (maxFixedEffects == -1) { // Initialize on the fly
@@ -833,14 +864,20 @@ public class ConfigManager {
                 callback.execute(playerDataYaml.getConfigurationSection(pplayerUUID.toString() + ".fixedEffect").getKeys(false).size() >= maxFixedEffects);
             } else callback.execute(false);
         } else {
-            PlayerParticles.mySQL.connect((connection) -> {
-                try (Statement statement = connection.createStatement();
-                     ResultSet res = statement.executeQuery("SELECT COUNT(1) FROM pp_fixed WHERE player_uuid = '" + pplayerUUID.toString() + "'")) {
-                    
-                    if (res.next()) {
-                        callback.execute(res.getInt(1) >= maxFixedEffects);
-                    } else callback.execute(false);
-                }
+            async(() -> {
+                PlayerParticles.mySQL.connect((connection) -> {
+                    try (Statement statement = connection.createStatement();
+                         ResultSet res = statement.executeQuery("SELECT COUNT(1) FROM pp_fixed WHERE player_uuid = '" + pplayerUUID.toString() + "'")) {
+                        
+                        boolean hasReachedMax;
+                        if (res.next()) 
+                            hasReachedMax = res.getInt(1) >= maxFixedEffects;
+                        else 
+                            hasReachedMax = false;
+                        
+                        sync(() -> callback.execute(hasReachedMax));
+                    }
+                });
             });
         }
     }
@@ -849,7 +886,7 @@ public class ConfigManager {
      * Gets the next Id for a player's fixed effects
      * 
      * @param pplayerUUID The player to get the Id for
-     * @return The smallest available Id the player can use
+     * @param callback The callback to execute with the smallest available Id the player can use
      */
     public void getNextFixedEffectId(UUID pplayerUUID, ConfigurationCallback<Integer> callback) {
         if (!PlayerParticles.useMySQL) {
@@ -869,27 +906,29 @@ public class ConfigManager {
 
             callback.execute(ParticleUtils.getSmallestPositiveInt(ids));
         } else {
-            PlayerParticles.mySQL.connect((connection) -> {
-                try (Statement statement = connection.createStatement();
-                     ResultSet res = statement.executeQuery("SELECT id FROM pp_fixed WHERE player_uuid = '" + pplayerUUID.toString() + "'")) {
-                    
-                    Set<String> idsSet = new HashSet<String>();
-                    
-                    while (res.next()) 
-                        idsSet.add(res.getInt(1) + "");
-                    
-                    if (idsSet.isEmpty()) {
-                        callback.execute(1);
-                        return;
+            async(() -> {
+                PlayerParticles.mySQL.connect((connection) -> {
+                    try (Statement statement = connection.createStatement();
+                         ResultSet res = statement.executeQuery("SELECT id FROM pp_fixed WHERE player_uuid = '" + pplayerUUID.toString() + "'")) {
+                        
+                        Set<String> idsSet = new HashSet<String>();
+                        
+                        while (res.next()) 
+                            idsSet.add(res.getInt(1) + "");
+                        
+                        if (idsSet.isEmpty()) {
+                            sync(() -> callback.execute(1));
+                            return;
+                        }
+                        
+                        int[] ids = new int[idsSet.size()];
+                        int i = 0;
+                        for (String key : idsSet)
+                            ids[i++] = Integer.parseInt(key);
+                        
+                        sync(() -> callback.execute(ParticleUtils.getSmallestPositiveInt(ids)));
                     }
-                    
-                    int[] ids = new int[idsSet.size()];
-                    int i = 0;
-                    for (String key : idsSet)
-                        ids[i++] = Integer.parseInt(key);
-
-                    callback.execute(ParticleUtils.getSmallestPositiveInt(ids));
-                }
+                });
             });
         }
     }
@@ -926,6 +965,41 @@ public class ConfigManager {
             disabledWorlds = PlayerParticles.getPlugin().getConfig().getStringList("disabled-worlds");
         }
         return disabledWorlds;
+    }
+    
+    /**
+     * Asynchronizes the callback with it's own thread
+     * 
+     * @param asyncCallback The callback to run on a separate thread
+     */
+    private void async(SyncInterface asyncCallback) {
+        new BukkitRunnable() {
+            public void run() {
+                System.out.println("Async with thread: " + Thread.currentThread().getName());
+                asyncCallback.execute();
+            }
+        }.runTaskAsynchronously(PlayerParticles.getPlugin());
+    }
+    
+    /**
+     * Synchronizes the callback with the main thread
+     * 
+     * @param syncCallback The callback to run on the main thread
+     */
+    private void sync(SyncInterface syncCallback) {
+        new BukkitRunnable() {
+            public void run() {
+                System.out.println("Resynced with thread: " + Thread.currentThread().getName());
+                syncCallback.execute();
+            }
+        }.runTask(PlayerParticles.getPlugin());
+    }
+    
+    /**
+     * Provides an easy way to run a section of code either synchronously or asynchronously using a callback
+     */
+    private static interface SyncInterface {
+        public void execute();
     }
     
     /**
