@@ -13,7 +13,7 @@ import com.esophose.playerparticles.util.VectorUtils;
 
 public class ParticleStyleWings implements ParticleStyle {
 
-    int spawnTimer = 0; // Spawn particles every 3 ticks
+    private int spawnTimer = 0; // Spawn particles every 3 ticks
 
     public PParticle[] getParticles(PPlayer pplayer, Location location) {
         List<PParticle> particles = new ArrayList<PParticle>();

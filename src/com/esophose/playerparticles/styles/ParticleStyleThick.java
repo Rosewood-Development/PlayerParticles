@@ -4,11 +4,12 @@ import org.bukkit.Location;
 
 import com.esophose.playerparticles.PPlayer;
 import com.esophose.playerparticles.styles.api.PParticle;
+import com.esophose.playerparticles.styles.api.ParticleStyle;
 
-public class ParticleStyleThick extends ParticleStyleNone {
+public class ParticleStyleThick implements ParticleStyle {
 
     public PParticle[] getParticles(PPlayer pplayer, Location location) {
-        PParticle[] baseParticles = super.getParticles(pplayer, location);
+        PParticle[] baseParticles = DefaultStyles.NONE.getParticles(pplayer, location);
 
         int multiplyingFactor = 15; // Uses the same logic as ParticleStyleNone except multiplies the resulting particles by 15x
         PParticle[] particles = new PParticle[baseParticles.length * multiplyingFactor];
@@ -25,6 +26,10 @@ public class ParticleStyleThick extends ParticleStyleNone {
 
     public String getName() {
         return "thick";
+    }
+    
+    public boolean canBeFixed() {
+        return true;
     }
 
 }

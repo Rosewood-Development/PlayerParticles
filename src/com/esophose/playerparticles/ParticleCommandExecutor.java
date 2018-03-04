@@ -524,7 +524,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
         args = cmdArgs;
 
         if (cmd.equalsIgnoreCase("create")) {
-            String[] f_args = args;
+            final String[] f_args = args;
             ConfigManager.getInstance().hasPlayerReachedMaxFixedEffects(p.getUniqueId(), (reachedMax) -> {
                 if (reachedMax) {
                     MessageManager.sendMessage(p, MessageType.MAX_FIXED_EFFECTS_REACHED);
@@ -815,7 +815,8 @@ public class ParticleCommandExecutor implements CommandExecutor {
             ArrayList<FixedParticleEffect> fixedEffectsToRemove = new ArrayList<FixedParticleEffect>();
 
             for (FixedParticleEffect fixedEffect : ParticleManager.fixedParticleEffects)
-                if (fixedEffect.getLocation().getWorld() == p.getLocation().getWorld() && fixedEffect.getLocation().distance(p.getLocation()) <= radius) fixedEffectsToRemove.add(fixedEffect);
+                if (fixedEffect.getLocation().getWorld() == p.getLocation().getWorld() && fixedEffect.getLocation().distance(p.getLocation()) <= radius) 
+                    fixedEffectsToRemove.add(fixedEffect);
 
             for (FixedParticleEffect fixedEffect : fixedEffectsToRemove) 
                 ConfigManager.getInstance().removeFixedEffect(fixedEffect.getOwnerUniqueId(), fixedEffect.getId(), (successful) -> { });

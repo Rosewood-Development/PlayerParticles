@@ -2,6 +2,8 @@ package com.esophose.playerparticles.styles;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 
 import com.esophose.playerparticles.PlayerParticles;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
@@ -27,6 +29,11 @@ public class DefaultStyles {
     public static final ParticleStyle THICK = new ParticleStyleThick();
     public static final ParticleStyle WINGS = new ParticleStyleWings();
     public static final ParticleStyle SPHERE = new ParticleStyleSphere();
+    public static final ParticleStyle SWORDS = new ParticleStyleSwords();
+    public static final ParticleStyle HURT = new ParticleStyleHurt();
+    public static final ParticleStyle BLOCKPLACE = new ParticleStyleBlockPlace();
+    public static final ParticleStyle BLOCKBREAK = new ParticleStyleBlockBreak();
+    public static final ParticleStyle BLOCKEDIT = new ParticleStyleBlockEdit();
 
     /**
      * Registers all the default styles to the ParticleStyleManager
@@ -47,9 +54,21 @@ public class DefaultStyles {
         ParticleStyleManager.registerStyle(THICK);
         ParticleStyleManager.registerStyle(WINGS);
         ParticleStyleManager.registerStyle(SPHERE);
-
-        Bukkit.getPluginManager().registerEvents((Listener) MOVE, PlayerParticles.getPlugin());
-        Bukkit.getPluginManager().registerEvents((Listener) ARROWS, PlayerParticles.getPlugin());
+        ParticleStyleManager.registerCustomHandledStyle(SWORDS);
+        ParticleStyleManager.registerCustomHandledStyle(HURT);
+        ParticleStyleManager.registerCustomHandledStyle(BLOCKPLACE);
+        ParticleStyleManager.registerCustomHandledStyle(BLOCKBREAK);
+        ParticleStyleManager.registerCustomHandledStyle(BLOCKEDIT);
+        
+        PluginManager manager = Bukkit.getPluginManager();
+        Plugin playerParticles = PlayerParticles.getPlugin();
+        manager.registerEvents((Listener) MOVE, playerParticles);
+        manager.registerEvents((Listener) ARROWS, playerParticles);
+        manager.registerEvents((Listener) SWORDS, playerParticles);
+        manager.registerEvents((Listener) HURT, playerParticles);
+        manager.registerEvents((Listener) BLOCKPLACE, playerParticles);
+        manager.registerEvents((Listener) BLOCKBREAK, playerParticles);
+        manager.registerEvents((Listener) BLOCKEDIT, playerParticles);
     }
 
 }

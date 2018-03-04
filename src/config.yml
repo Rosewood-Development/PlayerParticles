@@ -475,9 +475,8 @@ database-user-password: ''
 # icons to whatever block/item you want.                              #
 #                                                                     #
 # Important Notes:                                                    #
-# * If any of the block/item names are invalid it will notify you     #
-#   in console and the icon in the GUI will be the barrier icon to    #
-#   show that it failed to load.                                      #
+# * If any of the block/item names are invalid the icon in the GUI    #
+#   will be the barrier icon to show that it failed to load.          #
 # * Do NOT change the particle/style name                             #
 # * You MUST use the Spigot-given name for it to work. You can see    #
 #   all the Spigot-given names at the link below:                     #
@@ -552,6 +551,11 @@ gui-icon:
     THICK: VINE
     WINGS: ELYTRA
     SPHERE: SNOW_BALL
+    SWORDS: IRON_SWORD
+    HURT: CACTUS
+    BLOCKPLACE: WOOD
+    BLOCKBREAK: IRON_PICKAXE
+    BLOCKEDIT: DISPENSER
 
 
 # That's everything! You reached the end of the configuration.

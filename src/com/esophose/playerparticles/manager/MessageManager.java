@@ -122,16 +122,12 @@ public class MessageManager {
          * @param config The config to pull the message from
          */
         protected void setMessage(FileConfiguration config) {
-            try {
-                String messageFromConfig = config.getString(configLocation);
-                if (messageFromConfig == null || messageFromConfig.length() == 0) {
-                    messageFromConfig = "&cMissing message in config.yml. Contact a server administrator.";
-                    PlayerParticles.getPlugin().getLogger().warning("Missing message in config.yml: " + this.configLocation);
-                }
-                this.message = ChatColor.translateAlternateColorCodes('&', messageFromConfig);
-            } catch (Exception ex) {
-                System.out.println(this.name());
+            String messageFromConfig = config.getString(configLocation);
+            if (messageFromConfig == null || messageFromConfig.length() == 0) {
+                messageFromConfig = "&cMissing message in config.yml. Contact a server administrator.";
+                PlayerParticles.getPlugin().getLogger().warning("Missing message in config.yml: " + this.configLocation);
             }
+            this.message = ChatColor.translateAlternateColorCodes('&', messageFromConfig);
         }
 
         /**

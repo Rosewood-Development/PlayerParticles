@@ -2,6 +2,7 @@ package com.esophose.playerparticles.styles;
 
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -9,19 +10,28 @@ import com.esophose.playerparticles.PPlayer;
 import com.esophose.playerparticles.manager.ConfigManager;
 import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.manager.PermissionManager;
+import com.esophose.playerparticles.styles.api.PParticle;
+import com.esophose.playerparticles.styles.api.ParticleStyle;
 
-public class ParticleStyleMove extends ParticleStyleNone implements Listener {
+public class ParticleStyleMove implements ParticleStyle, Listener {
+    
+    public PParticle[] getParticles(PPlayer pplayer, Location location) {
+        return DefaultStyles.NONE.getParticles(pplayer, location);
+    }
+
+    public void updateTimers() {
+        
+    }
 
     public String getName() {
         return "move";
     }
 
-    /**
-     * The event used to update the move style
-     * 
-     * @param e The event
-     */
-    @EventHandler
+    public boolean canBeFixed() {
+        return false;
+    }
+    
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerMove(PlayerMoveEvent e) {
         PPlayer pplayer = ConfigManager.getInstance().getPPlayer(e.getPlayer().getUniqueId());
         if (pplayer != null && pplayer.getParticleStyle() == DefaultStyles.MOVE) {
@@ -31,10 +41,6 @@ public class ParticleStyleMove extends ParticleStyleNone implements Listener {
                 ParticleManager.displayParticles(pplayer, DefaultStyles.MOVE.getParticles(pplayer, loc));
             }
         }
-    }
-
-    public boolean canBeFixed() {
-        return false;
     }
 
 }

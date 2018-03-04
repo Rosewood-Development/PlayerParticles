@@ -7,37 +7,35 @@
  */
 
 /*
- * TODO: v5
- * + Add new style 'tornado'
- * + Add new style 'fairy'
- * + Add new style 'atom'
- * + Add new style 'rings'
- * + Add new style 'jump'
- * + Add new style 'blockbreak'
- * + Add new style 'blockplace'
- * + Add new style 'hurt'
- * + Add new style 'swords'
- * + Make database queries async
+ * TODO: v5.1
  * + Command to force set an effect/style for a player
  * + Tab completion for fixed effects
+ * + Add new style 'tornado'
+ * + Add new style 'companion'
+ * + Add new style 'atom'
+ * + Add new style 'rings'
  */
 
 /*
  * Changelog v5:
- * + Added GUI. Opens with /pp or /pp gui. Icons and messages are completely customizable from the config.
+ * + Added a GUI. Opens with /pp or /pp gui. Icons and messages are completely customizable from the config.
  * + Added a way to disable the GUI, because I know somebody will ask
  * + Added new style 'wings'
  * + Added new style 'sphere'
- * - Minecraft 1.7 and 1.8 are no longer supported. There is no reason to still be on a version that old.
- * Fixed a bug where typing /pp data when you haven't been added to the playerData.yml/database yet threw an error
- * Switched over to the Spigot Particle API
- * Plugin is now built against Java 1.8.0_161 and Spigot 1.9.4
- * Servers running Java 7 are no longer supported. Please upgrade to Java 8 if you haven't yet.
- * Rewrote database connection system, should fix any memory leaks from before
- * Reduced particle render distance from 512 to 192 (12 chunks), you won't notice a difference
- * Database management should no longer contain memory leaks
- * Fixed missing command 'fixed' from '/pp help' list
- * Fixed missing command 'fixed' from tab completion
+ * + Added new style 'hurt'
+ * + Added new style 'swords'
+ * + Added new style 'blockbreak'
+ * + Added new style 'blockplace'
+ * + Added new style 'blockedit'
+ * - Minecraft 1.7 and 1.8 are no longer supported, there is no reason to still be on a version that old
+ * - Servers running Java 7 are no longer supported, please upgrade to Java 8 if you haven't yet
+ * * Fixed a bug where typing /pp data when you haven't been added to the playerData.yml/database yet threw an error
+ * * Switched over to the Spigot Particle API
+ * * Plugin is now built against Java 1.8.0_161 and Spigot 1.9.4-R0.1
+ * * Rewrote database connection system, should fix any memory leaks from before
+ * * Reduced particle render distance from 512 to 192 (12 chunks), you won't notice a difference
+ * * Fixed missing command 'fixed' from '/pp help' list
+ * * Fixed missing command 'fixed' from tab completion
  */
 
 package com.esophose.playerparticles;

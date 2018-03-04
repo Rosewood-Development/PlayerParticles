@@ -85,7 +85,7 @@ public class PermissionManager {
      * @return True if the player has permission
      */
     public static boolean canUseForceReset(Player player) {
-        return player.hasPermission("playerparticles.*") || player.hasPermission("playerparticles.forcereset");
+        return player.hasPermission("playerparticles.forcereset");
     }
 
     /**
@@ -96,17 +96,6 @@ public class PermissionManager {
      */
     public static boolean canUseFixedEffects(Player player) {
         return player.hasPermission("playerparticles.*") || player.hasPermission("playerparticles.fixed");
-    }
-
-    /**
-     * Checks if a player has permission to open the GUI
-     * Access is restricted if they have the following permission
-     * 
-     * @param player The player to check the permission for
-     * @return False if the player's access to the GUI is revoked
-     */
-    public static boolean canUseGui(Player player) {
-        return !player.hasPermission("playerparticles.gui.revoke");
     }
 
 }

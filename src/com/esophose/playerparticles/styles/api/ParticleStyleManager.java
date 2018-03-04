@@ -10,6 +10,8 @@ package com.esophose.playerparticles.styles.api;
 
 import java.util.ArrayList;
 
+import com.esophose.playerparticles.PlayerParticles;
+
 public class ParticleStyleManager {
 
     /**
@@ -26,9 +28,9 @@ public class ParticleStyleManager {
     public static void registerStyle(ParticleStyle style) {
         for (ParticleStyle testAgainst : styles) {
             if (testAgainst.getName().replace("_", "").equalsIgnoreCase(style.getName())) {
-                throw new ParticleStyleAlreadyRegisteredException("Tried to register two styles with the same name!");
+                PlayerParticles.getPlugin().getLogger().severe("Tried to register two styles with the same (or too similar) name: " + style.getName());
             } else if (testAgainst.equals(style)) {
-                throw new ParticleStyleAlreadyRegisteredException("Tried to register the same style twice!");
+                PlayerParticles.getPlugin().getLogger().severe("Tried to register the same style twice: " + style.getName());
             }
         }
         styles.add(style);
@@ -83,19 +85,6 @@ public class ParticleStyleManager {
     public static void updateTimers() {
         for (ParticleStyle style : styles)
             style.updateTimers();
-    }
-
-    /**
-     * The exception to throw if a style is already registered
-     */
-    private static final class ParticleStyleAlreadyRegisteredException extends RuntimeException {
-
-        private static final long serialVersionUID = -6116170395810178020L;
-
-        private ParticleStyleAlreadyRegisteredException(String message) {
-            super(message);
-        }
-
     }
 
 }
