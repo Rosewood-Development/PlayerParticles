@@ -325,7 +325,9 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
     public static void changeState(PPlayer p, GuiState state) {
         Player player = p.getPlayer();
 
-        if (PermissionManager.getEffectsUserHasPermissionFor(player).size() == 1 || PermissionManager.getStylesUserHasPermissionFor(player).size() == 1 || (state == GuiState.DATA && p.getParticleSpawnData() == null && p.getParticleSpawnColor() == null)) return;
+        if ((state == GuiState.EFFECT && PermissionManager.getEffectsUserHasPermissionFor(player).size() == 1) || 
+            (state == GuiState.STYLE && PermissionManager.getStylesUserHasPermissionFor(player).size() == 1) || 
+            (state == GuiState.DATA && p.getParticleSpawnData() == null && p.getParticleSpawnColor() == null)) return;
 
         // Update the state and create an inventory for the player if one isn't already open for them
         // If they have the wrong inventory open for some reason, create a new one and open it for them
