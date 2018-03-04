@@ -1,5 +1,24 @@
 == UPDATING WILL DELETE YOUR CONFIG.YML ==
 * Create a backup of your config.yml if you wish to import all your old settings!
+=== v5 ===
++ Added a GUI. Opens with /pp or /pp gui. Icons and messages are completely customizable from the config.
++ Added a way to disable the GUI, because I know somebody will ask
++ Added new style 'wings'
++ Added new style 'sphere'
++ Added new style 'hurt'
++ Added new style 'swords'
++ Added new style 'blockbreak'
++ Added new style 'blockplace'
++ Added new style 'blockedit'
+- Minecraft 1.7 and 1.8 are no longer supported, there is no reason to still be on a version that old
+- Servers running Java 7 are no longer supported, please upgrade to Java 8 if you haven't yet
+* Fixed a bug where typing /pp data when you haven't been added to the playerData.yml/database yet threw an error
+* Switched over to the Spigot Particle API
+* Plugin is now built against Java 1.8.0_161 and Spigot 1.9.4-R0.1
+* Rewrote database connection system, should fix any memory leaks from before
+* Reduced particle render distance from 512 to 192 (12 chunks), you won't notice a difference
+* Fixed missing command 'fixed' from '/pp help' list
+* Fixed missing command 'fixed' from tab completion
 === v4.5 ===
 * Fix issue with the style 'halo' that caused 10 errors per second to be printed to the config. These were listed as "java.lang.NullPointerException" or "Task #### for PlayerParticles generated an exception". Thanks to everybody who helped find this error. (It's been in the plugin for over 6 months somehow)
 * Fix a rare issue with the update checker that would cause the plugin to fail loading if there was no internet connection or the Curse API servers were down. It will now fail without an error and a notice will be printed to the console.
