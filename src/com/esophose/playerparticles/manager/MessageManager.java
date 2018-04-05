@@ -123,11 +123,11 @@ public class MessageManager {
          */
         protected void setMessage(FileConfiguration config) {
             String messageFromConfig = config.getString(configLocation);
-            if (messageFromConfig == null || messageFromConfig.length() == 0) {
+            if (messageFromConfig == null) {
                 messageFromConfig = "&cMissing message in config.yml. Contact a server administrator.";
                 PlayerParticles.getPlugin().getLogger().warning("Missing message in config.yml: " + this.configLocation);
             }
-            this.message = ChatColor.translateAlternateColorCodes('&', messageFromConfig);
+            this.message = parseColors(messageFromConfig);
         }
 
         /**
@@ -189,6 +189,8 @@ public class MessageManager {
         if (!messagesEnabled) return;
 
         String message = messageType.getMessage();
+        if (message.length() == 0) return;
+        
         if (prefixEnabled) {
             message = messagePrefix + " " + message;
         }
@@ -209,11 +211,11 @@ public class MessageManager {
         if (!messagesEnabled) return;
 
         String message = messageType.getMessageReplaced(typeReplacement);
+        if (message.trim().length() == 0) return;
+        
         if (prefixEnabled) {
             message = messagePrefix + " " + message;
         }
-
-        if (message.trim().equals("")) return;
 
         player.sendMessage(message);
     }
@@ -227,12 +229,12 @@ public class MessageManager {
      */
     public static void sendCustomMessage(Player player, String message) {
         if (!messagesEnabled) return;
+        
+        if (message.trim().length() == 0) return;
 
         if (prefixEnabled) {
             message = messagePrefix + " " + message;
         }
-
-        if (message.trim().equals("")) return;
 
         player.sendMessage(message);
     }
