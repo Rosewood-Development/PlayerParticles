@@ -7,7 +7,7 @@
  */
 
 /*
- * TODO: v5.1
+ * TODO: v5.2
  * + Command to force set an effect/style for a player
  * + Tab completion for fixed effects
  * + Add new style 'tornado'

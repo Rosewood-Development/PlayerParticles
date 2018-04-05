@@ -14,7 +14,7 @@
 # I don't recommend changing it
 # NOTE: Updating to a new version of the plugin will change this number and delete your config. 
 #       Make sure you create a backup each time before you update!
-version: 5.0
+version: 5.1
 
 # Check for new versions of the plugin
 # Default: true

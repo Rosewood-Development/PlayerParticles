@@ -337,21 +337,21 @@ public class ConfigManager {
      * @param particleEffect The effect that is being saved
      */
     public void savePPlayer(UUID playerUUID, ParticleEffect particleEffect) {
-        if (!PlayerParticles.useMySQL) {
-            ConfigurationSection section = playerDataYaml.getConfigurationSection(playerUUID.toString() + ".effect");
-            section.set("name", particleEffect.getName());
-            save();
-        } else {
-            async(() -> {
-                try {
-                    PlayerParticles.mySQL.updateSQL("UPDATE pp_users SET effect = '" + particleEffect.getName() + "' WHERE player_uuid = '" + playerUUID + "';");
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            });
-        }
-        
         getPPlayer(playerUUID, (pplayer) -> {
+            if (!PlayerParticles.useMySQL) {
+                ConfigurationSection section = playerDataYaml.getConfigurationSection(playerUUID.toString() + ".effect");
+                section.set("name", particleEffect.getName());
+                save();
+            } else {
+                async(() -> {
+                    try {
+                        PlayerParticles.mySQL.updateSQL("UPDATE pp_users SET effect = '" + particleEffect.getName() + "' WHERE player_uuid = '" + playerUUID + "';");
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+        
             pplayer.setParticleEffect(particleEffect);
         });
     }
@@ -363,21 +363,21 @@ public class ConfigManager {
      * @param particleStyle The style that is being saved
      */
     public void savePPlayer(UUID playerUUID, ParticleStyle particleStyle) {
-        if (!PlayerParticles.useMySQL) {
-            ConfigurationSection section = playerDataYaml.getConfigurationSection(playerUUID.toString() + ".style");
-            section.set("name", particleStyle.getName());
-            save();
-        } else {
-            async(() -> {
-                try {
-                    PlayerParticles.mySQL.updateSQL("UPDATE pp_users SET style = '" + particleStyle.getName() + "' WHERE player_uuid = '" + playerUUID + "';");
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            });
-        }
-        
         getPPlayer(playerUUID, (pplayer) -> {
+            if (!PlayerParticles.useMySQL) {
+                ConfigurationSection section = playerDataYaml.getConfigurationSection(playerUUID.toString() + ".style");
+                section.set("name", particleStyle.getName());
+                save();
+            } else {
+                async(() -> {
+                    try {
+                        PlayerParticles.mySQL.updateSQL("UPDATE pp_users SET style = '" + particleStyle.getName() + "' WHERE player_uuid = '" + playerUUID + "';");
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+            
             pplayer.setParticleStyle(particleStyle);
         });
     }
@@ -389,22 +389,22 @@ public class ConfigManager {
      * @param particleItemData The data that is being saved
      */
     public void savePPlayer(UUID playerUUID, ItemData particleItemData) {
-        if (!PlayerParticles.useMySQL) {
-            ConfigurationSection section = playerDataYaml.getConfigurationSection(playerUUID.toString() + ".itemData");
-            section.set("material", particleItemData.getMaterial().name());
-            section.set("data", particleItemData.getData());
-            save();
-        } else {
-            async(() -> {
-                try {
-                    PlayerParticles.mySQL.updateSQL("UPDATE pp_data_item SET material = '" + particleItemData.getMaterial().name() + "', data = '" + particleItemData.getData() + "' WHERE uuid = '" + playerUUID + "';");
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            });
-        }
-        
         getPPlayer(playerUUID, (pplayer) -> {
+            if (!PlayerParticles.useMySQL) {
+                ConfigurationSection section = playerDataYaml.getConfigurationSection(playerUUID.toString() + ".itemData");
+                section.set("material", particleItemData.getMaterial().name());
+                section.set("data", particleItemData.getData());
+                save();
+            } else {
+                async(() -> {
+                    try {
+                        PlayerParticles.mySQL.updateSQL("UPDATE pp_data_item SET material = '" + particleItemData.getMaterial().name() + "', data = '" + particleItemData.getData() + "' WHERE uuid = '" + playerUUID + "';");
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+        
             pplayer.setItemData(particleItemData);
         });
     }
@@ -416,22 +416,22 @@ public class ConfigManager {
      * @param particleBlockData The data that is being saved
      */
     public void savePPlayer(UUID playerUUID, BlockData particleBlockData) {
-        if (!PlayerParticles.useMySQL) {
-            ConfigurationSection section = playerDataYaml.getConfigurationSection(playerUUID.toString() + ".blockData");
-            section.set("material", particleBlockData.getMaterial().name());
-            section.set("data", particleBlockData.getData());
-            save();
-        } else {
-            async(() -> {
-                try {
-                    PlayerParticles.mySQL.updateSQL("UPDATE pp_data_block SET material = '" + particleBlockData.getMaterial().name() + "', data = '" + particleBlockData.getData() + "' WHERE uuid = '" + playerUUID + "';");
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            });
-        }
-        
         getPPlayer(playerUUID, (pplayer) -> {
+            if (!PlayerParticles.useMySQL) {
+                ConfigurationSection section = playerDataYaml.getConfigurationSection(playerUUID.toString() + ".blockData");
+                section.set("material", particleBlockData.getMaterial().name());
+                section.set("data", particleBlockData.getData());
+                save();
+            } else {
+                async(() -> {
+                    try {
+                        PlayerParticles.mySQL.updateSQL("UPDATE pp_data_block SET material = '" + particleBlockData.getMaterial().name() + "', data = '" + particleBlockData.getData() + "' WHERE uuid = '" + playerUUID + "';");
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+        
             pplayer.setBlockData(particleBlockData);
         });
     }
@@ -443,23 +443,23 @@ public class ConfigManager {
      * @param particleColorData The data that is being saved
      */
     public void savePPlayer(UUID playerUUID, OrdinaryColor particleColorData) {
-        if (!PlayerParticles.useMySQL) {
-            ConfigurationSection section = playerDataYaml.getConfigurationSection(playerUUID.toString() + ".colorData");
-            section.set("r", particleColorData.getRed());
-            section.set("g", particleColorData.getGreen());
-            section.set("b", particleColorData.getBlue());
-            save();
-        } else {
-            async(() -> {
-                try {
-                    PlayerParticles.mySQL.updateSQL("UPDATE pp_data_color SET r = " + particleColorData.getRed() + ", g = " + particleColorData.getGreen() + ", b = " + particleColorData.getBlue() + " WHERE uuid = '" + playerUUID + "';");
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            });
-        }
-        
         getPPlayer(playerUUID, (pplayer) -> {
+            if (!PlayerParticles.useMySQL) {
+                ConfigurationSection section = playerDataYaml.getConfigurationSection(playerUUID.toString() + ".colorData");
+                section.set("r", particleColorData.getRed());
+                section.set("g", particleColorData.getGreen());
+                section.set("b", particleColorData.getBlue());
+                save();
+            } else {
+                async(() -> {
+                    try {
+                        PlayerParticles.mySQL.updateSQL("UPDATE pp_data_color SET r = " + particleColorData.getRed() + ", g = " + particleColorData.getGreen() + ", b = " + particleColorData.getBlue() + " WHERE uuid = '" + playerUUID + "';");
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+        
             pplayer.setColorData(particleColorData);
         });
     }
@@ -471,21 +471,21 @@ public class ConfigManager {
      * @param particleNoteColorData The data that is being saved
      */
     public void savePPlayer(UUID playerUUID, NoteColor particleNoteColorData) {
-        if (!PlayerParticles.useMySQL) {
-            ConfigurationSection section = playerDataYaml.getConfigurationSection(playerUUID.toString() + ".noteColorData");
-            section.set("note", (byte) (particleNoteColorData.getValueX() * 24));
-            save();
-        } else {
-            async(() -> {
-                try {
-                    PlayerParticles.mySQL.updateSQL("UPDATE pp_data_note SET note = " + (byte) (particleNoteColorData.getValueX() * 24) + " WHERE uuid = '" + playerUUID + "';");
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            });
-        }
-        
         getPPlayer(playerUUID, (pplayer) -> {
+            if (!PlayerParticles.useMySQL) {
+                ConfigurationSection section = playerDataYaml.getConfigurationSection(playerUUID.toString() + ".noteColorData");
+                section.set("note", (byte) (particleNoteColorData.getValueX() * 24));
+                save();
+            } else {
+                async(() -> {
+                    try {
+                        PlayerParticles.mySQL.updateSQL("UPDATE pp_data_note SET note = " + (byte) (particleNoteColorData.getValueX() * 24) + " WHERE uuid = '" + playerUUID + "';");
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+        
             pplayer.setNoteColorData(particleNoteColorData);
         });
     }

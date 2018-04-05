@@ -13,9 +13,11 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -55,7 +57,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      * 
      * @param e The event
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent e) {
         ConfigManager.getInstance().loadPPlayer(e.getPlayer().getUniqueId());
     }
@@ -65,7 +67,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      * 
      * @param e The event
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent e) {
         PPlayer pplayer = ConfigManager.getInstance().getPPlayer(e.getPlayer().getUniqueId());
         if (pplayer != null)
@@ -191,9 +193,8 @@ public class ParticleManager extends BukkitRunnable implements Listener {
                 valid = false;
             }
 
-            // Check for the string matching to maintain support for 1.7
-            // This was checking GameMode.SPECTATOR before and was throwing errors
-            if (player.getGameMode().name().equalsIgnoreCase("spectator")) {
+            // Don't show their particles if they are in spectator mode
+            if (player.getGameMode() == GameMode.SPECTATOR) {
                 valid = false;
             }
 
