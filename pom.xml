@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.esophose.playerparticles</groupId>
   <artifactId>PlayerParticles</artifactId>
-  <version>5</version>
+  <version>5.1</version>
   <name>PlayerParticles</name>
   <url>https://github.com/Esophose/PlayerParticles</url>
   <description>Display particles around your player using customized styles and data!</description>
@@ -53,7 +53,7 @@
                   </excludes>
                 </filter>
               </filters>
-              <outputFile>C:\Users\Esophose\Desktop\1.12.2 Dev Server\plugins\update\PlayerParticles v5.jar</outputFile>
+              <outputFile>C:\Users\Esophose\Desktop\1.12.2 Dev Server\plugins\update\PlayerParticles v5.1.jar</outputFile>
             </configuration>
           </execution>
         </executions>

@@ -374,7 +374,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         SkullMeta currentIconMeta = (SkullMeta) currentIcon.getItemMeta();
         currentIconMeta.setDisplayName(ChatColor.GREEN + player.getName());
         String[] currentIconLore = new String[3];
-        currentIconLore[0] = ChatColor.YELLOW + "Effect: " + ChatColor.AQUA + p.getParticleEffect().getName();
+        currentIconLore[0] = ChatColor.YELLOW + "Effect: " + ChatColor.AQUA + p.getParticleEffect().getName().toLowerCase();
         currentIconLore[1] = ChatColor.YELLOW + "Style: " + ChatColor.AQUA + p.getParticleStyle().getName();
         currentIconLore[2] = ChatColor.YELLOW + "Active Data: " + ChatColor.AQUA + p.getParticleDataString();
         currentIconMeta.setLore(Arrays.asList(currentIconLore));
@@ -670,11 +670,11 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         ItemStack icon = new ItemStack(effectIcons.get(effect.name()), 1);
         ItemMeta iconMeta = icon.getItemMeta();
 
-        iconMeta.setDisplayName(MessageType.GUI_ICON_NAME_COLOR.getMessage() + effect.getName());
+        iconMeta.setDisplayName(MessageType.GUI_ICON_NAME_COLOR.getMessage() + effect.getName().toLowerCase());
         if (!isActive) {
-            iconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SETS_TO.getMessageReplaced("effect") + effect.getName()));
+            iconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SETS_TO.getMessageReplaced("effect") + effect.getName().toLowerCase()));
         } else {
-            iconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SETS_TO.getMessageReplaced("effect") + effect.getName(), MessageType.GUI_ICON_CURRENT_ACTIVE.getMessageReplaced("effect")));
+            iconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SETS_TO.getMessageReplaced("effect") + effect.getName().toLowerCase(), MessageType.GUI_ICON_CURRENT_ACTIVE.getMessageReplaced("effect")));
             iconMeta.addEnchant(Enchantment.ARROW_INFINITE, -1, true);
             iconMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
