@@ -1,6 +1,6 @@
 name: PlayerParticles
 main: com.esophose.playerparticles.PlayerParticles
-version: 5.1
+version: 5
 description: Make particles around players in fancy ways.
 author: Esophose
 website: https://dev.bukkit.org/projects/playerparticles

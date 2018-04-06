@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.esophose.playerparticles</groupId>
   <artifactId>PlayerParticles</artifactId>
-  <version>5</version>
+  <version>5_bukkit-1.8</version>
   <name>PlayerParticles</name>
   <url>https://github.com/Esophose/PlayerParticles</url>
   <description>Display particles around your player using customized styles and data!</description>
@@ -53,7 +53,7 @@
                   </excludes>
                 </filter>
               </filters>
-              <outputFile>C:\Users\Esophose\Desktop\1.12.2 Dev Server\plugins\update\PlayerParticles v5.jar</outputFile>
+              <outputFile>C:\Users\Esophose\Desktop\1.8.8 Dev Server\plugins\update\PlayerParticles v5 Bukkit-1.8.jar</outputFile>
             </configuration>
           </execution>
         </executions>
@@ -85,7 +85,7 @@
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
-      <version>1.9.4-R0.1-SNAPSHOT</version>
+      <version>1.8.8-R0.1-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>

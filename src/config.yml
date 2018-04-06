@@ -5,6 +5,8 @@
 #  |____|   |____(____  / ____|\___  >__|  |____|    (____  /__|   |__| |__|\___  >____/\___  >____  >      \_//______  /
 #                     \/\/         \/                     \/                    \/          \/     \/                 \/ 
 
+# This is the final build supporting Minecraft 1.8
+
 # ==================================================== #
 #                PlayerParticles Config                #
 #               Welcome to the beginning               #
@@ -14,11 +16,7 @@
 # I don't recommend changing it
 # NOTE: Updating to a new version of the plugin will change this number and delete your config. 
 #       Make sure you create a backup each time before you update!
-version: 5.1
-
-# Check for new versions of the plugin
-# Default: true
-check-updates: true
+version: 5
 
 # If the command /pp gui is enabled
 # Disable this if you have your own custom GUI through another plugin
@@ -549,7 +547,7 @@ gui-icon:
     ARROWS: BOW
     SPIRAL: HOPPER
     THICK: VINE
-    WINGS: ELYTRA
+    WINGS: FIREWORK
     SPHERE: SNOW_BALL
     SWORDS: IRON_SWORD
     HURT: CACTUS

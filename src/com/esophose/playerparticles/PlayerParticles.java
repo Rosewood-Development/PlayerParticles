@@ -33,16 +33,8 @@ import com.esophose.playerparticles.manager.DatabaseManager;
 import com.esophose.playerparticles.manager.MessageManager;
 import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.styles.DefaultStyles;
-import com.esophose.playerparticles.updater.PluginUpdateListener;
-import com.esophose.playerparticles.updater.Updater;
 
 public class PlayerParticles extends JavaPlugin {
-
-    /**
-     * The version a new update has, will be null if the config has it disabled
-     * or if there is no new version
-     */
-    public static String updateVersion = null;
 
     /**
      * The MySQL database connection manager
@@ -72,7 +64,6 @@ public class PlayerParticles extends JavaPlugin {
         getCommand("pp").setTabCompleter(new ParticleCommandCompleter());
         getCommand("pp").setExecutor(new ParticleCommandExecutor());
         Bukkit.getPluginManager().registerEvents(new ParticleManager(), this);
-        Bukkit.getPluginManager().registerEvents(new PluginUpdateListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerParticlesGui(), this);
         if (getConfig().getDouble("version") < Double.parseDouble(getDescription().getVersion())) {
             File configFile = new File(getDataFolder(), "config.yml");
@@ -83,23 +74,6 @@ public class PlayerParticles extends JavaPlugin {
         }
         checkDatabase();
         startTask();
-
-        if (shouldCheckUpdates()) {
-            new BukkitRunnable() {
-                public void run() {
-                    final File file = getFile();
-                    try { // This can throw an exception if the server has no internet connection or if the Curse API is down
-                        Updater updater = new Updater(getPlugin(), 82823, file, Updater.UpdateType.NO_DOWNLOAD, false);
-                        if (Double.parseDouble(updater.getLatestName().replaceAll("PlayerParticles v", "")) > Double.parseDouble(getPlugin().getDescription().getVersion())) {
-                            updateVersion = updater.getLatestName().replaceAll("PlayerParticles v", "");
-                            getLogger().info("An update (v" + updateVersion + ") is available! You are running v" + getPlugin().getDescription().getVersion());
-                        }
-                    } catch (Exception e) {
-                        getLogger().warning("An error occurred checking for an update. There is either no established internet connection or the Curse API is down.");
-                    }
-                }
-            }.runTaskAsynchronously(this);
-        }
     }
 
     /**
@@ -120,15 +94,6 @@ public class PlayerParticles extends JavaPlugin {
      */
     public static Plugin getPlugin() {
         return Bukkit.getPluginManager().getPlugin("PlayerParticles");
-    }
-
-    /**
-     * Checks the config if the plugin can look for updates
-     * 
-     * @return True if check-updates is set to true in the config
-     */
-    public boolean shouldCheckUpdates() {
-        return getConfig().getBoolean("check-updates");
     }
 
     /**
