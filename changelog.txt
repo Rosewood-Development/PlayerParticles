@@ -2,6 +2,7 @@
 * Create a backup of your config.yml if you wish to import all your old settings!
 === v5.1 ===
 * Fix bug preventing the use of /pp effect, style, data, and reset from being used before a player has opened the GUI
+* Empty messages in config.yml will no longer display an error to the player, they won't be printed out at all
 === v5 ===
 + Added a GUI. Opens with /pp or /pp gui. Icons and messages are completely customizable from the config.
 + Added a way to disable the GUI, because I know somebody will ask
