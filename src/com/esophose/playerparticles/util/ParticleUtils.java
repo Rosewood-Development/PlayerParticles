@@ -31,6 +31,25 @@ public class ParticleUtils {
                 return material; 
         return null;
     } // @formatter:on
+    
+    /**
+     * Finds a block/item as a material from a list of possible strings
+     * Contains a fallback to the barrier icon just in case
+     * 
+     * @param input A list of material names
+     * @return The first matching material
+     */
+    public static Material closestMatchWithFallback(String... input) {
+        Material mat = null;
+        for (String name : input) {
+            mat = closestMatch(name);
+            if (mat != null)
+                return mat;
+        }
+        if (mat == null)
+            mat = Material.BARRIER;
+        return mat;
+    }
 
     /**
      * Gets the smallest positive integer from an array

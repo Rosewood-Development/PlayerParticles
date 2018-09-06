@@ -35,6 +35,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.Dye;
+import org.bukkit.material.Skull;
 import org.bukkit.material.Wool;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -102,6 +103,10 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
      */
     private static Material[] blockMaterials;
     private static Material[] itemMaterials;
+    
+    private final class ColorInfo {
+        
+    }
 
     static { // @formatter:off
         colorMapping = new LinkedHashMap<DyeColor, OrdinaryColor>();
@@ -144,66 +149,67 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
 
         rainbowColors = new DyeColor[] { DyeColor.RED, DyeColor.ORANGE, DyeColor.YELLOW, DyeColor.LIME, DyeColor.LIGHT_BLUE, DyeColor.BLUE, DyeColor.PURPLE };
 
+        // All materials contain their > 1.13 name, followed by their legacy name, if applicable
         blockMaterials = new Material[] {
-            Material.STONE,
-            Material.GRASS,
-            Material.TNT,
-            Material.COBBLESTONE,
-            Material.WOOD,
-            Material.BEDROCK,
-            Material.SAND,
-            Material.LOG,
-            Material.SPONGE,
-            Material.GLASS,
-            Material.WOOL,
-            Material.IRON_BLOCK,
-            Material.GOLD_BLOCK,
-            Material.DIAMOND_BLOCK,
-            Material.EMERALD_BLOCK,
-            Material.COAL_BLOCK,
-            Material.REDSTONE_BLOCK,
-            Material.BOOKSHELF,
-            Material.ICE,
-            Material.CLAY,
-            Material.PUMPKIN,
-            Material.MELON_BLOCK,
-            Material.NETHERRACK,
-            Material.SOUL_SAND,
-            Material.GLOWSTONE,
-            Material.NETHER_BRICK,
-            Material.ENDER_STONE,
-            Material.PRISMARINE
+            ParticleUtils.closestMatchWithFallback("STONE"),
+            ParticleUtils.closestMatchWithFallback("GRASS"),
+            ParticleUtils.closestMatchWithFallback("TNT"),
+            ParticleUtils.closestMatchWithFallback("COBBLESTONE"),
+            ParticleUtils.closestMatchWithFallback("OAK_WOOD", "WOOD"),
+            ParticleUtils.closestMatchWithFallback("BEDROCK"),
+            ParticleUtils.closestMatchWithFallback("SAND"),
+            ParticleUtils.closestMatchWithFallback("OAK_LOG", "LOG"),
+            ParticleUtils.closestMatchWithFallback("SPONGE"),
+            ParticleUtils.closestMatchWithFallback("GLASS"),
+            ParticleUtils.closestMatchWithFallback("WHITE_WOOL", "WOOL"),
+            ParticleUtils.closestMatchWithFallback("IRON_BLOCK"),
+            ParticleUtils.closestMatchWithFallback("GOLD_BLOCK"),
+            ParticleUtils.closestMatchWithFallback("DIAMOND_BLOCK"),
+            ParticleUtils.closestMatchWithFallback("EMERALD_BLOCK"),
+            ParticleUtils.closestMatchWithFallback("COAL_BLOCK"),
+            ParticleUtils.closestMatchWithFallback("REDSTONE_BLOCK"),
+            ParticleUtils.closestMatchWithFallback("BOOKSHELF"),
+            ParticleUtils.closestMatchWithFallback("ICE"),
+            ParticleUtils.closestMatchWithFallback("CLAY"),
+            ParticleUtils.closestMatchWithFallback("PUMPKIN"),
+            ParticleUtils.closestMatchWithFallback("MELON", "MELON_BLOCK"),
+            ParticleUtils.closestMatchWithFallback("NETHERRACK"),
+            ParticleUtils.closestMatchWithFallback("SOUL_SAND"),
+            ParticleUtils.closestMatchWithFallback("GLOWSTONE"),
+            ParticleUtils.closestMatchWithFallback("NETHER_BRICK"),
+            ParticleUtils.closestMatchWithFallback("END_STONE", "ENDER_STONE"),
+            ParticleUtils.closestMatchWithFallback("PRISMARINE")
         };
 
         itemMaterials = new Material[] {
-            Material.COAL,
-            Material.IRON_INGOT,
-            Material.GOLD_INGOT,
-            Material.REDSTONE,
-            Material.EMERALD,
-            Material.QUARTZ,
-            Material.CLAY_BRICK,
-            Material.GLOWSTONE_DUST,
-            Material.SUGAR_CANE,
-            Material.FLINT,
-            Material.POTATO_ITEM,
-            Material.CARROT_ITEM,
-            Material.SNOW_BALL,
-            Material.BONE,
-            Material.ENDER_PEARL,
-            Material.BLAZE_POWDER,
-            Material.NETHER_STALK,
-            Material.FIREBALL,
-            Material.CHORUS_FRUIT,
-            Material.PRISMARINE_CRYSTALS,
-            Material.SULPHUR,
-            Material.APPLE,
-            Material.MELON,
-            Material.COOKIE,
-            Material.IRON_SPADE,
-            Material.COMPASS,
-            Material.WATCH,
-            Material.NAME_TAG
+            ParticleUtils.closestMatchWithFallback("COAL"),
+            ParticleUtils.closestMatchWithFallback("IRON_INGOT"),
+            ParticleUtils.closestMatchWithFallback("GOLD_INGOT"),
+            ParticleUtils.closestMatchWithFallback("REDSTONE"),
+            ParticleUtils.closestMatchWithFallback("EMERALD"),
+            ParticleUtils.closestMatchWithFallback("QUARTZ"),
+            ParticleUtils.closestMatchWithFallback("BRICK", "CLAY_BRICK"),
+            ParticleUtils.closestMatchWithFallback("GLOWSTONE_DUST"),
+            ParticleUtils.closestMatchWithFallback("SUGAR_CANE"),
+            ParticleUtils.closestMatchWithFallback("FLINT"),
+            ParticleUtils.closestMatchWithFallback("POTATO", "POTATO_ITEM"),
+            ParticleUtils.closestMatchWithFallback("CARROT", "CARROT_ITEM"),
+            ParticleUtils.closestMatchWithFallback("SNOWBALL", "SNOW_BALL"),
+            ParticleUtils.closestMatchWithFallback("BONE"),
+            ParticleUtils.closestMatchWithFallback("ENDER_PEARL"),
+            ParticleUtils.closestMatchWithFallback("BLAZE_POWDER"),
+            ParticleUtils.closestMatchWithFallback("NETHER_WART", "NETHER_STALK"),
+            ParticleUtils.closestMatchWithFallback("FIRE_CHARGE", "FIREBALL"),
+            ParticleUtils.closestMatchWithFallback("CHORUS_FRUIT"),
+            ParticleUtils.closestMatchWithFallback("PRISMARINE_CRYSTALS"),
+            ParticleUtils.closestMatchWithFallback("GUNPOWDER", "SULPHUR"),
+            ParticleUtils.closestMatchWithFallback("APPLE"),
+            ParticleUtils.closestMatchWithFallback("MELON"),
+            ParticleUtils.closestMatchWithFallback("COOKIE"),
+            ParticleUtils.closestMatchWithFallback("IRON_SHOVEL", "IRON_SPADE"),
+            ParticleUtils.closestMatchWithFallback("COMPASS"),
+            ParticleUtils.closestMatchWithFallback("CLOCK", "WATCH"),
+            ParticleUtils.closestMatchWithFallback("NAME_TAG")
         };
     } // @formatter:on
 
@@ -370,7 +376,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
 
         inventory.clear(); // Make sure the inventory is always empty before we start adding items
 
-        ItemStack currentIcon = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());
+        ItemStack currentIcon = new ItemStack(Material.PLAYER_HEAD, 1);
         SkullMeta currentIconMeta = (SkullMeta) currentIcon.getItemMeta();
         currentIconMeta.setDisplayName(ChatColor.GREEN + player.getName());
         String[] currentIconLore = new String[3];
@@ -378,7 +384,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         currentIconLore[1] = ChatColor.YELLOW + "Style: " + ChatColor.AQUA + p.getParticleStyle().getName();
         currentIconLore[2] = ChatColor.YELLOW + "Active Data: " + ChatColor.AQUA + p.getParticleDataString();
         currentIconMeta.setLore(Arrays.asList(currentIconLore));
-        currentIconMeta.setOwner(player.getName());
+        currentIconMeta.setOwningPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()));
         currentIcon.setItemMeta(currentIconMeta);
 
         ItemStack effectIcon = new ItemStack(defaultMenuIcons[0], 1);
@@ -568,6 +574,8 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
      */
     @EventHandler
     public void onInventoryInteract(InventoryClickEvent e) {
+        if (isGuiDisabled()) return; // Don't worry about processing anything if the GUI is disabled
+        
         if (!(e.getWhoClicked() instanceof Player)) return; // Not sure if I actually have to check this
 
         Player player = (Player) e.getWhoClicked();
