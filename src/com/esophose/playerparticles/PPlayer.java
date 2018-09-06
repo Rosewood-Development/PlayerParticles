@@ -27,6 +27,7 @@ import com.esophose.playerparticles.particles.ParticleEffect.ParticleData;
 import com.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
 import com.esophose.playerparticles.styles.DefaultStyles;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
+import com.esophose.playerparticles.util.ParticleUtils;
 
 public class PPlayer {
 
@@ -169,7 +170,7 @@ public class PPlayer {
      * @param itemData The player's new item data
      */
     public void setItemData(ItemData itemData) {
-        if (itemData == null) itemData = new ItemData(Material.IRON_SPADE, (byte) 0);
+        if (itemData == null) itemData = new ItemData(ParticleUtils.closestMatchWithFallback("IRON_SHOVEL", "IRON_SPADE"), (byte)0);
         this.particleItemData = itemData;
     }
 
@@ -279,7 +280,7 @@ public class PPlayer {
     public static PPlayer getNewPPlayer(UUID playerUUID) {
         ParticleEffect particleEffect = ParticleEffect.NONE;
         ParticleStyle particleStyle = DefaultStyles.NONE;
-        ItemData particleItemData = new ItemData(Material.IRON_SPADE, (byte) 0);
+        ItemData particleItemData = new ItemData(ParticleUtils.closestMatchWithFallback("IRON_SHOVEL", "IRON_SPADE"), (byte) 0);
         BlockData particleBlockData = new BlockData(Material.STONE, (byte) 0);
         OrdinaryColor particleColorData = new OrdinaryColor(0, 0, 0);
         NoteColor particleNoteColorData = new NoteColor(0);

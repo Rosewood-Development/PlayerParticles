@@ -71,7 +71,6 @@ public enum ParticleEffect {
     DRIP_LAVA("dripLava", "DRIP_LAVA"),
     ANGRY_VILLAGER("angryVillager", "VILLAGER_ANGRY"),
     HAPPY_VILLAGER("happyVillager", "VILLAGER_HAPPY"),
-    // TOWN_AURA("townaura", "TOWN_AURA", ParticleProperty.DIRECTIONAL), // Same thing as depthsuspend
     NOTE("note", "NOTE", ParticleProperty.COLORABLE),
     PORTAL("portal", "PORTAL"),
     ENCHANTMENT_TABLE("enchantmenttable", "ENCHANTMENT_TABLE"),
@@ -303,7 +302,6 @@ public enum ParticleEffect {
      * @param center Center location of the effect
      * @throws ParticleDataException If the particle effect does not require additional data or if the data type is incorrect
      */
-    @SuppressWarnings("deprecation")
     public void display(ParticleData data, float offsetX, float offsetY, float offsetZ, float speed, int amount, Location center) throws ParticleDataException {
         if (!hasProperty(ParticleProperty.REQUIRES_DATA)) {
             throw new ParticleDataException("This particle effect does not require additional data");

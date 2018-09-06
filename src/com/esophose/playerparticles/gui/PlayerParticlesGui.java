@@ -11,14 +11,13 @@ package com.esophose.playerparticles.gui;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
@@ -35,8 +34,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.Dye;
-import org.bukkit.material.Skull;
-import org.bukkit.material.Wool;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.esophose.playerparticles.PPlayer;
@@ -88,8 +85,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
     /**
      * Maps to convert from clicked materials to particle colors
      */
-    private static LinkedHashMap<DyeColor, OrdinaryColor> colorMapping;
-    private static String[] colorMappingNames;
+    private static ColorData[] colorMapping;
 
     /**
      * DyeColor array in the order of the rainbow
@@ -103,52 +99,37 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
      */
     private static Material[] blockMaterials;
     private static Material[] itemMaterials;
-    
-    private final class ColorInfo {
-        
-    }
 
     static { // @formatter:off
-        colorMapping = new LinkedHashMap<DyeColor, OrdinaryColor>();
+    	colorMapping = new ColorData[] {
+    		new ColorData(DyeColor.RED, Material.ROSE_RED, new OrdinaryColor(255, 0, 0), ChatColor.RED + "red"),
+    		new ColorData(DyeColor.ORANGE, Material.ORANGE_DYE, new OrdinaryColor(255, 140, 0), ChatColor.GOLD + "orange"),
+    		new ColorData(DyeColor.YELLOW, Material.DANDELION_YELLOW, new OrdinaryColor(255, 255, 0), ChatColor.YELLOW + "yellow"),
+    		new ColorData(DyeColor.LIME, Material.LIME_DYE, new OrdinaryColor(50, 205, 50), ChatColor.GREEN + "lime green"),
+    		new ColorData(DyeColor.GREEN, Material.CACTUS_GREEN, new OrdinaryColor(0, 128, 0), ChatColor.DARK_GREEN + "green"),
+    		new ColorData(DyeColor.BLUE, Material.LAPIS_LAZULI, new OrdinaryColor(0, 0, 255), ChatColor.DARK_BLUE + "blue"),
+    		new ColorData(DyeColor.CYAN, Material.CYAN_DYE, new OrdinaryColor(0, 139, 139), ChatColor.DARK_AQUA + "cyan"),
+    		new ColorData(DyeColor.LIGHT_BLUE, Material.LIGHT_BLUE_DYE, new OrdinaryColor(173, 216, 230), ChatColor.AQUA + "light blue"),
+    		new ColorData(DyeColor.PURPLE, Material.PURPLE_DYE, new OrdinaryColor(138, 43, 226), ChatColor.DARK_PURPLE + "purple"),
+    		new ColorData(DyeColor.MAGENTA, Material.MAGENTA_DYE, new OrdinaryColor(202, 31, 123), ChatColor.LIGHT_PURPLE + "magenta"),
+    		new ColorData(DyeColor.PINK, Material.PINK_DYE, new OrdinaryColor(255, 182, 193), ChatColor.LIGHT_PURPLE + "pink"),
+    		new ColorData(DyeColor.BROWN, Material.COCOA_BEANS, new OrdinaryColor(139, 69, 19), ChatColor.GOLD + "brown"),
+    		new ColorData(DyeColor.BLACK, Material.INK_SAC, new OrdinaryColor(0, 0, 0), ChatColor.DARK_GRAY + "black"),
+    		new ColorData(DyeColor.GRAY, Material.GRAY_DYE, new OrdinaryColor(128, 128, 128), ChatColor.DARK_GRAY + "gray"),
+    		new ColorData(DyeColor.getByColor(Color.SILVER), Material.LIGHT_GRAY_DYE, new OrdinaryColor(192, 192, 192), ChatColor.GRAY + "light gray"),
+    		new ColorData(DyeColor.WHITE, Material.BONE_MEAL, new OrdinaryColor(255, 255, 255), ChatColor.WHITE + "white"),
+    	};
 
-        colorMapping.put(DyeColor.RED, new OrdinaryColor(255, 0, 0));
-        colorMapping.put(DyeColor.ORANGE, new OrdinaryColor(255, 140, 0));
-        colorMapping.put(DyeColor.YELLOW, new OrdinaryColor(255, 255, 0));
-        colorMapping.put(DyeColor.LIME, new OrdinaryColor(50, 205, 50));
-        colorMapping.put(DyeColor.GREEN, new OrdinaryColor(0, 128, 0));
-        colorMapping.put(DyeColor.BLUE, new OrdinaryColor(0, 0, 255));
-        colorMapping.put(DyeColor.CYAN, new OrdinaryColor(0, 139, 139));
-        colorMapping.put(DyeColor.LIGHT_BLUE, new OrdinaryColor(173, 216, 230));
-        colorMapping.put(DyeColor.PURPLE, new OrdinaryColor(138, 43, 226));
-        colorMapping.put(DyeColor.MAGENTA, new OrdinaryColor(202, 31, 123));
-        colorMapping.put(DyeColor.PINK, new OrdinaryColor(255, 182, 193));
-        colorMapping.put(DyeColor.BROWN, new OrdinaryColor(139, 69, 19));
-        colorMapping.put(DyeColor.BLACK, new OrdinaryColor(0, 0, 0));
-        colorMapping.put(DyeColor.GRAY, new OrdinaryColor(128, 128, 128));
-        colorMapping.put(DyeColor.SILVER, new OrdinaryColor(192, 192, 192));
-        colorMapping.put(DyeColor.WHITE, new OrdinaryColor(255, 255, 255));
-
-        colorMappingNames = new String[] { 
-            ChatColor.RED + "red", 
-            ChatColor.GOLD + "orange", 
-            ChatColor.YELLOW + "yellow", 
-            ChatColor.GREEN + "lime green", 
-            ChatColor.DARK_GREEN + "green", 
-            ChatColor.DARK_BLUE + "blue", 
-            ChatColor.DARK_AQUA + "cyan", 
-            ChatColor.AQUA + "light blue", 
-            ChatColor.DARK_PURPLE + "purple", 
-            ChatColor.LIGHT_PURPLE + "magenta", 
-            ChatColor.LIGHT_PURPLE + "pink", 
-            ChatColor.GOLD + "brown", 
-            ChatColor.DARK_GRAY + "black", 
-            ChatColor.DARK_GRAY + "gray", 
-            ChatColor.GRAY + "light gray", 
-            ChatColor.WHITE + "white" 
+        rainbowColors = new DyeColor[] { 
+        	DyeColor.RED, 
+        	DyeColor.ORANGE, 
+        	DyeColor.YELLOW, 
+        	DyeColor.LIME, 
+        	DyeColor.LIGHT_BLUE, 
+        	DyeColor.BLUE, 
+        	DyeColor.PURPLE 
         };
-
-        rainbowColors = new DyeColor[] { DyeColor.RED, DyeColor.ORANGE, DyeColor.YELLOW, DyeColor.LIME, DyeColor.LIGHT_BLUE, DyeColor.BLUE, DyeColor.PURPLE };
-
+        
         // All materials contain their > 1.13 name, followed by their legacy name, if applicable
         blockMaterials = new Material[] {
             ParticleUtils.closestMatchWithFallback("STONE"),
@@ -376,7 +357,14 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
 
         inventory.clear(); // Make sure the inventory is always empty before we start adding items
 
-        ItemStack currentIcon = new ItemStack(Material.PLAYER_HEAD, 1);
+        ItemStack currentIcon;
+        Material playerHead = ParticleUtils.closestMatch("PLAYER_HEAD");
+        if (playerHead != null) {
+        	currentIcon = new ItemStack(playerHead, 1);
+        } else {
+        	currentIcon = new ItemStack(ParticleUtils.closestMatch("SKULL_ITEM"), 1, (short) SkullType.PLAYER.ordinal());
+        }
+        
         SkullMeta currentIconMeta = (SkullMeta) currentIcon.getItemMeta();
         currentIconMeta.setDisplayName(ChatColor.GREEN + player.getName());
         String[] currentIconLore = new String[3];
@@ -635,9 +623,9 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
                     if (clicked.getItemMeta().getDisplayName().equals(rainbowName)) {
                         ConfigManager.getInstance().savePPlayer(pplayer.getUniqueId(), new OrdinaryColor(999, 999, 999));
                     } else {
-                        for (int i = 0; i < colorMappingNames.length; i++) {
-                            if (clicked.getItemMeta().getDisplayName().equals(colorMappingNames[i])) {
-                                ConfigManager.getInstance().savePPlayer(pplayer.getUniqueId(), getColorMappingEntry(i).getValue());
+                        for (int i = 0; i < colorMapping.length; i++) {
+                            if (clicked.getItemMeta().getDisplayName().equals(colorMapping[i].getName())) {
+                                ConfigManager.getInstance().savePPlayer(pplayer.getUniqueId(), colorMapping[i].getOrdinaryColor());
                             }
                         }
                     }
@@ -654,18 +642,6 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
             changeState(pplayer, GuiState.DEFAULT);
             break;
         }
-    }
-
-    /**
-     * Gets a DyeColor, OrdinaryColor pair from the colorMapping LinkedHashSet
-     * 
-     * @param colorIndex The index to get the pair from
-     * @return A DyeColor, OrdinaryColor pair
-     */
-    @SuppressWarnings("unchecked")
-    private static Map.Entry<DyeColor, OrdinaryColor> getColorMappingEntry(int colorIndex) {
-        Set<Map.Entry<DyeColor, OrdinaryColor>> mapSet = colorMapping.entrySet();
-        return (Map.Entry<DyeColor, OrdinaryColor>) mapSet.toArray()[colorIndex];
     }
 
     /**
@@ -746,17 +722,20 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
      * @param colorIndex What color to use
      * @return An ItemStack formatted to be displayed in the GUI
      */
-    private static ItemStack getItemForColorData(OrdinaryColor currentColor, int colorIndex) {
-        Map.Entry<DyeColor, OrdinaryColor> colorMappingEntry = getColorMappingEntry(colorIndex);
-        DyeColor dyeColor = colorMappingEntry.getKey();
-        OrdinaryColor displayColor = colorMappingEntry.getValue();
-        String formattedDisplayColor = ChatColor.RED.toString() + displayColor.getRed() + " " + ChatColor.GREEN + displayColor.getGreen() + " " + ChatColor.AQUA + displayColor.getBlue();
+	private static ItemStack getItemForColorData(OrdinaryColor currentColor, int colorIndex) {
+        ColorData colorData = colorMapping[colorIndex];
+        String formattedDisplayColor = ChatColor.RED.toString() + colorData.getOrdinaryColor().getRed() + " " + ChatColor.GREEN + colorData.getOrdinaryColor().getGreen() + " " + ChatColor.AQUA + colorData.getOrdinaryColor().getBlue();
 
-        ItemStack colorIcon = new Dye(dyeColor).toItemStack(1);
+        ItemStack colorIcon;
+        if (colorData.getMaterial() != null) { // Use 1.13 materials
+        	colorIcon = new ItemStack(colorData.getMaterial());
+        } else { // Use < 1.13 dye colors
+        	colorIcon = new Dye(colorData.getDyeColor()).toItemStack(1);
+        }
         ItemMeta colorIconMeta = colorIcon.getItemMeta();
 
-        colorIconMeta.setDisplayName(colorMappingNames[colorIndex]);
-        if (!currentColor.equals(displayColor)) {
+        colorIconMeta.setDisplayName(colorData.getName());
+        if (!currentColor.equals(colorData.getOrdinaryColor())) {
             colorIconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SETS_TO.getMessageReplaced("color data") + formattedDisplayColor));
         } else {
             colorIconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SETS_TO.getMessageReplaced("color data") + formattedDisplayColor, MessageType.GUI_ICON_CURRENT_ACTIVE.getMessageReplaced("color data")));
@@ -797,8 +776,14 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
      * 
      * @return An ItemStack formatted to be displayed in the GUI
      */
-    private static ItemStack getItemForRainbowColorData(OrdinaryColor currentColor, DyeColor dyeColor) {
-        ItemStack rainbowIcon = new Wool(dyeColor).toItemStack(1);
+	private static ItemStack getItemForRainbowColorData(OrdinaryColor currentColor, DyeColor dyeColor) {
+    	ColorData colorData = getColorDataFromOrdinaryColor(dyeColor);
+    	ItemStack rainbowIcon;
+        if (colorData.getMaterial() != null) { // Use 1.13 materials
+        	rainbowIcon = new ItemStack(colorData.getMaterial());
+        } else { // Use < 1.13 dye colors
+        	rainbowIcon = new Dye(colorData.getDyeColor()).toItemStack(1);
+        }
         ItemMeta rainbowIconMeta = rainbowIcon.getItemMeta();
 
         rainbowIconMeta.setDisplayName(rainbowName);
@@ -819,8 +804,14 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
      * 
      * @return An ItemStack formatted to be displayed in the GUI
      */
-    private static ItemStack getItemForRainbowNoteData(NoteColor currentColor, DyeColor dyeColor) {
-        ItemStack rainbowIcon = new Wool(dyeColor).toItemStack(1);
+	private static ItemStack getItemForRainbowNoteData(NoteColor currentColor, DyeColor dyeColor) {
+    	ColorData colorData = getColorDataFromOrdinaryColor(dyeColor);
+    	ItemStack rainbowIcon;
+        if (colorData.getMaterial() != null) { // Use 1.13 materials
+        	rainbowIcon = new ItemStack(colorData.getMaterial());
+        } else { // Use < 1.13 dye colors
+        	rainbowIcon = new Dye(colorData.getDyeColor()).toItemStack(1);
+        }
         ItemMeta rainbowIconMeta = rainbowIcon.getItemMeta();
 
         rainbowIconMeta.setDisplayName(rainbowName);
@@ -848,6 +839,19 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         icon.setItemMeta(iconMeta);
 
         return icon;
+    }
+    
+    /**
+     * Gets a ColorData object from its DyeColor
+     * 
+     * @param color The DyeColor
+     * @return The found ColorData object, null if not found
+     */
+    private static ColorData getColorDataFromOrdinaryColor(DyeColor color) {
+    	for (ColorData colorData : colorMapping)
+    		if (colorData.getDyeColor().equals(color))
+    			return colorData;
+    	return null;
     }
 
 }
