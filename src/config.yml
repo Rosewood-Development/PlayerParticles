@@ -14,7 +14,7 @@
 # I don't recommend changing it
 # NOTE: Updating to a new version of the plugin will change this number and delete your config. 
 #       Make sure you create a backup each time before you update!
-version: 5.1
+version: 5.2
 
 # Check for new versions of the plugin
 # Default: true
@@ -169,13 +169,13 @@ message-color-data-usage: '&b/pp data [<0-255> <0-255> <0-255>]|[rainbow]'
 
 # Item Data Usage
 # You should not change the text here, only the coloring
-# Default: '&b/pp data <itemName/ID> <0-15>'
-message-item-data-usage: '&b/pp data <itemName> <0-15>'
+# Default: '&b/pp data <itemName/ID>'
+message-item-data-usage: '&b/pp data <itemName>'
 
 # Block Data Usage
 # You should not change the text here, only the coloring
-# Default: '&b/pp data <blockName/ID> <0-15>'
-message-block-data-usage: '&b/pp data <blockName> <0-15>'
+# Default: '&b/pp data <blockName/ID>'
+message-block-data-usage: '&b/pp data <blockName>'
 
 # ---------------- #
 #     Prefixes     #

@@ -30,7 +30,7 @@ public class PermissionManager {
      */
     public static boolean hasEffectPermission(Player player, ParticleEffect effect) {
         if (player.hasPermission("playerparticles.*") || player.hasPermission("playerparticles.effect.*")) return true;
-        if (player.hasPermission("playerparticles.effect." + effect.getName().toLowerCase().replace("_", ""))) return true;
+        if (player.hasPermission("playerparticles.effect." + effect.getName())) return true;
         if (effect == ParticleEffect.NONE) return true;
         return false;
     }
@@ -45,7 +45,7 @@ public class PermissionManager {
      */
     public static boolean hasStylePermission(Player player, ParticleStyle style) {
         if (player.hasPermission("playerparticles.*") || player.hasPermission("playerparticles.style.*")) return true;
-        if (player.hasPermission("playerparticles.style." + style.getName().toLowerCase().replace("_", ""))) return true;
+        if (player.hasPermission("playerparticles.style." + style.getName())) return true;
         if (style == DefaultStyles.NONE) return true;
         return false;
     }
@@ -59,7 +59,7 @@ public class PermissionManager {
     public static List<String> getEffectsUserHasPermissionFor(Player p) {
         List<String> list = new ArrayList<String>();
         for (ParticleEffect pe : ParticleEffect.getSupportedEffects()) {
-            if (hasEffectPermission(p, pe)) list.add(pe.getName().toLowerCase().replace("_", ""));
+            if (hasEffectPermission(p, pe)) list.add(pe.getName());
         }
         return list;
     }
@@ -73,7 +73,7 @@ public class PermissionManager {
     public static List<String> getStylesUserHasPermissionFor(Player p) {
         List<String> list = new ArrayList<String>();
         for (ParticleStyle ps : ParticleStyleManager.getStyles()) {
-            if (hasStylePermission(p, ps)) list.add(ps.getName().toLowerCase().replace("_", ""));
+            if (hasStylePermission(p, ps)) list.add(ps.getName());
         }
         return list;
     }

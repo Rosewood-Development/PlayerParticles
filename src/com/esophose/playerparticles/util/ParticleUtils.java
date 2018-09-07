@@ -8,6 +8,9 @@
 
 package com.esophose.playerparticles.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Material;
 
 public class ParticleUtils {
@@ -49,6 +52,22 @@ public class ParticleUtils {
         if (mat == null)
             mat = Material.BARRIER;
         return mat;
+    }
+    
+    public static List<String> getAllBlockMaterials() {
+        List<String> materials = new ArrayList<String>();
+        for (Material mat : Material.values())
+            if (mat.isBlock())
+                materials.add(mat.name().toLowerCase());
+        return materials;
+    }
+    
+    public static List<String> getAllItemMaterials() {
+        List<String> materials = new ArrayList<String>();
+        for (Material mat : Material.values())
+            if (!mat.isBlock())
+                materials.add(mat.name().toLowerCase());
+        return materials;
     }
 
     /**

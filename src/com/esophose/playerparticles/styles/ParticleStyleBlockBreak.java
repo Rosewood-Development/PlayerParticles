@@ -11,7 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
 import com.esophose.playerparticles.PPlayer;
-import com.esophose.playerparticles.manager.ConfigManager;
+import com.esophose.playerparticles.manager.PPlayerDataManager;
 import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.manager.PermissionManager;
 import com.esophose.playerparticles.styles.api.PParticle;
@@ -43,7 +43,7 @@ public class ParticleStyleBlockBreak implements ParticleStyle, Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
-        PPlayer pplayer = ConfigManager.getInstance().getPPlayer(player.getUniqueId());
+        PPlayer pplayer = PPlayerDataManager.getInstance().getPPlayer(player.getUniqueId());
         if (pplayer != null && pplayer.getParticleStyle() == DefaultStyles.BLOCKBREAK && PermissionManager.hasStylePermission(player, DefaultStyles.BLOCKBREAK)) {
             Location loc = event.getBlock().getLocation();
             ParticleManager.displayParticles(pplayer, DefaultStyles.BLOCKBREAK.getParticles(pplayer, loc));

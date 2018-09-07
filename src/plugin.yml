@@ -1,9 +1,10 @@
 name: PlayerParticles
 main: com.esophose.playerparticles.PlayerParticles
-version: 5.1
+version: 5.2
+api-version: 1.13
 description: Make particles around players in fancy ways.
 author: Esophose
 website: https://dev.bukkit.org/projects/playerparticles
 commands:
     pp:
-        description: The main PlayerParticles command.
+        description: The main PlayerParticles command. By default, opens the GUI.

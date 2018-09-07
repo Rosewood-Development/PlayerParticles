@@ -38,12 +38,12 @@ import com.esophose.playerparticles.styles.api.ParticleStyle;
 import com.esophose.playerparticles.styles.api.ParticleStyleManager;
 import com.esophose.playerparticles.util.ParticleUtils;
 
-public class ConfigManager {
+public class PPlayerDataManager {
 
     /**
      * The instance of the ConfigManager used for effect data
      */
-    private static ConfigManager instance = new ConfigManager("playerData");
+    private static PPlayerDataManager instance = new PPlayerDataManager("pplayerData");
     /**
      * The file the data is located in for the instance
      */
@@ -71,14 +71,14 @@ public class ConfigManager {
     /**
      * @return The instance of the config for effects
      */
-    public static ConfigManager getInstance() {
+    public static PPlayerDataManager getInstance() {
         return instance;
     }
 
     /**
      * @param fileName The name of the file
      */
-    private ConfigManager(String fileName) {
+    private PPlayerDataManager(String fileName) {
         if (!PlayerParticles.useMySQL) { // Don't bother creating the playerData.yml file if we aren't going to use it
             if (!PlayerParticles.getPlugin().getDataFolder().exists()) PlayerParticles.getPlugin().getDataFolder().mkdir();
 
@@ -165,8 +165,8 @@ public class ConfigManager {
 
                 ParticleEffect particleEffect = ParticleEffect.fromName(effectSection.getString("name"));
                 ParticleStyle particleStyle = ParticleStyleManager.styleFromString(styleSection.getString("name"));
-                ItemData particleItemData = new ItemData(Material.matchMaterial(itemDataSection.getString("material")), (byte) itemDataSection.getInt("data"));
-                BlockData particleBlockData = new BlockData(Material.matchMaterial(blockDataSection.getString("material")), (byte) blockDataSection.getInt("data"));
+                ItemData particleItemData = new ItemData(Material.matchMaterial(itemDataSection.getString("material")));
+                BlockData particleBlockData = new BlockData(Material.matchMaterial(blockDataSection.getString("material")));
                 OrdinaryColor particleColorData = new OrdinaryColor(colorDataSection.getInt("r"), colorDataSection.getInt("g"), colorDataSection.getInt("b"));
                 NoteColor particleNoteColorData = new NoteColor(noteColorDataSection.getInt("note"));
 
@@ -197,8 +197,8 @@ public class ConfigManager {
                         if (res.next()) {
                             ParticleEffect particleEffect = ParticleEffect.fromName(res.getString("u.effect"));
                             ParticleStyle particleStyle = ParticleStyleManager.styleFromString(res.getString("u.style"));
-                            ItemData particleItemData = new ItemData(Material.matchMaterial(res.getString("i.material")), res.getByte("i.data"));
-                            BlockData particleBlockData = new BlockData(Material.matchMaterial(res.getString("b.material")), res.getByte("b.data"));
+                            ItemData particleItemData = new ItemData(Material.matchMaterial(res.getString("i.material")));
+                            BlockData particleBlockData = new BlockData(Material.matchMaterial(res.getString("b.material")));
                             OrdinaryColor particleColorData = new OrdinaryColor(res.getInt("c.r"), res.getInt("c.g"), res.getInt("c.b"));
                             NoteColor particleNoteColorData = new NoteColor(res.getByte("n.note"));
 
@@ -246,9 +246,7 @@ public class ConfigManager {
             effectSection.set("name", pplayer.getParticleEffect().getName());
             styleSection.set("name", pplayer.getParticleStyle().getName());
             itemDataSection.set("material", pplayer.getItemData().getMaterial().name());
-            itemDataSection.set("data", pplayer.getItemData().getData());
             blockDataSection.set("material", pplayer.getBlockData().getMaterial().name());
-            blockDataSection.set("data", pplayer.getBlockData().getData());
             colorDataSection.set("r", pplayer.getColorData().getRed());
             colorDataSection.set("g", pplayer.getColorData().getGreen());
             colorDataSection.set("b", pplayer.getColorData().getBlue());
@@ -269,13 +267,11 @@ public class ConfigManager {
                                                             "); " +
                                                             "INSERT INTO pp_data_item (uuid, material, data) VALUES (" +
                                                             "'" + pplayer.getUniqueId().toString() + "', " +
-                                                            "'" + pplayer.getItemData().getMaterial().name() + "', " +
-                                                            pplayer.getItemData().getData() + 
+                                                            "'" + pplayer.getItemData().getMaterial().name() +
                                                             "); " +
                                                             "INSERT INTO pp_data_block (uuid, material, data) VALUES (" +
                                                             "'" + pplayer.getUniqueId().toString() + "', " +
-                                                            "'" + pplayer.getBlockData().getMaterial().name() + "', " +
-                                                            pplayer.getBlockData().getData() + 
+                                                            "'" + pplayer.getBlockData().getMaterial().name() +
                                                             "); " +
                                                             "INSERT INTO pp_data_color (uuid, r, g, b) VALUES (" +
                                                             "'" + pplayer.getUniqueId().toString() + "', " +
@@ -393,12 +389,11 @@ public class ConfigManager {
             if (!PlayerParticles.useMySQL) {
                 ConfigurationSection section = playerDataYaml.getConfigurationSection(playerUUID.toString() + ".itemData");
                 section.set("material", particleItemData.getMaterial().name());
-                section.set("data", particleItemData.getData());
                 save();
             } else {
                 async(() -> {
                     try {
-                        PlayerParticles.mySQL.updateSQL("UPDATE pp_data_item SET material = '" + particleItemData.getMaterial().name() + "', data = '" + particleItemData.getData() + "' WHERE uuid = '" + playerUUID + "';");
+                        PlayerParticles.mySQL.updateSQL("UPDATE pp_data_item SET material = '" + particleItemData.getMaterial().name() + "' WHERE uuid = '" + playerUUID + "';");
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
@@ -420,12 +415,11 @@ public class ConfigManager {
             if (!PlayerParticles.useMySQL) {
                 ConfigurationSection section = playerDataYaml.getConfigurationSection(playerUUID.toString() + ".blockData");
                 section.set("material", particleBlockData.getMaterial().name());
-                section.set("data", particleBlockData.getData());
                 save();
             } else {
                 async(() -> {
                     try {
-                        PlayerParticles.mySQL.updateSQL("UPDATE pp_data_block SET material = '" + particleBlockData.getMaterial().name() + "', data = '" + particleBlockData.getData() + "' WHERE uuid = '" + playerUUID + "';");
+                        PlayerParticles.mySQL.updateSQL("UPDATE pp_data_block SET material = '" + particleBlockData.getMaterial().name() + "' WHERE uuid = '" + playerUUID + "';");
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
@@ -507,7 +501,6 @@ public class ConfigManager {
                 baseSection.createSection("colorData");
                 baseSection.createSection("noteColorData");
             } else {
-                System.out.println("Tried to create a fixed effect with ID " + fixedEffect.getId() + " that already exists!");
                 return;
             }
 
@@ -527,9 +520,7 @@ public class ConfigManager {
             effectSection.set("name", fixedEffect.getParticleEffect().getName());
             styleSection.set("name", fixedEffect.getParticleStyle().getName());
             itemDataSection.set("material", fixedEffect.getItemData().getMaterial().name());
-            itemDataSection.set("data", fixedEffect.getItemData().getData());
             blockDataSection.set("material", fixedEffect.getBlockData().getMaterial().name());
-            blockDataSection.set("data", fixedEffect.getBlockData().getData());
             colorDataSection.set("r", fixedEffect.getColorData().getRed());
             colorDataSection.set("g", fixedEffect.getColorData().getGreen());
             colorDataSection.set("b", fixedEffect.getColorData().getBlue());
@@ -544,7 +535,6 @@ public class ConfigManager {
                          ResultSet res = statement.executeQuery("SELECT * FROM pp_fixed WHERE player_uuid = '" + fixedEffect.getOwnerUniqueId() + "' AND id = " + fixedEffect.getId())) {
                         
                         if (res.next()) {
-                            System.out.println("Tried to create a fixed effect with ID " + fixedEffect.getId() + " that already in the database!");
                             return;
                         }
                         
@@ -563,13 +553,11 @@ public class ConfigManager {
                                                         "); " +
                                                         "INSERT INTO pp_data_item (uuid, material, data) VALUES (" +
                                                         "'" + fixedEffectUUID + "', " +
-                                                        "'" + fixedEffect.getItemData().getMaterial().name() + "', " +
-                                                        fixedEffect.getItemData().getData() + 
+                                                        "'" + fixedEffect.getItemData().getMaterial().name() +
                                                         "); " +
                                                         "INSERT INTO pp_data_block (uuid, material, data) VALUES (" +
                                                         "'" + fixedEffectUUID + "', " +
-                                                        "'" + fixedEffect.getBlockData().getMaterial().name() + "', " +
-                                                        fixedEffect.getBlockData().getData() + 
+                                                        "'" + fixedEffect.getBlockData().getMaterial().name() +
                                                         "); " +
                                                         "INSERT INTO pp_data_color (uuid, r, g, b) VALUES (" +
                                                         "'" + fixedEffectUUID + "', " +
@@ -695,8 +683,8 @@ public class ConfigManager {
                         double zPos = section.getDouble("zPos");
                         ParticleEffect particleEffect = ParticleEffect.fromName(effectSection.getString("name"));
                         ParticleStyle particleStyle = ParticleStyleManager.styleFromString(styleSection.getString("name"));
-                        ItemData particleItemData = new ItemData(Material.matchMaterial(itemDataSection.getString("material")), (byte) itemDataSection.getInt("data"));
-                        BlockData particleBlockData = new BlockData(Material.matchMaterial(blockDataSection.getString("material")), (byte) blockDataSection.getInt("data"));
+                        ItemData particleItemData = new ItemData(Material.matchMaterial(itemDataSection.getString("material")));
+                        BlockData particleBlockData = new BlockData(Material.matchMaterial(blockDataSection.getString("material")));
                         OrdinaryColor particleColorData = new OrdinaryColor(colorDataSection.getInt("r"), colorDataSection.getInt("g"), colorDataSection.getInt("b"));
                         NoteColor particleNoteColorData = new NoteColor(noteColorDataSection.getInt("note"));
 
@@ -728,8 +716,8 @@ public class ConfigManager {
                             double zPos = res.getDouble("f.zPos");
                             ParticleEffect particleEffect = ParticleManager.effectFromString(res.getString("f.effect"));
                             ParticleStyle particleStyle = ParticleStyleManager.styleFromString(res.getString("f.style"));
-                            ItemData particleItemData = new ItemData(Material.matchMaterial(res.getString("i.material")), res.getByte("i.data"));
-                            BlockData particleBlockData = new BlockData(Material.matchMaterial(res.getString("b.material")), res.getByte("b.data"));
+                            ItemData particleItemData = new ItemData(Material.matchMaterial(res.getString("i.material")));
+                            BlockData particleBlockData = new BlockData(Material.matchMaterial(res.getString("b.material")));
                             OrdinaryColor particleColorData = new OrdinaryColor(res.getInt("c.r"), res.getInt("c.g"), res.getInt("c.b"));
                             NoteColor particleNoteColorData = new NoteColor(res.getByte("n.note"));
                             
@@ -767,8 +755,8 @@ public class ConfigManager {
                 double zPos = section.getDouble("zPos");
                 ParticleEffect particleEffect = ParticleEffect.fromName(effectSection.getString("name"));
                 ParticleStyle particleStyle = ParticleStyleManager.styleFromString(styleSection.getString("name"));
-                ItemData particleItemData = new ItemData(Material.matchMaterial(itemDataSection.getString("material")), (byte) itemDataSection.getInt("data"));
-                BlockData particleBlockData = new BlockData(Material.matchMaterial(blockDataSection.getString("material")), (byte) blockDataSection.getInt("data"));
+                ItemData particleItemData = new ItemData(Material.matchMaterial(itemDataSection.getString("material")));
+                BlockData particleBlockData = new BlockData(Material.matchMaterial(blockDataSection.getString("material")));
                 OrdinaryColor particleColorData = new OrdinaryColor(colorDataSection.getInt("r"), colorDataSection.getInt("g"), colorDataSection.getInt("b"));
                 NoteColor particleNoteColorData = new NoteColor(noteColorDataSection.getInt("note"));
                 
@@ -793,8 +781,8 @@ public class ConfigManager {
                             double zPos = res.getDouble("f.zPos");
                             ParticleEffect particleEffect = ParticleManager.effectFromString(res.getString("f.effect"));
                             ParticleStyle particleStyle = ParticleStyleManager.styleFromString(res.getString("f.style"));
-                            ItemData particleItemData = new ItemData(Material.matchMaterial(res.getString("i.material")), res.getByte("i.data"));
-                            BlockData particleBlockData = new BlockData(Material.matchMaterial(res.getString("b.material")), res.getByte("b.data"));
+                            ItemData particleItemData = new ItemData(Material.matchMaterial(res.getString("i.material")));
+                            BlockData particleBlockData = new BlockData(Material.matchMaterial(res.getString("b.material")));
                             OrdinaryColor particleColorData = new OrdinaryColor(res.getInt("c.r"), res.getInt("c.g"), res.getInt("c.b"));
                             NoteColor particleNoteColorData = new NoteColor(res.getByte("n.note"));
 
@@ -975,7 +963,6 @@ public class ConfigManager {
     private void async(SyncInterface asyncCallback) {
         new BukkitRunnable() {
             public void run() {
-                System.out.println("Async with thread: " + Thread.currentThread().getName());
                 asyncCallback.execute();
             }
         }.runTaskAsynchronously(PlayerParticles.getPlugin());
@@ -989,7 +976,6 @@ public class ConfigManager {
     private void sync(SyncInterface syncCallback) {
         new BukkitRunnable() {
             public void run() {
-                System.out.println("Resynced with thread: " + Thread.currentThread().getName());
                 syncCallback.execute();
             }
         }.runTask(PlayerParticles.getPlugin());

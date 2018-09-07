@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.esophose.playerparticles.PPlayer;
-import com.esophose.playerparticles.manager.ConfigManager;
+import com.esophose.playerparticles.manager.PPlayerDataManager;
 import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.manager.PermissionManager;
 import com.esophose.playerparticles.styles.api.PParticle;
@@ -33,7 +33,7 @@ public class ParticleStyleMove implements ParticleStyle, Listener {
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerMove(PlayerMoveEvent e) {
-        PPlayer pplayer = ConfigManager.getInstance().getPPlayer(e.getPlayer().getUniqueId());
+        PPlayer pplayer = PPlayerDataManager.getInstance().getPPlayer(e.getPlayer().getUniqueId());
         if (pplayer != null && pplayer.getParticleStyle() == DefaultStyles.MOVE) {
             if (PermissionManager.hasStylePermission(e.getPlayer(), DefaultStyles.MOVE)) {
                 Location loc = e.getPlayer().getLocation();

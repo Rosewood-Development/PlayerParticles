@@ -9,7 +9,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 import com.esophose.playerparticles.PPlayer;
-import com.esophose.playerparticles.manager.ConfigManager;
+import com.esophose.playerparticles.manager.PPlayerDataManager;
 import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.manager.PermissionManager;
 import com.esophose.playerparticles.styles.api.PParticle;
@@ -36,7 +36,7 @@ public class ParticleStyleBlockEdit implements ParticleStyle, Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
-        PPlayer pplayer = ConfigManager.getInstance().getPPlayer(player.getUniqueId());
+        PPlayer pplayer = PPlayerDataManager.getInstance().getPPlayer(player.getUniqueId());
         if (pplayer != null && pplayer.getParticleStyle() == DefaultStyles.BLOCKEDIT && PermissionManager.hasStylePermission(player, DefaultStyles.BLOCKEDIT)) {
             Location loc = event.getBlock().getLocation();
             ParticleManager.displayParticles(pplayer, DefaultStyles.BLOCKBREAK.getParticles(pplayer, loc));
@@ -46,7 +46,7 @@ public class ParticleStyleBlockEdit implements ParticleStyle, Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
-        PPlayer pplayer = ConfigManager.getInstance().getPPlayer(player.getUniqueId());
+        PPlayer pplayer = PPlayerDataManager.getInstance().getPPlayer(player.getUniqueId());
         if (pplayer != null && pplayer.getParticleStyle() == DefaultStyles.BLOCKEDIT && PermissionManager.hasStylePermission(player, DefaultStyles.BLOCKEDIT)) {
             Location loc = event.getBlockPlaced().getLocation();
             ParticleManager.displayParticles(pplayer, DefaultStyles.BLOCKPLACE.getParticles(pplayer, loc));

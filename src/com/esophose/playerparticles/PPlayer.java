@@ -170,7 +170,7 @@ public class PPlayer {
      * @param itemData The player's new item data
      */
     public void setItemData(ItemData itemData) {
-        if (itemData == null) itemData = new ItemData(ParticleUtils.closestMatchWithFallback("IRON_SHOVEL", "IRON_SPADE"), (byte)0);
+        if (itemData == null) itemData = new ItemData(ParticleUtils.closestMatchWithFallback("IRON_SHOVEL", "IRON_SPADE"));
         this.particleItemData = itemData;
     }
 
@@ -180,7 +180,7 @@ public class PPlayer {
      * @param blockData The player's new block data
      */
     public void setBlockData(BlockData blockData) {
-        if (blockData == null) blockData = new BlockData(Material.STONE, (byte) 0);
+        if (blockData == null) blockData = new BlockData(Material.STONE);
         this.particleBlockData = blockData;
     }
 
@@ -210,11 +210,11 @@ public class PPlayer {
      * @return The ParticleData the current particle effect requires
      */
     public ParticleData getParticleSpawnData() {
-        if (this.particleEffect.hasProperty(ParticleProperty.REQUIRES_DATA)) {
-            if (this.particleEffect == ParticleEffect.ITEM_CRACK) {
+        if (this.particleEffect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
+            if (this.particleEffect == ParticleEffect.ITEM) {
                 return this.particleItemData;
             } else {
-                return particleBlockData;
+                return this.particleBlockData;
             }
         }
         return null;
@@ -249,10 +249,10 @@ public class PPlayer {
      * @return The particle data in a human-readable string
      */
     public String getParticleDataString() {
-        if (this.particleEffect == ParticleEffect.BLOCK_CRACK || this.particleEffect == ParticleEffect.BLOCK_DUST || this.particleEffect == ParticleEffect.FALLING_DUST) {
-            return particleBlockData.getMaterial().toString().toLowerCase() + ":" + particleBlockData.getData();
-        } else if (this.particleEffect == ParticleEffect.ITEM_CRACK) {
-            return particleItemData.getMaterial().toString().toLowerCase() + ":" + particleItemData.getData();
+        if (this.particleEffect == ParticleEffect.BLOCK || this.particleEffect == ParticleEffect.FALLING_DUST) {
+            return particleBlockData.getMaterial().toString().toLowerCase();
+        } else if (this.particleEffect == ParticleEffect.ITEM) {
+            return particleItemData.getMaterial().toString().toLowerCase();
         } else if (this.particleEffect.hasProperty(ParticleProperty.COLORABLE)) {
             if (this.particleEffect == ParticleEffect.NOTE) {
                 if (this.particleNoteColorData.getValueX() * 24 == 99) {
@@ -280,8 +280,8 @@ public class PPlayer {
     public static PPlayer getNewPPlayer(UUID playerUUID) {
         ParticleEffect particleEffect = ParticleEffect.NONE;
         ParticleStyle particleStyle = DefaultStyles.NONE;
-        ItemData particleItemData = new ItemData(ParticleUtils.closestMatchWithFallback("IRON_SHOVEL", "IRON_SPADE"), (byte) 0);
-        BlockData particleBlockData = new BlockData(Material.STONE, (byte) 0);
+        ItemData particleItemData = new ItemData(ParticleUtils.closestMatchWithFallback("IRON_SHOVEL", "IRON_SPADE"));
+        BlockData particleBlockData = new BlockData(Material.STONE);
         OrdinaryColor particleColorData = new OrdinaryColor(0, 0, 0);
         NoteColor particleNoteColorData = new NoteColor(0);
 

@@ -38,7 +38,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.esophose.playerparticles.PPlayer;
 import com.esophose.playerparticles.PlayerParticles;
-import com.esophose.playerparticles.manager.ConfigManager;
+import com.esophose.playerparticles.manager.PPlayerDataManager;
 import com.esophose.playerparticles.manager.MessageManager.MessageType;
 import com.esophose.playerparticles.particles.ParticleEffect;
 import com.esophose.playerparticles.particles.ParticleEffect.BlockData;
@@ -102,22 +102,22 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
 
     static { // @formatter:off
     	colorMapping = new ColorData[] {
-    		new ColorData(DyeColor.RED, Material.ROSE_RED, new OrdinaryColor(255, 0, 0), ChatColor.RED + "red"),
-    		new ColorData(DyeColor.ORANGE, Material.ORANGE_DYE, new OrdinaryColor(255, 140, 0), ChatColor.GOLD + "orange"),
-    		new ColorData(DyeColor.YELLOW, Material.DANDELION_YELLOW, new OrdinaryColor(255, 255, 0), ChatColor.YELLOW + "yellow"),
-    		new ColorData(DyeColor.LIME, Material.LIME_DYE, new OrdinaryColor(50, 205, 50), ChatColor.GREEN + "lime green"),
-    		new ColorData(DyeColor.GREEN, Material.CACTUS_GREEN, new OrdinaryColor(0, 128, 0), ChatColor.DARK_GREEN + "green"),
-    		new ColorData(DyeColor.BLUE, Material.LAPIS_LAZULI, new OrdinaryColor(0, 0, 255), ChatColor.DARK_BLUE + "blue"),
-    		new ColorData(DyeColor.CYAN, Material.CYAN_DYE, new OrdinaryColor(0, 139, 139), ChatColor.DARK_AQUA + "cyan"),
-    		new ColorData(DyeColor.LIGHT_BLUE, Material.LIGHT_BLUE_DYE, new OrdinaryColor(173, 216, 230), ChatColor.AQUA + "light blue"),
-    		new ColorData(DyeColor.PURPLE, Material.PURPLE_DYE, new OrdinaryColor(138, 43, 226), ChatColor.DARK_PURPLE + "purple"),
-    		new ColorData(DyeColor.MAGENTA, Material.MAGENTA_DYE, new OrdinaryColor(202, 31, 123), ChatColor.LIGHT_PURPLE + "magenta"),
-    		new ColorData(DyeColor.PINK, Material.PINK_DYE, new OrdinaryColor(255, 182, 193), ChatColor.LIGHT_PURPLE + "pink"),
-    		new ColorData(DyeColor.BROWN, Material.COCOA_BEANS, new OrdinaryColor(139, 69, 19), ChatColor.GOLD + "brown"),
-    		new ColorData(DyeColor.BLACK, Material.INK_SAC, new OrdinaryColor(0, 0, 0), ChatColor.DARK_GRAY + "black"),
-    		new ColorData(DyeColor.GRAY, Material.GRAY_DYE, new OrdinaryColor(128, 128, 128), ChatColor.DARK_GRAY + "gray"),
-    		new ColorData(DyeColor.getByColor(Color.SILVER), Material.LIGHT_GRAY_DYE, new OrdinaryColor(192, 192, 192), ChatColor.GRAY + "light gray"),
-    		new ColorData(DyeColor.WHITE, Material.BONE_MEAL, new OrdinaryColor(255, 255, 255), ChatColor.WHITE + "white"),
+    		new ColorData(DyeColor.RED, ParticleUtils.closestMatch("ROSE_RED"), new OrdinaryColor(255, 0, 0), ChatColor.RED + "red"),
+    		new ColorData(DyeColor.ORANGE, ParticleUtils.closestMatch("ORANGE_DYE"), new OrdinaryColor(255, 140, 0), ChatColor.GOLD + "orange"),
+    		new ColorData(DyeColor.YELLOW, ParticleUtils.closestMatch("DANDELION_YELLOW"), new OrdinaryColor(255, 255, 0), ChatColor.YELLOW + "yellow"),
+    		new ColorData(DyeColor.LIME, ParticleUtils.closestMatch("LIME_DYE"), new OrdinaryColor(50, 205, 50), ChatColor.GREEN + "lime green"),
+    		new ColorData(DyeColor.GREEN, ParticleUtils.closestMatch("CACTUS_GREEN"), new OrdinaryColor(0, 128, 0), ChatColor.DARK_GREEN + "green"),
+    		new ColorData(DyeColor.BLUE, ParticleUtils.closestMatch("LAPIZ_LAZULI"), new OrdinaryColor(0, 0, 255), ChatColor.DARK_BLUE + "blue"),
+    		new ColorData(DyeColor.CYAN, ParticleUtils.closestMatch("CYAN_DYE"), new OrdinaryColor(0, 139, 139), ChatColor.DARK_AQUA + "cyan"),
+    		new ColorData(DyeColor.LIGHT_BLUE, ParticleUtils.closestMatch("LIGHT_BLUE_DYE"), new OrdinaryColor(173, 216, 230), ChatColor.AQUA + "light blue"),
+    		new ColorData(DyeColor.PURPLE, ParticleUtils.closestMatch("PURPLE_DYE"), new OrdinaryColor(138, 43, 226), ChatColor.DARK_PURPLE + "purple"),
+    		new ColorData(DyeColor.MAGENTA, ParticleUtils.closestMatch("MAGENTA_DYE"), new OrdinaryColor(202, 31, 123), ChatColor.LIGHT_PURPLE + "magenta"),
+    		new ColorData(DyeColor.PINK, ParticleUtils.closestMatch("PINK_DYE"), new OrdinaryColor(255, 182, 193), ChatColor.LIGHT_PURPLE + "pink"),
+    		new ColorData(DyeColor.BROWN, ParticleUtils.closestMatch("COCOA_BEANS"), new OrdinaryColor(139, 69, 19), ChatColor.GOLD + "brown"),
+    		new ColorData(DyeColor.BLACK, ParticleUtils.closestMatch("INK_SAC"), new OrdinaryColor(0, 0, 0), ChatColor.DARK_GRAY + "black"),
+    		new ColorData(DyeColor.GRAY, ParticleUtils.closestMatch("GRAY_DYE"), new OrdinaryColor(128, 128, 128), ChatColor.DARK_GRAY + "gray"),
+    		new ColorData(DyeColor.getByColor(Color.SILVER), ParticleUtils.closestMatch("LIGHT_GRAY_DYE"), new OrdinaryColor(192, 192, 192), ChatColor.GRAY + "light gray"),
+    		new ColorData(DyeColor.WHITE, ParticleUtils.closestMatch("BONE_MEAL"), new OrdinaryColor(255, 255, 255), ChatColor.WHITE + "white"),
     	};
 
         rainbowColors = new DyeColor[] { 
@@ -157,7 +157,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
             ParticleUtils.closestMatchWithFallback("NETHERRACK"),
             ParticleUtils.closestMatchWithFallback("SOUL_SAND"),
             ParticleUtils.closestMatchWithFallback("GLOWSTONE"),
-            ParticleUtils.closestMatchWithFallback("NETHER_BRICK"),
+            ParticleUtils.closestMatchWithFallback("NETHER_BRICKS"),
             ParticleUtils.closestMatchWithFallback("END_STONE", "ENDER_STONE"),
             ParticleUtils.closestMatchWithFallback("PRISMARINE")
         };
@@ -213,7 +213,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         for (int i = 0; i < defaultMenuIcons.length; i++)
             if (defaultMenuIcons[i] == null) defaultMenuIcons[i] = Material.BARRIER;
 
-        for (ParticleEffect effect : ParticleEffect.values()) {
+        for (ParticleEffect effect : ParticleEffect.getSupportedEffects()) {
             String effectName = effect.name();
             Material iconMaterial = ParticleUtils.closestMatch(config.getString("gui-icon.effect." + effectName));
             if (iconMaterial == null) iconMaterial = Material.BARRIER; // Missing icon or invalid? Replace it with a barrier instead to fail safety.
@@ -239,7 +239,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
 
         for (Map.Entry<UUID, GuiInventory> entry : playerGuiInventories.entrySet()) {
             UUID playerUUID = entry.getKey();
-            PPlayer pplayer = ConfigManager.getInstance().getPPlayer(playerUUID);
+            PPlayer pplayer = PPlayerDataManager.getInstance().getPPlayer(playerUUID);
             if (pplayer == null) {
                 toRemoveList.add(playerUUID);
                 continue;
@@ -368,11 +368,11 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         SkullMeta currentIconMeta = (SkullMeta) currentIcon.getItemMeta();
         currentIconMeta.setDisplayName(ChatColor.GREEN + player.getName());
         String[] currentIconLore = new String[3];
-        currentIconLore[0] = ChatColor.YELLOW + "Effect: " + ChatColor.AQUA + p.getParticleEffect().getName().toLowerCase();
+        currentIconLore[0] = ChatColor.YELLOW + "Effect: " + ChatColor.AQUA + p.getParticleEffect().getName();
         currentIconLore[1] = ChatColor.YELLOW + "Style: " + ChatColor.AQUA + p.getParticleStyle().getName();
         currentIconLore[2] = ChatColor.YELLOW + "Active Data: " + ChatColor.AQUA + p.getParticleDataString();
         currentIconMeta.setLore(Arrays.asList(currentIconLore));
-        currentIconMeta.setOwningPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()));
+        currentIconMeta.setOwner(player.getName());
         currentIcon.setItemMeta(currentIconMeta);
 
         ItemStack effectIcon = new ItemStack(defaultMenuIcons[0], 1);
@@ -401,7 +401,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         if (pe.hasProperty(ParticleProperty.COLORABLE)) // @formatter:off
             if (pe == ParticleEffect.NOTE) dataType = "note " + dataType;
                 else dataType = "color " + dataType;
-            else if (pe.hasProperty(ParticleProperty.REQUIRES_DATA)) if (pe == ParticleEffect.ITEM_CRACK) dataType = "item " + dataType;
+            else if (pe.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) if (pe == ParticleEffect.ITEM) dataType = "item " + dataType;
         else dataType = "block " + dataType; // @formatter:on
         dataIconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SET_YOUR.getMessageReplaced(dataType)));
         if (p.getParticleSpawnData() == null && p.getParticleSpawnColor() == null) {
@@ -509,8 +509,8 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
 
                 inventory.setItem(40, getItemForRainbowColorData(p.getColorData(), rainbowColors[rainbowColorsIndex]));
             }
-        } else if (pe.hasProperty(ParticleProperty.REQUIRES_DATA)) {
-            if (pe == ParticleEffect.ITEM_CRACK) { // Item data
+        } else if (pe.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
+            if (pe == ParticleEffect.ITEM) { // Item data
                 Material currentItemMaterial = p.getItemData().getMaterial();
                 int itemMaterialIndex = 0;
                 for (int i = 10; i <= 16; i++) { // Top row
@@ -575,7 +575,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         
         if (!guiInventory.getInventory().equals(e.getClickedInventory())) return; // Clicked bottom inventory
 
-        PPlayer pplayer = ConfigManager.getInstance().getPPlayer(player.getUniqueId());
+        PPlayer pplayer = PPlayerDataManager.getInstance().getPPlayer(player.getUniqueId());
         if (pplayer == null) {
             player.closeInventory();
             return;
@@ -602,11 +602,11 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
             }
             break;
         case EFFECT:
-            ConfigManager.getInstance().savePPlayer(pplayer.getUniqueId(), ParticleManager.effectFromString(name));
+            PPlayerDataManager.getInstance().savePPlayer(pplayer.getUniqueId(), ParticleManager.effectFromString(name));
             changeState(pplayer, GuiState.DEFAULT);
             break;
         case STYLE:
-            ConfigManager.getInstance().savePPlayer(pplayer.getUniqueId(), ParticleStyleManager.styleFromString(name));
+            PPlayerDataManager.getInstance().savePPlayer(pplayer.getUniqueId(), ParticleStyleManager.styleFromString(name));
             changeState(pplayer, GuiState.DEFAULT);
             break;
         case DATA:
@@ -614,28 +614,28 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
             if (pe.hasProperty(ParticleProperty.COLORABLE)) {
                 if (pe == ParticleEffect.NOTE) {
                     if (clicked.getItemMeta().getDisplayName().equals(rainbowName)) {
-                        ConfigManager.getInstance().savePPlayer(pplayer.getUniqueId(), new NoteColor(99));
+                        PPlayerDataManager.getInstance().savePPlayer(pplayer.getUniqueId(), new NoteColor(99));
                     } else {
                         int note = Integer.parseInt(ChatColor.stripColor(clicked.getItemMeta().getDisplayName()).substring(6));
-                        ConfigManager.getInstance().savePPlayer(pplayer.getUniqueId(), new NoteColor(note));
+                        PPlayerDataManager.getInstance().savePPlayer(pplayer.getUniqueId(), new NoteColor(note));
                     }
                 } else {
                     if (clicked.getItemMeta().getDisplayName().equals(rainbowName)) {
-                        ConfigManager.getInstance().savePPlayer(pplayer.getUniqueId(), new OrdinaryColor(999, 999, 999));
+                        PPlayerDataManager.getInstance().savePPlayer(pplayer.getUniqueId(), new OrdinaryColor(999, 999, 999));
                     } else {
                         for (int i = 0; i < colorMapping.length; i++) {
                             if (clicked.getItemMeta().getDisplayName().equals(colorMapping[i].getName())) {
-                                ConfigManager.getInstance().savePPlayer(pplayer.getUniqueId(), colorMapping[i].getOrdinaryColor());
+                                PPlayerDataManager.getInstance().savePPlayer(pplayer.getUniqueId(), colorMapping[i].getOrdinaryColor());
                             }
                         }
                     }
                 }
-            } else if (pe.hasProperty(ParticleProperty.REQUIRES_DATA)) {
+            } else if (pe.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
                 Material clickedMaterial = clicked.getType(); // All preset materials have a data value of 0
-                if (pe == ParticleEffect.ITEM_CRACK) {
-                    ConfigManager.getInstance().savePPlayer(pplayer.getUniqueId(), new ItemData(clickedMaterial, (byte) 0));
+                if (pe == ParticleEffect.ITEM) {
+                    PPlayerDataManager.getInstance().savePPlayer(pplayer.getUniqueId(), new ItemData(clickedMaterial));
                 } else {
-                    ConfigManager.getInstance().savePPlayer(pplayer.getUniqueId(), new BlockData(clickedMaterial, (byte) 0));
+                    PPlayerDataManager.getInstance().savePPlayer(pplayer.getUniqueId(), new BlockData(clickedMaterial));
                 }
             }
 
@@ -654,11 +654,11 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         ItemStack icon = new ItemStack(effectIcons.get(effect.name()), 1);
         ItemMeta iconMeta = icon.getItemMeta();
 
-        iconMeta.setDisplayName(MessageType.GUI_ICON_NAME_COLOR.getMessage() + effect.getName().toLowerCase());
+        iconMeta.setDisplayName(MessageType.GUI_ICON_NAME_COLOR.getMessage() + effect.getName());
         if (!isActive) {
-            iconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SETS_TO.getMessageReplaced("effect") + effect.getName().toLowerCase()));
+            iconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SETS_TO.getMessageReplaced("effect") + effect.getName()));
         } else {
-            iconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SETS_TO.getMessageReplaced("effect") + effect.getName().toLowerCase(), MessageType.GUI_ICON_CURRENT_ACTIVE.getMessageReplaced("effect")));
+            iconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SETS_TO.getMessageReplaced("effect") + effect.getName(), MessageType.GUI_ICON_CURRENT_ACTIVE.getMessageReplaced("effect")));
             iconMeta.addEnchant(Enchantment.ARROW_INFINITE, -1, true);
             iconMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }

@@ -15,7 +15,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 import com.esophose.playerparticles.PPlayer;
-import com.esophose.playerparticles.manager.ConfigManager;
+import com.esophose.playerparticles.manager.PPlayerDataManager;
 import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.particles.ParticleEffect.BlockData;
 import com.esophose.playerparticles.particles.ParticleEffect.ItemData;
@@ -87,8 +87,8 @@ public class FixedParticleEffect {
         this.particleNoteColorData = noteColorData;
 
         // The PPlayer must be loaded
-        ConfigManager.getInstance().loadPPlayer(pplayerUUID);
-        PPlayer owner = ConfigManager.getInstance().getPPlayer(this.pplayerUUID);
+        PPlayerDataManager.getInstance().loadPPlayer(pplayerUUID);
+        PPlayer owner = PPlayerDataManager.getInstance().getPPlayer(this.pplayerUUID);
 
         // Check nulls, if any are null set them to the PPlayer's values
         if (this.particleItemData == null) this.particleItemData = owner.getItemData();
@@ -182,10 +182,10 @@ public class FixedParticleEffect {
      * @return The ParticleData the current particle effect requires
      */
     public ParticleData getParticleSpawnData() {
-        if (this.particleEffect.hasProperty(ParticleProperty.REQUIRES_DATA)) {
-            if (this.particleEffect == ParticleEffect.BLOCK_CRACK || this.particleEffect == ParticleEffect.BLOCK_DUST || this.particleEffect == ParticleEffect.FALLING_DUST) {
+        if (this.particleEffect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
+            if (this.particleEffect == ParticleEffect.BLOCK || this.particleEffect == ParticleEffect.FALLING_DUST) {
                 return particleBlockData;
-            } else if (this.particleEffect == ParticleEffect.ITEM_CRACK) {
+            } else if (this.particleEffect == ParticleEffect.ITEM) {
                 return this.particleItemData;
             }
         }
@@ -235,11 +235,11 @@ public class FixedParticleEffect {
                     return this.particleColorData.getRed() + " " + this.particleColorData.getGreen() + " " + this.particleColorData.getBlue();
                 }
             }
-        } else if (this.particleEffect.hasProperty(ParticleProperty.REQUIRES_DATA)) {
-            if (this.particleEffect == ParticleEffect.BLOCK_CRACK || this.particleEffect == ParticleEffect.BLOCK_DUST || this.particleEffect == ParticleEffect.FALLING_DUST) {
-                return this.particleBlockData.getMaterial() + " " + this.particleBlockData.getData();
-            } else if (this.particleEffect == ParticleEffect.ITEM_CRACK) {
-                return this.particleItemData.getMaterial() + " " + this.particleItemData.getData();
+        } else if (this.particleEffect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
+            if (this.particleEffect == ParticleEffect.BLOCK || this.particleEffect == ParticleEffect.FALLING_DUST) {
+                return this.particleBlockData.getMaterial().toString().toLowerCase();
+            } else if (this.particleEffect == ParticleEffect.ITEM) {
+                return this.particleItemData.getMaterial().toString().toLowerCase();
             }
         }
 

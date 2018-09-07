@@ -29,7 +29,6 @@ import com.esophose.playerparticles.particles.ParticleEffect;
 import com.esophose.playerparticles.particles.ParticleEffect.NoteColor;
 import com.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
 import com.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
-import com.esophose.playerparticles.styles.DefaultStyles;
 import com.esophose.playerparticles.styles.api.PParticle;
 import com.esophose.playerparticles.styles.api.ParticleStyleManager;
 
@@ -59,7 +58,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent e) {
-        ConfigManager.getInstance().loadPPlayer(e.getPlayer().getUniqueId());
+        PPlayerDataManager.getInstance().loadPPlayer(e.getPlayer().getUniqueId());
     }
 
     /**
@@ -69,7 +68,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent e) {
-        PPlayer pplayer = ConfigManager.getInstance().getPPlayer(e.getPlayer().getUniqueId());
+        PPlayer pplayer = PPlayerDataManager.getInstance().getPPlayer(e.getPlayer().getUniqueId());
         if (pplayer != null)
             particlePlayers.remove(pplayer);
     }
@@ -78,7 +77,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      * Adds all fixed effects from the config
      */
     public static void addAllFixedEffects() {
-        ConfigManager.getInstance().getAllFixedEffects((fixedEffects) -> {
+        PPlayerDataManager.getInstance().getAllFixedEffects((fixedEffects) -> {
             fixedParticleEffects.addAll(fixedEffects);
         });
     }
@@ -122,7 +121,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
     public static void refreshPPlayers() {
         particlePlayers.clear();
         for (Player player : Bukkit.getOnlinePlayers()) 
-            ConfigManager.getInstance().loadPPlayer(player.getUniqueId());
+            PPlayerDataManager.getInstance().loadPPlayer(player.getUniqueId());
     }
 
     /**
@@ -148,7 +147,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      */
     public static ParticleEffect effectFromString(String effectName) {
         for (ParticleEffect effect : ParticleEffect.getSupportedEffects()) {
-            if (effect.getName().toLowerCase().replace("_", "").equals(effectName.toLowerCase())) return effect;
+            if (effect.getName().equalsIgnoreCase(effectName)) return effect;
         }
         return null;
     }
@@ -178,27 +177,15 @@ public class ParticleManager extends BukkitRunnable implements Listener {
                 continue;
             }
 
-            // Perform permission and validity checks
+            // Perform validity checks
             boolean valid = true;
-
-            // If the player no longer has permission for the effect, remove it
-            if (!PermissionManager.hasEffectPermission(player, pplayer.getParticleEffect())) {
-                ConfigManager.getInstance().savePPlayer(pplayer.getUniqueId(), ParticleEffect.NONE);
-                valid = false;
-            }
-
-            // If the player no longer has permission for the style, default to none
-            if (!PermissionManager.hasStylePermission(player, pplayer.getParticleStyle())) {
-                ConfigManager.getInstance().savePPlayer(pplayer.getUniqueId(), DefaultStyles.NONE);
-                valid = false;
-            }
 
             // Don't show their particles if they are in spectator mode
             if (player.getGameMode() == GameMode.SPECTATOR) {
                 valid = false;
             }
 
-            if (ConfigManager.getInstance().isWorldDisabled(player.getWorld().getName())) {
+            if (PPlayerDataManager.getInstance().isWorldDisabled(player.getWorld().getName())) {
                 valid = false;
             }
 
@@ -235,7 +222,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
             ParticleEffect effect = pplayer.getParticleEffect();
             if (effect == ParticleEffect.NONE) return;
             for (PParticle particle : pplayer.getParticleStyle().getParticles(pplayer, location)) {
-                if (effect.hasProperty(ParticleProperty.REQUIRES_DATA)) {
+                if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
                     effect.display(pplayer.getParticleSpawnData(), particle.getXOff(), particle.getYOff(), particle.getZOff(), particle.getSpeed(), 1, particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
                 } else if (effect.hasProperty(ParticleProperty.COLORABLE)) {
                     effect.display(pplayer.getParticleSpawnColor(), particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
@@ -256,7 +243,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
         ParticleEffect effect = pplayer.getParticleEffect();
         if (effect == ParticleEffect.NONE) return;
         for (PParticle particle : particles) {
-            if (effect.hasProperty(ParticleProperty.REQUIRES_DATA)) {
+            if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
                 effect.display(pplayer.getParticleSpawnData(), particle.getXOff(), particle.getYOff(), particle.getZOff(), particle.getSpeed(), 1, particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
             } else if (effect.hasProperty(ParticleProperty.COLORABLE)) {
                 effect.display(pplayer.getParticleSpawnColor(), particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
@@ -275,7 +262,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
         PPlayer fakePPlayer = new PPlayer(fixedEffect.getOwnerUniqueId(), fixedEffect.getParticleEffect(), fixedEffect.getParticleStyle(), null, null, null, null);
         ParticleEffect effect = fixedEffect.getParticleEffect();
         for (PParticle particle : fixedEffect.getParticleStyle().getParticles(fakePPlayer, fixedEffect.getLocation())) {
-            if (effect.hasProperty(ParticleProperty.REQUIRES_DATA)) {
+            if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
                 effect.display(fixedEffect.getParticleSpawnData(), particle.getXOff(), particle.getYOff(), particle.getZOff(), particle.getSpeed(), 1, particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
             } else if (effect.hasProperty(ParticleProperty.COLORABLE)) {
                 effect.display(fixedEffect.getParticleSpawnColor(), particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));

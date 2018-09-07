@@ -25,7 +25,7 @@ import org.bukkit.entity.Player;
 
 import com.esophose.playerparticles.gui.PlayerParticlesGui;
 import com.esophose.playerparticles.gui.PlayerParticlesGui.GuiState;
-import com.esophose.playerparticles.manager.ConfigManager;
+import com.esophose.playerparticles.manager.PPlayerDataManager;
 import com.esophose.playerparticles.manager.MessageManager;
 import com.esophose.playerparticles.manager.MessageManager.MessageType;
 import com.esophose.playerparticles.manager.ParticleManager;
@@ -105,23 +105,36 @@ public class ParticleCommandExecutor implements CommandExecutor {
         
         // Commands that require access to effects
         if (PermissionManager.getEffectsUserHasPermissionFor(p).size() != 1) {
-            switch (args[0].toLowerCase()) {
-            case "effect":
-                onEffect(p, cmdArgs);
-                break;
-            case "data":
-                onData(p, cmdArgs);
-                break;
-            case "fixed":
-                onFixed(p, cmdArgs);
-                break;
-            case "reset":
-                onReset(p, cmdArgs);
-                break;
-            case "gui":
-                onGUI(p, false);
-                break;
-            }
+            final String[] f_cmdArgs = cmdArgs;
+            PPlayerDataManager.getInstance().getPPlayer(p.getUniqueId(), (pplayer) -> { // The PPlayer MUST be loaded before we can execute any of these commands
+                // If the player no longer has permission for their effect, remove it
+                if (!PermissionManager.hasEffectPermission(p, pplayer.getParticleEffect())) {
+                    PPlayerDataManager.getInstance().savePPlayer(pplayer.getUniqueId(), ParticleEffect.NONE);
+                }
+
+                // If the player no longer has permission for their style, default to none
+                if (!PermissionManager.hasStylePermission(p, pplayer.getParticleStyle())) {
+                    PPlayerDataManager.getInstance().savePPlayer(pplayer.getUniqueId(), DefaultStyles.NONE);
+                }
+                
+                switch (args[0].toLowerCase()) {
+                case "effect":
+                    onEffect(p, f_cmdArgs);
+                    break;
+                case "data":
+                    onData(p, f_cmdArgs);
+                    break;
+                case "fixed":
+                    onFixed(p, f_cmdArgs);
+                    break;
+                case "reset":
+                    onReset(p, f_cmdArgs);
+                    break;
+                case "gui":
+                    onGUI(p, false);
+                    break;
+                }
+            });
         } else {
             MessageManager.sendMessage(p, MessageType.NO_PARTICLES);
         }
@@ -157,13 +170,13 @@ public class ParticleCommandExecutor implements CommandExecutor {
      * @param p The player who used the command
      */
     private void onWorlds(Player p) {
-        if (ConfigManager.getInstance().getDisabledWorlds() == null || ConfigManager.getInstance().getDisabledWorlds().isEmpty()) {
+        if (PPlayerDataManager.getInstance().getDisabledWorlds() == null || PPlayerDataManager.getInstance().getDisabledWorlds().isEmpty()) {
             MessageManager.sendMessage(p, MessageType.DISABLED_WORLDS_NONE);
             return;
         }
 
         String worlds = "";
-        for (String s : ConfigManager.getInstance().getDisabledWorlds()) {
+        for (String s : PPlayerDataManager.getInstance().getDisabledWorlds()) {
             worlds += s + ", ";
         }
         if (worlds.length() > 2) worlds = worlds.substring(0, worlds.length() - 2);
@@ -188,13 +201,8 @@ public class ParticleCommandExecutor implements CommandExecutor {
      * @param args The arguments for the command
      */
     private void onData(Player p, String[] args) {
-        if (PermissionManager.getEffectsUserHasPermissionFor(p).size() == 1) {
-            
-            return;
-        }
-        
-        ParticleEffect effect = ConfigManager.getInstance().getPPlayer(p.getUniqueId()).getParticleEffect();
-        if ((!effect.hasProperty(ParticleProperty.REQUIRES_DATA) && !effect.hasProperty(ParticleProperty.COLORABLE)) || args.length == 0) {
+        ParticleEffect effect = PPlayerDataManager.getInstance().getPPlayer(p.getUniqueId()).getParticleEffect();
+        if ((!effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA) && !effect.hasProperty(ParticleProperty.COLORABLE)) || args.length == 0) {
             if (effect.hasProperty(ParticleProperty.COLORABLE)) {
                 if (effect == ParticleEffect.NOTE) {
                     MessageManager.sendMessage(p, MessageType.DATA_USAGE, "note");
@@ -203,8 +211,8 @@ public class ParticleCommandExecutor implements CommandExecutor {
                     MessageManager.sendMessage(p, MessageType.DATA_USAGE, "color");
                     MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.COLOR_DATA_USAGE.getMessage());
                 }
-            } else if (effect.hasProperty(ParticleProperty.REQUIRES_DATA)) {
-                if (effect == ParticleEffect.ITEM_CRACK) {
+            } else if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
+                if (effect == ParticleEffect.ITEM) {
                     MessageManager.sendMessage(p, MessageType.DATA_USAGE, "item");
                     MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.ITEM_DATA_USAGE.getMessage());
                 } else {
@@ -219,7 +227,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
         if (effect.hasProperty(ParticleProperty.COLORABLE)) {
             if (effect == ParticleEffect.NOTE) {
                 if (args[0].equalsIgnoreCase("rainbow")) {
-                    ConfigManager.getInstance().savePPlayer(p.getUniqueId(), new NoteColor(99));
+                    PPlayerDataManager.getInstance().savePPlayer(p.getUniqueId(), new NoteColor(99));
                     MessageManager.sendMessage(p, MessageType.DATA_APPLIED, "note");
                     return;
                 }
@@ -239,11 +247,11 @@ public class ParticleCommandExecutor implements CommandExecutor {
                     return;
                 }
 
-                ConfigManager.getInstance().savePPlayer(p.getUniqueId(), new NoteColor(note));
+                PPlayerDataManager.getInstance().savePPlayer(p.getUniqueId(), new NoteColor(note));
                 MessageManager.sendMessage(p, MessageType.DATA_APPLIED, "note");
             } else {
                 if (args[0].equalsIgnoreCase("rainbow")) {
-                    ConfigManager.getInstance().savePPlayer(p.getUniqueId(), new OrdinaryColor(999, 999, 999));
+                    PPlayerDataManager.getInstance().savePPlayer(p.getUniqueId(), new OrdinaryColor(999, 999, 999));
                     MessageManager.sendMessage(p, MessageType.DATA_APPLIED, "color");
                 } else if (args.length >= 3) {
                     int r = -1;
@@ -266,18 +274,16 @@ public class ParticleCommandExecutor implements CommandExecutor {
                         return;
                     }
 
-                    ConfigManager.getInstance().savePPlayer(p.getUniqueId(), new OrdinaryColor(r, g, b));
+                    PPlayerDataManager.getInstance().savePPlayer(p.getUniqueId(), new OrdinaryColor(r, g, b));
                     MessageManager.sendMessage(p, MessageType.DATA_APPLIED, "color");
                 } else {
                     MessageManager.sendMessage(p, MessageType.DATA_INVALID_ARGUMENTS, "color");
                     MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.COLOR_DATA_USAGE.getMessage());
                 }
             }
-        } else if (effect.hasProperty(ParticleProperty.REQUIRES_DATA)) {
-            if (effect == ParticleEffect.ITEM_CRACK) {
+        } else if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
+            if (effect == ParticleEffect.ITEM) {
                 Material material = null;
-                int data = -1;
-
                 try {
                     material = ParticleUtils.closestMatch(args[0]);
                     if (material == null) material = Material.matchMaterial(args[0]);
@@ -288,32 +294,16 @@ public class ParticleCommandExecutor implements CommandExecutor {
                     return;
                 }
 
-                try {
-                    data = Integer.parseInt(args[1]);
-                } catch (Exception e) {
-                    MessageManager.sendMessage(p, MessageType.DATA_INVALID_ARGUMENTS, "item");
-                    MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.ITEM_DATA_USAGE.getMessage());
-                    return;
-                }
-
                 if (material.isBlock()) {
                     MessageManager.sendMessage(p, MessageType.DATA_MATERIAL_MISMATCH, "item");
                     MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.ITEM_DATA_USAGE.getMessage());
                     return;
                 }
 
-                if (data < 0 || data > 15) {
-                    MessageManager.sendMessage(p, MessageType.DATA_INVALID_ARGUMENTS, "item");
-                    MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.ITEM_DATA_USAGE.getMessage());
-                    return;
-                }
-
-                ConfigManager.getInstance().savePPlayer(p.getUniqueId(), new ItemData(material, (byte) data));
+                PPlayerDataManager.getInstance().savePPlayer(p.getUniqueId(), new ItemData(material));
                 MessageManager.sendMessage(p, MessageType.DATA_APPLIED, "item");
             } else {
                 Material material = null;
-                int data = -1;
-
                 try {
                     material = ParticleUtils.closestMatch(args[0]);
                     if (material == null) material = Material.matchMaterial(args[0]);
@@ -324,27 +314,13 @@ public class ParticleCommandExecutor implements CommandExecutor {
                     return;
                 }
 
-                try {
-                    data = Integer.parseInt(args[1]);
-                } catch (Exception e) {
-                    MessageManager.sendMessage(p, MessageType.DATA_INVALID_ARGUMENTS, "block");
-                    MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.BLOCK_DATA_USAGE.getMessage());
-                    return;
-                }
-
                 if (!material.isBlock()) {
                     MessageManager.sendMessage(p, MessageType.DATA_MATERIAL_MISMATCH, "block");
                     MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.BLOCK_DATA_USAGE.getMessage());
                     return;
                 }
 
-                if (data < 0 || data > 15) {
-                    MessageManager.sendMessage(p, MessageType.DATA_INVALID_ARGUMENTS, "block");
-                    MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.BLOCK_DATA_USAGE.getMessage());
-                    return;
-                }
-
-                ConfigManager.getInstance().savePPlayer(p.getUniqueId(), new BlockData(material, (byte) data));
+                PPlayerDataManager.getInstance().savePPlayer(p.getUniqueId(), new BlockData(material));
                 MessageManager.sendMessage(p, MessageType.DATA_APPLIED, "block");
             }
         }
@@ -367,14 +343,14 @@ public class ParticleCommandExecutor implements CommandExecutor {
                 if (altPlayer == null) {
                     MessageManager.sendMessage(p, MessageType.FAILED_EXECUTE_NOT_FOUND, altPlayerName);
                 } else {
-                    ConfigManager.getInstance().resetPPlayer(altPlayer.getUniqueId());
+                    PPlayerDataManager.getInstance().resetPPlayer(altPlayer.getUniqueId());
                     MessageManager.sendMessage(altPlayer, MessageType.RESET);
 
                     MessageManager.sendMessage(p, MessageType.EXECUTED_FOR_PLAYER, altPlayer.getName());
                 }
             }
         } else {
-            ConfigManager.getInstance().resetPPlayer(p.getUniqueId());
+            PPlayerDataManager.getInstance().resetPPlayer(p.getUniqueId());
             MessageManager.sendMessage(p, MessageType.RESET);
         }
     }
@@ -390,16 +366,16 @@ public class ParticleCommandExecutor implements CommandExecutor {
             MessageManager.sendMessage(p, MessageType.INVALID_TYPE);
             return;
         }
-        String argument = args[0].replace("_", "");
+        String argument = args[0];
         if (ParticleManager.effectFromString(argument) != null) {
             ParticleEffect effect = ParticleManager.effectFromString(argument);
             if (!PermissionManager.hasEffectPermission(p, effect)) {
-                MessageManager.sendMessage(p, MessageType.NO_PERMISSION, effect.getName().toLowerCase());
+                MessageManager.sendMessage(p, MessageType.NO_PERMISSION, effect.getName());
                 return;
             }
-            ConfigManager.getInstance().savePPlayer(p.getUniqueId(), effect);
+            PPlayerDataManager.getInstance().savePPlayer(p.getUniqueId(), effect);
             if (effect != ParticleEffect.NONE) {
-                MessageManager.sendMessage(p, MessageType.NOW_USING, effect.getName().toLowerCase());
+                MessageManager.sendMessage(p, MessageType.NOW_USING, effect.getName());
             } else {
                 MessageManager.sendMessage(p, MessageType.CLEARED_PARTICLES);
             }
@@ -422,7 +398,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
         String toSend = MessageType.USE.getMessage() + " ";
         for (ParticleEffect effect : ParticleEffect.getSupportedEffects()) {
             if (PermissionManager.hasEffectPermission(p, effect)) {
-                toSend += effect.getName().toLowerCase().replace("_", "") + ", ";
+                toSend += effect.getName() + ", ";
                 continue;
             }
         }
@@ -449,16 +425,16 @@ public class ParticleCommandExecutor implements CommandExecutor {
             MessageManager.sendMessage(p, MessageType.INVALID_TYPE_STYLE);
             return;
         }
-        String argument = args[0].replace("_", "");
+        String argument = args[0];
         if (ParticleStyleManager.styleFromString(argument) != null) {
             ParticleStyle style = ParticleStyleManager.styleFromString(argument);
             if (!PermissionManager.hasStylePermission(p, style)) {
-                MessageManager.sendMessage(p, MessageType.NO_PERMISSION_STYLE, style.getName().toLowerCase());
+                MessageManager.sendMessage(p, MessageType.NO_PERMISSION_STYLE, style.getName());
                 return;
             }
-            ConfigManager.getInstance().savePPlayer(p.getUniqueId(), style);
+            PPlayerDataManager.getInstance().savePPlayer(p.getUniqueId(), style);
             if (style != DefaultStyles.NONE) {
-                MessageManager.sendMessage(p, MessageType.NOW_USING_STYLE, style.getName().toLowerCase());
+                MessageManager.sendMessage(p, MessageType.NOW_USING_STYLE, style.getName());
             } else {
                 MessageManager.sendMessage(p, MessageType.CLEARED_STYLE);
             }
@@ -481,7 +457,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
         String toSend = MessageType.USE.getMessage() + " ";
         for (ParticleStyle style : ParticleStyleManager.getStyles()) {
             if (PermissionManager.hasStylePermission(p, style)) {
-                toSend += style.getName().toLowerCase();
+                toSend += style.getName();
                 toSend += ", ";
             }
         }
@@ -525,7 +501,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 
         if (cmd.equalsIgnoreCase("create")) {
             final String[] f_args = args;
-            ConfigManager.getInstance().hasPlayerReachedMaxFixedEffects(p.getUniqueId(), (reachedMax) -> {
+            PPlayerDataManager.getInstance().hasPlayerReachedMaxFixedEffects(p.getUniqueId(), (reachedMax) -> {
                 if (reachedMax) {
                     MessageManager.sendMessage(p, MessageType.MAX_FIXED_EFFECTS_REACHED);
                     return;
@@ -564,7 +540,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
                 }
 
                 double distanceFromEffect = p.getLocation().distance(new Location(p.getWorld(), xPos, yPos, zPos));
-                int maxCreationDistance = ConfigManager.getInstance().getMaxFixedEffectCreationDistance();
+                int maxCreationDistance = PPlayerDataManager.getInstance().getMaxFixedEffectCreationDistance();
                 if (maxCreationDistance != 0 && distanceFromEffect > maxCreationDistance) {
                     MessageManager.sendMessage(p, MessageType.CREATE_FIXED_OUT_OF_RANGE, maxCreationDistance + "");
                     return;
@@ -644,11 +620,9 @@ public class ParticleCommandExecutor implements CommandExecutor {
                                 colorData = new OrdinaryColor(r, g, b);
                             }
                         }
-                    } else if (effect.hasProperty(ParticleProperty.REQUIRES_DATA)) {
-                        if (effect == ParticleEffect.BLOCK_CRACK || effect == ParticleEffect.BLOCK_DUST || effect == ParticleEffect.FALLING_DUST) {
+                    } else if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
+                        if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST) {
                             Material material = null;
-                            int data = -1;
-
                             try {
                                 material = ParticleUtils.closestMatch(f_args[5]);
                                 if (material == null) material = Material.matchMaterial(f_args[5]);
@@ -658,23 +632,9 @@ public class ParticleCommandExecutor implements CommandExecutor {
                                 return;
                             }
 
-                            try {
-                                data = Integer.parseInt(f_args[6]);
-                            } catch (Exception e) {
-                                MessageManager.sendMessage(p, MessageType.CREATE_FIXED_DATA_ERROR, "block");
-                                return;
-                            }
-
-                            if (data < 0 || data > 15 || !material.isBlock()) {
-                                MessageManager.sendMessage(p, MessageType.CREATE_FIXED_DATA_ERROR, "block");
-                                return;
-                            }
-
-                            blockData = new BlockData(material, (byte) data);
-                        } else if (effect == ParticleEffect.ITEM_CRACK) {
+                            blockData = new BlockData(material);
+                        } else if (effect == ParticleEffect.ITEM) {
                             Material material = null;
-                            int data = -1;
-
                             try {
                                 material = ParticleUtils.closestMatch(f_args[5]);
                                 if (material == null) material = Material.matchMaterial(f_args[5]);
@@ -684,19 +644,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
                                 return;
                             }
 
-                            try {
-                                data = Integer.parseInt(f_args[6]);
-                            } catch (Exception e) {
-                                MessageManager.sendMessage(p, MessageType.CREATE_FIXED_DATA_ERROR, "item");
-                                return;
-                            }
-
-                            if (data < 0 || data > 15 || material.isBlock()) {
-                                MessageManager.sendMessage(p, MessageType.CREATE_FIXED_DATA_ERROR, "item");
-                                return;
-                            }
-
-                            itemData = new ItemData(material, (byte) data);
+                            itemData = new ItemData(material);
                         }
                     }
                 }
@@ -708,14 +656,14 @@ public class ParticleCommandExecutor implements CommandExecutor {
                 final OrdinaryColor f_colorData = colorData;
                 final NoteColor f_noteData = noteColorData;
                 
-                ConfigManager.getInstance().getNextFixedEffectId(p.getUniqueId(), (nextFixedEffectId) -> {
+                PPlayerDataManager.getInstance().getNextFixedEffectId(p.getUniqueId(), (nextFixedEffectId) -> {
                     FixedParticleEffect fixedEffect = new FixedParticleEffect(p.getUniqueId(), // @formatter:off
                                                                               nextFixedEffectId, 
                                                                               p.getLocation().getWorld().getName(), f_xPos, f_yPos, f_zPos, 
                                                                               effect, style, f_itemData, f_blockData, f_colorData, f_noteData); // @formatter:on
 
                     MessageManager.sendMessage(p, MessageType.CREATE_FIXED_SUCCESS);
-                    ConfigManager.getInstance().saveFixedEffect(fixedEffect);
+                    PPlayerDataManager.getInstance().saveFixedEffect(fixedEffect);
                 });
             });
         } else if (cmd.equalsIgnoreCase("remove")) {
@@ -733,7 +681,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
             }
 
             final int f_id = id;
-            ConfigManager.getInstance().removeFixedEffect(p.getUniqueId(), id, (successful) -> {
+            PPlayerDataManager.getInstance().removeFixedEffect(p.getUniqueId(), id, (successful) -> {
                 if (successful) {
                     MessageManager.sendMessage(p, MessageType.REMOVE_FIXED_SUCCESS, f_id + "");
                 } else {
@@ -741,7 +689,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
                 }
             });
         } else if (cmd.equalsIgnoreCase("list")) {
-            ConfigManager.getInstance().getFixedEffectIdsForPlayer(p.getUniqueId(), (ids) -> {
+            PPlayerDataManager.getInstance().getFixedEffectIdsForPlayer(p.getUniqueId(), (ids) -> {
                 Collections.sort(ids);
 
                 if (ids.isEmpty()) {
@@ -775,7 +723,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
             
             
             final int f_id = id;
-            ConfigManager.getInstance().getFixedEffectForPlayerById(p.getUniqueId(), id, (fixedEffect) -> {
+            PPlayerDataManager.getInstance().getFixedEffectForPlayerById(p.getUniqueId(), id, (fixedEffect) -> {
                 if (fixedEffect == null) {
                     MessageManager.sendMessage(p, MessageType.INFO_FIXED_NONEXISTANT, f_id + "");
                     return;
@@ -819,7 +767,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
                     fixedEffectsToRemove.add(fixedEffect);
 
             for (FixedParticleEffect fixedEffect : fixedEffectsToRemove) 
-                ConfigManager.getInstance().removeFixedEffect(fixedEffect.getOwnerUniqueId(), fixedEffect.getId(), (successful) -> { });
+                PPlayerDataManager.getInstance().removeFixedEffect(fixedEffect.getOwnerUniqueId(), fixedEffect.getId(), (successful) -> { });
 
             String clearMessage = MessageType.CLEAR_FIXED_SUCCESS.getMessage() // @formatter:off
 								  .replaceAll("\\{0\\}", fixedEffectsToRemove.size() + "")
@@ -859,7 +807,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
             MessageManager.sendMessage(p, MessageType.GUI_BY_DEFAULT);
         }
 
-        ConfigManager.getInstance().getPPlayer(p.getUniqueId(), (pplayer) -> {
+        PPlayerDataManager.getInstance().getPPlayer(p.getUniqueId(), (pplayer) -> {
             PlayerParticlesGui.changeState(pplayer, GuiState.DEFAULT);
         });
     }

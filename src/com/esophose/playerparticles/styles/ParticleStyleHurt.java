@@ -8,7 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 import com.esophose.playerparticles.PPlayer;
-import com.esophose.playerparticles.manager.ConfigManager;
+import com.esophose.playerparticles.manager.PPlayerDataManager;
 import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.manager.PermissionManager;
 import com.esophose.playerparticles.styles.api.PParticle;
@@ -44,7 +44,7 @@ public class ParticleStyleHurt implements ParticleStyle, Listener {
     public void onEntityDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            PPlayer pplayer = ConfigManager.getInstance().getPPlayer(player.getUniqueId());
+            PPlayer pplayer = PPlayerDataManager.getInstance().getPPlayer(player.getUniqueId());
             if (pplayer != null && pplayer.getParticleStyle() == DefaultStyles.HURT && PermissionManager.hasStylePermission(player, DefaultStyles.HURT)) {
                 Location loc = player.getLocation().clone().add(0, 1, 0);
                 ParticleManager.displayParticles(pplayer, DefaultStyles.HURT.getParticles(pplayer, loc));

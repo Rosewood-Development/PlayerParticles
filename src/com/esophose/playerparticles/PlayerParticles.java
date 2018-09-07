@@ -74,15 +74,27 @@ public class PlayerParticles extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new ParticleManager(), this);
         Bukkit.getPluginManager().registerEvents(new PluginUpdateListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerParticlesGui(), this);
-        if (getConfig().getDouble("version") < Double.parseDouble(getDescription().getVersion())) {
+        double configVersion = getConfig().getDouble("version");
+        if (configVersion < Double.parseDouble(getDescription().getVersion())) {
             File configFile = new File(getDataFolder(), "config.yml");
             if (configFile.exists()) configFile.delete();
             saveDefaultConfig();
             reloadConfig();
             getLogger().warning("The config.yml has been updated to v" + getDescription().getVersion() + "!");
         }
-        checkDatabase();
-        startTask();
+
+        if (configVersion < 5.2) {
+            checkDatabase(true); // @formatter:off
+            getLogger().warning("All previous player data has been purged. " + 
+                                "PlayerParticles v" + getDescription().getVersion() + " is not backwards compatible with the previous data schema. " + 
+                                "If you were using regular file storage, the new data file is called pplayerData.yml, the old file playerData.yml is still there. " + 
+                                "If you were using database storage, all data has been deleted."); // @formatter:on
+        } else {
+            checkDatabase(false);
+        }
+
+        checkDatabase(configVersion < 5.2);
+        startParticleTask();
 
         if (shouldCheckUpdates()) {
             new BukkitRunnable() {
@@ -138,7 +150,7 @@ public class PlayerParticles extends JavaPlugin {
      * Creates new tables if they don't exist
      * Sets useMySQL to true if it connects successfully, and false if it fails or isn't enabled
      */
-    private void checkDatabase() {
+    private void checkDatabase(boolean shouldPurge) {
         if (getConfig().getBoolean("database-enable")) {
             mySQL = new DatabaseManager(getConfig());
 
@@ -147,6 +159,23 @@ public class PlayerParticles extends JavaPlugin {
 
             // Queries are purposely not run in an asynchronous task, this is on plugin startup and shouldn't affect the end users
             mySQL.connect((connection) -> { // @formatter:off
+                if (shouldPurge) { // Reset the database
+                    try (Statement statement = connection.createStatement()) {
+                        statement.addBatch("DROP TABLE pp_users"); // Drop tables, they will be recreated from scratch
+                        statement.addBatch("DROP TABLE pp_fixed");
+                        statement.addBatch("DROP TABLE pp_data_item");
+                        statement.addBatch("DROP TABLE pp_data_block");
+                        statement.addBatch("DROP TABLE pp_data_color");
+                        statement.addBatch("DROP TABLE pp_data_note");
+                        statement.executeBatch();
+                    } catch (SQLException e) {
+                        getLogger().info("Failed to connect to the MySQL Database! Check to see if your login information is correct!");
+                        getLogger().info("Additional information: " + e.getMessage());
+                        useMySQL = false;
+                        return;
+                    }
+                }
+                
                 try (Statement statement = connection.createStatement();
                      ResultSet res = statement.executeQuery("SHOW TABLES LIKE 'pp_users'")) {
                     
@@ -165,8 +194,8 @@ public class PlayerParticles extends JavaPlugin {
                     } else { // Database isn't created yet
                         mySQL.updateSQL("CREATE TABLE pp_users (player_uuid VARCHAR(36), effect VARCHAR(32), style VARCHAR(32));" + 
                                         "CREATE TABLE pp_fixed (uuid VARCHAR(36), player_uuid VARCHAR(36), id SMALLINT, effect VARCHAR(32), style VARCHAR(32), worldName VARCHAR(50), xPos DOUBLE, yPos DOUBLE, zPos DOUBLE);" +
-                                        "CREATE TABLE pp_data_item (uuid VARCHAR(36), material VARCHAR(32), data SMALLINT);" + 
-                                        "CREATE TABLE pp_data_block (uuid VARCHAR(36), material VARCHAR(32), data SMALLINT);" +
+                                        "CREATE TABLE pp_data_item (uuid VARCHAR(36), material VARCHAR(32));" + 
+                                        "CREATE TABLE pp_data_block (uuid VARCHAR(36), material VARCHAR(32));" +
                                         "CREATE TABLE pp_data_color (uuid VARCHAR(36), r SMALLINT, g SMALLINT, b SMALLINT);" + 
                                         "CREATE TABLE pp_data_note (uuid VARCHAR(36), note SMALLINT);");
                     }
@@ -186,7 +215,7 @@ public class PlayerParticles extends JavaPlugin {
      * Starts the task reponsible for spawning particles
      * Run in the synchronous task so it starts after all plugins have loaded, including extensions
      */
-    private void startTask() {
+    private void startParticleTask() {
         final Plugin playerParticles = this;
         new BukkitRunnable() {
             public void run() {

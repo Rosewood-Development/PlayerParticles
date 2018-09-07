@@ -27,8 +27,8 @@ public class ParticleStyleManager {
      */
     public static void registerStyle(ParticleStyle style) {
         for (ParticleStyle testAgainst : styles) {
-            if (testAgainst.getName().replace("_", "").equalsIgnoreCase(style.getName())) {
-                PlayerParticles.getPlugin().getLogger().severe("Tried to register two styles with the same (or too similar) name: " + style.getName());
+            if (testAgainst.getName().equalsIgnoreCase(style.getName())) {
+                PlayerParticles.getPlugin().getLogger().severe("Tried to register two styles with the same name spelling: " + style.getName());
             } else if (testAgainst.equals(style)) {
                 PlayerParticles.getPlugin().getLogger().severe("Tried to register the same style twice: " + style.getName());
             }
@@ -73,7 +73,7 @@ public class ParticleStyleManager {
      */
     public static ParticleStyle styleFromString(String styleName) {
         for (ParticleStyle style : styles)
-            if (style.getName().toLowerCase().replace("_", "").equals(styleName)) return style;
+            if (style.getName().equals(styleName)) return style;
         return null;
     }
 

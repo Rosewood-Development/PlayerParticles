@@ -13,7 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.esophose.playerparticles.PPlayer;
-import com.esophose.playerparticles.manager.ConfigManager;
+import com.esophose.playerparticles.manager.PPlayerDataManager;
 import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.manager.PermissionManager;
 import com.esophose.playerparticles.styles.api.PParticle;
@@ -57,7 +57,7 @@ public class ParticleStyleSwords implements ParticleStyle, Listener {
         if (event.getDamager() instanceof Player && event.getEntity() instanceof LivingEntity) {
             Player player = (Player) event.getDamager();
             LivingEntity entity = (LivingEntity) event.getEntity();
-            PPlayer pplayer = ConfigManager.getInstance().getPPlayer(player.getUniqueId());
+            PPlayer pplayer = PPlayerDataManager.getInstance().getPPlayer(player.getUniqueId());
             if (pplayer != null && pplayer.getParticleStyle() == DefaultStyles.SWORDS && PermissionManager.hasStylePermission(player, DefaultStyles.SWORDS)) {
                 if (player.getInventory().getItemInMainHand() != null && SWORD_NAMES.contains(player.getInventory().getItemInMainHand().getType().name())) {
                     Location loc = entity.getLocation().clone().add(0, 1, 0);
