@@ -192,8 +192,8 @@ public class PPlayerDataManager {
                                    "WHERE u.player_uuid = '" + id + "'";
                     
                     try (Statement statement = connection.createStatement();
-                         ResultSet res = statement.executeQuery(query)) {
-                        
+                        ResultSet res = statement.executeQuery(query)) {
+
                         if (res.next()) {
                             ParticleEffect particleEffect = ParticleEffect.fromName(res.getString("u.effect"));
                             ParticleStyle particleStyle = ParticleStyleManager.styleFromString(res.getString("u.style"));
@@ -265,13 +265,13 @@ public class PPlayerDataManager {
                                                             "'" + pplayer.getParticleEffect().getName() + "', " +
                                                             "'" + pplayer.getParticleStyle().getName() + "'" +
                                                             "); " +
-                                                            "INSERT INTO pp_data_item (uuid, material, data) VALUES (" +
+                                                            "INSERT INTO pp_data_item (uuid, material) VALUES (" +
                                                             "'" + pplayer.getUniqueId().toString() + "', " +
-                                                            "'" + pplayer.getItemData().getMaterial().name() +
+                                                            "'" + pplayer.getItemData().getMaterial().name() + "'" +
                                                             "); " +
-                                                            "INSERT INTO pp_data_block (uuid, material, data) VALUES (" +
+                                                            "INSERT INTO pp_data_block (uuid, material) VALUES (" +
                                                             "'" + pplayer.getUniqueId().toString() + "', " +
-                                                            "'" + pplayer.getBlockData().getMaterial().name() +
+                                                            "'" + pplayer.getBlockData().getMaterial().name() + "'" +
                                                             "); " +
                                                             "INSERT INTO pp_data_color (uuid, r, g, b) VALUES (" +
                                                             "'" + pplayer.getUniqueId().toString() + "', " +
@@ -551,13 +551,13 @@ public class PPlayerDataManager {
                                                         fixedEffect.getLocation().getY() + ", " +
                                                         fixedEffect.getLocation().getZ() +
                                                         "); " +
-                                                        "INSERT INTO pp_data_item (uuid, material, data) VALUES (" +
+                                                        "INSERT INTO pp_data_item (uuid, material) VALUES (" +
                                                         "'" + fixedEffectUUID + "', " +
-                                                        "'" + fixedEffect.getItemData().getMaterial().name() +
+                                                        "'" + fixedEffect.getItemData().getMaterial().name() + "'" +
                                                         "); " +
-                                                        "INSERT INTO pp_data_block (uuid, material, data) VALUES (" +
+                                                        "INSERT INTO pp_data_block (uuid, material) VALUES (" +
                                                         "'" + fixedEffectUUID + "', " +
-                                                        "'" + fixedEffect.getBlockData().getMaterial().name() +
+                                                        "'" + fixedEffect.getBlockData().getMaterial().name() + "'" +
                                                         "); " +
                                                         "INSERT INTO pp_data_color (uuid, r, g, b) VALUES (" +
                                                         "'" + fixedEffectUUID + "', " +
