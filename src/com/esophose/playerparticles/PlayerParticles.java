@@ -76,10 +76,37 @@ public class PlayerParticles extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlayerParticlesGui(), this);
         double configVersion = getConfig().getDouble("version");
         if (configVersion < Double.parseDouble(getDescription().getVersion())) {
+            // Make sure database information gets carried over between config updates
+            boolean databaseEnable = false;
+            String databaseHostname = "";
+            int databasePort = 3306;
+            String databaseName = "";
+            String databaseUserName = "";
+            String databaseUserPassword = "";
+            
             File configFile = new File(getDataFolder(), "config.yml");
-            if (configFile.exists()) configFile.delete();
+            if (configFile.exists()) {
+                databaseEnable = getConfig().getBoolean("database-enable");
+                databaseHostname = getConfig().getString("database-hostname");
+                databasePort = getConfig().getInt("database-port");
+                databaseName = getConfig().getString("database-name");
+                databaseUserName = getConfig().getString("database-user-name");
+                databaseUserPassword = getConfig().getString("database-user-password");
+                if (databaseEnable) { // @formatter:off
+                    getLogger().warning("== WARNING == The PlayerParticles database configuration was detected as database-enable=true. " + 
+                                        "The database configuration has been loaded this time for critical schema updates, but has also been DELETED from the config.yml! " + 
+                                        "This needs to be replaced or else the plugin wont connect to the database on its next load!"); // @formatter:on
+                }
+                configFile.delete();
+            }
             saveDefaultConfig();
             reloadConfig();
+            getConfig().set("database-enable", databaseEnable);
+            getConfig().set("database-hostname", databaseHostname);
+            getConfig().set("database-port", databasePort);
+            getConfig().set("database-name", databaseName);
+            getConfig().set("database-user-name", databaseUserName);
+            getConfig().set("database-user-password", databaseUserPassword);
             getLogger().warning("The config.yml has been updated to v" + getDescription().getVersion() + "!");
         }
 
@@ -153,7 +180,7 @@ public class PlayerParticles extends JavaPlugin {
     private void checkDatabase(boolean shouldPurge) {
         if (getConfig().getBoolean("database-enable")) {
             mySQL = new DatabaseManager(getConfig());
-
+            
             useMySQL = mySQL.isInitialized(); // If something goes wrong, this will be set to false
             if (!useMySQL) return; // Break out, couldn't set up the database connection
 
@@ -167,7 +194,6 @@ public class PlayerParticles extends JavaPlugin {
                         statement.addBatch("DROP TABLE pp_data_block");
                         statement.addBatch("DROP TABLE pp_data_color");
                         statement.addBatch("DROP TABLE pp_data_note");
-                        statement.executeBatch();
                     } catch (SQLException e) {
                         getLogger().info("Failed to connect to the MySQL Database! Check to see if your login information is correct!");
                         getLogger().info("Additional information: " + e.getMessage());

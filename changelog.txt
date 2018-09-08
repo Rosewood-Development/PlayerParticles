@@ -1,5 +1,18 @@
 == UPDATING WILL DELETE YOUR CONFIG.YML ==
 * Create a backup of your config.yml if you wish to import all your old settings!
+=== v5.2 ===
+* Added native support for Minecraft 1.13.x
+* Still compatible with Minecraft 1.9 through Minecraft 1.12!
+* Renamed a bunch of effects to their internal names, you will have to update your user permissions
+* All saved player data on file and in the database (if enabled) will be deleted, it isn't backwards compatible with PlayerParticles v5.1 due to "the flattening"
+* Permission checks are now only performed on command execution for efficiency
+* Block/Item data in the GUI are now randomized
+* Removed the 'data' tag from block/item data, it was removed in 1.13
+* Added full tab-completion support
+* Added all new 1.13 particle effects
+* Alphabatized effects and styles in their respective info lists
+* Fixed /pp data throwing an internal error on rare occasions 
+* Removed excessive console logging when database-enable is set to true
 === v5.1 ===
 * Fix bug preventing the use of /pp effect, style, data, and reset from being used before a player has opened the GUI
 * Empty messages in config.yml will no longer display an error to the player, they won't be printed out at all

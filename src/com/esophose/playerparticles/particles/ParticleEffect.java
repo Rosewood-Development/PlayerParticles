@@ -39,7 +39,7 @@ public enum ParticleEffect {
     BARRIER("BARRIER", "BARRIER"),
     BLOCK("BLOCK_CRACK", "BLOCK_CRACK", ParticleProperty.REQUIRES_MATERIAL_DATA),
     BUBBLE("WATER_BUBBLE", "WATER_BUBBLE"),
-    //BUBBLE_COLUMN_UP("BUBBLE_COLUMN_UP", null), // Identical to bubble
+    BUBBLE_COLUMN_UP("BUBBLE_COLUMN_UP", null),
     BUBBLE_POP("BUBBLE_POP", null),
     CLOUD("CLOUD", "CLOUD"),
     CRIT("CRIT", "CRIT"),
@@ -56,6 +56,7 @@ public enum ParticleEffect {
     END_ROD("END_ROD", "END_ROD"),
     ENTITY_EFFECT("SPELL_MOB", "SPELL_MOB", ParticleProperty.COLORABLE),
     EXPLOSION("EXPLOSION_LARGE", "EXPLOSION_LARGE"),
+    EXPLOSION_EMITTER("EXPLOSION_HUGE", "EXPLOSION_HUGE"),
     FALLING_DUST("FALLING_DUST", "FALLING_DUST", ParticleProperty.REQUIRES_MATERIAL_DATA),
     FIREWORK("FIREWORKS_SPARK", "FIREWORKS_SPARK"),
     FISHING("WATER_WAKE", "WATER_WAKE"),
@@ -63,7 +64,6 @@ public enum ParticleEffect {
     FOOTSTEP(null, "FOOTSTEP"), // Removed in Minecraft 1.13 :(
     HAPPY_VILLAGER("VILLAGER_HAPPY", "VILLAGER_HAPPY"),
     HEART("HEART", "HEART"),
-    EXPLOSION_EMITTER("EXPLOSION_HUGE", "EXPLOSION_HUGE"),
     INSTANT_EFFECT("SPELL_INSTANT", "SPELL_INSTANT"),
     ITEM("ITEM_CRACK", "ITEM_CRACK", ParticleProperty.REQUIRES_MATERIAL_DATA), 
     ITEM_SLIME("SLIME", "SLIME"),
@@ -90,12 +90,13 @@ public enum ParticleEffect {
     private static final int PARTICLE_DISPLAY_RANGE_SQUARED = 36864; // (12 chunks * 16 blocks per chunk)^2
     private static final Map<String, ParticleEffect> NAME_MAP = new HashMap<String, ParticleEffect>();
     private static boolean VERSION_13; // This is a particle unique to Minecraft 1.13, this is a reliable way of telling what server version is running
-    private static Constructor<?> DUSTOPTIONS_CONSTRUCTOR;
-    private static Method CREATEBLOCKDATA_METHOD;
+    private static Constructor<?> DustOptions_CONSTRUCTOR;
+    private static Method createBlockData_METHOD;
     private final Particle internalEnum;
     private final List<ParticleProperty> properties;
 
     // Initialize map for quick name and id lookup
+    // Initialize Minecraft 1.13 related variables
     static {
         for (ParticleEffect effect : values()) {
             NAME_MAP.put(effect.getName(), effect);
@@ -103,10 +104,11 @@ public enum ParticleEffect {
         
         try {
             VERSION_13 = Particle.valueOf("NAUTILUS") != null;
-            DUSTOPTIONS_CONSTRUCTOR = Particle.REDSTONE.getDataType().getConstructor(Color.class, float.class);
-            CREATEBLOCKDATA_METHOD = Material.class.getMethod("createBlockData");
+            DustOptions_CONSTRUCTOR = Particle.REDSTONE.getDataType().getConstructor(Color.class, float.class);
+            createBlockData_METHOD = Material.class.getMethod("createBlockData");
         } catch (Exception e) { 
-            DUSTOPTIONS_CONSTRUCTOR = null;
+            DustOptions_CONSTRUCTOR = null;
+            createBlockData_METHOD = null;
             VERSION_13 = false;
         }
     }
@@ -259,7 +261,7 @@ public enum ParticleEffect {
             OrdinaryColor dustColor = (OrdinaryColor)color;
             Object dustData = null;
             try { // The DustData class doesn't exist in Minecraft versions less than 1.13... so this is disgusting... but it works great
-                dustData = DUSTOPTIONS_CONSTRUCTOR.newInstance(Color.fromRGB(dustColor.getRed(), dustColor.getGreen(), dustColor.getBlue()), 1); // Wait, you can change the size of these now??? AWESOME! I might implement this in the future!
+                dustData = DustOptions_CONSTRUCTOR.newInstance(Color.fromRGB(dustColor.getRed(), dustColor.getGreen(), dustColor.getBlue()), 1); // Wait, you can change the size of these now??? AWESOME! I might implement this in the future!
             } catch (Exception e) { }
             
             for (Player player : getPlayersInRange(center)) {
@@ -297,7 +299,7 @@ public enum ParticleEffect {
         Object extraData = null;
         if (internalEnum.getDataType().getTypeName().equals("org.bukkit.block.data.BlockData")) { 
             try { // The Material.createBlockData() method doesn't exist in Minecraft versions less than 1.13... so this is disgusting... but it works great
-                extraData = CREATEBLOCKDATA_METHOD.invoke(data.getMaterial());
+                extraData = createBlockData_METHOD.invoke(data.getMaterial());
             } catch (Exception e) { }
         } else if (internalEnum.getDataType() == ItemStack.class) {
             extraData = new ItemStack(data.getMaterial());
@@ -350,8 +352,7 @@ public enum ParticleEffect {
 
     /**
      * Represents the particle data for effects like
-     * {@link ParticleEffect#ITEM}, {@link ParticleEffect#BLOCK_CRACK},
-     * {@link ParticleEffect#BLOCK_DUST}, and {@link ParticleEffect#FALLING_DUST}
+     * {@link ParticleEffect#ITEM}, {@link ParticleEffect#BLOCK}, and {@link ParticleEffect#FALLING_DUST}
      * <p>
      * This class is part of the <b>ParticleEffect Library</b> and follows the
      * same usage conditions
@@ -382,7 +383,7 @@ public enum ParticleEffect {
     }
 
     /**
-     * Represents the item data for the {@link ParticleEffect#ITEM_CRACK} effect
+     * Represents the item data for the {@link ParticleEffect#ITEM} effect
      * <p>
      * This class is part of the <b>ParticleEffect Library</b> and follows the
      * same usage conditions
@@ -402,8 +403,8 @@ public enum ParticleEffect {
     }
 
     /**
-     * Represents the block data for the {@link ParticleEffect#BLOCK_CRACK} and
-     * {@link ParticleEffect#BLOCK_DUST} effects
+     * Represents the block data for the {@link ParticleEffect#BLOCK} and
+     * {@link ParticleEffect#FALLING_DUST} effects
      * <p>
      * This class is part of the <b>ParticleEffect Library</b> and follows the
      * same usage conditions
@@ -416,7 +417,6 @@ public enum ParticleEffect {
          * Construct a new block data
          * 
          * @param material Material of the block
-         * @param data Data value of the block
          * @throws IllegalArgumentException If the material is not a block
          */
         public BlockData(Material material) throws IllegalArgumentException {
@@ -428,8 +428,8 @@ public enum ParticleEffect {
     }
 
     /**
-     * Represents the color for effects like {@link ParticleEffect#MOB_SPELL},
-     * {@link ParticleEffect#MOB_SPELL_AMBIENT}, {@link ParticleEffect#RED_DUST}
+     * Represents the color for effects like {@link ParticleEffect#ENTITY_EFFECT},
+     * {@link ParticleEffect#AMBIENT_ENTITY_EFFECT}, {@link ParticleEffect#DUST}
      * and {@link ParticleEffect#NOTE}
      * <p>
      * This class is part of the <b>ParticleEffect Library</b> and follows the
@@ -462,8 +462,8 @@ public enum ParticleEffect {
     }
 
     /**
-     * Represents the color for effects like {@link ParticleEffect#MOB_SPELL},
-     * {@link ParticleEffect#MOB_SPELL_AMBIENT} and {@link ParticleEffect#NOTE}
+     * Represents the color for effects like {@link ParticleEffect#ENTITY_EFFECT},
+     * {@link ParticleEffect#AMBIENT_ENTITY_EFFECT} and {@link ParticleEffect#NOTE}
      * <p>
      * This class is part of the <b>ParticleEffect Library</b> and follows the
      * same usage conditions

@@ -18,18 +18,38 @@ public class ColorData {
 		this.name = name;
 	}
 	
+	/**
+	 * Get the DyeColor 
+	 * 
+	 * @return The DyeColor
+	 */
 	public DyeColor getDyeColor() {
 		return this.dyeColor;
 	}
 	
+	/**
+	 * Get the Material representing this color
+	 * 
+	 * @return The Material
+	 */
 	public Material getMaterial() {
 		return this.material;
 	}
 	
+	/**
+	 * Get the OrdinaryColor representing this color
+	 * 
+	 * @return The OrdinaryColor
+	 */
 	public OrdinaryColor getOrdinaryColor() {
 		return this.ordinaryColor;
 	}
 	
+	/**
+	 * Get the name of this color
+	 * 
+	 * @return The name of this color
+	 */
 	public String getName() {
 		return this.name;
 	}

@@ -31,6 +31,7 @@
         <version>3.1.0</version>
         <executions>
           <execution>
+          	<id>1.13</id>
             <phase>package</phase>
             <goals>
               <goal>shade</goal>
@@ -53,7 +54,115 @@
                   </excludes>
                 </filter>
               </filters>
-              <outputFile>C:\Users\Esophose\Desktop\Spigot 1.13 Dev Server\plugins\update\PlayerParticles v5.2.jar</outputFile>
+              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.13\plugins\update\PlayerParticles v5.2.jar</outputFile>
+            </configuration>
+          </execution>
+          <execution>
+          	<id>1.12</id>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <artifactSet>
+                <includes>
+                  <include>com.zaxxer:HikariCP</include>
+                  <include>org.slf4j:slf4j-api</include>
+                  <include>org.slf4j:slf4j-nop</include>
+                </includes>
+              </artifactSet>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.12\plugins\update\PlayerParticles v5.2.jar</outputFile>
+            </configuration>
+          </execution>
+          <execution>
+          	<id>1.11</id>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <artifactSet>
+                <includes>
+                  <include>com.zaxxer:HikariCP</include>
+                  <include>org.slf4j:slf4j-api</include>
+                  <include>org.slf4j:slf4j-nop</include>
+                </includes>
+              </artifactSet>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.11\plugins\update\PlayerParticles v5.2.jar</outputFile>
+            </configuration>
+          </execution>
+          <execution>
+          	<id>1.10</id>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <artifactSet>
+                <includes>
+                  <include>com.zaxxer:HikariCP</include>
+                  <include>org.slf4j:slf4j-api</include>
+                  <include>org.slf4j:slf4j-nop</include>
+                </includes>
+              </artifactSet>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.10\plugins\update\PlayerParticles v5.2.jar</outputFile>
+            </configuration>
+          </execution>
+          <execution>
+          	<id>1.9</id>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <artifactSet>
+                <includes>
+                  <include>com.zaxxer:HikariCP</include>
+                  <include>org.slf4j:slf4j-api</include>
+                  <include>org.slf4j:slf4j-nop</include>
+                </includes>
+              </artifactSet>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.9\plugins\update\PlayerParticles v5.2.jar</outputFile>
             </configuration>
           </execution>
         </executions>

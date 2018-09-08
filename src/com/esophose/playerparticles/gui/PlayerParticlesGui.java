@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -20,6 +21,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.SkullType;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -93,12 +95,13 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
      */
     private static DyeColor[] rainbowColors;
     private static int rainbowColorsIndex = 0;
-
+    
     /**
-     * 28 of each block/item Materials for block/item data
+     * Cached material data
      */
-    private static Material[] blockMaterials;
-    private static Material[] itemMaterials;
+    private static final Random RANDOM = new Random();
+    private static List<Material> BLOCK_MATERIALS = new ArrayList<Material>();
+    private static List<Material> ITEM_MATERIALS = new ArrayList<Material>();
 
     static { // @formatter:off
     	colorMapping = new ColorData[] {
@@ -116,7 +119,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
     		new ColorData(DyeColor.BROWN, ParticleUtils.closestMatch("COCOA_BEANS"), new OrdinaryColor(139, 69, 19), ChatColor.GOLD + "brown"),
     		new ColorData(DyeColor.BLACK, ParticleUtils.closestMatch("INK_SAC"), new OrdinaryColor(0, 0, 0), ChatColor.DARK_GRAY + "black"),
     		new ColorData(DyeColor.GRAY, ParticleUtils.closestMatch("GRAY_DYE"), new OrdinaryColor(128, 128, 128), ChatColor.DARK_GRAY + "gray"),
-    		new ColorData(DyeColor.getByColor(Color.SILVER), ParticleUtils.closestMatch("LIGHT_GRAY_DYE"), new OrdinaryColor(192, 192, 192), ChatColor.GRAY + "light gray"),
+    		new ColorData(DyeColor.getByDyeData((byte)7), ParticleUtils.closestMatch("LIGHT_GRAY_DYE"), new OrdinaryColor(192, 192, 192), ChatColor.GRAY + "light gray"),
     		new ColorData(DyeColor.WHITE, ParticleUtils.closestMatch("BONE_MEAL"), new OrdinaryColor(255, 255, 255), ChatColor.WHITE + "white"),
     	};
 
@@ -130,68 +133,20 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         	DyeColor.PURPLE 
         };
         
-        // All materials contain their > 1.13 name, followed by their legacy name, if applicable
-        blockMaterials = new Material[] {
-            ParticleUtils.closestMatchWithFallback("STONE"),
-            ParticleUtils.closestMatchWithFallback("GRASS"),
-            ParticleUtils.closestMatchWithFallback("TNT"),
-            ParticleUtils.closestMatchWithFallback("COBBLESTONE"),
-            ParticleUtils.closestMatchWithFallback("OAK_WOOD", "WOOD"),
-            ParticleUtils.closestMatchWithFallback("BEDROCK"),
-            ParticleUtils.closestMatchWithFallback("SAND"),
-            ParticleUtils.closestMatchWithFallback("OAK_LOG", "LOG"),
-            ParticleUtils.closestMatchWithFallback("SPONGE"),
-            ParticleUtils.closestMatchWithFallback("GLASS"),
-            ParticleUtils.closestMatchWithFallback("WHITE_WOOL", "WOOL"),
-            ParticleUtils.closestMatchWithFallback("IRON_BLOCK"),
-            ParticleUtils.closestMatchWithFallback("GOLD_BLOCK"),
-            ParticleUtils.closestMatchWithFallback("DIAMOND_BLOCK"),
-            ParticleUtils.closestMatchWithFallback("EMERALD_BLOCK"),
-            ParticleUtils.closestMatchWithFallback("COAL_BLOCK"),
-            ParticleUtils.closestMatchWithFallback("REDSTONE_BLOCK"),
-            ParticleUtils.closestMatchWithFallback("BOOKSHELF"),
-            ParticleUtils.closestMatchWithFallback("ICE"),
-            ParticleUtils.closestMatchWithFallback("CLAY"),
-            ParticleUtils.closestMatchWithFallback("PUMPKIN"),
-            ParticleUtils.closestMatchWithFallback("MELON", "MELON_BLOCK"),
-            ParticleUtils.closestMatchWithFallback("NETHERRACK"),
-            ParticleUtils.closestMatchWithFallback("SOUL_SAND"),
-            ParticleUtils.closestMatchWithFallback("GLOWSTONE"),
-            ParticleUtils.closestMatchWithFallback("NETHER_BRICKS"),
-            ParticleUtils.closestMatchWithFallback("END_STONE", "ENDER_STONE"),
-            ParticleUtils.closestMatchWithFallback("PRISMARINE")
-        };
-
-        itemMaterials = new Material[] {
-            ParticleUtils.closestMatchWithFallback("COAL"),
-            ParticleUtils.closestMatchWithFallback("IRON_INGOT"),
-            ParticleUtils.closestMatchWithFallback("GOLD_INGOT"),
-            ParticleUtils.closestMatchWithFallback("REDSTONE"),
-            ParticleUtils.closestMatchWithFallback("EMERALD"),
-            ParticleUtils.closestMatchWithFallback("QUARTZ"),
-            ParticleUtils.closestMatchWithFallback("BRICK", "CLAY_BRICK"),
-            ParticleUtils.closestMatchWithFallback("GLOWSTONE_DUST"),
-            ParticleUtils.closestMatchWithFallback("SUGAR_CANE"),
-            ParticleUtils.closestMatchWithFallback("FLINT"),
-            ParticleUtils.closestMatchWithFallback("POTATO", "POTATO_ITEM"),
-            ParticleUtils.closestMatchWithFallback("CARROT", "CARROT_ITEM"),
-            ParticleUtils.closestMatchWithFallback("SNOWBALL", "SNOW_BALL"),
-            ParticleUtils.closestMatchWithFallback("BONE"),
-            ParticleUtils.closestMatchWithFallback("ENDER_PEARL"),
-            ParticleUtils.closestMatchWithFallback("BLAZE_POWDER"),
-            ParticleUtils.closestMatchWithFallback("NETHER_WART", "NETHER_STALK"),
-            ParticleUtils.closestMatchWithFallback("FIRE_CHARGE", "FIREBALL"),
-            ParticleUtils.closestMatchWithFallback("CHORUS_FRUIT"),
-            ParticleUtils.closestMatchWithFallback("PRISMARINE_CRYSTALS"),
-            ParticleUtils.closestMatchWithFallback("GUNPOWDER", "SULPHUR"),
-            ParticleUtils.closestMatchWithFallback("APPLE"),
-            ParticleUtils.closestMatchWithFallback("MELON"),
-            ParticleUtils.closestMatchWithFallback("COOKIE"),
-            ParticleUtils.closestMatchWithFallback("IRON_SHOVEL", "IRON_SPADE"),
-            ParticleUtils.closestMatchWithFallback("COMPASS"),
-            ParticleUtils.closestMatchWithFallback("CLOCK", "WATCH"),
-            ParticleUtils.closestMatchWithFallback("NAME_TAG")
-        };
+        Inventory testingInventory = Bukkit.createInventory(null, 9);
+        for (Material mat : Material.values()) {
+            // Verify an ItemStack of the material can be placed into an inventory. In 1.12 and up this can easily be checked with mat.isItem(), but that doesn't exist pre 1.12
+            testingInventory.clear();
+            testingInventory.setItem(0, new ItemStack(mat, 1));
+            ItemStack itemStack = testingInventory.getItem(0);
+            if (itemStack != null) {
+                if (mat.isBlock()) {
+                    BLOCK_MATERIALS.add(mat);
+                } else if (!mat.isBlock()) {
+                    ITEM_MATERIALS.add(mat);
+                }
+            }
+        }
     } // @formatter:on
 
     /**
@@ -207,23 +162,28 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         effectIcons = new HashMap<String, Material>();
         styleIcons = new HashMap<String, Material>();
 
-        defaultMenuIcons[0] = ParticleUtils.closestMatch(config.getString("gui-icon.main-menu.EFFECT"));
-        defaultMenuIcons[1] = ParticleUtils.closestMatch(config.getString("gui-icon.main-menu.STYLE"));
-        defaultMenuIcons[2] = ParticleUtils.closestMatch(config.getString("gui-icon.main-menu.DATA"));
-        for (int i = 0; i < defaultMenuIcons.length; i++)
-            if (defaultMenuIcons[i] == null) defaultMenuIcons[i] = Material.BARRIER;
+        defaultMenuIcons[0] = ParticleUtils.closestMatchWithFallback(config.getString("gui-icon.main-menu.EFFECT"));
+        defaultMenuIcons[1] = ParticleUtils.closestMatchWithFallback(config.getString("gui-icon.main-menu.STYLE"));
+        defaultMenuIcons[2] = ParticleUtils.closestMatchWithFallback(config.getString("gui-icon.main-menu.DATA"));
+        
+        // Grab a different effect icon set based on if the Minecraft version is >= 1.13 or not
+        String legacy;
+        try {
+            Particle.valueOf("NAUTILUS");
+            legacy = "";
+        } catch (Exception ex) {
+            legacy = "-legacy";
+        }
 
         for (ParticleEffect effect : ParticleEffect.getSupportedEffects()) {
-            String effectName = effect.name();
-            Material iconMaterial = ParticleUtils.closestMatch(config.getString("gui-icon.effect." + effectName));
-            if (iconMaterial == null) iconMaterial = Material.BARRIER; // Missing icon or invalid? Replace it with a barrier instead to fail safety.
+            String effectName = effect.getName().toUpperCase();
+            Material iconMaterial = ParticleUtils.closestMatchWithFallback(config.getString("gui-icon.effect" + legacy + "." + effectName));
             effectIcons.put(effectName, iconMaterial);
         }
 
         for (ParticleStyle style : ParticleStyleManager.getStyles()) {
             String styleName = style.getName().toUpperCase();
-            Material iconMaterial = ParticleUtils.closestMatch(config.getString("gui-icon.style." + styleName));
-            if (iconMaterial == null) iconMaterial = Material.BARRIER; // Missing icon or invalid? Replace it with a barrier instead to fail safety.
+            Material iconMaterial = ParticleUtils.closestMatchWithFallback(config.getString("gui-icon.style" + legacy + "." + styleName));
             styleIcons.put(styleName, iconMaterial);
         }
 
@@ -373,6 +333,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         currentIconLore[2] = ChatColor.YELLOW + "Active Data: " + ChatColor.AQUA + p.getParticleDataString();
         currentIconMeta.setLore(Arrays.asList(currentIconLore));
         currentIconMeta.setOwner(player.getName());
+        //currentIconMeta.setOwningPlayer(Bukkit.getOfflinePlayer(player.getUniqueId())); // This doesn't exist in 1.9
         currentIcon.setItemMeta(currentIconMeta);
 
         ItemStack effectIcon = new ItemStack(defaultMenuIcons[0], 1);
@@ -510,43 +471,58 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
                 inventory.setItem(40, getItemForRainbowColorData(p.getColorData(), rainbowColors[rainbowColorsIndex]));
             }
         } else if (pe.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
+            List<Material> materialBag = new ArrayList<Material>();
+            int materialIndex = 0;
+            
             if (pe == ParticleEffect.ITEM) { // Item data
                 Material currentItemMaterial = p.getItemData().getMaterial();
-                int itemMaterialIndex = 0;
+                
+                while (materialBag.size() < 28) { // Grab 28 random materials that are an item
+                    Material randomMaterial = ITEM_MATERIALS.get(RANDOM.nextInt(ITEM_MATERIALS.size()));
+                    if (!materialBag.contains(randomMaterial))
+                        materialBag.add(randomMaterial);
+                }
+                
                 for (int i = 10; i <= 16; i++) { // Top row
-                    inventory.setItem(i, getItemForMaterialData(currentItemMaterial, "item", itemMaterials[itemMaterialIndex]));
-                    itemMaterialIndex++;
+                    inventory.setItem(i, getItemForMaterialData(currentItemMaterial, "item", materialBag.get(materialIndex)));
+                    materialIndex++;
                 }
                 for (int i = 19; i <= 25; i++) { // Middle 1 row
-                    inventory.setItem(i, getItemForMaterialData(currentItemMaterial, "item", itemMaterials[itemMaterialIndex]));
-                    itemMaterialIndex++;
+                    inventory.setItem(i, getItemForMaterialData(currentItemMaterial, "item", materialBag.get(materialIndex)));
+                    materialIndex++;
                 }
                 for (int i = 28; i <= 34; i++) { // Middle 2 row
-                    inventory.setItem(i, getItemForMaterialData(currentItemMaterial, "item", itemMaterials[itemMaterialIndex]));
-                    itemMaterialIndex++;
+                    inventory.setItem(i, getItemForMaterialData(currentItemMaterial, "item", materialBag.get(materialIndex)));
+                    materialIndex++;
                 }
                 for (int i = 37; i <= 43; i++) { // Bottom row
-                    inventory.setItem(i, getItemForMaterialData(currentItemMaterial, "item", itemMaterials[itemMaterialIndex]));
-                    itemMaterialIndex++;
+                    inventory.setItem(i, getItemForMaterialData(currentItemMaterial, "item", materialBag.get(materialIndex)));
+                    materialIndex++;
                 }
             } else { // Block data
                 Material currentBlockMaterial = p.getBlockData().getMaterial();
-                int blockMaterialIndex = 0;
+                
+                while (materialBag.size() < 28) { // Grab 28 random materials that are an item
+                    Material randomMaterial = BLOCK_MATERIALS.get(RANDOM.nextInt(BLOCK_MATERIALS.size()));
+                    if (!materialBag.contains(randomMaterial))
+                        materialBag.add(randomMaterial);
+                }
+                
                 for (int i = 10; i <= 16; i++) { // Top row
-                    inventory.setItem(i, getItemForMaterialData(currentBlockMaterial, "block", blockMaterials[blockMaterialIndex]));
-                    blockMaterialIndex++;
+                    inventory.setItem(i, getItemForMaterialData(currentBlockMaterial, "block", materialBag.get(materialIndex)));
+                    materialIndex++;
                 }
                 for (int i = 19; i <= 25; i++) { // Middle 1 row
-                    inventory.setItem(i, getItemForMaterialData(currentBlockMaterial, "block", blockMaterials[blockMaterialIndex]));
-                    blockMaterialIndex++;
+                    inventory.setItem(i, getItemForMaterialData(currentBlockMaterial, "block", materialBag.get(materialIndex)));
+                    materialIndex++;
                 }
                 for (int i = 28; i <= 34; i++) { // Middle 2 row
-                    inventory.setItem(i, getItemForMaterialData(currentBlockMaterial, "block", blockMaterials[blockMaterialIndex]));
-                    blockMaterialIndex++;
+                    inventory.setItem(i, getItemForMaterialData(currentBlockMaterial, "block", materialBag.get(materialIndex)));
+                    materialIndex++;
                 }
                 for (int i = 37; i <= 43; i++) { // Bottom row
-                    inventory.setItem(i, getItemForMaterialData(currentBlockMaterial, "block", blockMaterials[blockMaterialIndex]));
-                    blockMaterialIndex++;
+                    inventory.setItem(i, getItemForMaterialData(currentBlockMaterial, "block", materialBag.get(materialIndex)));
+                    materialIndex++;
                 }
             }
         }
