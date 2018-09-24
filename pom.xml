@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.esophose.playerparticles</groupId>
   <artifactId>PlayerParticles</artifactId>
-  <version>5.2</version>
+  <version>5.3</version>
   <name>PlayerParticles</name>
   <url>https://github.com/Esophose/PlayerParticles</url>
   <description>Display particles around your player using customized styles and data!</description>
@@ -42,6 +42,7 @@
                   <include>com.zaxxer:HikariCP</include>
                   <include>org.slf4j:slf4j-api</include>
                   <include>org.slf4j:slf4j-nop</include>
+                  <include>org.xerial:sqlite-jdbc</include>
                 </includes>
               </artifactSet>
               <filters>
@@ -54,7 +55,7 @@
                   </excludes>
                 </filter>
               </filters>
-              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.13\plugins\update\PlayerParticles v5.2.jar</outputFile>
+              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.13\plugins\update\PlayerParticles v5.3.jar</outputFile>
             </configuration>
           </execution>
           <execution>
@@ -69,6 +70,7 @@
                   <include>com.zaxxer:HikariCP</include>
                   <include>org.slf4j:slf4j-api</include>
                   <include>org.slf4j:slf4j-nop</include>
+                  <include>org.xerial:sqlite-jdbc</include>
                 </includes>
               </artifactSet>
               <filters>
@@ -81,7 +83,7 @@
                   </excludes>
                 </filter>
               </filters>
-              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.12\plugins\update\PlayerParticles v5.2.jar</outputFile>
+              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.12\plugins\update\PlayerParticles v5.3.jar</outputFile>
             </configuration>
           </execution>
           <execution>
@@ -96,6 +98,7 @@
                   <include>com.zaxxer:HikariCP</include>
                   <include>org.slf4j:slf4j-api</include>
                   <include>org.slf4j:slf4j-nop</include>
+                  <include>org.xerial:sqlite-jdbc</include>
                 </includes>
               </artifactSet>
               <filters>
@@ -108,7 +111,7 @@
                   </excludes>
                 </filter>
               </filters>
-              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.11\plugins\update\PlayerParticles v5.2.jar</outputFile>
+              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.11\plugins\update\PlayerParticles v5.3.jar</outputFile>
             </configuration>
           </execution>
           <execution>
@@ -123,6 +126,7 @@
                   <include>com.zaxxer:HikariCP</include>
                   <include>org.slf4j:slf4j-api</include>
                   <include>org.slf4j:slf4j-nop</include>
+                  <include>org.xerial:sqlite-jdbc</include>
                 </includes>
               </artifactSet>
               <filters>
@@ -135,7 +139,7 @@
                   </excludes>
                 </filter>
               </filters>
-              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.10\plugins\update\PlayerParticles v5.2.jar</outputFile>
+              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.10\plugins\update\PlayerParticles v5.3.jar</outputFile>
             </configuration>
           </execution>
           <execution>
@@ -150,6 +154,7 @@
                   <include>com.zaxxer:HikariCP</include>
                   <include>org.slf4j:slf4j-api</include>
                   <include>org.slf4j:slf4j-nop</include>
+                  <include>org.xerial:sqlite-jdbc</include>
                 </includes>
               </artifactSet>
               <filters>
@@ -162,7 +167,7 @@
                   </excludes>
                 </filter>
               </filters>
-              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.9\plugins\update\PlayerParticles v5.2.jar</outputFile>
+              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.9\plugins\update\PlayerParticles v5.3.jar</outputFile>
             </configuration>
           </execution>
         </executions>
@@ -191,6 +196,11 @@
       <artifactId>HikariCP</artifactId>
       <version>3.2.0</version>
     </dependency>
+    <dependency>
+      <groupId>org.xerial</groupId>
+      <artifactId>sqlite-jdbc</artifactId>
+      <version>3.23.1</version>
+	</dependency>
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>

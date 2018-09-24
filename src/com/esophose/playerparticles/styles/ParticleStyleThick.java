@@ -1,20 +1,23 @@
 package com.esophose.playerparticles.styles;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Location;
 
-import com.esophose.playerparticles.PPlayer;
+import com.esophose.playerparticles.particles.ParticlePair;
 import com.esophose.playerparticles.styles.api.PParticle;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class ParticleStyleThick implements ParticleStyle {
 
-    public PParticle[] getParticles(PPlayer pplayer, Location location) {
-        PParticle[] baseParticles = DefaultStyles.NONE.getParticles(pplayer, location);
+    public List<PParticle> getParticles(ParticlePair particle, Location location) {
+        List<PParticle> baseParticles = DefaultStyles.NONE.getParticles(particle, location);
 
-        int multiplyingFactor = 15; // Uses the same logic as ParticleStyleNone except multiplies the resulting particles by 15x
-        PParticle[] particles = new PParticle[baseParticles.length * multiplyingFactor];
-        for (int i = 0; i < baseParticles.length * multiplyingFactor; i++) {
-            particles[i] = baseParticles[i % baseParticles.length];
+        int multiplyingFactor = 10; // Uses the same logic as ParticleStyleNone except multiplies the resulting particles by 10x
+        List<PParticle> particles = new ArrayList<PParticle>();
+        for (int i = 0; i < baseParticles.size() * multiplyingFactor; i++) {
+            particles.add(baseParticles.get(i % baseParticles.size()));
         }
 
         return particles;

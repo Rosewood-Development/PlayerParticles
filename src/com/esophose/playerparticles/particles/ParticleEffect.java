@@ -26,14 +26,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
-/**
- * Heavily modified to work with the Spigot Particle API
- * 
- * @author Esophose
- */
+@SuppressWarnings("deprecation")
 public enum ParticleEffect {
     
     // Ordered and named by their Minecraft 1.13 internal names
+	NONE("", ""), // Custom effect to represent none selected, always display first
     AMBIENT_ENTITY_EFFECT("SPELL_MOB_AMBIENT", "SPELL_MOB_AMBIENT", ParticleProperty.COLORABLE),
     ANGRY_VILLAGER("VILLAGER_ANGRY", "VILLAGER_ANGRY"),
     BARRIER("BARRIER", "BARRIER"),
@@ -72,7 +69,6 @@ public enum ParticleEffect {
     LAVA("LAVA", "LAVA"),
     MYCELIUM("TOWN_AURA", "TOWN_AURA"),
     NAUTILUS("NAUTILUS", null),
-    NONE("", ""), // Custom effect to represent none selected
     NOTE("NOTE", "NOTE", ParticleProperty.COLORABLE),
     POOF("EXPLOSION_NORMAL", "EXPLOSION_NORMAL"), // The 1.13 combination of explode and showshovel
     PORTAL("PORTAL", "PORTAL"),
@@ -201,28 +197,6 @@ public enum ParticleEffect {
     }
 
     /**
-     * Determine if the data type for a particle effect is correct
-     * 
-     * @param effect Particle effect
-     * @param data Particle data
-     * @return Whether the data type is correct or not
-     */
-    private static boolean isDataCorrect(ParticleEffect effect, ParticleData data) {
-        return ((effect == BLOCK || effect == FALLING_DUST) && data instanceof BlockData) || (effect == ITEM && data instanceof ItemData);
-    }
-
-    /**
-     * Determine if the color type for a particle effect is correct
-     * 
-     * @param effect Particle effect
-     * @param color Particle color
-     * @return Whether the color type is correct or not
-     */
-    private static boolean isColorCorrect(ParticleEffect effect, ParticleColor color) {
-        return ((effect == ENTITY_EFFECT || effect == AMBIENT_ENTITY_EFFECT || effect == DUST) && color instanceof OrdinaryColor) || (effect == NOTE && color instanceof NoteColor);
-    }
-
-    /**
      * Displays a particle effect
      * 
      * @param offsetX Maximum distance particles can fly away from the center on the x-axis
@@ -253,9 +227,6 @@ public enum ParticleEffect {
         if (!hasProperty(ParticleProperty.COLORABLE)) {
             throw new ParticleColorException("This particle effect is not colorable");
         }
-        if (!isColorCorrect(this, color)) {
-            throw new ParticleColorException("The particle color type is incorrect");
-        }
 
         if (this == DUST && VERSION_13) { // DUST uses a special data object for spawning in 1.13
             OrdinaryColor dustColor = (OrdinaryColor)color;
@@ -280,7 +251,7 @@ public enum ParticleEffect {
      * visible for all players within a certain range in the world of @param
      * center
      * 
-     * @param data Data of the effect
+     * @param spawnMaterial Material of the effect
      * @param offsetX Maximum distance particles can fly away from the center on the x-axis
      * @param offsetY Maximum distance particles can fly away from the center on the y-axis
      * @param offsetZ Maximum distance particles can fly away from the center on the z-axis
@@ -289,22 +260,20 @@ public enum ParticleEffect {
      * @param center Center location of the effect
      * @throws ParticleDataException If the particle effect does not require additional data or if the data type is incorrect
      */
-    public void display(ParticleData data, float offsetX, float offsetY, float offsetZ, float speed, int amount, Location center) throws ParticleDataException {
+    public void display(Material spawnMaterial, float offsetX, float offsetY, float offsetZ, float speed, int amount, Location center) throws ParticleDataException {
         if (!hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
             throw new ParticleDataException("This particle effect does not require additional data");
         }
-        if (!isDataCorrect(this, data)) {
-            throw new ParticleDataException("The particle data type is incorrect");
-        }
+        
         Object extraData = null;
         if (internalEnum.getDataType().getTypeName().equals("org.bukkit.block.data.BlockData")) { 
             try { // The Material.createBlockData() method doesn't exist in Minecraft versions less than 1.13... so this is disgusting... but it works great
-                extraData = createBlockData_METHOD.invoke(data.getMaterial());
+                extraData = createBlockData_METHOD.invoke(spawnMaterial);
             } catch (Exception e) { }
         } else if (internalEnum.getDataType() == ItemStack.class) {
-            extraData = new ItemStack(data.getMaterial());
+            extraData = new ItemStack(spawnMaterial);
         } else if (internalEnum.getDataType() == MaterialData.class) {
-            extraData = new MaterialData(data.getMaterial()); // Deprecated, only used in versions < 1.13
+            extraData = new MaterialData(spawnMaterial); // Deprecated, only used in versions < 1.13
         } else {
             System.out.println(internalEnum.getDataType());
             extraData = null;
@@ -348,83 +317,6 @@ public enum ParticleEffect {
          * The particle effect uses the offsets as color values
          */
         COLORABLE;
-    }
-
-    /**
-     * Represents the particle data for effects like
-     * {@link ParticleEffect#ITEM}, {@link ParticleEffect#BLOCK}, and {@link ParticleEffect#FALLING_DUST}
-     * <p>
-     * This class is part of the <b>ParticleEffect Library</b> and follows the
-     * same usage conditions
-     * 
-     * @author DarkBlade12
-     * @since 1.6
-     */
-    public static abstract class ParticleData {
-        private final Material material;
-
-        /**
-         * Construct a new particle data
-         * 
-         * @param material Material of the item/block
-         */
-        public ParticleData(Material material) {
-            this.material = material;
-        }
-
-        /**
-         * Returns the material of this data
-         * 
-         * @return The material
-         */
-        public Material getMaterial() {
-            return material;
-        }
-    }
-
-    /**
-     * Represents the item data for the {@link ParticleEffect#ITEM} effect
-     * <p>
-     * This class is part of the <b>ParticleEffect Library</b> and follows the
-     * same usage conditions
-     * 
-     * @author DarkBlade12
-     * @since 1.6
-     */
-    public static final class ItemData extends ParticleData {
-        /**
-         * Construct a new item data
-         * 
-         * @param material Material of the item
-         */
-        public ItemData(Material material) {
-            super(material);
-        }
-    }
-
-    /**
-     * Represents the block data for the {@link ParticleEffect#BLOCK} and
-     * {@link ParticleEffect#FALLING_DUST} effects
-     * <p>
-     * This class is part of the <b>ParticleEffect Library</b> and follows the
-     * same usage conditions
-     * 
-     * @author DarkBlade12
-     * @since 1.6
-     */
-    public static final class BlockData extends ParticleData {
-        /**
-         * Construct a new block data
-         * 
-         * @param material Material of the block
-         * @throws IllegalArgumentException If the material is not a block
-         */
-        public BlockData(Material material) throws IllegalArgumentException {
-            super(material);
-            if (!material.isBlock()) {
-                throw new IllegalArgumentException("The material is not a block");
-            }
-        }
     }
 
     /**

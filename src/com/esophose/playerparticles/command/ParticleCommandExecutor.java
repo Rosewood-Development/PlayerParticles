@@ -6,7 +6,7 @@
  * be distributed to any person by any means.
  */
 
-package com.esophose.playerparticles;
+package com.esophose.playerparticles.command;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -23,17 +23,16 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.esophose.playerparticles.PlayerParticles;
 import com.esophose.playerparticles.gui.PlayerParticlesGui;
 import com.esophose.playerparticles.gui.PlayerParticlesGui.GuiState;
-import com.esophose.playerparticles.manager.PPlayerDataManager;
+import com.esophose.playerparticles.manager.DataManager;
 import com.esophose.playerparticles.manager.MessageManager;
 import com.esophose.playerparticles.manager.MessageManager.MessageType;
 import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.manager.PermissionManager;
 import com.esophose.playerparticles.particles.FixedParticleEffect;
 import com.esophose.playerparticles.particles.ParticleEffect;
-import com.esophose.playerparticles.particles.ParticleEffect.BlockData;
-import com.esophose.playerparticles.particles.ParticleEffect.ItemData;
 import com.esophose.playerparticles.particles.ParticleEffect.NoteColor;
 import com.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
 import com.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
@@ -106,15 +105,15 @@ public class ParticleCommandExecutor implements CommandExecutor {
         // Commands that require access to effects
         if (PermissionManager.getEffectsUserHasPermissionFor(p).size() != 1) {
             final String[] f_cmdArgs = cmdArgs;
-            PPlayerDataManager.getInstance().getPPlayer(p.getUniqueId(), (pplayer) -> { // The PPlayer MUST be loaded before we can execute any of these commands
+            DataManager.getInstance().getPPlayer(p.getUniqueId(), (pplayer) -> { // The PPlayer MUST be loaded before we can execute any of these commands
                 // If the player no longer has permission for their effect, remove it
                 if (!PermissionManager.hasEffectPermission(p, pplayer.getParticleEffect())) {
-                    PPlayerDataManager.getInstance().savePPlayer(pplayer.getUniqueId(), ParticleEffect.NONE);
+                    DataManager.getInstance().savePPlayer(pplayer.getUniqueId(), ParticleEffect.NONE);
                 }
 
                 // If the player no longer has permission for their style, default to none
                 if (!PermissionManager.hasStylePermission(p, pplayer.getParticleStyle())) {
-                    PPlayerDataManager.getInstance().savePPlayer(pplayer.getUniqueId(), DefaultStyles.NONE);
+                    DataManager.getInstance().savePPlayer(pplayer.getUniqueId(), DefaultStyles.NONE);
                 }
                 
                 switch (args[0].toLowerCase()) {
@@ -170,13 +169,13 @@ public class ParticleCommandExecutor implements CommandExecutor {
      * @param p The player who used the command
      */
     private void onWorlds(Player p) {
-        if (PPlayerDataManager.getInstance().getDisabledWorlds() == null || PPlayerDataManager.getInstance().getDisabledWorlds().isEmpty()) {
+        if (DataManager.getInstance().getDisabledWorlds() == null || DataManager.getInstance().getDisabledWorlds().isEmpty()) {
             MessageManager.sendMessage(p, MessageType.DISABLED_WORLDS_NONE);
             return;
         }
 
         String worlds = "";
-        for (String s : PPlayerDataManager.getInstance().getDisabledWorlds()) {
+        for (String s : DataManager.getInstance().getDisabledWorlds()) {
             worlds += s + ", ";
         }
         if (worlds.length() > 2) worlds = worlds.substring(0, worlds.length() - 2);
@@ -201,7 +200,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
      * @param args The arguments for the command
      */
     private void onData(Player p, String[] args) {
-        ParticleEffect effect = PPlayerDataManager.getInstance().getPPlayer(p.getUniqueId()).getParticleEffect();
+        ParticleEffect effect = DataManager.getInstance().getPPlayer(p.getUniqueId()).getParticleEffect();
         if ((!effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA) && !effect.hasProperty(ParticleProperty.COLORABLE)) || args.length == 0) {
             if (effect.hasProperty(ParticleProperty.COLORABLE)) {
                 if (effect == ParticleEffect.NOTE) {
@@ -227,7 +226,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
         if (effect.hasProperty(ParticleProperty.COLORABLE)) {
             if (effect == ParticleEffect.NOTE) {
                 if (args[0].equalsIgnoreCase("rainbow")) {
-                    PPlayerDataManager.getInstance().savePPlayer(p.getUniqueId(), new NoteColor(99));
+                    DataManager.getInstance().savePPlayer(p.getUniqueId(), new NoteColor(99));
                     MessageManager.sendMessage(p, MessageType.DATA_APPLIED, "note");
                     return;
                 }
@@ -247,11 +246,11 @@ public class ParticleCommandExecutor implements CommandExecutor {
                     return;
                 }
 
-                PPlayerDataManager.getInstance().savePPlayer(p.getUniqueId(), new NoteColor(note));
+                DataManager.getInstance().savePPlayer(p.getUniqueId(), new NoteColor(note));
                 MessageManager.sendMessage(p, MessageType.DATA_APPLIED, "note");
             } else {
                 if (args[0].equalsIgnoreCase("rainbow")) {
-                    PPlayerDataManager.getInstance().savePPlayer(p.getUniqueId(), new OrdinaryColor(999, 999, 999));
+                    DataManager.getInstance().savePPlayer(p.getUniqueId(), new OrdinaryColor(999, 999, 999));
                     MessageManager.sendMessage(p, MessageType.DATA_APPLIED, "color");
                 } else if (args.length >= 3) {
                     int r = -1;
@@ -274,7 +273,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
                         return;
                     }
 
-                    PPlayerDataManager.getInstance().savePPlayer(p.getUniqueId(), new OrdinaryColor(r, g, b));
+                    DataManager.getInstance().savePPlayer(p.getUniqueId(), new OrdinaryColor(r, g, b));
                     MessageManager.sendMessage(p, MessageType.DATA_APPLIED, "color");
                 } else {
                     MessageManager.sendMessage(p, MessageType.DATA_INVALID_ARGUMENTS, "color");
@@ -300,7 +299,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
                     return;
                 }
 
-                PPlayerDataManager.getInstance().savePPlayer(p.getUniqueId(), new ItemData(material));
+                DataManager.getInstance().savePPlayer(p.getUniqueId(), new ItemData(material));
                 MessageManager.sendMessage(p, MessageType.DATA_APPLIED, "item");
             } else {
                 Material material = null;
@@ -320,7 +319,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
                     return;
                 }
 
-                PPlayerDataManager.getInstance().savePPlayer(p.getUniqueId(), new BlockData(material));
+                DataManager.getInstance().savePPlayer(p.getUniqueId(), new BlockData(material));
                 MessageManager.sendMessage(p, MessageType.DATA_APPLIED, "block");
             }
         }
@@ -343,14 +342,14 @@ public class ParticleCommandExecutor implements CommandExecutor {
                 if (altPlayer == null) {
                     MessageManager.sendMessage(p, MessageType.FAILED_EXECUTE_NOT_FOUND, altPlayerName);
                 } else {
-                    PPlayerDataManager.getInstance().resetPPlayer(altPlayer.getUniqueId());
+                    DataManager.getInstance().resetPPlayer(altPlayer.getUniqueId());
                     MessageManager.sendMessage(altPlayer, MessageType.RESET);
 
                     MessageManager.sendMessage(p, MessageType.EXECUTED_FOR_PLAYER, altPlayer.getName());
                 }
             }
         } else {
-            PPlayerDataManager.getInstance().resetPPlayer(p.getUniqueId());
+            DataManager.getInstance().resetPPlayer(p.getUniqueId());
             MessageManager.sendMessage(p, MessageType.RESET);
         }
     }
@@ -373,7 +372,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
                 MessageManager.sendMessage(p, MessageType.NO_PERMISSION, effect.getName());
                 return;
             }
-            PPlayerDataManager.getInstance().savePPlayer(p.getUniqueId(), effect);
+            DataManager.getInstance().savePPlayer(p.getUniqueId(), effect);
             if (effect != ParticleEffect.NONE) {
                 MessageManager.sendMessage(p, MessageType.NOW_USING, effect.getName());
             } else {
@@ -432,7 +431,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
                 MessageManager.sendMessage(p, MessageType.NO_PERMISSION_STYLE, style.getName());
                 return;
             }
-            PPlayerDataManager.getInstance().savePPlayer(p.getUniqueId(), style);
+            DataManager.getInstance().savePPlayer(p.getUniqueId(), style);
             if (style != DefaultStyles.NONE) {
                 MessageManager.sendMessage(p, MessageType.NOW_USING_STYLE, style.getName());
             } else {
@@ -501,7 +500,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
 
         if (cmd.equalsIgnoreCase("create")) {
             final String[] f_args = args;
-            PPlayerDataManager.getInstance().hasPlayerReachedMaxFixedEffects(p.getUniqueId(), (reachedMax) -> {
+            DataManager.getInstance().hasPlayerReachedMaxFixedEffects(p.getUniqueId(), (reachedMax) -> {
                 if (reachedMax) {
                     MessageManager.sendMessage(p, MessageType.MAX_FIXED_EFFECTS_REACHED);
                     return;
@@ -540,7 +539,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
                 }
 
                 double distanceFromEffect = p.getLocation().distance(new Location(p.getWorld(), xPos, yPos, zPos));
-                int maxCreationDistance = PPlayerDataManager.getInstance().getMaxFixedEffectCreationDistance();
+                int maxCreationDistance = DataManager.getInstance().getMaxFixedEffectCreationDistance();
                 if (maxCreationDistance != 0 && distanceFromEffect > maxCreationDistance) {
                     MessageManager.sendMessage(p, MessageType.CREATE_FIXED_OUT_OF_RANGE, maxCreationDistance + "");
                     return;
@@ -656,14 +655,14 @@ public class ParticleCommandExecutor implements CommandExecutor {
                 final OrdinaryColor f_colorData = colorData;
                 final NoteColor f_noteData = noteColorData;
                 
-                PPlayerDataManager.getInstance().getNextFixedEffectId(p.getUniqueId(), (nextFixedEffectId) -> {
+                DataManager.getInstance().getNextFixedEffectId(p.getUniqueId(), (nextFixedEffectId) -> {
                     FixedParticleEffect fixedEffect = new FixedParticleEffect(p.getUniqueId(), // @formatter:off
                                                                               nextFixedEffectId, 
                                                                               p.getLocation().getWorld().getName(), f_xPos, f_yPos, f_zPos, 
                                                                               effect, style, f_itemData, f_blockData, f_colorData, f_noteData); // @formatter:on
 
                     MessageManager.sendMessage(p, MessageType.CREATE_FIXED_SUCCESS);
-                    PPlayerDataManager.getInstance().saveFixedEffect(fixedEffect);
+                    DataManager.getInstance().saveFixedEffect(fixedEffect);
                 });
             });
         } else if (cmd.equalsIgnoreCase("remove")) {
@@ -681,7 +680,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
             }
 
             final int f_id = id;
-            PPlayerDataManager.getInstance().removeFixedEffect(p.getUniqueId(), id, (successful) -> {
+            DataManager.getInstance().removeFixedEffect(p.getUniqueId(), id, (successful) -> {
                 if (successful) {
                     MessageManager.sendMessage(p, MessageType.REMOVE_FIXED_SUCCESS, f_id + "");
                 } else {
@@ -689,7 +688,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
                 }
             });
         } else if (cmd.equalsIgnoreCase("list")) {
-            PPlayerDataManager.getInstance().getFixedEffectIdsForPlayer(p.getUniqueId(), (ids) -> {
+            DataManager.getInstance().getFixedEffectIdsForPlayer(p.getUniqueId(), (ids) -> {
                 Collections.sort(ids);
 
                 if (ids.isEmpty()) {
@@ -723,7 +722,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
             
             
             final int f_id = id;
-            PPlayerDataManager.getInstance().getFixedEffectForPlayerById(p.getUniqueId(), id, (fixedEffect) -> {
+            DataManager.getInstance().getFixedEffectForPlayerById(p.getUniqueId(), id, (fixedEffect) -> {
                 if (fixedEffect == null) {
                     MessageManager.sendMessage(p, MessageType.INFO_FIXED_NONEXISTANT, f_id + "");
                     return;
@@ -767,7 +766,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
                     fixedEffectsToRemove.add(fixedEffect);
 
             for (FixedParticleEffect fixedEffect : fixedEffectsToRemove) 
-                PPlayerDataManager.getInstance().removeFixedEffect(fixedEffect.getOwnerUniqueId(), fixedEffect.getId(), (successful) -> { });
+                DataManager.getInstance().removeFixedEffect(fixedEffect.getOwnerUniqueId(), fixedEffect.getId(), (successful) -> { });
 
             String clearMessage = MessageType.CLEAR_FIXED_SUCCESS.getMessage() // @formatter:off
 								  .replaceAll("\\{0\\}", fixedEffectsToRemove.size() + "")
@@ -807,7 +806,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
             MessageManager.sendMessage(p, MessageType.GUI_BY_DEFAULT);
         }
 
-        PPlayerDataManager.getInstance().getPPlayer(p.getUniqueId(), (pplayer) -> {
+        DataManager.getInstance().getPPlayer(p.getUniqueId(), (pplayer) -> {
             PlayerParticlesGui.changeState(pplayer, GuiState.DEFAULT);
         });
     }

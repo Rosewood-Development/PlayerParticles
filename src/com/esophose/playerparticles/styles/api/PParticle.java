@@ -13,7 +13,7 @@ import org.bukkit.Location;
 public class PParticle {
 
     /**
-     * Data that affects the particle
+     * Data that determines where the particle will spawn
      */
     private Location location;
     private float speed;

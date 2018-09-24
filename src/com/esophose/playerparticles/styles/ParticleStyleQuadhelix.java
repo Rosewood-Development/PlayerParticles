@@ -1,8 +1,11 @@
 package com.esophose.playerparticles.styles;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Location;
 
-import com.esophose.playerparticles.PPlayer;
+import com.esophose.playerparticles.particles.ParticlePair;
 import com.esophose.playerparticles.styles.api.PParticle;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
 
@@ -12,13 +15,13 @@ public class ParticleStyleQuadhelix implements ParticleStyle {
     private float stepY = 0;
     private boolean reverse = false;
 
-    public PParticle[] getParticles(PPlayer pplayer, Location location) {
-        PParticle[] particles = new PParticle[4];
+    public List<PParticle> getParticles(ParticlePair particle, Location location) {
+        List<PParticle> particles = new ArrayList<PParticle>();
         for (int i = 0; i < 4; i++) {
             double dx = -(Math.cos((stepX / 90) * (Math.PI * 2) + ((Math.PI / 2) * i))) * ((60 - Math.abs(stepY)) / 60);
             double dy = (stepY / 60) * 1.5;
             double dz = -(Math.sin((stepX / 90) * (Math.PI * 2) + ((Math.PI / 2) * i))) * ((60 - Math.abs(stepY)) / 60);
-            particles[i] = new PParticle(new Location(location.getWorld(), location.getX() + dx, location.getY() + dy, location.getZ() + dz));
+            particles.add(new PParticle(new Location(location.getWorld(), location.getX() + dx, location.getY() + dy, location.getZ() + dz)));
         }
         return particles;
     }

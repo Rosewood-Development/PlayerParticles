@@ -18,6 +18,7 @@ public class MessageManager {
 
     /**
      * Contains the location in the config of every chat message
+     * TODO: Implement .lang files
      */
     public static enum MessageType {
 
@@ -151,10 +152,6 @@ public class MessageManager {
     }
 
     /**
-     * Stores the main config for quick access
-     */
-    private static FileConfiguration config;
-    /**
      * Stores if messages and their prefixes should be displayed
      */
     private static boolean messagesEnabled, prefixEnabled;
@@ -168,8 +165,7 @@ public class MessageManager {
      * This should only get called once by the PlayerParticles class, however
      * calling it multiple times wont affect anything negatively
      */
-    public static void setup() {
-        config = PlayerParticles.getPlugin().getConfig();
+    public static void setup(FileConfiguration config) {
         messagesEnabled = config.getBoolean("messages-enabled");
         prefixEnabled = config.getBoolean("use-message-prefix");
         messagePrefix = parseColors(config.getString("message-prefix"));

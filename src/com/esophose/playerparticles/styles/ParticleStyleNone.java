@@ -1,124 +1,144 @@
 package com.esophose.playerparticles.styles;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.bukkit.Location;
 
-import com.esophose.playerparticles.PPlayer;
 import com.esophose.playerparticles.particles.ParticleEffect;
+import com.esophose.playerparticles.particles.ParticlePair;
 import com.esophose.playerparticles.styles.api.PParticle;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class ParticleStyleNone implements ParticleStyle {
 
-    public PParticle[] getParticles(PPlayer pplayer, Location location) {
-        ParticleEffect particleEffect = pplayer.getParticleEffect();
-        if (particleEffect.equals(ParticleEffect.ANGRY_VILLAGER)) {
-            return new PParticle[] { new PParticle(location, 0.6F, 0.6F, 0.6F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.BUBBLE)) {
-            return new PParticle[] { new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.CLOUD)) {
-            return new PParticle[] { new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.CRIT)) {
-            return new PParticle[] { new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.UNDERWATER)) {
-            PParticle[] particles = new PParticle[5];
-            for (int i = 0; i < 5; i++)
-                particles[i] = new PParticle(location, 0.5F, 0.5F, 0.5F, 0.0F);
-            return particles;
-        } else if (particleEffect.equals(ParticleEffect.DRIPPING_LAVA)) {
-            return new PParticle[] { new PParticle(location, 0.6F, 0.6F, 0.6F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.DRIPPING_LAVA)) {
-            return new PParticle[] { new PParticle(location, 0.6F, 0.6F, 0.6F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.ENCHANT)) {
-            return new PParticle[] { new PParticle(location, 0.6F, 0.6F, 0.6F, 0.05F) };
-        } else if (particleEffect.equals(ParticleEffect.POOF)) {
-            return new PParticle[] { new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.FIREWORK)) {
-            return new PParticle[] { new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.FLAME)) {
-            return new PParticle[] { new PParticle(location, 0.1F, 0.1F, 0.1F, 0.05F) };
-        } else if (particleEffect.equals(ParticleEffect.FOOTSTEP)) {
-            return new PParticle[] { new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.HAPPY_VILLAGER)) {
-            return new PParticle[] { new PParticle(location, 0.5F, 0.5F, 0.5F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.HEART)) {
-            return new PParticle[] { new PParticle(location, 0.6F, 0.6F, 0.6F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.EXPLOSION_EMITTER)) {
-            return new PParticle[] { new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.INSTANT_EFFECT)) {
-            return new PParticle[] { new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.EXPLOSION)) {
-            return new PParticle[] { new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.LARGE_SMOKE)) {
-            return new PParticle[] { new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.LAVA)) {
-            return new PParticle[] { new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.ENCHANTED_HIT)) {
-            return new PParticle[] { new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.ENTITY_EFFECT)) {
-            return new PParticle[] { new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.AMBIENT_ENTITY_EFFECT)) {
-            return new PParticle[] { new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.NOTE)) {
-            return new PParticle[] { new PParticle(location, 0.6F, 0.6F, 0.6F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.PORTAL)) {
-            return new PParticle[] { new PParticle(location, 0.5F, 0.5F, 0.5F, 0.05F) };
-        } else if (particleEffect.equals(ParticleEffect.DUST)) {
-            return new PParticle[] { new PParticle(location, 0.5F, 0.5F, 0.5F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.ITEM_SLIME)) {
-            return new PParticle[] { new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.SMOKE)) {
-            return new PParticle[] { new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.ITEM_SNOWBALL)) {
-            return new PParticle[] { new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.SPELL)) {
-            return new PParticle[] { new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.UNDERWATER)) {
-            PParticle[] particles = new PParticle[3];
-            for (int i = 0; i < 3; i++)
-                particles[i] = new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F);
-            return particles;
-        } else if (particleEffect.equals(ParticleEffect.WITCH)) {
-            return new PParticle[] { new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.BARRIER)) {
-            return new PParticle[] { new PParticle(location, 1.2F, 1.2F, 1.2F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.SPLASH)) {
-            return new PParticle[] { new PParticle(location, 0.8F, 0.8F, 0.8F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.DRAGON_BREATH)) {
-            return new PParticle[] { new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.END_ROD)) {
-            return new PParticle[] { new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.DAMAGE_INDICATOR)) {
-            return new PParticle[] { new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.SWEEP_ATTACK)) {
-            return new PParticle[] { new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.BLOCK)) {
-            return new PParticle[] { new PParticle(location, 0.6F, 0.6F, 0.6F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.ITEM)) {
-            return new PParticle[] { new PParticle(location, 0.6F, 0.6F, 0.6F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.FALLING_DUST)) {
-            PParticle[] particles = new PParticle[2];
-            for (int i = 0; i < 2; i++)
-                particles[i] = new PParticle(location.add(0, 0.75, 0), 0.6F, 0.4F, 0.6F, 0.0F);
-            return particles;
-        } else if (particleEffect.equals(ParticleEffect.TOTEM_OF_UNDYING)) {
-            return new PParticle[] { new PParticle(location, 0.6F, 0.6F, 0.6F, 0.0F) };
-        } else if (particleEffect.equals(ParticleEffect.SPIT)) {
-            return new PParticle[] { new PParticle(location, 0.6F, 0.6F, 0.6F, 0.0F) };
-        } else {
-            return new PParticle[] { new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F) };
-        }
-    }
+	public List<PParticle> getParticles(ParticlePair particle, Location location) {
+		ParticleEffect particleEffect = particle.getEffect();
+		List<PParticle> particles = new ArrayList<PParticle>();
 
-    public void updateTimers() {
+		switch (particleEffect) {
+		case AMBIENT_ENTITY_EFFECT:
+			return Collections.singletonList(new PParticle(location, 0.6F, 0.6F, 0.6F, 0.0F));
+		case ANGRY_VILLAGER:
+			return Collections.singletonList(new PParticle(location, 0.6F, 0.6F, 0.6F, 0.0F));
+		case BARRIER:
+			return Collections.singletonList(new PParticle(location, 0.6F, 0.6F, 0.6F, 0.0F));
+		case BLOCK:
+			return Collections.singletonList(new PParticle(location, 0.6F, 0.6F, 0.6F, 0.0F));
+		case BUBBLE:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case BUBBLE_COLUMN_UP:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case BUBBLE_POP:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case CLOUD:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case CRIT:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case CURRENT_DOWN:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case DAMAGE_INDICATOR:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case DOLPHIN:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case DRAGON_BREATH:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case DRIPPING_LAVA:
+			return Collections.singletonList(new PParticle(location, 0.6F, 0.6F, 0.6F, 0.0F));
+		case DRIPPING_WATER:
+			return Collections.singletonList(new PParticle(location, 0.6F, 0.6F, 0.6F, 0.0F));
+		case DUST:
+			return Collections.singletonList(new PParticle(location, 0.5F, 0.5F, 0.5F, 0.0F));
+		case ENCHANT:
+			return Collections.singletonList(new PParticle(location, 0.6F, 0.6F, 0.6F, 0.05F));
+		case ENCHANTED_HIT:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case END_ROD:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case ENTITY_EFFECT:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case EXPLOSION:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case EXPLOSION_EMITTER:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case FALLING_DUST:
+			for (int i = 0; i < 2; i++)
+				particles.add(new PParticle(location.add(0, 0.75, 0), 0.6F, 0.4F, 0.6F, 0.0F));
+			return particles;
+		case FIREWORK:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case FISHING:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case FLAME:
+			return Collections.singletonList(new PParticle(location, 0.1F, 0.1F, 0.1F, 0.05F));
+		case FOOTSTEP:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case HAPPY_VILLAGER:
+			return Collections.singletonList(new PParticle(location, 0.5F, 0.5F, 0.5F, 0.0F));
+		case HEART:
+			return Collections.singletonList(new PParticle(location, 0.6F, 0.6F, 0.6F, 0.0F));
+		case INSTANT_EFFECT:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case ITEM:
+			return Collections.singletonList(new PParticle(location, 0.6F, 0.6F, 0.6F, 0.0F));
+		case ITEM_SLIME:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case ITEM_SNOWBALL:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case LARGE_SMOKE:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case LAVA:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case MYCELIUM:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case NAUTILUS:
+			return Collections.singletonList(new PParticle(location, 0.5F, 0.5F, 0.5F, 0.05F));
+		case NONE:
+			return particles;
+		case NOTE:
+			return Collections.singletonList(new PParticle(location, 0.6F, 0.6F, 0.6F, 0.0F));
+		case POOF:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case PORTAL:
+			return Collections.singletonList(new PParticle(location, 0.5F, 0.5F, 0.5F, 0.05F));
+		case RAIN:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case SMOKE:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case SPELL:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case SPIT:
+			return Collections.singletonList(new PParticle(location, 0.6F, 0.6F, 0.6F, 0.0F));
+		case SPLASH:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case SQUID_INK:
+			return Collections.singletonList(new PParticle(location, 0.6F, 0.6F, 0.6F, 0.0F));
+		case SWEEP_ATTACK:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		case TOTEM_OF_UNDYING:
+			return Collections.singletonList(new PParticle(location, 0.6F, 0.6F, 0.6F, 0.0F));
+		case UNDERWATER:
+			for (int i = 0; i < 5; i++)
+				particles.add(new PParticle(location, 0.5F, 0.5F, 0.5F, 0.0F));
+			return particles;
+		case WITCH:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		default:
+			return Collections.singletonList(new PParticle(location, 0.4F, 0.4F, 0.4F, 0.0F));
+		}
+	}
 
-    }
+	public void updateTimers() {
 
-    public String getName() {
-        return "none";
-    }
+	}
 
-    public boolean canBeFixed() {
-        return true;
-    }
+	public String getName() {
+		return "none";
+	}
+
+	public boolean canBeFixed() {
+		return true;
+	}
 
 }

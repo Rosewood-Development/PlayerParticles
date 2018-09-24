@@ -11,7 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
 
-import com.esophose.playerparticles.PPlayer;
+import com.esophose.playerparticles.particles.ParticlePair;
 import com.esophose.playerparticles.styles.api.PParticle;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
 
@@ -20,16 +20,16 @@ public class ParticleStyleArrows implements ParticleStyle, Listener {
     private String[] arrowEntityNames = new String[] { "ARROW", "SPECTRAL_ARROW", "TIPPED_ARROW" };
     private List<Arrow> arrows = new ArrayList<Arrow>();
 
-    public PParticle[] getParticles(PPlayer pplayer, Location location) {
+    public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<PParticle>();
 
         for (Arrow arrow : arrows) {
-            if (((Player) arrow.getShooter()).getUniqueId() == pplayer.getUniqueId()) {
+            if (((Player) arrow.getShooter()).getUniqueId() == particle.getOwnerUniqueId()) {
                 particles.add(new PParticle(arrow.getLocation(), 0.05F, 0.05F, 0.05F, 0.0F));
             }
         }
 
-        return particles.toArray(new PParticle[particles.size()]);
+        return particles;
     }
 
     /**

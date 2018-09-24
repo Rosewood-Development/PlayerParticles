@@ -6,7 +6,7 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import com.esophose.playerparticles.PPlayer;
+import com.esophose.playerparticles.particles.ParticlePair;
 import com.esophose.playerparticles.styles.api.PParticle;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
 import com.esophose.playerparticles.util.VectorUtils;
@@ -15,7 +15,7 @@ public class ParticleStyleWings implements ParticleStyle {
 
     private int spawnTimer = 0; // Spawn particles every 3 ticks
 
-    public PParticle[] getParticles(PPlayer pplayer, Location location) {
+    public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<PParticle>();
         if (spawnTimer == 0) {
             for (double t = 0; t < Math.PI * 2; t += Math.PI / 64) {
@@ -26,7 +26,7 @@ public class ParticleStyleWings implements ParticleStyle {
                 particles.add(new PParticle(loc));
             }
         }
-        return particles.toArray(new PParticle[particles.size()]);
+        return particles;
     }
 
     public void updateTimers() {

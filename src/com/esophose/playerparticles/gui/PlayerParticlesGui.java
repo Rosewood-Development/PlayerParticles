@@ -38,13 +38,11 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.Dye;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.esophose.playerparticles.PPlayer;
 import com.esophose.playerparticles.PlayerParticles;
-import com.esophose.playerparticles.manager.PPlayerDataManager;
+import com.esophose.playerparticles.manager.DataManager;
 import com.esophose.playerparticles.manager.MessageManager.MessageType;
+import com.esophose.playerparticles.particles.PPlayer;
 import com.esophose.playerparticles.particles.ParticleEffect;
-import com.esophose.playerparticles.particles.ParticleEffect.BlockData;
-import com.esophose.playerparticles.particles.ParticleEffect.ItemData;
 import com.esophose.playerparticles.particles.ParticleEffect.NoteColor;
 import com.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
 import com.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
@@ -135,7 +133,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         
         Inventory testingInventory = Bukkit.createInventory(null, 9);
         for (Material mat : Material.values()) {
-            // Verify an ItemStack of the material can be placed into an inventory. In 1.12 and up this can easily be checked with mat.isItem(), but that doesn't exist pre 1.12
+            // Verify an ItemStack of the material can be placed into an inventory. In 1.12 and up this can easily be checked with mat.isItem(), but that doesn't exist pre-1.12
             testingInventory.clear();
             testingInventory.setItem(0, new ItemStack(mat, 1));
             ItemStack itemStack = testingInventory.getItem(0);
@@ -199,7 +197,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
 
         for (Map.Entry<UUID, GuiInventory> entry : playerGuiInventories.entrySet()) {
             UUID playerUUID = entry.getKey();
-            PPlayer pplayer = PPlayerDataManager.getInstance().getPPlayer(playerUUID);
+            PPlayer pplayer = DataManager.getInstance().getPPlayer(playerUUID);
             if (pplayer == null) {
                 toRemoveList.add(playerUUID);
                 continue;
@@ -274,7 +272,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
 
         if ((state == GuiState.EFFECT && PermissionManager.getEffectsUserHasPermissionFor(player).size() == 1) || 
             (state == GuiState.STYLE && PermissionManager.getStylesUserHasPermissionFor(player).size() == 1) || 
-            (state == GuiState.DATA && p.getParticleSpawnData() == null && p.getParticleSpawnColor() == null)) return;
+            (state == GuiState.DATA && p.getSpawnMaterial() == null && p.getSpawnColor() == null)) return;
 
         // Update the state and create an inventory for the player if one isn't already open for them
         // If they have the wrong inventory open for some reason, create a new one and open it for them
@@ -365,7 +363,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
             else if (pe.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) if (pe == ParticleEffect.ITEM) dataType = "item " + dataType;
         else dataType = "block " + dataType; // @formatter:on
         dataIconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SET_YOUR.getMessageReplaced(dataType)));
-        if (p.getParticleSpawnData() == null && p.getParticleSpawnColor() == null) {
+        if (p.getSpawnMaterial() == null && p.getSpawnColor() == null) {
             dataIconMeta.setLore(Arrays.asList(MessageType.GUI_NO_DATA.getMessage()));
         }
         dataIcon.setItemMeta(dataIconMeta);
@@ -475,7 +473,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
             int materialIndex = 0;
             
             if (pe == ParticleEffect.ITEM) { // Item data
-                Material currentItemMaterial = p.getItemData().getMaterial();
+                Material currentItemMaterial = p.getMaterialData().getMaterial();
                 
                 while (materialBag.size() < 28) { // Grab 28 random materials that are an item
                     Material randomMaterial = ITEM_MATERIALS.get(RANDOM.nextInt(ITEM_MATERIALS.size()));
@@ -551,7 +549,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         
         if (!guiInventory.getInventory().equals(e.getClickedInventory())) return; // Clicked bottom inventory
 
-        PPlayer pplayer = PPlayerDataManager.getInstance().getPPlayer(player.getUniqueId());
+        PPlayer pplayer = DataManager.getInstance().getPPlayer(player.getUniqueId());
         if (pplayer == null) {
             player.closeInventory();
             return;
@@ -578,11 +576,11 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
             }
             break;
         case EFFECT:
-            PPlayerDataManager.getInstance().savePPlayer(pplayer.getUniqueId(), ParticleManager.effectFromString(name));
+            DataManager.getInstance().savePPlayer(pplayer.getUniqueId(), ParticleManager.effectFromString(name));
             changeState(pplayer, GuiState.DEFAULT);
             break;
         case STYLE:
-            PPlayerDataManager.getInstance().savePPlayer(pplayer.getUniqueId(), ParticleStyleManager.styleFromString(name));
+            DataManager.getInstance().savePPlayer(pplayer.getUniqueId(), ParticleStyleManager.styleFromString(name));
             changeState(pplayer, GuiState.DEFAULT);
             break;
         case DATA:
@@ -590,18 +588,18 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
             if (pe.hasProperty(ParticleProperty.COLORABLE)) {
                 if (pe == ParticleEffect.NOTE) {
                     if (clicked.getItemMeta().getDisplayName().equals(rainbowName)) {
-                        PPlayerDataManager.getInstance().savePPlayer(pplayer.getUniqueId(), new NoteColor(99));
+                        DataManager.getInstance().savePPlayer(pplayer.getUniqueId(), new NoteColor(99));
                     } else {
                         int note = Integer.parseInt(ChatColor.stripColor(clicked.getItemMeta().getDisplayName()).substring(6));
-                        PPlayerDataManager.getInstance().savePPlayer(pplayer.getUniqueId(), new NoteColor(note));
+                        DataManager.getInstance().savePPlayer(pplayer.getUniqueId(), new NoteColor(note));
                     }
                 } else {
                     if (clicked.getItemMeta().getDisplayName().equals(rainbowName)) {
-                        PPlayerDataManager.getInstance().savePPlayer(pplayer.getUniqueId(), new OrdinaryColor(999, 999, 999));
+                        DataManager.getInstance().savePPlayer(pplayer.getUniqueId(), new OrdinaryColor(999, 999, 999));
                     } else {
                         for (int i = 0; i < colorMapping.length; i++) {
                             if (clicked.getItemMeta().getDisplayName().equals(colorMapping[i].getName())) {
-                                PPlayerDataManager.getInstance().savePPlayer(pplayer.getUniqueId(), colorMapping[i].getOrdinaryColor());
+                                DataManager.getInstance().savePPlayer(pplayer.getUniqueId(), colorMapping[i].getOrdinaryColor());
                             }
                         }
                     }
@@ -609,9 +607,9 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
             } else if (pe.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
                 Material clickedMaterial = clicked.getType(); // All preset materials have a data value of 0
                 if (pe == ParticleEffect.ITEM) {
-                    PPlayerDataManager.getInstance().savePPlayer(pplayer.getUniqueId(), new ItemData(clickedMaterial));
+                    DataManager.getInstance().savePPlayer(pplayer.getUniqueId(), new ItemData(clickedMaterial));
                 } else {
-                    PPlayerDataManager.getInstance().savePPlayer(pplayer.getUniqueId(), new BlockData(clickedMaterial));
+                    DataManager.getInstance().savePPlayer(pplayer.getUniqueId(), new BlockData(clickedMaterial));
                 }
             }
 

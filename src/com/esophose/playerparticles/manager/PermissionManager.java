@@ -58,9 +58,9 @@ public class PermissionManager {
      */
     public static List<String> getEffectsUserHasPermissionFor(Player p) {
         List<String> list = new ArrayList<String>();
-        for (ParticleEffect pe : ParticleEffect.getSupportedEffects()) {
-            if (hasEffectPermission(p, pe)) list.add(pe.getName());
-        }
+        for (ParticleEffect pe : ParticleEffect.getSupportedEffects())
+            if (hasEffectPermission(p, pe)) 
+            	list.add(pe.getName());
         return list;
     }
 
@@ -72,9 +72,9 @@ public class PermissionManager {
      */
     public static List<String> getStylesUserHasPermissionFor(Player p) {
         List<String> list = new ArrayList<String>();
-        for (ParticleStyle ps : ParticleStyleManager.getStyles()) {
-            if (hasStylePermission(p, ps)) list.add(ps.getName());
-        }
+        for (ParticleStyle ps : ParticleStyleManager.getStyles())
+            if (hasStylePermission(p, ps)) 
+            	list.add(ps.getName());
         return list;
     }
 

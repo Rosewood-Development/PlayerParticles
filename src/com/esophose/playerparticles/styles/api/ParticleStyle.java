@@ -8,9 +8,11 @@
 
 package com.esophose.playerparticles.styles.api;
 
+import java.util.List;
+
 import org.bukkit.Location;
 
-import com.esophose.playerparticles.PPlayer;
+import com.esophose.playerparticles.particles.ParticlePair;
 
 public interface ParticleStyle {
 
@@ -19,9 +21,9 @@ public interface ParticleStyle {
      * 
      * @param pplayer The PPlayer to display the particles for
      * @param location The central location of the particles
-     * @return A list of all PParticles' to spawn
+     * @return A List<PParticle> of PParticles to spawn
      */
-    public PParticle[] getParticles(PPlayer pplayer, Location location);
+    public List<PParticle> getParticles(ParticlePair particle, Location location);
 
     /**
      * Used to update timers for animations, called once per particle tick

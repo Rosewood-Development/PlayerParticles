@@ -6,7 +6,7 @@
  * be distributed to any person by any means.
  */
 
-package com.esophose.playerparticles;
+package com.esophose.playerparticles.command;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,8 +20,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import com.esophose.playerparticles.manager.MessageManager.MessageType;
-import com.esophose.playerparticles.manager.PPlayerDataManager;
+import com.esophose.playerparticles.manager.DataManager;
 import com.esophose.playerparticles.manager.PermissionManager;
+import com.esophose.playerparticles.particles.PPlayer;
 import com.esophose.playerparticles.particles.ParticleEffect;
 import com.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
 import com.esophose.playerparticles.util.ParticleUtils;
@@ -64,7 +65,7 @@ public class ParticleCommandCompleter implements TabCompleter {
                         completions.add("<id>");
                     } 
                 } else if (args[0].equalsIgnoreCase("data")) {
-                    PPlayer pplayer = PPlayerDataManager.getInstance().getPPlayer(((Player) sender).getUniqueId());
+                    PPlayer pplayer = DataManager.getInstance().getPPlayer(((Player) sender).getUniqueId());
                     if (pplayer == null) {
                         completions.add(ChatColor.stripColor(MessageType.NO_DATA_USAGE.getMessage()));
                     } else if (pplayer.getParticleEffect().hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA) && args.length == 2) {

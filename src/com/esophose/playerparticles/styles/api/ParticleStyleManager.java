@@ -9,6 +9,7 @@
 package com.esophose.playerparticles.styles.api;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.esophose.playerparticles.PlayerParticles;
 
@@ -17,8 +18,8 @@ public class ParticleStyleManager {
     /**
      * Arrays that contain all registered styles
      */
-    private static ArrayList<ParticleStyle> styles = new ArrayList<ParticleStyle>();
-    private static ArrayList<ParticleStyle> customHandledStyles = new ArrayList<ParticleStyle>();
+    private static List<ParticleStyle> styles = new ArrayList<ParticleStyle>();
+    private static List<ParticleStyle> customHandledStyles = new ArrayList<ParticleStyle>();
 
     /**
      * Registers a style that is put into the plugin's update loop
@@ -59,9 +60,9 @@ public class ParticleStyleManager {
     /**
      * Gets all registered styles
      * 
-     * @return An ArrayList of all registered styles
+     * @return A List<ParticleStyle> of all registered styles
      */
-    public static ArrayList<ParticleStyle> getStyles() {
+    public static List<ParticleStyle> getStyles() {
         return styles;
     }
 

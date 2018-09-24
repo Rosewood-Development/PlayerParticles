@@ -14,7 +14,7 @@
 # I don't recommend changing it
 # NOTE: Updating to a new version of the plugin will change this number and delete your config. 
 #       Make sure you create a backup each time before you update!
-version: 5.2
+version: 5.3
 
 # Check for new versions of the plugin
 # Default: true
@@ -206,11 +206,11 @@ message-disabled-worlds: '&eParticles are disabled in these worlds:&b'
 message-executed-for-player: '&aCommand executed for &b{TYPE}'
 
 # Failed Execute Not Found
-# Default: '&cFailed to execute for &b{TYPE}&c! Player not found!'
+# Default: '&cFailed to execute command for &b{TYPE}&c! Player not found!'
 message-failed-execute-not-found: '&cFailed to execute command for &b{TYPE}&c! Player not found!'
 
 # Failed Execute No Permission
-# Default: '&cFailed to execute for &b{TYPE}&c! You do not have permission!'
+# Default: '&cFailed to execute command for &b{TYPE}&c! You do not have permission!'
 message-failed-execute-no-permission: '&cFailed to execute command for &b{TYPE}&c! You do not have permission!'
 
 # ----------------- #

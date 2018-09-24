@@ -40,6 +40,7 @@ public class DefaultStyles {
      * Registered in alphabetical order
      */
     public static void registerStyles() {
+    	ParticleStyleManager.registerStyle(NONE); // Always display none first
         ParticleStyleManager.registerStyle(ARROWS);
         ParticleStyleManager.registerStyle(BEAM);
         ParticleStyleManager.registerCustomHandledStyle(BLOCKBREAK);
@@ -50,7 +51,6 @@ public class DefaultStyles {
         ParticleStyleManager.registerStyle(HALO);
         ParticleStyleManager.registerCustomHandledStyle(HURT);
         ParticleStyleManager.registerCustomHandledStyle(MOVE);
-        ParticleStyleManager.registerStyle(NONE);
         ParticleStyleManager.registerStyle(ORBIT);
         ParticleStyleManager.registerStyle(POINT);
         ParticleStyleManager.registerStyle(QUADHELIX);
