@@ -21,17 +21,20 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 
 import com.esophose.playerparticles.PlayerParticles;
 import com.esophose.playerparticles.gui.PlayerParticlesGui;
 import com.esophose.playerparticles.gui.PlayerParticlesGui.GuiState;
 import com.esophose.playerparticles.manager.DataManager;
-import com.esophose.playerparticles.manager.MessageManager;
-import com.esophose.playerparticles.manager.MessageManager.MessageType;
+import com.esophose.playerparticles.manager.LangManager;
+import com.esophose.playerparticles.manager.LangManager.Lang;
 import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.manager.PermissionManager;
 import com.esophose.playerparticles.particles.FixedParticleEffect;
+import com.esophose.playerparticles.particles.PPlayer;
 import com.esophose.playerparticles.particles.ParticleEffect;
 import com.esophose.playerparticles.particles.ParticleEffect.NoteColor;
 import com.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
@@ -41,103 +44,72 @@ import com.esophose.playerparticles.styles.api.ParticleStyle;
 import com.esophose.playerparticles.styles.api.ParticleStyleManager;
 import com.esophose.playerparticles.util.ParticleUtils;
 
-public class ParticleCommandExecutor implements CommandExecutor {
+public class ParticleCommandHandler implements CommandExecutor, TabCompleter {
     
     /**
-     * A list of all valid commands
+     * A list of all commands
      */
-    private static List<String> validCommands;
+    private static List<CommandModule> commands;
     
     static {
-        validCommands = new ArrayList<String>();
-        validCommands.addAll(Arrays.asList(ParticleCommandCompleter.getCommandsList()));
+        commands.add(new AddCommandModule());
+        commands.add(new DataCommandModule());
+        commands.add(new DefaultCommandModule());
+        commands.add(new EditCommandModule());
+        commands.add(new EffectCommandModule());
+        commands.add(new EffectsCommandModule());
+        commands.add(new FixedCommandModule());
+        commands.add(new GroupCommandModule());
+        commands.add(new GUICommandModule());
+        commands.add(new HelpCommandModule());
+        commands.add(new InfoCommandModule());
+        commands.add(new ListCommandModule());
+        commands.add(new RemoveCommandModule());
+        commands.add(new ResetCommandModule());
+        commands.add(new StyleCommandModule());
+        commands.add(new StylesCommandModule());
+        commands.add(new VersionCommandModule());
+        commands.add(new WorldsCommandModule());
+    }
+    
+    public static CommandModule findMatchingCommand(String commandName) {
+    	for (CommandModule commandModule : commands)
+    		if (commandModule.getName().equalsIgnoreCase(commandName))
+    			return commandModule;
+    	return null;
     }
 
     /**
      * Called when a player executes a /pp command
-     * Checks what /pp command it is and calls the correct method
+     * Checks what /pp command it is and calls the corresponding module
      * 
      * @param sender Who executed the command
      * @param cmd The command
      * @param label The command label
      * @param args The arguments following the command
-     * @return True if everything went as planned (should always be true)
+     * @return true
      */
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) return true;
         Player p = (Player) sender;
         
-        if (args.length == 0) {
-            onGUI(p, true);
-            return true;
-        }
+        DataManager.getPPlayer(p.getUniqueId(), (pplayer) -> {
+        	String commandName = args.length > 0 ? args[0] : "";
+        	CommandModule commandModule = findMatchingCommand(commandName);
+        	
+        	if (commandModule != null) {
+        		if (commandModule.requiresEffects() && PermissionManager.getEffectsUserHasPermissionFor(p).size() == 1) {
+        			LangManager.sendMessage(p, Lang.NO_PARTICLES); // TODO: Rename to NO_EFFECTS
+        		} else {
+        			String[] cmdArgs = new String[0];
+                    if (args.length > 1) cmdArgs = Arrays.copyOfRange(args, 1, args.length);
+            		commandModule.onCommandExecute(pplayer, cmdArgs);
+        		}
+        	} else {
+        		LangManager.sendMessage(p, Lang.INVALID_ARGUMENTS); // TODO: Rename to UNKNOWN_COMMAND
+        	}
+        });
         
-        if (!validCommands.contains(args[0].toLowerCase())) {
-            MessageManager.sendMessage(p, MessageType.INVALID_ARGUMENTS);
-            return true;
-        }
-        
-        String[] cmdArgs = new String[0];
-        if (args.length >= 2) cmdArgs = Arrays.copyOfRange(args, 1, args.length);
-        
-        // Commands that don't require access to any effects
-        switch (args[0].toLowerCase()) {
-        case "help":
-            onHelp(p);
-            return true;
-        case "worlds":
-            onWorlds(p);
-            return true;
-        case "version":
-            onVersion(p);
-            return true;
-        case "effects":
-            onEffects(p);
-            return true;
-        case "styles":
-            onStyles(p);
-            return true;
-        case "style":
-            onStyle(p, cmdArgs);
-            return true;
-        }
-        
-        // Commands that require access to effects
-        if (PermissionManager.getEffectsUserHasPermissionFor(p).size() != 1) {
-            final String[] f_cmdArgs = cmdArgs;
-            DataManager.getInstance().getPPlayer(p.getUniqueId(), (pplayer) -> { // The PPlayer MUST be loaded before we can execute any of these commands
-                // If the player no longer has permission for their effect, remove it
-                if (!PermissionManager.hasEffectPermission(p, pplayer.getParticleEffect())) {
-                    DataManager.getInstance().savePPlayer(pplayer.getUniqueId(), ParticleEffect.NONE);
-                }
-
-                // If the player no longer has permission for their style, default to none
-                if (!PermissionManager.hasStylePermission(p, pplayer.getParticleStyle())) {
-                    DataManager.getInstance().savePPlayer(pplayer.getUniqueId(), DefaultStyles.NONE);
-                }
-                
-                switch (args[0].toLowerCase()) {
-                case "effect":
-                    onEffect(p, f_cmdArgs);
-                    break;
-                case "data":
-                    onData(p, f_cmdArgs);
-                    break;
-                case "fixed":
-                    onFixed(p, f_cmdArgs);
-                    break;
-                case "reset":
-                    onReset(p, f_cmdArgs);
-                    break;
-                case "gui":
-                    onGUI(p, false);
-                    break;
-                }
-            });
-        } else {
-            MessageManager.sendMessage(p, MessageType.NO_PARTICLES);
-        }
-
         return true;
     }
 
@@ -159,38 +131,8 @@ public class ParticleCommandExecutor implements CommandExecutor {
      * @param p The player who used the command
      */
     private void onHelp(Player p) {
-        MessageManager.sendMessage(p, MessageType.AVAILABLE_COMMANDS);
-        MessageManager.sendMessage(p, MessageType.COMMAND_USAGE);
-    }
-
-    /**
-     * Called when a player uses /pp worlds
-     * 
-     * @param p The player who used the command
-     */
-    private void onWorlds(Player p) {
-        if (DataManager.getInstance().getDisabledWorlds() == null || DataManager.getInstance().getDisabledWorlds().isEmpty()) {
-            MessageManager.sendMessage(p, MessageType.DISABLED_WORLDS_NONE);
-            return;
-        }
-
-        String worlds = "";
-        for (String s : DataManager.getInstance().getDisabledWorlds()) {
-            worlds += s + ", ";
-        }
-        if (worlds.length() > 2) worlds = worlds.substring(0, worlds.length() - 2);
-
-        MessageManager.sendCustomMessage(p, MessageType.DISABLED_WORLDS.getMessage() + " " + worlds);
-    }
-
-    /**
-     * Called when a player uses /pp version
-     * 
-     * @param p The player who used the command
-     */
-    private void onVersion(Player p) {
-        MessageManager.sendCustomMessage(p, ChatColor.GOLD + "Running PlayerParticles v" + PlayerParticles.getPlugin().getDescription().getVersion());
-        MessageManager.sendCustomMessage(p, ChatColor.GOLD + "Plugin created by: Esophose");
+        LangManager.sendMessage(p, Lang.AVAILABLE_COMMANDS);
+        LangManager.sendMessage(p, Lang.COMMAND_USAGE);
     }
 
     /**
@@ -204,22 +146,22 @@ public class ParticleCommandExecutor implements CommandExecutor {
         if ((!effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA) && !effect.hasProperty(ParticleProperty.COLORABLE)) || args.length == 0) {
             if (effect.hasProperty(ParticleProperty.COLORABLE)) {
                 if (effect == ParticleEffect.NOTE) {
-                    MessageManager.sendMessage(p, MessageType.DATA_USAGE, "note");
-                    MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.NOTE_DATA_USAGE.getMessage());
+                    LangManager.sendMessage(p, Lang.DATA_USAGE, "note");
+                    LangManager.sendCustomMessage(p, Lang.USAGE.get() + " " + Lang.NOTE_DATA_USAGE.get());
                 } else {
-                    MessageManager.sendMessage(p, MessageType.DATA_USAGE, "color");
-                    MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.COLOR_DATA_USAGE.getMessage());
+                    LangManager.sendMessage(p, Lang.DATA_USAGE, "color");
+                    LangManager.sendCustomMessage(p, Lang.USAGE.get() + " " + Lang.COLOR_DATA_USAGE.get());
                 }
             } else if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
                 if (effect == ParticleEffect.ITEM) {
-                    MessageManager.sendMessage(p, MessageType.DATA_USAGE, "item");
-                    MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.ITEM_DATA_USAGE.getMessage());
+                    LangManager.sendMessage(p, Lang.DATA_USAGE, "item");
+                    LangManager.sendCustomMessage(p, Lang.USAGE.get() + " " + Lang.ITEM_DATA_USAGE.get());
                 } else {
-                    MessageManager.sendMessage(p, MessageType.DATA_USAGE, "block");
-                    MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.BLOCK_DATA_USAGE.getMessage());
+                    LangManager.sendMessage(p, Lang.DATA_USAGE, "block");
+                    LangManager.sendCustomMessage(p, Lang.USAGE.get() + " " + Lang.BLOCK_DATA_USAGE.get());
                 }
             } else {
-                MessageManager.sendMessage(p, MessageType.NO_DATA_USAGE);
+                LangManager.sendMessage(p, Lang.NO_DATA_USAGE);
             }
             return;
         }
@@ -227,7 +169,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
             if (effect == ParticleEffect.NOTE) {
                 if (args[0].equalsIgnoreCase("rainbow")) {
                     DataManager.getInstance().savePPlayer(p.getUniqueId(), new NoteColor(99));
-                    MessageManager.sendMessage(p, MessageType.DATA_APPLIED, "note");
+                    LangManager.sendMessage(p, Lang.DATA_APPLIED, "note");
                     return;
                 }
 
@@ -235,23 +177,23 @@ public class ParticleCommandExecutor implements CommandExecutor {
                 try {
                     note = Integer.parseInt(args[0]);
                 } catch (Exception e) {
-                    MessageManager.sendMessage(p, MessageType.DATA_INVALID_ARGUMENTS, "note");
-                    MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.NOTE_DATA_USAGE.getMessage());
+                    LangManager.sendMessage(p, Lang.DATA_INVALID_ARGUMENTS, "note");
+                    LangManager.sendCustomMessage(p, Lang.USAGE.get() + " " + Lang.NOTE_DATA_USAGE.get());
                     return;
                 }
 
                 if (note < 0 || note > 23) {
-                    MessageManager.sendMessage(p, MessageType.DATA_INVALID_ARGUMENTS, "note");
-                    MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.NOTE_DATA_USAGE.getMessage());
+                    LangManager.sendMessage(p, Lang.DATA_INVALID_ARGUMENTS, "note");
+                    LangManager.sendCustomMessage(p, Lang.USAGE.get() + " " + Lang.NOTE_DATA_USAGE.get());
                     return;
                 }
 
                 DataManager.getInstance().savePPlayer(p.getUniqueId(), new NoteColor(note));
-                MessageManager.sendMessage(p, MessageType.DATA_APPLIED, "note");
+                LangManager.sendMessage(p, Lang.DATA_APPLIED, "note");
             } else {
                 if (args[0].equalsIgnoreCase("rainbow")) {
                     DataManager.getInstance().savePPlayer(p.getUniqueId(), new OrdinaryColor(999, 999, 999));
-                    MessageManager.sendMessage(p, MessageType.DATA_APPLIED, "color");
+                    LangManager.sendMessage(p, Lang.DATA_APPLIED, "color");
                 } else if (args.length >= 3) {
                     int r = -1;
                     int g = -1;
@@ -262,22 +204,22 @@ public class ParticleCommandExecutor implements CommandExecutor {
                         g = Integer.parseInt(args[1]);
                         b = Integer.parseInt(args[2]);
                     } catch (Exception e) {
-                        MessageManager.sendMessage(p, MessageType.DATA_INVALID_ARGUMENTS, "color");
-                        MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.COLOR_DATA_USAGE.getMessage());
+                        LangManager.sendMessage(p, Lang.DATA_INVALID_ARGUMENTS, "color");
+                        LangManager.sendCustomMessage(p, Lang.USAGE.get() + " " + Lang.COLOR_DATA_USAGE.get());
                         return;
                     }
 
                     if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
-                        MessageManager.sendMessage(p, MessageType.DATA_INVALID_ARGUMENTS, "color");
-                        MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.COLOR_DATA_USAGE.getMessage());
+                        LangManager.sendMessage(p, Lang.DATA_INVALID_ARGUMENTS, "color");
+                        LangManager.sendCustomMessage(p, Lang.USAGE.get() + " " + Lang.COLOR_DATA_USAGE.get());
                         return;
                     }
 
                     DataManager.getInstance().savePPlayer(p.getUniqueId(), new OrdinaryColor(r, g, b));
-                    MessageManager.sendMessage(p, MessageType.DATA_APPLIED, "color");
+                    LangManager.sendMessage(p, Lang.DATA_APPLIED, "color");
                 } else {
-                    MessageManager.sendMessage(p, MessageType.DATA_INVALID_ARGUMENTS, "color");
-                    MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.COLOR_DATA_USAGE.getMessage());
+                    LangManager.sendMessage(p, Lang.DATA_INVALID_ARGUMENTS, "color");
+                    LangManager.sendCustomMessage(p, Lang.USAGE.get() + " " + Lang.COLOR_DATA_USAGE.get());
                 }
             }
         } else if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
@@ -288,19 +230,19 @@ public class ParticleCommandExecutor implements CommandExecutor {
                     if (material == null) material = Material.matchMaterial(args[0]);
                     if (material == null) throw new Exception();
                 } catch (Exception e) {
-                    MessageManager.sendMessage(p, MessageType.DATA_MATERIAL_UNKNOWN, "item");
-                    MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.ITEM_DATA_USAGE.getMessage());
+                    LangManager.sendMessage(p, Lang.DATA_MATERIAL_UNKNOWN, "item");
+                    LangManager.sendCustomMessage(p, Lang.USAGE.get() + " " + Lang.ITEM_DATA_USAGE.get());
                     return;
                 }
 
                 if (material.isBlock()) {
-                    MessageManager.sendMessage(p, MessageType.DATA_MATERIAL_MISMATCH, "item");
-                    MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.ITEM_DATA_USAGE.getMessage());
+                    LangManager.sendMessage(p, Lang.DATA_MATERIAL_MISMATCH, "item");
+                    LangManager.sendCustomMessage(p, Lang.USAGE.get() + " " + Lang.ITEM_DATA_USAGE.get());
                     return;
                 }
 
                 DataManager.getInstance().savePPlayer(p.getUniqueId(), new ItemData(material));
-                MessageManager.sendMessage(p, MessageType.DATA_APPLIED, "item");
+                LangManager.sendMessage(p, Lang.DATA_APPLIED, "item");
             } else {
                 Material material = null;
                 try {
@@ -308,19 +250,19 @@ public class ParticleCommandExecutor implements CommandExecutor {
                     if (material == null) material = Material.matchMaterial(args[0]);
                     if (material == null) throw new Exception();
                 } catch (Exception e) {
-                    MessageManager.sendMessage(p, MessageType.DATA_MATERIAL_UNKNOWN, "block");
-                    MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.BLOCK_DATA_USAGE.getMessage());
+                    LangManager.sendMessage(p, Lang.DATA_MATERIAL_UNKNOWN, "block");
+                    LangManager.sendCustomMessage(p, Lang.USAGE.get() + " " + Lang.BLOCK_DATA_USAGE.get());
                     return;
                 }
 
                 if (!material.isBlock()) {
-                    MessageManager.sendMessage(p, MessageType.DATA_MATERIAL_MISMATCH, "block");
-                    MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.BLOCK_DATA_USAGE.getMessage());
+                    LangManager.sendMessage(p, Lang.DATA_MATERIAL_MISMATCH, "block");
+                    LangManager.sendCustomMessage(p, Lang.USAGE.get() + " " + Lang.BLOCK_DATA_USAGE.get());
                     return;
                 }
 
                 DataManager.getInstance().savePPlayer(p.getUniqueId(), new BlockData(material));
-                MessageManager.sendMessage(p, MessageType.DATA_APPLIED, "block");
+                LangManager.sendMessage(p, Lang.DATA_APPLIED, "block");
             }
         }
     }
@@ -336,21 +278,21 @@ public class ParticleCommandExecutor implements CommandExecutor {
         if (args.length >= 1) {
             String altPlayerName = args[0];
             if (!PermissionManager.canUseForceReset(p)) {
-                MessageManager.sendMessage(p, MessageType.FAILED_EXECUTE_NO_PERMISSION, altPlayerName);
+                LangManager.sendMessage(p, Lang.FAILED_EXECUTE_NO_PERMISSION, altPlayerName);
             } else {
                 Player altPlayer = getOnlinePlayerByName(altPlayerName);
                 if (altPlayer == null) {
-                    MessageManager.sendMessage(p, MessageType.FAILED_EXECUTE_NOT_FOUND, altPlayerName);
+                    LangManager.sendMessage(p, Lang.FAILED_EXECUTE_NOT_FOUND, altPlayerName);
                 } else {
                     DataManager.getInstance().resetPPlayer(altPlayer.getUniqueId());
-                    MessageManager.sendMessage(altPlayer, MessageType.RESET);
+                    LangManager.sendMessage(altPlayer, Lang.RESET);
 
-                    MessageManager.sendMessage(p, MessageType.EXECUTED_FOR_PLAYER, altPlayer.getName());
+                    LangManager.sendMessage(p, Lang.EXECUTED_FOR_PLAYER, altPlayer.getName());
                 }
             }
         } else {
             DataManager.getInstance().resetPPlayer(p.getUniqueId());
-            MessageManager.sendMessage(p, MessageType.RESET);
+            LangManager.sendMessage(p, Lang.RESET);
         }
     }
 
@@ -362,25 +304,25 @@ public class ParticleCommandExecutor implements CommandExecutor {
      */
     private void onEffect(Player p, String[] args) {
         if (args.length == 0) {
-            MessageManager.sendMessage(p, MessageType.INVALID_TYPE);
+            LangManager.sendMessage(p, Lang.INVALID_TYPE);
             return;
         }
         String argument = args[0];
         if (ParticleManager.effectFromString(argument) != null) {
             ParticleEffect effect = ParticleManager.effectFromString(argument);
             if (!PermissionManager.hasEffectPermission(p, effect)) {
-                MessageManager.sendMessage(p, MessageType.NO_PERMISSION, effect.getName());
+                LangManager.sendMessage(p, Lang.NO_PERMISSION, effect.getName());
                 return;
             }
             DataManager.getInstance().savePPlayer(p.getUniqueId(), effect);
             if (effect != ParticleEffect.NONE) {
-                MessageManager.sendMessage(p, MessageType.NOW_USING, effect.getName());
+                LangManager.sendMessage(p, Lang.NOW_USING, effect.getName());
             } else {
-                MessageManager.sendMessage(p, MessageType.CLEARED_PARTICLES);
+                LangManager.sendMessage(p, Lang.CLEARED_PARTICLES);
             }
             return;
         }
-        MessageManager.sendMessage(p, MessageType.INVALID_TYPE);
+        LangManager.sendMessage(p, Lang.INVALID_TYPE);
     }
 
     /**
@@ -390,11 +332,11 @@ public class ParticleCommandExecutor implements CommandExecutor {
      */
     private void onEffects(Player p) {
         if (PermissionManager.getEffectsUserHasPermissionFor(p).size() == 1) {
-            MessageManager.sendMessage(p, MessageType.NO_PARTICLES);
+            LangManager.sendMessage(p, Lang.NO_PARTICLES);
             return;
         }
         
-        String toSend = MessageType.USE.getMessage() + " ";
+        String toSend = Lang.USE.get() + " ";
         for (ParticleEffect effect : ParticleEffect.getSupportedEffects()) {
             if (PermissionManager.hasEffectPermission(p, effect)) {
                 toSend += effect.getName() + ", ";
@@ -405,8 +347,8 @@ public class ParticleCommandExecutor implements CommandExecutor {
             toSend = toSend.substring(0, toSend.length() - 2);
         }
         
-        MessageManager.sendCustomMessage(p, toSend);
-        MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.PARTICLE_USAGE.getMessage());
+        LangManager.sendCustomMessage(p, toSend);
+        LangManager.sendCustomMessage(p, Lang.USAGE.get() + " " + Lang.PARTICLE_USAGE.get());
     }
 
     /**
@@ -417,29 +359,29 @@ public class ParticleCommandExecutor implements CommandExecutor {
      */
     private void onStyle(Player p, String[] args) {
         if (PermissionManager.getStylesUserHasPermissionFor(p).size() == 1) {
-            MessageManager.sendMessage(p, MessageType.NO_STYLES);
+            LangManager.sendMessage(p, Lang.NO_STYLES);
             return;
         }
         if (args.length == 0) {
-            MessageManager.sendMessage(p, MessageType.INVALID_TYPE_STYLE);
+            LangManager.sendMessage(p, Lang.INVALID_TYPE_STYLE);
             return;
         }
         String argument = args[0];
         if (ParticleStyleManager.styleFromString(argument) != null) {
             ParticleStyle style = ParticleStyleManager.styleFromString(argument);
             if (!PermissionManager.hasStylePermission(p, style)) {
-                MessageManager.sendMessage(p, MessageType.NO_PERMISSION_STYLE, style.getName());
+                LangManager.sendMessage(p, Lang.NO_PERMISSION_STYLE, style.getName());
                 return;
             }
             DataManager.getInstance().savePPlayer(p.getUniqueId(), style);
             if (style != DefaultStyles.NONE) {
-                MessageManager.sendMessage(p, MessageType.NOW_USING_STYLE, style.getName());
+                LangManager.sendMessage(p, Lang.NOW_USING_STYLE, style.getName());
             } else {
-                MessageManager.sendMessage(p, MessageType.CLEARED_STYLE);
+                LangManager.sendMessage(p, Lang.CLEARED_STYLE);
             }
             return;
         }
-        MessageManager.sendMessage(p, MessageType.INVALID_TYPE_STYLE);
+        LangManager.sendMessage(p, Lang.INVALID_TYPE_STYLE);
     }
 
     /**
@@ -449,11 +391,11 @@ public class ParticleCommandExecutor implements CommandExecutor {
      */
     private void onStyles(Player p) {
         if (PermissionManager.getStylesUserHasPermissionFor(p).size() == 1) {
-            MessageManager.sendMessage(p, MessageType.NO_STYLES);
+            LangManager.sendMessage(p, Lang.NO_STYLES);
             return;
         }
         
-        String toSend = MessageType.USE.getMessage() + " ";
+        String toSend = Lang.USE.get() + " ";
         for (ParticleStyle style : ParticleStyleManager.getStyles()) {
             if (PermissionManager.hasStylePermission(p, style)) {
                 toSend += style.getName();
@@ -464,8 +406,8 @@ public class ParticleCommandExecutor implements CommandExecutor {
             toSend = toSend.substring(0, toSend.length() - 2);
         }
         
-        MessageManager.sendCustomMessage(p, toSend);
-        MessageManager.sendCustomMessage(p, MessageType.USAGE.getMessage() + " " + MessageType.STYLE_USAGE.getMessage());
+        LangManager.sendCustomMessage(p, toSend);
+        LangManager.sendCustomMessage(p, Lang.USAGE.get() + " " + Lang.STYLE_USAGE.get());
     }
 
     /**
@@ -476,17 +418,17 @@ public class ParticleCommandExecutor implements CommandExecutor {
      */
     private void onFixed(Player p, String[] args) {
         if (!PermissionManager.canUseFixedEffects(p)) {
-            MessageManager.sendMessage(p, MessageType.NO_PERMISSION_FIXED);
+            LangManager.sendMessage(p, Lang.NO_PERMISSION_FIXED);
             return;
         }
 
         if (args.length == 0) { // General information on command
-            MessageManager.sendMessage(p, MessageType.INVALID_FIXED_COMMAND);
-            MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_CREATE);
-            MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_REMOVE);
-            MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_LIST);
-            MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_INFO);
-            if (p.hasPermission("playerparticles.fixed.clear")) MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_CLEAR);
+            LangManager.sendMessage(p, Lang.INVALID_FIXED_COMMAND);
+            LangManager.sendMessage(p, Lang.FIXED_COMMAND_DESC_CREATE);
+            LangManager.sendMessage(p, Lang.FIXED_COMMAND_DESC_REMOVE);
+            LangManager.sendMessage(p, Lang.FIXED_COMMAND_DESC_LIST);
+            LangManager.sendMessage(p, Lang.FIXED_COMMAND_DESC_INFO);
+            if (p.hasPermission("playerparticles.fixed.clear")) LangManager.sendMessage(p, Lang.FIXED_COMMAND_DESC_CLEAR);
             return;
         }
 
@@ -502,12 +444,12 @@ public class ParticleCommandExecutor implements CommandExecutor {
             final String[] f_args = args;
             DataManager.getInstance().hasPlayerReachedMaxFixedEffects(p.getUniqueId(), (reachedMax) -> {
                 if (reachedMax) {
-                    MessageManager.sendMessage(p, MessageType.MAX_FIXED_EFFECTS_REACHED);
+                    LangManager.sendMessage(p, Lang.MAX_FIXED_EFFECTS_REACHED);
                     return;
                 }
                 
                 if (f_args.length < 5) {
-                    MessageManager.sendMessage(p, MessageType.CREATE_FIXED_MISSING_ARGS, (5 - f_args.length) + "");
+                    LangManager.sendMessage(p, Lang.CREATE_FIXED_MISSING_ARGS, (5 - f_args.length) + "");
                     return;
                 }
 
@@ -534,37 +476,37 @@ public class ParticleCommandExecutor implements CommandExecutor {
                         zPos = Double.parseDouble(f_args[2]);
                     }
                 } catch (Exception e) {
-                    MessageManager.sendMessage(p, MessageType.CREATE_FIXED_INVALID_COORDS);
+                    LangManager.sendMessage(p, Lang.CREATE_FIXED_INVALID_COORDS);
                     return;
                 }
 
                 double distanceFromEffect = p.getLocation().distance(new Location(p.getWorld(), xPos, yPos, zPos));
                 int maxCreationDistance = DataManager.getInstance().getMaxFixedEffectCreationDistance();
                 if (maxCreationDistance != 0 && distanceFromEffect > maxCreationDistance) {
-                    MessageManager.sendMessage(p, MessageType.CREATE_FIXED_OUT_OF_RANGE, maxCreationDistance + "");
+                    LangManager.sendMessage(p, Lang.CREATE_FIXED_OUT_OF_RANGE, maxCreationDistance + "");
                     return;
                 }
 
                 ParticleEffect effect = ParticleManager.effectFromString(f_args[3]);
                 if (effect == null) {
-                    MessageManager.sendMessage(p, MessageType.CREATE_FIXED_INVALID_EFFECT, f_args[3]);
+                    LangManager.sendMessage(p, Lang.CREATE_FIXED_INVALID_EFFECT, f_args[3]);
                     return;
                 } else if (!PermissionManager.hasEffectPermission(p, effect)) {
-                    MessageManager.sendMessage(p, MessageType.CREATE_FIXED_NO_PERMISSION_EFFECT, effect.getName());
+                    LangManager.sendMessage(p, Lang.CREATE_FIXED_NO_PERMISSION_EFFECT, effect.getName());
                     return;
                 }
 
                 ParticleStyle style = ParticleStyleManager.styleFromString(f_args[4]);
                 if (style == null) {
-                    MessageManager.sendMessage(p, MessageType.CREATE_FIXED_INVALID_STYLE, f_args[4]);
+                    LangManager.sendMessage(p, Lang.CREATE_FIXED_INVALID_STYLE, f_args[4]);
                     return;
                 } else if (!PermissionManager.hasStylePermission(p, style)) {
-                    MessageManager.sendMessage(p, MessageType.CREATE_FIXED_NO_PERMISSION_STYLE, f_args[4]);
+                    LangManager.sendMessage(p, Lang.CREATE_FIXED_NO_PERMISSION_STYLE, f_args[4]);
                     return;
                 }
 
                 if (!style.canBeFixed()) {
-                    MessageManager.sendMessage(p, MessageType.CREATE_FIXED_NON_FIXABLE_STYLE, style.getName());
+                    LangManager.sendMessage(p, Lang.CREATE_FIXED_NON_FIXABLE_STYLE, style.getName());
                     return;
                 }
 
@@ -583,12 +525,12 @@ public class ParticleCommandExecutor implements CommandExecutor {
                                 try {
                                     note = Integer.parseInt(f_args[5]);
                                 } catch (Exception e) {
-                                    MessageManager.sendMessage(p, MessageType.CREATE_FIXED_DATA_ERROR, "note");
+                                    LangManager.sendMessage(p, Lang.CREATE_FIXED_DATA_ERROR, "note");
                                     return;
                                 }
 
                                 if (note < 0 || note > 23) {
-                                    MessageManager.sendMessage(p, MessageType.CREATE_FIXED_DATA_ERROR, "note");
+                                    LangManager.sendMessage(p, Lang.CREATE_FIXED_DATA_ERROR, "note");
                                     return;
                                 }
 
@@ -607,12 +549,12 @@ public class ParticleCommandExecutor implements CommandExecutor {
                                     g = Integer.parseInt(f_args[6]);
                                     b = Integer.parseInt(f_args[7]);
                                 } catch (Exception e) {
-                                    MessageManager.sendMessage(p, MessageType.CREATE_FIXED_DATA_ERROR, "color");
+                                    LangManager.sendMessage(p, Lang.CREATE_FIXED_DATA_ERROR, "color");
                                     return;
                                 }
 
                                 if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
-                                    MessageManager.sendMessage(p, MessageType.CREATE_FIXED_DATA_ERROR, "color");
+                                    LangManager.sendMessage(p, Lang.CREATE_FIXED_DATA_ERROR, "color");
                                     return;
                                 }
 
@@ -627,7 +569,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
                                 if (material == null) material = Material.matchMaterial(f_args[5]);
                                 if (material == null) throw new Exception();
                             } catch (Exception e) {
-                                MessageManager.sendMessage(p, MessageType.CREATE_FIXED_DATA_ERROR, "block");
+                                LangManager.sendMessage(p, Lang.CREATE_FIXED_DATA_ERROR, "block");
                                 return;
                             }
 
@@ -639,7 +581,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
                                 if (material == null) material = Material.matchMaterial(f_args[5]);
                                 if (material == null) throw new Exception();
                             } catch (Exception e) {
-                                MessageManager.sendMessage(p, MessageType.CREATE_FIXED_DATA_ERROR, "item");
+                                LangManager.sendMessage(p, Lang.CREATE_FIXED_DATA_ERROR, "item");
                                 return;
                             }
 
@@ -661,13 +603,13 @@ public class ParticleCommandExecutor implements CommandExecutor {
                                                                               p.getLocation().getWorld().getName(), f_xPos, f_yPos, f_zPos, 
                                                                               effect, style, f_itemData, f_blockData, f_colorData, f_noteData); // @formatter:on
 
-                    MessageManager.sendMessage(p, MessageType.CREATE_FIXED_SUCCESS);
+                    LangManager.sendMessage(p, Lang.CREATE_FIXED_SUCCESS);
                     DataManager.getInstance().saveFixedEffect(fixedEffect);
                 });
             });
         } else if (cmd.equalsIgnoreCase("remove")) {
             if (args.length < 1) {
-                MessageManager.sendMessage(p, MessageType.REMOVE_FIXED_NO_ARGS);
+                LangManager.sendMessage(p, Lang.REMOVE_FIXED_NO_ARGS);
                 return;
             }
 
@@ -675,16 +617,16 @@ public class ParticleCommandExecutor implements CommandExecutor {
             try {
                 id = Integer.parseInt(args[0]);
             } catch (Exception e) {
-                MessageManager.sendMessage(p, MessageType.REMOVE_FIXED_INVALID_ARGS);
+                LangManager.sendMessage(p, Lang.REMOVE_FIXED_INVALID_ARGS);
                 return;
             }
 
             final int f_id = id;
             DataManager.getInstance().removeFixedEffect(p.getUniqueId(), id, (successful) -> {
                 if (successful) {
-                    MessageManager.sendMessage(p, MessageType.REMOVE_FIXED_SUCCESS, f_id + "");
+                    LangManager.sendMessage(p, Lang.REMOVE_FIXED_SUCCESS, f_id + "");
                 } else {
-                    MessageManager.sendMessage(p, MessageType.REMOVE_FIXED_NONEXISTANT, f_id + "");
+                    LangManager.sendMessage(p, Lang.REMOVE_FIXED_NONEXISTANT, f_id + "");
                 }
             });
         } else if (cmd.equalsIgnoreCase("list")) {
@@ -692,11 +634,11 @@ public class ParticleCommandExecutor implements CommandExecutor {
                 Collections.sort(ids);
 
                 if (ids.isEmpty()) {
-                    MessageManager.sendMessage(p, MessageType.LIST_FIXED_NONE);
+                    LangManager.sendMessage(p, Lang.LIST_FIXED_NONE);
                     return;
                 }
 
-                String msg = MessageType.LIST_FIXED_SUCCESS.getMessage();
+                String msg = Lang.LIST_FIXED_SUCCESS.get();
                 boolean first = true;
                 for (int id : ids) {
                     if (!first) msg += ", ";
@@ -704,11 +646,11 @@ public class ParticleCommandExecutor implements CommandExecutor {
                     msg += id;
                 }
 
-                MessageManager.sendCustomMessage(p, msg);
+                LangManager.sendCustomMessage(p, msg);
             });
         } else if (cmd.equalsIgnoreCase("info")) {
             if (args.length < 1) {
-                MessageManager.sendMessage(p, MessageType.INFO_FIXED_NO_ARGS);
+                LangManager.sendMessage(p, Lang.INFO_FIXED_NO_ARGS);
                 return;
             }
 
@@ -716,7 +658,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
             try {
                 id = Integer.parseInt(args[0]);
             } catch (Exception e) {
-                MessageManager.sendMessage(p, MessageType.INFO_FIXED_INVALID_ARGS);
+                LangManager.sendMessage(p, Lang.INFO_FIXED_INVALID_ARGS);
                 return;
             }
             
@@ -724,12 +666,12 @@ public class ParticleCommandExecutor implements CommandExecutor {
             final int f_id = id;
             DataManager.getInstance().getFixedEffectForPlayerById(p.getUniqueId(), id, (fixedEffect) -> {
                 if (fixedEffect == null) {
-                    MessageManager.sendMessage(p, MessageType.INFO_FIXED_NONEXISTANT, f_id + "");
+                    LangManager.sendMessage(p, Lang.INFO_FIXED_NONEXISTANT, f_id + "");
                     return;
                 }
 
                 DecimalFormat df = new DecimalFormat("0.##"); // Decimal formatter so the coords aren't super long
-                String listMessage = MessageType.INFO_FIXED_INFO.getMessage() // @formatter:off
+                String listMessage = Lang.INFO_FIXED_INFO.get() // @formatter:off
                                      .replaceAll("\\{0\\}", fixedEffect.getId() + "")
                                      .replaceAll("\\{1\\}", fixedEffect.getLocation().getWorld().getName())
                                      .replaceAll("\\{2\\}", df.format(fixedEffect.getLocation().getX()) + "")
@@ -738,16 +680,16 @@ public class ParticleCommandExecutor implements CommandExecutor {
                                      .replaceAll("\\{5\\}", fixedEffect.getParticleEffect().getName())
                                      .replaceAll("\\{6\\}", fixedEffect.getParticleStyle().getName())
                                      .replaceAll("\\{7\\}", fixedEffect.getDataString()); // @formatter:on
-                MessageManager.sendCustomMessage(p, listMessage);
+                LangManager.sendCustomMessage(p, listMessage);
             });
         } else if (cmd.equalsIgnoreCase("clear")) {
             if (!p.hasPermission("playerparticles.fixed.clear")) {
-                MessageManager.sendMessage(p, MessageType.CLEAR_FIXED_NO_PERMISSION);
+                LangManager.sendMessage(p, Lang.CLEAR_FIXED_NO_PERMISSION);
                 return;
             }
 
             if (args.length < 1) {
-                MessageManager.sendMessage(p, MessageType.CLEAR_FIXED_NO_ARGS);
+                LangManager.sendMessage(p, Lang.CLEAR_FIXED_NO_ARGS);
                 return;
             }
 
@@ -755,7 +697,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
             try {
                 radius = Math.abs(Integer.parseInt(args[0]));
             } catch (Exception e) {
-                MessageManager.sendMessage(p, MessageType.CLEAR_FIXED_INVALID_ARGS);
+                LangManager.sendMessage(p, Lang.CLEAR_FIXED_INVALID_ARGS);
                 return;
             }
 
@@ -768,47 +710,96 @@ public class ParticleCommandExecutor implements CommandExecutor {
             for (FixedParticleEffect fixedEffect : fixedEffectsToRemove) 
                 DataManager.getInstance().removeFixedEffect(fixedEffect.getOwnerUniqueId(), fixedEffect.getId(), (successful) -> { });
 
-            String clearMessage = MessageType.CLEAR_FIXED_SUCCESS.getMessage() // @formatter:off
+            String clearMessage = Lang.CLEAR_FIXED_SUCCESS.get() // @formatter:off
 								  .replaceAll("\\{0\\}", fixedEffectsToRemove.size() + "")
 								  .replaceAll("\\{1\\}", radius + ""); // @formatter:on
-            MessageManager.sendCustomMessage(p, clearMessage);
+            LangManager.sendCustomMessage(p, clearMessage);
             return;
         } else {
-            MessageManager.sendMessage(p, MessageType.INVALID_FIXED_COMMAND);
-            MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_CREATE);
-            MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_REMOVE);
-            MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_LIST);
-            MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_INFO);
-            if (p.hasPermission("playerparticles.fixed.clear")) MessageManager.sendMessage(p, MessageType.FIXED_COMMAND_DESC_CLEAR);
+            LangManager.sendMessage(p, Lang.INVALID_FIXED_COMMAND);
+            LangManager.sendMessage(p, Lang.FIXED_COMMAND_DESC_CREATE);
+            LangManager.sendMessage(p, Lang.FIXED_COMMAND_DESC_REMOVE);
+            LangManager.sendMessage(p, Lang.FIXED_COMMAND_DESC_LIST);
+            LangManager.sendMessage(p, Lang.FIXED_COMMAND_DESC_INFO);
+            if (p.hasPermission("playerparticles.fixed.clear")) LangManager.sendMessage(p, Lang.FIXED_COMMAND_DESC_CLEAR);
         }
     }
+    
+    private static final String[] COMMANDS = { "help", "gui", "effect", "effects", "style", "styles", "data", "fixed", "reset", "worlds", "version" };
+    private static final String[] FIXED_COMMANDS = { "create", "remove", "list", "info" };
+    private static final List<String> BLOCK_MATERIALS = ParticleUtils.getAllBlockMaterials();
+    private static final List<String> ITEM_MATERIALS = ParticleUtils.getAllItemMaterials();
 
-    private void onGUI(Player p, boolean byDefault) {
-        if (PlayerParticlesGui.isGuiDisabled()) {
-            if (byDefault) {
-                onHelp(p);
+    /**
+     * Activated when a user pushes tab in chat prefixed with /pp
+     * 
+     * @param sender The sender that hit tab, should always be a player
+     * @param cmd The command the player is executing
+     * @param alias The possible alias for the command
+     * @param args All arguments following the command
+     * @return A list of commands available to the sender
+     */
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
+        if (!(sender instanceof Player)) return new ArrayList<String>();
+
+        if (cmd.getName().equalsIgnoreCase("pp")) {
+            if (args.length > 1) {
+            	CommandModule commandModule = findMatchingCommand(args[0]);
+            	if (commandModule != null) {
+            		String[] cmdArgs = Arrays.copyOfRange(args, 1, args.length);
+            		return commandModule.onTabComplete(DataManager.getPPlayer(((Player) sender).getUniqueId()), cmdArgs);
+            	}
+            	
+            	// TODO: Move to correct CommandModules
+                if (args[0].equalsIgnoreCase("effect") && args.length == 2) {
+                    List<String> commands = PermissionManager.getEffectsUserHasPermissionFor((Player) sender);
+                    StringUtil.copyPartialMatches(args[1], commands, completions);
+                } else if (args[0].equalsIgnoreCase("style") && args.length == 2) {
+                    List<String> commands = PermissionManager.getStylesUserHasPermissionFor((Player) sender);
+                    StringUtil.copyPartialMatches(args[1], commands, completions);
+                } else if (args[0].equalsIgnoreCase("fixed") && args.length > 1) {
+                    if (args.length == 2) {
+                        List<String> commands = Arrays.asList(FIXED_COMMANDS);
+                        StringUtil.copyPartialMatches(args[1], commands, completions);
+                    } else if (args[1].equalsIgnoreCase("create")) {
+                        completions.add("<x> <y> <z> <effect> <style> [data]");
+                    } else if ((args[1].equalsIgnoreCase("remove") || args[1].equalsIgnoreCase("info")) && args.length == 3) {
+                        completions.add("<id>");
+                    } 
+                } else if (args[0].equalsIgnoreCase("data")) {
+                    PPlayer pplayer = DataManager.getPPlayer(((Player) sender).getUniqueId());
+                    if (pplayer == null) {
+                        completions.add(ChatColor.stripColor(Lang.NO_DATA_USAGE.get()));
+                    } else if (pplayer.getParticleEffect().hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA) && args.length == 2) {
+                        if (pplayer.getParticleEffect() == ParticleEffect.ITEM) {
+                            StringUtil.copyPartialMatches(args[1], ITEM_MATERIALS, completions);
+                        } else {
+                            StringUtil.copyPartialMatches(args[1], BLOCK_MATERIALS, completions);
+                        }
+                    } else if (pplayer.getParticleEffect().hasProperty(ParticleProperty.COLORABLE)) {
+                        if (pplayer.getParticleEffect() == ParticleEffect.NOTE && args.length == 2) {
+                            completions.add("<0-23>");
+                            StringUtil.copyPartialMatches(args[args.length - 1], Arrays.asList(new String[] { "rainbow" }), completions);
+                        } else if (pplayer.getParticleEffect() != ParticleEffect.NOTE && args.length > 1 && args.length < 5) {
+                            completions.add("<0-255>");
+                            if (args.length == 2) {
+                                StringUtil.copyPartialMatches(args[args.length - 1], Arrays.asList(new String[] { "rainbow" }), completions);
+                            }
+                        }
+                    } else if (args.length == 2) {
+                        completions.add(ChatColor.stripColor(Lang.NO_DATA_USAGE.get()));
+                    }
+                }
             } else {
-                MessageManager.sendMessage(p, MessageType.GUI_DISABLED);
+                List<String> commands = new ArrayList<String>(Arrays.asList(COMMANDS));
+                StringUtil.copyPartialMatches(args[0], commands, completions);
             }
-            return;
         }
+        return null;
+    }
 
-        if (PermissionManager.getEffectsUserHasPermissionFor(p).size() == 1) {
-            if (byDefault) {
-                onHelp(p);
-            } else {
-                MessageManager.sendMessage(p, MessageType.NO_PARTICLES);
-            }
-            return;
-        }
-
-        if (byDefault) {
-            MessageManager.sendMessage(p, MessageType.GUI_BY_DEFAULT);
-        }
-
-        DataManager.getInstance().getPPlayer(p.getUniqueId(), (pplayer) -> {
-            PlayerParticlesGui.changeState(pplayer, GuiState.DEFAULT);
-        });
+    public static String[] getCommandsList() {
+        return COMMANDS;
     }
 
 }

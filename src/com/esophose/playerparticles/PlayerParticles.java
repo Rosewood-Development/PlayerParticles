@@ -27,13 +27,12 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.esophose.playerparticles.command.ParticleCommandCompleter;
-import com.esophose.playerparticles.command.ParticleCommandExecutor;
+import com.esophose.playerparticles.command.ParticleCommandHandler;
 import com.esophose.playerparticles.database.DatabaseConnector;
 import com.esophose.playerparticles.database.MySqlDatabaseConnector;
 import com.esophose.playerparticles.database.SqliteDatabaseConnector;
 import com.esophose.playerparticles.gui.PlayerParticlesGui;
-import com.esophose.playerparticles.manager.MessageManager;
+import com.esophose.playerparticles.manager.LangManager;
 import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.styles.DefaultStyles;
 import com.esophose.playerparticles.updater.PluginUpdateListener;
@@ -67,14 +66,18 @@ public class PlayerParticles extends JavaPlugin {
      */
     public void onEnable() {
     	pluginInstance = Bukkit.getServer().getPluginManager().getPlugin("PlayerParticles");
+    	
         DefaultStyles.registerStyles();
-        MessageManager.setup(this.getConfig());
-        saveDefaultConfig();
-        getCommand("pp").setTabCompleter(new ParticleCommandCompleter());
-        getCommand("pp").setExecutor(new ParticleCommandExecutor());
+        LangManager.setup();
+        
+        getCommand("pp").setTabCompleter(new ParticleCommandHandler());
+        getCommand("pp").setExecutor(new ParticleCommandHandler());
+        
         Bukkit.getPluginManager().registerEvents(new ParticleManager(), this);
         Bukkit.getPluginManager().registerEvents(new PluginUpdateListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerParticlesGui(), this);
+        
+        saveDefaultConfig();
         double configVersion = getConfig().getDouble("version");
         if (configVersion < Double.parseDouble(getDescription().getVersion())) {
             File configFile = new File(getDataFolder(), "config.yml");

@@ -40,7 +40,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.esophose.playerparticles.PlayerParticles;
 import com.esophose.playerparticles.manager.DataManager;
-import com.esophose.playerparticles.manager.MessageManager.MessageType;
+import com.esophose.playerparticles.manager.LangManager.Lang;
 import com.esophose.playerparticles.particles.PPlayer;
 import com.esophose.playerparticles.particles.ParticleEffect;
 import com.esophose.playerparticles.particles.ParticleEffect.NoteColor;
@@ -337,18 +337,18 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         ItemStack effectIcon = new ItemStack(defaultMenuIcons[0], 1);
         ItemMeta effectIconMeta = effectIcon.getItemMeta();
         effectIconMeta.setDisplayName(ChatColor.GREEN + "Effect");
-        effectIconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SET_YOUR.getMessageReplaced("effect")));
+        effectIconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SET_YOUR.getMessageReplaced("effect")));
         if (PermissionManager.getEffectsUserHasPermissionFor(player).size() == 1) { // Always has access to NONE
-            effectIconMeta.setLore(Arrays.asList(MessageType.GUI_NO_ACCESS_TO.getMessageReplaced("effects")));
+            effectIconMeta.setLore(Arrays.asList(Lang.GUI_NO_ACCESS_TO.getMessageReplaced("effects")));
         }
         effectIcon.setItemMeta(effectIconMeta);
 
         ItemStack styleIcon = new ItemStack(defaultMenuIcons[1], 1);
         ItemMeta styleIconMeta = styleIcon.getItemMeta();
         styleIconMeta.setDisplayName(ChatColor.GREEN + "Style");
-        styleIconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SET_YOUR.getMessageReplaced("style")));
+        styleIconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SET_YOUR.getMessageReplaced("style")));
         if (PermissionManager.getStylesUserHasPermissionFor(player).size() == 1) { // Always has access to NONE
-            styleIconMeta.setLore(Arrays.asList(MessageType.GUI_NO_ACCESS_TO.getMessageReplaced("styles")));
+            styleIconMeta.setLore(Arrays.asList(Lang.GUI_NO_ACCESS_TO.getMessageReplaced("styles")));
         }
         styleIcon.setItemMeta(styleIconMeta);
 
@@ -362,9 +362,9 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
                 else dataType = "color " + dataType;
             else if (pe.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) if (pe == ParticleEffect.ITEM) dataType = "item " + dataType;
         else dataType = "block " + dataType; // @formatter:on
-        dataIconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SET_YOUR.getMessageReplaced(dataType)));
+        dataIconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SET_YOUR.getMessageReplaced(dataType)));
         if (p.getSpawnMaterial() == null && p.getSpawnColor() == null) {
-            dataIconMeta.setLore(Arrays.asList(MessageType.GUI_NO_DATA.getMessage()));
+            dataIconMeta.setLore(Arrays.asList(Lang.GUI_NO_DATA.get()));
         }
         dataIcon.setItemMeta(dataIconMeta);
 
@@ -559,7 +559,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         if (clicked == null || clicked.getType() == Material.AIR) return; // Clicked on an empty slot, do nothing
 
         // Check back button. This is common for most menus
-        if (clicked.getItemMeta().getDisplayName().equals(MessageType.GUI_BACK_BUTTON.getMessage())) {
+        if (clicked.getItemMeta().getDisplayName().equals(Lang.GUI_BACK_BUTTON.get())) {
             changeState(pplayer, GuiState.DEFAULT);
             return;
         }
@@ -628,11 +628,11 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         ItemStack icon = new ItemStack(effectIcons.get(effect.name()), 1);
         ItemMeta iconMeta = icon.getItemMeta();
 
-        iconMeta.setDisplayName(MessageType.GUI_ICON_NAME_COLOR.getMessage() + effect.getName());
+        iconMeta.setDisplayName(Lang.GUI_ICON_NAME_COLOR.get() + effect.getName());
         if (!isActive) {
-            iconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SETS_TO.getMessageReplaced("effect") + effect.getName()));
+            iconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SETS_TO.getMessageReplaced("effect") + effect.getName()));
         } else {
-            iconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SETS_TO.getMessageReplaced("effect") + effect.getName(), MessageType.GUI_ICON_CURRENT_ACTIVE.getMessageReplaced("effect")));
+            iconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SETS_TO.getMessageReplaced("effect") + effect.getName(), Lang.GUI_ICON_CURRENT_ACTIVE.getMessageReplaced("effect")));
             iconMeta.addEnchant(Enchantment.ARROW_INFINITE, -1, true);
             iconMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
@@ -651,11 +651,11 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         ItemStack icon = new ItemStack(styleIcons.get(style.getName().toUpperCase()), 1);
         ItemMeta iconMeta = icon.getItemMeta();
 
-        iconMeta.setDisplayName(MessageType.GUI_ICON_NAME_COLOR.getMessage() + style.getName());
+        iconMeta.setDisplayName(Lang.GUI_ICON_NAME_COLOR.get() + style.getName());
         if (!isActive) {
-            iconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SETS_TO.getMessageReplaced("style") + style.getName()));
+            iconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SETS_TO.getMessageReplaced("style") + style.getName()));
         } else {
-            iconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SETS_TO.getMessageReplaced("style") + style.getName(), MessageType.GUI_ICON_CURRENT_ACTIVE.getMessageReplaced("style")));
+            iconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SETS_TO.getMessageReplaced("style") + style.getName(), Lang.GUI_ICON_CURRENT_ACTIVE.getMessageReplaced("style")));
             iconMeta.addEnchant(Enchantment.ARROW_INFINITE, -1, true);
             iconMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
@@ -676,11 +676,11 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         ItemStack materialIcon = new ItemStack(material, 1);
         ItemMeta materialIconMeta = materialIcon.getItemMeta();
 
-        materialIconMeta.setDisplayName(MessageType.GUI_ICON_NAME_COLOR.getMessage() + material.name().toLowerCase());
+        materialIconMeta.setDisplayName(Lang.GUI_ICON_NAME_COLOR.get() + material.name().toLowerCase());
         if (currentMaterial != material) {
-            materialIconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SETS_TO.getMessageReplaced(dataType + " data") + material.name().toLowerCase()));
+            materialIconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SETS_TO.getMessageReplaced(dataType + " data") + material.name().toLowerCase()));
         } else {
-            materialIconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SETS_TO.getMessageReplaced(dataType + " data") + material.name().toLowerCase(), MessageType.GUI_ICON_CURRENT_ACTIVE.getMessageReplaced(dataType + " data")));
+            materialIconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SETS_TO.getMessageReplaced(dataType + " data") + material.name().toLowerCase(), Lang.GUI_ICON_CURRENT_ACTIVE.getMessageReplaced(dataType + " data")));
             materialIconMeta.addEnchant(Enchantment.ARROW_INFINITE, -1, true);
             materialIconMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
@@ -710,9 +710,9 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
 
         colorIconMeta.setDisplayName(colorData.getName());
         if (!currentColor.equals(colorData.getOrdinaryColor())) {
-            colorIconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SETS_TO.getMessageReplaced("color data") + formattedDisplayColor));
+            colorIconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SETS_TO.getMessageReplaced("color data") + formattedDisplayColor));
         } else {
-            colorIconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SETS_TO.getMessageReplaced("color data") + formattedDisplayColor, MessageType.GUI_ICON_CURRENT_ACTIVE.getMessageReplaced("color data")));
+            colorIconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SETS_TO.getMessageReplaced("color data") + formattedDisplayColor, Lang.GUI_ICON_CURRENT_ACTIVE.getMessageReplaced("color data")));
             colorIconMeta.addEnchant(Enchantment.ARROW_INFINITE, -1, true);
             colorIconMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
@@ -732,11 +732,11 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         ItemStack noteIcon = new ItemStack(Material.NOTE_BLOCK, noteIndex + 1);
         ItemMeta noteIconMeta = noteIcon.getItemMeta();
 
-        noteIconMeta.setDisplayName(MessageType.GUI_ICON_NAME_COLOR.getMessage() + "note #" + noteIndex);
+        noteIconMeta.setDisplayName(Lang.GUI_ICON_NAME_COLOR.get() + "note #" + noteIndex);
         if (currentNote.getValueX() * 24 != noteIndex) {
-            noteIconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SETS_TO.getMessageReplaced("note data") + "note #" + noteIndex));
+            noteIconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SETS_TO.getMessageReplaced("note data") + "note #" + noteIndex));
         } else {
-            noteIconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SETS_TO.getMessageReplaced("note data") + "note #" + noteIndex, MessageType.GUI_ICON_CURRENT_ACTIVE.getMessageReplaced("note data")));
+            noteIconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SETS_TO.getMessageReplaced("note data") + "note #" + noteIndex, Lang.GUI_ICON_CURRENT_ACTIVE.getMessageReplaced("note data")));
             noteIconMeta.addEnchant(Enchantment.ARROW_INFINITE, -1, true);
             noteIconMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
@@ -762,11 +762,11 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
 
         rainbowIconMeta.setDisplayName(rainbowName);
         if (currentColor.getRed() == 999 && currentColor.getGreen() == 999 && currentColor.getBlue() == 999) {
-            rainbowIconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SETS_TO.getMessageReplaced("color data") + rainbowName, MessageType.GUI_ICON_CURRENT_ACTIVE.getMessageReplaced("color data")));
+            rainbowIconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SETS_TO.getMessageReplaced("color data") + rainbowName, Lang.GUI_ICON_CURRENT_ACTIVE.getMessageReplaced("color data")));
             rainbowIconMeta.addEnchant(Enchantment.ARROW_INFINITE, -1, true);
             rainbowIconMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         } else {
-            rainbowIconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SETS_TO.getMessageReplaced("color data") + rainbowName));
+            rainbowIconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SETS_TO.getMessageReplaced("color data") + rainbowName));
         }
         rainbowIcon.setItemMeta(rainbowIconMeta);
 
@@ -790,11 +790,11 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
 
         rainbowIconMeta.setDisplayName(rainbowName);
         if (currentColor.getValueX() * 24 == 99) {
-            rainbowIconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SETS_TO.getMessageReplaced("note data") + rainbowName, MessageType.GUI_ICON_CURRENT_ACTIVE.getMessageReplaced("note data")));
+            rainbowIconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SETS_TO.getMessageReplaced("note data") + rainbowName, Lang.GUI_ICON_CURRENT_ACTIVE.getMessageReplaced("note data")));
             rainbowIconMeta.addEnchant(Enchantment.ARROW_INFINITE, -1, true);
             rainbowIconMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         } else {
-            rainbowIconMeta.setLore(Arrays.asList(MessageType.GUI_ICON_SETS_TO.getMessageReplaced("note data") + rainbowName));
+            rainbowIconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SETS_TO.getMessageReplaced("note data") + rainbowName));
         }
         rainbowIcon.setItemMeta(rainbowIconMeta);
 
@@ -809,7 +809,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
     private static ItemStack getItemForBack() {
         ItemStack icon = new ItemStack(Material.ARROW, 1);
         ItemMeta iconMeta = icon.getItemMeta();
-        iconMeta.setDisplayName(MessageType.GUI_BACK_BUTTON.getMessage());
+        iconMeta.setDisplayName(Lang.GUI_BACK_BUTTON.get());
         icon.setItemMeta(iconMeta);
 
         return icon;
