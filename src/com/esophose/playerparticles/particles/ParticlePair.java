@@ -23,24 +23,24 @@ public class ParticlePair {
 	private ParticleEffect effect;
 	private ParticleStyle style;
 	
-	private Material particleItemMaterial;
-    private Material particleBlockMaterial;
-    private OrdinaryColor particleColorData;
-    private NoteColor particleNoteColorData;
+	private Material itemMaterial;
+    private Material blockMaterial;
+    private OrdinaryColor color;
+    private NoteColor noteColor;
 	
-	public ParticlePair(UUID ownerUUID, int id, ParticleEffect effect, ParticleStyle style, Material itemMaterial, Material blockMaterial, OrdinaryColor colorData, NoteColor noteColorData) {
+	public ParticlePair(UUID ownerUUID, int id, ParticleEffect effect, ParticleStyle style, Material itemMaterial, Material blockMaterial, OrdinaryColor color, NoteColor noteColor) {
 		this.ownerUUID = ownerUUID;
 		this.id = id;
 		
 		this.effect = effect;
 		this.style = style;
 		
-		this.setParticleEffect(effect);
-        this.setParticleStyle(style);
+		this.setEffect(effect);
+        this.setStyle(style);
         this.setItemMaterial(itemMaterial);
-        this.setBlockData(blockMaterial);
-        this.setColorData(colorData);
-        this.setNoteColorData(noteColorData);
+        this.setBlockMaterial(blockMaterial);
+        this.setColor(color);
+        this.setNoteColor(noteColor);
 	}
 	
 	/**
@@ -48,7 +48,7 @@ public class ParticlePair {
      * 
      * @param effect The player's new particle effect
      */
-    public void setParticleEffect(ParticleEffect effect) {
+    public void setEffect(ParticleEffect effect) {
         if (effect == null) effect = ParticleEffect.NONE;
         this.effect = effect;
     }
@@ -58,7 +58,7 @@ public class ParticlePair {
      * 
      * @param style The player's new particle style
      */
-    public void setParticleStyle(ParticleStyle style) {
+    public void setStyle(ParticleStyle style) {
         if (style == null) style = DefaultStyles.NONE;
         this.style = style;
     }
@@ -70,7 +70,7 @@ public class ParticlePair {
      */
     public void setItemMaterial(Material itemMaterial) {
         if (itemMaterial == null || itemMaterial.isBlock()) itemMaterial = ParticleUtils.closestMatchWithFallback("IRON_SHOVEL", "IRON_SPADE");
-        this.particleItemMaterial = itemMaterial;
+        this.itemMaterial = itemMaterial;
     }
 
     /**
@@ -78,9 +78,9 @@ public class ParticlePair {
      * 
      * @param blockMaterial The player's new block material
      */
-    public void setBlockData(Material blockMaterial) {
+    public void setBlockMaterial(Material blockMaterial) {
         if (blockMaterial == null) blockMaterial = Material.STONE;
-        this.particleBlockMaterial = blockMaterial;
+        this.blockMaterial = blockMaterial;
     }
 
     /**
@@ -88,9 +88,9 @@ public class ParticlePair {
      * 
      * @param colorData The player's new color data
      */
-    public void setColorData(OrdinaryColor colorData) {
+    public void setColor(OrdinaryColor colorData) {
         if (colorData == null) colorData = new OrdinaryColor(0, 0, 0);
-        this.particleColorData = colorData;
+        this.color = colorData;
     }
 
     /**
@@ -98,9 +98,9 @@ public class ParticlePair {
      * 
      * @param noteColorData The player's new note color data
      */
-    public void setNoteColorData(NoteColor noteColorData) {
+    public void setNoteColor(NoteColor noteColorData) {
         if (noteColorData == null) noteColorData = new NoteColor(0);
-        this.particleNoteColorData = noteColorData;
+        this.noteColor = noteColorData;
     }
     
     /**
@@ -138,6 +138,42 @@ public class ParticlePair {
 	public ParticleStyle getStyle() {
 		return this.style;
 	}
+	
+	/**
+	 * Get the item Material this particle uses
+	 * 
+	 * @return The item Material
+	 */
+	public Material getItemMaterial() {
+		return this.itemMaterial;
+	}
+	
+	/**
+	 * Get the block Material this particle uses
+	 * 
+	 * @return The block Material
+	 */
+	public Material getBlockMaterial() {
+		return this.blockMaterial;
+	}
+	
+	/**
+	 * Get the color this particle uses
+	 * 
+	 * @return The color
+	 */
+	public OrdinaryColor getColor() {
+		return this.color;
+	}
+	
+	/**
+	 * Get the note color this particle uses
+	 * 
+	 * @return The note color
+	 */
+	public NoteColor getNoteColor() {
+		return this.noteColor;
+	}
     
     /**
      * Gets the color the current particle effect will spawn with
@@ -147,15 +183,15 @@ public class ParticlePair {
     public ParticleColor getSpawnColor() {
         if (this.effect.hasProperty(ParticleProperty.COLORABLE)) {
             if (this.effect == ParticleEffect.NOTE) {
-                if (this.particleNoteColorData.getValueX() * 24 == 99) {
+                if (this.noteColor.getValueX() * 24 == 99) {
                     return ParticleManager.getRainbowNoteParticleColor();
                 }
-                return this.particleNoteColorData;
+                return this.noteColor;
             } else {
-                if (this.particleColorData.getRed() == 999 && this.particleColorData.getGreen() == 999 && this.particleColorData.getBlue() == 999) {
+                if (this.color.getRed() == 999 && this.color.getGreen() == 999 && this.color.getBlue() == 999) {
                     return ParticleManager.getRainbowParticleColor();
                 } else {
-                    return this.particleColorData;
+                    return this.color;
                 }
             }
         }
@@ -170,9 +206,9 @@ public class ParticlePair {
     public Material getSpawnMaterial() {
         if (this.effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
             if (this.effect == ParticleEffect.ITEM) {
-                return this.particleItemMaterial;
+                return this.itemMaterial;
             } else {
-                return this.particleBlockMaterial;
+                return this.blockMaterial;
             }
         }
         return null;
@@ -183,22 +219,22 @@ public class ParticlePair {
      * 
      * @return The particle data in a human-readable string
      */
-    public String getParticleDataString() {
+    public String getDataString() {
         if (this.effect == ParticleEffect.BLOCK || this.effect == ParticleEffect.FALLING_DUST) {
-            return this.particleBlockMaterial.toString().toLowerCase();
+            return this.blockMaterial.toString().toLowerCase();
         } else if (this.effect == ParticleEffect.ITEM) {
-            return this.particleItemMaterial.toString().toLowerCase();
+            return this.itemMaterial.toString().toLowerCase();
         } else if (this.effect.hasProperty(ParticleProperty.COLORABLE)) {
             if (this.effect == ParticleEffect.NOTE) {
-                if (this.particleNoteColorData.getValueX() * 24 == 99) {
+                if (this.noteColor.getValueX() * 24 == 99) {
                     return PlayerParticlesGui.rainbowName;
                 }
-                return "note #" + (int) (this.particleNoteColorData.getValueX() * 24);
+                return "note #" + (int) (this.noteColor.getValueX() * 24);
             } else {
-                if (this.particleColorData.getRed() == 999 && this.particleColorData.getGreen() == 999 && this.particleColorData.getBlue() == 999) {
+                if (this.color.getRed() == 999 && this.color.getGreen() == 999 && this.color.getBlue() == 999) {
                     return PlayerParticlesGui.rainbowName;
                 } else {
-                    return ChatColor.RED + "" + this.particleColorData.getRed() + " " + ChatColor.GREEN + this.particleColorData.getGreen() + " " + ChatColor.AQUA + this.particleColorData.getBlue();
+                    return ChatColor.RED + "" + this.color.getRed() + " " + ChatColor.GREEN + this.color.getGreen() + " " + ChatColor.AQUA + this.color.getBlue();
                 }
             }
         }

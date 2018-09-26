@@ -49,7 +49,7 @@ public class ParticleStyleHurt implements ParticleStyle, Listener {
             Player player = (Player) event.getEntity();
             PPlayer pplayer = DataManager.getPPlayer(player.getUniqueId());
             if (pplayer != null) {
-            	for (ParticlePair particle : pplayer.getParticlesForStyle(DefaultStyles.HURT)) {
+            	for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.HURT)) {
             		Location loc = player.getLocation().clone().add(0, 1, 0);
                     ParticleManager.displayParticles(particle, DefaultStyles.HURT.getParticles(particle, loc));
             	}

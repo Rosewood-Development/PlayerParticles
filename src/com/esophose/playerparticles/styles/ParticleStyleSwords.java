@@ -59,7 +59,7 @@ public class ParticleStyleSwords implements ParticleStyle, Listener {
             LivingEntity entity = (LivingEntity) event.getEntity();
             PPlayer pplayer = DataManager.getPPlayer(player.getUniqueId());
             if (pplayer != null) {
-            	for (ParticlePair particle : pplayer.getParticlesForStyle(DefaultStyles.SWORDS)) {
+            	for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.SWORDS)) {
                 	Location loc = entity.getLocation().clone().add(0, 1, 0);
                     ParticleManager.displayParticles(particle, DefaultStyles.SWORDS.getParticles(particle, loc));
             	}

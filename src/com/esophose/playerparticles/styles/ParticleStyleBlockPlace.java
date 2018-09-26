@@ -45,7 +45,7 @@ public class ParticleStyleBlockPlace implements ParticleStyle, Listener {
         Player player = event.getPlayer();
         PPlayer pplayer = DataManager.getPPlayer(player.getUniqueId());
         if (pplayer != null) {
-        	for (ParticlePair particle : pplayer.getParticlesForStyle(DefaultStyles.BLOCKPLACE)) {
+        	for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.BLOCKPLACE)) {
         		Location loc = event.getBlock().getLocation();
                 ParticleManager.displayParticles(particle, DefaultStyles.BLOCKPLACE.getParticles(particle, loc));
         	}

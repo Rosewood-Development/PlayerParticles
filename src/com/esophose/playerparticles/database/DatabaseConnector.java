@@ -2,7 +2,6 @@ package com.esophose.playerparticles.database;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public abstract class DatabaseConnector {
 	
@@ -32,46 +31,6 @@ public abstract class DatabaseConnector {
 	 * @throws SQLException If an SQL problem occurs getting the connection
 	 */
 	protected abstract Connection getConnection() throws SQLException;
-	
-	/**
-     * Executes an update statement and cleans up all resources
-     * Allows batched statements separated by semicolons
-     * 
-     * @param query The update statement to run
-     * @return An int with the status of the first statement in the query
-     * @throws SQLException If an SQL problem occurs executing the statement
-     */
-	public int updateSQL(String query) throws SQLException {
-		Connection connection = null;
-        Statement statement = null;
-        
-        try {
-            connection = this.getConnection();
-            statement = connection.createStatement();
-            
-            int[] results;
-
-            if (query.indexOf(';') != -1) {
-                String[] queries = query.split(";");
-                for (String q : queries) {
-                    statement.addBatch(q);
-                }
-
-                results = statement.executeBatch();
-            } else {
-                results = new int[] { statement.executeUpdate(query) };
-            }
-
-            statement.close();
-
-            return results[0];
-        } catch (SQLException ex) {
-            throw ex;
-        } finally {
-            try { if (connection != null) connection.close(); } catch (Exception ex) { };
-            try { if (statement != null) statement.close(); } catch (Exception ex) { };
-        }
-	}
     
 	/**
      * Allows Lambda expressions to be used to reduce duplicated code for getting connections

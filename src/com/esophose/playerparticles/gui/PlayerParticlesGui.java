@@ -328,7 +328,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         String[] currentIconLore = new String[3];
         currentIconLore[0] = ChatColor.YELLOW + "Effect: " + ChatColor.AQUA + p.getParticleEffect().getName();
         currentIconLore[1] = ChatColor.YELLOW + "Style: " + ChatColor.AQUA + p.getParticleStyle().getName();
-        currentIconLore[2] = ChatColor.YELLOW + "Active Data: " + ChatColor.AQUA + p.getParticleDataString();
+        currentIconLore[2] = ChatColor.YELLOW + "Active Data: " + ChatColor.AQUA + p.getDataString();
         currentIconMeta.setLore(Arrays.asList(currentIconLore));
         currentIconMeta.setOwner(player.getName());
         //currentIconMeta.setOwningPlayer(Bukkit.getOfflinePlayer(player.getUniqueId())); // This doesn't exist in 1.9

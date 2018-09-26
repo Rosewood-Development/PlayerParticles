@@ -737,7 +737,7 @@ public class ParticleCommandExecutor implements CommandExecutor {
                                      .replaceAll("\\{4\\}", df.format(fixedEffect.getLocation().getZ()) + "")
                                      .replaceAll("\\{5\\}", fixedEffect.getParticleEffect().getName())
                                      .replaceAll("\\{6\\}", fixedEffect.getParticleStyle().getName())
-                                     .replaceAll("\\{7\\}", fixedEffect.getParticleDataString()); // @formatter:on
+                                     .replaceAll("\\{7\\}", fixedEffect.getDataString()); // @formatter:on
                 MessageManager.sendCustomMessage(p, listMessage);
             });
         } else if (cmd.equalsIgnoreCase("clear")) {

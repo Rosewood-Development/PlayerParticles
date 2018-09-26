@@ -65,7 +65,7 @@ public class ParticleCommandCompleter implements TabCompleter {
                         completions.add("<id>");
                     } 
                 } else if (args[0].equalsIgnoreCase("data")) {
-                    PPlayer pplayer = DataManager.getInstance().getPPlayer(((Player) sender).getUniqueId());
+                    PPlayer pplayer = DataManager.getPPlayer(((Player) sender).getUniqueId());
                     if (pplayer == null) {
                         completions.add(ChatColor.stripColor(MessageType.NO_DATA_USAGE.getMessage()));
                     } else if (pplayer.getParticleEffect().hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA) && args.length == 2) {

@@ -41,7 +41,7 @@ public class ParticleStyleBlockEdit implements ParticleStyle, Listener {
         Player player = event.getPlayer();
         PPlayer pplayer = DataManager.getPPlayer(player.getUniqueId());
         if (pplayer != null) {
-        	for (ParticlePair particle : pplayer.getParticlesForStyle(DefaultStyles.BLOCKEDIT)) {
+        	for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.BLOCKEDIT)) {
         		Location loc = event.getBlock().getLocation();
                 ParticleManager.displayParticles(particle, DefaultStyles.BLOCKBREAK.getParticles(particle, loc));
         	}
@@ -53,7 +53,7 @@ public class ParticleStyleBlockEdit implements ParticleStyle, Listener {
         Player player = event.getPlayer();
         PPlayer pplayer = DataManager.getPPlayer(player.getUniqueId());
         if (pplayer != null) {
-        	for (ParticlePair particle : pplayer.getParticlesForStyle(DefaultStyles.BLOCKEDIT)) {
+        	for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.BLOCKEDIT)) {
         		Location loc = event.getBlock().getLocation();
                 ParticleManager.displayParticles(particle, DefaultStyles.BLOCKPLACE.getParticles(particle, loc));
         	}

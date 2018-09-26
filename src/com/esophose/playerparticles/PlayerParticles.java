@@ -7,9 +7,8 @@
  */
 
 /*
- * TODO: v5.2
+ * TODO: v5.3
  * + Command to force set an effect/style for a player
- * + Tab completion for fixed effects
  * + Add new style 'tornado'
  * + Add new style 'companion'
  * + Add new style 'atom'
@@ -159,14 +158,14 @@ public class PlayerParticles extends JavaPlugin {
     			try (Statement statement = connection.createStatement()) {
         			ResultSet result = statement.executeQuery("SHOW TABLES LIKE 'pp_users'");
         			if (result.next()) {
-        				databaseConnector.updateSQL(
-        											"DROP TABLE pp_users;" + 
-        											"DROP TABLE pp_fixed;" + 
-        											"DROP TABLE pp_data_item;" + 
-        											"DROP TABLE pp_data_block;" +
-        											"DROP TABLE pp_data_color;" + 
-        											"DROP TABLE pp_data_note;"
-        										   );
+        				Statement dropStatement = connection.createStatement();
+        				dropStatement.addBatch("DROP TABLE pp_users");
+        				dropStatement.addBatch("DROP TABLE pp_fixed");
+        				dropStatement.addBatch("DROP TABLE pp_data_item");
+        				dropStatement.addBatch("DROP TABLE pp_data_block");
+        				dropStatement.addBatch("DROP TABLE pp_data_color");
+        				dropStatement.addBatch("DROP TABLE pp_data_note");
+        				dropStatement.executeBatch();
         			}
         		}
     			
@@ -174,12 +173,12 @@ public class PlayerParticles extends JavaPlugin {
         		try (Statement statement = connection.createStatement()) {
         			ResultSet result = statement.executeQuery("SHOW TABLES LIKE 'pp_group'");
         			if (!result.next()) {
-        				databaseConnector.updateSQL(
-        											"CREATE TABLE pp_player (uuid VARCHAR(36));" +
-        											"CREATE TABLE pp_group (uuid VARCHAR(36), owner_uuid VARCHAR(36), id SMALLINT);" +
-        											"CREATE TABLE pp_fixed (owner_uuid VARCHAR(36), id SMALLINT, particle_uuid VARCHAR(36), world VARCHAR(100), xPos DOUBLE, yPos DOUBLE, zPos DOUBLE);" +
-        											"CREATE TABLE pp_particle (uuid VARCHAR(36), group_uuid VARCHAR(36), effect VARCHAR(100), style VARCHAR(100), item_material VARCHAR(100), block_material VARCHAR(100), note SMALLINT, r SMALLINT, g SMALLINT, b SMALLINT);"
-        										   );
+        				Statement createStatement = connection.createStatement();
+        				createStatement.addBatch("CREATE TABLE pp_player (uuid VARCHAR(36))");
+        				createStatement.addBatch("CREATE TABLE pp_group (uuid VARCHAR(36), owner_uuid VARCHAR(36), name VARCHAR(100))");
+        				createStatement.addBatch("CREATE TABLE pp_fixed (owner_uuid VARCHAR(36), id SMALLINT, particle_uuid VARCHAR(36), world VARCHAR(100), xPos DOUBLE, yPos DOUBLE, zPos DOUBLE)");
+        				createStatement.addBatch("CREATE TABLE pp_particle (uuid VARCHAR(36), group_uuid VARCHAR(36), id SMALLINT, effect VARCHAR(100), style VARCHAR(100), item_material VARCHAR(100), block_material VARCHAR(100), note SMALLINT, r SMALLINT, g SMALLINT, b SMALLINT)");
+        				createStatement.executeBatch();
         			}
         		}
     		} catch (SQLException ex) {
@@ -199,7 +198,6 @@ public class PlayerParticles extends JavaPlugin {
         new BukkitRunnable() {
             public void run() {
                 ParticleManager.refreshPPlayers(); // Add any online players who have particles
-                ParticleManager.addAllFixedEffects(); // Add all fixed effects
                 PlayerParticlesGui.setup();
 
                 long ticks = getConfig().getLong("ticks-per-particle");

@@ -500,6 +500,15 @@ public enum ParticleEffect {
                 this.note = note;
             }
         }
+        
+        /**
+         * Returns the note value
+         * 
+         * @return The note value
+         */
+        public int getNote() {
+        	return this.note;
+        }
 
         /**
          * Returns the note value divided by 24

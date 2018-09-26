@@ -45,7 +45,7 @@ public class ParticleStyleBlockBreak implements ParticleStyle, Listener {
         Player player = event.getPlayer();
         PPlayer pplayer = DataManager.getPPlayer(player.getUniqueId());
         if (pplayer != null) {
-        	for (ParticlePair particle : pplayer.getParticlesForStyle(DefaultStyles.BLOCKBREAK)) {
+        	for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.BLOCKBREAK)) {
         		Location loc = event.getBlock().getLocation();
                 ParticleManager.displayParticles(particle, DefaultStyles.BLOCKBREAK.getParticles(particle, loc));
         	}

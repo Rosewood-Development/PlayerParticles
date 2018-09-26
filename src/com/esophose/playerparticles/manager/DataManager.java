@@ -8,22 +8,14 @@
 
 package com.esophose.playerparticles.manager;
 
-import java.io.File;
-import java.io.IOException;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.esophose.playerparticles.PlayerParticles;
@@ -32,11 +24,17 @@ import com.esophose.playerparticles.particles.PPlayer;
 import com.esophose.playerparticles.particles.ParticleEffect;
 import com.esophose.playerparticles.particles.ParticleEffect.NoteColor;
 import com.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
+import com.esophose.playerparticles.particles.ParticleGroup;
+import com.esophose.playerparticles.particles.ParticlePair;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
 import com.esophose.playerparticles.styles.api.ParticleStyleManager;
 import com.esophose.playerparticles.util.ParticleUtils;
 
-public class DataManager {
+/**
+ * All data changes to PPlayers such as group or fixed effect changes must be done through here,
+ * rather than directly on the PPlayer object
+ */
+public class DataManager { // @formatter:off
 
     /**
      * The disabled worlds cached for quick access
@@ -70,7 +68,6 @@ public class DataManager {
         for (PPlayer pp : ParticleManager.particlePlayers) 
             if (pp.getUniqueId() == playerUUID) 
                 return pp;
-        
         return null;
     }
 
@@ -88,310 +85,258 @@ public class DataManager {
             return;
         }
         
-        // Either get an existing one from the database, or create a new one
-        buildPPlayer(playerUUID, true, (pplayer) -> {
-            ParticleManager.particlePlayers.add(pplayer);
-            callback.execute(pplayer);
+        async(() -> {
+        	List<ParticleGroup> groups = new ArrayList<ParticleGroup>();
+        	List<FixedParticleEffect> fixedParticles = new ArrayList<FixedParticleEffect>();
+        	
+        	PlayerParticles.databaseConnector.connect((connection) -> {
+        		// Load particle groups
+        		String groupQuery = "SELECT * FROM pp_group g WHERE g.owner_uuid = ? " + 
+        					   	    "JOIN pp_particle p ON g.uuid = p.group_uuid";
+        		try (PreparedStatement statement = connection.prepareStatement(groupQuery)) {
+        			statement.setString(1, playerUUID.toString());
+        			
+        			ResultSet result = statement.executeQuery();
+        			while (result.next()) {
+        				// Group properties
+        				String groupName = result.getString("g.name");
+        				
+        				// Particle properties
+        				int id = result.getInt("p.id");
+        				ParticleEffect effect = ParticleEffect.fromName(result.getString("p.effect"));
+        				ParticleStyle style = ParticleStyleManager.styleFromString(result.getString("p.style"));
+        				Material itemMaterial = ParticleUtils.closestMatchWithFallback(result.getString("p.item_material"));
+        				Material blockMaterial = ParticleUtils.closestMatchWithFallback(result.getString("p.block_material"));
+        				NoteColor noteColor = new NoteColor(result.getInt("p.note"));
+        				OrdinaryColor color = new OrdinaryColor(result.getInt("p.r"), result.getInt("p.g"), result.getInt("p.b"));
+        				ParticlePair particle = new ParticlePair(playerUUID, id, effect, style, itemMaterial, blockMaterial, color, noteColor);
+        				
+        				// Try to add particle to an existing group
+        				boolean groupAlreadyExists = false;
+        				for (ParticleGroup group : groups) {
+        					if (group.getName().equalsIgnoreCase(groupName)) {
+        						group.getParticles().add(particle);
+        						groupAlreadyExists = true;
+        						break;
+        					}
+        				}
+        				
+        				// Add the particle to a new group if one didn't already exist
+        				if (!groupAlreadyExists) {
+        					List<ParticlePair> particles = new ArrayList<ParticlePair>();
+        					particles.add(particle);
+        					ParticleGroup newGroup = new ParticleGroup(groupName, particles);
+        					groups.add(newGroup);
+        				}
+        			}
+        		}
+        		
+        		// Load fixed effects
+        		String fixedQuery = "SELECT * FROM pp_fixed f WHERE f.owner_uuid = ? " +
+        						    "JOIN pp_particle p ON f.particle_uuid = p.uuid";
+        		try (PreparedStatement statement = connection.prepareStatement(fixedQuery)) {
+        			statement.setString(1, playerUUID.toString());
+        			
+        			ResultSet result = statement.executeQuery();
+        			while (result.next()) {
+        				// Fixed effect properties
+        				int fixedEffectId = result.getInt("f.id");
+        				String worldName = result.getString("f.world");
+        				double xPos = result.getDouble("f.xPos");
+        				double yPos = result.getDouble("f.yPos");
+        				double zPos = result.getDouble("f.zPos");
+        				
+        				// Particle properties
+        				int particleId = result.getInt("p.id");
+        				ParticleEffect effect = ParticleEffect.fromName(result.getString("p.effect"));
+        				ParticleStyle style = ParticleStyleManager.styleFromString(result.getString("p.style"));
+        				Material itemMaterial = ParticleUtils.closestMatchWithFallback(result.getString("p.item_material"));
+        				Material blockMaterial = ParticleUtils.closestMatchWithFallback(result.getString("p.block_material"));
+        				NoteColor noteColor = new NoteColor(result.getInt("p.note"));
+        				OrdinaryColor color = new OrdinaryColor(result.getInt("p.r"), result.getInt("p.g"), result.getInt("p.b"));
+        				ParticlePair particle = new ParticlePair(playerUUID, particleId, effect, style, itemMaterial, blockMaterial, color, noteColor);
+        				
+        				fixedParticles.add(new FixedParticleEffect(playerUUID, fixedEffectId, worldName, xPos, yPos, zPos, particle));
+        			}
+        		}
+        		
+        		if (groups.size() == 0) { // If there aren't any groups then this is a brand new PPlayer and we need to save a new active group for them
+        			ParticleGroup activeGroup = new ParticleGroup(null, new ArrayList<ParticlePair>());
+        			saveParticleGroup(playerUUID, activeGroup);
+        			groups.add(activeGroup);
+        		}
+        		
+        		PPlayer loadedPPlayer = new PPlayer(playerUUID, groups, fixedParticles);
+        		ParticleManager.particlePlayers.add(loadedPPlayer);
+        		
+        		sync(() -> callback.execute(loadedPPlayer));
+        	});
         });
-    }
-
-    /**
-     * Gets a PPlayer matching the UUID given
-     * If createIfNotFound is true, one will be created if it doesn't exist
-     * 
-     * @param playerUUID The UUID to match the PPlayer to
-     * @param createIfNotFound If true, creates a new PPlayer if the requested one doesn't exist
-     * @param callback The callback to execute with the built PPlayer
-     */
-    private static void buildPPlayer(UUID playerUUID, boolean createIfNotFound, ConfigurationCallback<PPlayer> callback) {
-    	async(() -> {
-            String id = playerUUID.toString(); // @formatter:off
-            PlayerParticles.databaseConnector.connect((connection) -> {
-                String query = "SELECT * FROM pp_users u " + 
-                               "JOIN pp_data_item i ON u.player_uuid = i.uuid " + 
-                               "JOIN pp_data_block b ON u.player_uuid = b.uuid " +
-                               "JOIN pp_data_color c ON u.player_uuid = c.uuid " +
-                               "JOIN pp_data_note n ON u.player_uuid = n.uuid " +
-                               "WHERE u.player_uuid = '" + id + "'";
-                
-                try (Statement statement = connection.createStatement();
-                    ResultSet res = statement.executeQuery(query)) {
-
-                    if (res.next()) {
-                        ParticleEffect particleEffect = ParticleEffect.fromName(res.getString("u.effect"));
-                        ParticleStyle particleStyle = ParticleStyleManager.styleFromString(res.getString("u.style"));
-                        ItemData particleItemData = new ItemData(Material.matchMaterial(res.getString("i.material")));
-                        BlockData particleBlockData = new BlockData(Material.matchMaterial(res.getString("b.material")));
-                        OrdinaryColor particleColorData = new OrdinaryColor(res.getInt("c.r"), res.getInt("c.g"), res.getInt("c.b"));
-                        NoteColor particleNoteColorData = new NoteColor(res.getByte("n.note"));
-
-                        sync(() -> callback.execute(new PPlayer(playerUUID, particleEffect, particleStyle, particleItemData, particleBlockData, particleColorData, particleNoteColorData)));
-                        return;
-                    }
-                    
-                    if (createIfNotFound) { // Didn't find an existing PPlayer, create and return a new one
-                        PPlayer pplayer = PPlayer.getNewPPlayer(playerUUID);
-                        saveNewPPlayer(pplayer);
-                        sync(() -> callback.execute(pplayer));
-                    }
-                }
-            });
-        });
-    }
-
-    /**
-     * Saves a new PPlayer to the database or the file
-     * 
-     * @param pplayer The PPlayer to save
-     */
-    public static void saveNewPPlayer(PPlayer pplayer) {
-    	async(() -> {
-            PlayerParticles.databaseConnector.connect((connection) -> {
-                try (Statement statement = connection.createStatement();
-                     ResultSet res = statement.executeQuery("SELECT * FROM pp_users WHERE player_uuid = '" + pplayer.getUniqueId() + "'")) {
-                    
-                    if (!res.next()) {
-                        PlayerParticles.databaseConnector.updateSQL("INSERT INTO pp_users (player_uuid, effect, style) VALUES (" +
-                                                        "'" + pplayer.getUniqueId().toString() + "', " +
-                                                        "'" + pplayer.getParticleEffect().getName() + "', " +
-                                                        "'" + pplayer.getParticleStyle().getName() + "'" +
-                                                        "); " +
-                                                        "INSERT INTO pp_data_item (uuid, material) VALUES (" +
-                                                        "'" + pplayer.getUniqueId().toString() + "', " +
-                                                        "'" + pplayer.getMaterialData().getMaterial().name() + "'" +
-                                                        "); " +
-                                                        "INSERT INTO pp_data_block (uuid, material) VALUES (" +
-                                                        "'" + pplayer.getUniqueId().toString() + "', " +
-                                                        "'" + pplayer.getBlockData().getMaterial().name() + "'" +
-                                                        "); " +
-                                                        "INSERT INTO pp_data_color (uuid, r, g, b) VALUES (" +
-                                                        "'" + pplayer.getUniqueId().toString() + "', " +
-                                                        pplayer.getColorData().getRed() + ", " +
-                                                        pplayer.getColorData().getGreen() + ", " +
-                                                        pplayer.getColorData().getBlue() + 
-                                                        "); " +
-                                                        "INSERT INTO pp_data_note (uuid, note) VALUES (" +
-                                                        "'" + pplayer.getUniqueId().toString() + "', " +
-                                                        (byte) (pplayer.getNoteColorData().getValueX() * 24) +
-                                                        ");"
-                                                        );
-                    } else {
-                        throw new RuntimeException("The user " + pplayer.getUniqueId() + " is already in the database. They can not be added.");
-                    }
-                }
-            });
-        });
-
-        ParticleManager.updateIfContains(pplayer); // Update the player in case this is a /pp reset
     }
     
     /**
-     * Loads a PPlayer and caches it
+     * Saves a ParticleGroup. If it already exists, update it.
      * 
-     * @param playerUUID The pplayer to load
+     * @param playerUUID The owner of the group
+     * @param group The group to create/update
      */
-    public static void loadPPlayer(UUID playerUUID) {
-        for (PPlayer pplayer : ParticleManager.particlePlayers)
-            if (pplayer.getUniqueId() == playerUUID)
-                return;
-        
-        buildPPlayer(playerUUID, false, (pplayer) -> { 
-            ParticleManager.particlePlayers.add(pplayer);
-        });
+    public static void saveParticleGroup(UUID playerUUID, ParticleGroup group) {
+    	async(() -> {
+    		PlayerParticles.databaseConnector.connect((connection) -> {
+    			String groupUUIDQuery = "SELECT uuid FROM pp_group WHERE owner_uuid = ? AND name = ?";
+    			try (PreparedStatement statement = connection.prepareStatement(groupUUIDQuery)) {
+    				statement.setString(1, playerUUID.toString());
+    				statement.setString(2, group.getName());
+    				
+    				String groupUUID = null;
+    				
+    				ResultSet result = statement.executeQuery();
+    				if (result.next()) { // Clear out particles from existing group
+    					groupUUID = result.getString("uuid");
+    					
+    					String particlesDeleteQuery = "DELETE FROM pp_particle WHERE group_uuid = ?";
+    					PreparedStatement particlesDeleteStatement = connection.prepareStatement(particlesDeleteQuery);
+    					particlesDeleteStatement.setString(1, result.getString("uuid"));
+    					
+    					particlesDeleteStatement.executeUpdate();
+    				} else { // Create new group
+    					groupUUID = UUID.randomUUID().toString();
+    					
+    					String groupCreateQuery = "INSERT INTO pp_group (uuid, owner_uuid, name) VALUES (?, ?, ?)";
+    					PreparedStatement groupCreateStatement = connection.prepareStatement(groupCreateQuery);
+    					groupCreateStatement.setString(1, groupUUID);
+    					groupCreateStatement.setString(2, playerUUID.toString());
+    					groupCreateStatement.setString(3, group.getName());
+    					
+    					groupCreateStatement.executeUpdate();
+    				}
+    				
+    				// Fill group with new particles
+    				String createParticlesQuery = "INSERT INTO pp_particle (uuid, group_uuid, id, effect, style, item_material, block_material, note, r, g, b) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    				PreparedStatement particlesStatement = connection.prepareStatement(createParticlesQuery);
+    				for (ParticlePair particle : group.getParticles()) {
+    					particlesStatement.setString(1, UUID.randomUUID().toString());
+    					particlesStatement.setString(2, groupUUID);
+    					particlesStatement.setInt(3, particle.getId());
+    					particlesStatement.setString(4, particle.getEffect().getName());
+    					particlesStatement.setString(5, particle.getStyle().getName());
+    					particlesStatement.setString(6, particle.getItemMaterial().name());
+    					particlesStatement.setString(7, particle.getBlockMaterial().name());
+    					particlesStatement.setInt(8, particle.getNoteColor().getNote());
+    					particlesStatement.setInt(9, particle.getColor().getRed());
+    					particlesStatement.setInt(10, particle.getColor().getGreen());
+    					particlesStatement.setInt(11, particle.getColor().getBlue());
+    					particlesStatement.addBatch();
+    				}
+    			}
+    		});
+    	});
+    	
+    	getPPlayer(playerUUID, (pplayer) -> {
+    		for (ParticleGroup existing : pplayer.getParticles()) {
+    			if (existing.getName().equalsIgnoreCase(group.getName())) {
+    				pplayer.getParticles().remove(existing);
+    				break;
+    			}
+    		}
+    		pplayer.getParticles().add(group);
+    	});
     }
-
+    
     /**
-     * Resets all saved information about a PPlayer
-     * This should be made into a single batch query in the future
+     * Removes a ParticleGroup
      * 
-     * @param playerUUID The pplayer to reset
+     * @param playerUUID The owner of the group
+     * @param group The group to remove
      */
-    public static void resetPPlayer(UUID playerUUID) {
-        PPlayer pplayer = PPlayer.getNewPPlayer(playerUUID);
-        savePPlayer(playerUUID, pplayer.getParticleEffect());
-        savePPlayer(playerUUID, pplayer.getParticleStyle());
-        savePPlayer(playerUUID, pplayer.getMaterialData());
-        savePPlayer(playerUUID, pplayer.getBlockData());
-        savePPlayer(playerUUID, pplayer.getColorData());
-        savePPlayer(playerUUID, pplayer.getNoteColorData());
-    }
-
-    /**
-     * Saves the effect to the player's save file or database entry
-     * 
-     * @param playerUUID The UUID of the player
-     * @param particleEffect The effect that is being saved
-     */
-    public static void savePPlayer(UUID playerUUID, ParticleEffect particleEffect) {
-        getPPlayer(playerUUID, (pplayer) -> {
-        	async(() -> {
-                try {
-                    PlayerParticles.databaseConnector.updateSQL("UPDATE pp_users SET effect = '" + particleEffect.getName() + "' WHERE player_uuid = '" + playerUUID + "';");
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            });
-        
-            pplayer.setParticleEffect(particleEffect);
-        });
-    }
-
-    /**
-     * Saves the style to the player's save file or database entry
-     * 
-     * @param playerUUID The UUID of the player
-     * @param particleStyle The style that is being saved
-     */
-    public static void savePPlayer(UUID playerUUID, ParticleStyle particleStyle) {
-        getPPlayer(playerUUID, (pplayer) -> {
-        	async(() -> {
-                try {
-                    PlayerParticles.databaseConnector.updateSQL("UPDATE pp_users SET style = '" + particleStyle.getName() + "' WHERE player_uuid = '" + playerUUID + "';");
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            });
-            
-            pplayer.setParticleStyle(particleStyle);
-        });
-    }
-
-    /**
-     * Saves the item data to the player's save file or database entry
-     * 
-     * @param playerUUID The UUID of the player
-     * @param particleItemData The data that is being saved
-     */
-    public static void savePPlayer(UUID playerUUID, ItemData particleItemData) {
-        getPPlayer(playerUUID, (pplayer) -> {
-        	async(() -> {
-                try {
-                    PlayerParticles.databaseConnector.updateSQL("UPDATE pp_data_item SET material = '" + particleItemData.getMaterial().name() + "' WHERE uuid = '" + playerUUID + "';");
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            });
-        
-            pplayer.setItemMaterial(particleItemData);
-        });
-    }
-
-    /**
-     * Saves the block data to the player's save file or database entry
-     * 
-     * @param playerUUID The UUID of the player
-     * @param particleBlockData The data that is being saved
-     */
-    public static void savePPlayer(UUID playerUUID, BlockData particleBlockData) {
-        getPPlayer(playerUUID, (pplayer) -> {
-        	async(() -> {
-                try {
-                    PlayerParticles.databaseConnector.updateSQL("UPDATE pp_data_block SET material = '" + particleBlockData.getMaterial().name() + "' WHERE uuid = '" + playerUUID + "';");
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            });
-        
-            pplayer.setBlockData(particleBlockData);
-        });
-    }
-
-    /**
-     * Saves the color data to the player's save file or database entry
-     * 
-     * @param playerUUID The UUID of the player
-     * @param particleColorData The data that is being saved
-     */
-    public static void savePPlayer(UUID playerUUID, OrdinaryColor particleColorData) {
-        getPPlayer(playerUUID, (pplayer) -> {
-        	async(() -> {
-                try {
-                    PlayerParticles.databaseConnector.updateSQL("UPDATE pp_data_color SET r = " + particleColorData.getRed() + ", g = " + particleColorData.getGreen() + ", b = " + particleColorData.getBlue() + " WHERE uuid = '" + playerUUID + "';");
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            });
-        
-            pplayer.setColorData(particleColorData);
-        });
-    }
-
-    /**
-     * Saves the note color data to the player's save file or database entry
-     * 
-     * @param playerUUID The UUID of the player
-     * @param particleNoteColorData The data that is being saved
-     */
-    public static void savePPlayer(UUID playerUUID, NoteColor particleNoteColorData) {
-        getPPlayer(playerUUID, (pplayer) -> {
-        	async(() -> {
-                try {
-                    PlayerParticles.databaseConnector.updateSQL("UPDATE pp_data_note SET note = " + (byte) (particleNoteColorData.getValueX() * 24) + " WHERE uuid = '" + playerUUID + "';");
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            });
-        
-            pplayer.setNoteColorData(particleNoteColorData);
-        });
+    public static void removeParticleGroup(UUID playerUUID, ParticleGroup group) {
+    	async(() -> {
+    		PlayerParticles.databaseConnector.connect((connection) -> {
+    			String groupQuery = "SELECT * FROM pp_group WHERE owner_uuid = ? AND name = ?";
+    			String particleDeleteQuery = "DELETE FROM pp_particle WHERE group_uuid = ?";
+    			String groupDeleteQuery = "DELETE FROM pp_group WHERE uuid = ?";
+    			
+    			// Execute group uuid query
+    			String groupUUID = null;
+    			try (PreparedStatement statement = connection.prepareStatement(groupQuery)) {
+    				statement.setString(1, playerUUID.toString());
+    				statement.setString(2, group.getName());
+    				
+    				ResultSet result = statement.executeQuery();
+    				groupUUID = result.getString("uuid");
+    			}
+    			
+    			// Execute particle delete update
+    			try (PreparedStatement statement = connection.prepareStatement(particleDeleteQuery)) {
+    				statement.setString(1, groupUUID);
+    				
+    				statement.executeUpdate();
+    			}
+    			
+    			// Execute group delete update
+    			try (PreparedStatement statement = connection.prepareStatement(groupDeleteQuery)) {
+    				statement.setString(1, groupUUID);
+    				
+    				statement.executeUpdate();
+    			}
+    		});
+    	});
+    	
+    	getPPlayer(playerUUID, (pplayer) -> {
+    		pplayer.getParticles().remove(group);
+    	});
     }
 
     /**
      * Saves a fixed effect to save data
+     * Does not perform a check to see if a fixed effect with this id already exists
      * 
      * @param fixedEffect The fixed effect to save
      */
     public static void saveFixedEffect(FixedParticleEffect fixedEffect) {
     	async(() -> {
             PlayerParticles.databaseConnector.connect((connection) -> {
-                try (Statement statement = connection.createStatement();
-                     ResultSet res = statement.executeQuery("SELECT * FROM pp_fixed WHERE player_uuid = '" + fixedEffect.getOwnerUniqueId() + "' AND id = " + fixedEffect.getId())) {
-                    
-                    if (res.next()) {
-                        return;
-                    }
-                    
-                    String fixedEffectUUID = UUID.randomUUID().toString();
-
-                    PlayerParticles.databaseConnector.updateSQL("INSERT INTO pp_fixed (uuid, player_uuid, id, effect, style, worldName, xPos, yPos, zPos) VALUES (" +
-                                                    "'" + fixedEffectUUID + "', " +
-                                                    "'" + fixedEffect.getOwnerUniqueId().toString() + "', " +
-                                                    fixedEffect.getId() + ", " +
-                                                    "'" + fixedEffect.getParticleEffect().getName() + "', " +
-                                                    "'" + fixedEffect.getParticleStyle().getName() + "', " +
-                                                    "'" + fixedEffect.getLocation().getWorld().getName() + "', " +
-                                                    fixedEffect.getLocation().getX() + ", " +
-                                                    fixedEffect.getLocation().getY() + ", " +
-                                                    fixedEffect.getLocation().getZ() +
-                                                    "); " +
-                                                    "INSERT INTO pp_data_item (uuid, material) VALUES (" +
-                                                    "'" + fixedEffectUUID + "', " +
-                                                    "'" + fixedEffect.getMaterialData().getMaterial().name() + "'" +
-                                                    "); " +
-                                                    "INSERT INTO pp_data_block (uuid, material) VALUES (" +
-                                                    "'" + fixedEffectUUID + "', " +
-                                                    "'" + fixedEffect.getBlockData().getMaterial().name() + "'" +
-                                                    "); " +
-                                                    "INSERT INTO pp_data_color (uuid, r, g, b) VALUES (" +
-                                                    "'" + fixedEffectUUID + "', " +
-                                                    fixedEffect.getColorData().getRed() + ", " +
-                                                    fixedEffect.getColorData().getGreen() + ", " +
-                                                    fixedEffect.getColorData().getBlue() + 
-                                                    "); " +
-                                                    "INSERT INTO pp_data_note (uuid, note) VALUES (" +
-                                                    "'" + fixedEffectUUID + "', " +
-                                                    (byte) (fixedEffect.getNoteColorData().getValueX() * 24) +
-                                                    ");"
-                                                    );
-                    
-                    sync(() -> ParticleManager.addFixedEffect(fixedEffect));
+            	String particleUUID = UUID.randomUUID().toString();
+            	
+                String particleQuery = "INSERT INTO pp_particle (uuid, group_uuid, id, effect, style, item_material, block_material, note, r, g, b) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                try (PreparedStatement statement = connection.prepareStatement(particleQuery)) {
+                	ParticlePair particle = fixedEffect.getParticlePair();
+                	statement.setString(1, particleUUID);
+                	statement.setString(2, null);
+                	statement.setInt(3, fixedEffect.getId());
+                	statement.setString(4, particle.getEffect().getName());
+                	statement.setString(5, particle.getStyle().getName());
+					statement.setString(6, particle.getItemMaterial().name());
+					statement.setString(7, particle.getBlockMaterial().name());
+					statement.setInt(8, particle.getNoteColor().getNote());
+					statement.setInt(9, particle.getColor().getRed());
+					statement.setInt(10, particle.getColor().getGreen());
+					statement.setInt(11, particle.getColor().getBlue());
+					statement.executeUpdate();
+                }
+                
+                String fixedEffectQuery = "INSERT INTO pp_fixed (owner_uuid, id, particle_uuid, world, xPos, yPos, zPos) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                try (PreparedStatement statement = connection.prepareStatement(fixedEffectQuery)) {
+                	statement.setString(1, fixedEffect.getOwnerUniqueId().toString());
+                	statement.setInt(2, fixedEffect.getId());
+                	statement.setString(3, particleUUID);
+                	statement.setString(4, fixedEffect.getLocation().getWorld().getName());
+                	statement.setDouble(5, fixedEffect.getLocation().getX());
+                	statement.setDouble(6, fixedEffect.getLocation().getY());
+                	statement.setDouble(7, fixedEffect.getLocation().getZ());
+                	statement.executeUpdate();
                 }
             });
         });
+    	
+    	getPPlayer(fixedEffect.getOwnerUniqueId(), (pplayer) -> {
+    		pplayer.addFixedEffect(fixedEffect);
+    	});
     }
 
     /**
      * Deletes a fixed effect from save data
+     * Does not perform a check to see if a fixed effect with this id already exists
      * 
      * @param playerUUID The player who owns the effect
      * @param id The id of the effect to remove
@@ -400,130 +345,37 @@ public class DataManager {
     public static void removeFixedEffect(UUID playerUUID, int id, ConfigurationCallback<Boolean> callback) {
     	async(() -> {
             PlayerParticles.databaseConnector.connect((connection) -> {
-                try (Statement statement = connection.createStatement();
-                     ResultSet res = statement.executeQuery("SELECT uuid FROM pp_fixed WHERE player_uuid = '" + playerUUID.toString() + "' AND id = " + id)) {
-                    
-                    if (!res.next()) {
-                        callback.execute(false);
-                        return;
-                    }
-                    
-                    String uuid = res.getString("uuid");
-                    PlayerParticles.databaseConnector.updateSQL("DELETE FROM pp_fixed WHERE uuid = '" + uuid + "';" + 
-                                                    "DELETE FROM pp_data_item WHERE uuid = '" + uuid + "';" +
-                                                    "DELETE FROM pp_data_block WHERE uuid = '" + uuid + "';" +
-                                                    "DELETE FROM pp_data_color WHERE uuid = '" + uuid + "';" +
-                                                    "DELETE FROM pp_data_note WHERE uuid = '" + uuid + "';"
-                                                    );
-                    
-                    sync(() -> {
-                        ParticleManager.removeFixedEffectForPlayer(playerUUID, id);
-                        callback.execute(true);
-                    });
+            	String particleUUID = null;
+            	
+                String particleUUIDQuery = "SELECT particle_uuid FROM pp_fixed WHERE owner_uuid = ? AND id = ?";
+                try (PreparedStatement statement = connection.prepareStatement(particleUUIDQuery)) {
+                	statement.setString(1, playerUUID.toString());
+                	statement.setInt(2, id);
+                	
+                	ResultSet result = statement.executeQuery();
+                	particleUUID = result.getString("particle_uuid");
+                }
+                
+                String particleDeleteQuery = "DELETE FROM pp_particle WHERE uuid = ?";
+                try (PreparedStatement statement = connection.prepareStatement(particleDeleteQuery)) {
+                	statement.setString(1, particleUUID);
+                	
+                	statement.executeUpdate();
+                }
+                
+                String fixedEffectDeleteQuery = "DELETE FROM pp_fixed WHERE owner_uuid = ? AND id = ?";
+                try (PreparedStatement statement = connection.prepareStatement(fixedEffectDeleteQuery)) {
+                	statement.setString(1, playerUUID.toString());
+                	statement.setInt(2, id);
+                	
+                	statement.executeUpdate();
                 }
             });
         });
-    }
-
-    /**
-     * Resets all fixed effects for a given player
-     * 
-     * @param playerUUID The player to remove all effects from
-     */
-    public static void resetFixedEffects(UUID playerUUID) {
-    	async(() -> {
-            try { // @formatter:off
-                PlayerParticles.databaseConnector.updateSQL("DELETE FROM pp_data_item WHERE uuid IN (SELECT uuid FROM pp_fixed WHERE player_uuid = '" + playerUUID.toString() + "');" +
-                                                "DELETE FROM pp_data_block WHERE uuid IN (SELECT uuid FROM pp_fixed WHERE player_uuid = '" + playerUUID.toString() + "');" +
-                                                "DELETE FROM pp_data_color WHERE uuid IN (SELECT uuid FROM pp_fixed WHERE player_uuid = '" + playerUUID.toString() + "');" +
-                                                "DELETE FROM pp_data_note WHERE uuid IN (SELECT uuid FROM pp_fixed WHERE player_uuid = '" + playerUUID.toString() + "');" +
-                                                "DELETE FROM pp_fixed WHERE player_uuid = '" + playerUUID.toString() + "';"
-                                                ); // @formatter:on
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        });
-
-        ParticleManager.removeAllFixedEffectsForPlayer(playerUUID);
-    }
-
-    /**
-     * Gets a list of all saved fixed particle effects
-     * 
-     * @param callback The callback to execute with a list of all saved fixed particle effects
-     */
-    public static void getAllFixedEffects(ConfigurationCallback<List<FixedParticleEffect>> callback) {
-    	async(() -> {
-            PlayerParticles.databaseConnector.connect((connection) -> {
-                String query = "SELECT * FROM pp_fixed f " + 
-                               "JOIN pp_data_item i ON f.uuid = i.uuid " + 
-                               "JOIN pp_data_block b ON f.uuid = b.uuid " +
-                               "JOIN pp_data_color c ON f.uuid = c.uuid " +
-                               "JOIN pp_data_note n ON f.uuid = n.uuid";
-                try (Statement statement = connection.createStatement();
-                     ResultSet res = statement.executeQuery(query)) {
-                    
-                    List<FixedParticleEffect> fixedEffects = new ArrayList<FixedParticleEffect>();
-
-                    while (res.next()) {
-                        UUID pplayerUUID = UUID.fromString(res.getString("f.player_uuid"));
-                        int id = res.getInt("f.id");
-                        String worldName = res.getString("f.worldName");
-                        double xPos = res.getDouble("f.xPos");
-                        double yPos = res.getDouble("f.yPos");
-                        double zPos = res.getDouble("f.zPos");
-                        ParticleEffect particleEffect = ParticleManager.effectFromString(res.getString("f.effect"));
-                        ParticleStyle particleStyle = ParticleStyleManager.styleFromString(res.getString("f.style"));
-                        ItemData particleItemData = new ItemData(Material.matchMaterial(res.getString("i.material")));
-                        BlockData particleBlockData = new BlockData(Material.matchMaterial(res.getString("b.material")));
-                        OrdinaryColor particleColorData = new OrdinaryColor(res.getInt("c.r"), res.getInt("c.g"), res.getInt("c.b"));
-                        NoteColor particleNoteColorData = new NoteColor(res.getByte("n.note"));
-                        
-                        fixedEffects.add(new FixedParticleEffect(pplayerUUID, id, worldName, xPos, yPos, zPos, particleEffect, particleStyle, particleItemData, particleBlockData, particleColorData, particleNoteColorData));
-                    }
-
-                    sync(() -> callback.execute(fixedEffects));
-                }
-            });
-        });
-    }
-
-    /**
-     * Gets a fixed effect for a pplayer by its id
-     * 
-     * @param pplayerUUID The player who owns the effect
-     * @param id The id for the effect to get
-     * @param callback The callback to execute with the effect, if one exists
-     */
-    public static void getFixedEffectForPlayerById(UUID pplayerUUID, int id, ConfigurationCallback<FixedParticleEffect> callback) {
-    	async(() -> {
-            PlayerParticles.databaseConnector.connect((connection) -> { // @formatter:off
-                String query = "SELECT * FROM pp_fixed f " +  
-                               "JOIN pp_data_item i ON f.uuid = i.uuid " +
-                               "JOIN pp_data_block b ON f.uuid = b.uuid " +
-                               "JOIN pp_data_color c ON f.uuid = c.uuid " +
-                               "JOIN pp_data_note n ON f.uuid = n.uuid " +
-                               "WHERE f.player_uuid = '" + pplayerUUID.toString() + "' AND f.id = '" + id + "'"; // @formatter:on
-                try (Statement statement = connection.createStatement();
-                     ResultSet res = statement.executeQuery(query)) {
-                    
-                    if (res.next()) {
-                        String worldName = res.getString("f.worldName");
-                        double xPos = res.getDouble("f.xPos");
-                        double yPos = res.getDouble("f.yPos");
-                        double zPos = res.getDouble("f.zPos");
-                        ParticleEffect particleEffect = ParticleManager.effectFromString(res.getString("f.effect"));
-                        ParticleStyle particleStyle = ParticleStyleManager.styleFromString(res.getString("f.style"));
-                        ItemData particleItemData = new ItemData(Material.matchMaterial(res.getString("i.material")));
-                        BlockData particleBlockData = new BlockData(Material.matchMaterial(res.getString("b.material")));
-                        OrdinaryColor particleColorData = new OrdinaryColor(res.getInt("c.r"), res.getInt("c.g"), res.getInt("c.b"));
-                        NoteColor particleNoteColorData = new NoteColor(res.getByte("n.note"));
-
-                        sync(() -> callback.execute(new FixedParticleEffect(pplayerUUID, id, worldName, xPos, yPos, zPos, particleEffect, particleStyle, particleItemData, particleBlockData, particleColorData, particleNoteColorData)));
-                    }
-                }
-            });
-        });
+    	
+    	getPPlayer(playerUUID, (pplayer) -> {
+    		pplayer.removeFixedEffect(id);
+    	});
     }
 
     /**
@@ -533,21 +385,9 @@ public class DataManager {
      * @param callback The callback to execute with a list of all fixed effect ids for the given player
      */
     public static void getFixedEffectIdsForPlayer(UUID pplayerUUID, ConfigurationCallback<List<Integer>> callback) {
-    	async(() -> {
-            PlayerParticles.databaseConnector.connect((connection) -> {
-                try (Statement statement = connection.createStatement();
-                     ResultSet res = statement.executeQuery("SELECT id FROM pp_fixed WHERE player_uuid = '" + pplayerUUID.toString() + "'")) {
-                    
-                    List<Integer> ids = new ArrayList<Integer>();
-                    
-                    while (res.next()) {
-                        ids.add(res.getInt(1));
-                    }
-                    
-                    sync(() -> callback.execute(ids));
-                }
-            });
-        });
+    	getPPlayer(pplayerUUID, (pplayer) -> {
+    		callback.execute(pplayer.getFixedEffectIds());
+    	});
     }
 
     /**
@@ -566,21 +406,9 @@ public class DataManager {
             return;
         }
 
-        async(() -> {
-            PlayerParticles.databaseConnector.connect((connection) -> {
-                try (Statement statement = connection.createStatement();
-                     ResultSet res = statement.executeQuery("SELECT COUNT(1) FROM pp_fixed WHERE player_uuid = '" + pplayerUUID.toString() + "'")) {
-                    
-                    boolean hasReachedMax;
-                    if (res.next()) 
-                        hasReachedMax = res.getInt(1) >= maxFixedEffects;
-                    else 
-                        hasReachedMax = false;
-                    
-                    sync(() -> callback.execute(hasReachedMax));
-                }
-            });
-        });
+        getPPlayer(pplayerUUID, (pplayer) -> {
+    		callback.execute(pplayer.getFixedEffectIds().size() >= maxFixedEffects);
+    	});
     }
 
     /**
@@ -590,30 +418,13 @@ public class DataManager {
      * @param callback The callback to execute with the smallest available Id the player can use
      */
     public static void getNextFixedEffectId(UUID pplayerUUID, ConfigurationCallback<Integer> callback) {
-    	async(() -> {
-            PlayerParticles.databaseConnector.connect((connection) -> {
-                try (Statement statement = connection.createStatement();
-                     ResultSet res = statement.executeQuery("SELECT id FROM pp_fixed WHERE player_uuid = '" + pplayerUUID.toString() + "'")) {
-                    
-                    Set<String> idsSet = new HashSet<String>();
-                    
-                    while (res.next()) 
-                        idsSet.add(res.getInt(1) + "");
-                    
-                    if (idsSet.isEmpty()) {
-                        sync(() -> callback.execute(1));
-                        return;
-                    }
-                    
-                    int[] ids = new int[idsSet.size()];
-                    int i = 0;
-                    for (String key : idsSet)
-                        ids[i++] = Integer.parseInt(key);
-                    
-                    sync(() -> callback.execute(ParticleUtils.getSmallestPositiveInt(ids)));
-                }
-            });
-        });
+    	getPPlayer(pplayerUUID, (pplayer) -> {
+    		List<Integer> fixedEffectIds = pplayer.getFixedEffectIds();
+    		int[] ids = new int[fixedEffectIds.size()];
+    		for (int i = 0; i < fixedEffectIds.size(); i++)
+    			ids[i] = fixedEffectIds.get(i);
+    		callback.execute(ParticleUtils.getSmallestPositiveInt(ids));
+    	});
     }
 
     /**
@@ -690,4 +501,4 @@ public class DataManager {
         public void execute(T obj);
     }
 
-}
+} // @formatter:on
