@@ -207,13 +207,15 @@ public enum ParticleEffect {
      * @param center Center location of the effect
      * @throws ParticleDataException If the particle effect requires additional data
      */
-    public void display(float offsetX, float offsetY, float offsetZ, float speed, int amount, Location center) throws ParticleDataException {
+    public void display(double offsetX, double offsetY, double offsetZ, double speed, int amount, Location center) throws ParticleDataException {
         if (hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
             throw new ParticleDataException("This particle effect requires additional data");
         }
         
-        for (Player player : getPlayersInRange(center))
+        for (Player player : getPlayersInRange(center)) {
             player.spawnParticle(internalEnum, center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed);
+        }
+            
     }
 
     /**
@@ -260,7 +262,7 @@ public enum ParticleEffect {
      * @param center Center location of the effect
      * @throws ParticleDataException If the particle effect does not require additional data or if the data type is incorrect
      */
-    public void display(Material spawnMaterial, float offsetX, float offsetY, float offsetZ, float speed, int amount, Location center) throws ParticleDataException {
+    public void display(Material spawnMaterial, double offsetX, double offsetY, double offsetZ, double speed, int amount, Location center) throws ParticleDataException {
         if (!hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
             throw new ParticleDataException("This particle effect does not require additional data");
         }

@@ -90,24 +90,25 @@ public class DataManager { // @formatter:off
         	
         	PlayerParticles.databaseConnector.connect((connection) -> {
         		// Load particle groups
-        		String groupQuery = "SELECT * FROM pp_group g WHERE g.owner_uuid = ? " + 
-        					   	    "JOIN pp_particle p ON g.uuid = p.group_uuid";
+        		String groupQuery = "SELECT * FROM pp_group g " + 
+        					   	    "JOIN pp_particle p ON g.uuid = p.group_uuid " + 
+        					   	    "WHERE g.owner_uuid = ?";
         		try (PreparedStatement statement = connection.prepareStatement(groupQuery)) {
         			statement.setString(1, playerUUID.toString());
         			
         			ResultSet result = statement.executeQuery();
         			while (result.next()) {
         				// Group properties
-        				String groupName = result.getString("g.name");
+        				String groupName = result.getString("name");
         				
         				// Particle properties
-        				int id = result.getInt("p.id");
-        				ParticleEffect effect = ParticleEffect.fromName(result.getString("p.effect"));
-        				ParticleStyle style = ParticleStyleManager.styleFromString(result.getString("p.style"));
-        				Material itemMaterial = ParticleUtils.closestMatchWithFallback(result.getString("p.item_material"));
-        				Material blockMaterial = ParticleUtils.closestMatchWithFallback(result.getString("p.block_material"));
-        				NoteColor noteColor = new NoteColor(result.getInt("p.note"));
-        				OrdinaryColor color = new OrdinaryColor(result.getInt("p.r"), result.getInt("p.g"), result.getInt("p.b"));
+        				int id = result.getInt("id");
+        				ParticleEffect effect = ParticleEffect.fromName(result.getString("effect"));
+        				ParticleStyle style = ParticleStyleManager.styleFromString(result.getString("style"));
+        				Material itemMaterial = ParticleUtils.closestMatchWithFallback(result.getString("item_material"));
+        				Material blockMaterial = ParticleUtils.closestMatchWithFallback(result.getString("block_material"));
+        				NoteColor noteColor = new NoteColor(result.getInt("note"));
+        				OrdinaryColor color = new OrdinaryColor(result.getInt("r"), result.getInt("g"), result.getInt("b"));
         				ParticlePair particle = new ParticlePair(playerUUID, id, effect, style, itemMaterial, blockMaterial, color, noteColor);
         				
         				// Try to add particle to an existing group
@@ -131,28 +132,29 @@ public class DataManager { // @formatter:off
         		}
         		
         		// Load fixed effects
-        		String fixedQuery = "SELECT * FROM pp_fixed f WHERE f.owner_uuid = ? " +
-        						    "JOIN pp_particle p ON f.particle_uuid = p.uuid";
+        		String fixedQuery = "SELECT f.id AS f_id, f.world, f.xPos, f.yPos, f.zPos, p.id AS p_id, p.effect, p.style, p.item_material, p.block_material, p.note, p.r, p.g, p.b FROM pp_fixed f " +
+        						    "JOIN pp_particle p ON f.particle_uuid = p.uuid " + 
+        						    "WHERE f.owner_uuid = ?";
         		try (PreparedStatement statement = connection.prepareStatement(fixedQuery)) {
         			statement.setString(1, playerUUID.toString());
         			
         			ResultSet result = statement.executeQuery();
         			while (result.next()) {
         				// Fixed effect properties
-        				int fixedEffectId = result.getInt("f.id");
-        				String worldName = result.getString("f.world");
-        				double xPos = result.getDouble("f.xPos");
-        				double yPos = result.getDouble("f.yPos");
-        				double zPos = result.getDouble("f.zPos");
+        				int fixedEffectId = result.getInt("f_id");
+        				String worldName = result.getString("world");
+        				double xPos = result.getDouble("xPos");
+        				double yPos = result.getDouble("yPos");
+        				double zPos = result.getDouble("zPos");
         				
         				// Particle properties
-        				int particleId = result.getInt("p.id");
-        				ParticleEffect effect = ParticleEffect.fromName(result.getString("p.effect"));
-        				ParticleStyle style = ParticleStyleManager.styleFromString(result.getString("p.style"));
-        				Material itemMaterial = ParticleUtils.closestMatchWithFallback(result.getString("p.item_material"));
-        				Material blockMaterial = ParticleUtils.closestMatchWithFallback(result.getString("p.block_material"));
-        				NoteColor noteColor = new NoteColor(result.getInt("p.note"));
-        				OrdinaryColor color = new OrdinaryColor(result.getInt("p.r"), result.getInt("p.g"), result.getInt("p.b"));
+        				int particleId = result.getInt("p_id");
+        				ParticleEffect effect = ParticleEffect.fromName(result.getString("effect"));
+        				ParticleStyle style = ParticleStyleManager.styleFromString(result.getString("style"));
+        				Material itemMaterial = ParticleUtils.closestMatchWithFallback(result.getString("item_material"));
+        				Material blockMaterial = ParticleUtils.closestMatchWithFallback(result.getString("block_material"));
+        				NoteColor noteColor = new NoteColor(result.getInt("note"));
+        				OrdinaryColor color = new OrdinaryColor(result.getInt("r"), result.getInt("g"), result.getInt("b"));
         				ParticlePair particle = new ParticlePair(playerUUID, particleId, effect, style, itemMaterial, blockMaterial, color, noteColor);
         				
         				fixedParticles.add(new FixedParticleEffect(playerUUID, fixedEffectId, worldName, xPos, yPos, zPos, particle));
@@ -232,8 +234,10 @@ public class DataManager { // @formatter:off
     	});
     	
     	getPPlayer(playerUUID, (pplayer) -> {
+    	    String groupName = group.getName() == null ? "" : group.getName();
     		for (ParticleGroup existing : pplayer.getParticles()) {
-    			if (existing.getName().equalsIgnoreCase(group.getName())) {
+    		    String existingName = existing.getName() == null ? "" : existing.getName();
+    			if (groupName.equalsIgnoreCase(existingName)) {
     				pplayer.getParticles().remove(existing);
     				break;
     			}

@@ -31,6 +31,8 @@ public class ParticleCommandHandler implements CommandExecutor, TabCompleter {
     private static List<CommandModule> commands;
     
     static {
+        commands = new ArrayList<CommandModule>();
+        
         commands.add(new AddCommandModule());
         commands.add(new DataCommandModule());
         commands.add(new DefaultCommandModule());

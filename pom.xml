@@ -42,7 +42,6 @@
                   <include>com.zaxxer:HikariCP</include>
                   <include>org.slf4j:slf4j-api</include>
                   <include>org.slf4j:slf4j-nop</include>
-                  <include>org.xerial:sqlite-jdbc</include>
                 </includes>
               </artifactSet>
               <filters>
@@ -70,7 +69,6 @@
                   <include>com.zaxxer:HikariCP</include>
                   <include>org.slf4j:slf4j-api</include>
                   <include>org.slf4j:slf4j-nop</include>
-                  <include>org.xerial:sqlite-jdbc</include>
                 </includes>
               </artifactSet>
               <filters>
@@ -98,7 +96,6 @@
                   <include>com.zaxxer:HikariCP</include>
                   <include>org.slf4j:slf4j-api</include>
                   <include>org.slf4j:slf4j-nop</include>
-                  <include>org.xerial:sqlite-jdbc</include>
                 </includes>
               </artifactSet>
               <filters>
@@ -126,7 +123,6 @@
                   <include>com.zaxxer:HikariCP</include>
                   <include>org.slf4j:slf4j-api</include>
                   <include>org.slf4j:slf4j-nop</include>
-                  <include>org.xerial:sqlite-jdbc</include>
                 </includes>
               </artifactSet>
               <filters>
@@ -154,7 +150,6 @@
                   <include>com.zaxxer:HikariCP</include>
                   <include>org.slf4j:slf4j-api</include>
                   <include>org.slf4j:slf4j-nop</include>
-                  <include>org.xerial:sqlite-jdbc</include>
                 </includes>
               </artifactSet>
               <filters>

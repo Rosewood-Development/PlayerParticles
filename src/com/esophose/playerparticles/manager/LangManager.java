@@ -224,14 +224,18 @@ public class LangManager {
     private static YamlConfiguration configureLangFile(FileConfiguration config) {
     	File pluginDataFolder = PlayerParticles.getPlugin().getDataFolder();
     	langFileName = config.getString("lang-file");
-    	File targetLangFile = new File(pluginDataFolder.getAbsolutePath() + File.pathSeparator + "lang" + File.pathSeparator + langFileName);
+    	File targetLangFile = new File(pluginDataFolder.getAbsolutePath() + "/lang/" + langFileName);
     	
     	if (!targetLangFile.exists()) { // Target .lang file didn't exist, default to en_US.lang
-    		PlayerParticles.getPlugin().getLogger().warning("Couldn't find lang file '" + langFileName + "', defaulting to en_US.lang");
+    	    if (!langFileName.equals("en_US.lang")) {
+    	        PlayerParticles.getPlugin().getLogger().warning("Couldn't find lang file '" + langFileName + "', defaulting to en_US.lang");
+    	    }
     		langFileName = "en_US.lang";
-    		targetLangFile = new File(pluginDataFolder.getAbsolutePath() + File.pathSeparator + "lang" + File.pathSeparator + langFileName);
+    		
+    		targetLangFile = new File(pluginDataFolder.getAbsolutePath() + "/lang/" + langFileName);
     		if (!targetLangFile.exists()) { // en_US.lang didn't exist, create it
     			try (InputStream stream = PlayerParticles.getPlugin().getResource("lang/en_US.lang")) {
+    			    targetLangFile.getParentFile().mkdir(); // Make sure the directory always exists
         			Files.copy(stream, Paths.get(targetLangFile.getAbsolutePath()));
         			return YamlConfiguration.loadConfiguration(targetLangFile);
     			} catch (IOException ex) {

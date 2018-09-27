@@ -11,16 +11,16 @@ import com.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class ParticleStyleQuadhelix implements ParticleStyle {
 
-    private float stepX = 0;
-    private float stepY = 0;
+    private int stepX = 0;
+    private int stepY = 0;
     private boolean reverse = false;
 
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<PParticle>();
         for (int i = 0; i < 4; i++) {
-            double dx = -(Math.cos((stepX / 90) * (Math.PI * 2) + ((Math.PI / 2) * i))) * ((60 - Math.abs(stepY)) / 60);
-            double dy = (stepY / 60) * 1.5;
-            double dz = -(Math.sin((stepX / 90) * (Math.PI * 2) + ((Math.PI / 2) * i))) * ((60 - Math.abs(stepY)) / 60);
+            double dx = -(Math.cos((stepX / 90D) * (Math.PI * 2) + ((Math.PI / 2) * i))) * ((60 - Math.abs(stepY)) / 60);
+            double dy = (stepY / 60D) * 1.5;
+            double dz = -(Math.sin((stepX / 90D) * (Math.PI * 2) + ((Math.PI / 2) * i))) * ((60 - Math.abs(stepY)) / 60);
             particles.add(new PParticle(new Location(location.getWorld(), location.getX() + dx, location.getY() + dy, location.getZ() + dz)));
         }
         return particles;

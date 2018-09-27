@@ -11,14 +11,14 @@ import com.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class ParticleStyleOrbit implements ParticleStyle {
 
-    private float step = 0;
+    private int step = 0;
 
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         int orbs = 3;
         List<PParticle> particles = new ArrayList<PParticle>();
         for (int i = 0; i < orbs; i++) {
-            double dx = -(Math.cos((step / 120) * (Math.PI * 2) + (((Math.PI * 2) / orbs) * i)));
-            double dz = -(Math.sin((step / 120) * (Math.PI * 2) + (((Math.PI * 2) / orbs) * i)));
+            double dx = -(Math.cos((step / 120D) * (Math.PI * 2) + (((Math.PI * 2) / orbs) * i)));
+            double dz = -(Math.sin((step / 120D) * (Math.PI * 2) + (((Math.PI * 2) / orbs) * i)));
             particles.add(new PParticle(new Location(location.getWorld(), location.getX() + dx, location.getY(), location.getZ() + dz)));
         }
         return particles;

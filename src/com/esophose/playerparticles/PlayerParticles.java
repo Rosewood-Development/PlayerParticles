@@ -150,7 +150,7 @@ public class PlayerParticles extends JavaPlugin {
     	}
     	
     	if (!databaseConnector.isInitialized()) {
-    		getLogger().severe("Unable to connect to the MySql database! Is your login information correct? Falling back to file database.");
+    		getLogger().severe("Unable to connect to the MySQL database! Is your login information correct? Falling back to SQLite database instead.");
     		configureDatabase(false);
     		return;
     	}
@@ -159,35 +159,56 @@ public class PlayerParticles extends JavaPlugin {
     		// Check if pp_users exists, if it does, this is an old database schema that needs to be deleted
     		try { // @formatter:off
     			try (Statement statement = connection.createStatement()) {
-        			ResultSet result = statement.executeQuery("SHOW TABLES LIKE 'pp_users'");
+    			    String pp_usersQuery;
+    			    if (useMySql) {
+    			        pp_usersQuery = "SHOW TABLES LIKE 'pp_users'";
+    			    } else {
+    			        pp_usersQuery = "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'pp_users'";
+    			    }
+        			ResultSet result = statement.executeQuery(pp_usersQuery);
         			if (result.next()) {
+        			    statement.close();
+        			    
         				Statement dropStatement = connection.createStatement();
-        				dropStatement.addBatch("DROP TABLE pp_users");
-        				dropStatement.addBatch("DROP TABLE pp_fixed");
-        				dropStatement.addBatch("DROP TABLE pp_data_item");
-        				dropStatement.addBatch("DROP TABLE pp_data_block");
-        				dropStatement.addBatch("DROP TABLE pp_data_color");
-        				dropStatement.addBatch("DROP TABLE pp_data_note");
+        				dropStatement.addBatch("DROP TABLE IF EXISTS pp_users");
+        				dropStatement.addBatch("DROP TABLE IF EXISTS pp_fixed");
+        				dropStatement.addBatch("DROP TABLE IF EXISTS pp_data_item");
+        				dropStatement.addBatch("DROP TABLE IF EXISTS pp_data_block");
+        				dropStatement.addBatch("DROP TABLE IF EXISTS pp_data_color");
+        				dropStatement.addBatch("DROP TABLE IF EXISTS pp_data_note");
         				dropStatement.executeBatch();
+        				getLogger().warning("Deleted old " + (useMySql ? "MySQL" : "SQLite") + " database schema, it was out of date.");
         			}
         		}
     			
     			// Check if pp_group exists, if it doesn't, we need to create all the tables
         		try (Statement statement = connection.createStatement()) {
-        			ResultSet result = statement.executeQuery("SHOW TABLES LIKE 'pp_group'");
+        		    String pp_groupQuery;
+                    if (useMySql) {
+                        pp_groupQuery = "SHOW TABLES LIKE 'pp_group'";
+                    } else {
+                        pp_groupQuery = "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'pp_group'";
+                    }
+        			ResultSet result = statement.executeQuery(pp_groupQuery);
         			if (!result.next()) {
+        			    statement.close();
+        			    
         				Statement createStatement = connection.createStatement();
-        				createStatement.addBatch("CREATE TABLE pp_player (uuid VARCHAR(36))");
-        				createStatement.addBatch("CREATE TABLE pp_group (uuid VARCHAR(36), owner_uuid VARCHAR(36), name VARCHAR(100))");
-        				createStatement.addBatch("CREATE TABLE pp_fixed (owner_uuid VARCHAR(36), id SMALLINT, particle_uuid VARCHAR(36), world VARCHAR(100), xPos DOUBLE, yPos DOUBLE, zPos DOUBLE)");
-        				createStatement.addBatch("CREATE TABLE pp_particle (uuid VARCHAR(36), group_uuid VARCHAR(36), id SMALLINT, effect VARCHAR(100), style VARCHAR(100), item_material VARCHAR(100), block_material VARCHAR(100), note SMALLINT, r SMALLINT, g SMALLINT, b SMALLINT)");
+        				createStatement.addBatch("CREATE TABLE IF NOT EXISTS pp_group (uuid VARCHAR(36), owner_uuid VARCHAR(36), name VARCHAR(100))");
+        				createStatement.addBatch("CREATE TABLE IF NOT EXISTS pp_fixed (owner_uuid VARCHAR(36), id SMALLINT, particle_uuid VARCHAR(36), world VARCHAR(100), xPos DOUBLE, yPos DOUBLE, zPos DOUBLE)");
+        				createStatement.addBatch("CREATE TABLE IF NOT EXISTS pp_particle (uuid VARCHAR(36), group_uuid VARCHAR(36), id SMALLINT, effect VARCHAR(100), style VARCHAR(100), item_material VARCHAR(100), block_material VARCHAR(100), note SMALLINT, r SMALLINT, g SMALLINT, b SMALLINT)");
         				createStatement.executeBatch();
+        				getLogger().warning("Created new " + (useMySql ? "MySQL" : "SQLite") + " database schema.");
         			}
         		}
     		} catch (SQLException ex) {
-    			getLogger().severe("Unable to connect to the MySql database! Is your login information correct? Falling back to file database instead.");
-        		configureDatabase(false);
-        		return;
+    		    ex.printStackTrace();
+    			if (useMySql) {
+    			    getLogger().severe("Unable to connect to the MySQL database! Is your login information correct? Falling back to SQLite database instead.");
+    			    configureDatabase(false);
+    			} else {
+    			    getLogger().severe("Unable to connect to the SQLite database! This is a critical error, the plugin will be unable to save any data.");
+    			}
     		}
     	}); // @formatter:on
     }

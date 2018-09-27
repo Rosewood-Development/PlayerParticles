@@ -11,7 +11,7 @@ import com.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class ParticleStyleBeam implements ParticleStyle {
 
-    private float step = 0;
+    private int step = 0;
     private boolean reversed = false;
 
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
@@ -22,7 +22,7 @@ public class ParticleStyleBeam implements ParticleStyle {
         for (int i = 0; i < points; i++) {
             double angle = slice * i;
             double newX = location.getX() + radius * Math.cos(angle);
-            double newY = location.getY() + (step / 10) - 1;
+            double newY = location.getY() + (step / 10D) - 1;
             double newZ = location.getZ() + radius * Math.sin(angle);
             particles.add(new PParticle(new Location(location.getWorld(), newX, newY, newZ)));
         }

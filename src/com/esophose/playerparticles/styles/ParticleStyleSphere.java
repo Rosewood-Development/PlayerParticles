@@ -13,7 +13,7 @@ public class ParticleStyleSphere implements ParticleStyle {
 
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         int density = 15;
-        float radius = 1.5f;
+        double radius = 1.5f;
         List<PParticle> particles = new ArrayList<PParticle>();
 
         for (int i = 0; i < density; i++) {

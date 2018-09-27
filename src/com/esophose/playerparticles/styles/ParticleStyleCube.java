@@ -41,7 +41,7 @@ import com.esophose.playerparticles.util.VectorUtils;
  */
 public class ParticleStyleCube implements ParticleStyle {
 
-    private float edgeLength = 2;
+    private double edgeLength = 2;
     private double angularVelocityX = (Math.PI / 200) / 5;
     private double angularVelocityY = (Math.PI / 170) / 5;
     private double angularVelocityZ = (Math.PI / 155) / 5;
@@ -57,7 +57,7 @@ public class ParticleStyleCube implements ParticleStyle {
             xRotation = step * angularVelocityX;
             yRotation = step * angularVelocityY;
             zRotation = step * angularVelocityZ;
-            float a = edgeLength / 2;
+            double a = edgeLength / 2;
             double angleX, angleY;
             Vector v = new Vector();
             for (int i = 0; i < 4; i++) {

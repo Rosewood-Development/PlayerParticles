@@ -16,8 +16,8 @@ public class PParticle {
      * Data that determines where the particle will spawn
      */
     private Location location;
-    private float speed;
-    private float xOff, yOff, zOff;
+    private double speed;
+    private double xOff, yOff, zOff;
 
     /**
      * The constructor with all the fancy parameters for customization
@@ -28,7 +28,7 @@ public class PParticle {
      * @param zOff The offset for the z-axis
      * @param speed The speed the particle will move at
      */
-    public PParticle(Location location, float xOff, float yOff, float zOff, float speed) {
+    public PParticle(Location location, double xOff, double yOff, double zOff, double speed) {
         this.location = location;
         this.xOff = xOff;
         this.yOff = yOff;
@@ -75,7 +75,7 @@ public class PParticle {
      * 
      * @return The particle's speed
      */
-    public float getSpeed() {
+    public double getSpeed() {
         return this.speed;
     }
 
@@ -84,7 +84,7 @@ public class PParticle {
      * 
      * @return The x-axis offset
      */
-    public float getXOff() {
+    public double getXOff() {
         return this.xOff;
     }
 
@@ -93,7 +93,7 @@ public class PParticle {
      * 
      * @return The y-axis offset
      */
-    public float getYOff() {
+    public double getYOff() {
         return this.yOff;
     }
 
@@ -102,7 +102,7 @@ public class PParticle {
      * 
      * @return The z-axis offset
      */
-    public float getZOff() {
+    public double getZOff() {
         return this.zOff;
     }
 

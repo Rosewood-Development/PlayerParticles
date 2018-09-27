@@ -11,7 +11,7 @@ import com.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class ParticleStyleSpin implements ParticleStyle {
 
-	private float step = 0;
+	private int step = 0;
 
 	public List<PParticle> getParticles(ParticlePair particle, Location location) {
 		int points = 15;
