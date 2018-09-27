@@ -8,7 +8,7 @@ import com.esophose.playerparticles.particles.PPlayer;
 public class AddCommandModule implements CommandModule {
 
 	public void onCommandExecute(PPlayer pplayer, String[] args) {
-
+		
 	}
 
 	public List<String> onTabComplete(PPlayer pplayer, String[] args) {

@@ -256,5 +256,21 @@ public class ParticlePair {
     							new OrdinaryColor(0, 0, 0), 
     							new NoteColor(0)); // @formatter:on
     }
+    
+    /**
+     * Gets a ParticlePair with the default values applied
+     * 
+     * @return A ParticlePair with default values
+     */
+    public static ParticlePair getDefault(UUID ownerUUID) {
+    	return new ParticlePair(ownerUUID, // @formatter:off
+								1, 
+								ParticleEffect.NONE, 
+								DefaultStyles.NONE, 
+								ParticleUtils.closestMatchWithFallback("IRON_SHOVEL", "IRON_SPADE"), 
+								Material.STONE, 
+								new OrdinaryColor(0, 0, 0), 
+								new NoteColor(0)); // @formatter:on
+    }
 	
 }

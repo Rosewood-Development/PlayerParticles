@@ -16,6 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.esophose.playerparticles.styles.api.ParticleStyle;
+import com.esophose.playerparticles.util.ParticleUtils;
 
 public class PPlayer {
 
@@ -148,6 +149,11 @@ public class PPlayer {
     	return null;
     }
     
+    /**
+     * Gets a list of ids of all fixed effect this player has
+     * 
+     * @return A List<Integer> of ids this player's fixed effects have
+     */
     public List<Integer> getFixedEffectIds() {
     	List<Integer> ids = new ArrayList<Integer>();
     	for (FixedParticleEffect fixedEffect : this.fixedParticles)
@@ -173,6 +179,20 @@ public class PPlayer {
         for (int i = this.fixedParticles.size() - 1; i >= 0; i--) 
             if (this.fixedParticles.get(i).getId() == id) 
             	this.fixedParticles.remove(i);
+    }
+    
+    /**
+     * Gets the next Id for a player's fixed effects
+     * 
+     * @param pplayerUUID The player to get the Id for
+     * @return The next available fixed effect id
+     */
+    public int getNextFixedEffectId() {
+    	List<Integer> fixedEffectIds = this.getFixedEffectIds();
+		int[] ids = new int[fixedEffectIds.size()];
+		for (int i = 0; i < fixedEffectIds.size(); i++)
+			ids[i] = fixedEffectIds.get(i);
+		return ParticleUtils.getSmallestPositiveInt(ids);
     }
 
 }

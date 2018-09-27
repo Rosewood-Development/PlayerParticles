@@ -48,6 +48,8 @@ public class LangManager {
     	STYLES_COMMAND_DESCRIPTION("styles-command-description"),
     	VERSION_COMMAND_DESCRIPTION("version-command-description"),
     	WORLDS_COMMAND_DESCRIPTION("worlds-command-description"),
+    	
+    	COMMAND_REMOVED("command-removed"),
 
         // Particles
         NO_PERMISSION("message-no-permission"),
@@ -163,8 +165,8 @@ public class LangManager {
          * 
          * @return The message
          */
-        public String get() {
-            return this.message;
+        public String get(String... replacements) {
+            return String.format(this.message, (Object[])replacements);
         }
 
         /**

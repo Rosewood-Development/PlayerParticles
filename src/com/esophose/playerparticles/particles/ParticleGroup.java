@@ -1,5 +1,6 @@
 package com.esophose.playerparticles.particles;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ParticleGroup {
@@ -29,6 +30,15 @@ public class ParticleGroup {
 	 */
 	public List<ParticlePair> getParticles() {
 		return this.particles;
+	}
+	
+	/**
+	 * Gets an empty ParticleGroup
+	 * 
+	 * @return The default empty active ParticleGroup
+	 */
+	public static ParticleGroup getDefaultGroup() {
+		return new ParticleGroup(null, new ArrayList<ParticlePair>());
 	}
 	
 }

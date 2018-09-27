@@ -38,7 +38,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
     /**
      * The list containing all the loaded PPlayer info
      */
-    public static ArrayList<PPlayer> particlePlayers = new ArrayList<PPlayer>();
+    public static List<PPlayer> particlePlayers = new ArrayList<PPlayer>();
 
     /**
      * Rainbow particle effect hue and note color used for rainbow colorable effects
@@ -67,6 +67,15 @@ public class ParticleManager extends BukkitRunnable implements Listener {
         PPlayer pplayer = DataManager.getPPlayer(e.getPlayer().getUniqueId());
         if (pplayer != null)
             particlePlayers.remove(pplayer);
+    }
+    
+    /**
+     * Gets the PPlayers that are loaded
+     * 
+     * @return The loaded PPlayers
+     */
+    public static List<PPlayer> getPPlayers() {
+    	return particlePlayers;
     }
 
     /**

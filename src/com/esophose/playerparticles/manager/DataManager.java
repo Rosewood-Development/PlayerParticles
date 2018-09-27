@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -342,7 +341,7 @@ public class DataManager { // @formatter:off
      * @param id The id of the effect to remove
      * @param callback The callback to execute with if the fixed effect was removed or not
      */
-    public static void removeFixedEffect(UUID playerUUID, int id, ConfigurationCallback<Boolean> callback) {
+    public static void removeFixedEffect(UUID playerUUID, int id) {
     	async(() -> {
             PlayerParticles.databaseConnector.connect((connection) -> {
             	String particleUUID = null;
@@ -379,52 +378,19 @@ public class DataManager { // @formatter:off
     }
 
     /**
-     * Gets a list of all fixed effect ids for a player
-     * 
-     * @param pplayerUUID The player
-     * @param callback The callback to execute with a list of all fixed effect ids for the given player
-     */
-    public static void getFixedEffectIdsForPlayer(UUID pplayerUUID, ConfigurationCallback<List<Integer>> callback) {
-    	getPPlayer(pplayerUUID, (pplayer) -> {
-    		callback.execute(pplayer.getFixedEffectIds());
-    	});
-    }
-
-    /**
      * Checks if the given player has reached the max number of fixed effects
      * 
      * @param pplayerUUID The player to check
-     * @param callback The callback to execute with if the player can create any more fixed effects
+	 * @return If the player has reached the max number of fixed effects
      */
-    public static void hasPlayerReachedMaxFixedEffects(UUID pplayerUUID, ConfigurationCallback<Boolean> callback) {
+    public static boolean hasPlayerReachedMaxFixedEffects(PPlayer pplayer) {
         if (maxFixedEffects == -1) { // Initialize on the fly
             maxFixedEffects = PlayerParticles.getPlugin().getConfig().getInt("max-fixed-effects");
         }
-
-        if (Bukkit.getPlayer(pplayerUUID).hasPermission("playerparticles.fixed.unlimited")) {
-            callback.execute(false);
-            return;
-        }
-
-        getPPlayer(pplayerUUID, (pplayer) -> {
-    		callback.execute(pplayer.getFixedEffectIds().size() >= maxFixedEffects);
-    	});
-    }
-
-    /**
-     * Gets the next Id for a player's fixed effects
-     * 
-     * @param pplayerUUID The player to get the Id for
-     * @param callback The callback to execute with the smallest available Id the player can use
-     */
-    public static void getNextFixedEffectId(UUID pplayerUUID, ConfigurationCallback<Integer> callback) {
-    	getPPlayer(pplayerUUID, (pplayer) -> {
-    		List<Integer> fixedEffectIds = pplayer.getFixedEffectIds();
-    		int[] ids = new int[fixedEffectIds.size()];
-    		for (int i = 0; i < fixedEffectIds.size(); i++)
-    			ids[i] = fixedEffectIds.get(i);
-    		callback.execute(ParticleUtils.getSmallestPositiveInt(ids));
-    	});
+        
+        if (pplayer.getPlayer().hasPermission("playerparticles.fixed.unlimited"))
+        	return false;
+        return pplayer.getFixedEffectIds().size() >= maxFixedEffects;
     }
 
     /**
