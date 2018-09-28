@@ -39,8 +39,8 @@ import com.esophose.playerparticles.updater.PluginUpdateListener;
 import com.esophose.playerparticles.updater.Updater;
 
 public class PlayerParticles extends JavaPlugin {
-	
-	private static Plugin pluginInstance;
+
+    private static Plugin pluginInstance;
 
     /**
      * The version a new update has, will be null if the config has it disabled
@@ -65,15 +65,15 @@ public class PlayerParticles extends JavaPlugin {
      * Checks for any updates if checking is enabled in the config
      */
     public void onEnable() {
-    	pluginInstance = Bukkit.getServer().getPluginManager().getPlugin("PlayerParticles");
-        
+        pluginInstance = Bukkit.getServer().getPluginManager().getPlugin("PlayerParticles");
+
         getCommand("pp").setTabCompleter(new ParticleCommandHandler());
         getCommand("pp").setExecutor(new ParticleCommandHandler());
-        
+
         Bukkit.getPluginManager().registerEvents(new ParticleManager(), this);
         Bukkit.getPluginManager().registerEvents(new PluginUpdateListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerParticlesGui(), this);
-        
+
         saveDefaultConfig();
         double configVersion = getConfig().getDouble("version");
         if (configVersion < Double.parseDouble(getDescription().getVersion())) {
@@ -85,10 +85,10 @@ public class PlayerParticles extends JavaPlugin {
             reloadConfig();
             getLogger().warning("The config.yml has been updated to v" + getDescription().getVersion() + "!");
         }
-        
+
         DefaultStyles.registerStyles();
         LangManager.setup();
-        
+
         configureDatabase(getConfig().getBoolean("database-enable"));
         startParticleTask();
 
@@ -143,21 +143,21 @@ public class PlayerParticles extends JavaPlugin {
      * Creates new tables if they don't exist
      */
     private void configureDatabase(boolean useMySql) {
-    	if (useMySql) {
-    		databaseConnector = new MySqlDatabaseConnector(this.getConfig());
-    	} else {
-    		databaseConnector = new SqliteDatabaseConnector(this.getDataFolder().getAbsolutePath());
-    	}
-    	
-    	if (!databaseConnector.isInitialized()) {
-    		getLogger().severe("Unable to connect to the MySQL database! Is your login information correct? Falling back to SQLite database instead.");
-    		configureDatabase(false);
-    		return;
-    	}
-    	
-    	databaseConnector.connect((connection) -> {
-    		// Check if pp_users exists, if it does, this is an old database schema that needs to be deleted
-    		try { // @formatter:off
+        if (useMySql) {
+            databaseConnector = new MySqlDatabaseConnector(this.getConfig());
+        } else {
+            databaseConnector = new SqliteDatabaseConnector(this.getDataFolder().getAbsolutePath());
+        }
+
+        if (!databaseConnector.isInitialized()) {
+            getLogger().severe("Unable to connect to the MySQL database! Is your login information correct? Falling back to SQLite database instead.");
+            configureDatabase(false);
+            return;
+        }
+
+        databaseConnector.connect((connection) -> {
+            // Check if pp_users exists, if it does, this is an old database schema that needs to be deleted
+            try { // @formatter:off
     			try (Statement statement = connection.createStatement()) {
     			    String pp_usersQuery;
     			    if (useMySql) {

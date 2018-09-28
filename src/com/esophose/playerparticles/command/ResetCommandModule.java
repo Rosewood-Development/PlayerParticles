@@ -14,20 +14,20 @@ import com.esophose.playerparticles.particles.ParticleGroup;
 
 public class ResetCommandModule implements CommandModule {
 
-	public void onCommandExecute(PPlayer pplayer, String[] args) {
-		if (args.length >= 1) {
+    public void onCommandExecute(PPlayer pplayer, String[] args) {
+        if (args.length >= 1) {
             String altPlayerName = args[0];
             if (!PermissionManager.canUseForceReset(pplayer.getPlayer())) {
                 LangManager.sendMessage(pplayer, Lang.FAILED_EXECUTE_NO_PERMISSION, altPlayerName);
             } else {
-            	Player targetPlayer = null;
-            	for (Player p : Bukkit.getOnlinePlayers()) {
-            		if (p.getName().toLowerCase().contains(altPlayerName.toLowerCase())) {
-                    	targetPlayer = p;
-                    	break;
+                Player targetPlayer = null;
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    if (p.getName().toLowerCase().contains(altPlayerName.toLowerCase())) {
+                        targetPlayer = p;
+                        break;
                     }
-            	}
-            	
+                }
+
                 if (targetPlayer == null) {
                     LangManager.sendMessage(pplayer, Lang.FAILED_EXECUTE_NOT_FOUND, altPlayerName);
                 } else {
@@ -41,26 +41,26 @@ public class ResetCommandModule implements CommandModule {
             DataManager.saveParticleGroup(pplayer.getUniqueId(), ParticleGroup.getDefaultGroup());
             LangManager.sendMessage(pplayer, Lang.RESET);
         }
-	}
+    }
 
-	public List<String> onTabComplete(PPlayer pplayer, String[] args) {
-		return null;
-	}
+    public List<String> onTabComplete(PPlayer pplayer, String[] args) {
+        return null;
+    }
 
-	public String getName() {
-		return "reset";
-	}
+    public String getName() {
+        return "reset";
+    }
 
-	public String getDescription() {
-		return Lang.RESET_COMMAND_DESCRIPTION.get();
-	}
+    public String getDescription() {
+        return Lang.RESET_COMMAND_DESCRIPTION.get();
+    }
 
-	public String getArguments() {
-		return "";
-	}
-	
-	public boolean requiresEffects() {
-		return false;
-	}
-	
+    public String getArguments() {
+        return "";
+    }
+
+    public boolean requiresEffects() {
+        return false;
+    }
+
 }

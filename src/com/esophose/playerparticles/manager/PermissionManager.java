@@ -60,7 +60,7 @@ public class PermissionManager {
         List<String> list = new ArrayList<String>();
         for (ParticleEffect pe : ParticleEffect.getSupportedEffects())
             if (hasEffectPermission(p, pe)) 
-            	list.add(pe.getName());
+                list.add(pe.getName());
         return list;
     }
 
@@ -74,7 +74,7 @@ public class PermissionManager {
         List<String> list = new ArrayList<String>();
         for (ParticleStyle ps : ParticleStyleManager.getStyles())
             if (hasStylePermission(p, ps)) 
-            	list.add(ps.getName());
+                list.add(ps.getName());
         return list;
     }
 

@@ -20,9 +20,9 @@ import com.esophose.playerparticles.styles.api.PParticle;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class ParticleStyleSwords implements ParticleStyle, Listener {
-    
+
     private static final List<String> SWORD_NAMES;
-    
+
     static {
         SWORD_NAMES = new ArrayList<String>();
         SWORD_NAMES.addAll(Arrays.asList("WOOD_SWORD", "STONE_SWORD", "IRON_SWORD", "GOLD_SWORD", "GOLDEN_SWORD", "DIAMOND_SWORD", "TRIDENT"));
@@ -41,7 +41,7 @@ public class ParticleStyleSwords implements ParticleStyle, Listener {
     }
 
     public void updateTimers() {
-        
+
     }
 
     public String getName() {
@@ -51,7 +51,7 @@ public class ParticleStyleSwords implements ParticleStyle, Listener {
     public boolean canBeFixed() {
         return false;
     }
-    
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player && event.getEntity() instanceof LivingEntity) {
@@ -59,10 +59,10 @@ public class ParticleStyleSwords implements ParticleStyle, Listener {
             LivingEntity entity = (LivingEntity) event.getEntity();
             PPlayer pplayer = DataManager.getPPlayer(player.getUniqueId());
             if (pplayer != null) {
-            	for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.SWORDS)) {
-                	Location loc = entity.getLocation().clone().add(0, 1, 0);
+                for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.SWORDS)) {
+                    Location loc = entity.getLocation().clone().add(0, 1, 0);
                     ParticleManager.displayParticles(particle, DefaultStyles.SWORDS.getParticles(particle, loc));
-            	}
+                }
             }
         }
     }

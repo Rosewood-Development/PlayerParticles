@@ -28,28 +28,28 @@ public class LangManager {
      * Contains the location in the .lang file of every chat message
      */
     public static enum Lang {
-    	
-    	// Command Descriptions
-    	ADD_COMMAND_DESCRIPTION("add-command-description"),
-    	DATA_COMMAND_DESCRIPTION("data-command-description"),
-    	DEFAULT_COMMAND_DESCRIPTION("default-command-description"),
-    	EDIT_COMMAND_DESCRIPTION("edit-command-description"),
-    	EFFECT_COMMAND_DESCRIPTION("effect-command-description"),
-    	EFFECTS_COMMAND_DESCRIPTION("effects-command-description"),
-    	FIXED_COMMAND_DESCRIPTION("fixed-command-description"),
-    	GROUP_COMMAND_DESCRIPTION("group-command-description"),
-    	GUI_COMMAND_DESCRIPTION("gui-command-description"),
-    	HELP_COMMAND_DESCRIPTION("help-command-description"),
-    	INFO_COMMAND_DESCRIPTION("info-command-description"),
-    	LIST_COMMAND_DESCRIPTION("list-command-description"),
-    	REMOVE_COMMAND_DESCRIPTION("remove-command-description"),
-    	RESET_COMMAND_DESCRIPTION("reset-command-description"),
-    	STYLE_COMMAND_DESCRIPTION("style-command-description"),
-    	STYLES_COMMAND_DESCRIPTION("styles-command-description"),
-    	VERSION_COMMAND_DESCRIPTION("version-command-description"),
-    	WORLDS_COMMAND_DESCRIPTION("worlds-command-description"),
-    	
-    	COMMAND_REMOVED("command-removed"),
+
+        // Command Descriptions
+        ADD_COMMAND_DESCRIPTION("add-command-description"),
+        DATA_COMMAND_DESCRIPTION("data-command-description"),
+        DEFAULT_COMMAND_DESCRIPTION("default-command-description"),
+        EDIT_COMMAND_DESCRIPTION("edit-command-description"),
+        EFFECT_COMMAND_DESCRIPTION("effect-command-description"),
+        EFFECTS_COMMAND_DESCRIPTION("effects-command-description"),
+        FIXED_COMMAND_DESCRIPTION("fixed-command-description"),
+        GROUP_COMMAND_DESCRIPTION("group-command-description"),
+        GUI_COMMAND_DESCRIPTION("gui-command-description"),
+        HELP_COMMAND_DESCRIPTION("help-command-description"),
+        INFO_COMMAND_DESCRIPTION("info-command-description"),
+        LIST_COMMAND_DESCRIPTION("list-command-description"),
+        REMOVE_COMMAND_DESCRIPTION("remove-command-description"),
+        RESET_COMMAND_DESCRIPTION("reset-command-description"),
+        STYLE_COMMAND_DESCRIPTION("style-command-description"),
+        STYLES_COMMAND_DESCRIPTION("styles-command-description"),
+        VERSION_COMMAND_DESCRIPTION("version-command-description"),
+        WORLDS_COMMAND_DESCRIPTION("worlds-command-description"),
+
+        COMMAND_REMOVED("command-removed"),
 
         // Particles
         NO_PERMISSION("message-no-permission"),
@@ -166,7 +166,7 @@ public class LangManager {
          * @return The message
          */
         public String get(String... replacements) {
-            return String.format(this.message, (Object[])replacements);
+            return String.format(this.message, (Object[]) replacements);
         }
 
         /**
@@ -199,20 +199,20 @@ public class LangManager {
      * calling it multiple times wont affect anything negatively
      */
     public static void setup() {
-    	FileConfiguration config = PlayerParticles.getPlugin().getConfig();
+        FileConfiguration config = PlayerParticles.getPlugin().getConfig();
         messagesEnabled = config.getBoolean("messages-enabled");
         prefixEnabled = config.getBoolean("use-message-prefix");
         messagePrefix = parseColors(config.getString("message-prefix"));
-        
+
         YamlConfiguration lang = configureLangFile(config);
-    	if (lang == null) {
-    		messagesEnabled = false;
-    	} else {
-    		 for (Lang messageType : Lang.values())
-    			 messageType.setMessage(lang);
-    	}
+        if (lang == null) {
+            messagesEnabled = false;
+        } else {
+            for (Lang messageType : Lang.values())
+                messageType.setMessage(lang);
+        }
     }
-    
+
     /**
      * Loads the target .lang file as defined in the config and grabs its YamlConfiguration
      * If it doesn't exist, default to en_US.lang
@@ -222,31 +222,31 @@ public class LangManager {
      * @return The YamlConfiguration of the target .lang file
      */
     private static YamlConfiguration configureLangFile(FileConfiguration config) {
-    	File pluginDataFolder = PlayerParticles.getPlugin().getDataFolder();
-    	langFileName = config.getString("lang-file");
-    	File targetLangFile = new File(pluginDataFolder.getAbsolutePath() + "/lang/" + langFileName);
-    	
-    	if (!targetLangFile.exists()) { // Target .lang file didn't exist, default to en_US.lang
-    	    if (!langFileName.equals("en_US.lang")) {
-    	        PlayerParticles.getPlugin().getLogger().warning("Couldn't find lang file '" + langFileName + "', defaulting to en_US.lang");
-    	    }
-    		langFileName = "en_US.lang";
-    		
-    		targetLangFile = new File(pluginDataFolder.getAbsolutePath() + "/lang/" + langFileName);
-    		if (!targetLangFile.exists()) { // en_US.lang didn't exist, create it
-    			try (InputStream stream = PlayerParticles.getPlugin().getResource("lang/en_US.lang")) {
-    			    targetLangFile.getParentFile().mkdir(); // Make sure the directory always exists
-        			Files.copy(stream, Paths.get(targetLangFile.getAbsolutePath()));
-        			return YamlConfiguration.loadConfiguration(targetLangFile);
-    			} catch (IOException ex) {
-    				ex.printStackTrace();
-    				PlayerParticles.getPlugin().getLogger().severe("Unable to write en_US.lang to disk! All messages for the plugin have been disabled until this is fixed!");
-    				return null;
-    			}
-    		}
-    	}
-    	
-    	return YamlConfiguration.loadConfiguration(targetLangFile);
+        File pluginDataFolder = PlayerParticles.getPlugin().getDataFolder();
+        langFileName = config.getString("lang-file");
+        File targetLangFile = new File(pluginDataFolder.getAbsolutePath() + "/lang/" + langFileName);
+
+        if (!targetLangFile.exists()) { // Target .lang file didn't exist, default to en_US.lang
+            if (!langFileName.equals("en_US.lang")) {
+                PlayerParticles.getPlugin().getLogger().warning("Couldn't find lang file '" + langFileName + "', defaulting to en_US.lang");
+            }
+            langFileName = "en_US.lang";
+
+            targetLangFile = new File(pluginDataFolder.getAbsolutePath() + "/lang/" + langFileName);
+            if (!targetLangFile.exists()) { // en_US.lang didn't exist, create it
+                try (InputStream stream = PlayerParticles.getPlugin().getResource("lang/en_US.lang")) {
+                    targetLangFile.getParentFile().mkdir(); // Make sure the directory always exists
+                    Files.copy(stream, Paths.get(targetLangFile.getAbsolutePath()));
+                    return YamlConfiguration.loadConfiguration(targetLangFile);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                    PlayerParticles.getPlugin().getLogger().severe("Unable to write en_US.lang to disk! All messages for the plugin have been disabled until this is fixed!");
+                    return null;
+                }
+            }
+        }
+
+        return YamlConfiguration.loadConfiguration(targetLangFile);
     }
 
     /**
@@ -260,7 +260,7 @@ public class LangManager {
 
         String message = messageType.get();
         if (message.length() == 0) return;
-        
+
         if (prefixEnabled) {
             message = messagePrefix + " " + message;
         }
@@ -269,7 +269,7 @@ public class LangManager {
 
         player.sendMessage(message);
     }
-    
+
     /**
      * Sends a message to the given PPlayer
      * 
@@ -277,7 +277,7 @@ public class LangManager {
      * @param messageType The message to send to the player
      */
     public static void sendMessage(PPlayer pplayer, Lang messageType) {
-    	sendMessage(pplayer.getPlayer(), messageType);
+        sendMessage(pplayer.getPlayer(), messageType);
     }
 
     /**
@@ -292,14 +292,14 @@ public class LangManager {
 
         String message = messageType.getMessageReplaced(typeReplacement);
         if (message.trim().length() == 0) return;
-        
+
         if (prefixEnabled) {
             message = messagePrefix + " " + message;
         }
 
         player.sendMessage(message);
     }
-    
+
     /**
      * Sends a message to the given PPlayer and allows for replacing {TYPE}
      * 
@@ -320,7 +320,7 @@ public class LangManager {
      */
     public static void sendCustomMessage(Player player, String message) {
         if (!messagesEnabled) return;
-        
+
         if (message.trim().length() == 0) return;
 
         if (prefixEnabled) {
@@ -329,7 +329,7 @@ public class LangManager {
 
         player.sendMessage(message);
     }
-    
+
     /**
      * Sends a custom message to a PPlayer
      * Used in cases of string building

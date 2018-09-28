@@ -28,9 +28,9 @@ import org.bukkit.material.MaterialData;
 
 @SuppressWarnings("deprecation")
 public enum ParticleEffect {
-    
+
     // Ordered and named by their Minecraft 1.13 internal names
-	NONE("", ""), // Custom effect to represent none selected, always display first
+    NONE("", ""), // Custom effect to represent none selected, always display first
     AMBIENT_ENTITY_EFFECT("SPELL_MOB_AMBIENT", "SPELL_MOB_AMBIENT", ParticleProperty.COLORABLE),
     ANGRY_VILLAGER("VILLAGER_ANGRY", "VILLAGER_ANGRY"),
     BARRIER("BARRIER", "BARRIER"),
@@ -47,7 +47,7 @@ public enum ParticleEffect {
     DRIPPING_LAVA("DRIP_LAVA", "DRIP_LAVA"),
     DRIPPING_WATER("DRIP_WATER", "DRIP_WATER"),
     DUST("REDSTONE", "REDSTONE", ParticleProperty.COLORABLE),
-    //ELDER_GUARDIAN("MOB_APPEARANCE", "MOB_APPEARANCE"), // No thank you
+    // ELDER_GUARDIAN("MOB_APPEARANCE", "MOB_APPEARANCE"), // No thank you
     ENCHANT("ENCHANTMENT_TABLE", "ENCHANTMENT_TABLE"),
     ENCHANTED_HIT("CRIT_MAGIC", "CRIT_MAGIC"),
     END_ROD("END_ROD", "END_ROD"),
@@ -62,7 +62,7 @@ public enum ParticleEffect {
     HAPPY_VILLAGER("VILLAGER_HAPPY", "VILLAGER_HAPPY"),
     HEART("HEART", "HEART"),
     INSTANT_EFFECT("SPELL_INSTANT", "SPELL_INSTANT"),
-    ITEM("ITEM_CRACK", "ITEM_CRACK", ParticleProperty.REQUIRES_MATERIAL_DATA), 
+    ITEM("ITEM_CRACK", "ITEM_CRACK", ParticleProperty.REQUIRES_MATERIAL_DATA),
     ITEM_SLIME("SLIME", "SLIME"),
     ITEM_SNOWBALL("SNOWBALL", "SNOWBALL"),
     LARGE_SMOKE("SMOKE_LARGE", "SMOKE_LARGE"),
@@ -82,7 +82,7 @@ public enum ParticleEffect {
     TOTEM_OF_UNDYING("TOTEM", "TOTEM"),
     UNDERWATER("SUSPENDED_DEPTH", "SUSPENDED_DEPTH"),
     WITCH("SPELL_WITCH", "SPELL_WTICH");
-    
+
     private static final int PARTICLE_DISPLAY_RANGE_SQUARED = 36864; // (12 chunks * 16 blocks per chunk)^2
     private static final Map<String, ParticleEffect> NAME_MAP = new HashMap<String, ParticleEffect>();
     private static boolean VERSION_13; // This is a particle unique to Minecraft 1.13, this is a reliable way of telling what server version is running
@@ -97,12 +97,12 @@ public enum ParticleEffect {
         for (ParticleEffect effect : values()) {
             NAME_MAP.put(effect.getName(), effect);
         }
-        
+
         try {
             VERSION_13 = Particle.valueOf("NAUTILUS") != null;
             DustOptions_CONSTRUCTOR = Particle.REDSTONE.getDataType().getConstructor(Color.class, float.class);
             createBlockData_METHOD = Material.class.getMethod("createBlockData");
-        } catch (Exception e) { 
+        } catch (Exception e) {
             DustOptions_CONSTRUCTOR = null;
             createBlockData_METHOD = null;
             VERSION_13 = false;
@@ -126,7 +126,7 @@ public enum ParticleEffect {
                 break;
             }
         }
-        
+
         this.internalEnum = matchingEnum; // Will be null if this server's version doesn't support this particle type
     }
 
@@ -211,11 +211,11 @@ public enum ParticleEffect {
         if (hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
             throw new ParticleDataException("This particle effect requires additional data");
         }
-        
+
         for (Player player : getPlayersInRange(center)) {
             player.spawnParticle(internalEnum, center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed);
         }
-            
+
     }
 
     /**
@@ -231,18 +231,20 @@ public enum ParticleEffect {
         }
 
         if (this == DUST && VERSION_13) { // DUST uses a special data object for spawning in 1.13
-            OrdinaryColor dustColor = (OrdinaryColor)color;
+            OrdinaryColor dustColor = (OrdinaryColor) color;
             Object dustData = null;
             try { // The DustData class doesn't exist in Minecraft versions less than 1.13... so this is disgusting... but it works great
                 dustData = DustOptions_CONSTRUCTOR.newInstance(Color.fromRGB(dustColor.getRed(), dustColor.getGreen(), dustColor.getBlue()), 1); // Wait, you can change the size of these now??? AWESOME! I might implement this in the future!
-            } catch (Exception e) { }
-            
+            } catch (Exception e) {
+                
+            }
+
             for (Player player : getPlayersInRange(center)) {
                 player.spawnParticle(internalEnum, center.getX(), center.getY(), center.getZ(), 1, 0, 0, 0, 0, dustData);
             }
         } else {
             for (Player player : getPlayersInRange(center)) {
-             // Minecraft clients require that you pass a non-zero value if the Red value should be zero
+                // Minecraft clients require that you pass a non-zero value if the Red value should be zero
                 player.spawnParticle(internalEnum, center.getX(), center.getY(), center.getZ(), 0, this == ParticleEffect.DUST && color.getValueX() == 0 ? Float.MIN_VALUE : color.getValueX(), color.getValueY(), color.getValueZ(), 1);
             }
         }
@@ -266,12 +268,14 @@ public enum ParticleEffect {
         if (!hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
             throw new ParticleDataException("This particle effect does not require additional data");
         }
-        
+
         Object extraData = null;
-        if (internalEnum.getDataType().getTypeName().equals("org.bukkit.block.data.BlockData")) { 
+        if (internalEnum.getDataType().getTypeName().equals("org.bukkit.block.data.BlockData")) {
             try { // The Material.createBlockData() method doesn't exist in Minecraft versions less than 1.13... so this is disgusting... but it works great
                 extraData = createBlockData_METHOD.invoke(spawnMaterial);
-            } catch (Exception e) { }
+            } catch (Exception e) {
+                
+            }
         } else if (internalEnum.getDataType() == ItemStack.class) {
             extraData = new ItemStack(spawnMaterial);
         } else if (internalEnum.getDataType() == MaterialData.class) {
@@ -280,11 +284,11 @@ public enum ParticleEffect {
             System.out.println(internalEnum.getDataType());
             extraData = null;
         }
-        
+
         for (Player player : getPlayersInRange(center))
             player.spawnParticle(internalEnum, center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed, extraData);
     }
-    
+
     /**
      * Gets a List<Player> of players within the particle display range
      * 
@@ -293,11 +297,11 @@ public enum ParticleEffect {
      */
     private List<Player> getPlayersInRange(Location center) {
         List<Player> players = new ArrayList<Player>();
-        
-        for (Player p : Bukkit.getOnlinePlayers()) 
+
+        for (Player p : Bukkit.getOnlinePlayers())
             if (p.getWorld().equals(center.getWorld()) && center.distanceSquared(p.getLocation()) <= PARTICLE_DISPLAY_RANGE_SQUARED) 
                 players.add(p);
-        
+
         return players;
     }
 
@@ -502,14 +506,14 @@ public enum ParticleEffect {
                 this.note = note;
             }
         }
-        
+
         /**
          * Returns the note value
          * 
          * @return The note value
          */
         public int getNote() {
-        	return this.note;
+            return this.note;
         }
 
         /**

@@ -16,13 +16,13 @@ import com.esophose.playerparticles.styles.api.PParticle;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class ParticleStyleMove implements ParticleStyle, Listener {
-    
+
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         return DefaultStyles.NONE.getParticles(particle, location);
     }
 
     public void updateTimers() {
-        
+
     }
 
     public String getName() {
@@ -32,16 +32,16 @@ public class ParticleStyleMove implements ParticleStyle, Listener {
     public boolean canBeFixed() {
         return false;
     }
-    
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerMove(PlayerMoveEvent e) {
         PPlayer pplayer = DataManager.getPPlayer(e.getPlayer().getUniqueId());
         if (pplayer != null) {
-        	for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.MOVE)) {
-        		Location loc = e.getPlayer().getLocation();
+            for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.MOVE)) {
+                Location loc = e.getPlayer().getLocation();
                 loc.setY(loc.getY() + 0.05);
                 ParticleManager.displayParticles(particle, DefaultStyles.MOVE.getParticles(particle, loc));
-        	}
+            }
         }
     }
 

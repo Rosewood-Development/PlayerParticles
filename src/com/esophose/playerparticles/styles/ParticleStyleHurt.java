@@ -32,7 +32,7 @@ public class ParticleStyleHurt implements ParticleStyle, Listener {
     }
 
     public void updateTimers() {
-        
+
     }
 
     public String getName() {
@@ -42,17 +42,17 @@ public class ParticleStyleHurt implements ParticleStyle, Listener {
     public boolean canBeFixed() {
         return false;
     }
-    
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onEntityDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
             PPlayer pplayer = DataManager.getPPlayer(player.getUniqueId());
             if (pplayer != null) {
-            	for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.HURT)) {
-            		Location loc = player.getLocation().clone().add(0, 1, 0);
+                for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.HURT)) {
+                    Location loc = player.getLocation().clone().add(0, 1, 0);
                     ParticleManager.displayParticles(particle, DefaultStyles.HURT.getParticles(particle, loc));
-            	}
+                }
             }
         }
     }

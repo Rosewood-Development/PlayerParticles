@@ -97,7 +97,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
      */
     private static DyeColor[] rainbowColors;
     private static int rainbowColorsIndex = 0;
-    
+
     /**
      * Cached material data
      */
@@ -167,7 +167,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         defaultMenuIcons[0] = ParticleUtils.closestMatchWithFallback(config.getString("gui-icon.main-menu.EFFECT"));
         defaultMenuIcons[1] = ParticleUtils.closestMatchWithFallback(config.getString("gui-icon.main-menu.STYLE"));
         defaultMenuIcons[2] = ParticleUtils.closestMatchWithFallback(config.getString("gui-icon.main-menu.DATA"));
-        
+
         // Grab a different effect icon set based on if the Minecraft version is >= 1.13 or not
         String legacy;
         try {
@@ -191,156 +191,144 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
 
         new PlayerParticlesGui().runTaskTimer(PlayerParticles.getPlugin(), 0, 10);
     }
-    
+
     // TODO: Delete these specialized getter methods once the new GUI is finished
     private static ParticleEffect getPPlayerEffect(PPlayer pplayer) {
-    	List<ParticlePair> particles = pplayer.getActiveParticles();
-    	if (particles.isEmpty()) return ParticleEffect.NONE;
-    	return particles.get(0).getEffect();
+        List<ParticlePair> particles = pplayer.getActiveParticles();
+        if (particles.isEmpty()) return ParticleEffect.NONE;
+        return particles.get(0).getEffect();
     }
-    
+
     private static ParticleStyle getPPlayerStyle(PPlayer pplayer) {
-    	List<ParticlePair> particles = pplayer.getActiveParticles();
-    	if (particles.isEmpty()) return DefaultStyles.NONE;
-    	return particles.get(0).getStyle();
+        List<ParticlePair> particles = pplayer.getActiveParticles();
+        if (particles.isEmpty()) return DefaultStyles.NONE;
+        return particles.get(0).getStyle();
     }
-    
+
     private static Material getPPlayerItemMaterial(PPlayer pplayer) {
-    	List<ParticlePair> particles = pplayer.getActiveParticles();
-    	if (particles.isEmpty()) return ParticlePair.getDefault().getItemMaterial();
-    	return particles.get(0).getItemMaterial();
+        List<ParticlePair> particles = pplayer.getActiveParticles();
+        if (particles.isEmpty()) return ParticlePair.getDefault().getItemMaterial();
+        return particles.get(0).getItemMaterial();
     }
-    
+
     private static Material getPPlayerBlockMaterial(PPlayer pplayer) {
-    	List<ParticlePair> particles = pplayer.getActiveParticles();
-    	if (particles.isEmpty()) return ParticlePair.getDefault().getBlockMaterial();
-    	return particles.get(0).getBlockMaterial();
+        List<ParticlePair> particles = pplayer.getActiveParticles();
+        if (particles.isEmpty()) return ParticlePair.getDefault().getBlockMaterial();
+        return particles.get(0).getBlockMaterial();
     }
-    
+
     private static OrdinaryColor getPPlayerColor(PPlayer pplayer) {
-    	List<ParticlePair> particles = pplayer.getActiveParticles();
-    	if (particles.isEmpty()) return ParticlePair.getDefault().getColor();
-    	return particles.get(0).getColor();
+        List<ParticlePair> particles = pplayer.getActiveParticles();
+        if (particles.isEmpty()) return ParticlePair.getDefault().getColor();
+        return particles.get(0).getColor();
     }
-    
+
     private static NoteColor getPPlayerNoteColor(PPlayer pplayer) {
-    	List<ParticlePair> particles = pplayer.getActiveParticles();
-    	if (particles.isEmpty()) return ParticlePair.getDefault().getNoteColor();
-    	return particles.get(0).getNoteColor();
+        List<ParticlePair> particles = pplayer.getActiveParticles();
+        if (particles.isEmpty()) return ParticlePair.getDefault().getNoteColor();
+        return particles.get(0).getNoteColor();
     }
-    
+
     private static Material getPPlayerSpawnMaterial(PPlayer pplayer) {
-    	List<ParticlePair> particles = pplayer.getActiveParticles();
-    	if (particles.isEmpty()) return ParticlePair.getDefault().getSpawnMaterial();
-    	return particles.get(0).getSpawnMaterial();
+        List<ParticlePair> particles = pplayer.getActiveParticles();
+        if (particles.isEmpty()) return ParticlePair.getDefault().getSpawnMaterial();
+        return particles.get(0).getSpawnMaterial();
     }
-    
+
     private static ParticleColor getPPlayerSpawnColor(PPlayer pplayer) {
-    	List<ParticlePair> particles = pplayer.getActiveParticles();
-    	if (particles.isEmpty()) return ParticlePair.getDefault().getSpawnColor();
-    	return particles.get(0).getSpawnColor();
+        List<ParticlePair> particles = pplayer.getActiveParticles();
+        if (particles.isEmpty()) return ParticlePair.getDefault().getSpawnColor();
+        return particles.get(0).getSpawnColor();
     }
-    
+
     private static String getPPlayerDataString(PPlayer pplayer) {
-    	List<ParticlePair> particles = pplayer.getActiveParticles();
-    	if (particles.isEmpty()) return ParticlePair.getDefault().getDataString();
-    	return particles.get(0).getDataString();
+        List<ParticlePair> particles = pplayer.getActiveParticles();
+        if (particles.isEmpty()) return ParticlePair.getDefault().getDataString();
+        return particles.get(0).getDataString();
     }
-    
+
     private static void setPPlayerEffect(PPlayer pplayer, ParticleEffect effect) {
-    	List<ParticlePair> particles = pplayer.getActiveParticles();
-    	ParticlePair particle;
-    	if (particles.isEmpty()) 
-    		particle = ParticlePair.getDefault(pplayer.getUniqueId());
-    	else 
-    		particle = particles.get(0);
-    	
-    	particle.setEffect(effect);
-    	particles.clear();
-    	particles.add(particle);
-    	
-    	ParticleGroup group = new ParticleGroup(null, particles);
-    	DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+        List<ParticlePair> particles = pplayer.getActiveParticles();
+        ParticlePair particle;
+        if (particles.isEmpty()) particle = ParticlePair.getDefault(pplayer.getUniqueId());
+        else particle = particles.get(0);
+
+        particle.setEffect(effect);
+        particles.clear();
+        particles.add(particle);
+
+        ParticleGroup group = new ParticleGroup(null, particles);
+        DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
     }
-    
+
     private static void setPPlayerStyle(PPlayer pplayer, ParticleStyle style) {
-    	List<ParticlePair> particles = pplayer.getActiveParticles();
-    	ParticlePair particle;
-    	if (particles.isEmpty()) 
-    		particle = ParticlePair.getDefault(pplayer.getUniqueId());
-    	else 
-    		particle = particles.get(0);
-    	
-    	particle.setStyle(style);
-    	particles.clear();
-    	particles.add(particle);
-    	
-    	ParticleGroup group = new ParticleGroup(null, particles);
-    	DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+        List<ParticlePair> particles = pplayer.getActiveParticles();
+        ParticlePair particle;
+        if (particles.isEmpty()) particle = ParticlePair.getDefault(pplayer.getUniqueId());
+        else particle = particles.get(0);
+
+        particle.setStyle(style);
+        particles.clear();
+        particles.add(particle);
+
+        ParticleGroup group = new ParticleGroup(null, particles);
+        DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
     }
-    
+
     private static void setPPlayerItemMaterial(PPlayer pplayer, Material material) {
-    	List<ParticlePair> particles = pplayer.getActiveParticles();
-    	ParticlePair particle;
-    	if (particles.isEmpty()) 
-    		particle = ParticlePair.getDefault(pplayer.getUniqueId());
-    	else 
-    		particle = particles.get(0);
-    	
-    	particle.setItemMaterial(material);
-    	particles.clear();
-    	particles.add(particle);
-    	
-    	ParticleGroup group = new ParticleGroup(null, particles);
-    	DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+        List<ParticlePair> particles = pplayer.getActiveParticles();
+        ParticlePair particle;
+        if (particles.isEmpty()) particle = ParticlePair.getDefault(pplayer.getUniqueId());
+        else particle = particles.get(0);
+
+        particle.setItemMaterial(material);
+        particles.clear();
+        particles.add(particle);
+
+        ParticleGroup group = new ParticleGroup(null, particles);
+        DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
     }
-    
+
     private static void setPPlayerBlockMaterial(PPlayer pplayer, Material material) {
-    	List<ParticlePair> particles = pplayer.getActiveParticles();
-    	ParticlePair particle;
-    	if (particles.isEmpty()) 
-    		particle = ParticlePair.getDefault(pplayer.getUniqueId());
-    	else 
-    		particle = particles.get(0);
-    	
-    	particle.setBlockMaterial(material);
-    	particles.clear();
-    	particles.add(particle);
-    	
-    	ParticleGroup group = new ParticleGroup(null, particles);
-    	DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+        List<ParticlePair> particles = pplayer.getActiveParticles();
+        ParticlePair particle;
+        if (particles.isEmpty()) particle = ParticlePair.getDefault(pplayer.getUniqueId());
+        else particle = particles.get(0);
+
+        particle.setBlockMaterial(material);
+        particles.clear();
+        particles.add(particle);
+
+        ParticleGroup group = new ParticleGroup(null, particles);
+        DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
     }
-    
+
     private static void setPPlayerColor(PPlayer pplayer, OrdinaryColor color) {
-    	List<ParticlePair> particles = pplayer.getActiveParticles();
-    	ParticlePair particle;
-    	if (particles.isEmpty()) 
-    		particle = ParticlePair.getDefault(pplayer.getUniqueId());
-    	else 
-    		particle = particles.get(0);
-    	
-    	particle.setColor(color);
-    	particles.clear();
-    	particles.add(particle);
-    	
-    	ParticleGroup group = new ParticleGroup(null, particles);
-    	DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+        List<ParticlePair> particles = pplayer.getActiveParticles();
+        ParticlePair particle;
+        if (particles.isEmpty()) particle = ParticlePair.getDefault(pplayer.getUniqueId());
+        else particle = particles.get(0);
+
+        particle.setColor(color);
+        particles.clear();
+        particles.add(particle);
+
+        ParticleGroup group = new ParticleGroup(null, particles);
+        DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
     }
-    
+
     private static void setPPlayerNoteColor(PPlayer pplayer, NoteColor noteColor) {
-    	List<ParticlePair> particles = pplayer.getActiveParticles();
-    	ParticlePair particle;
-    	if (particles.isEmpty()) 
-    		particle = ParticlePair.getDefault(pplayer.getUniqueId());
-    	else 
-    		particle = particles.get(0);
-    	
-    	particle.setNoteColor(noteColor);
-    	particles.clear();
-    	particles.add(particle);
-    	
-    	ParticleGroup group = new ParticleGroup(null, particles);
-    	DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+        List<ParticlePair> particles = pplayer.getActiveParticles();
+        ParticlePair particle;
+        if (particles.isEmpty()) particle = ParticlePair.getDefault(pplayer.getUniqueId());
+        else particle = particles.get(0);
+
+        particle.setNoteColor(noteColor);
+        particles.clear();
+        particles.add(particle);
+
+        ParticleGroup group = new ParticleGroup(null, particles);
+        DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
     }
 
     /**
@@ -425,9 +413,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
     public static void changeState(PPlayer pplayer, GuiState state) {
         Player player = pplayer.getPlayer();
 
-        if ((state == GuiState.EFFECT && PermissionManager.getEffectsUserHasPermissionFor(player).size() == 1) || 
-            (state == GuiState.STYLE && PermissionManager.getStylesUserHasPermissionFor(player).size() == 1) || 
-            (state == GuiState.DATA && getPPlayerSpawnMaterial(pplayer) == null && getPPlayerSpawnColor(pplayer) == null)) return;
+        if ((state == GuiState.EFFECT && PermissionManager.getEffectsUserHasPermissionFor(player).size() == 1) || (state == GuiState.STYLE && PermissionManager.getStylesUserHasPermissionFor(player).size() == 1) || (state == GuiState.DATA && getPPlayerSpawnMaterial(pplayer) == null && getPPlayerSpawnColor(pplayer) == null)) return;
 
         // Update the state and create an inventory for the player if one isn't already open for them
         // If they have the wrong inventory open for some reason, create a new one and open it for them
@@ -473,11 +459,11 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         ItemStack currentIcon;
         Material playerHead = ParticleUtils.closestMatch("PLAYER_HEAD");
         if (playerHead != null) {
-        	currentIcon = new ItemStack(playerHead, 1);
+            currentIcon = new ItemStack(playerHead, 1);
         } else {
-        	currentIcon = new ItemStack(ParticleUtils.closestMatch("SKULL_ITEM"), 1, (short) SkullType.PLAYER.ordinal());
+            currentIcon = new ItemStack(ParticleUtils.closestMatch("SKULL_ITEM"), 1, (short) SkullType.PLAYER.ordinal());
         }
-        
+
         SkullMeta currentIconMeta = (SkullMeta) currentIcon.getItemMeta();
         currentIconMeta.setDisplayName(ChatColor.GREEN + player.getName());
         String[] currentIconLore = new String[3];
@@ -486,7 +472,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         currentIconLore[2] = ChatColor.YELLOW + "Active Data: " + ChatColor.AQUA + getPPlayerDataString(pplayer);
         currentIconMeta.setLore(Arrays.asList(currentIconLore));
         currentIconMeta.setOwner(player.getName());
-        //currentIconMeta.setOwningPlayer(Bukkit.getOfflinePlayer(player.getUniqueId())); // This doesn't exist in 1.9
+        // currentIconMeta.setOwningPlayer(Bukkit.getOfflinePlayer(player.getUniqueId())); // This doesn't exist in 1.9
         currentIcon.setItemMeta(currentIconMeta);
 
         ItemStack effectIcon = new ItemStack(defaultMenuIcons[0], 1);
@@ -626,16 +612,15 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         } else if (pe.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
             List<Material> materialBag = new ArrayList<Material>();
             int materialIndex = 0;
-            
+
             if (pe == ParticleEffect.ITEM) { // Item data
                 Material currentItemMaterial = getPPlayerItemMaterial(pplayer);
-                
+
                 while (materialBag.size() < 28) { // Grab 28 random materials that are an item
                     Material randomMaterial = ITEM_MATERIALS.get(RANDOM.nextInt(ITEM_MATERIALS.size()));
-                    if (!materialBag.contains(randomMaterial))
-                        materialBag.add(randomMaterial);
+                    if (!materialBag.contains(randomMaterial)) materialBag.add(randomMaterial);
                 }
-                
+
                 for (int i = 10; i <= 16; i++) { // Top row
                     inventory.setItem(i, getItemForMaterialData(currentItemMaterial, "item", materialBag.get(materialIndex)));
                     materialIndex++;
@@ -654,13 +639,12 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
                 }
             } else { // Block data
                 Material currentBlockMaterial = getPPlayerBlockMaterial(pplayer);
-                
+
                 while (materialBag.size() < 28) { // Grab 28 random materials that are an item
                     Material randomMaterial = BLOCK_MATERIALS.get(RANDOM.nextInt(BLOCK_MATERIALS.size()));
-                    if (!materialBag.contains(randomMaterial))
-                        materialBag.add(randomMaterial);
+                    if (!materialBag.contains(randomMaterial)) materialBag.add(randomMaterial);
                 }
-                
+
                 for (int i = 10; i <= 16; i++) { // Top row
                     inventory.setItem(i, getItemForMaterialData(currentBlockMaterial, "block", materialBag.get(materialIndex)));
                     materialIndex++;
@@ -692,7 +676,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
     @EventHandler
     public void onInventoryInteract(InventoryClickEvent e) {
         if (isGuiDisabled()) return; // Don't worry about processing anything if the GUI is disabled
-        
+
         if (!(e.getWhoClicked() instanceof Player)) return; // Not sure if I actually have to check this
 
         Player player = (Player) e.getWhoClicked();
@@ -701,7 +685,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         if (guiInventory == null || !guiInventory.getInventory().equals(e.getView().getTopInventory())) return; // Make sure it is the right inventory
 
         e.setCancelled(true); // In the PlayerParticles GUI, can't let them take anything out
-        
+
         if (!guiInventory.getInventory().equals(e.getClickedInventory())) return; // Clicked bottom inventory
 
         PPlayer pplayer = DataManager.getPPlayer(player.getUniqueId());
@@ -731,11 +715,11 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
             }
             break;
         case EFFECT:
-        	setPPlayerEffect(pplayer, ParticleManager.effectFromString(name));
+            setPPlayerEffect(pplayer, ParticleManager.effectFromString(name));
             changeState(pplayer, GuiState.DEFAULT);
             break;
         case STYLE:
-        	setPPlayerStyle(pplayer, ParticleStyleManager.styleFromString(name));
+            setPPlayerStyle(pplayer, ParticleStyleManager.styleFromString(name));
             changeState(pplayer, GuiState.DEFAULT);
             break;
         case DATA:
@@ -743,14 +727,14 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
             if (pe.hasProperty(ParticleProperty.COLORABLE)) {
                 if (pe == ParticleEffect.NOTE) {
                     if (clicked.getItemMeta().getDisplayName().equals(rainbowName)) {
-                    	setPPlayerNoteColor(pplayer, new NoteColor(99));
+                        setPPlayerNoteColor(pplayer, new NoteColor(99));
                     } else {
                         int note = Integer.parseInt(ChatColor.stripColor(clicked.getItemMeta().getDisplayName()).substring(6));
                         setPPlayerNoteColor(pplayer, new NoteColor(note));
                     }
                 } else {
                     if (clicked.getItemMeta().getDisplayName().equals(rainbowName)) {
-                    	setPPlayerColor(pplayer, new OrdinaryColor(999, 999, 999));
+                        setPPlayerColor(pplayer, new OrdinaryColor(999, 999, 999));
                     } else {
                         for (int i = 0; i < colorMapping.length; i++) {
                             if (clicked.getItemMeta().getDisplayName().equals(colorMapping[i].getName())) {
@@ -762,9 +746,9 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
             } else if (pe.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
                 Material clickedMaterial = clicked.getType(); // All preset materials have a data value of 0
                 if (pe == ParticleEffect.ITEM) {
-                	setPPlayerItemMaterial(pplayer, clickedMaterial);
+                    setPPlayerItemMaterial(pplayer, clickedMaterial);
                 } else {
-                	setPPlayerBlockMaterial(pplayer, clickedMaterial);
+                    setPPlayerBlockMaterial(pplayer, clickedMaterial);
                 }
             }
 
@@ -851,15 +835,15 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
      * @param colorIndex What color to use
      * @return An ItemStack formatted to be displayed in the GUI
      */
-	private static ItemStack getItemForColorData(OrdinaryColor currentColor, int colorIndex) {
+    private static ItemStack getItemForColorData(OrdinaryColor currentColor, int colorIndex) {
         ColorData colorData = colorMapping[colorIndex];
         String formattedDisplayColor = ChatColor.RED.toString() + colorData.getOrdinaryColor().getRed() + " " + ChatColor.GREEN + colorData.getOrdinaryColor().getGreen() + " " + ChatColor.AQUA + colorData.getOrdinaryColor().getBlue();
 
         ItemStack colorIcon;
         if (colorData.getMaterial() != null) { // Use 1.13 materials
-        	colorIcon = new ItemStack(colorData.getMaterial());
+            colorIcon = new ItemStack(colorData.getMaterial());
         } else { // Use < 1.13 dye colors
-        	colorIcon = new Dye(colorData.getDyeColor()).toItemStack(1);
+            colorIcon = new Dye(colorData.getDyeColor()).toItemStack(1);
         }
         ItemMeta colorIconMeta = colorIcon.getItemMeta();
 
@@ -905,13 +889,13 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
      * 
      * @return An ItemStack formatted to be displayed in the GUI
      */
-	private static ItemStack getItemForRainbowColorData(OrdinaryColor currentColor, DyeColor dyeColor) {
-    	ColorData colorData = getColorDataFromOrdinaryColor(dyeColor);
-    	ItemStack rainbowIcon;
+    private static ItemStack getItemForRainbowColorData(OrdinaryColor currentColor, DyeColor dyeColor) {
+        ColorData colorData = getColorDataFromOrdinaryColor(dyeColor);
+        ItemStack rainbowIcon;
         if (colorData.getMaterial() != null) { // Use 1.13 materials
-        	rainbowIcon = new ItemStack(colorData.getMaterial());
+            rainbowIcon = new ItemStack(colorData.getMaterial());
         } else { // Use < 1.13 dye colors
-        	rainbowIcon = new Dye(colorData.getDyeColor()).toItemStack(1);
+            rainbowIcon = new Dye(colorData.getDyeColor()).toItemStack(1);
         }
         ItemMeta rainbowIconMeta = rainbowIcon.getItemMeta();
 
@@ -933,13 +917,13 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
      * 
      * @return An ItemStack formatted to be displayed in the GUI
      */
-	private static ItemStack getItemForRainbowNoteData(NoteColor currentColor, DyeColor dyeColor) {
-    	ColorData colorData = getColorDataFromOrdinaryColor(dyeColor);
-    	ItemStack rainbowIcon;
+    private static ItemStack getItemForRainbowNoteData(NoteColor currentColor, DyeColor dyeColor) {
+        ColorData colorData = getColorDataFromOrdinaryColor(dyeColor);
+        ItemStack rainbowIcon;
         if (colorData.getMaterial() != null) { // Use 1.13 materials
-        	rainbowIcon = new ItemStack(colorData.getMaterial());
+            rainbowIcon = new ItemStack(colorData.getMaterial());
         } else { // Use < 1.13 dye colors
-        	rainbowIcon = new Dye(colorData.getDyeColor()).toItemStack(1);
+            rainbowIcon = new Dye(colorData.getDyeColor()).toItemStack(1);
         }
         ItemMeta rainbowIconMeta = rainbowIcon.getItemMeta();
 
@@ -969,7 +953,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
 
         return icon;
     }
-    
+
     /**
      * Gets a ColorData object from its DyeColor
      * 
@@ -977,10 +961,9 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
      * @return The found ColorData object, null if not found
      */
     private static ColorData getColorDataFromOrdinaryColor(DyeColor color) {
-    	for (ColorData colorData : colorMapping)
-    		if (colorData.getDyeColor().equals(color))
-    			return colorData;
-    	return null;
+        for (ColorData colorData : colorMapping)
+            if (colorData.getDyeColor().equals(color)) return colorData;
+        return null;
     }
 
 }

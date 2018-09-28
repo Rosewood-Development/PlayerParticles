@@ -168,7 +168,7 @@ public class ParticleCommandHandler implements CommandExecutor, TabCompleter {
 //            } else {
 //                List<String> commands = new ArrayList<String>(Arrays.asList(COMMANDS));
 //                StringUtil.copyPartialMatches(args[0], commands, completions);
-            }
+              }
         }
         return null;
     }

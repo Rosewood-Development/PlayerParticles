@@ -25,7 +25,7 @@ public class ParticleStyleBlockEdit implements ParticleStyle, Listener {
     }
 
     public void updateTimers() {
-        
+
     }
 
     public String getName() {
@@ -35,28 +35,28 @@ public class ParticleStyleBlockEdit implements ParticleStyle, Listener {
     public boolean canBeFixed() {
         return false;
     }
-    
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
         PPlayer pplayer = DataManager.getPPlayer(player.getUniqueId());
         if (pplayer != null) {
-        	for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.BLOCKEDIT)) {
-        		Location loc = event.getBlock().getLocation();
+            for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.BLOCKEDIT)) {
+                Location loc = event.getBlock().getLocation();
                 ParticleManager.displayParticles(particle, DefaultStyles.BLOCKBREAK.getParticles(particle, loc));
-        	}
+            }
         }
     }
-    
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
         PPlayer pplayer = DataManager.getPPlayer(player.getUniqueId());
         if (pplayer != null) {
-        	for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.BLOCKEDIT)) {
-        		Location loc = event.getBlock().getLocation();
+            for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.BLOCKEDIT)) {
+                Location loc = event.getBlock().getLocation();
                 ParticleManager.displayParticles(particle, DefaultStyles.BLOCKPLACE.getParticles(particle, loc));
-        	}
+            }
         }
     }
 

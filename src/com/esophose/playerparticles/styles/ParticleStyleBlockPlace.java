@@ -22,7 +22,7 @@ public class ParticleStyleBlockPlace implements ParticleStyle, Listener {
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<PParticle>();
 
-        for (int i = 0; i < 15; i++) 
+        for (int i = 0; i < 15; i++)
             particles.add(new PParticle(location.clone().add(0.5, 0.5, 0.5), 0.75F, 0.75F, 0.75F, 0.05F));
 
         return particles;
@@ -45,10 +45,10 @@ public class ParticleStyleBlockPlace implements ParticleStyle, Listener {
         Player player = event.getPlayer();
         PPlayer pplayer = DataManager.getPPlayer(player.getUniqueId());
         if (pplayer != null) {
-        	for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.BLOCKPLACE)) {
-        		Location loc = event.getBlock().getLocation();
+            for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.BLOCKPLACE)) {
+                Location loc = event.getBlock().getLocation();
                 ParticleManager.displayParticles(particle, DefaultStyles.BLOCKPLACE.getParticles(particle, loc));
-        	}
+            }
         }
     }
 

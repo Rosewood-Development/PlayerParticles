@@ -40,7 +40,7 @@ public class DefaultStyles {
      * Registered in alphabetical order
      */
     public static void registerStyles() {
-    	ParticleStyleManager.registerStyle(NONE); // Always display none first
+        ParticleStyleManager.registerStyle(NONE); // Always display none first
         ParticleStyleManager.registerStyle(ARROWS);
         ParticleStyleManager.registerStyle(BEAM);
         ParticleStyleManager.registerCustomHandledStyle(BLOCKBREAK);
@@ -60,7 +60,7 @@ public class DefaultStyles {
         ParticleStyleManager.registerCustomHandledStyle(SWORDS);
         ParticleStyleManager.registerStyle(THICK);
         ParticleStyleManager.registerStyle(WINGS);
-        
+
         PluginManager manager = Bukkit.getPluginManager();
         Plugin playerParticles = PlayerParticles.getPlugin();
         manager.registerEvents((Listener) ARROWS, playerParticles);

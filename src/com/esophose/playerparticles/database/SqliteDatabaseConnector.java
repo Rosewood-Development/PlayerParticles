@@ -8,31 +8,31 @@ import java.sql.SQLException;
 import com.esophose.playerparticles.PlayerParticles;
 
 public class SqliteDatabaseConnector extends DatabaseConnector {
-	
-	private final String connectionString;
 
-	public SqliteDatabaseConnector(String directory) {
-		this.connectionString = "jdbc:sqlite:" + directory + File.separator + "playerparticles.db";
-	}
+    private final String connectionString;
 
-	public boolean isInitialized() {
-		return true; // Always available
-	}
+    public SqliteDatabaseConnector(String directory) {
+        this.connectionString = "jdbc:sqlite:" + directory + File.separator + "playerparticles.db";
+    }
 
-	public void closeConnection() {
-		// Nothing to do
-	}
+    public boolean isInitialized() {
+        return true; // Always available
+    }
 
-	public void connect(ConnectionCallback callback) {
-		try (Connection connection = this.getConnection()) {
-			callback.execute(connection);
-		} catch (SQLException ex) {
-			PlayerParticles.getPlugin().getLogger().severe("An error occurred retrieving an sqlite database connection: " + ex.getMessage());
-		}
-	}
-	
-	protected Connection getConnection() throws SQLException {
-		return DriverManager.getConnection(this.connectionString);
-	}
-	
+    public void closeConnection() {
+        // Nothing to do
+    }
+
+    public void connect(ConnectionCallback callback) {
+        try (Connection connection = this.getConnection()) {
+            callback.execute(connection);
+        } catch (SQLException ex) {
+            PlayerParticles.getPlugin().getLogger().severe("An error occurred retrieving an sqlite database connection: " + ex.getMessage());
+        }
+    }
+
+    protected Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(this.connectionString);
+    }
+
 }

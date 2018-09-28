@@ -85,7 +85,7 @@ public class FixedParticleEffect {
      * @return The ParticlePair that represents this FixedParticleEffect's appearance
      */
     public ParticlePair getParticlePair() {
-    	return this.particlePair;
+        return this.particlePair;
     }
 
     /**

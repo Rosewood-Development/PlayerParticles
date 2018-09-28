@@ -54,7 +54,8 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent e) {
-    	DataManager.getPPlayer(e.getPlayer().getUniqueId(), (pplayer) -> {});  // Loads the PPlayer from the database
+        DataManager.getPPlayer(e.getPlayer().getUniqueId(), (pplayer) -> {
+        }); // Loads the PPlayer from the database
     }
 
     /**
@@ -65,17 +66,16 @@ public class ParticleManager extends BukkitRunnable implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent e) {
         PPlayer pplayer = DataManager.getPPlayer(e.getPlayer().getUniqueId());
-        if (pplayer != null)
-            particlePlayers.remove(pplayer);
+        if (pplayer != null) particlePlayers.remove(pplayer);
     }
-    
+
     /**
      * Gets the PPlayers that are loaded
      * 
      * @return The loaded PPlayers
      */
     public static List<PPlayer> getPPlayers() {
-    	return particlePlayers;
+        return particlePlayers;
     }
 
     /**
@@ -83,8 +83,9 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      */
     public static void refreshPPlayers() {
         particlePlayers.clear();
-        for (Player player : Bukkit.getOnlinePlayers()) 
-        	DataManager.getPPlayer(player.getUniqueId(), (pplayer) -> {}); // Loads the PPlayer from the database
+        for (Player player : Bukkit.getOnlinePlayers())
+            DataManager.getPPlayer(player.getUniqueId(), (pplayer) -> {
+            }); // Loads the PPlayer from the database
     }
 
     /**
@@ -138,18 +139,17 @@ public class ParticleManager extends BukkitRunnable implements Listener {
             // Don't show their particles if they are in spectator mode
             // Don't spawn particles if the world doesn't allow it
             if (player != null && player.getGameMode() != GameMode.SPECTATOR && !DataManager.isWorldDisabled(player.getWorld().getName())) {
-            	Location loc = player.getLocation();
+                Location loc = player.getLocation();
                 loc.setY(loc.getY() + 1);
-                
-            	for (ParticlePair particles : pplayer.getActiveParticles()) 
-                	displayParticles(particles, loc);
+
+                for (ParticlePair particles : pplayer.getActiveParticles())
+                    displayParticles(particles, loc);
             }
 
             // Loop for FixedParticleEffects
             // Don't spawn particles if the world doesn't allow it
             for (FixedParticleEffect effect : pplayer.getFixedParticles())
-            	if (!DataManager.isWorldDisabled(effect.getLocation().getWorld().getName()))
-            		displayFixedParticleEffect(effect);
+                if (!DataManager.isWorldDisabled(effect.getLocation().getWorld().getName())) displayFixedParticleEffect(effect);
         }
     }
 
@@ -201,7 +201,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      * @param fixedEffect The fixed effect to display
      */
     private void displayFixedParticleEffect(FixedParticleEffect fixedEffect) {
-    	ParticlePair particle = fixedEffect.getParticlePair();
+        ParticlePair particle = fixedEffect.getParticlePair();
         ParticleEffect effect = particle.getEffect();
         for (PParticle pparticle : particle.getStyle().getParticles(particle, fixedEffect.getLocation())) {
             if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {

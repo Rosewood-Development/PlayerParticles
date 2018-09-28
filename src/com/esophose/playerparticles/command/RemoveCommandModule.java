@@ -7,28 +7,28 @@ import com.esophose.playerparticles.particles.PPlayer;
 
 public class RemoveCommandModule implements CommandModule {
 
-	public void onCommandExecute(PPlayer pplayer, String[] args) {
+    public void onCommandExecute(PPlayer pplayer, String[] args) {
 
-	}
+    }
 
-	public List<String> onTabComplete(PPlayer pplayer, String[] args) {
-		return null;
-	}
+    public List<String> onTabComplete(PPlayer pplayer, String[] args) {
+        return null;
+    }
 
-	public String getName() {
-		return "remove";
-	}
+    public String getName() {
+        return "remove";
+    }
 
-	public String getDescription() {
-		return Lang.REMOVE_COMMAND_DESCRIPTION.get();
-	}
+    public String getDescription() {
+        return Lang.REMOVE_COMMAND_DESCRIPTION.get();
+    }
 
-	public String getArguments() {
-		return "<id>";
-	}
-	
-	public boolean requiresEffects() {
-		return true;
-	}
-	
+    public String getArguments() {
+        return "<id>";
+    }
+
+    public boolean requiresEffects() {
+        return true;
+    }
+
 }

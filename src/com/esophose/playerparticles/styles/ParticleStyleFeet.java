@@ -12,8 +12,8 @@ import com.esophose.playerparticles.styles.api.ParticleStyle;
 public class ParticleStyleFeet implements ParticleStyle {
 
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
-    	List<PParticle> particles = new ArrayList<PParticle>();
-    	particles.add(new PParticle(location.subtract(0, 0.95, 0), 0.4F, 0.0F, 0.4F, 0.0F));
+        List<PParticle> particles = new ArrayList<PParticle>();
+        particles.add(new PParticle(location.subtract(0, 0.95, 0), 0.4F, 0.0F, 0.4F, 0.0F));
         return particles;
     }
 

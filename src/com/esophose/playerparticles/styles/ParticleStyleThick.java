@@ -30,7 +30,7 @@ public class ParticleStyleThick implements ParticleStyle {
     public String getName() {
         return "thick";
     }
-    
+
     public boolean canBeFixed() {
         return true;
     }

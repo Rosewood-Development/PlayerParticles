@@ -12,14 +12,14 @@ import com.esophose.playerparticles.particles.ParticleEffect;
 
 public class EffectsCommandModule implements CommandModule {
 
-	public void onCommandExecute(PPlayer pplayer, String[] args) {
-		Player p = pplayer.getPlayer();
-		
-		if (PermissionManager.getEffectsUserHasPermissionFor(p).size() == 1) {
+    public void onCommandExecute(PPlayer pplayer, String[] args) {
+        Player p = pplayer.getPlayer();
+
+        if (PermissionManager.getEffectsUserHasPermissionFor(p).size() == 1) {
             LangManager.sendMessage(p, Lang.NO_PARTICLES);
             return;
         }
-        
+
         String toSend = Lang.USE.get() + " ";
         for (ParticleEffect effect : ParticleEffect.getSupportedEffects()) {
             if (PermissionManager.hasEffectPermission(p, effect)) {
@@ -30,29 +30,29 @@ public class EffectsCommandModule implements CommandModule {
         if (toSend.endsWith(", ")) {
             toSend = toSend.substring(0, toSend.length() - 2);
         }
-        
+
         LangManager.sendCustomMessage(p, toSend);
         LangManager.sendCustomMessage(p, Lang.USAGE.get() + " " + Lang.PARTICLE_USAGE.get());
-	}
+    }
 
-	public List<String> onTabComplete(PPlayer pplayer, String[] args) {
-		return null;
-	}
+    public List<String> onTabComplete(PPlayer pplayer, String[] args) {
+        return null;
+    }
 
-	public String getName() {
-		return "effects";
-	}
+    public String getName() {
+        return "effects";
+    }
 
-	public String getDescription() {
-		return Lang.EFFECTS_COMMAND_DESCRIPTION.get();
-	}
+    public String getDescription() {
+        return Lang.EFFECTS_COMMAND_DESCRIPTION.get();
+    }
 
-	public String getArguments() {
-		return "";
-	}
-	
-	public boolean requiresEffects() {
-		return false;
-	}
-	
+    public String getArguments() {
+        return "";
+    }
+
+    public boolean requiresEffects() {
+        return false;
+    }
+
 }

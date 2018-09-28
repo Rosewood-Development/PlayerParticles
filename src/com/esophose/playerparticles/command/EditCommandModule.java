@@ -7,28 +7,28 @@ import com.esophose.playerparticles.particles.PPlayer;
 
 public class EditCommandModule implements CommandModule {
 
-	public void onCommandExecute(PPlayer pplayer, String[] args) {
-	    
-	}
+    public void onCommandExecute(PPlayer pplayer, String[] args) {
 
-	public List<String> onTabComplete(PPlayer pplayer, String[] args) {
-		return null;
-	}
+    }
 
-	public String getName() {
-		return "edit";
-	}
+    public List<String> onTabComplete(PPlayer pplayer, String[] args) {
+        return null;
+    }
 
-	public String getDescription() {
-		return Lang.EDIT_COMMAND_DESCRIPTION.get();
-	}
+    public String getName() {
+        return "edit";
+    }
 
-	public String getArguments() {
-		return "";
-	}
-	
-	public boolean requiresEffects() {
-		return true;
-	}
-	
+    public String getDescription() {
+        return Lang.EDIT_COMMAND_DESCRIPTION.get();
+    }
+
+    public String getArguments() {
+        return "";
+    }
+
+    public boolean requiresEffects() {
+        return true;
+    }
+
 }

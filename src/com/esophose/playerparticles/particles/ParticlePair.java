@@ -16,34 +16,34 @@ import com.esophose.playerparticles.styles.api.ParticleStyle;
 import com.esophose.playerparticles.util.ParticleUtils;
 
 public class ParticlePair {
-	
-	private UUID ownerUUID;
-	private int id;
 
-	private ParticleEffect effect;
-	private ParticleStyle style;
-	
-	private Material itemMaterial;
+    private UUID ownerUUID;
+    private int id;
+
+    private ParticleEffect effect;
+    private ParticleStyle style;
+
+    private Material itemMaterial;
     private Material blockMaterial;
     private OrdinaryColor color;
     private NoteColor noteColor;
-	
-	public ParticlePair(UUID ownerUUID, int id, ParticleEffect effect, ParticleStyle style, Material itemMaterial, Material blockMaterial, OrdinaryColor color, NoteColor noteColor) {
-		this.ownerUUID = ownerUUID;
-		this.id = id;
-		
-		this.effect = effect;
-		this.style = style;
-		
-		this.setEffect(effect);
+
+    public ParticlePair(UUID ownerUUID, int id, ParticleEffect effect, ParticleStyle style, Material itemMaterial, Material blockMaterial, OrdinaryColor color, NoteColor noteColor) {
+        this.ownerUUID = ownerUUID;
+        this.id = id;
+
+        this.effect = effect;
+        this.style = style;
+
+        this.setEffect(effect);
         this.setStyle(style);
         this.setItemMaterial(itemMaterial);
         this.setBlockMaterial(blockMaterial);
         this.setColor(color);
         this.setNoteColor(noteColor);
-	}
-	
-	/**
+    }
+
+    /**
      * Sets the player's particle effect
      * 
      * @param effect The player's new particle effect
@@ -102,79 +102,79 @@ public class ParticlePair {
         if (noteColorData == null) noteColorData = new NoteColor(0);
         this.noteColor = noteColorData;
     }
-    
+
     /**
-	 * Get the UUID of the PPlayer that owns this ParticlePair
-	 * 
-	 * @return The owner's UUID
-	 */
-	public UUID getOwnerUniqueId() {
-		return this.ownerUUID;
-	}
-	
-	/**
-	 * Get the id of this particle
-	 * 
-	 * @return The id of this particle
-	 */
-	public int getId() {
-		return this.id;
-	}
-	
-	/**
-	 * Get the ParticleEffect that this ParticlePair represents
-	 * 
-	 * @return The effect
-	 */
-	public ParticleEffect getEffect() {
-		return this.effect;
-	}
-	
-	/**
-	 * Get the ParticleStyle that this ParticlePair represents
-	 * 
-	 * @return The style
-	 */
-	public ParticleStyle getStyle() {
-		return this.style;
-	}
-	
-	/**
-	 * Get the item Material this particle uses
-	 * 
-	 * @return The item Material
-	 */
-	public Material getItemMaterial() {
-		return this.itemMaterial;
-	}
-	
-	/**
-	 * Get the block Material this particle uses
-	 * 
-	 * @return The block Material
-	 */
-	public Material getBlockMaterial() {
-		return this.blockMaterial;
-	}
-	
-	/**
-	 * Get the color this particle uses
-	 * 
-	 * @return The color
-	 */
-	public OrdinaryColor getColor() {
-		return this.color;
-	}
-	
-	/**
-	 * Get the note color this particle uses
-	 * 
-	 * @return The note color
-	 */
-	public NoteColor getNoteColor() {
-		return this.noteColor;
-	}
-    
+     * Get the UUID of the PPlayer that owns this ParticlePair
+     * 
+     * @return The owner's UUID
+     */
+    public UUID getOwnerUniqueId() {
+        return this.ownerUUID;
+    }
+
+    /**
+     * Get the id of this particle
+     * 
+     * @return The id of this particle
+     */
+    public int getId() {
+        return this.id;
+    }
+
+    /**
+     * Get the ParticleEffect that this ParticlePair represents
+     * 
+     * @return The effect
+     */
+    public ParticleEffect getEffect() {
+        return this.effect;
+    }
+
+    /**
+     * Get the ParticleStyle that this ParticlePair represents
+     * 
+     * @return The style
+     */
+    public ParticleStyle getStyle() {
+        return this.style;
+    }
+
+    /**
+     * Get the item Material this particle uses
+     * 
+     * @return The item Material
+     */
+    public Material getItemMaterial() {
+        return this.itemMaterial;
+    }
+
+    /**
+     * Get the block Material this particle uses
+     * 
+     * @return The block Material
+     */
+    public Material getBlockMaterial() {
+        return this.blockMaterial;
+    }
+
+    /**
+     * Get the color this particle uses
+     * 
+     * @return The color
+     */
+    public OrdinaryColor getColor() {
+        return this.color;
+    }
+
+    /**
+     * Get the note color this particle uses
+     * 
+     * @return The note color
+     */
+    public NoteColor getNoteColor() {
+        return this.noteColor;
+    }
+
     /**
      * Gets the color the current particle effect will spawn with
      * 
@@ -197,7 +197,7 @@ public class ParticlePair {
         }
         return null;
     }
-    
+
     /**
      * Gets the material the current particle effect will spawn with
      * 
@@ -240,14 +240,14 @@ public class ParticlePair {
         }
         return "none";
     }
-    
+
     /**
      * Gets a ParticlePair with the default values applied
      * 
      * @return A ParticlePair with default values
      */
     public static ParticlePair getDefault() {
-    	return new ParticlePair(null, // @formatter:off
+        return new ParticlePair(null, // @formatter:off
     							-1, 
     							ParticleEffect.NONE, 
     							DefaultStyles.NONE, 
@@ -256,14 +256,14 @@ public class ParticlePair {
     							new OrdinaryColor(0, 0, 0), 
     							new NoteColor(0)); // @formatter:on
     }
-    
+
     /**
      * Gets a ParticlePair with the default values applied
      * 
      * @return A ParticlePair with default values
      */
     public static ParticlePair getDefault(UUID ownerUUID) {
-    	return new ParticlePair(ownerUUID, // @formatter:off
+        return new ParticlePair(ownerUUID, // @formatter:off
 								1, 
 								ParticleEffect.NONE, 
 								DefaultStyles.NONE, 
@@ -272,5 +272,5 @@ public class ParticlePair {
 								new OrdinaryColor(0, 0, 0), 
 								new NoteColor(0)); // @formatter:on
     }
-	
+
 }

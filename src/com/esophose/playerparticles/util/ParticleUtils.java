@@ -34,7 +34,7 @@ public class ParticleUtils {
                 return material; 
         return null;
     } // @formatter:on
-    
+
     /**
      * Finds a block/item as a material from a list of possible strings
      * Contains a fallback to the barrier icon just in case
@@ -46,26 +46,24 @@ public class ParticleUtils {
         Material mat = null;
         for (String name : input) {
             mat = closestMatch(name);
-            if (mat != null)
-                return mat;
+            if (mat != null) return mat;
         }
-        if (mat == null)
-            mat = Material.BARRIER;
+        if (mat == null) mat = Material.BARRIER;
         return mat;
     }
-    
+
     public static List<String> getAllBlockMaterials() {
         List<String> materials = new ArrayList<String>();
         for (Material mat : Material.values())
-            if (mat.isBlock())
+            if (mat.isBlock()) 
                 materials.add(mat.name().toLowerCase());
         return materials;
     }
-    
+
     public static List<String> getAllItemMaterials() {
         List<String> materials = new ArrayList<String>();
         for (Material mat : Material.values())
-            if (!mat.isBlock())
+            if (!mat.isBlock()) 
                 materials.add(mat.name().toLowerCase());
         return materials;
     }
@@ -86,7 +84,8 @@ public class ParticleUtils {
             }
         }
         for (int i = 0; i < n.length; ++i)
-            if (n[i] != i + 1) return i + 1;
+            if (n[i] != i + 1) 
+                return i + 1;
         return n.length + 1;
     }
 

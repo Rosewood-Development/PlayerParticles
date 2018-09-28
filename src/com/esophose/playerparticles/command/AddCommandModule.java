@@ -7,28 +7,28 @@ import com.esophose.playerparticles.particles.PPlayer;
 
 public class AddCommandModule implements CommandModule {
 
-	public void onCommandExecute(PPlayer pplayer, String[] args) {
-		
-	}
+    public void onCommandExecute(PPlayer pplayer, String[] args) {
 
-	public List<String> onTabComplete(PPlayer pplayer, String[] args) {
-		return null;
-	}
+    }
 
-	public String getName() {
-		return "add";
-	}
+    public List<String> onTabComplete(PPlayer pplayer, String[] args) {
+        return null;
+    }
 
-	public String getDescription() {
-		return Lang.ADD_COMMAND_DESCRIPTION.get();
-	}
+    public String getName() {
+        return "add";
+    }
 
-	public String getArguments() {
-		return "<effect> <style> [data]";
-	}
-	
-	public boolean requiresEffects() {
-		return true;
-	}
-	
+    public String getDescription() {
+        return Lang.ADD_COMMAND_DESCRIPTION.get();
+    }
+
+    public String getArguments() {
+        return "<effect> <style> [data]";
+    }
+
+    public boolean requiresEffects() {
+        return true;
+    }
+
 }
