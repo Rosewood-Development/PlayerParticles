@@ -66,9 +66,6 @@ public class PlayerParticles extends JavaPlugin {
      */
     public void onEnable() {
     	pluginInstance = Bukkit.getServer().getPluginManager().getPlugin("PlayerParticles");
-    	
-        DefaultStyles.registerStyles();
-        LangManager.setup();
         
         getCommand("pp").setTabCompleter(new ParticleCommandHandler());
         getCommand("pp").setExecutor(new ParticleCommandHandler());
@@ -88,6 +85,9 @@ public class PlayerParticles extends JavaPlugin {
             reloadConfig();
             getLogger().warning("The config.yml has been updated to v" + getDescription().getVersion() + "!");
         }
+        
+        DefaultStyles.registerStyles();
+        LangManager.setup();
         
         configureDatabase(getConfig().getBoolean("database-enable"));
         startParticleTask();
