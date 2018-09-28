@@ -1,11 +1,3 @@
-/**
- * Copyright Esophose 2018
- * While using any of the code provided by this plugin
- * you must not claim it as your own. This plugin may
- * be modified and installed on a server, but may not
- * be distributed to any person by any means.
- */
-
 /*
  * TODO: v5.3
  * + Command to force set an effect/style for a player
