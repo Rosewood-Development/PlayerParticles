@@ -51,8 +51,8 @@ public class ResetCommandModule implements CommandModule {
         return "reset";
     }
 
-    public String getDescription() {
-        return Lang.RESET_COMMAND_DESCRIPTION.get();
+    public Lang getDescription() {
+        return Lang.RESET_COMMAND_DESCRIPTION;
     }
 
     public String getArguments() {

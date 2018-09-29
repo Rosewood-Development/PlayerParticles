@@ -21,7 +21,7 @@ public class StylesCommandModule implements CommandModule {
             return;
         }
 
-        String toSend = Lang.USE.get() + " ";
+        String toSend = LangManager.getText(Lang.USE) + " ";
         for (ParticleStyle style : ParticleStyleManager.getStyles()) {
             if (PermissionManager.hasStylePermission(p, style)) {
                 toSend += style.getName();
@@ -33,7 +33,7 @@ public class StylesCommandModule implements CommandModule {
         }
 
         LangManager.sendCustomMessage(p, toSend);
-        LangManager.sendCustomMessage(p, Lang.USAGE.get() + " " + Lang.STYLE_USAGE.get());
+        LangManager.sendCustomMessage(p, LangManager.getText(Lang.USAGE) + " " + LangManager.getText(Lang.STYLE_USAGE));
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
@@ -44,8 +44,8 @@ public class StylesCommandModule implements CommandModule {
         return "styles";
     }
 
-    public String getDescription() {
-        return Lang.STYLES_COMMAND_DESCRIPTION.get();
+    public Lang getDescription() {
+        return Lang.STYLES_COMMAND_DESCRIPTION;
     }
 
     public String getArguments() {

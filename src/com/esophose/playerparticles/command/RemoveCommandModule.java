@@ -19,8 +19,8 @@ public class RemoveCommandModule implements CommandModule {
         return "remove";
     }
 
-    public String getDescription() {
-        return Lang.REMOVE_COMMAND_DESCRIPTION.get();
+    public Lang getDescription() {
+        return Lang.REMOVE_COMMAND_DESCRIPTION;
     }
 
     public String getArguments() {

@@ -19,8 +19,8 @@ public class GroupCommandModule implements CommandModule {
         return "group";
     }
 
-    public String getDescription() {
-        return Lang.GROUP_COMMAND_DESCRIPTION.get();
+    public Lang getDescription() {
+        return Lang.GROUP_COMMAND_DESCRIPTION;
     }
 
     public String getArguments() {

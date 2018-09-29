@@ -20,7 +20,7 @@ public class EffectsCommandModule implements CommandModule {
             return;
         }
 
-        String toSend = Lang.USE.get() + " ";
+        String toSend = LangManager.getText(Lang.USE) + " ";
         for (ParticleEffect effect : ParticleEffect.getSupportedEffects()) {
             if (PermissionManager.hasEffectPermission(p, effect)) {
                 toSend += effect.getName() + ", ";
@@ -32,7 +32,7 @@ public class EffectsCommandModule implements CommandModule {
         }
 
         LangManager.sendCustomMessage(p, toSend);
-        LangManager.sendCustomMessage(p, Lang.USAGE.get() + " " + Lang.PARTICLE_USAGE.get());
+        LangManager.sendCustomMessage(p, LangManager.getText(Lang.USAGE) + " " + LangManager.getText(Lang.PARTICLE_USAGE));
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
@@ -43,8 +43,8 @@ public class EffectsCommandModule implements CommandModule {
         return "effects";
     }
 
-    public String getDescription() {
-        return Lang.EFFECTS_COMMAND_DESCRIPTION.get();
+    public Lang getDescription() {
+        return Lang.EFFECTS_COMMAND_DESCRIPTION;
     }
 
     public String getArguments() {

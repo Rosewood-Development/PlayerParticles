@@ -19,8 +19,8 @@ public class InfoCommandModule implements CommandModule {
         return "info";
     }
 
-    public String getDescription() {
-        return Lang.INFO_COMMAND_DESCRIPTION.get();
+    public Lang getDescription() {
+        return Lang.INFO_COMMAND_DESCRIPTION;
     }
 
     public String getArguments() {

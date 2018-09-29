@@ -31,6 +31,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.esophose.playerparticles.PlayerParticles;
 import com.esophose.playerparticles.manager.DataManager;
+import com.esophose.playerparticles.manager.LangManager;
 import com.esophose.playerparticles.manager.LangManager.Lang;
 import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.manager.PermissionManager;
@@ -470,18 +471,18 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         ItemStack effectIcon = new ItemStack(defaultMenuIcons[0], 1);
         ItemMeta effectIconMeta = effectIcon.getItemMeta();
         effectIconMeta.setDisplayName(ChatColor.GREEN + "Effect");
-        effectIconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SET_YOUR.getMessageReplaced("effect")));
+        effectIconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_ICON_SET_YOUR, "effect")));
         if (PermissionManager.getEffectsUserHasPermissionFor(player).size() == 1) { // Always has access to NONE
-            effectIconMeta.setLore(Arrays.asList(Lang.GUI_NO_ACCESS_TO.getMessageReplaced("effects")));
+            effectIconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_NO_ACCESS_TO, "effects")));
         }
         effectIcon.setItemMeta(effectIconMeta);
 
         ItemStack styleIcon = new ItemStack(defaultMenuIcons[1], 1);
         ItemMeta styleIconMeta = styleIcon.getItemMeta();
         styleIconMeta.setDisplayName(ChatColor.GREEN + "Style");
-        styleIconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SET_YOUR.getMessageReplaced("style")));
+        styleIconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_ICON_SET_YOUR, "style")));
         if (PermissionManager.getStylesUserHasPermissionFor(player).size() == 1) { // Always has access to NONE
-            styleIconMeta.setLore(Arrays.asList(Lang.GUI_NO_ACCESS_TO.getMessageReplaced("styles")));
+            styleIconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_NO_ACCESS_TO, "styles")));
         }
         styleIcon.setItemMeta(styleIconMeta);
 
@@ -495,9 +496,9 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
                 else dataType = "color " + dataType;
             else if (pe.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) if (pe == ParticleEffect.ITEM) dataType = "item " + dataType;
         else dataType = "block " + dataType; // @formatter:on
-        dataIconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SET_YOUR.getMessageReplaced(dataType)));
+        dataIconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_ICON_SET_YOUR, dataType)));
         if (getPPlayerSpawnMaterial(pplayer) == null && getPPlayerSpawnColor(pplayer) == null) {
-            dataIconMeta.setLore(Arrays.asList(Lang.GUI_NO_DATA.get()));
+            dataIconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_NO_DATA)));
         }
         dataIcon.setItemMeta(dataIconMeta);
 
@@ -690,7 +691,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         if (clicked == null || clicked.getType() == Material.AIR) return; // Clicked on an empty slot, do nothing
 
         // Check back button. This is common for most menus
-        if (clicked.getItemMeta().getDisplayName().equals(Lang.GUI_BACK_BUTTON.get())) {
+        if (clicked.getItemMeta().getDisplayName().equals(LangManager.getText(Lang.GUI_BACK_BUTTON))) {
             changeState(pplayer, GuiState.DEFAULT);
             return;
         }
@@ -759,11 +760,11 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         ItemStack icon = new ItemStack(effectIcons.get(effect.name()), 1);
         ItemMeta iconMeta = icon.getItemMeta();
 
-        iconMeta.setDisplayName(Lang.GUI_ICON_NAME_COLOR.get() + effect.getName());
+        iconMeta.setDisplayName(LangManager.getText(Lang.GUI_ICON_NAME_COLOR) + effect.getName());
         if (!isActive) {
-            iconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SETS_TO.getMessageReplaced("effect") + effect.getName()));
+            iconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_ICON_SETS_TO, "effect") + effect.getName()));
         } else {
-            iconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SETS_TO.getMessageReplaced("effect") + effect.getName(), Lang.GUI_ICON_CURRENT_ACTIVE.getMessageReplaced("effect")));
+            iconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_ICON_SETS_TO, "effect") + effect.getName(), LangManager.getText(Lang.GUI_ICON_CURRENT_ACTIVE, "effect")));
             iconMeta.addEnchant(Enchantment.ARROW_INFINITE, -1, true);
             iconMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
@@ -782,11 +783,11 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         ItemStack icon = new ItemStack(styleIcons.get(style.getName().toUpperCase()), 1);
         ItemMeta iconMeta = icon.getItemMeta();
 
-        iconMeta.setDisplayName(Lang.GUI_ICON_NAME_COLOR.get() + style.getName());
+        iconMeta.setDisplayName(LangManager.getText(Lang.GUI_ICON_NAME_COLOR) + style.getName());
         if (!isActive) {
-            iconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SETS_TO.getMessageReplaced("style") + style.getName()));
+            iconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_ICON_SETS_TO, "style") + style.getName()));
         } else {
-            iconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SETS_TO.getMessageReplaced("style") + style.getName(), Lang.GUI_ICON_CURRENT_ACTIVE.getMessageReplaced("style")));
+            iconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_ICON_SETS_TO, "style") + style.getName(), LangManager.getText(Lang.GUI_ICON_CURRENT_ACTIVE, "style")));
             iconMeta.addEnchant(Enchantment.ARROW_INFINITE, -1, true);
             iconMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
@@ -807,11 +808,11 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         ItemStack materialIcon = new ItemStack(material, 1);
         ItemMeta materialIconMeta = materialIcon.getItemMeta();
 
-        materialIconMeta.setDisplayName(Lang.GUI_ICON_NAME_COLOR.get() + material.name().toLowerCase());
+        materialIconMeta.setDisplayName(LangManager.getText(Lang.GUI_ICON_NAME_COLOR) + material.name().toLowerCase());
         if (currentMaterial != material) {
-            materialIconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SETS_TO.getMessageReplaced(dataType + " data") + material.name().toLowerCase()));
+            materialIconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_ICON_SETS_TO, dataType + " data") + material.name().toLowerCase()));
         } else {
-            materialIconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SETS_TO.getMessageReplaced(dataType + " data") + material.name().toLowerCase(), Lang.GUI_ICON_CURRENT_ACTIVE.getMessageReplaced(dataType + " data")));
+            materialIconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_ICON_SETS_TO, dataType + " data") + material.name().toLowerCase(), LangManager.getText(Lang.GUI_ICON_CURRENT_ACTIVE, dataType + " data")));
             materialIconMeta.addEnchant(Enchantment.ARROW_INFINITE, -1, true);
             materialIconMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
@@ -841,9 +842,9 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
 
         colorIconMeta.setDisplayName(colorData.getName());
         if (!currentColor.equals(colorData.getOrdinaryColor())) {
-            colorIconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SETS_TO.getMessageReplaced("color data") + formattedDisplayColor));
+            colorIconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_ICON_SETS_TO, "color data") + formattedDisplayColor));
         } else {
-            colorIconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SETS_TO.getMessageReplaced("color data") + formattedDisplayColor, Lang.GUI_ICON_CURRENT_ACTIVE.getMessageReplaced("color data")));
+            colorIconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_ICON_SETS_TO, "color data") + formattedDisplayColor, LangManager.getText(Lang.GUI_ICON_CURRENT_ACTIVE, "color data")));
             colorIconMeta.addEnchant(Enchantment.ARROW_INFINITE, -1, true);
             colorIconMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
@@ -863,11 +864,11 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         ItemStack noteIcon = new ItemStack(Material.NOTE_BLOCK, noteIndex + 1);
         ItemMeta noteIconMeta = noteIcon.getItemMeta();
 
-        noteIconMeta.setDisplayName(Lang.GUI_ICON_NAME_COLOR.get() + "note #" + noteIndex);
+        noteIconMeta.setDisplayName(LangManager.getText(Lang.GUI_ICON_NAME_COLOR) + "note #" + noteIndex);
         if (currentNote.getValueX() * 24 != noteIndex) {
-            noteIconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SETS_TO.getMessageReplaced("note data") + "note #" + noteIndex));
+            noteIconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_ICON_SETS_TO, "note data") + "note #" + noteIndex));
         } else {
-            noteIconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SETS_TO.getMessageReplaced("note data") + "note #" + noteIndex, Lang.GUI_ICON_CURRENT_ACTIVE.getMessageReplaced("note data")));
+            noteIconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_ICON_SETS_TO, "note data") + "note #" + noteIndex, LangManager.getText(Lang.GUI_ICON_CURRENT_ACTIVE, "note data")));
             noteIconMeta.addEnchant(Enchantment.ARROW_INFINITE, -1, true);
             noteIconMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
@@ -893,11 +894,11 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
 
         rainbowIconMeta.setDisplayName(rainbowName);
         if (currentColor.getRed() == 999 && currentColor.getGreen() == 999 && currentColor.getBlue() == 999) {
-            rainbowIconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SETS_TO.getMessageReplaced("color data") + rainbowName, Lang.GUI_ICON_CURRENT_ACTIVE.getMessageReplaced("color data")));
+            rainbowIconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_ICON_SETS_TO, "color data") + rainbowName, LangManager.getText(Lang.GUI_ICON_CURRENT_ACTIVE, "color data")));
             rainbowIconMeta.addEnchant(Enchantment.ARROW_INFINITE, -1, true);
             rainbowIconMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         } else {
-            rainbowIconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SETS_TO.getMessageReplaced("color data") + rainbowName));
+            rainbowIconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_ICON_SETS_TO, "color data") + rainbowName));
         }
         rainbowIcon.setItemMeta(rainbowIconMeta);
 
@@ -921,11 +922,11 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
 
         rainbowIconMeta.setDisplayName(rainbowName);
         if (currentColor.getValueX() * 24 == 99) {
-            rainbowIconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SETS_TO.getMessageReplaced("note data") + rainbowName, Lang.GUI_ICON_CURRENT_ACTIVE.getMessageReplaced("note data")));
+            rainbowIconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_ICON_SETS_TO, "note data") + rainbowName, LangManager.getText(Lang.GUI_ICON_CURRENT_ACTIVE, "note data")));
             rainbowIconMeta.addEnchant(Enchantment.ARROW_INFINITE, -1, true);
             rainbowIconMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         } else {
-            rainbowIconMeta.setLore(Arrays.asList(Lang.GUI_ICON_SETS_TO.getMessageReplaced("note data") + rainbowName));
+            rainbowIconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_ICON_SETS_TO, "note data") + rainbowName));
         }
         rainbowIcon.setItemMeta(rainbowIconMeta);
 
@@ -940,7 +941,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
     private static ItemStack getItemForBack() {
         ItemStack icon = new ItemStack(Material.ARROW, 1);
         ItemMeta iconMeta = icon.getItemMeta();
-        iconMeta.setDisplayName(Lang.GUI_BACK_BUTTON.get());
+        iconMeta.setDisplayName(LangManager.getText(Lang.GUI_BACK_BUTTON));
         icon.setItemMeta(iconMeta);
 
         return icon;

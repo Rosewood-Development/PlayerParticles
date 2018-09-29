@@ -50,8 +50,8 @@ public class GUICommandModule implements CommandModule {
         return "gui";
     }
 
-    public String getDescription() {
-        return Lang.GUI_COMMAND_DESCRIPTION.get();
+    public Lang getDescription() {
+        return Lang.GUI_COMMAND_DESCRIPTION;
     }
 
     public String getArguments() {

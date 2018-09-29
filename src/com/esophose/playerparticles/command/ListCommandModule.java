@@ -19,8 +19,8 @@ public class ListCommandModule implements CommandModule {
         return "list";
     }
 
-    public String getDescription() {
-        return Lang.LIST_COMMAND_DESCRIPTION.get();
+    public Lang getDescription() {
+        return Lang.LIST_COMMAND_DESCRIPTION;
     }
 
     public String getArguments() {

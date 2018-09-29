@@ -2,6 +2,8 @@ package com.esophose.playerparticles.command;
 
 import java.util.List;
 
+import com.esophose.playerparticles.manager.LangManager;
+import com.esophose.playerparticles.manager.LangManager.Lang;
 import com.esophose.playerparticles.particles.PPlayer;
 
 public interface CommandModule {
@@ -30,11 +32,11 @@ public interface CommandModule {
     public String getName();
 
     /**
-     * Gets the description of this command
+     * Gets the Lang description of this command
      * 
      * @return The description of this command
      */
-    public String getDescription();
+    public Lang getDescription();
 
     /**
      * Gets any arguments this command has
@@ -49,5 +51,29 @@ public interface CommandModule {
      * @return If the player must have effects to use this command
      */
     public boolean requiresEffects();
+    
+    /**
+     * Displays a command's usage to the player
+     * 
+     * @param pplayer The PPlayer to display the command usage to
+     * @param command The command to display usage for
+     */
+    public static void printUsage(PPlayer pplayer, CommandModule command) {
+        LangManager.sendMessage(pplayer, Lang.COMMAND_MISSING_ARGS);
+        LangManager.sendCustomMessage(pplayer, String.format("/{0} {1}", command.getName(), command.getArguments()));
+    }
+    
+    /**
+     * Displays a command's sub-command usage to the player
+     * 
+     * @param pplayer The PPlayer to display the command usage to
+     * @param command The command to display usage for
+     * @param subCommandName The name of the command's sub-command to display usage for
+     * @param subCommandArgs The sub-command's arguments
+     */
+    public static void printSubcommandUsage(PPlayer pplayer, CommandModule command, String subCommandName, String subCommandArgs) {
+        LangManager.sendMessage(pplayer, Lang.COMMAND_MISSING_ARGS);
+        LangManager.sendCustomMessage(pplayer, String.format("/{0} {1} {2}", command.getName(), subCommandName, subCommandArgs));
+    }
 
 }

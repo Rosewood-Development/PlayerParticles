@@ -19,8 +19,8 @@ public class EditCommandModule implements CommandModule {
         return "edit";
     }
 
-    public String getDescription() {
-        return Lang.EDIT_COMMAND_DESCRIPTION.get();
+    public Lang getDescription() {
+        return Lang.EDIT_COMMAND_DESCRIPTION;
     }
 
     public String getArguments() {

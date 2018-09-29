@@ -18,25 +18,25 @@ public class DataCommandModule implements CommandModule {
                 if (effect.hasProperty(ParticleProperty.COLORABLE)) {
                     if (effect == ParticleEffect.NOTE) {
                         LangManager.sendMessage(pplayer, Lang.DATA_USAGE, "note");
-                        LangManager.sendCustomMessage(pplayer, Lang.USAGE.get() + " " + Lang.NOTE_DATA_USAGE.get());
+                        LangManager.sendCustomMessage(pplayer, LangManager.getText(Lang.USAGE) + " " + LangManager.getText(Lang.NOTE_DATA_USAGE));
                     } else {
                         LangManager.sendMessage(pplayer, Lang.DATA_USAGE, "color");
-                        LangManager.sendCustomMessage(pplayer, Lang.USAGE.get() + " " + Lang.COLOR_DATA_USAGE.get());
+                        LangManager.sendCustomMessage(pplayer, LangManager.getText(Lang.USAGE) + " " + LangManager.getText(Lang.COLOR_DATA_USAGE));
                     }
                 } else if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
                     if (effect == ParticleEffect.ITEM) {
                         LangManager.sendMessage(pplayer, Lang.DATA_USAGE, "item");
-                        LangManager.sendCustomMessage(pplayer, Lang.USAGE.get() + " " + Lang.ITEM_DATA_USAGE.get());
+                        LangManager.sendCustomMessage(pplayer, LangManager.getText(Lang.USAGE) + " " + LangManager.getText(Lang.ITEM_DATA_USAGE));
                     } else {
                         LangManager.sendMessage(pplayer, Lang.DATA_USAGE, "block");
-                        LangManager.sendCustomMessage(pplayer, Lang.USAGE.get() + " " + Lang.BLOCK_DATA_USAGE.get());
+                        LangManager.sendCustomMessage(pplayer, LangManager.getText(Lang.USAGE) + " " + LangManager.getText(Lang.BLOCK_DATA_USAGE));
                     }
                 } else {
                     LangManager.sendMessage(pplayer, Lang.NO_DATA_USAGE);
                 }
             }
         } else {
-            LangManager.sendMessage(pplayer, Lang.INVALID_TYPE);
+            LangManager.sendMessage(pplayer, Lang.INVALID_EFFECT);
         }
     }
 
@@ -48,8 +48,8 @@ public class DataCommandModule implements CommandModule {
         return "data";
     }
 
-    public String getDescription() {
-        return Lang.DATA_COMMAND_DESCRIPTION.get();
+    public Lang getDescription() {
+        return Lang.DATA_COMMAND_DESCRIPTION;
     }
 
     public String getArguments() {

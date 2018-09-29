@@ -21,8 +21,8 @@ public class HelpCommandModule implements CommandModule {
         return "help";
     }
 
-    public String getDescription() {
-        return Lang.HELP_COMMAND_DESCRIPTION.get();
+    public Lang getDescription() {
+        return Lang.HELP_COMMAND_DESCRIPTION;
     }
 
     public String getArguments() {

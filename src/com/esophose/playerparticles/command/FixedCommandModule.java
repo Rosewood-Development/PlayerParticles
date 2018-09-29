@@ -237,7 +237,7 @@ public class FixedCommandModule implements CommandModule {
                 return;
             }
 
-            String msg = Lang.LIST_FIXED_SUCCESS.get();
+            String msg = LangManager.getText(Lang.LIST_FIXED_SUCCESS);
             boolean first = true;
             for (int id : ids) {
                 if (!first) msg += ", ";
@@ -269,7 +269,7 @@ public class FixedCommandModule implements CommandModule {
             ParticlePair particle = fixedEffect.getParticlePair();
 
             DecimalFormat df = new DecimalFormat("0.##"); // Decimal formatter so the coords aren't super long
-            String listMessage = Lang.INFO_FIXED_INFO.get() // @formatter:off
+            String listMessage = LangManager.getText(Lang.INFO_FIXED_INFO) // @formatter:off
 					.replaceAll("\\{0\\}", fixedEffect.getId() + "")
 					.replaceAll("\\{1\\}", fixedEffect.getLocation().getWorld().getName())
 					.replaceAll("\\{2\\}", df.format(fixedEffect.getLocation().getX()) + "")
@@ -307,7 +307,7 @@ public class FixedCommandModule implements CommandModule {
             for (FixedParticleEffect fixedEffect : fixedEffectsToRemove)
                 DataManager.removeFixedEffect(fixedEffect.getOwnerUniqueId(), fixedEffect.getId());
 
-            String clearMessage = Lang.CLEAR_FIXED_SUCCESS.get() // @formatter:off
+            String clearMessage = LangManager.getText(Lang.CLEAR_FIXED_SUCCESS) // @formatter:off
 					.replaceAll("\\{0\\}", fixedEffectsToRemove.size() + "").replaceAll("\\{1\\}", radius + ""); // @formatter:on
             LangManager.sendCustomMessage(pplayer, clearMessage);
             return;
@@ -329,8 +329,8 @@ public class FixedCommandModule implements CommandModule {
         return "fixed";
     }
 
-    public String getDescription() {
-        return Lang.FIXED_COMMAND_DESCRIPTION.get();
+    public Lang getDescription() {
+        return Lang.FIXED_COMMAND_DESCRIPTION;
     }
 
     public String getArguments() {

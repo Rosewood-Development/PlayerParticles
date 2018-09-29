@@ -20,8 +20,8 @@ public class DefaultCommandModule implements CommandModule {
         return "";
     }
 
-    public String getDescription() {
-        return Lang.DEFAULT_COMMAND_DESCRIPTION.get();
+    public Lang getDescription() {
+        return Lang.DEFAULT_COMMAND_DESCRIPTION;
     }
 
     public String getArguments() {

@@ -20,8 +20,8 @@ public class StyleCommandModule implements CommandModule {
         return "style";
     }
 
-    public String getDescription() {
-        return Lang.STYLE_COMMAND_DESCRIPTION.get();
+    public Lang getDescription() {
+        return Lang.STYLE_COMMAND_DESCRIPTION;
     }
 
     public String getArguments() {

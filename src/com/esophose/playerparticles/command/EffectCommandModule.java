@@ -20,8 +20,8 @@ public class EffectCommandModule implements CommandModule {
         return "effect";
     }
 
-    public String getDescription() {
-        return Lang.EFFECT_COMMAND_DESCRIPTION.get();
+    public Lang getDescription() {
+        return Lang.EFFECT_COMMAND_DESCRIPTION;
     }
 
     public String getArguments() {

@@ -21,7 +21,7 @@ public class WorldsCommandModule implements CommandModule {
         }
         if (worlds.length() > 2) worlds = worlds.substring(0, worlds.length() - 2);
 
-        LangManager.sendCustomMessage(pplayer, Lang.DISABLED_WORLDS.get() + " " + worlds);
+        LangManager.sendCustomMessage(pplayer, LangManager.getText(Lang.DISABLED_WORLDS) + " " + worlds);
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
@@ -32,8 +32,8 @@ public class WorldsCommandModule implements CommandModule {
         return "worlds";
     }
 
-    public String getDescription() {
-        return Lang.WORLDS_COMMAND_DESCRIPTION.get();
+    public Lang getDescription() {
+        return Lang.WORLDS_COMMAND_DESCRIPTION;
     }
 
     public String getArguments() {
