@@ -20,7 +20,7 @@ public class RemoveCommandModule implements CommandModule {
     }
 
     public Lang getDescription() {
-        return Lang.REMOVE_COMMAND_DESCRIPTION;
+        return Lang.COMMAND_DESCRIPTION_REMOVE;
     }
 
     public String getArguments() {

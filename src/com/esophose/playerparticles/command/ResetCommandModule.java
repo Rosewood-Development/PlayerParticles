@@ -18,7 +18,7 @@ public class ResetCommandModule implements CommandModule {
         if (args.length >= 1) {
             String altPlayerName = args[0];
             if (!PermissionManager.canUseForceReset(pplayer.getPlayer())) {
-                LangManager.sendMessage(pplayer, Lang.FAILED_EXECUTE_NO_PERMISSION, altPlayerName);
+                LangManager.sendMessage(pplayer, Lang.EXECUTE_FAILED_NO_PERMISSION, altPlayerName);
             } else {
                 Player targetPlayer = null;
                 for (Player p : Bukkit.getOnlinePlayers()) {
@@ -29,17 +29,17 @@ public class ResetCommandModule implements CommandModule {
                 }
 
                 if (targetPlayer == null) {
-                    LangManager.sendMessage(pplayer, Lang.FAILED_EXECUTE_NOT_FOUND, altPlayerName);
+                    LangManager.sendMessage(pplayer, Lang.EXECUTE_FAILED_NOT_FOUND, altPlayerName);
                 } else {
                     DataManager.saveParticleGroup(targetPlayer.getUniqueId(), ParticleGroup.getDefaultGroup());
-                    LangManager.sendMessage(targetPlayer, Lang.RESET);
+                    LangManager.sendMessage(targetPlayer, Lang.RESET_SUCCESS);
 
-                    LangManager.sendMessage(pplayer, Lang.EXECUTED_FOR_PLAYER, targetPlayer.getName());
+                    LangManager.sendMessage(pplayer, Lang.EXECUTE_SUCCESS, targetPlayer.getName());
                 }
             }
         } else {
             DataManager.saveParticleGroup(pplayer.getUniqueId(), ParticleGroup.getDefaultGroup());
-            LangManager.sendMessage(pplayer, Lang.RESET);
+            LangManager.sendMessage(pplayer, Lang.RESET_SUCCESS);
         }
     }
 
@@ -52,7 +52,7 @@ public class ResetCommandModule implements CommandModule {
     }
 
     public Lang getDescription() {
-        return Lang.RESET_COMMAND_DESCRIPTION;
+        return Lang.COMMAND_DESCRIPTION_RESET;
     }
 
     public String getArguments() {

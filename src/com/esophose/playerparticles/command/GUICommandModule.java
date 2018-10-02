@@ -19,7 +19,7 @@ public class GUICommandModule implements CommandModule {
 
         if (PlayerParticlesGui.isGuiDisabled()) {
             if (byDefault) {
-                LangManager.sendMessage(pplayer, Lang.INVALID_ARGUMENTS);
+                LangManager.sendMessage(pplayer, Lang.COMMAND_ERROR_UNKNOWN);
             } else {
                 LangManager.sendMessage(pplayer, Lang.GUI_DISABLED);
             }
@@ -28,9 +28,9 @@ public class GUICommandModule implements CommandModule {
 
         if (PermissionManager.getEffectsUserHasPermissionFor(pplayer.getPlayer()).size() == 1) {
             if (byDefault) {
-                LangManager.sendMessage(pplayer, Lang.INVALID_ARGUMENTS);
+                LangManager.sendMessage(pplayer, Lang.COMMAND_ERROR_UNKNOWN);
             } else {
-                LangManager.sendMessage(pplayer, Lang.NO_PARTICLES);
+                LangManager.sendMessage(pplayer, Lang.COMMAND_ERROR_NO_EFFECTS);
             }
             return;
         }
@@ -51,7 +51,7 @@ public class GUICommandModule implements CommandModule {
     }
 
     public Lang getDescription() {
-        return Lang.GUI_COMMAND_DESCRIPTION;
+        return Lang.COMMAND_DESCRIPTION_GUI;
     }
 
     public String getArguments() {

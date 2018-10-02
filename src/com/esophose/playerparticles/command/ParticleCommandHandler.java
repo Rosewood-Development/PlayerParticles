@@ -78,14 +78,14 @@ public class ParticleCommandHandler implements CommandExecutor, TabCompleter {
         	
         	if (commandModule != null) {
         		if (commandModule.requiresEffects() && PermissionManager.getEffectsUserHasPermissionFor(p).size() == 1) {
-        			LangManager.sendMessage(p, Lang.NO_PARTICLES); // TODO: Rename to NO_EFFECTS
+        			LangManager.sendMessage(p, Lang.COMMAND_ERROR_NO_EFFECTS);
         		} else {
         			String[] cmdArgs = new String[0];
                     if (args.length > 1) cmdArgs = Arrays.copyOfRange(args, 1, args.length);
             		commandModule.onCommandExecute(pplayer, cmdArgs);
         		}
         	} else {
-        		LangManager.sendMessage(p, Lang.INVALID_ARGUMENTS); // TODO: Rename to UNKNOWN_COMMAND
+        		LangManager.sendMessage(p, Lang.COMMAND_ERROR_UNKNOWN);
         	}
         });
         

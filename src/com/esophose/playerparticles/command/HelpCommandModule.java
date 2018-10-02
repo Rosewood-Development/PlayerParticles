@@ -2,15 +2,13 @@ package com.esophose.playerparticles.command;
 
 import java.util.List;
 
-import com.esophose.playerparticles.manager.LangManager;
 import com.esophose.playerparticles.manager.LangManager.Lang;
 import com.esophose.playerparticles.particles.PPlayer;
 
 public class HelpCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
-        LangManager.sendMessage(pplayer, Lang.AVAILABLE_COMMANDS); // TODO: Rewrite to be dynamically generated from the ParticleCommandHandler's registered CommandModules
-        LangManager.sendMessage(pplayer, Lang.COMMAND_USAGE);
+        // TODO: Rewrite to be dynamically generated from the ParticleCommandHandler's registered CommandModules
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
@@ -22,7 +20,7 @@ public class HelpCommandModule implements CommandModule {
     }
 
     public Lang getDescription() {
-        return Lang.HELP_COMMAND_DESCRIPTION;
+        return Lang.COMMAND_DESCRIPTION_HELP;
     }
 
     public String getArguments() {

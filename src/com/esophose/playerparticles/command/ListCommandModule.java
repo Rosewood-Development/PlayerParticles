@@ -20,7 +20,7 @@ public class ListCommandModule implements CommandModule {
     }
 
     public Lang getDescription() {
-        return Lang.LIST_COMMAND_DESCRIPTION;
+        return Lang.COMMAND_DESCRIPTION_LIST;
     }
 
     public String getArguments() {

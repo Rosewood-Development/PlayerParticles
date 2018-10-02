@@ -21,7 +21,7 @@ public class DefaultCommandModule implements CommandModule {
     }
 
     public Lang getDescription() {
-        return Lang.DEFAULT_COMMAND_DESCRIPTION;
+        return Lang.COMMAND_DESCRIPTION_DEFAULT;
     }
 
     public String getArguments() {

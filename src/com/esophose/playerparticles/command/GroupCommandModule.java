@@ -20,7 +20,7 @@ public class GroupCommandModule implements CommandModule {
     }
 
     public Lang getDescription() {
-        return Lang.GROUP_COMMAND_DESCRIPTION;
+        return Lang.COMMAND_DESCRIPTION_GROUP;
     }
 
     public String getArguments() {

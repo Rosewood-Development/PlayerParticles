@@ -16,12 +16,13 @@ public class StylesCommandModule implements CommandModule {
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         Player p = pplayer.getPlayer();
 
-        if (PermissionManager.getStylesUserHasPermissionFor(p).size() == 1) {
-            LangManager.sendMessage(pplayer, Lang.NO_STYLES);
+        List<String> styleNames = PermissionManager.getStylesUserHasPermissionFor(p);
+        if (styleNames.size() == 1) {
+            LangManager.sendMessage(pplayer, Lang.STYLE_LIST, styleNames.get(0));
             return;
         }
 
-        String toSend = LangManager.getText(Lang.USE) + " ";
+        String toSend = "";
         for (ParticleStyle style : ParticleStyleManager.getStyles()) {
             if (PermissionManager.hasStylePermission(p, style)) {
                 toSend += style.getName();
@@ -32,8 +33,7 @@ public class StylesCommandModule implements CommandModule {
             toSend = toSend.substring(0, toSend.length() - 2);
         }
 
-        LangManager.sendCustomMessage(p, toSend);
-        LangManager.sendCustomMessage(p, LangManager.getText(Lang.USAGE) + " " + LangManager.getText(Lang.STYLE_USAGE));
+        LangManager.sendMessage(p, Lang.STYLE_LIST, toSend);
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
@@ -45,7 +45,7 @@ public class StylesCommandModule implements CommandModule {
     }
 
     public Lang getDescription() {
-        return Lang.STYLES_COMMAND_DESCRIPTION;
+        return Lang.COMMAND_DESCRIPTION_STYLES;
     }
 
     public String getArguments() {

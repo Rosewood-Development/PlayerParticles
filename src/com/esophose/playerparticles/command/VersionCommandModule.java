@@ -25,7 +25,7 @@ public class VersionCommandModule implements CommandModule {
     }
 
     public Lang getDescription() {
-        return Lang.VERSION_COMMAND_DESCRIPTION;
+        return Lang.COMMAND_DESCRIPTION_VERSION;
     }
 
     public String getArguments() {

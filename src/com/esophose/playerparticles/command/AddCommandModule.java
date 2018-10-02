@@ -27,19 +27,19 @@ public class AddCommandModule implements CommandModule {
         
         ParticleEffect effect = ParticleManager.effectFromString(args[0]);
         if (effect == null) {
-            LangManager.sendMessage(pplayer, Lang.INVALID_EFFECT, args[0]);
+            LangManager.sendMessage(pplayer, Lang.EFFECT_INVALID, args[0]);
             return;
         } else if (!PermissionManager.hasEffectPermission(pplayer.getPlayer(), effect)) {
-            LangManager.sendMessage(pplayer, Lang.NO_PERMISSION, effect.getName());
+            LangManager.sendMessage(pplayer, Lang.EFFECT_NO_PERMISSION, effect.getName());
             return;
         }
 
         ParticleStyle style = ParticleStyleManager.styleFromString(args[1]);
         if (style == null) {
-            LangManager.sendMessage(pplayer, Lang.CREATE_FIXED_INVALID_STYLE, args[1]);
+            LangManager.sendMessage(pplayer, Lang.STYLE_INVALID, args[1]);
             return;
         } else if (!PermissionManager.hasStylePermission(pplayer.getPlayer(), style)) {
-            LangManager.sendMessage(pplayer, Lang.CREATE_FIXED_NO_PERMISSION_STYLE, args[1]);
+            LangManager.sendMessage(pplayer, Lang.STYLE_NO_PERMISSION, args[1]);
             return;
         }
 
@@ -58,12 +58,12 @@ public class AddCommandModule implements CommandModule {
                         try {
                             note = Integer.parseInt(args[2]);
                         } catch (Exception e) {
-                            LangManager.sendMessage(pplayer, Lang.CREATE_FIXED_DATA_ERROR, "note");
+                            LangManager.sendMessage(pplayer, Lang.DATA_INVALID_NOTE);
                             return;
                         }
 
                         if (note < 0 || note > 23) {
-                            LangManager.sendMessage(pplayer, Lang.CREATE_FIXED_DATA_ERROR, "note");
+                            LangManager.sendMessage(pplayer, Lang.DATA_INVALID_NOTE);
                             return;
                         }
 
@@ -82,12 +82,12 @@ public class AddCommandModule implements CommandModule {
                             g = Integer.parseInt(args[3]);
                             b = Integer.parseInt(args[4]);
                         } catch (Exception e) {
-                            LangManager.sendMessage(pplayer, Lang.CREATE_FIXED_DATA_ERROR, "color");
+                            LangManager.sendMessage(pplayer, Lang.DATA_INVALID_COLOR);
                             return;
                         }
 
                         if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
-                            LangManager.sendMessage(pplayer, Lang.CREATE_FIXED_DATA_ERROR, "color");
+                            LangManager.sendMessage(pplayer, Lang.DATA_INVALID_COLOR);
                             return;
                         }
 
@@ -100,7 +100,7 @@ public class AddCommandModule implements CommandModule {
                         blockData = ParticleUtils.closestMatch(args[2]);
                         if (blockData == null) throw new Exception();
                     } catch (Exception e) {
-                        LangManager.sendMessage(pplayer, Lang.CREATE_FIXED_DATA_ERROR, "block");
+                        LangManager.sendMessage(pplayer, Lang.DATA_INVALID_BLOCK);
                         return;
                     }
                 } else if (effect == ParticleEffect.ITEM) {
@@ -108,7 +108,7 @@ public class AddCommandModule implements CommandModule {
                         itemData = ParticleUtils.closestMatch(args[2]);
                         if (itemData == null) throw new Exception();
                     } catch (Exception e) {
-                        LangManager.sendMessage(pplayer, Lang.CREATE_FIXED_DATA_ERROR, "item");
+                        LangManager.sendMessage(pplayer, Lang.DATA_INVALID_ITEM);
                         return;
                     }
                 }
@@ -127,7 +127,7 @@ public class AddCommandModule implements CommandModule {
     }
 
     public Lang getDescription() {
-        return Lang.ADD_COMMAND_DESCRIPTION;
+        return Lang.COMMAND_DESCRIPTION_ADD;
     }
 
     public String getArguments() {

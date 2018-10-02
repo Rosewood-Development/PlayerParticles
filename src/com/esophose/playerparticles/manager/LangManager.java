@@ -20,123 +20,122 @@ public class LangManager {
      * Contains the location in the .lang file of every chat message
      */
     public static enum Lang {
+        
+        // Command Errors
+        COMMAND_ERROR_NO_EFFECTS,
+        COMMAND_ERROR_UNKNOWN,
 
         // Command Descriptions
-        ADD_COMMAND_DESCRIPTION("add-command-description"),
-        DATA_COMMAND_DESCRIPTION("data-command-description"),
-        DEFAULT_COMMAND_DESCRIPTION("default-command-description"),
-        EDIT_COMMAND_DESCRIPTION("edit-command-description"),
-        EFFECT_COMMAND_DESCRIPTION("effect-command-description"),
-        EFFECTS_COMMAND_DESCRIPTION("effects-command-description"),
-        FIXED_COMMAND_DESCRIPTION("fixed-command-description"),
-        GROUP_COMMAND_DESCRIPTION("group-command-description"),
-        GUI_COMMAND_DESCRIPTION("gui-command-description"),
-        HELP_COMMAND_DESCRIPTION("help-command-description"),
-        INFO_COMMAND_DESCRIPTION("info-command-description"),
-        LIST_COMMAND_DESCRIPTION("list-command-description"),
-        REMOVE_COMMAND_DESCRIPTION("remove-command-description"),
-        RESET_COMMAND_DESCRIPTION("reset-command-description"),
-        STYLE_COMMAND_DESCRIPTION("style-command-description"),
-        STYLES_COMMAND_DESCRIPTION("styles-command-description"),
-        VERSION_COMMAND_DESCRIPTION("version-command-description"),
-        WORLDS_COMMAND_DESCRIPTION("worlds-command-description"),
-
-        COMMAND_REMOVED("command-removed"),
-        COMMAND_MISSING_ARGS("command-missing-args"),
-
-        // Particles
-        NO_PERMISSION("no-permission"),
-        NO_PARTICLES("no-particles"),
-        NOW_USING("now-using"),
-        CLEARED_PARTICLES("cleared-particles"),
-        INVALID_EFFECT("invalid-effect"),
-        PARTICLE_USAGE("particle-usage"),
-
+        COMMAND_DESCRIPTION_ADD,
+        COMMAND_DESCRIPTION_DATA,
+        COMMAND_DESCRIPTION_DEFAULT,
+        COMMAND_DESCRIPTION_EDIT,
+        COMMAND_DESCRIPTION_EFFECT,
+        COMMAND_DESCRIPTION_EFFECTS,
+        COMMAND_DESCRIPTION_FIXED,
+        COMMAND_DESCRIPTION_GROUP,
+        COMMAND_DESCRIPTION_GUI,
+        COMMAND_DESCRIPTION_HELP,
+        COMMAND_DESCRIPTION_INFO,
+        COMMAND_DESCRIPTION_LIST,
+        COMMAND_DESCRIPTION_REMOVE,
+        COMMAND_DESCRIPTION_RESET,
+        COMMAND_DESCRIPTION_STYLE,
+        COMMAND_DESCRIPTION_STYLES,
+        COMMAND_DESCRIPTION_VERSION,
+        COMMAND_DESCRIPTION_WORLDS,
+        
+        // Sub-Command Usage
+        COMMAND_DESCRIPTION_FIXED_CREATE,
+        COMMAND_DESCRIPTION_FIXED_REMOVE,
+        COMMAND_DESCRIPTION_FIXED_LIST,
+        COMMAND_DESCRIPTION_FIXED_INFO,
+        COMMAND_DESCRIPTION_FIXED_CLEAR,
+        COMMAND_DESCRIPTION_GROUP_SAVE,
+        COMMAND_DESCRIPTION_GROUP_LOAD,
+        COMMAND_DESCRIPTION_GROUP_REMOVE,
+        
+        // Effects
+        EFFECT_NO_PERMISSION,
+        EFFECT_INVALID,
+        EFFECT_LIST,
+        
         // Styles
-        NO_PERMISSION_STYLE("no-permission-style"),
-        NO_STYLES("no-styles"),
-        NOW_USING_STYLE("now-using-style"),
-        CLEARED_STYLE("cleared-style"),
-        INVALID_TYPE_STYLE("invalid-type-style"),
-        STYLE_USAGE("style-usage"),
-
+        STYLE_NO_PERMISSION,
+        STYLE_INVALID,
+        STYLE_LIST,
+        
         // Data
-        DATA_USAGE("data-usage"),
-        NO_DATA_USAGE("no-data-usage"),
-        DATA_APPLIED("data-applied"),
-        DATA_INVALID_ARGUMENTS("data-invalid-arguments"),
-        DATA_MATERIAL_UNKNOWN("data-material-unknown"),
-        DATA_MATERIAL_MISMATCH("data-material-mismatch"),
-        NOTE_DATA_USAGE("note-data-usage"),
-        COLOR_DATA_USAGE("color-data-usage"),
-        ITEM_DATA_USAGE("item-data-usage"),
-        BLOCK_DATA_USAGE("block-data-usage"),
-
+        DATA_USAGE_NONE,
+        DATA_USAGE_BLOCK,
+        DATA_USAGE_ITEM,
+        DATA_USAGE_COLOR,
+        DATA_USAGE_NOTE,
+        DATA_INVALID_BLOCK,
+        DATA_INVALID_ITEM,
+        DATA_INVALID_COLOR,
+        DATA_INVALID_NOTE,
+        DATA_INVALID_MATERIAL_NOT_ITEM,
+        DATA_INVALID_MATERIAL_NOT_BLOCK,
+        DATA_INVALID_MATERIAL_ITEM,
+        DATA_INVALID_MATERIAL_BLOCK,
+        
+        // Worlds
+        DISABLED_WORLDS,
+        DISABLED_WORLDS_NONE,
+        
+        // Alternate Player Command Execution
+        EXECUTE_SUCCESS,
+        EXECUTE_FAILED_NOT_FOUND,
+        EXECUTE_FAILED_NO_PERMISSION,
+        
+        // Reset
+        RESET_SUCCESS,
+        
         // Fixed Effects
-        FIXED_COMMAND_DESC_CREATE("fixed-command-desc-create"),
-        FIXED_COMMAND_DESC_REMOVE("fixed-command-desc-remove"),
-        FIXED_COMMAND_DESC_LIST("fixed-command-desc-list"),
-        FIXED_COMMAND_DESC_INFO("fixed-command-desc-info"),
-        FIXED_COMMAND_DESC_CLEAR("fixed-command-desc-clear"),
-        CREATE_FIXED_MISSING_ARGS("create-fixed-missing-args"),
-        CREATE_FIXED_INVALID_COORDS("create-fixed-invalid-coords"),
-        CREATE_FIXED_OUT_OF_RANGE("create-fixed-out-of-range"),
-        CREATE_FIXED_INVALID_EFFECT("create-fixed-invalid-effect"),
-        CREATE_FIXED_NO_PERMISSION_EFFECT("create-fixed-no-permission-effect"),
-        CREATE_FIXED_INVALID_STYLE("create-fixed-invalid-style"),
-        CREATE_FIXED_NO_PERMISSION_STYLE("create-fixed-no-permission-style"),
-        CREATE_FIXED_NON_FIXABLE_STYLE("create-fixed-non-fixable-style"),
-        CREATE_FIXED_DATA_ERROR("create-fixed-data-error"),
-        CREATE_FIXED_SUCCESS("create-fixed-success"),
-        REMOVE_FIXED_NONEXISTANT("remove-fixed-nonexistant"),
-        REMOVE_FIXED_NO_ARGS("remove-fixed-no-args"),
-        REMOVE_FIXED_INVALID_ARGS("remove-fixed-invalid-args"),
-        REMOVE_FIXED_SUCCESS("remove-fixed-success"),
-        LIST_FIXED_SUCCESS("list-fixed-success"),
-        LIST_FIXED_NONE("list-fixed-none"),
-        INFO_FIXED_NONEXISTANT("info-fixed-nonexistant"),
-        INFO_FIXED_NO_ARGS("info-fixed-no-args"),
-        INFO_FIXED_INVALID_ARGS("info-fixed-invalid-args"),
-        INFO_FIXED_INFO("info-fixed-info"),
-        CLEAR_FIXED_NO_PERMISSION("clear-no-permission"),
-        CLEAR_FIXED_NO_ARGS("clear-no-args"),
-        CLEAR_FIXED_INVALID_ARGS("clear-invalid-args"),
-        CLEAR_FIXED_SUCCESS("clear-success"),
-        NO_PERMISSION_FIXED("no-permission-fixed"),
-        MAX_FIXED_EFFECTS_REACHED("max-fixed-effects-reached"),
-        INVALID_FIXED_COMMAND("invalid-fixed-command"),
-
+        FIXED_CREATE_MISSING_ARGS,
+        FIXED_CREATE_INVALID_COORDS,
+        FIXED_CREATE_OUT_OF_RANGE,
+        FIXED_CREATE_EFFECT_INVALID,
+        FIXED_CREATE_EFFECT_NO_PERMISSION,
+        FIXED_CREATE_STYLE_INVALID,
+        FIXED_CREATE_STYLE_NO_PERMISSION,
+        FIXED_CREATE_STYLE_NON_FIXABLE,
+        FIXED_CREATE_DATA_ERROR,
+        FIXED_CREATE_SUCCESS,
+        FIXED_REMOVE_INVALID,
+        FIXED_REMOVE_NO_ARGS,
+        FIXED_REMOVE_ARGS_INVALID,
+        FIXED_REMOVE_SUCCESS,
+        FIXED_LIST_NONE,
+        FIXED_LIST_SUCCESS,
+        FIXED_INFO_INVALID,
+        FIXED_INFO_NO_ARGS,
+        FIXED_INFO_INVALID_ARGS,
+        FIXED_INFO_SUCCESS,
+        FIXED_CLEAR_NO_PERMISSION,
+        FIXED_CLEAR_NO_ARGS,
+        FIXED_CLEAR_INVALID_ARGS,
+        FIXED_CLEAR_SUCCESS,
+        FIXED_NO_PERMISSION,
+        FIXED_MAX_REACHED,
+        FIXED_INVALID_COMMAND,
+        
         // GUI
-        GUI_DISABLED("gui-disabled"),
-        GUI_BY_DEFAULT("gui-by-default"),
-        GUI_BACK_BUTTON("gui-back-button"),
-        GUI_ICON_NAME_COLOR("gui-icon-name-color"),
-        GUI_ICON_CURRENT_ACTIVE("gui-icon-current-active"),
-        GUI_ICON_SETS_TO("gui-icon-sets-to"),
-        GUI_ICON_SET_YOUR("gui-icon-set-your"),
-        GUI_NO_ACCESS_TO("gui-no-access-to"),
-        GUI_NO_DATA("gui-no-data"),
+        GUI_DISABLED,
+        GUI_BY_DEFAULT,
+        GUI_BACK_BUTTON,
+        GUI_ICON_NAME_COLOR,
+        GUI_ICON_CURRENT_ACTIVE,
+        GUI_ICON_SETS_TO,
+        GUI_ICON_SET_YOUR,
+        GUI_NO_ACCESS_TO,
+        GUI_NO_DATA;
 
-        // Prefixes
-        USE("use"),
-        USAGE("usage"),
-        RESET("reset"),
-
-        // Other
-        INVALID_ARGUMENTS("invalid-arguments"),
-        AVAILABLE_COMMANDS("available-commands"),
-        DISABLED_WORLDS_NONE("disabled-worlds-none"),
-        DISABLED_WORLDS("disabled-worlds"),
-        COMMAND_USAGE("command-usage"),
-        EXECUTED_FOR_PLAYER("executed-for-player"),
-        FAILED_EXECUTE_NOT_FOUND("failed-execute-not-found"),
-        FAILED_EXECUTE_NO_PERMISSION("failed-execute-no-permission");
-
-        private String fileLocation;
         private String message;
-
-        private Lang(String fileLocation) {
-            this.fileLocation = fileLocation;
+        
+        private String getConfigName() {
+            return this.name().toLowerCase().replaceAll("_", "-");
         }
 
         /**
@@ -145,10 +144,11 @@ public class LangManager {
          * @param langFile The lang file to pull the message from
          */
         private void setMessage(YamlConfiguration langFile) {
-            String langMessage = langFile.getString(this.fileLocation);
+            String fileLocation = this.getConfigName();
+            String langMessage = langFile.getString(fileLocation);
             if (langMessage == null) {
-                langMessage = "&cMissing message in " + langFileName + ": " + this.fileLocation + ". Contact a server administrator.";
-                PlayerParticles.getPlugin().getLogger().warning("Missing message in " + langFileName + ": " + this.fileLocation);
+                langMessage = "&cMissing message in " + langFileName + ": " + fileLocation + ". Contact a server administrator.";
+                PlayerParticles.getPlugin().getLogger().warning("Missing message in " + langFileName + ": " + fileLocation);
             }
             this.message = parseColors(langMessage);
         }

@@ -9,7 +9,7 @@ import com.esophose.playerparticles.particles.PPlayer;
 public class EffectCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
-        LangManager.sendMessage(pplayer, Lang.COMMAND_REMOVED);
+        LangManager.sendMessage(pplayer, Lang.COMMAND_DESCRIPTION_EFFECT);
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
@@ -21,7 +21,7 @@ public class EffectCommandModule implements CommandModule {
     }
 
     public Lang getDescription() {
-        return Lang.EFFECT_COMMAND_DESCRIPTION;
+        return Lang.COMMAND_DESCRIPTION_EFFECT;
     }
 
     public String getArguments() {

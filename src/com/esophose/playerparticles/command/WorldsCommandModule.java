@@ -33,7 +33,7 @@ public class WorldsCommandModule implements CommandModule {
     }
 
     public Lang getDescription() {
-        return Lang.WORLDS_COMMAND_DESCRIPTION;
+        return Lang.COMMAND_DESCRIPTION_WORLDS;
     }
 
     public String getArguments() {

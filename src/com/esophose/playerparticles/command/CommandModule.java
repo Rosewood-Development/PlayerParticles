@@ -59,7 +59,6 @@ public interface CommandModule {
      * @param command The command to display usage for
      */
     public static void printUsage(PPlayer pplayer, CommandModule command) {
-        LangManager.sendMessage(pplayer, Lang.COMMAND_MISSING_ARGS);
         LangManager.sendCustomMessage(pplayer, String.format("/{0} {1}", command.getName(), command.getArguments()));
     }
     
@@ -72,7 +71,6 @@ public interface CommandModule {
      * @param subCommandArgs The sub-command's arguments
      */
     public static void printSubcommandUsage(PPlayer pplayer, CommandModule command, String subCommandName, String subCommandArgs) {
-        LangManager.sendMessage(pplayer, Lang.COMMAND_MISSING_ARGS);
         LangManager.sendCustomMessage(pplayer, String.format("/{0} {1} {2}", command.getName(), subCommandName, subCommandArgs));
     }
 

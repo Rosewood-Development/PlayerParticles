@@ -17,26 +17,22 @@ public class DataCommandModule implements CommandModule {
             if ((!effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA) && !effect.hasProperty(ParticleProperty.COLORABLE)) || args.length == 0) {
                 if (effect.hasProperty(ParticleProperty.COLORABLE)) {
                     if (effect == ParticleEffect.NOTE) {
-                        LangManager.sendMessage(pplayer, Lang.DATA_USAGE, "note");
-                        LangManager.sendCustomMessage(pplayer, LangManager.getText(Lang.USAGE) + " " + LangManager.getText(Lang.NOTE_DATA_USAGE));
+                        LangManager.sendMessage(pplayer, Lang.DATA_USAGE_NOTE);
                     } else {
-                        LangManager.sendMessage(pplayer, Lang.DATA_USAGE, "color");
-                        LangManager.sendCustomMessage(pplayer, LangManager.getText(Lang.USAGE) + " " + LangManager.getText(Lang.COLOR_DATA_USAGE));
+                        LangManager.sendMessage(pplayer, Lang.DATA_USAGE_COLOR);
                     }
                 } else if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
                     if (effect == ParticleEffect.ITEM) {
-                        LangManager.sendMessage(pplayer, Lang.DATA_USAGE, "item");
-                        LangManager.sendCustomMessage(pplayer, LangManager.getText(Lang.USAGE) + " " + LangManager.getText(Lang.ITEM_DATA_USAGE));
+                        LangManager.sendMessage(pplayer, Lang.DATA_USAGE_ITEM);
                     } else {
-                        LangManager.sendMessage(pplayer, Lang.DATA_USAGE, "block");
-                        LangManager.sendCustomMessage(pplayer, LangManager.getText(Lang.USAGE) + " " + LangManager.getText(Lang.BLOCK_DATA_USAGE));
+                        LangManager.sendMessage(pplayer, Lang.DATA_USAGE_BLOCK);
                     }
                 } else {
-                    LangManager.sendMessage(pplayer, Lang.NO_DATA_USAGE);
+                    LangManager.sendMessage(pplayer, Lang.DATA_USAGE_NONE);
                 }
             }
         } else {
-            LangManager.sendMessage(pplayer, Lang.INVALID_EFFECT);
+            LangManager.sendMessage(pplayer, Lang.EFFECT_INVALID);
         }
     }
 
@@ -49,7 +45,7 @@ public class DataCommandModule implements CommandModule {
     }
 
     public Lang getDescription() {
-        return Lang.DATA_COMMAND_DESCRIPTION;
+        return Lang.COMMAND_DESCRIPTION_DATA;
     }
 
     public String getArguments() {

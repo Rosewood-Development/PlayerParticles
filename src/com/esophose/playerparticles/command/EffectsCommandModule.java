@@ -15,12 +15,13 @@ public class EffectsCommandModule implements CommandModule {
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         Player p = pplayer.getPlayer();
 
-        if (PermissionManager.getEffectsUserHasPermissionFor(p).size() == 1) {
-            LangManager.sendMessage(p, Lang.NO_PARTICLES);
+        List<String> effectList = PermissionManager.getEffectsUserHasPermissionFor(p);
+        if (effectList.size() == 1) {
+            LangManager.sendMessage(p, Lang.EFFECT_LIST, effectList.get(0));
             return;
         }
 
-        String toSend = LangManager.getText(Lang.USE) + " ";
+        String toSend = "";
         for (ParticleEffect effect : ParticleEffect.getSupportedEffects()) {
             if (PermissionManager.hasEffectPermission(p, effect)) {
                 toSend += effect.getName() + ", ";
@@ -31,8 +32,7 @@ public class EffectsCommandModule implements CommandModule {
             toSend = toSend.substring(0, toSend.length() - 2);
         }
 
-        LangManager.sendCustomMessage(p, toSend);
-        LangManager.sendCustomMessage(p, LangManager.getText(Lang.USAGE) + " " + LangManager.getText(Lang.PARTICLE_USAGE));
+        LangManager.sendMessage(p, Lang.EFFECT_LIST, toSend);
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
@@ -44,7 +44,7 @@ public class EffectsCommandModule implements CommandModule {
     }
 
     public Lang getDescription() {
-        return Lang.EFFECTS_COMMAND_DESCRIPTION;
+        return Lang.COMMAND_DESCRIPTION_EFFECTS;
     }
 
     public String getArguments() {

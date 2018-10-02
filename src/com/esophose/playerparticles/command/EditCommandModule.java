@@ -20,7 +20,7 @@ public class EditCommandModule implements CommandModule {
     }
 
     public Lang getDescription() {
-        return Lang.EDIT_COMMAND_DESCRIPTION;
+        return Lang.COMMAND_DESCRIPTION_EDIT;
     }
 
     public String getArguments() {

@@ -20,7 +20,7 @@ public class InfoCommandModule implements CommandModule {
     }
 
     public Lang getDescription() {
-        return Lang.INFO_COMMAND_DESCRIPTION;
+        return Lang.COMMAND_DESCRIPTION_INFO;
     }
 
     public String getArguments() {
