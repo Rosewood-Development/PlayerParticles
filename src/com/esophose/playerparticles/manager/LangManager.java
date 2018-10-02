@@ -184,8 +184,8 @@ public class LangManager {
     public static void setup() {
         FileConfiguration config = PlayerParticles.getPlugin().getConfig();
         messagesEnabled = config.getBoolean("messages-enabled");
-        prefixEnabled = config.getBoolean("use-prefix");
-        messagePrefix = parseColors(config.getString("prefix"));
+        prefixEnabled = config.getBoolean("use-message-prefix");
+        messagePrefix = parseColors(config.getString("message-prefix"));
 
         YamlConfiguration lang = configureLangFile(config);
         if (lang == null) {

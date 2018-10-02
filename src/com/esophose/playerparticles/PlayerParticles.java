@@ -50,7 +50,7 @@ public class PlayerParticles extends JavaPlugin {
      * Saves the default config if it doesn't exist
      * Registers the tab completer and the event listeners
      * Checks if the config needs to be updated to the new version
-     * Makes sure the database is accessable
+     * Makes sure the database is accessible
      * Updates the map and styleMap @see ParticleCreator
      * Starts the particle spawning task
      * Registers the command executor
