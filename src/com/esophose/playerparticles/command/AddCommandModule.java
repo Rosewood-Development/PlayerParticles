@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.bukkit.Material;
 
+import com.esophose.playerparticles.manager.DataManager;
 import com.esophose.playerparticles.manager.LangManager;
 import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.manager.PermissionManager;
@@ -13,6 +14,8 @@ import com.esophose.playerparticles.particles.ParticleEffect;
 import com.esophose.playerparticles.particles.ParticleEffect.NoteColor;
 import com.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
 import com.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
+import com.esophose.playerparticles.particles.ParticleGroup;
+import com.esophose.playerparticles.particles.ParticlePair;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
 import com.esophose.playerparticles.styles.api.ParticleStyleManager;
 import com.esophose.playerparticles.util.ParticleUtils;
@@ -114,7 +117,9 @@ public class AddCommandModule implements CommandModule {
                 }
             }
             
-            // TODO: Update active group and save
+            ParticleGroup group = pplayer.getActiveParticleGroup();
+            group.getParticles().add(new ParticlePair(pplayer.getUniqueId(), pplayer.getNextActiveParticleId(), effect, style, blockData, blockData, colorData, noteColorData));
+            DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
         }
     }
 

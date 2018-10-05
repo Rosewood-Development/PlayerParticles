@@ -75,7 +75,8 @@ public class PPlayer {
      */
     public ParticleGroup getParticlesByName(String name) {
         for (ParticleGroup group : this.particleGroups)
-            if (group.getName().equalsIgnoreCase(name)) return group;
+            if (group.getName().equalsIgnoreCase(name)) 
+                return group;
         return null;
     }
 
@@ -85,8 +86,18 @@ public class PPlayer {
      * @return A List<ParticlePair> of all particles this player has set
      */
     public List<ParticlePair> getActiveParticles() {
+        return this.getActiveParticleGroup().getParticles();
+    }
+
+    /**
+     * Get the PPlayer's active ParticleGroup
+     * 
+     * @return A ParticleGroup of this player's active particles
+     */
+    public ParticleGroup getActiveParticleGroup() {
         for (ParticleGroup group : this.particleGroups)
-            if (group.getName() == null) return group.getParticles();
+            if (group.getName() == null) 
+                return group;
         return null; // This should never return null, there will always be at least one ParticleGroup
     }
 
@@ -99,7 +110,8 @@ public class PPlayer {
     public List<ParticlePair> getActiveParticlesForStyle(ParticleStyle style) {
         List<ParticlePair> matches = new ArrayList<ParticlePair>();
         for (ParticlePair pair : this.getActiveParticles())
-            if (pair.getStyle().equals(style)) matches.add(pair);
+            if (pair.getStyle().equals(style)) 
+                matches.add(pair);
         return matches;
     }
 
@@ -111,7 +123,8 @@ public class PPlayer {
      */
     public ParticlePair getActiveParticle(int id) {
         for (ParticlePair particle : this.getActiveParticles())
-            if (particle.getId() == id) return particle;
+            if (particle.getId() == id) 
+                return particle;
         return null;
     }
 
@@ -132,7 +145,8 @@ public class PPlayer {
      */
     public FixedParticleEffect getFixedEffectById(int id) {
         for (FixedParticleEffect fixedEffect : this.fixedParticles)
-            if (fixedEffect.getId() == id) return fixedEffect;
+            if (fixedEffect.getId() == id) 
+                return fixedEffect;
         return null;
     }
 
@@ -164,13 +178,13 @@ public class PPlayer {
      */
     public void removeFixedEffect(int id) {
         for (int i = this.fixedParticles.size() - 1; i >= 0; i--)
-            if (this.fixedParticles.get(i).getId() == id) this.fixedParticles.remove(i);
+            if (this.fixedParticles.get(i).getId() == id) 
+                this.fixedParticles.remove(i);
     }
 
     /**
      * Gets the next Id for a player's fixed effects
      * 
-     * @param pplayerUUID The player to get the Id for
      * @return The next available fixed effect id
      */
     public int getNextFixedEffectId() {
@@ -178,6 +192,19 @@ public class PPlayer {
         int[] ids = new int[fixedEffectIds.size()];
         for (int i = 0; i < fixedEffectIds.size(); i++)
             ids[i] = fixedEffectIds.get(i);
+        return ParticleUtils.getSmallestPositiveInt(ids);
+    }
+
+    /**
+     * Gets the next Id for a player's active particles
+     * 
+     * @return The next available active particle id
+     */
+    public int getNextActiveParticleId() {
+        List<ParticlePair> activeParticles = this.getActiveParticles();
+        int[] ids = new int[activeParticles.size()];
+        for (int i = 0; i < activeParticles.size(); i++)
+            ids[i] = activeParticles.get(i).getId();
         return ParticleUtils.getSmallestPositiveInt(ids);
     }
 
