@@ -88,9 +88,10 @@ public class DataManager {
         					   	    "WHERE g.owner_uuid = ?"; // @formatter:on
                 try (PreparedStatement statement = connection.prepareStatement(groupQuery)) {
                     statement.setString(1, playerUUID.toString());
-
+                    System.out.println("Executing particle query");
                     ResultSet result = statement.executeQuery();
                     while (result.next()) {
+                        System.out.println("Particle result found");
                         // Group properties
                         String groupName = result.getString("name");
 
@@ -103,6 +104,15 @@ public class DataManager {
                         NoteColor noteColor = new NoteColor(result.getInt("note"));
                         OrdinaryColor color = new OrdinaryColor(result.getInt("r"), result.getInt("g"), result.getInt("b"));
                         ParticlePair particle = new ParticlePair(playerUUID, id, effect, style, itemMaterial, blockMaterial, color, noteColor);
+                        
+                        System.out.println("==============================");
+                        System.out.println(result.getInt("id"));
+                        System.out.println(result.getString("effect"));
+                        System.out.println(result.getString("style"));
+                        System.out.println(result.getString("item_material"));
+                        System.out.println(result.getString("block_material"));
+                        System.out.println(result.getInt("note"));
+                        System.out.println(result.getInt("r") + " " + result.getInt("g") + " " + result.getInt("b"));
 
                         // Try to add particle to an existing group
                         boolean groupAlreadyExists = false;
@@ -155,7 +165,7 @@ public class DataManager {
                 }
 
                 if (groups.size() == 0) { // If there aren't any groups then this is a brand new PPlayer and we need to save a new active group for them
-                    ParticleGroup activeGroup = new ParticleGroup(null, new ArrayList<ParticlePair>());
+                    ParticleGroup activeGroup = new ParticleGroup(ParticleGroup.DEFAULT_NAME, new ArrayList<ParticlePair>());
                     saveParticleGroup(playerUUID, activeGroup);
                     groups.add(activeGroup);
                 }
@@ -222,15 +232,15 @@ public class DataManager {
                         particlesStatement.setInt(11, particle.getColor().getBlue());
                         particlesStatement.addBatch();
                     }
+                    
+                    particlesStatement.executeBatch();
                 }
             });
         });
 
         getPPlayer(playerUUID, (pplayer) -> {
-            String groupName = group.getName() == null ? "" : group.getName();
             for (ParticleGroup existing : pplayer.getParticles()) {
-                String existingName = existing.getName() == null ? "" : existing.getName();
-                if (groupName.equalsIgnoreCase(existingName)) {
+                if (group.getName().equalsIgnoreCase(existing.getName())) {
                     pplayer.getParticles().remove(existing);
                     break;
                 }
@@ -298,7 +308,7 @@ public class DataManager {
                 try (PreparedStatement statement = connection.prepareStatement(particleQuery)) {
                     ParticlePair particle = fixedEffect.getParticlePair();
                     statement.setString(1, particleUUID);
-                    statement.setString(2, null);
+                    statement.setNull(2, java.sql.Types.VARCHAR);
                     statement.setInt(3, fixedEffect.getId());
                     statement.setString(4, particle.getEffect().getName());
                     statement.setString(5, particle.getStyle().getName());

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.MessageFormat;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -54,6 +55,9 @@ public class LangManager {
         COMMAND_DESCRIPTION_GROUP_SAVE,
         COMMAND_DESCRIPTION_GROUP_LOAD,
         COMMAND_DESCRIPTION_GROUP_REMOVE,
+        
+        // Add Command
+        COMMAND_ADD_PARTICLE_APPLIED,
         
         // Effects
         EFFECT_NO_PERMISSION,
@@ -158,8 +162,8 @@ public class LangManager {
          * 
          * @return The message
          */
-        private String get(String... replacements) {
-            return String.format(this.message, (Object[]) replacements);
+        private String get(Object... replacements) {
+            return new MessageFormat(this.message).format(replacements);
         }
     }
 
@@ -198,8 +202,8 @@ public class LangManager {
 
     /**
      * Loads the target .lang file as defined in the config and grabs its YamlConfiguration
-     * If it doesn't exist, default to en_US.lang
-     * If en_US.lang doesn't exist, copy the file from this .jar to the target directory
+     * If it doesn't exist, default to default.lang
+     * If default.lang doesn't exist, copy the file from this .jar to the target directory
      * 
      * @param config The plugin's configuration file
      * @return The YamlConfiguration of the target .lang file
@@ -209,21 +213,21 @@ public class LangManager {
         langFileName = config.getString("lang-file");
         File targetLangFile = new File(pluginDataFolder.getAbsolutePath() + "/lang/" + langFileName);
 
-        if (!targetLangFile.exists()) { // Target .lang file didn't exist, default to en_US.lang
-            if (!langFileName.equals("en_US.lang")) {
-                PlayerParticles.getPlugin().getLogger().warning("Couldn't find lang file '" + langFileName + "', defaulting to en_US.lang");
+        if (!targetLangFile.exists()) { // Target .lang file didn't exist, default to default.lang
+            if (!langFileName.equals("default.lang")) {
+                PlayerParticles.getPlugin().getLogger().warning("Couldn't find lang file '" + langFileName + "', defaulting to default.lang");
             }
-            langFileName = "en_US.lang";
+            langFileName = "default.lang";
 
             targetLangFile = new File(pluginDataFolder.getAbsolutePath() + "/lang/" + langFileName);
-            if (!targetLangFile.exists()) { // en_US.lang didn't exist, create it
-                try (InputStream stream = PlayerParticles.getPlugin().getResource("lang/en_US.lang")) {
+            if (!targetLangFile.exists()) { // default.lang didn't exist, create it
+                try (InputStream stream = PlayerParticles.getPlugin().getResource("lang/default.lang")) {
                     targetLangFile.getParentFile().mkdir(); // Make sure the directory always exists
                     Files.copy(stream, Paths.get(targetLangFile.getAbsolutePath()));
                     return YamlConfiguration.loadConfiguration(targetLangFile);
                 } catch (IOException ex) {
                     ex.printStackTrace();
-                    PlayerParticles.getPlugin().getLogger().severe("Unable to write en_US.lang to disk! All messages for the plugin have been disabled until this is fixed!");
+                    PlayerParticles.getPlugin().getLogger().severe("Unable to write default.lang to disk! All messages for the plugin have been disabled until this is fixed!");
                     return null;
                 }
             }
@@ -238,7 +242,7 @@ public class LangManager {
      * @param messageType The message type to get
      * @param replacements The replacements fot the message
      */
-    public static String getText(Lang messageType, String... replacements) {
+    public static String getText(Lang messageType, Object... replacements) {
         return messageType.get(replacements);
     }
 
@@ -248,7 +252,7 @@ public class LangManager {
      * @param player The player to send the message to
      * @param messageType The message to send to the player
      */
-    public static void sendMessage(Player player, Lang messageType, String... replacements) {
+    public static void sendMessage(Player player, Lang messageType, Object... replacements) {
         if (!messagesEnabled) return;
         
         String message = messageType.get(replacements);
@@ -270,8 +274,8 @@ public class LangManager {
      * @param pplayer The player to send the message to
      * @param messageType The message to send to the player
      */
-    public static void sendMessage(PPlayer pplayer, Lang messageType, String... replacements) {
-        sendMessage(pplayer, messageType, replacements);
+    public static void sendMessage(PPlayer pplayer, Lang messageType, Object... replacements) {
+        sendMessage(pplayer.getPlayer(), messageType, replacements);
     }
 
     /**

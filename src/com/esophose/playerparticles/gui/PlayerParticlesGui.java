@@ -250,7 +250,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         particles.clear();
         particles.add(particle);
 
-        ParticleGroup group = new ParticleGroup(null, particles);
+        ParticleGroup group = new ParticleGroup(ParticleGroup.DEFAULT_NAME, particles);
         DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
     }
 
@@ -264,7 +264,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         particles.clear();
         particles.add(particle);
 
-        ParticleGroup group = new ParticleGroup(null, particles);
+        ParticleGroup group = new ParticleGroup(ParticleGroup.DEFAULT_NAME, particles);
         DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
     }
 
@@ -278,7 +278,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         particles.clear();
         particles.add(particle);
 
-        ParticleGroup group = new ParticleGroup(null, particles);
+        ParticleGroup group = new ParticleGroup(ParticleGroup.DEFAULT_NAME, particles);
         DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
     }
 
@@ -292,7 +292,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         particles.clear();
         particles.add(particle);
 
-        ParticleGroup group = new ParticleGroup(null, particles);
+        ParticleGroup group = new ParticleGroup(ParticleGroup.DEFAULT_NAME, particles);
         DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
     }
 
@@ -306,7 +306,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         particles.clear();
         particles.add(particle);
 
-        ParticleGroup group = new ParticleGroup(null, particles);
+        ParticleGroup group = new ParticleGroup(ParticleGroup.DEFAULT_NAME, particles);
         DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
     }
 
@@ -320,7 +320,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         particles.clear();
         particles.add(particle);
 
-        ParticleGroup group = new ParticleGroup(null, particles);
+        ParticleGroup group = new ParticleGroup(ParticleGroup.DEFAULT_NAME, particles);
         DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
     }
 

@@ -1,6 +1,9 @@
 package com.esophose.playerparticles.command;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.bukkit.util.StringUtil;
 
 import com.esophose.playerparticles.manager.LangManager.Lang;
 import com.esophose.playerparticles.particles.PPlayer;
@@ -13,7 +16,14 @@ public class DefaultCommandModule implements CommandModule {
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
-        return null;
+        List<String> matches = new ArrayList<String>();
+        List<String> commandNames = ParticleCommandHandler.getCommandNames();
+        
+        if (args.length == 0) return commandNames;
+        
+        StringUtil.copyPartialMatches(args[0], commandNames, matches);
+
+        return matches;
     }
 
     public String getName() {

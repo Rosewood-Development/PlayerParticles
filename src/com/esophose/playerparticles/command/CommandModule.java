@@ -1,10 +1,13 @@
 package com.esophose.playerparticles.command;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 import com.esophose.playerparticles.manager.LangManager;
 import com.esophose.playerparticles.manager.LangManager.Lang;
 import com.esophose.playerparticles.particles.PPlayer;
+
+import net.md_5.bungee.api.ChatColor;
 
 public interface CommandModule {
 
@@ -59,7 +62,24 @@ public interface CommandModule {
      * @param command The command to display usage for
      */
     public static void printUsage(PPlayer pplayer, CommandModule command) {
-        LangManager.sendCustomMessage(pplayer, String.format("/{0} {1}", command.getName(), command.getArguments()));
+        Object[] args = new Object[] { command.getName(), command.getArguments() };
+        LangManager.sendCustomMessage(pplayer, new MessageFormat(ChatColor.YELLOW + "/pp {0} {1}").format(args));
+    }
+    
+    /**
+     * Displays a command's usage (with its description) to the player
+     * 
+     * @param pplayer The PPlayer to display the command usage to
+     * @param command The command to display usage for
+     */
+    public static void printUsageWithDescription(PPlayer pplayer, CommandModule command) {
+        if (command.getArguments().length() == 0) {
+            Object[] args = new Object[] { command.getName(), LangManager.getText(command.getDescription()) };
+            LangManager.sendCustomMessage(pplayer, new MessageFormat(ChatColor.YELLOW + "/pp {0} - {1}").format(args));
+        } else {
+            Object[] args = new Object[] { command.getName(), command.getArguments(), LangManager.getText(command.getDescription()) };
+            LangManager.sendCustomMessage(pplayer, new MessageFormat(ChatColor.YELLOW + "/pp {0} {1} - {2}").format(args));
+        }
     }
     
     /**
@@ -71,7 +91,8 @@ public interface CommandModule {
      * @param subCommandArgs The sub-command's arguments
      */
     public static void printSubcommandUsage(PPlayer pplayer, CommandModule command, String subCommandName, String subCommandArgs) {
-        LangManager.sendCustomMessage(pplayer, String.format("/{0} {1} {2}", command.getName(), subCommandName, subCommandArgs));
+        Object[] args = new Object[] { command.getName(), subCommandName, subCommandArgs };
+        LangManager.sendCustomMessage(pplayer, new MessageFormat(ChatColor.YELLOW + "/pp {0} {1} {2}").format(args));
     }
 
 }

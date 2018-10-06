@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ParticleGroup {
+    
+    public static final String DEFAULT_NAME = "active";
 
     private String name;
     private List<ParticlePair> particles;
@@ -38,7 +40,7 @@ public class ParticleGroup {
      * @return The default empty active ParticleGroup
      */
     public static ParticleGroup getDefaultGroup() {
-        return new ParticleGroup(null, new ArrayList<ParticlePair>());
+        return new ParticleGroup(DEFAULT_NAME, new ArrayList<ParticlePair>());
     }
 
 }

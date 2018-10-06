@@ -23,7 +23,7 @@ public class ParticleStyleBlockBreak implements ParticleStyle, Listener {
         List<PParticle> particles = new ArrayList<PParticle>();
 
         for (int i = 0; i < 15; i++)
-            particles.add(new PParticle(location.clone().add(0.5, 0.5, 0.5), 0.5F, 0.5F, 0.5F, 0.05F));
+            particles.add(new PParticle(location.add(0.5, 0.5, 0.5), 0.5F, 0.5F, 0.5F, 0.05F));
 
         return particles;
     }
@@ -46,7 +46,7 @@ public class ParticleStyleBlockBreak implements ParticleStyle, Listener {
         PPlayer pplayer = DataManager.getPPlayer(player.getUniqueId());
         if (pplayer != null) {
             for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.BLOCKBREAK)) {
-                Location loc = event.getBlock().getLocation();
+                Location loc = event.getBlock().getLocation().clone();
                 ParticleManager.displayParticles(particle, DefaultStyles.BLOCKBREAK.getParticles(particle, loc));
             }
         }

@@ -1,14 +1,18 @@
 package com.esophose.playerparticles.command;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 
 import com.esophose.playerparticles.manager.DataManager;
 import com.esophose.playerparticles.manager.LangManager;
+import com.esophose.playerparticles.manager.LangManager.Lang;
 import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.manager.PermissionManager;
-import com.esophose.playerparticles.manager.LangManager.Lang;
 import com.esophose.playerparticles.particles.PPlayer;
 import com.esophose.playerparticles.particles.ParticleEffect;
 import com.esophose.playerparticles.particles.ParticleEffect.NoteColor;
@@ -116,15 +120,59 @@ public class AddCommandModule implements CommandModule {
                     }
                 }
             }
-            
-            ParticleGroup group = pplayer.getActiveParticleGroup();
-            group.getParticles().add(new ParticlePair(pplayer.getUniqueId(), pplayer.getNextActiveParticleId(), effect, style, blockData, blockData, colorData, noteColorData));
-            DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
         }
+        
+        ParticleGroup group = pplayer.getActiveParticleGroup();
+        ParticlePair newParticle = new ParticlePair(pplayer.getUniqueId(), pplayer.getNextActiveParticleId(), effect, style, blockData, blockData, colorData, noteColorData);
+        group.getParticles().add(newParticle);
+        DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+        
+        LangManager.sendMessage(pplayer, Lang.COMMAND_ADD_PARTICLE_APPLIED, newParticle.getEffect().getName(), newParticle.getStyle().getName(), newParticle.getDataString());
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
-        return null;
+        Player p = pplayer.getPlayer();
+        List<String> matches = new ArrayList<String>();
+        System.out.println("Args in AddCommandModule: " + Arrays.toString(args) + " " + args.length);
+        if (args.length <= 1) { // Effect name
+            if (args.length == 0) matches = PermissionManager.getEffectsUserHasPermissionFor(p);
+            else StringUtil.copyPartialMatches(args[0], PermissionManager.getEffectsUserHasPermissionFor(p), matches);
+        } else if (args.length == 2) { // Style name
+            StringUtil.copyPartialMatches(args[1], PermissionManager.getStylesUserHasPermissionFor(p), matches);
+        } else if (args.length >= 3) { // Data
+            ParticleEffect effect = ParticleEffect.fromName(args[0]);
+            if (effect != null) {
+                if (effect.hasProperty(ParticleProperty.COLORABLE)) {
+                    List<String> possibleValues = new ArrayList<String>();
+                    if (effect == ParticleEffect.NOTE) { // Note data
+                        if (args.length == 3) {
+                            possibleValues.add("<0-23>");
+                            possibleValues.add("rainbow");
+                        }
+                    } else { // Color data
+                        if (args.length <= 5 && !args[2].equalsIgnoreCase("rainbow")) {
+                            possibleValues.add("<0-255>");
+                        }
+                        if (args.length <= 4 && !args[2].equalsIgnoreCase("rainbow")) {
+                            possibleValues.add("<0-255> <0-255>");
+                        }
+                        if (args.length <= 3) {
+                            possibleValues.add("<0-255> <0-255> <0-255>");
+                            possibleValues.add("rainbow");
+                        }
+                    }
+                    StringUtil.copyPartialMatches(args[args.length - 1], possibleValues, matches);
+                } else if (args.length == 3 && effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
+                    if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST) { // Block material
+                        matches = StringUtil.copyPartialMatches(args[2], ParticleUtils.getAllBlockMaterials(), matches);
+                    } else if (effect == ParticleEffect.ITEM) { // Item material
+                        matches = StringUtil.copyPartialMatches(args[2], ParticleUtils.getAllItemMaterials(), matches);
+                    }
+                }
+            }
+        }
+        
+        return matches;
     }
 
     public String getName() {

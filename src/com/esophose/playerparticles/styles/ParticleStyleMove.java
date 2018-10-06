@@ -38,7 +38,7 @@ public class ParticleStyleMove implements ParticleStyle, Listener {
         PPlayer pplayer = DataManager.getPPlayer(e.getPlayer().getUniqueId());
         if (pplayer != null) {
             for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.MOVE)) {
-                Location loc = e.getPlayer().getLocation();
+                Location loc = e.getPlayer().getLocation().clone();
                 loc.setY(loc.getY() + 0.05);
                 ParticleManager.displayParticles(particle, DefaultStyles.MOVE.getParticles(particle, loc));
             }

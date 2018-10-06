@@ -96,7 +96,7 @@ public class PPlayer {
      */
     public ParticleGroup getActiveParticleGroup() {
         for (ParticleGroup group : this.particleGroups)
-            if (group.getName() == null) 
+            if (group.getName().equals(ParticleGroup.DEFAULT_NAME)) 
                 return group;
         return null; // This should never return null, there will always be at least one ParticleGroup
     }

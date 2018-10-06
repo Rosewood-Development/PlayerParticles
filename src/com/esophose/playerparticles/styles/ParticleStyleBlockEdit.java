@@ -54,7 +54,7 @@ public class ParticleStyleBlockEdit implements ParticleStyle, Listener {
         PPlayer pplayer = DataManager.getPPlayer(player.getUniqueId());
         if (pplayer != null) {
             for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.BLOCKEDIT)) {
-                Location loc = event.getBlock().getLocation();
+                Location loc = event.getBlock().getLocation().clone();
                 ParticleManager.displayParticles(particle, DefaultStyles.BLOCKPLACE.getParticles(particle, loc));
             }
         }

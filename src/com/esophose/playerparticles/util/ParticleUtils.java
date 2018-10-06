@@ -6,6 +6,21 @@ import java.util.List;
 import org.bukkit.Material;
 
 public class ParticleUtils {
+    
+    private static List<String> blockMaterials, itemMaterials;
+    
+    static {
+        blockMaterials = new ArrayList<String>();
+        itemMaterials = new ArrayList<String>();
+        
+        for (Material mat : Material.values()) {
+            if (mat.isBlock()) {
+                blockMaterials.add(mat.name().toLowerCase());
+            } else {
+                itemMaterials.add(mat.name().toLowerCase());
+            }
+        }
+    }
 
     /**
      * Finds a block/item as a material from a string
@@ -45,19 +60,11 @@ public class ParticleUtils {
     }
 
     public static List<String> getAllBlockMaterials() {
-        List<String> materials = new ArrayList<String>();
-        for (Material mat : Material.values())
-            if (mat.isBlock()) 
-                materials.add(mat.name().toLowerCase());
-        return materials;
+        return blockMaterials;
     }
 
     public static List<String> getAllItemMaterials() {
-        List<String> materials = new ArrayList<String>();
-        for (Material mat : Material.values())
-            if (!mat.isBlock()) 
-                materials.add(mat.name().toLowerCase());
-        return materials;
+        return itemMaterials;
     }
 
     /**

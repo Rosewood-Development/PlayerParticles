@@ -1,5 +1,5 @@
 # ================================================================ #
-#                 en_US.lang MESSAGE CONFIGURATION                 #
+#           default.lang (English) MESSAGE CONFIGURATION           #
 # Important Notes:                                                 #
 # * You can use the & symbol to color the messages                 #
 # * {#} Will be replaced with whatever that message requires       #
@@ -17,7 +17,7 @@ command-description-add: 'Add a particle to your active particles'
 command-description-data: 'Check what type of data an effect uses'
 command-description-default: 'The main command. By default, opens the GUI.'
 command-description-edit: 'Edit the effect, style, or data of an active particle'
-command-description-effect: 'This command has been removed, use /pp help to find new commands'
+command-description-effect: '&cThis command has been removed, use &b/pp help &cto find new commands'
 command-description-effects: 'Display a list of effects you can use'
 command-description-fixed: 'Create, edit, and remove fixed particle effects'
 command-description-group: 'Save, load, and remove your particle groups'
@@ -27,20 +27,23 @@ command-description-info: 'Gets the description of one of your active particles'
 command-description-list: 'Lists the ids of your active particles'
 command-description-remove: 'Removes one of your active particles'
 command-description-reset: 'Removes all your active particles'
-command-description-style: 'This command has been removed, use /pp help to find new commands'
+command-description-style: '&cThis command has been removed, use &b/pp help &cto find new commands'
 command-description-styles: 'Display a list of styles you can use'
 command-description-version: 'Display the current version of the plugin and the author'
-command-description-worlds: 'Find out what worlds PlayerParticles is disabled in'
+command-description-worlds: 'Find out what worlds particles is disabled in'
 
 # Sub-Command Usage
-command-description-fixed-create: '/pp fixed create <x> <y> <z> <effect> <style> [data] - Creates a new fixed effect'
-command-description-fixed-remove: '/pp fixed remove <id> - Removes a fixed effect by its id'
-command-description-fixed-list: '/pp fixed list - Lists all ids of your fixed effects'
-command-description-fixed-info: '/pp fixed info <id> - Gets info on one of your fixed effects'
-command-description-fixed-clear: '/pp fixed clear <radius> - Clears all fixed effects of all players within the given radius'
-command-description-group-save: '/pp group save <name> - Saves all currently applied particles under a given name'
-command-description-group-load: '/pp group load <name> - Loads all particles saved under a given name'
-command-description-group-remove: '/pp group remove <name> - Removes all particles saved under a given name'
+command-description-fixed-create: '&e/pp fixed create <x> <y> <z> <effect> <style> [data] - Creates a new fixed effect'
+command-description-fixed-remove: '&e/pp fixed remove <id> - Removes a fixed effect by its id'
+command-description-fixed-list: '&e/pp fixed list - Lists all ids of your fixed effects'
+command-description-fixed-info: '&e/pp fixed info <id> - Gets info on one of your fixed effects'
+command-description-fixed-clear: '&e/pp fixed clear <radius> - Clears all fixed effects of all players within the given radius'
+command-description-group-save: '&e/pp group save <name> - Saves all currently applied particles under a given name'
+command-description-group-load: '&e/pp group load <name> - Loads all particles saved under a given name'
+command-description-group-remove: '&e/pp group remove <name> - Removes all particles saved under a given name'
+
+# Add Command
+command-add-particle-applied: '&aA new particle has been applied with the effect &b{0}&a, style &b{1}&a, and data &b{2}&a!'
 
 # Effects
 effect-no-permission: '&cYou do not have permission to use the effect &b{0} &c!'

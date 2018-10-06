@@ -57,6 +57,27 @@ public class ParticleCommandHandler implements CommandExecutor, TabCompleter {
     			return commandModule;
     	return null;
     }
+    
+    /**
+     * Get a list of all available commands
+     * 
+     * @return A List of all CommandModules registered
+     */
+    public static List<CommandModule> getCommands() {
+        return commands;
+    }
+    
+    /**
+     * Get all available command names
+     * 
+     * @return All available command names
+     */
+    public static List<String> getCommandNames() {
+        List<String> commandNames = new ArrayList<String>();
+        for (CommandModule cmd : commands) 
+            commandNames.add(cmd.getName());
+        return commandNames;
+    }
 
     /**
      * Called when a player executes a /pp command
@@ -110,10 +131,14 @@ public class ParticleCommandHandler implements CommandExecutor, TabCompleter {
         if (!(sender instanceof Player)) return new ArrayList<String>();
 
         if (cmd.getName().equalsIgnoreCase("pp")) {
-            if (args.length > 1) {
+            System.out.println("Args in onTabComplete: " + Arrays.toString(args) + " " + args.length);
+            if (args.length <= 1) {
+                CommandModule commandModule = findMatchingCommand(""); // Get the default command module
+                return commandModule.onTabComplete(DataManager.getPPlayer(((Player) sender).getUniqueId()), args);
+            } else if (args.length >= 2) {
             	CommandModule commandModule = findMatchingCommand(args[0]);
+            	String[] cmdArgs = Arrays.copyOfRange(args, 1, args.length);
             	if (commandModule != null) {
-            		String[] cmdArgs = Arrays.copyOfRange(args, 1, args.length);
             		return commandModule.onTabComplete(DataManager.getPPlayer(((Player) sender).getUniqueId()), cmdArgs);
             	}
             	

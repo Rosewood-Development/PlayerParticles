@@ -131,13 +131,11 @@ public class ParticleManager extends BukkitRunnable implements Listener {
             // Don't show their particles if they are in spectator mode
             // Don't spawn particles if the world doesn't allow it
             if (player != null && player.getGameMode() != GameMode.SPECTATOR && !DataManager.isWorldDisabled(player.getWorld().getName())) {
-                Location loc = player.getLocation();
-                loc.setY(loc.getY() + 1);
-
-                for (ParticlePair particles : pplayer.getActiveParticles())
-                    displayParticles(particles, loc);
+                for (ParticlePair particles : pplayer.getActiveParticles()) {
+                    displayParticles(particles, player.getLocation().clone().add(0, 1, 0));
+                }
             }
-
+            
             // Loop for FixedParticleEffects
             // Don't spawn particles if the world doesn't allow it
             for (FixedParticleEffect effect : pplayer.getFixedParticles())

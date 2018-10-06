@@ -8,7 +8,10 @@ import com.esophose.playerparticles.particles.PPlayer;
 public class HelpCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
-        // TODO: Rewrite to be dynamically generated from the ParticleCommandHandler's registered CommandModules
+        List<CommandModule> cmds = ParticleCommandHandler.getCommands();
+        for (CommandModule cmd : cmds) {
+            CommandModule.printUsageWithDescription(pplayer, cmd);
+        }
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
