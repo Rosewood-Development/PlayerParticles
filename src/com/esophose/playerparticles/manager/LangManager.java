@@ -20,7 +20,7 @@ public class LangManager {
     /**
      * Contains the location in the .lang file of every chat message
      */
-    public static enum Lang {
+    public static enum Lang { // @formatter:off
         
         // Command Errors
         COMMAND_ERROR_NO_EFFECTS,
@@ -59,6 +59,9 @@ public class LangManager {
         // Add Command
         COMMAND_ADD_PARTICLE_APPLIED,
         
+        // Data Command
+        COMMAND_DATA_NO_ARGS,
+        
         // Effects
         EFFECT_NO_PERMISSION,
         EFFECT_INVALID,
@@ -87,11 +90,6 @@ public class LangManager {
         // Worlds
         DISABLED_WORLDS,
         DISABLED_WORLDS_NONE,
-        
-        // Alternate Player Command Execution
-        EXECUTE_SUCCESS,
-        EXECUTE_FAILED_NOT_FOUND,
-        EXECUTE_FAILED_NO_PERMISSION,
         
         // Reset
         RESET_SUCCESS,
@@ -134,10 +132,10 @@ public class LangManager {
         GUI_ICON_SETS_TO,
         GUI_ICON_SET_YOUR,
         GUI_NO_ACCESS_TO,
-        GUI_NO_DATA;
+        GUI_NO_DATA; // @formatter:on
 
         private String message;
-        
+
         private String getConfigName() {
             return this.name().toLowerCase().replaceAll("_", "-");
         }
@@ -235,7 +233,7 @@ public class LangManager {
 
         return YamlConfiguration.loadConfiguration(targetLangFile);
     }
-    
+
     /**
      * Gets a formatted and replaced message
      * 
@@ -254,7 +252,7 @@ public class LangManager {
      */
     public static void sendMessage(Player player, Lang messageType, Object... replacements) {
         if (!messagesEnabled) return;
-        
+
         String message = messageType.get(replacements);
 
         if (message.length() == 0) return;

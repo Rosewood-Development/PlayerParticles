@@ -88,10 +88,9 @@ public class DataManager {
         					   	    "WHERE g.owner_uuid = ?"; // @formatter:on
                 try (PreparedStatement statement = connection.prepareStatement(groupQuery)) {
                     statement.setString(1, playerUUID.toString());
-                    System.out.println("Executing particle query");
+
                     ResultSet result = statement.executeQuery();
                     while (result.next()) {
-                        System.out.println("Particle result found");
                         // Group properties
                         String groupName = result.getString("name");
 
@@ -104,15 +103,6 @@ public class DataManager {
                         NoteColor noteColor = new NoteColor(result.getInt("note"));
                         OrdinaryColor color = new OrdinaryColor(result.getInt("r"), result.getInt("g"), result.getInt("b"));
                         ParticlePair particle = new ParticlePair(playerUUID, id, effect, style, itemMaterial, blockMaterial, color, noteColor);
-                        
-                        System.out.println("==============================");
-                        System.out.println(result.getInt("id"));
-                        System.out.println(result.getString("effect"));
-                        System.out.println(result.getString("style"));
-                        System.out.println(result.getString("item_material"));
-                        System.out.println(result.getString("block_material"));
-                        System.out.println(result.getInt("note"));
-                        System.out.println(result.getInt("r") + " " + result.getInt("g") + " " + result.getInt("b"));
 
                         // Try to add particle to an existing group
                         boolean groupAlreadyExists = false;

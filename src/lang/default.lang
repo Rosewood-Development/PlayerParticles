@@ -45,6 +45,9 @@ command-description-group-remove: '&e/pp group remove <name> - Removes all parti
 # Add Command
 command-add-particle-applied: '&aA new particle has been applied with the effect &b{0}&a, style &b{1}&a, and data &b{2}&a!'
 
+# Data Command
+command-data-no-args: '&cMissing argument for effect. Command usage: &b/pp data <effect>'
+
 # Effects
 effect-no-permission: '&cYou do not have permission to use the effect &b{0} &c!'
 effect-invalid: '&cThe effect &b{0} &cdoes not exist. Use &b/pp effects &cfor a list of effects you can use.'
@@ -56,15 +59,15 @@ style-invalid: '&cThe style &b{0} &cdoes not exist. Use &b/pp styles &cfor a lis
 style-list: '&eYou can use the following styles: &b{0}'
 
 # Data
-data-usage-none: '&eYour current effect does not use any data!'
-data-usage-block: '&eThe effect &b{0} requires &bblock &edata! &bFormat: <blockName>'
-data-usage-item: '&eThe effect &b{0} requires &bitem &edata! &bFormat: <itemName>'
-data-usage-color: '&eThe effect &b{0} requires &bcolor &edata! &bFormat: [<0-255> <0-255> <0-255>]|[<rainbow>]'
-data-usage-note: '&eThe effect &b{0} requires &bnote &edata! &bFormat: <0-23>/<rainbow>'
+data-usage-none: '&eThe effect &b{0} &edoes not use any data!'
+data-usage-block: '&eThe effect &b{0} &erequires &bblock &edata! &bFormat: <blockName>'
+data-usage-item: '&eThe effect &b{0} &erequires &bitem &edata! &bFormat: <itemName>'
+data-usage-color: '&eThe effect &b{0} &erequires &bcolor &edata! &bFormat: <<0-255> <0-255> <0-255>>|<rainbow>'
+data-usage-note: '&eThe effect &b{0} &erequires &bnote &edata! &bFormat: <0-23>|<rainbow>'
 data-invalid-block: '&cThe &bblock &cdata you entered is invalid! &bFormat: <blockName>'
 data-invalid-item: '&cThe &bitem &cdata you entered is invalid! &bFormat: <itemName>'
-data-invalid-color: '&cThe &bcolor &cdata you entered is invalid! &bFormat: [<0-255> <0-255> <0-255>]|[<rainbow>]'
-data-invalid-note: '&cThe &bitem &cdata you entered is invalid! &bFormat: <0-23>/<rainbow>'
+data-invalid-color: '&cThe &bcolor &cdata you entered is invalid! &bFormat: <<0-255> <0-255> <0-255>>|<rainbow>'
+data-invalid-note: '&cThe &bnote &cdata you entered is invalid! &bFormat: <0-23>|<rainbow>'
 data-invalid-material-not-item: '&cThe &bitem &cmaterial &b{0} &cyou entered is not an item!'
 data-invalid-material-not-block: '&cThe &bblock &cmaterial &b{0} &cyou entered is not a block!'
 data-invalid-material-item: '&cThe &bitem &cmaterial &b{0} you entered does not exist!'
@@ -74,13 +77,8 @@ data-invalid-material-block: '&cThe &bblock &cmaterial &b{0} you entered does no
 disabled-worlds: '&eParticles are disabled in these worlds: &b{0}'
 disabled-worlds-none: '&eParticles are not disabled in any worlds!'
 
-# Alternate Player Command Execution
-execute-success: '&aSuccessfully executed &b{0} &aexecuted for &b{1}'
-execute-failed-not-found: '&cFailed to execute &b{0} &cfor &b{1}&c! Player not found!'
-execute-failed-no-permission: '&cFailed to execute &b{0} for &b{1}&c! You do not have permission!'
-
 # Reset
-reset-success: '&aAll your active particles have been removed.'
+reset-success: '&aRemoved &b{0} &aactive particles.'
 
 # Fixed Effects
 fixed-create-missing-args: '&cUnable to create fixed effect, you are missing &b{0} &crequired arguments!'

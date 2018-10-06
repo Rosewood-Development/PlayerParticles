@@ -36,7 +36,6 @@ public class FixedCommandModule implements CommandModule {
         }
 
         if (args.length == 0) { // General information on command
-            LangManager.sendMessage(p, Lang.FIXED_INVALID_COMMAND);
             LangManager.sendMessage(p, Lang.COMMAND_DESCRIPTION_FIXED_CREATE);
             LangManager.sendMessage(p, Lang.COMMAND_DESCRIPTION_FIXED_REMOVE);
             LangManager.sendMessage(p, Lang.COMMAND_DESCRIPTION_FIXED_LIST);

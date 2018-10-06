@@ -71,16 +71,6 @@ public class PermissionManager {
     }
 
     /**
-     * Checks if a player has permission to execute commands for other players
-     * 
-     * @param player The player to check the permission for
-     * @return True if the player has permission
-     */
-    public static boolean canUseForceReset(Player player) {
-        return player.hasPermission("playerparticles.forcereset");
-    }
-
-    /**
      * Checks if a player has permission to created fixed effects
      * 
      * @param player The player to check the permission for

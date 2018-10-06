@@ -1,6 +1,5 @@
 /*
  * TODO: v5.3
- * + Command to force set an effect/style for a player
  * + Add new style 'tornado'
  * + Add new style 'companion'
  * + Add new style 'atom'

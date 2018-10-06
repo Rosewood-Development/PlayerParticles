@@ -1,7 +1,6 @@
 package com.esophose.playerparticles.command;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Material;
@@ -133,7 +132,7 @@ public class AddCommandModule implements CommandModule {
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
         Player p = pplayer.getPlayer();
         List<String> matches = new ArrayList<String>();
-        System.out.println("Args in AddCommandModule: " + Arrays.toString(args) + " " + args.length);
+
         if (args.length <= 1) { // Effect name
             if (args.length == 0) matches = PermissionManager.getEffectsUserHasPermissionFor(p);
             else StringUtil.copyPartialMatches(args[0], PermissionManager.getEffectsUserHasPermissionFor(p), matches);
