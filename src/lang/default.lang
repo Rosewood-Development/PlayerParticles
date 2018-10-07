@@ -48,6 +48,9 @@ command-add-particle-applied: '&aA new particle has been applied with the effect
 # Data Command
 command-data-no-args: '&cMissing argument for effect. Command usage: &b/pp data <effect>'
 
+# Rainbow
+rainbow: '&cr&6a&ei&an&bb&9o&dw'
+
 # Effects
 effect-no-permission: '&cYou do not have permission to use the effect &b{0} &c!'
 effect-invalid: '&cThe effect &b{0} &cdoes not exist. Use &b/pp effects &cfor a list of effects you can use.'
@@ -78,7 +81,7 @@ disabled-worlds: '&eParticles are disabled in these worlds: &b{0}'
 disabled-worlds-none: '&eParticles are not disabled in any worlds!'
 
 # Reset
-reset-success: '&aRemoved &b{0} &aactive particles.'
+reset-success: '&aRemoved &b{0} &aactive particle(s)!'
 
 # Fixed Effects
 fixed-create-missing-args: '&cUnable to create fixed effect, you are missing &b{0} &crequired arguments!'

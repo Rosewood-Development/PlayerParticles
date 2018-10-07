@@ -18,7 +18,7 @@ import com.esophose.playerparticles.styles.api.ParticleStyle;
 public class ParticleStyleMove implements ParticleStyle, Listener {
 
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
-        return DefaultStyles.NONE.getParticles(particle, location);
+        return DefaultStyles.NORMAL.getParticles(particle, location);
     }
 
     public void updateTimers() {

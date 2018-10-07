@@ -9,7 +9,7 @@ import com.esophose.playerparticles.PlayerParticles;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-public class MySqlDatabaseConnector extends DatabaseConnector {
+public class MySqlDatabaseConnector implements DatabaseConnector {
 
     private HikariDataSource hikari;
     private boolean initializedSuccessfully = false;
@@ -44,15 +44,11 @@ public class MySqlDatabaseConnector extends DatabaseConnector {
     }
 
     public void connect(ConnectionCallback callback) {
-        try (Connection connection = this.getConnection()) {
+        try (Connection connection = hikari.getConnection()) {
             callback.execute(connection);
         } catch (SQLException ex) {
             PlayerParticles.getPlugin().getLogger().severe("An error occurred retrieving a mysql database connection: " + ex.getMessage());
         }
-    }
-
-    protected Connection getConnection() throws SQLException {
-        return hikari.getConnection();
     }
 
 }

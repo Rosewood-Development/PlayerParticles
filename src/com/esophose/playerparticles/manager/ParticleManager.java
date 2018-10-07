@@ -152,7 +152,6 @@ public class ParticleManager extends BukkitRunnable implements Listener {
     private void displayParticles(ParticlePair particle, Location location) {
         if (!ParticleStyleManager.isCustomHandled(particle.getStyle())) {
             ParticleEffect effect = particle.getEffect();
-            if (effect == ParticleEffect.NONE) return;
             for (PParticle pparticle : particle.getStyle().getParticles(particle, location)) {
                 if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
                     effect.display(particle.getSpawnMaterial(), pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), 1, pparticle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
@@ -173,7 +172,6 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      */
     public static void displayParticles(ParticlePair particle, List<PParticle> particles) {
         ParticleEffect effect = particle.getEffect();
-        if (effect == ParticleEffect.NONE) return;
         for (PParticle pparticle : particles) {
             if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
                 effect.display(particle.getSpawnMaterial(), pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), 1, pparticle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));

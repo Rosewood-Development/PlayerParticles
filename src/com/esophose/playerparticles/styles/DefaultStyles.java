@@ -24,7 +24,7 @@ public class DefaultStyles {
     public static final ParticleStyle HALO = new ParticleStyleHalo();
     public static final ParticleStyle HURT = new ParticleStyleHurt();
     public static final ParticleStyle MOVE = new ParticleStyleMove();
-    public static final ParticleStyle NONE = new ParticleStyleNone();
+    public static final ParticleStyle NORMAL = new ParticleStyleNormal();
     public static final ParticleStyle ORBIT = new ParticleStyleOrbit();
     public static final ParticleStyle POINT = new ParticleStylePoint();
     public static final ParticleStyle QUADHELIX = new ParticleStyleQuadhelix();
@@ -40,7 +40,7 @@ public class DefaultStyles {
      * Registered in alphabetical order
      */
     public static void registerStyles() {
-        ParticleStyleManager.registerStyle(NONE); // Always display none first
+        ParticleStyleManager.registerStyle(NORMAL); // Always display none first
         ParticleStyleManager.registerStyle(ARROWS);
         ParticleStyleManager.registerStyle(BEAM);
         ParticleStyleManager.registerCustomHandledStyle(BLOCKBREAK);

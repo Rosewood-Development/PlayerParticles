@@ -22,7 +22,6 @@ import org.bukkit.material.MaterialData;
 public enum ParticleEffect {
 
     // Ordered and named by their Minecraft 1.13 internal names
-    NONE("", ""), // Custom effect to represent none selected, always display first
     AMBIENT_ENTITY_EFFECT("SPELL_MOB_AMBIENT", "SPELL_MOB_AMBIENT", ParticleProperty.COLORABLE),
     ANGRY_VILLAGER("VILLAGER_ANGRY", "VILLAGER_ANGRY"),
     BARRIER("BARRIER", "BARRIER"),
@@ -157,7 +156,7 @@ public enum ParticleEffect {
      * @return Whether the particle effect is supported or not
      */
     public boolean isSupported() {
-        return this == NONE || this.internalEnum != null;
+        return this.internalEnum != null;
     }
 
     /**

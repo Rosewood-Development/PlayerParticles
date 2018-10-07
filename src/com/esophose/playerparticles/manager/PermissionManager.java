@@ -23,7 +23,6 @@ public class PermissionManager {
     public static boolean hasEffectPermission(Player player, ParticleEffect effect) {
         if (player.hasPermission("playerparticles.*") || player.hasPermission("playerparticles.effect.*")) return true;
         if (player.hasPermission("playerparticles.effect." + effect.getName())) return true;
-        if (effect == ParticleEffect.NONE) return true;
         return false;
     }
 
@@ -38,7 +37,7 @@ public class PermissionManager {
     public static boolean hasStylePermission(Player player, ParticleStyle style) {
         if (player.hasPermission("playerparticles.*") || player.hasPermission("playerparticles.style.*")) return true;
         if (player.hasPermission("playerparticles.style." + style.getName())) return true;
-        if (style == DefaultStyles.NONE) return true;
+        if (style == DefaultStyles.NORMAL) return true;
         return false;
     }
 

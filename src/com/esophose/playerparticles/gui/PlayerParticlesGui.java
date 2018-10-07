@@ -66,8 +66,6 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         DATA
     } // @formatter:on
 
-    public static final String rainbowName = ChatColor.RED + "r" + ChatColor.GOLD + "a" + ChatColor.YELLOW + "i" + ChatColor.GREEN + "n" + ChatColor.AQUA + "b" + ChatColor.BLUE + "o" + ChatColor.LIGHT_PURPLE + "w";
-
     private static final int INVENTORY_SIZE = 54;
     private static HashMap<UUID, GuiInventory> playerGuiInventories;
     private static boolean guiEnabled;
@@ -188,13 +186,13 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
     // TODO: Delete these specialized getter methods once the new GUI is finished
     private static ParticleEffect getPPlayerEffect(PPlayer pplayer) {
         List<ParticlePair> particles = pplayer.getActiveParticles();
-        if (particles.isEmpty()) return ParticleEffect.NONE;
+        if (particles.isEmpty()) return ParticleEffect.FLAME;
         return particles.get(0).getEffect();
     }
 
     private static ParticleStyle getPPlayerStyle(PPlayer pplayer) {
         List<ParticlePair> particles = pplayer.getActiveParticles();
-        if (particles.isEmpty()) return DefaultStyles.NONE;
+        if (particles.isEmpty()) return DefaultStyles.NORMAL;
         return particles.get(0).getStyle();
     }
 
@@ -719,14 +717,14 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
             ParticleEffect pe = getPPlayerEffect(pplayer);
             if (pe.hasProperty(ParticleProperty.COLORABLE)) {
                 if (pe == ParticleEffect.NOTE) {
-                    if (clicked.getItemMeta().getDisplayName().equals(rainbowName)) {
+                    if (clicked.getItemMeta().getDisplayName().equals(LangManager.getText(Lang.RAINBOW))) {
                         setPPlayerNoteColor(pplayer, new NoteColor(99));
                     } else {
                         int note = Integer.parseInt(ChatColor.stripColor(clicked.getItemMeta().getDisplayName()).substring(6));
                         setPPlayerNoteColor(pplayer, new NoteColor(note));
                     }
                 } else {
-                    if (clicked.getItemMeta().getDisplayName().equals(rainbowName)) {
+                    if (clicked.getItemMeta().getDisplayName().equals(LangManager.getText(Lang.RAINBOW))) {
                         setPPlayerColor(pplayer, new OrdinaryColor(999, 999, 999));
                     } else {
                         for (int i = 0; i < colorMapping.length; i++) {
@@ -892,13 +890,13 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         }
         ItemMeta rainbowIconMeta = rainbowIcon.getItemMeta();
 
-        rainbowIconMeta.setDisplayName(rainbowName);
+        rainbowIconMeta.setDisplayName(LangManager.getText(Lang.RAINBOW));
         if (currentColor.getRed() == 999 && currentColor.getGreen() == 999 && currentColor.getBlue() == 999) {
-            rainbowIconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_ICON_SETS_TO, "color data") + rainbowName, LangManager.getText(Lang.GUI_ICON_CURRENT_ACTIVE, "color data")));
+            rainbowIconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_ICON_SETS_TO, "color data") + LangManager.getText(Lang.RAINBOW), LangManager.getText(Lang.GUI_ICON_CURRENT_ACTIVE, "color data")));
             rainbowIconMeta.addEnchant(Enchantment.ARROW_INFINITE, -1, true);
             rainbowIconMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         } else {
-            rainbowIconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_ICON_SETS_TO, "color data") + rainbowName));
+            rainbowIconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_ICON_SETS_TO, "color data") + LangManager.getText(Lang.RAINBOW)));
         }
         rainbowIcon.setItemMeta(rainbowIconMeta);
 
@@ -920,13 +918,13 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         }
         ItemMeta rainbowIconMeta = rainbowIcon.getItemMeta();
 
-        rainbowIconMeta.setDisplayName(rainbowName);
+        rainbowIconMeta.setDisplayName(LangManager.getText(Lang.RAINBOW));
         if (currentColor.getValueX() * 24 == 99) {
-            rainbowIconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_ICON_SETS_TO, "note data") + rainbowName, LangManager.getText(Lang.GUI_ICON_CURRENT_ACTIVE, "note data")));
+            rainbowIconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_ICON_SETS_TO, "note data") + LangManager.getText(Lang.RAINBOW), LangManager.getText(Lang.GUI_ICON_CURRENT_ACTIVE, "note data")));
             rainbowIconMeta.addEnchant(Enchantment.ARROW_INFINITE, -1, true);
             rainbowIconMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         } else {
-            rainbowIconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_ICON_SETS_TO, "note data") + rainbowName));
+            rainbowIconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_ICON_SETS_TO, "note data") + LangManager.getText(Lang.RAINBOW)));
         }
         rainbowIcon.setItemMeta(rainbowIconMeta);
 

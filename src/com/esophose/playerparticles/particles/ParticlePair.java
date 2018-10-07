@@ -5,7 +5,8 @@ import java.util.UUID;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
-import com.esophose.playerparticles.gui.PlayerParticlesGui;
+import com.esophose.playerparticles.manager.LangManager;
+import com.esophose.playerparticles.manager.LangManager.Lang;
 import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.particles.ParticleEffect.NoteColor;
 import com.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
@@ -49,7 +50,7 @@ public class ParticlePair {
      * @param effect The player's new particle effect
      */
     public void setEffect(ParticleEffect effect) {
-        if (effect == null) effect = ParticleEffect.NONE;
+        if (effect == null) effect = ParticleEffect.FLAME;
         this.effect = effect;
     }
 
@@ -59,7 +60,7 @@ public class ParticlePair {
      * @param style The player's new particle style
      */
     public void setStyle(ParticleStyle style) {
-        if (style == null) style = DefaultStyles.NONE;
+        if (style == null) style = DefaultStyles.NORMAL;
         this.style = style;
     }
 
@@ -227,12 +228,12 @@ public class ParticlePair {
         } else if (this.effect.hasProperty(ParticleProperty.COLORABLE)) {
             if (this.effect == ParticleEffect.NOTE) {
                 if (this.noteColor.getValueX() * 24 == 99) {
-                    return PlayerParticlesGui.rainbowName;
+                    return LangManager.getText(Lang.RAINBOW);
                 }
                 return "note #" + (int) (this.noteColor.getValueX() * 24);
             } else {
                 if (this.color.getRed() == 999 && this.color.getGreen() == 999 && this.color.getBlue() == 999) {
-                    return PlayerParticlesGui.rainbowName;
+                    return LangManager.getText(Lang.RAINBOW);
                 } else {
                     return ChatColor.RED + "" + this.color.getRed() + " " + ChatColor.GREEN + this.color.getGreen() + " " + ChatColor.AQUA + this.color.getBlue();
                 }
@@ -246,11 +247,12 @@ public class ParticlePair {
      * 
      * @return A ParticlePair with default values
      */
+    @Deprecated // TODO: REMOVE ONCE NEW GUI IS DONE
     public static ParticlePair getDefault() {
         return new ParticlePair(null, // @formatter:off
     							-1, 
-    							ParticleEffect.NONE, 
-    							DefaultStyles.NONE, 
+    							ParticleEffect.FLAME, 
+    							DefaultStyles.NORMAL, 
     							ParticleUtils.closestMatchWithFallback("IRON_SHOVEL", "IRON_SPADE"), 
     							Material.STONE, 
     							new OrdinaryColor(0, 0, 0), 
@@ -262,11 +264,12 @@ public class ParticlePair {
      * 
      * @return A ParticlePair with default values
      */
+    @Deprecated // TODO: REMOVE ONCE NEW GUI IS DONE
     public static ParticlePair getDefault(UUID ownerUUID) {
         return new ParticlePair(ownerUUID, // @formatter:off
 								1, 
-								ParticleEffect.NONE, 
-								DefaultStyles.NONE, 
+								ParticleEffect.FLAME, 
+								DefaultStyles.NORMAL, 
 								ParticleUtils.closestMatchWithFallback("IRON_SHOVEL", "IRON_SPADE"), 
 								Material.STONE, 
 								new OrdinaryColor(0, 0, 0), 

@@ -16,10 +16,10 @@ public class ParticleStyleSpiral implements ParticleStyle {
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<PParticle>();
         for (int stepY = -60; stepY < 60; stepY += 10) {
-            double dx = -(Math.cos(((stepX + stepY) / 90) * Math.PI * 2)) * 0.8;
+            double dx = -(Math.cos(((stepX + stepY) / 90D) * Math.PI * 2)) * 0.8;
             double dy = stepY / 45D;
-            double dz = -(Math.sin(((stepX + stepY) / 90) * Math.PI * 2)) * 0.8;
-            particles.add(new PParticle(new Location(location.getWorld(), location.getX() + dx, location.getY() + dy, location.getZ() + dz)));
+            double dz = -(Math.sin(((stepX + stepY) / 90D) * Math.PI * 2)) * 0.8;
+            particles.add(new PParticle(location.clone().add(dx, dy, dz)));
         }
         return particles;
     }

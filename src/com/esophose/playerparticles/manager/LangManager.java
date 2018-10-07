@@ -62,6 +62,9 @@ public class LangManager {
         // Data Command
         COMMAND_DATA_NO_ARGS,
         
+        // Rainbow
+        RAINBOW,
+        
         // Effects
         EFFECT_NO_PERMISSION,
         EFFECT_INVALID,

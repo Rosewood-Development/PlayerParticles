@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 import com.esophose.playerparticles.PlayerParticles;
 
-public class SqliteDatabaseConnector extends DatabaseConnector {
+public class SqliteDatabaseConnector implements DatabaseConnector {
 
     private final String connectionString;
 
@@ -24,15 +24,11 @@ public class SqliteDatabaseConnector extends DatabaseConnector {
     }
 
     public void connect(ConnectionCallback callback) {
-        try (Connection connection = this.getConnection()) {
+        try (Connection connection = DriverManager.getConnection(this.connectionString)) {
             callback.execute(connection);
         } catch (SQLException ex) {
             PlayerParticles.getPlugin().getLogger().severe("An error occurred retrieving an sqlite database connection: " + ex.getMessage());
         }
-    }
-
-    protected Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(this.connectionString);
     }
 
 }

@@ -11,7 +11,7 @@ import com.esophose.playerparticles.particles.ParticlePair;
 import com.esophose.playerparticles.styles.api.PParticle;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
 
-public class ParticleStyleNone implements ParticleStyle {
+public class ParticleStyleNormal implements ParticleStyle {
 
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         ParticleEffect particleEffect = particle.getEffect();
@@ -33,7 +33,7 @@ public class ParticleStyleNone implements ParticleStyle {
         case BUBBLE_POP:
             return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
         case CLOUD:
-            return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
+            return Collections.singletonList(new PParticle(location, 0.0, 0.0, 0.0, 0.0));
         case CRIT:
             return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
         case CURRENT_DOWN:
@@ -94,8 +94,6 @@ public class ParticleStyleNone implements ParticleStyle {
             return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
         case NAUTILUS:
             return Collections.singletonList(new PParticle(location, 0.5, 0.5, 0.5, 0.05));
-        case NONE:
-            return particles;
         case NOTE:
             return Collections.singletonList(new PParticle(location, 0.6, 0.6, 0.6, 0.0));
         case POOF:

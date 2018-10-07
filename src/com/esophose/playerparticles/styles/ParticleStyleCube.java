@@ -70,7 +70,7 @@ public class ParticleStyleCube implements ParticleStyle {
                         VectorUtils.rotateAroundAxisX(v, angleX);
                         VectorUtils.rotateAroundAxisY(v, angleY);
                         VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
-                        pparticles.add(new PParticle(location.add(v)));
+                        pparticles.add(new PParticle(location.clone().add(v)));
                     }
                 }
                 for (int p = 0; p <= particles; p++) {
@@ -78,7 +78,7 @@ public class ParticleStyleCube implements ParticleStyle {
                     v.setY(edgeLength * p / particles - a);
                     VectorUtils.rotateAroundAxisY(v, angleY);
                     VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
-                    pparticles.add(new PParticle(location.add(v)));
+                    pparticles.add(new PParticle(location.clone().add(v)));
                 }
             }
         }
