@@ -26,7 +26,7 @@ public class ParticleGroup {
     }
 
     /**
-     * Get the List<ParticlePair> of particles in this group
+     * Get the List of ParticlePairs in this group
      * 
      * @return The particles in this group
      */

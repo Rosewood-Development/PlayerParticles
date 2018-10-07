@@ -132,6 +132,8 @@ public class PlayerParticles extends JavaPlugin {
      * Gets the database connection information from the config and tries to connect to the server
      * Removes old table from previous versions of the plugin
      * Creates new tables if they don't exist
+     * 
+     * @param useMySql If we should use MySQL as the database type, if false, uses SQLite
      */
     private void configureDatabase(boolean useMySql) {
         if (useMySql) {

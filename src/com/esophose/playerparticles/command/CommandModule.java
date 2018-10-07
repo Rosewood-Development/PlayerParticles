@@ -24,6 +24,7 @@ public interface CommandModule {
      * 
      * @param pplayer The PPlayer who is tab completing this command
      * @param args Arguments typed so far
+     * @return A list of possible argument values
      */
     public List<String> onTabComplete(PPlayer pplayer, String[] args);
 

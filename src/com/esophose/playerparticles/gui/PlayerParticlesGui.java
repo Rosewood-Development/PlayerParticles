@@ -752,6 +752,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
      * Gets the icon for a given particle effect from the config
      * 
      * @param effect The effect
+     * @param isActive If this effect is the current one active
      * @return An ItemStack formatted to be displayed in the GUI
      */
     private static ItemStack getItemForEffect(ParticleEffect effect, boolean isActive) {
@@ -775,6 +776,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
      * Gets the icon for a given particle style from the config
      * 
      * @param style The style
+     * @param isActive If this style is the current one active
      * @return An ItemStack formatted to be displayed in the GUI
      */
     private static ItemStack getItemForStyle(ParticleStyle style, boolean isActive) {
@@ -878,6 +880,8 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
     /**
      * Gets the icon for rainbow color/note data
      * 
+     * @param currentColor The player's current color data
+     * @param dyeColor The color of the rainbow we're on
      * @return An ItemStack formatted to be displayed in the GUI
      */
     private static ItemStack getItemForRainbowColorData(OrdinaryColor currentColor, DyeColor dyeColor) {
@@ -906,6 +910,8 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
     /**
      * Gets the icon for rainbow color/note data
      * 
+     * @param currentColor The player's current note data
+     * @param dyeColor The color of the rainbow we're on
      * @return An ItemStack formatted to be displayed in the GUI
      */
     private static ItemStack getItemForRainbowNoteData(NoteColor currentColor, DyeColor dyeColor) {

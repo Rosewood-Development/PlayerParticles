@@ -18,12 +18,12 @@ public class PPlayer {
     private final UUID playerUUID;
 
     /**
-     * A List<ParticleGroup> of all particle groups this player has, the active particle group has an id of null
+     * A List of ParticleGroups this player has, the active particle group has an id of null
      */
     private List<ParticleGroup> particleGroups;
 
     /**
-     * A List<FixedParticleEffect> of all fixed particles this user has applied
+     * A List of FixedParticleEffects this user has applied
      */
     private List<FixedParticleEffect> fixedParticles;
 
@@ -31,8 +31,8 @@ public class PPlayer {
      * Constructs a new PPlayer
      * 
      * @param uuid The player UUID
-     * @param particlePairs The ParticlePairs this PPlayer has
-     * @param fixedParticles2 The fixed ParticlePairs this PPlayer has
+     * @param particleGroups The ParticleGroups this PPlayer has
+     * @param fixedParticles The FixedParticleEffects this PPlayer has
      */
     public PPlayer(UUID uuid, List<ParticleGroup> particleGroups, List<FixedParticleEffect> fixedParticles) {
         this.playerUUID = uuid;
@@ -59,9 +59,9 @@ public class PPlayer {
     }
 
     /**
-     * Get a List<ParticleGroup> of all particles this user has saved
+     * Get a List of ParticleGroups this user has saved
      * 
-     * @return A list of all particle groups this player has
+     * @return A List of ParticleGroups this player has
      */
     public List<ParticleGroup> getParticles() {
         return this.particleGroups;
@@ -83,7 +83,7 @@ public class PPlayer {
     /**
      * Get the effect/style/data for particles this player has set
      * 
-     * @return A List<ParticlePair> of all particles this player has set
+     * @return A List of ParticlePairs this player has set
      */
     public List<ParticlePair> getActiveParticles() {
         return this.getActiveParticleGroup().getParticles();
@@ -105,7 +105,7 @@ public class PPlayer {
      * Get all ParticlePairs with a style matching the input
      * 
      * @param style The style to match
-     * @return A List<ParticlePair> with a matching style
+     * @return A List of ParticlePairs with a matching style
      */
     public List<ParticlePair> getActiveParticlesForStyle(ParticleStyle style) {
         List<ParticlePair> matches = new ArrayList<ParticlePair>();
@@ -131,7 +131,7 @@ public class PPlayer {
     /**
      * Get the effect/style/data for all fixed particles this has has set
      * 
-     * @return A List<FixedParticleEffect> of all fixed particles this player has set
+     * @return A List of FixedParticleEffects this player has set
      */
     public List<FixedParticleEffect> getFixedParticles() {
         return this.fixedParticles;
@@ -153,7 +153,7 @@ public class PPlayer {
     /**
      * Gets a list of ids of all fixed effect this player has
      * 
-     * @return A List<Integer> of ids this player's fixed effects have
+     * @return A List of Integer ids this player's fixed effects have
      */
     public List<Integer> getFixedEffectIds() {
         List<Integer> ids = new ArrayList<Integer>();

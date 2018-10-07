@@ -175,7 +175,8 @@ public class LangManager {
         /**
          * Gets the message this enum represents
          * 
-         * @return The message
+         * @param replacements The replacements for the message
+         * @return The message with the replacements applied
          */
         private String get(Object... replacements) {
             return new MessageFormat(this.message).format(replacements);
@@ -256,6 +257,7 @@ public class LangManager {
      * 
      * @param messageType The message type to get
      * @param replacements The replacements fot the message
+     * @return The Lang in text form with its replacements applied
      */
     public static String getText(Lang messageType, Object... replacements) {
         return messageType.get(replacements);
@@ -266,6 +268,7 @@ public class LangManager {
      * 
      * @param player The player to send the message to
      * @param messageType The message to send to the player
+     * @param replacements The replacements for the message
      */
     public static void sendMessage(Player player, Lang messageType, Object... replacements) {
         if (!messagesEnabled) return;
@@ -288,6 +291,7 @@ public class LangManager {
      * 
      * @param pplayer The player to send the message to
      * @param messageType The message to send to the player
+     * @param replacements The replacements for the message
      */
     public static void sendMessage(PPlayer pplayer, Lang messageType, Object... replacements) {
         sendMessage(pplayer.getPlayer(), messageType, replacements);

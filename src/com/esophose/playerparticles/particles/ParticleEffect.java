@@ -103,8 +103,8 @@ public enum ParticleEffect {
     /**
      * Construct a new particle effect
      * 
-     * @param enumName Name of the Particle Enum when the server version is >= 1.13
-     * @param enumNameLegacy Name of the Particle Enum when the server version is < 1.13
+     * @param enumName Name of the Particle Enum when the server version is greater than or equal to 1.13
+     * @param enumNameLegacy Name of the Particle Enum when the server version is less than 1.13
      * @param properties Properties of this particle effect
      */
     private ParticleEffect(String enumName, String enumNameLegacy, ParticleProperty... properties) {
@@ -281,10 +281,10 @@ public enum ParticleEffect {
     }
 
     /**
-     * Gets a List<Player> of players within the particle display range
+     * Gets a List of Players within the particle display range
      * 
      * @param center The center of the radius to check around
-     * @return A List<Player> of the players within the particle display range
+     * @return A List of Players within the particle display range
      */
     private List<Player> getPlayersInRange(Location center) {
         List<Player> players = new ArrayList<Player>();

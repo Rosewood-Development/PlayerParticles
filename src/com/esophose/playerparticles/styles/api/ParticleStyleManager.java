@@ -52,7 +52,7 @@ public class ParticleStyleManager {
     /**
      * Gets all registered styles
      * 
-     * @return A List<ParticleStyle> of all registered styles
+     * @return A List of ParticleStyles that are registered
      */
     public static List<ParticleStyle> getStyles() {
         return styles;

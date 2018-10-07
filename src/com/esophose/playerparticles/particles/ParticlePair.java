@@ -262,6 +262,7 @@ public class ParticlePair {
     /**
      * Gets a ParticlePair with the default values applied
      * 
+     * @param ownerUUID The owner of this ParticlePair
      * @return A ParticlePair with default values
      */
     @Deprecated // TODO: REMOVE ONCE NEW GUI IS DONE

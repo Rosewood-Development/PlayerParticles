@@ -336,7 +336,6 @@ public class DataManager {
      * 
      * @param playerUUID The player who owns the effect
      * @param id The id of the effect to remove
-     * @param callback The callback to execute with if the fixed effect was removed or not
      */
     public static void removeFixedEffect(UUID playerUUID, int id) {
         async(() -> {
@@ -377,7 +376,7 @@ public class DataManager {
     /**
      * Checks if the given player has reached the max number of fixed effects
      * 
-     * @param pplayerUUID The player to check
+     * @param pplayer The player to check
      * @return If the player has reached the max number of fixed effects
      */
     public static boolean hasPlayerReachedMaxFixedEffects(PPlayer pplayer) {

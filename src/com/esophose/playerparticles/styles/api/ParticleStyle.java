@@ -11,9 +11,9 @@ public interface ParticleStyle {
     /**
      * Gets all the particles to display based on the style's logic
      * 
-     * @param pplayer The PPlayer to display the particles for
+     * @param particle The ParticlePair that contains the particle's data
      * @param location The central location of the particles
-     * @return A List<PParticle> of PParticles to spawn
+     * @return A List of PParticles to spawn
      */
     public List<PParticle> getParticles(ParticlePair particle, Location location);
 
