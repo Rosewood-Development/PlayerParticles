@@ -55,12 +55,25 @@ public class LangManager {
         COMMAND_DESCRIPTION_GROUP_SAVE,
         COMMAND_DESCRIPTION_GROUP_LOAD,
         COMMAND_DESCRIPTION_GROUP_REMOVE,
+        COMMAND_DESCRIPTION_GROUP_LIST,
+        COMMAND_DESCRIPTION_GROUP_INFO,
         
         // Add Command
         COMMAND_ADD_PARTICLE_APPLIED,
         
         // Data Command
         COMMAND_DATA_NO_ARGS,
+        
+        // Remove Command
+        COMMAND_REMOVE_NO_ARGS,
+        COMMAND_REMOVE_ARGS_INVALID,
+        COMMAND_REMOVE_INVALID_ID,
+        COMMAND_REMOVE_SUCCESS,
+        
+        // List Command
+        COMMAND_LIST_NONE,
+        COMMAND_LIST_YOU_HAVE,
+        COMMAND_LIST_OUTPUT,
         
         // Rainbow
         RAINBOW,
@@ -69,6 +82,7 @@ public class LangManager {
         EFFECT_NO_PERMISSION,
         EFFECT_INVALID,
         EFFECT_LIST,
+        EFFECT_LIST_EMPTY,
         
         // Styles
         STYLE_NO_PERMISSION,

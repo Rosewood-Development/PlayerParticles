@@ -237,7 +237,7 @@ public class FixedCommandModule implements CommandModule {
                 return;
             }
 
-            String msg = LangManager.getText(Lang.FIXED_LIST_SUCCESS);
+            String msg = "";
             boolean first = true;
             for (int id : ids) {
                 if (!first) msg += ", ";
@@ -245,7 +245,7 @@ public class FixedCommandModule implements CommandModule {
                 msg += id;
             }
 
-            LangManager.sendCustomMessage(p, msg);
+            LangManager.sendMessage(p, Lang.FIXED_LIST_SUCCESS, msg);
         } else if (cmd.equalsIgnoreCase("info")) {
             if (args.length < 1) {
                 LangManager.sendMessage(p, Lang.FIXED_INFO_NO_ARGS);

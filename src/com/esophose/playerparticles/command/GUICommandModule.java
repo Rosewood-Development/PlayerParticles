@@ -26,7 +26,7 @@ public class GUICommandModule implements CommandModule {
             return;
         }
 
-        if (PermissionManager.getEffectsUserHasPermissionFor(pplayer.getPlayer()).size() == 1) {
+        if (PermissionManager.getEffectsUserHasPermissionFor(pplayer.getPlayer()).isEmpty()) {
             if (byDefault) {
                 LangManager.sendMessage(pplayer, Lang.COMMAND_ERROR_UNKNOWN);
             } else {

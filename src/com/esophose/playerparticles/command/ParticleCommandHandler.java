@@ -35,7 +35,6 @@ public class ParticleCommandHandler implements CommandExecutor, TabCompleter {
         commands.add(new GroupCommandModule());
         commands.add(new GUICommandModule());
         commands.add(new HelpCommandModule());
-        commands.add(new InfoCommandModule());
         commands.add(new ListCommandModule());
         commands.add(new RemoveCommandModule());
         commands.add(new ResetCommandModule());
@@ -98,7 +97,7 @@ public class ParticleCommandHandler implements CommandExecutor, TabCompleter {
             CommandModule commandModule = findMatchingCommand(commandName);
 
             if (commandModule != null) {
-                if (commandModule.requiresEffects() && PermissionManager.getEffectsUserHasPermissionFor(p).size() == 1) {
+                if (commandModule.requiresEffects() && PermissionManager.getEffectsUserHasPermissionFor(p).isEmpty()) {
                     LangManager.sendMessage(p, Lang.COMMAND_ERROR_NO_EFFECTS);
                 } else {
                     String[] cmdArgs = new String[0];

@@ -5,10 +5,9 @@ import java.util.List;
 import org.bukkit.entity.Player;
 
 import com.esophose.playerparticles.manager.LangManager;
-import com.esophose.playerparticles.manager.PermissionManager;
 import com.esophose.playerparticles.manager.LangManager.Lang;
+import com.esophose.playerparticles.manager.PermissionManager;
 import com.esophose.playerparticles.particles.PPlayer;
-import com.esophose.playerparticles.particles.ParticleEffect;
 
 public class EffectsCommandModule implements CommandModule {
 
@@ -16,18 +15,16 @@ public class EffectsCommandModule implements CommandModule {
         Player p = pplayer.getPlayer();
 
         List<String> effectList = PermissionManager.getEffectsUserHasPermissionFor(p);
-        if (effectList.size() == 1) {
-            LangManager.sendMessage(p, Lang.EFFECT_LIST, effectList.get(0));
+        if (effectList.isEmpty()) {
+            LangManager.sendMessage(p, Lang.EFFECT_LIST_EMPTY);
             return;
         }
 
         String toSend = "";
-        for (ParticleEffect effect : ParticleEffect.getSupportedEffects()) {
-            if (PermissionManager.hasEffectPermission(p, effect)) {
-                toSend += effect.getName() + ", ";
-                continue;
-            }
+        for (String name : effectList) {
+            toSend += name + ", ";
         }
+        
         if (toSend.endsWith(", ")) {
             toSend = toSend.substring(0, toSend.length() - 2);
         }

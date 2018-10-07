@@ -8,6 +8,7 @@ import com.esophose.playerparticles.particles.PPlayer;
 public class HelpCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
+        // TODO: Add pages, there are a lot of commands
         List<CommandModule> cmds = ParticleCommandHandler.getCommands();
         for (CommandModule cmd : cmds) {
             CommandModule.printUsageWithDescription(pplayer, cmd);

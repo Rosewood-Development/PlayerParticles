@@ -404,7 +404,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
     public static void changeState(PPlayer pplayer, GuiState state) {
         Player player = pplayer.getPlayer();
 
-        if ((state == GuiState.EFFECT && PermissionManager.getEffectsUserHasPermissionFor(player).size() == 1) || (state == GuiState.STYLE && PermissionManager.getStylesUserHasPermissionFor(player).size() == 1) || (state == GuiState.DATA && getPPlayerSpawnMaterial(pplayer) == null && getPPlayerSpawnColor(pplayer) == null)) return;
+        if ((state == GuiState.EFFECT && PermissionManager.getEffectsUserHasPermissionFor(player).isEmpty()) || (state == GuiState.STYLE && PermissionManager.getStylesUserHasPermissionFor(player).size() == 1) || (state == GuiState.DATA && getPPlayerSpawnMaterial(pplayer) == null && getPPlayerSpawnColor(pplayer) == null)) return;
 
         // Update the state and create an inventory for the player if one isn't already open for them
         // If they have the wrong inventory open for some reason, create a new one and open it for them
@@ -470,7 +470,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         ItemMeta effectIconMeta = effectIcon.getItemMeta();
         effectIconMeta.setDisplayName(ChatColor.GREEN + "Effect");
         effectIconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_ICON_SET_YOUR, "effect")));
-        if (PermissionManager.getEffectsUserHasPermissionFor(player).size() == 1) { // Always has access to NONE
+        if (PermissionManager.getEffectsUserHasPermissionFor(player).isEmpty()) {
             effectIconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_NO_ACCESS_TO, "effects")));
         }
         effectIcon.setItemMeta(effectIconMeta);
@@ -479,7 +479,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         ItemMeta styleIconMeta = styleIcon.getItemMeta();
         styleIconMeta.setDisplayName(ChatColor.GREEN + "Style");
         styleIconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_ICON_SET_YOUR, "style")));
-        if (PermissionManager.getStylesUserHasPermissionFor(player).size() == 1) { // Always has access to NONE
+        if (PermissionManager.getStylesUserHasPermissionFor(player).size() == 1) { // Always has access to NORMAL
             styleIconMeta.setLore(Arrays.asList(LangManager.getText(Lang.GUI_NO_ACCESS_TO, "styles")));
         }
         styleIcon.setItemMeta(styleIconMeta);

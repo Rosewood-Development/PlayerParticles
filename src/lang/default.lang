@@ -9,56 +9,70 @@
 # ================================================================ #
 
 # Command Errors
-command-error-no-effects: '&cYou must have access to effects to use this command.'
+command-error-no-effects: '&cYou must have access to effects to use this command!'
 command-error-unknown: '&cUnknown command, use &b/pp help &cfor a list of commands.'
 
 # Command Descriptions
 command-description-add: 'Add a particle to your active particles'
 command-description-data: 'Check what type of data an effect uses'
-command-description-default: 'The main command. By default, opens the GUI.'
+command-description-default: 'The main command. By default, opens the GUI'
 command-description-edit: 'Edit the effect, style, or data of an active particle'
 command-description-effect: '&cThis command has been removed, use &b/pp help &cto find new commands'
 command-description-effects: 'Display a list of effects you can use'
 command-description-fixed: 'Create, edit, and remove fixed particle effects'
 command-description-group: 'Save, load, and remove your particle groups'
 command-description-gui: 'Display the GUI for easy editing of particles'
-command-description-help: 'Displays the help menu... You have arrived.'
+command-description-help: 'Displays the help menu... You have arrived'
 command-description-info: 'Gets the description of one of your active particles'
-command-description-list: 'Lists the ids of your active particles'
+command-description-list: 'Lists the IDs of your active particles'
 command-description-remove: 'Removes one of your active particles'
 command-description-reset: 'Removes all your active particles'
 command-description-style: '&cThis command has been removed, use &b/pp help &cto find new commands'
 command-description-styles: 'Display a list of styles you can use'
 command-description-version: 'Display the current version of the plugin and the author'
-command-description-worlds: 'Find out what worlds particles is disabled in'
+command-description-worlds: 'Find out what worlds particles are disabled in'
 
 # Sub-Command Usage
 command-description-fixed-create: '&e/pp fixed create <x> <y> <z> <effect> <style> [data] - Creates a new fixed effect'
-command-description-fixed-remove: '&e/pp fixed remove <id> - Removes a fixed effect by its id'
-command-description-fixed-list: '&e/pp fixed list - Lists all ids of your fixed effects'
-command-description-fixed-info: '&e/pp fixed info <id> - Gets info on one of your fixed effects'
+command-description-fixed-remove: '&e/pp fixed remove <ID> - Removes a fixed effect by its ID'
+command-description-fixed-list: '&e/pp fixed list - Lists all IDs of your fixed effects'
+command-description-fixed-info: '&e/pp fixed info <ID> - Gets info on one of your fixed effects'
 command-description-fixed-clear: '&e/pp fixed clear <radius> - Clears all fixed effects of all players within the given radius'
-command-description-group-save: '&e/pp group save <name> - Saves all currently applied particles under a given name'
-command-description-group-load: '&e/pp group load <name> - Loads all particles saved under a given name'
-command-description-group-remove: '&e/pp group remove <name> - Removes all particles saved under a given name'
+command-description-group-save: '&e/pp group save <name> - Saves all active particles in a new group'
+command-description-group-load: '&e/pp group load <name> - Loads all particles saved in a group'
+command-description-group-remove: '&e/pp group remove <name> - Removes a group you have saved'
+command-description-group-list: '&e/pp group list <name> - List all particle groups you have saved'
+command-description-group-info: '&e/pp group info <name> - List the particles saved in the group'
 
 # Add Command
 command-add-particle-applied: '&aA new particle has been applied with the effect &b{0}&a, style &b{1}&a, and data &b{2}&a!'
 
 # Data Command
-command-data-no-args: '&cMissing argument for effect. Command usage: &b/pp data <effect>'
+command-data-no-args: '&cMissing argument for effect! Command usage: &b/pp data <effect>'
+
+# Remove Command
+command-remove-no-args: '&cYou did not specify an ID to remove! &b/pp remove <ID>'
+command-remove-args-invalid: '&cThe ID you entered is invalid, it must be a positive whole number!'
+command-remove-invalid-id: '&cYou do not have a particle applied with the ID &b{0}&c!'
+command-remove-success: '&aYour particle with the ID &b{0} &ahas been removed!'
+
+# List Command
+command-list-none: '&eYou do not have any active particles!'
+command-list-you-have: '&eYou have the following particles applied:'
+command-list-output: '&eID: &b{0} &eEffect: &b{1} &eStyle: &b{2} &eData: &b{3}'
 
 # Rainbow
 rainbow: '&cr&6a&ei&an&bb&9o&dw'
 
 # Effects
 effect-no-permission: '&cYou do not have permission to use the effect &b{0} &c!'
-effect-invalid: '&cThe effect &b{0} &cdoes not exist. Use &b/pp effects &cfor a list of effects you can use.'
+effect-invalid: '&cThe effect &b{0} &cdoes not exist! Use &b/pp effects &cfor a list of effects you can use.'
 effect-list: '&eYou can use the following effects: &b{0}'
+effect-list-empoty: '&cYou do not have permission to use any effects!'
 
 # Styles
 style-no-permission: '&cYou do not have permission to use the style &b{0} &c!'
-style-invalid: '&cThe style &b{0} &cdoes not exist. Use &b/pp styles &cfor a list of styles you can use.'
+style-invalid: '&cThe style &b{0} &cdoes not exist! Use &b/pp styles &cfor a list of styles you can use.'
 style-list: '&eYou can use the following styles: &b{0}'
 
 # Data
@@ -78,7 +92,7 @@ data-invalid-material-block: '&cThe &bblock &cmaterial &b{0} you entered does no
 
 # Worlds
 disabled-worlds: '&eParticles are disabled in these worlds: &b{0}'
-disabled-worlds-none: '&eParticles are not disabled in any worlds!'
+disabled-worlds-none: '&eParticles are not disabled in any worlds.'
 
 # Reset
 reset-success: '&aRemoved &b{0} &aactive particle(s)!'
@@ -94,26 +108,26 @@ fixed-create-style-no-permission: '&cUnable to create fixed effect, you do not h
 fixed-create-style-non-fixable: '&cThe style &b{0} &ccan not be used in fixed effects!'
 fixed-create-data-error: '&cUnable to create fixed effect, the data provided is not correct! Use &b/pp data <effect> &cto find the correct data format!'
 fixed-create-success: '&aYour fixed effect has been created!'
-fixed-remove-invalid: '&cUnable to remove fixed effect, you do not have a fixed effect with the id of &b{0}&c!'
-fixed-remove-no-args: '&cYou did not specify an id to remove!'
-fixed-remove-args-invalid: '&cUnable to remove, the id specified must be a number!'
-fixed-remove-success: '&aYour fixed effect with the id &b{0} &ahas been removed!'
+fixed-remove-invalid: '&cUnable to remove fixed effect, you do not have a fixed effect with the ID of &b{0}&c!'
+fixed-remove-no-args: '&cYou did not specify an ID to remove!'
+fixed-remove-args-invalid: '&cUnable to remove, the ID specified must be a number!'
+fixed-remove-success: '&aYour fixed effect with the ID &b{0} &ahas been removed!'
 fixed-list-none: '&eYou do not have any fixed effects!'
-fixed-list-success: '&eYou have fixed effects with these ids: &b{0}'
-fixed-info-invalid: '&cUnable to get info, you do not have a fixed effect with the id of &b{0}&c!'
-fixed-info-no-args: '&cYou did not specify an id to display info for!'
-fixed-info-invalid-args: '&cUnable to get info, the id specified must be a number!'
+fixed-list-success: '&eYou have fixed effects with these IDs: &b{0}'
+fixed-info-invalid: '&cUnable to get info, you do not have a fixed effect with the ID of &b{0}&c!'
+fixed-info-no-args: '&cYou did not specify an ID to display info for!'
+fixed-info-invalid-args: '&cUnable to get info, the ID specified must be a number!'
 fixed-info-success: '&eID: &b{0} &eWorld: &b{1} &eX: &b{2} &eY: &b{3} &eZ: &b{4} &eEffect: &b{5} &eStyle: &b{6} &eData: &b{7}'
 fixed-clear-no-permission: '&cYou do not have permission to clear nearby fixed effects!'
 fixed-clear-no-args: '&cYou did not provide a radius to clear fixed effects for!'
-fixed-clear-invalid-args: '&cThe radius you provided is invalid. Make sure it is a positive whole number!'
+fixed-clear-invalid-args: '&cThe radius you provided is invalid, it must be a positive whole number!'
 fixed-clear-success: '&aCleared &b{0} &afixed effects within &b{1} &ablocks of your location!'
 fixed-no-permission: '&cYou do not have permission to use fixed effects!'
 fixed-max-reached: '&cYou have reached the maximum allowed fixed effects!'
 fixed-invalid-command: '&cInvalid sub-command for &b/pp fixed&c!'
 
 # GUI
-gui-disabled: '&cThe server administrator has disabled the GUI.'
+gui-disabled: '&cThe server administrator has disabled the GUI!'
 gui-by-default: '&eWe opened the GUI for you because you did not specify a command. View other commands with &b/pp help&e or use &b/pp gui&e to avoid this message.'
 gui-back-button: '&eGo Back'
 gui-icon-name-color: '&a'
