@@ -1,5 +1,6 @@
 package com.esophose.playerparticles.command;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.esophose.playerparticles.gui.PlayerParticlesGui;
@@ -43,7 +44,7 @@ public class GUICommandModule implements CommandModule {
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
-        return null;
+        return new ArrayList<String>();
     }
 
     public String getName() {

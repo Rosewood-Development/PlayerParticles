@@ -1,5 +1,6 @@
 package com.esophose.playerparticles.command;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.esophose.playerparticles.manager.LangManager;
@@ -13,7 +14,7 @@ public class StyleCommandModule implements CommandModule {
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
-        return null;
+        return new ArrayList<String>();
     }
 
     public String getName() {

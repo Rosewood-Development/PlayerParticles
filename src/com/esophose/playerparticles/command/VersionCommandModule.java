@@ -1,5 +1,6 @@
 package com.esophose.playerparticles.command;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
@@ -17,7 +18,7 @@ public class VersionCommandModule implements CommandModule {
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
-        return null;
+        return new ArrayList<String>();
     }
 
     public String getName() {
