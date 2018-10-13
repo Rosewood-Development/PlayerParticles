@@ -3,7 +3,6 @@
  * + Add new style 'tornado'
  * + Add new style 'companion'
  * + Add new style 'atom'
- * + Add new style 'rings'
  */
 
 package com.esophose.playerparticles;
@@ -42,7 +41,7 @@ public class PlayerParticles extends JavaPlugin {
     /**
      * The database connection manager
      */
-    public static DatabaseConnector databaseConnector = null;
+    private static DatabaseConnector databaseConnector = null;
 
     /**
      * Registers all the styles available by default
@@ -81,6 +80,7 @@ public class PlayerParticles extends JavaPlugin {
         LangManager.setup();
 
         configureDatabase(getConfig().getBoolean("database-enable"));
+        ParticleManager.refreshData();
         startParticleTask();
 
         if (shouldCheckUpdates()) {
@@ -116,6 +116,15 @@ public class PlayerParticles extends JavaPlugin {
      */
     public static Plugin getPlugin() {
         return pluginInstance;
+    }
+    
+    /**
+     * Gets the DatabaseConnector that allows querying the database
+     * 
+     * @return The DatabaseConnector
+     */
+    public static DatabaseConnector getDBConnector() {
+        return databaseConnector;
     }
 
     /**
@@ -214,7 +223,6 @@ public class PlayerParticles extends JavaPlugin {
         final Plugin playerParticles = this;
         new BukkitRunnable() {
             public void run() {
-                ParticleManager.refreshPPlayers(); // Add any online players who have particles
                 PlayerParticlesGui.setup();
 
                 long ticks = getConfig().getLong("ticks-per-particle");

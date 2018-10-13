@@ -206,7 +206,6 @@ public enum ParticleEffect {
         for (Player player : getPlayersInRange(center)) {
             player.spawnParticle(internalEnum, center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed);
         }
-
     }
 
     /**
@@ -272,7 +271,6 @@ public enum ParticleEffect {
         } else if (internalEnum.getDataType() == MaterialData.class) {
             extraData = new MaterialData(spawnMaterial); // Deprecated, only used in versions < 1.13
         } else {
-            System.out.println(internalEnum.getDataType());
             extraData = null;
         }
 

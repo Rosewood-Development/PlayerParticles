@@ -10,7 +10,6 @@ import org.bukkit.util.StringUtil;
 import com.esophose.playerparticles.manager.DataManager;
 import com.esophose.playerparticles.manager.LangManager;
 import com.esophose.playerparticles.manager.LangManager.Lang;
-import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.manager.PermissionManager;
 import com.esophose.playerparticles.particles.PPlayer;
 import com.esophose.playerparticles.particles.ParticleEffect;
@@ -31,7 +30,7 @@ public class AddCommandModule implements CommandModule {
             return;
         }
         
-        ParticleEffect effect = ParticleManager.effectFromString(args[0]);
+        ParticleEffect effect = ParticleEffect.fromName(args[0]);
         if (effect == null) {
             LangManager.sendMessage(pplayer, Lang.EFFECT_INVALID, args[0]);
             return;

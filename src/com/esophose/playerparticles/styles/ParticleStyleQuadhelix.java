@@ -11,18 +11,33 @@ import com.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class ParticleStyleQuadhelix implements ParticleStyle {
 
+    private static double[] cos, sin;
+    private static final int orbs = 4;
+    private static int maxStepX = 80;
+    private static int maxStepY = 60;
     private int stepX = 0;
-    private int maxStepX = 90;
     private int stepY = 0;
-    private int maxStepY = 60;
     private boolean reverse = false;
+    
+    static {
+        cos = new double[maxStepX];
+        sin = new double[maxStepX];
+        
+        int i = 0;
+        for (double n = 0; n < maxStepX; n++) {
+            cos[i] = -Math.cos(n / maxStepX * Math.PI * 2);
+            sin[i] = -Math.sin(n / maxStepX * Math.PI * 2);
+            i++;
+        }
+    }
 
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<PParticle>();
-        for (int i = 0; i < 4; i++) {
-            double dx = -(Math.cos((stepX / (double)maxStepX) * (Math.PI * 2) + ((Math.PI / 2) * i))) * ((60 - Math.abs(stepY)) / (double)maxStepY);
+        for (int i = 0; i < orbs; i++) {
+            int step = (stepX + (maxStepX / orbs) * i) % maxStepX;
+            double dx = cos[step] * ((60 - Math.abs(stepY)) / (double)maxStepY);
             double dy = (stepY / (double)maxStepY) * 1.5;
-            double dz = -(Math.sin((stepX / (double)maxStepX) * (Math.PI * 2) + ((Math.PI / 2) * i))) * ((60 - Math.abs(stepY)) / (double)maxStepY);
+            double dz = sin[step] * ((60 - Math.abs(stepY)) / (double)maxStepY);
             particles.add(new PParticle(location.clone().add(dx, dy, dz)));
         }
         return particles;

@@ -52,7 +52,7 @@ public class ParticleStyleCube implements ParticleStyle {
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> pparticles = new ArrayList<PParticle>();
 
-        if (!skipNextStep) {
+        if (!skipNextStep) { // TODO: relative position lookup tables
             double xRotation = 0, yRotation = 0, zRotation = 0;
             xRotation = step * angularVelocityX;
             yRotation = step * angularVelocityY;

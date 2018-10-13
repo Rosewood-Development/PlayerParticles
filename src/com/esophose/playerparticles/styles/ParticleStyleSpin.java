@@ -11,24 +11,32 @@ import com.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class ParticleStyleSpin implements ParticleStyle {
 
+    private static double[] cos, sin;
+    private static final int maxSteps = 30;
     private int step = 0;
+    
+    static {
+        cos = new double[maxSteps];
+        sin = new double[maxSteps];
+        
+        int i = 0;
+        for (double n = 0; n < Math.PI * 2; n += Math.PI * 2 / maxSteps) {
+            cos[i] = Math.cos(n);
+            sin[i] = Math.sin(n);
+            i++;
+        }
+    }
 
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
-        int points = 15;
         double radius = .5;
-        double slice = 2 * Math.PI / points;
-        double angle = slice * (step % 15);
-        double newX = location.getX() + radius * Math.cos(angle);
+        double newX = location.getX() + radius * cos[step];
         double newY = location.getY() + 1.5;
-        double newZ = location.getZ() + radius * Math.sin(angle);
+        double newZ = location.getZ() + radius * sin[step];
         return Collections.singletonList(new PParticle(new Location(location.getWorld(), newX, newY, newZ)));
     }
 
     public void updateTimers() {
-        step++;
-        if (step > 30) {
-            step = 0;
-        }
+        step = (step + 1) % maxSteps;
     }
 
     public String getName() {

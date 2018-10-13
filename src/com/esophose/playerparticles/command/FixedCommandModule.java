@@ -133,7 +133,7 @@ public class FixedCommandModule implements CommandModule {
             return;
         }
 
-        ParticleEffect effect = ParticleManager.effectFromString(args[3]);
+        ParticleEffect effect = ParticleEffect.fromName(args[3]);
         if (effect == null) {
             LangManager.sendMessage(p, Lang.FIXED_CREATE_EFFECT_INVALID, args[3]);
             return;

@@ -47,6 +47,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent e) {
         DataManager.getPPlayer(e.getPlayer().getUniqueId(), (pplayer) -> {
+            System.out.println("Loaded");
         }); // Loads the PPlayer from the database
     }
 
@@ -58,7 +59,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent e) {
         PPlayer pplayer = DataManager.getPPlayer(e.getPlayer().getUniqueId());
-        if (pplayer != null) particlePlayers.remove(pplayer);
+        if (pplayer != null && pplayer.getFixedEffectIds().isEmpty()) particlePlayers.remove(pplayer);
     }
 
     /**
@@ -71,41 +72,15 @@ public class ParticleManager extends BukkitRunnable implements Listener {
     }
 
     /**
-     * Load a PPlayer for all players on the server who have active particles or fixed effects
+     * Loads all FixedParticleEffects from the database
+     * Loads all online PPlayers from the database
      */
-    public static void refreshPPlayers() {
+    public static void refreshData() {
         particlePlayers.clear();
-        for (Player player : Bukkit.getOnlinePlayers())
-            DataManager.getPPlayer(player.getUniqueId(), (pplayer) -> {
-            }); // Loads the PPlayer from the database
-    }
-
-    /**
-     * Overrides an existing PPlayer with the same UUID
-     * 
-     * @param pplayer The PPlayer to override
-     */
-    public static void updateIfContains(PPlayer pplayer) {
-        for (PPlayer pp : particlePlayers) {
-            if (pp.getUniqueId() == pplayer.getUniqueId()) {
-                particlePlayers.remove(pp);
-                particlePlayers.add(pplayer);
-                break;
-            }
+        DataManager.loadFixedEffects();
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            DataManager.getPPlayer(player.getUniqueId(), (pplayer) -> { }); // Loads the PPlayer from the database
         }
-    }
-
-    /**
-     * Gets an effect type from a string, used for getting ParticleEffects from the saved data
-     * 
-     * @param effectName The name of the particle to check for
-     * @return The ParticleEffect with the given name, will be null if name was not found
-     */
-    public static ParticleEffect effectFromString(String effectName) {
-        for (ParticleEffect effect : ParticleEffect.getSupportedEffects()) {
-            if (effect.getName().equalsIgnoreCase(effectName)) return effect;
-        }
-        return null;
     }
 
     /**

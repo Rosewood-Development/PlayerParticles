@@ -68,7 +68,7 @@ rainbow: '&cr&6a&ei&an&bb&9o&dw'
 effect-no-permission: '&cYou do not have permission to use the effect &b{0} &c!'
 effect-invalid: '&cThe effect &b{0} &cdoes not exist! Use &b/pp effects &cfor a list of effects you can use.'
 effect-list: '&eYou can use the following effects: &b{0}'
-effect-list-empoty: '&cYou do not have permission to use any effects!'
+effect-list-empty: '&cYou do not have permission to use any effects!'
 
 # Styles
 style-no-permission: '&cYou do not have permission to use the style &b{0} &c!'

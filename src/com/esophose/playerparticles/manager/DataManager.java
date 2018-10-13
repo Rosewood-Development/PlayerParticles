@@ -81,7 +81,7 @@ public class DataManager {
             List<ParticleGroup> groups = new ArrayList<ParticleGroup>();
             List<FixedParticleEffect> fixedParticles = new ArrayList<FixedParticleEffect>();
 
-            PlayerParticles.databaseConnector.connect((connection) -> {
+            PlayerParticles.getDBConnector().connect((connection) -> {
                 // Load particle groups
                 String groupQuery = "SELECT * FROM pp_group g " + // @formatter:off
         					   	    "JOIN pp_particle p ON g.uuid = p.group_uuid " + 
@@ -167,6 +167,24 @@ public class DataManager {
             });
         });
     }
+    
+    /**
+     * Loads all PPlayers from the database that own FixedParticleEffects
+     */
+    public static void loadFixedEffects() {
+        async(() -> {
+            PlayerParticles.getDBConnector().connect((connection) -> {
+                String query = "SELECT DISTINCT owner_uuid FROM pp_fixed";
+                try (PreparedStatement statement = connection.prepareStatement(query)) {
+                    ResultSet result = statement.executeQuery();
+                    while (result.next()) {
+                        UUID playerUUID = UUID.fromString(result.getString("owner_uuid"));
+                        getPPlayer(playerUUID, (pplayer) -> { });
+                    }
+                }
+            });
+        });
+    }
 
     /**
      * Saves a ParticleGroup. If it already exists, update it.
@@ -176,7 +194,7 @@ public class DataManager {
      */
     public static void saveParticleGroup(UUID playerUUID, ParticleGroup group) {
         async(() -> {
-            PlayerParticles.databaseConnector.connect((connection) -> {
+            PlayerParticles.getDBConnector().connect((connection) -> {
                 String groupUUIDQuery = "SELECT uuid FROM pp_group WHERE owner_uuid = ? AND name = ?";
                 try (PreparedStatement statement = connection.prepareStatement(groupUUIDQuery)) {
                     statement.setString(1, playerUUID.toString());
@@ -247,7 +265,7 @@ public class DataManager {
      */
     public static void removeParticleGroup(UUID playerUUID, ParticleGroup group) {
         async(() -> {
-            PlayerParticles.databaseConnector.connect((connection) -> {
+            PlayerParticles.getDBConnector().connect((connection) -> {
                 String groupQuery = "SELECT * FROM pp_group WHERE owner_uuid = ? AND name = ?";
                 String particleDeleteQuery = "DELETE FROM pp_particle WHERE group_uuid = ?";
                 String groupDeleteQuery = "DELETE FROM pp_group WHERE uuid = ?";
@@ -291,7 +309,7 @@ public class DataManager {
      */
     public static void saveFixedEffect(FixedParticleEffect fixedEffect) {
         async(() -> {
-            PlayerParticles.databaseConnector.connect((connection) -> {
+            PlayerParticles.getDBConnector().connect((connection) -> {
                 String particleUUID = UUID.randomUUID().toString();
 
                 String particleQuery = "INSERT INTO pp_particle (uuid, group_uuid, id, effect, style, item_material, block_material, note, r, g, b) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -339,7 +357,7 @@ public class DataManager {
      */
     public static void removeFixedEffect(UUID playerUUID, int id) {
         async(() -> {
-            PlayerParticles.databaseConnector.connect((connection) -> {
+            PlayerParticles.getDBConnector().connect((connection) -> {
                 String particleUUID = null;
 
                 String particleUUIDQuery = "SELECT particle_uuid FROM pp_fixed WHERE owner_uuid = ? AND id = ?";

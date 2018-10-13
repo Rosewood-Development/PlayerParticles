@@ -519,7 +519,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         List<String> effectsUserHasPermissionFor = PermissionManager.getEffectsUserHasPermissionFor(player);
         for (int i = 0; i < effectsUserHasPermissionFor.size(); i++) {
             String s = effectsUserHasPermissionFor.get(i);
-            ParticleEffect effect = ParticleManager.effectFromString(s);
+            ParticleEffect effect = ParticleEffect.fromName(s);
             inventory.setItem(i, getItemForEffect(effect, effect == getPPlayerEffect(pplayer)));
         }
 
@@ -706,7 +706,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
             }
             break;
         case EFFECT:
-            setPPlayerEffect(pplayer, ParticleManager.effectFromString(name));
+            setPPlayerEffect(pplayer, ParticleEffect.fromName(name));
             changeState(pplayer, GuiState.DEFAULT);
             break;
         case STYLE:
