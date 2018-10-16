@@ -24,12 +24,12 @@ public class RemoveCommandModule implements CommandModule {
         try {
             id = Integer.parseInt(args[0]);
         } catch (Exception ex) {
-            LangManager.sendMessage(pplayer, Lang.COMMAND_REMOVE_ARGS_INVALID);
+            LangManager.sendMessage(pplayer, Lang.COMMAND_ID_INVALID);
             return;
         }
         
         if (id <= 0) {
-            LangManager.sendMessage(pplayer, Lang.COMMAND_REMOVE_ARGS_INVALID);
+            LangManager.sendMessage(pplayer, Lang.COMMAND_ID_INVALID);
             return;
         }
         
@@ -44,7 +44,7 @@ public class RemoveCommandModule implements CommandModule {
         }
         
         if (!removed) {
-            LangManager.sendMessage(pplayer, Lang.COMMAND_REMOVE_INVALID_ID, id);
+            LangManager.sendMessage(pplayer, Lang.COMMAND_ID_UNKNOWN, id);
             return;
         }
         

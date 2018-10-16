@@ -58,16 +58,24 @@ public class LangManager {
         COMMAND_DESCRIPTION_GROUP_LIST,
         COMMAND_DESCRIPTION_GROUP_INFO,
         
+        // ID Lookup
+        COMMAND_ID_INVALID,
+        COMMAND_ID_UNKNOWN,
+        
         // Add Command
         COMMAND_ADD_PARTICLE_APPLIED,
         
         // Data Command
         COMMAND_DATA_NO_ARGS,
         
+        // Edit Command
+        COMMAND_EDIT_INVALID_PROPERTY,
+        COMMAND_EDIT_SUCCESS_EFFECT,
+        COMMAND_EDIT_SUCCESS_STYLE,
+        COMMAND_EDIT_SUCCESS_DATA,
+        
         // Remove Command
         COMMAND_REMOVE_NO_ARGS,
-        COMMAND_REMOVE_ARGS_INVALID,
-        COMMAND_REMOVE_INVALID_ID,
         COMMAND_REMOVE_SUCCESS,
         
         // List Command

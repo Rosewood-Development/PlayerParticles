@@ -142,7 +142,7 @@ public class FixedCommandModule implements CommandModule {
             return;
         }
 
-        ParticleStyle style = ParticleStyleManager.styleFromString(args[4]);
+        ParticleStyle style = ParticleStyle.fromName(args[4]);
         if (style == null) {
             LangManager.sendMessage(p, Lang.FIXED_CREATE_STYLE_INVALID, args[4]);
             return;
@@ -213,7 +213,7 @@ public class FixedCommandModule implements CommandModule {
                     try {
                         material = ParticleUtils.closestMatch(args[5]);
                         if (material == null) material = Material.matchMaterial(args[5]);
-                        if (material == null) throw new Exception();
+                        if (material == null || !material.isBlock()) throw new Exception();
                     } catch (Exception e) {
                         LangManager.sendMessage(p, Lang.FIXED_CREATE_DATA_ERROR);
                         return;
@@ -225,7 +225,7 @@ public class FixedCommandModule implements CommandModule {
                     try {
                         material = ParticleUtils.closestMatch(args[5]);
                         if (material == null) material = Material.matchMaterial(args[5]);
-                        if (material == null) throw new Exception();
+                        if (material == null || material.isBlock()) throw new Exception();
                     } catch (Exception e) {
                         LangManager.sendMessage(p, Lang.FIXED_CREATE_DATA_ERROR);
                         return;

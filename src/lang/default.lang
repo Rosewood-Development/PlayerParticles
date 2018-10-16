@@ -3,7 +3,7 @@
 # Important Notes:                                                 #
 # * You can use the & symbol to color the messages                 #
 # * {#} Will be replaced with whatever that message requires       #
-# * If you use an apostrophe character it MUST be escaped! ( \' )  #
+# * Do NOT use the apostrophe character in any message! ( ' )      #
 # * PLEASE MAKE YOUR OWN .lang FILE IF YOU WANT CUSTOM MESSAGES!   #
 # * This file will be overridden almost every plugin update!       #
 # ================================================================ #
@@ -44,16 +44,24 @@ command-description-group-remove: '&e/pp group remove <name> - Removes a group y
 command-description-group-list: '&e/pp group list <name> - List all particle groups you have saved'
 command-description-group-info: '&e/pp group info <name> - List the particles saved in the group'
 
+# Command ID Lookup
+command-id-invalid: '&cThe ID you entered is invalid, it must be a positive whole number!'
+command-id-unknown: '&cYou do not have a particle applied with the ID &b{0}&c!'
+
 # Add Command
 command-add-particle-applied: '&aA new particle has been applied with the effect &b{0}&a, style &b{1}&a, and data &b{2}&a!'
 
 # Data Command
 command-data-no-args: '&cMissing argument for effect! Command usage: &b/pp data <effect>'
 
+# Edit Command
+command-edit-invalid-property: '&cAn invalid property &b{0} &cwas provided. Valid properties: &beffect&c, &bstyle&c, &bdata'
+command-edit-success-effect: '&aYour particle with an ID of &b{0} &ahas had its effect changed to &b{1}&a!'
+command-edit-success-style: '&aYour particle with an ID of &b{0} &ahas had its style changed to &b{1}&a!'
+command-edit-success-data: '&aYour particle with an ID of &b{0} &ahas had its data changed to &b{1}&a!'
+
 # Remove Command
 command-remove-no-args: '&cYou did not specify an ID to remove! &b/pp remove <ID>'
-command-remove-args-invalid: '&cThe ID you entered is invalid, it must be a positive whole number!'
-command-remove-invalid-id: '&cYou do not have a particle applied with the ID &b{0}&c!'
 command-remove-success: '&aYour particle with the ID &b{0} &ahas been removed!'
 
 # List Command

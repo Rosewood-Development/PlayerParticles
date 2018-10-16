@@ -2,7 +2,6 @@
  * TODO: v5.3
  * + Add new style 'tornado'
  * + Add new style 'companion'
- * + Add new style 'atom'
  */
 
 package com.esophose.playerparticles;

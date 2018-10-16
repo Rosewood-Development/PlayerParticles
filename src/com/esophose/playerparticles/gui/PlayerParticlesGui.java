@@ -52,7 +52,7 @@ import com.esophose.playerparticles.util.ParticleUtils;
  * This class provides a collection of static methods for modifying your
  * particle/style/data through the use of a GUI
  */
-// TODO: This entire GUI is currently hardwired to only work with the first particle in the player's list, make it with with everything
+// TODO: This entire GUI is currently hardwired to only work with the first particle in the player's list, make it work with everything
 public class PlayerParticlesGui extends BukkitRunnable implements Listener {
 
     /**
@@ -540,7 +540,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
         List<String> stylesUserHasPermissionFor = PermissionManager.getStylesUserHasPermissionFor(player);
         for (int i = 0; i < stylesUserHasPermissionFor.size(); i++) {
             String s = stylesUserHasPermissionFor.get(i);
-            ParticleStyle style = ParticleStyleManager.styleFromString(s);
+            ParticleStyle style = ParticleStyle.fromName(s);
             inventory.setItem(i, getItemForStyle(style, style == getPPlayerStyle(pplayer)));
         }
 
@@ -710,7 +710,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
             changeState(pplayer, GuiState.DEFAULT);
             break;
         case STYLE:
-            setPPlayerStyle(pplayer, ParticleStyleManager.styleFromString(name));
+            setPPlayerStyle(pplayer, ParticleStyle.fromName(name));
             changeState(pplayer, GuiState.DEFAULT);
             break;
         case DATA:

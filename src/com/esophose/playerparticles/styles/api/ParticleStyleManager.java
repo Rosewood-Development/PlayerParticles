@@ -59,18 +59,6 @@ public class ParticleStyleManager {
     }
 
     /**
-     * Gets the ParticleStyle with the name given, returns null if not found
-     * 
-     * @param styleName The string of the style to search for
-     * @return The ParticleStyle with the name requested
-     */
-    public static ParticleStyle styleFromString(String styleName) {
-        for (ParticleStyle style : styles)
-            if (style.getName().equals(styleName)) return style;
-        return null;
-    }
-
-    /**
      * Updates all the timers for the particle styles to make the animations
      * 
      * Do not call this in your plugin, it will mess with other styles

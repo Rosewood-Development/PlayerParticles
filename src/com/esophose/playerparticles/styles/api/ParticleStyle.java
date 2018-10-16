@@ -35,5 +35,18 @@ public interface ParticleStyle {
      * @return If the style can be used in a FixedParticleEffect
      */
     public boolean canBeFixed();
+    
+    
+    /**
+     * Gets the ParticleStyle with the name given, returns null if not found
+     * 
+     * @param styleName The string of the style to search for
+     * @return The ParticleStyle with the name requested
+     */
+    public static ParticleStyle fromName(String styleName) {
+        for (ParticleStyle style : ParticleStyleManager.getStyles())
+            if (style.getName().equals(styleName)) return style;
+        return null;
+    }
 
 }

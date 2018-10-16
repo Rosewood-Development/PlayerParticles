@@ -97,7 +97,7 @@ public class DataManager {
                         // Particle properties
                         int id = result.getInt("id");
                         ParticleEffect effect = ParticleEffect.fromName(result.getString("effect"));
-                        ParticleStyle style = ParticleStyleManager.styleFromString(result.getString("style"));
+                        ParticleStyle style = ParticleStyle.fromName(result.getString("style"));
                         Material itemMaterial = ParticleUtils.closestMatchWithFallback(result.getString("item_material"));
                         Material blockMaterial = ParticleUtils.closestMatchWithFallback(result.getString("block_material"));
                         NoteColor noteColor = new NoteColor(result.getInt("note"));
@@ -143,7 +143,7 @@ public class DataManager {
                         // Particle properties
                         int particleId = result.getInt("p_id");
                         ParticleEffect effect = ParticleEffect.fromName(result.getString("effect"));
-                        ParticleStyle style = ParticleStyleManager.styleFromString(result.getString("style"));
+                        ParticleStyle style = ParticleStyle.fromName(result.getString("style"));
                         Material itemMaterial = ParticleUtils.closestMatchWithFallback(result.getString("item_material"));
                         Material blockMaterial = ParticleUtils.closestMatchWithFallback(result.getString("block_material"));
                         NoteColor noteColor = new NoteColor(result.getInt("note"));

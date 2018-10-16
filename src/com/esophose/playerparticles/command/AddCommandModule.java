@@ -19,7 +19,6 @@ import com.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
 import com.esophose.playerparticles.particles.ParticleGroup;
 import com.esophose.playerparticles.particles.ParticlePair;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
-import com.esophose.playerparticles.styles.api.ParticleStyleManager;
 import com.esophose.playerparticles.util.ParticleUtils;
 
 public class AddCommandModule implements CommandModule {
@@ -39,7 +38,7 @@ public class AddCommandModule implements CommandModule {
             return;
         }
 
-        ParticleStyle style = ParticleStyleManager.styleFromString(args[1]);
+        ParticleStyle style = ParticleStyle.fromName(args[1]);
         if (style == null) {
             LangManager.sendMessage(pplayer, Lang.STYLE_INVALID, args[1]);
             return;
@@ -103,7 +102,7 @@ public class AddCommandModule implements CommandModule {
                 if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST) {
                     try {
                         blockData = ParticleUtils.closestMatch(args[2]);
-                        if (blockData == null) throw new Exception();
+                        if (blockData == null || !blockData.isBlock()) throw new Exception();
                     } catch (Exception e) {
                         LangManager.sendMessage(pplayer, Lang.DATA_INVALID_BLOCK);
                         return;
@@ -111,7 +110,7 @@ public class AddCommandModule implements CommandModule {
                 } else if (effect == ParticleEffect.ITEM) {
                     try {
                         itemData = ParticleUtils.closestMatch(args[2]);
-                        if (itemData == null) throw new Exception();
+                        if (itemData == null || itemData.isBlock()) throw new Exception();
                     } catch (Exception e) {
                         LangManager.sendMessage(pplayer, Lang.DATA_INVALID_ITEM);
                         return;
