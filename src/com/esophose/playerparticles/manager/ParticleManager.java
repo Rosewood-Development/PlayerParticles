@@ -46,9 +46,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent e) {
-        DataManager.getPPlayer(e.getPlayer().getUniqueId(), (pplayer) -> {
-            System.out.println("Loaded");
-        }); // Loads the PPlayer from the database
+        DataManager.getPPlayer(e.getPlayer().getUniqueId(), (pplayer) -> { }); // Loads the PPlayer from the database
     }
 
     /**

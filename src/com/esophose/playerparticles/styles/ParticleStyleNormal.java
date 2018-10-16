@@ -51,7 +51,7 @@ public class ParticleStyleNormal implements ParticleStyle {
         case DUST:
             return Collections.singletonList(new PParticle(location, 0.5, 0.5, 0.5, 0.0));
         case ENCHANT:
-            return Collections.singletonList(new PParticle(location, 0.6, 0.6, 0.6, 0.05));
+            return Collections.singletonList(new PParticle(location, 0.6, 0.6, 0.6, 1.0));
         case ENCHANTED_HIT:
             return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
         case END_ROD:
@@ -93,13 +93,13 @@ public class ParticleStyleNormal implements ParticleStyle {
         case MYCELIUM:
             return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
         case NAUTILUS:
-            return Collections.singletonList(new PParticle(location, 0.5, 0.5, 0.5, 0.05));
+            return Collections.singletonList(new PParticle(location, 0.5, 0.5, 0.5, 1.0));
         case NOTE:
             return Collections.singletonList(new PParticle(location, 0.6, 0.6, 0.6, 0.0));
         case POOF:
             return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
         case PORTAL:
-            return Collections.singletonList(new PParticle(location, 0.5, 0.5, 0.5, 0.05));
+            return Collections.singletonList(new PParticle(location, 0.5, 0.5, 0.5, 1.0));
         case RAIN:
             return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
         case SMOKE:
@@ -132,7 +132,7 @@ public class ParticleStyleNormal implements ParticleStyle {
     }
 
     public String getName() {
-        return "none";
+        return "normal";
     }
 
     public boolean canBeFixed() {

@@ -37,6 +37,12 @@ public class ParticleStyleRings implements ParticleStyle {
         return particles;
     }
     
+    /**
+     * Wraps an index around the cos/sin array length
+     * 
+     * @param index The index to wrap
+     * @return The wrapped index
+     */
     private int wrap(int index) {
         return index % cos.length;
     }

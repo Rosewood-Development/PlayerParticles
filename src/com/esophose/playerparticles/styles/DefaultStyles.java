@@ -15,6 +15,7 @@ public class DefaultStyles {
      * All the styles that are available by default from this plugin
      */
     public static final ParticleStyle ARROWS = new ParticleStyleArrows();
+    public static final ParticleStyle BATMAN = new ParticleStyleBatman();
     public static final ParticleStyle BEAM = new ParticleStyleBeam();
     public static final ParticleStyle BLOCKBREAK = new ParticleStyleBlockBreak();
     public static final ParticleStyle BLOCKEDIT = new ParticleStyleBlockEdit();
@@ -41,8 +42,8 @@ public class DefaultStyles {
      * Registered in alphabetical order
      */
     public static void registerStyles() {
-        ParticleStyleManager.registerStyle(NORMAL); // Always display none first
         ParticleStyleManager.registerStyle(ARROWS);
+        ParticleStyleManager.registerStyle(BATMAN);
         ParticleStyleManager.registerStyle(BEAM);
         ParticleStyleManager.registerCustomHandledStyle(BLOCKBREAK);
         ParticleStyleManager.registerCustomHandledStyle(BLOCKEDIT);
@@ -52,6 +53,7 @@ public class DefaultStyles {
         ParticleStyleManager.registerStyle(HALO);
         ParticleStyleManager.registerCustomHandledStyle(HURT);
         ParticleStyleManager.registerCustomHandledStyle(MOVE);
+        ParticleStyleManager.registerStyle(NORMAL);
         ParticleStyleManager.registerStyle(ORBIT);
         ParticleStyleManager.registerStyle(POINT);
         ParticleStyleManager.registerStyle(QUADHELIX);
