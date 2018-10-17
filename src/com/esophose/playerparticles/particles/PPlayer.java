@@ -63,7 +63,7 @@ public class PPlayer {
      * 
      * @return A List of ParticleGroups this player has
      */
-    public List<ParticleGroup> getParticles() {
+    public List<ParticleGroup> getParticleGroups() {
         return this.particleGroups;
     }
 

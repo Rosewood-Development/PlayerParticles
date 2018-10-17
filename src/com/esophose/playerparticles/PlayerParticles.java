@@ -2,6 +2,26 @@
  * TODO: v5.3
  * + Add new style 'tornado'
  * + Add new style 'companion'
+ * * Setting in config.yml for max number of particle groups, default 10
+ * * Permission to allow players to overrule the max particle groups allowed in the config playerparticles.groups.unlimited
+ * * Setting in config.yml to disable non-event styles while the player is moving
+ * * Setting in config.yml for max particles allowed per player, default 3
+ * * Permission to allow players to overrule the max particles allowed playerparticles.particle.max
+ * * Permissions for the following:
+ *     - playerparticles.particles.max.1
+ *     - playerparticles.particles.max.2
+ *     - playerparticles.particles.max.3
+ *     - playerparticles.particles.max.4
+ *     - playerparticles.particles.max.5
+ *     - playerparticles.particles.max.6
+ *     - playerparticles.particles.max.7
+ *     - playerparticles.particles.max.8
+ *     - playerparticles.particles.max.9
+ *     - playerparticles.particles.max.10
+ *     - playerparticles.particles.max.unlimited
+ *     Note: The default max particles in the config.yml is used instead if the playerparticles.particles.max.# is lower
+ *     Note: The highest number the user has permission for is how many they are able to use
+ *           Ex. they have 4 and 7, they will have a max of 7
  */
 
 package com.esophose.playerparticles;
@@ -48,7 +68,6 @@ public class PlayerParticles extends JavaPlugin {
      * Registers the tab completer and the event listeners
      * Checks if the config needs to be updated to the new version
      * Makes sure the database is accessible
-     * Updates the map and styleMap @see ParticleCreator
      * Starts the particle spawning task
      * Registers the command executor
      * Checks for any updates if checking is enabled in the config

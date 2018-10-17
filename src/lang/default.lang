@@ -20,7 +20,7 @@ command-description-edit: 'Edit the effect, style, or data of an active particle
 command-description-effect: '&cThis command has been removed, use &b/pp help &cto find new commands'
 command-description-effects: 'Display a list of effects you can use'
 command-description-fixed: 'Create, edit, and remove fixed particle effects'
-command-description-group: 'Save, load, and remove your particle groups'
+command-description-group: 'Save, load, and remove particle groups'
 command-description-gui: 'Display the GUI for easy editing of particles'
 command-description-help: 'Displays the help menu... You have arrived'
 command-description-info: 'Gets the description of one of your active particles'
@@ -45,29 +45,44 @@ command-description-group-list: '&e/pp group list <name> - List all particle gro
 command-description-group-info: '&e/pp group info <name> - List the particles saved in the group'
 
 # Command ID Lookup
-command-id-invalid: '&cThe ID you entered is invalid, it must be a positive whole number!'
-command-id-unknown: '&cYou do not have a particle applied with the ID &b{0}&c!'
+id-invalid: '&cThe ID you entered is invalid, it must be a positive whole number!'
+id-unknown: '&cYou do not have a particle applied with the ID &b{0}&c!'
 
 # Add Command
-command-add-particle-applied: '&aA new particle has been applied with the effect &b{0}&a, style &b{1}&a, and data &b{2}&a!'
+add-particle-applied: '&aA new particle has been applied with the effect &b{0}&a, style &b{1}&a, and data &b{2}&a!'
 
 # Data Command
-command-data-no-args: '&cMissing argument for effect! Command usage: &b/pp data <effect>'
+data-no-args: '&cMissing argument for effect! Command usage: &b/pp data <effect>'
 
 # Edit Command
-command-edit-invalid-property: '&cAn invalid property &b{0} &cwas provided. Valid properties: &beffect&c, &bstyle&c, &bdata'
-command-edit-success-effect: '&aYour particle with an ID of &b{0} &ahas had its effect changed to &b{1}&a!'
-command-edit-success-style: '&aYour particle with an ID of &b{0} &ahas had its style changed to &b{1}&a!'
-command-edit-success-data: '&aYour particle with an ID of &b{0} &ahas had its data changed to &b{1}&a!'
+edit-invalid-property: '&cAn invalid property &b{0} &cwas provided. Valid properties: &beffect&c, &bstyle&c, &bdata'
+edit-success-effect: '&aYour particle with an ID of &b{0} &ahas had its effect changed to &b{1}&a!'
+edit-success-style: '&aYour particle with an ID of &b{0} &ahas had its style changed to &b{1}&a!'
+edit-success-data: '&aYour particle with an ID of &b{0} &ahas had its data changed to &b{1}&a!'
+
+# Group Command
+group-invalid: '&cA group does not exist with the name &b{0}&c!'
+group-reserved: '&cThe group name &bactive &cis reserved and cannot be used!'
+group-no-name: '&cYou did not provide a group name! &b/pp {0} <groupName>'
+group-save-reached-max: '&cUnable to save group, you have reached the max number of groups!'
+group-save-no-particles: '&cUnable to save group, you do not have any particles applied!'
+group-save-success: '&aYour current particles have been saved under the group named &b{0}&a!'
+group-save-success-overwrite: '&aThe group named &b{0} &ahas been updated with your current particles!'
+group-load-success: '&aApplied &b{0} &aparticles from the group &b{1}&a!'
+group-remove-success: '&aRemoved the particle group named &b{0}&a!'
+group-info-header: '&eThe group &b{0} &ehas the following particles:'
+group-list-none: '&eYou do not have any particle groups saved!'
+group-list-output: '&eYou have the following groups saved: &b{0}'
+group-list-presets: '&eThe following preset groups are available: &b{0}'
 
 # Remove Command
-command-remove-no-args: '&cYou did not specify an ID to remove! &b/pp remove <ID>'
-command-remove-success: '&aYour particle with the ID &b{0} &ahas been removed!'
+remove-no-args: '&cYou did not specify an ID to remove! &b/pp remove <ID>'
+remove-success: '&aYour particle with the ID &b{0} &ahas been removed!'
 
 # List Command
-command-list-none: '&eYou do not have any active particles!'
-command-list-you-have: '&eYou have the following particles applied:'
-command-list-output: '&eID: &b{0} &eEffect: &b{1} &eStyle: &b{2} &eData: &b{3}'
+list-none: '&eYou do not have any active particles!'
+list-you-have: '&eYou have the following particles applied:'
+list-output: '&eID: &b{0} &eEffect: &b{1} &eStyle: &b{2} &eData: &b{3}'
 
 # Rainbow
 rainbow: '&cr&6a&ei&an&bb&9o&dw'

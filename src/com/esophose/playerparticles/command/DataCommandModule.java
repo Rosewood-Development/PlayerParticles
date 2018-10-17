@@ -38,7 +38,7 @@ public class DataCommandModule implements CommandModule {
                 LangManager.sendMessage(pplayer, Lang.DATA_USAGE_NONE, effect.getName());
             }
         } else {
-            LangManager.sendMessage(pplayer, Lang.COMMAND_DATA_NO_ARGS);
+            LangManager.sendMessage(pplayer, Lang.DATA_NO_ARGS);
         }
     }
 

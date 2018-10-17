@@ -16,7 +16,7 @@ public class RemoveCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         if (args.length == 0) {
-            LangManager.sendMessage(pplayer, Lang.COMMAND_REMOVE_NO_ARGS);
+            LangManager.sendMessage(pplayer, Lang.REMOVE_NO_ARGS);
             return;
         }
         
@@ -24,12 +24,12 @@ public class RemoveCommandModule implements CommandModule {
         try {
             id = Integer.parseInt(args[0]);
         } catch (Exception ex) {
-            LangManager.sendMessage(pplayer, Lang.COMMAND_ID_INVALID);
+            LangManager.sendMessage(pplayer, Lang.ID_INVALID);
             return;
         }
         
         if (id <= 0) {
-            LangManager.sendMessage(pplayer, Lang.COMMAND_ID_INVALID);
+            LangManager.sendMessage(pplayer, Lang.ID_INVALID);
             return;
         }
         
@@ -44,12 +44,12 @@ public class RemoveCommandModule implements CommandModule {
         }
         
         if (!removed) {
-            LangManager.sendMessage(pplayer, Lang.COMMAND_ID_UNKNOWN, id);
+            LangManager.sendMessage(pplayer, Lang.ID_UNKNOWN, id);
             return;
         }
         
         DataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
-        LangManager.sendMessage(pplayer, Lang.COMMAND_REMOVE_SUCCESS, id);
+        LangManager.sendMessage(pplayer, Lang.REMOVE_SUCCESS, id);
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {

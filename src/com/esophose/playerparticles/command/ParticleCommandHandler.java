@@ -136,7 +136,7 @@ public class ParticleCommandHandler implements CommandExecutor, TabCompleter {
                 }
             }
         }
-        return null;
+        return new ArrayList<String>();
     }
 
 }

@@ -59,29 +59,44 @@ public class LangManager {
         COMMAND_DESCRIPTION_GROUP_INFO,
         
         // ID Lookup
-        COMMAND_ID_INVALID,
-        COMMAND_ID_UNKNOWN,
+        ID_INVALID,
+        ID_UNKNOWN,
         
         // Add Command
-        COMMAND_ADD_PARTICLE_APPLIED,
+        ADD_PARTICLE_APPLIED,
         
         // Data Command
-        COMMAND_DATA_NO_ARGS,
+        DATA_NO_ARGS,
         
         // Edit Command
-        COMMAND_EDIT_INVALID_PROPERTY,
-        COMMAND_EDIT_SUCCESS_EFFECT,
-        COMMAND_EDIT_SUCCESS_STYLE,
-        COMMAND_EDIT_SUCCESS_DATA,
+        EDIT_INVALID_PROPERTY,
+        EDIT_SUCCESS_EFFECT,
+        EDIT_SUCCESS_STYLE,
+        EDIT_SUCCESS_DATA,
+        
+        // Group Command
+        GROUP_INVALID,
+        GROUP_RESERVED,
+        GROUP_NO_NAME,
+        GROUP_SAVE_REACHED_MAX,
+        GROUP_SAVE_NO_PARTICLES,
+        GROUP_SAVE_SUCCESS,
+        GROUP_SAVE_SUCCESS_OVERWRITE,
+        GROUP_LOAD_SUCCESS,
+        GROUP_REMOVE_SUCCESS,
+        GROUP_INFO_HEADER,
+        GROUP_LIST_NONE,
+        GROUP_LIST_OUTPUT,
+        GROUP_LIST_PRESETS,
         
         // Remove Command
-        COMMAND_REMOVE_NO_ARGS,
-        COMMAND_REMOVE_SUCCESS,
+        REMOVE_NO_ARGS,
+        REMOVE_SUCCESS,
         
         // List Command
-        COMMAND_LIST_NONE,
-        COMMAND_LIST_YOU_HAVE,
-        COMMAND_LIST_OUTPUT,
+        LIST_NONE,
+        LIST_YOU_HAVE,
+        LIST_OUTPUT,
         
         // Rainbow
         RAINBOW,

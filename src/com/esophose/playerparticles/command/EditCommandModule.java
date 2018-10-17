@@ -33,17 +33,17 @@ public class EditCommandModule implements CommandModule {
         try {
             id = Integer.parseInt(args[0]);
         } catch (Exception e) {
-            LangManager.sendMessage(pplayer, Lang.COMMAND_ID_INVALID);
+            LangManager.sendMessage(pplayer, Lang.ID_INVALID);
             return;
         }
         
         if (id <= 0) {
-            LangManager.sendMessage(pplayer, Lang.COMMAND_ID_INVALID);
+            LangManager.sendMessage(pplayer, Lang.ID_INVALID);
             return;
         }
         
         if (pplayer.getActiveParticle(id) == null) {
-            LangManager.sendMessage(pplayer, Lang.COMMAND_ID_UNKNOWN, id);
+            LangManager.sendMessage(pplayer, Lang.ID_UNKNOWN, id);
             return;
         }
         
@@ -63,7 +63,7 @@ public class EditCommandModule implements CommandModule {
             editData(pplayer, id, cmdArgs);
             break;
         default:
-            LangManager.sendMessage(pplayer, Lang.COMMAND_EDIT_INVALID_PROPERTY, args[1]);
+            LangManager.sendMessage(pplayer, Lang.EDIT_INVALID_PROPERTY, args[1]);
             break;
         }
     }
@@ -94,7 +94,7 @@ public class EditCommandModule implements CommandModule {
         }
         
         DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
-        LangManager.sendMessage(pplayer, Lang.COMMAND_EDIT_SUCCESS_EFFECT, id, effect.getName());
+        LangManager.sendMessage(pplayer, Lang.EDIT_SUCCESS_EFFECT, id, effect.getName());
     }
     
     /**
@@ -123,7 +123,7 @@ public class EditCommandModule implements CommandModule {
         }
         
         DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
-        LangManager.sendMessage(pplayer, Lang.COMMAND_EDIT_SUCCESS_STYLE, id, style.getName());
+        LangManager.sendMessage(pplayer, Lang.EDIT_SUCCESS_STYLE, id, style.getName());
     }
     
     /**
@@ -220,7 +220,7 @@ public class EditCommandModule implements CommandModule {
         }
         
         DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
-        LangManager.sendMessage(pplayer, Lang.COMMAND_EDIT_SUCCESS_DATA, id, updatedDataString);
+        LangManager.sendMessage(pplayer, Lang.EDIT_SUCCESS_DATA, id, updatedDataString);
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
@@ -252,10 +252,12 @@ public class EditCommandModule implements CommandModule {
             } else if (args.length >= 3) {
                 switch (args[1].toLowerCase()) {
                 case "effect":
-                    StringUtil.copyPartialMatches(args[2], PermissionManager.getEffectsUserHasPermissionFor(p), matches);
+                    if (args.length == 3)
+                        StringUtil.copyPartialMatches(args[2], PermissionManager.getEffectsUserHasPermissionFor(p), matches);
                     break;
                 case "style":
-                    StringUtil.copyPartialMatches(args[2], PermissionManager.getStylesUserHasPermissionFor(p), matches);
+                    if (args.length == 3)
+                        StringUtil.copyPartialMatches(args[2], PermissionManager.getStylesUserHasPermissionFor(p), matches);
                     break;
                 case "data":
                     ParticleEffect effect = pplayer.getActiveParticle(id).getEffect();

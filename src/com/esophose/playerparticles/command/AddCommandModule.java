@@ -124,7 +124,7 @@ public class AddCommandModule implements CommandModule {
         group.getParticles().add(newParticle);
         DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
         
-        LangManager.sendMessage(pplayer, Lang.COMMAND_ADD_PARTICLE_APPLIED, newParticle.getEffect().getName(), newParticle.getStyle().getName(), newParticle.getDataString());
+        LangManager.sendMessage(pplayer, Lang.ADD_PARTICLE_APPLIED, newParticle.getEffect().getName(), newParticle.getStyle().getName(), newParticle.getDataString());
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {

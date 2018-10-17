@@ -241,6 +241,13 @@ public class ParticlePair {
         }
         return "none";
     }
+    
+    /**
+     * Gets a copy of this ParticlePair
+     */
+    public ParticlePair clone() {
+        return new ParticlePair(this.ownerUUID, this.id, this.effect, this.style, this.itemMaterial, this.blockMaterial, this.color, this.noteColor);
+    }
 
     /**
      * Gets a ParticlePair with the default values applied

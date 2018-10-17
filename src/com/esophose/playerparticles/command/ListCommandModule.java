@@ -14,17 +14,17 @@ public class ListCommandModule implements CommandModule {
         List<ParticlePair> particles = pplayer.getActiveParticles();
         
         if (particles.isEmpty()) {
-            LangManager.sendMessage(pplayer, Lang.COMMAND_LIST_NONE);
+            LangManager.sendMessage(pplayer, Lang.LIST_NONE);
             return;
         }
         
-        LangManager.sendMessage(pplayer, Lang.COMMAND_LIST_YOU_HAVE);
+        LangManager.sendMessage(pplayer, Lang.LIST_YOU_HAVE);
         for (ParticlePair particle : particles) {
             int id = particle.getId();
             String effect = particle.getEffect().getName();
             String style = particle.getStyle().getName();
             String data = particle.getDataString();
-            LangManager.sendMessage(pplayer, Lang.COMMAND_LIST_OUTPUT, id, effect, style, data);
+            LangManager.sendMessage(pplayer, Lang.LIST_OUTPUT, id, effect, style, data);
         }
     }
 

@@ -18,7 +18,6 @@ import com.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
 import com.esophose.playerparticles.particles.ParticleGroup;
 import com.esophose.playerparticles.particles.ParticlePair;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
-import com.esophose.playerparticles.styles.api.ParticleStyleManager;
 import com.esophose.playerparticles.util.ParticleUtils;
 
 /**
@@ -247,13 +246,13 @@ public class DataManager {
         });
 
         getPPlayer(playerUUID, (pplayer) -> {
-            for (ParticleGroup existing : pplayer.getParticles()) {
+            for (ParticleGroup existing : pplayer.getParticleGroups()) {
                 if (group.getName().equalsIgnoreCase(existing.getName())) {
-                    pplayer.getParticles().remove(existing);
+                    pplayer.getParticleGroups().remove(existing);
                     break;
                 }
             }
-            pplayer.getParticles().add(group);
+            pplayer.getParticleGroups().add(group);
         });
     }
 
@@ -297,7 +296,7 @@ public class DataManager {
         });
 
         getPPlayer(playerUUID, (pplayer) -> {
-            pplayer.getParticles().remove(group);
+            pplayer.getParticleGroups().remove(group);
         });
     }
 

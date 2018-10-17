@@ -14,9 +14,9 @@ import org.bukkit.util.StringUtil;
 
 import com.esophose.playerparticles.manager.DataManager;
 import com.esophose.playerparticles.manager.LangManager;
+import com.esophose.playerparticles.manager.LangManager.Lang;
 import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.manager.PermissionManager;
-import com.esophose.playerparticles.manager.LangManager.Lang;
 import com.esophose.playerparticles.particles.FixedParticleEffect;
 import com.esophose.playerparticles.particles.PPlayer;
 import com.esophose.playerparticles.particles.ParticleEffect;
@@ -25,7 +25,6 @@ import com.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
 import com.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
 import com.esophose.playerparticles.particles.ParticlePair;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
-import com.esophose.playerparticles.styles.api.ParticleStyleManager;
 import com.esophose.playerparticles.util.ParticleUtils;
 
 public class FixedCommandModule implements CommandModule {
@@ -388,8 +387,7 @@ public class FixedCommandModule implements CommandModule {
         String[] subCommands = new String[] { "create", "remove", "list", "info", "clear" };
         
         if (args.length <= 1) {
-            List<String> possibleCmds = new ArrayList<String>();
-            possibleCmds.addAll(new ArrayList<String>(Arrays.asList(subCommands)));
+            List<String> possibleCmds = new ArrayList<String>(Arrays.asList(subCommands));
             if (args.length == 0) matches = possibleCmds;
             else StringUtil.copyPartialMatches(args[0], possibleCmds, matches);
         } else {
@@ -470,7 +468,7 @@ public class FixedCommandModule implements CommandModule {
     }
 
     public String getArguments() {
-        return "<args>";
+        return "<sub-command>";
     }
 
     public boolean requiresEffects() {
