@@ -34,9 +34,9 @@ public class ParticleStyleHalo implements ParticleStyle {
         double radius = .65;
         List<PParticle> particles = new ArrayList<PParticle>();
         for (int i = 0; i < points; i++) {
-            double dx = location.getX() + radius * cos[i];
-            double dy = location.getY() + 1.5;
-            double dz = location.getZ() + radius * sin[i];
+            double dx = radius * cos[i];
+            double dy = 1.5;
+            double dz = radius * sin[i];
             particles.add(new PParticle(location.clone().add(dx, dy, dz)));
         }
         return particles;
