@@ -172,10 +172,8 @@ public class DataManager {
                 final PPlayer loadedPPlayer = new PPlayer(playerUUID, groups, fixedParticles);
                 
                 sync(() -> {
-                    Bukkit.broadcastMessage("About to add PPlayer");
                     if (getPPlayer(playerUUID) == null) { // Make sure the PPlayer still isn't added, since this is async it's possible it got ran twice
                         ParticleManager.particlePlayers.add(loadedPPlayer);
-                        Bukkit.broadcastMessage("Added PPlayer: " + ParticleManager.particlePlayers.size());
                         callback.execute(loadedPPlayer);
                     }
                 });
