@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -58,7 +59,7 @@ public class DataManager {
      */
     public static PPlayer getPPlayer(UUID playerUUID) {
         for (PPlayer pp : ParticleManager.particlePlayers)
-            if (pp.getUniqueId() == playerUUID) return pp;
+            if (pp.getUniqueId().equals(playerUUID)) return pp;
         return null;
     }
 
@@ -152,17 +153,32 @@ public class DataManager {
                         fixedParticles.add(new FixedParticleEffect(playerUUID, fixedEffectId, worldName, xPos, yPos, zPos, particle));
                     }
                 }
+                
+                // If there aren't any groups then this is a brand new PPlayer and we need to save a new active group for them
+                boolean activeGroupExists = false;
+                for (ParticleGroup group : groups) {
+                    if (group.getName().equals(ParticleGroup.DEFAULT_NAME)) {
+                        activeGroupExists = true;
+                        break;
+                    }
+                }
 
-                if (groups.size() == 0) { // If there aren't any groups then this is a brand new PPlayer and we need to save a new active group for them
+                if (!activeGroupExists) { 
                     ParticleGroup activeGroup = new ParticleGroup(ParticleGroup.DEFAULT_NAME, new ArrayList<ParticlePair>());
                     saveParticleGroup(playerUUID, activeGroup);
                     groups.add(activeGroup);
                 }
 
-                PPlayer loadedPPlayer = new PPlayer(playerUUID, groups, fixedParticles);
-                ParticleManager.particlePlayers.add(loadedPPlayer);
-
-                sync(() -> callback.execute(loadedPPlayer));
+                final PPlayer loadedPPlayer = new PPlayer(playerUUID, groups, fixedParticles);
+                
+                sync(() -> {
+                    Bukkit.broadcastMessage("About to add PPlayer");
+                    if (getPPlayer(playerUUID) == null) { // Make sure the PPlayer still isn't added, since this is async it's possible it got ran twice
+                        ParticleManager.particlePlayers.add(loadedPPlayer);
+                        Bukkit.broadcastMessage("Added PPlayer: " + ParticleManager.particlePlayers.size());
+                        callback.execute(loadedPPlayer);
+                    }
+                });
             });
         });
     }

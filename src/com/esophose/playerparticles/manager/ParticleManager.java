@@ -57,7 +57,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent e) {
         PPlayer pplayer = DataManager.getPPlayer(e.getPlayer().getUniqueId());
-        if (pplayer != null && pplayer.getFixedEffectIds().isEmpty()) particlePlayers.remove(pplayer);
+        if (pplayer != null && pplayer.getFixedEffectIds().isEmpty()) particlePlayers.remove(pplayer); // Unload the PPlayer if they don't have any fixed effects
     }
 
     /**

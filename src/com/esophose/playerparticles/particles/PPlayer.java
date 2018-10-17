@@ -98,7 +98,7 @@ public class PPlayer {
         for (ParticleGroup group : this.particleGroups)
             if (group.getName().equals(ParticleGroup.DEFAULT_NAME)) 
                 return group;
-        return null; // This should never return null, there will always be at least one ParticleGroup
+        throw new IllegalStateException("Active particle group does not exist for player with UUID: " + this.getUniqueId());
     }
 
     /**
@@ -177,9 +177,12 @@ public class PPlayer {
      * @param id The id of the fixed effect to remove
      */
     public void removeFixedEffect(int id) {
-        for (int i = this.fixedParticles.size() - 1; i >= 0; i--)
-            if (this.fixedParticles.get(i).getId() == id) 
-                this.fixedParticles.remove(i);
+        for (FixedParticleEffect fixedEffect : this.fixedParticles) {
+            if (fixedEffect.getId() == id) {
+                this.fixedParticles.remove(fixedEffect);
+                break;
+            }
+        }
     }
 
     /**
