@@ -106,7 +106,7 @@ public class FixedCommandModule implements CommandModule {
             Block targetBlock = p.getTargetBlock((Set<Material>)null, 8);
             int maxDistanceSqrd = 6 * 6;
             if (targetBlock.getLocation().distanceSquared(p.getLocation()) > maxDistanceSqrd) {
-                LangManager.sendMessage(p, Lang.FIXED_CREATE_OUT_OF_RANGE);
+                LangManager.sendMessage(p, Lang.FIXED_CREATE_LOOKING_TOO_FAR);
                 return;
             }
             
