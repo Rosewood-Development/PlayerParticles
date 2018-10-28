@@ -10,7 +10,27 @@ public class PParticle {
     private Location location;
     private double speed;
     private double xOff, yOff, zOff;
+    private boolean directional;
 
+    /**
+     * The constructor with all the fancy parameters for customization
+     * 
+     * @param location The location to display the particle at
+     * @param xOff The offset for the x-axis
+     * @param yOff The offset for the y-axis
+     * @param zOff The offset for the z-axis
+     * @param speed The speed the particle will move at
+     * @param directional If the particle should use the x, y, and z offsets as directions instead
+     */
+    public PParticle(Location location, double xOff, double yOff, double zOff, double speed, boolean directional) {
+        this.location = location;
+        this.xOff = xOff;
+        this.yOff = yOff;
+        this.zOff = zOff;
+        this.speed = speed;
+        this.directional = directional;
+    }
+    
     /**
      * The constructor with all the fancy parameters for customization
      * 
@@ -21,11 +41,7 @@ public class PParticle {
      * @param speed The speed the particle will move at
      */
     public PParticle(Location location, double xOff, double yOff, double zOff, double speed) {
-        this.location = location;
-        this.xOff = xOff;
-        this.yOff = yOff;
-        this.zOff = zOff;
-        this.speed = speed;
+        this(location, xOff, yOff, zOff, speed, false);
     }
 
     /**
@@ -35,7 +51,7 @@ public class PParticle {
      * @param location The location to display the particles at
      */
     public PParticle(Location location) {
-        this(location, 0.0F, 0.0F, 0.0F, 0.0F);
+        this(location, 0.0F, 0.0F, 0.0F, 0.0F, false);
     }
 
     /**
@@ -69,6 +85,15 @@ public class PParticle {
      */
     public double getSpeed() {
         return this.speed;
+    }
+    
+    /**
+     * Gets if the particle is directional
+     * 
+     * @return If the particle is directional
+     */
+    public boolean isDirectional() {
+        return this.directional;
     }
 
     /**

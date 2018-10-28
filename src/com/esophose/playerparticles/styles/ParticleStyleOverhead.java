@@ -9,11 +9,12 @@ import com.esophose.playerparticles.particles.ParticlePair;
 import com.esophose.playerparticles.styles.api.PParticle;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
 
-public class ParticleStyleFeet implements ParticleStyle {
+public class ParticleStyleOverhead implements ParticleStyle {
 
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<PParticle>();
-        particles.add(new PParticle(location.clone().subtract(0, 0.95, 0), 0.4F, 0.0F, 0.4F, 0.0F));
+        particles.add(new PParticle(location.clone().add(0, 1.75, 0), 0.4F, 0.1F, 0.4F, 0.0F));
+        particles.add(new PParticle(location.clone().add(0, 1.75, 0), 0.4F, 0.1F, 0.4F, 0.0F));
         return particles;
     }
 
@@ -22,7 +23,7 @@ public class ParticleStyleFeet implements ParticleStyle {
     }
 
     public String getName() {
-        return "feet";
+        return "overhead";
     }
 
     public boolean canBeFixed() {

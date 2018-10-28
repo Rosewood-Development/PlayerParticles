@@ -25,6 +25,7 @@ command-description-gui: 'Display the GUI for easy editing of particles'
 command-description-help: 'Displays the help menu... You have arrived'
 command-description-info: 'Gets the description of one of your active particles'
 command-description-list: 'Lists the IDs of your active particles'
+command-description-reload: 'Reloads the config.yml and lang file'
 command-description-remove: 'Removes one of your active particles'
 command-description-reset: 'Removes all your active particles'
 command-description-style: '&cThis command has been removed, use &b/pp help &cto find new commands'
@@ -33,7 +34,7 @@ command-description-version: 'Display the current version of the plugin and the 
 command-description-worlds: 'Find out what worlds particles are disabled in'
 
 # Sub-Command Usage
-command-description-fixed-create: '&e/pp fixed create <x> <y> <z> <effect> <style> [data] - Creates a new fixed effect'
+command-description-fixed-create: '&e/pp fixed create <<x> <y> <z>|<looking>> <effect> <style> [data] - Creates a new fixed effect'
 command-description-fixed-remove: '&e/pp fixed remove <ID> - Removes a fixed effect by its ID'
 command-description-fixed-list: '&e/pp fixed list - Lists all IDs of your fixed effects'
 command-description-fixed-info: '&e/pp fixed info <ID> - Gets info on one of your fixed effects'
@@ -74,6 +75,10 @@ group-info-header: '&eThe group &b{0} &ehas the following particles:'
 group-list-none: '&eYou do not have any particle groups saved!'
 group-list-output: '&eYou have the following groups saved: &b{0}'
 group-list-presets: '&eThe following preset groups are available: &b{0}'
+
+# Reload Command
+reload-success: '&aThe plugin has been reloaded!'
+reload-no-permission: '&cYou do not have permission to reload the plugin settings!'
 
 # Remove Command
 remove-no-args: '&cYou did not specify an ID to remove! &b/pp remove <ID>'
@@ -124,6 +129,7 @@ reset-success: '&aRemoved &b{0} &aactive particle(s)!'
 fixed-create-missing-args: '&cUnable to create fixed effect, you are missing &b{0} &crequired arguments!'
 fixed-create-invalid-coords: '&cUnable to create fixed effect, one or more coordinates you entered is invalid!'
 fixed-create-out-of-range: '&cUnable to create fixed effect, you must be within &b{0} &cblocks of your desired location!'
+fixed-create-looking-too-far: '&cUnable to create fixed effect, you are standing too far away from the block you are looking at!'
 fixed-create-effect-invalid: '&cUnable to create fixed effect, an effect with the name &b{0} &cdoes not exist!'
 fixed-create-effect-no-permission: '&cUnable to create fixed effect, you do not have permission to use the effect &b{0}&c!'
 fixed-create-style-invalid: '&cUnable to create fixed effect, a style with the name &b{0} &cdoes not exist!'

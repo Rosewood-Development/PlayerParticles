@@ -20,13 +20,17 @@ public class DefaultStyles {
     public static final ParticleStyle BLOCKBREAK = new ParticleStyleBlockBreak();
     public static final ParticleStyle BLOCKEDIT = new ParticleStyleBlockEdit();
     public static final ParticleStyle BLOCKPLACE = new ParticleStyleBlockPlace();
+    public static final ParticleStyle CHAINS = new ParticleStyleChains();
+    public static final ParticleStyle COMPANION = new ParticleStyleCompanion();
     public static final ParticleStyle CUBE = new ParticleStyleCube();
     public static final ParticleStyle FEET = new ParticleStyleFeet();
     public static final ParticleStyle HALO = new ParticleStyleHalo();
     public static final ParticleStyle HURT = new ParticleStyleHurt();
+    public static final ParticleStyle INVOCATION = new ParticleStyleInvocation();
     public static final ParticleStyle MOVE = new ParticleStyleMove();
     public static final ParticleStyle NORMAL = new ParticleStyleNormal();
     public static final ParticleStyle ORBIT = new ParticleStyleOrbit();
+    public static final ParticleStyle OVERHEAD = new ParticleStyleOverhead();
     public static final ParticleStyle POINT = new ParticleStylePoint();
     public static final ParticleStyle QUADHELIX = new ParticleStyleQuadhelix();
     public static final ParticleStyle RINGS = new ParticleStyleRings();
@@ -35,6 +39,7 @@ public class DefaultStyles {
     public static final ParticleStyle SPIRAL = new ParticleStyleSpiral();
     public static final ParticleStyle SWORDS = new ParticleStyleSwords();
     public static final ParticleStyle THICK = new ParticleStyleThick();
+    public static final ParticleStyle VORTEX = new ParticleStyleVortex();
     public static final ParticleStyle WINGS = new ParticleStyleWings();
 
     /**
@@ -48,13 +53,17 @@ public class DefaultStyles {
         ParticleStyleManager.registerCustomHandledStyle(BLOCKBREAK);
         ParticleStyleManager.registerCustomHandledStyle(BLOCKEDIT);
         ParticleStyleManager.registerCustomHandledStyle(BLOCKPLACE);
+        ParticleStyleManager.registerStyle(CHAINS);
+        ParticleStyleManager.registerStyle(COMPANION);
         ParticleStyleManager.registerStyle(CUBE);
         ParticleStyleManager.registerStyle(FEET);
         ParticleStyleManager.registerStyle(HALO);
         ParticleStyleManager.registerCustomHandledStyle(HURT);
+        ParticleStyleManager.registerStyle(INVOCATION);
         ParticleStyleManager.registerCustomHandledStyle(MOVE);
         ParticleStyleManager.registerStyle(NORMAL);
         ParticleStyleManager.registerStyle(ORBIT);
+        ParticleStyleManager.registerStyle(OVERHEAD);
         ParticleStyleManager.registerStyle(POINT);
         ParticleStyleManager.registerStyle(QUADHELIX);
         ParticleStyleManager.registerStyle(RINGS);
@@ -63,8 +72,10 @@ public class DefaultStyles {
         ParticleStyleManager.registerStyle(SPIRAL);
         ParticleStyleManager.registerCustomHandledStyle(SWORDS);
         ParticleStyleManager.registerStyle(THICK);
+        ParticleStyleManager.registerStyle(VORTEX);
         ParticleStyleManager.registerStyle(WINGS);
 
+        // Register their events
         PluginManager manager = Bukkit.getPluginManager();
         Plugin playerParticles = PlayerParticles.getPlugin();
         manager.registerEvents((Listener) ARROWS, playerParticles);

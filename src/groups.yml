@@ -1,0 +1,28 @@
+# ==================================================== #
+#                     PRESET GROUPS                    #
+# Information:                                         #
+# * The groups listed within this file will be         #
+#   available to all players who have access to the    #
+#   effect and style!                                  #
+# * Feel free to create your own, they will be         #
+#   available for users to select within the GUI!      #
+# ==================================================== #
+
+raincloud:
+    1:
+        effect: 'cloud'
+        style: 'overhead'
+        data: ''
+    2:
+        effect: 'rain'
+        style: 'overhead'
+        data: ''
+rainbows:
+    1:
+        effect: 'dust'
+        style: 'orbit'
+        data: 'rainbow'
+    2: 
+        effect: 'entity_effect'
+        style: 'feet'
+        data: 'rainbow'

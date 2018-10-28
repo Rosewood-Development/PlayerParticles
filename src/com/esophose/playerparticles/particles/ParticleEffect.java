@@ -18,6 +18,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
+import com.esophose.playerparticles.styles.api.PParticle;
+
 @SuppressWarnings("deprecation")
 public enum ParticleEffect {
 
@@ -185,6 +187,25 @@ public enum ParticleEffect {
             return entry.getValue();
         }
         return null;
+    }
+    
+    /**
+     * Invokes the correct spawn method for the particle information given
+     * 
+     * @param particle The ParticlePair, given the effect/style/data
+     * @param pparticle The particle spawn information
+     */
+    public static void display(ParticlePair particle, PParticle pparticle) {
+        ParticleEffect effect = particle.getEffect();
+        int count = pparticle.isDirectional() ? 0 : 1;
+        
+        if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
+            effect.display(particle.getSpawnMaterial(), pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), 1, pparticle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
+        } else if (effect.hasProperty(ParticleProperty.COLORABLE)) {
+            effect.display(particle.getSpawnColor(), pparticle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
+        } else {
+            effect.display(pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), count, pparticle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
+        }
     }
 
     /**

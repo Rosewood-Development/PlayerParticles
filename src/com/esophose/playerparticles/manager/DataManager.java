@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -451,6 +450,15 @@ public class DataManager {
             disabledWorlds = PlayerParticles.getPlugin().getConfig().getStringList("disabled-worlds");
         }
         return disabledWorlds;
+    }
+    
+    /**
+     * Resets all config-related settings
+     */
+    public static void reload() {
+        maxFixedEffects = -1;
+        maxFixedEffectCreationDistance = -1;
+        disabledWorlds = null;
     }
 
     /**

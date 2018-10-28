@@ -12,7 +12,7 @@ import com.esophose.playerparticles.styles.api.ParticleStyle;
 public class ParticleStylePoint implements ParticleStyle {
 
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
-        return Collections.singletonList(new PParticle(location.add(0.0, 1.5, 0.0)));
+        return Collections.singletonList(new PParticle(location.clone().add(0.0, 1.5, 0.0)));
     }
 
     public void updateTimers() {

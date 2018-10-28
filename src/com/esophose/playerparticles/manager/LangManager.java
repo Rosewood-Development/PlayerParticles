@@ -39,6 +39,7 @@ public class LangManager {
         COMMAND_DESCRIPTION_HELP,
         COMMAND_DESCRIPTION_INFO,
         COMMAND_DESCRIPTION_LIST,
+        COMMAND_DESCRIPTION_RELOAD,
         COMMAND_DESCRIPTION_REMOVE,
         COMMAND_DESCRIPTION_RESET,
         COMMAND_DESCRIPTION_STYLE,
@@ -89,6 +90,10 @@ public class LangManager {
         GROUP_LIST_OUTPUT,
         GROUP_LIST_PRESETS,
         
+        // Reload Command
+        RELOAD_SUCCESS,
+        RELOAD_NO_PERMISSION,
+        
         // Remove Command
         REMOVE_NO_ARGS,
         REMOVE_SUCCESS,
@@ -138,6 +143,7 @@ public class LangManager {
         FIXED_CREATE_MISSING_ARGS,
         FIXED_CREATE_INVALID_COORDS,
         FIXED_CREATE_OUT_OF_RANGE,
+        FIXED_CREATE_LOOKING_TOO_FAR,
         FIXED_CREATE_EFFECT_INVALID,
         FIXED_CREATE_EFFECT_NO_PERMISSION,
         FIXED_CREATE_STYLE_INVALID,
@@ -224,7 +230,7 @@ public class LangManager {
      * This should only get called once by the PlayerParticles class, however
      * calling it multiple times wont affect anything negatively
      */
-    public static void setup() {
+    public static void reload() {
         FileConfiguration config = PlayerParticles.getPlugin().getConfig();
         messagesEnabled = config.getBoolean("messages-enabled");
         prefixEnabled = config.getBoolean("use-message-prefix");

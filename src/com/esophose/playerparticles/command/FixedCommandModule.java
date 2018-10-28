@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
@@ -93,36 +95,61 @@ public class FixedCommandModule implements CommandModule {
             return;
         }
 
-        if (args.length < 5) {
+        if (args.length < 5 && !(args.length > 0 && args[0].equalsIgnoreCase("looking") && args.length >= 3)) {
             LangManager.sendMessage(p, Lang.FIXED_CREATE_MISSING_ARGS, 5 - args.length);
             return;
         }
 
         double xPos = -1, yPos = -1, zPos = -1;
-        try {
-            if (args[0].startsWith("~")) {
-                if (args[0].equals("~")) xPos = p.getLocation().getX();
-                else xPos = p.getLocation().getX() + Double.parseDouble(args[0].substring(1));
-            } else {
-                xPos = Double.parseDouble(args[0]);
+        
+        if (args[0].equalsIgnoreCase("looking")) {
+            Block targetBlock = p.getTargetBlock((Set<Material>)null, 8);
+            int maxDistanceSqrd = 6 * 6;
+            if (targetBlock.getLocation().distanceSquared(p.getLocation()) > maxDistanceSqrd) {
+                LangManager.sendMessage(p, Lang.FIXED_CREATE_OUT_OF_RANGE);
+                return;
             }
+            
+            Location blockLocation = targetBlock.getLocation().clone().add(0.5, 0.5, 0.5); // Center of block
+            
+            xPos = blockLocation.getX();
+            yPos = blockLocation.getY();
+            zPos = blockLocation.getZ();
+            
+            // Pad the args with the coordinates so we don't have to adjust all the indices
+            String[] paddedArgs = new String[args.length + 2];
+            paddedArgs[0] = String.valueOf(xPos);
+            paddedArgs[1] = String.valueOf(yPos);
+            paddedArgs[2] = String.valueOf(zPos);
+            for (int i = 1; i < args.length; i++)
+                paddedArgs[i + 2] = args[i];
+            args = paddedArgs;
+        } else {
+            try {
+                if (args[0].startsWith("~")) {
+                    if (args[0].equals("~")) xPos = p.getLocation().getX();
+                    else xPos = p.getLocation().getX() + Double.parseDouble(args[0].substring(1));
+                } else {
+                    xPos = Double.parseDouble(args[0]);
+                }
 
-            if (args[1].startsWith("~")) {
-                if (args[1].equals("~")) yPos = p.getLocation().getY() + 1;
-                else yPos = p.getLocation().getY() + 1 + Double.parseDouble(args[1].substring(1));
-            } else {
-                yPos = Double.parseDouble(args[1]);
-            }
+                if (args[1].startsWith("~")) {
+                    if (args[1].equals("~")) yPos = p.getLocation().getY() + 1;
+                    else yPos = p.getLocation().getY() + 1 + Double.parseDouble(args[1].substring(1));
+                } else {
+                    yPos = Double.parseDouble(args[1]);
+                }
 
-            if (args[2].startsWith("~")) {
-                if (args[2].equals("~")) zPos = p.getLocation().getZ();
-                else zPos = p.getLocation().getZ() + Double.parseDouble(args[2].substring(1));
-            } else {
-                zPos = Double.parseDouble(args[2]);
+                if (args[2].startsWith("~")) {
+                    if (args[2].equals("~")) zPos = p.getLocation().getZ();
+                    else zPos = p.getLocation().getZ() + Double.parseDouble(args[2].substring(1));
+                } else {
+                    zPos = Double.parseDouble(args[2]);
+                }
+            } catch (Exception e) {
+                LangManager.sendMessage(p, Lang.FIXED_CREATE_INVALID_COORDS);
+                return;
             }
-        } catch (Exception e) {
-            LangManager.sendMessage(p, Lang.FIXED_CREATE_INVALID_COORDS);
-            return;
         }
 
         double distanceFromEffect = p.getLocation().distance(new Location(p.getWorld(), xPos, yPos, zPos));
@@ -403,9 +430,21 @@ public class FixedCommandModule implements CommandModule {
                     }
                     if (args.length == 2) {
                         possibleValues.add("~ ~ ~");
+                        possibleValues.add("looking");
                     }
                     StringUtil.copyPartialMatches(args[args.length - 1], possibleValues, matches);
-                } else if (args.length == 5) {
+                }
+
+                // Pad arguments if the first coordinate is "looking"
+                if (args.length > 1 && args[1].equalsIgnoreCase("looking")) {
+                    String[] paddedArgs = new String[args.length + 2];
+                    paddedArgs[0] = paddedArgs[1] = paddedArgs[2] = paddedArgs[3] = "";
+                    for (int i = 2; i < args.length; i++)
+                        paddedArgs[i + 2] = args[i];
+                    args = paddedArgs;
+                }
+                
+                if (args.length == 5) {
                     StringUtil.copyPartialMatches(args[4], PermissionManager.getEffectsUserHasPermissionFor(p), matches);
                 } else if (args.length == 6) {
                     StringUtil.copyPartialMatches(args[5], PermissionManager.getStylesUserHasPermissionFor(p), matches);

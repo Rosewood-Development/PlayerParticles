@@ -21,10 +21,10 @@ public class ParticleStyleSphere implements ParticleStyle {
             double v = Math.random();
             double theta = 2 * Math.PI * u;
             double phi = Math.acos(2 * v - 1);
-            double x = location.getX() + (radius * Math.sin(phi) * Math.cos(theta));
-            double y = location.getY() + (radius * Math.sin(phi) * Math.sin(theta));
-            double z = location.getZ() + (radius * Math.cos(phi));
-            particles.add(new PParticle(new Location(location.getWorld(), x, y, z)));
+            double dx = radius * Math.sin(phi) * Math.cos(theta);
+            double dy = radius * Math.sin(phi) * Math.sin(theta);
+            double dz = radius * Math.cos(phi);
+            particles.add(new PParticle(location.clone().add(dx, dy, dz)));
         }
 
         return particles;

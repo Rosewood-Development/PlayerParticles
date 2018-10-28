@@ -19,13 +19,26 @@ public class ParticleStyleManager {
      * @param style The style to add
      */
     public static void registerStyle(ParticleStyle style) {
+        if (style == null) {
+            PlayerParticles.getPlugin().getLogger().severe("Tried to register a null style");
+            return;
+        }
+        
+        if (style.getName() == null || style.getName().trim().equals("")) {
+            PlayerParticles.getPlugin().getLogger().severe("Tried to register a style with a null or empty name: '" + style.getName() + "'");
+            return;
+        }
+        
         for (ParticleStyle testAgainst : styles) {
             if (testAgainst.getName().equalsIgnoreCase(style.getName())) {
-                PlayerParticles.getPlugin().getLogger().severe("Tried to register two styles with the same name spelling: " + style.getName());
+                PlayerParticles.getPlugin().getLogger().severe("Tried to register two styles with the same name spelling: '" + style.getName() + "'");
+                return;
             } else if (testAgainst.equals(style)) {
-                PlayerParticles.getPlugin().getLogger().severe("Tried to register the same style twice: " + style.getName());
+                PlayerParticles.getPlugin().getLogger().severe("Tried to register the same style twice: '" + style.getName() + "'");
+                return;
             }
         }
+        
         styles.add(style);
     }
 
@@ -56,6 +69,16 @@ public class ParticleStyleManager {
      */
     public static List<ParticleStyle> getStyles() {
         return styles;
+    }
+    
+    /**
+     * Removes all styles from the registry
+     * 
+     * It is not recommended to call this
+     */
+    public static void reset() {
+        styles.clear();
+        customHandledStyles.clear();
     }
 
     /**

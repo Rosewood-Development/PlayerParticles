@@ -1,7 +1,6 @@
 /*
  * TODO: v5.3
  * + Add new style 'tornado'
- * + Add new style 'companion'
  * * Setting in config.yml for max number of particle groups, default 10
  * * Permission to allow players to overrule the max particle groups allowed in the config playerparticles.groups.unlimited
  * * Setting in config.yml to disable non-event styles while the player is moving
@@ -35,12 +34,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import com.esophose.playerparticles.command.ParticleCommandHandler;
 import com.esophose.playerparticles.database.DatabaseConnector;
 import com.esophose.playerparticles.database.MySqlDatabaseConnector;
 import com.esophose.playerparticles.database.SqliteDatabaseConnector;
 import com.esophose.playerparticles.gui.PlayerParticlesGui;
+import com.esophose.playerparticles.manager.DataManager;
 import com.esophose.playerparticles.manager.LangManager;
 import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.styles.DefaultStyles;
@@ -61,6 +62,11 @@ public class PlayerParticles extends JavaPlugin {
      * The database connection manager
      */
     private static DatabaseConnector databaseConnector = null;
+    
+    /**
+     * The task that spawns the particles
+     */
+    private static BukkitTask particleTask = null;
 
     /**
      * Registers all the styles available by default
@@ -94,13 +100,6 @@ public class PlayerParticles extends JavaPlugin {
             getLogger().warning("The config.yml has been updated to v" + getDescription().getVersion() + "!");
         }
 
-        DefaultStyles.registerStyles();
-        LangManager.setup();
-
-        configureDatabase(getConfig().getBoolean("database-enable"));
-        ParticleManager.refreshData();
-        startParticleTask();
-
         if (shouldCheckUpdates()) {
             new BukkitRunnable() {
                 public void run() {
@@ -116,6 +115,8 @@ public class PlayerParticles extends JavaPlugin {
                 }
             }.runTaskAsynchronously(this);
         }
+        
+        this.reload();
     }
 
     /**
@@ -125,6 +126,34 @@ public class PlayerParticles extends JavaPlugin {
     public void onDisable() {
         databaseConnector.closeConnection();
         PlayerParticlesGui.forceCloseAllOpenGUIs();
+    }
+    
+    /**
+     * Reloads the settings of the plugin
+     */
+    public void reload() {
+        this.reloadConfig();
+        
+        // If not null, plugin is already loaded
+        if (particleTask != null) {
+            particleTask.cancel();
+            particleTask = null;
+            databaseConnector.closeConnection();
+            databaseConnector = null;
+            PlayerParticlesGui.forceCloseAllOpenGUIs();
+        } else {
+            DefaultStyles.registerStyles(); // Only ever load styles once
+        }
+        
+        configureDatabase(getConfig().getBoolean("database-enable"));
+        
+        DataManager.reload();
+        LangManager.reload();
+        
+        PlayerParticlesGui.setup();
+        
+        ParticleManager.refreshData();
+        startParticleTask();
     }
 
     /**
@@ -201,26 +230,16 @@ public class PlayerParticles extends JavaPlugin {
         			}
         		}
     			
-    			// Check if pp_group exists, if it doesn't, we need to create all the tables
-        		try (Statement statement = connection.createStatement()) {
-        		    String pp_groupQuery;
-                    if (useMySql) {
-                        pp_groupQuery = "SHOW TABLES LIKE 'pp_group'";
-                    } else {
-                        pp_groupQuery = "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'pp_group'";
+    			// Try to create the tables just in case they don't exist
+    			try (Statement createStatement = connection.createStatement()) {
+    			    createStatement.addBatch("CREATE TABLE IF NOT EXISTS pp_group (uuid VARCHAR(36), owner_uuid VARCHAR(36), name VARCHAR(100), PRIMARY KEY(uuid))");
+                    createStatement.addBatch("CREATE TABLE IF NOT EXISTS pp_fixed (owner_uuid VARCHAR(36), id SMALLINT, particle_uuid VARCHAR(36), world VARCHAR(100), xPos DOUBLE, yPos DOUBLE, zPos DOUBLE, PRIMARY KEY(owner_uuid, id), FOREIGN KEY(particle_uuid) REFERENCES pp_particle(uuid))");
+                    createStatement.addBatch("CREATE TABLE IF NOT EXISTS pp_particle (uuid VARCHAR(36), group_uuid VARCHAR(36), id SMALLINT, effect VARCHAR(100), style VARCHAR(100), item_material VARCHAR(100), block_material VARCHAR(100), note SMALLINT, r SMALLINT, g SMALLINT, b SMALLINT, PRIMARY KEY(uuid))");
+                    int[] results = createStatement.executeBatch();
+                    if (results[0] + results[1] + results[2] > 0) {
+                        getLogger().warning("Updated " + (useMySql ? "MySQL" : "SQLite") + " database schema.");
                     }
-        			ResultSet result = statement.executeQuery(pp_groupQuery);
-        			if (!result.next()) {
-        			    statement.close();
-        			    
-        				Statement createStatement = connection.createStatement();
-        				createStatement.addBatch("CREATE TABLE IF NOT EXISTS pp_group (uuid VARCHAR(36), owner_uuid VARCHAR(36), name VARCHAR(100))");
-        				createStatement.addBatch("CREATE TABLE IF NOT EXISTS pp_fixed (owner_uuid VARCHAR(36), id SMALLINT, particle_uuid VARCHAR(36), world VARCHAR(100), xPos DOUBLE, yPos DOUBLE, zPos DOUBLE)");
-        				createStatement.addBatch("CREATE TABLE IF NOT EXISTS pp_particle (uuid VARCHAR(36), group_uuid VARCHAR(36), id SMALLINT, effect VARCHAR(100), style VARCHAR(100), item_material VARCHAR(100), block_material VARCHAR(100), note SMALLINT, r SMALLINT, g SMALLINT, b SMALLINT)");
-        				createStatement.executeBatch();
-        				getLogger().warning("Created new " + (useMySql ? "MySQL" : "SQLite") + " database schema.");
-        			}
-        		}
+    			}
     		} catch (SQLException ex) {
     		    ex.printStackTrace();
     			if (useMySql) {
@@ -241,10 +260,8 @@ public class PlayerParticles extends JavaPlugin {
         final Plugin playerParticles = this;
         new BukkitRunnable() {
             public void run() {
-                PlayerParticlesGui.setup();
-
                 long ticks = getConfig().getLong("ticks-per-particle");
-                new ParticleManager().runTaskTimer(playerParticles, 0, ticks);
+                particleTask = new ParticleManager().runTaskTimer(playerParticles, 0, ticks);
             }
         }.runTaskLater(playerParticles, 1);
     }
