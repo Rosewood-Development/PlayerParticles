@@ -89,7 +89,7 @@ public class FixedCommandModule implements CommandModule {
      * @param args The command arguments
      */
     private void handleCreate(PPlayer pplayer, Player p, String[] args) {
-        boolean reachedMax = DataManager.hasPlayerReachedMaxFixedEffects(pplayer);
+        boolean reachedMax = PermissionManager.hasPlayerReachedMaxFixedEffects(pplayer);
         if (reachedMax) {
             LangManager.sendMessage(p, Lang.FIXED_MAX_REACHED);
             return;
@@ -153,7 +153,7 @@ public class FixedCommandModule implements CommandModule {
         }
 
         double distanceFromEffect = p.getLocation().distance(new Location(p.getWorld(), xPos, yPos, zPos));
-        int maxCreationDistance = DataManager.getMaxFixedEffectCreationDistance();
+        int maxCreationDistance = PermissionManager.getMaxFixedEffectCreationDistance();
         if (maxCreationDistance != 0 && distanceFromEffect > maxCreationDistance) {
             LangManager.sendMessage(p, Lang.FIXED_CREATE_OUT_OF_RANGE, maxCreationDistance + "");
             return;
@@ -377,7 +377,7 @@ public class FixedCommandModule implements CommandModule {
      * @param args The command arguments
      */
     private void handleClear(PPlayer pplayer, Player p, String[] args) {
-        if (!p.hasPermission("playerparticles.fixed.clear")) {
+        if (!PermissionManager.canClearFixedEffects(p)) {
             LangManager.sendMessage(p, Lang.FIXED_CLEAR_NO_PERMISSION);
             return;
         }

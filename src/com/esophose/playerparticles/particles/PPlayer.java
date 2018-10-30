@@ -73,7 +73,7 @@ public class PPlayer {
      * @param name The name of the ParticleGroup
      * @return The target named ParticleGroup
      */
-    public ParticleGroup getParticlesByName(String name) {
+    public ParticleGroup getParticleGroupByName(String name) {
         for (ParticleGroup group : this.particleGroups)
             if (group.getName().equalsIgnoreCase(name)) 
                 return group;

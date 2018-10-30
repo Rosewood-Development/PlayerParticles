@@ -14,7 +14,7 @@ public class GUICommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         boolean byDefault = false;
-        if (args.length > 0 && args[0].equals("byDefault")) {
+        if (args.length > 0 && args[0].equals("_byDefault_")) {
             byDefault = true;
         }
 

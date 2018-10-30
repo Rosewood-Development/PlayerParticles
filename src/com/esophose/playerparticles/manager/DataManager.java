@@ -26,24 +26,6 @@ import com.esophose.playerparticles.util.ParticleUtils;
  */
 public class DataManager {
 
-    /**
-     * The disabled worlds cached for quick access
-     */
-    private static List<String> disabledWorlds = null;
-
-    /**
-     * The max number of fixed effects a player can have, defined in the config
-     */
-    private static int maxFixedEffects = -1;
-
-    /**
-     * The max distance a fixed effect can be created relative to the player
-     */
-    private static int maxFixedEffectCreationDistance = -1;
-
-    /**
-     * This is not instantiable
-     */
     private DataManager() {
         
     }
@@ -401,64 +383,6 @@ public class DataManager {
         getPPlayer(playerUUID, (pplayer) -> {
             pplayer.removeFixedEffect(id);
         });
-    }
-
-    /**
-     * Checks if the given player has reached the max number of fixed effects
-     * 
-     * @param pplayer The player to check
-     * @return If the player has reached the max number of fixed effects
-     */
-    public static boolean hasPlayerReachedMaxFixedEffects(PPlayer pplayer) {
-        if (maxFixedEffects == -1) { // Initialize on the fly
-            maxFixedEffects = PlayerParticles.getPlugin().getConfig().getInt("max-fixed-effects");
-        }
-
-        if (pplayer.getPlayer().hasPermission("playerparticles.fixed.unlimited")) return false;
-        return pplayer.getFixedEffectIds().size() >= maxFixedEffects;
-    }
-
-    /**
-     * Gets the max distance a fixed effect can be created from the player
-     * 
-     * @return The max distance a fixed effect can be created from the player
-     */
-    public static int getMaxFixedEffectCreationDistance() {
-        if (maxFixedEffectCreationDistance == -1) { // Initialize on the fly
-            maxFixedEffectCreationDistance = PlayerParticles.getPlugin().getConfig().getInt("max-fixed-effect-creation-distance");
-        }
-        return maxFixedEffectCreationDistance;
-    }
-
-    /**
-     * Checks if a world is disabled for particles to spawn in
-     * 
-     * @param world The world name to check
-     * @return True if the world is disabled
-     */
-    public static boolean isWorldDisabled(String world) {
-        return getDisabledWorlds().contains(world);
-    }
-
-    /**
-     * Gets all the worlds that are disabled
-     * 
-     * @return All world names that are disabled
-     */
-    public static List<String> getDisabledWorlds() {
-        if (disabledWorlds == null) { // Initialize on the fly
-            disabledWorlds = PlayerParticles.getPlugin().getConfig().getStringList("disabled-worlds");
-        }
-        return disabledWorlds;
-    }
-    
-    /**
-     * Resets all config-related settings
-     */
-    public static void reload() {
-        maxFixedEffects = -1;
-        maxFixedEffectCreationDistance = -1;
-        disabledWorlds = null;
     }
 
     /**

@@ -19,6 +19,7 @@ import com.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
 import com.esophose.playerparticles.particles.ParticleGroup;
 import com.esophose.playerparticles.particles.ParticlePair;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
+import com.esophose.playerparticles.styles.api.ParticleStyleManager;
 import com.esophose.playerparticles.util.ParticleUtils;
 
 public class AddCommandModule implements CommandModule {
@@ -26,6 +27,12 @@ public class AddCommandModule implements CommandModule {
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         if (args.length < 2) {
             CommandModule.printUsage(pplayer, this);
+            return;
+        }
+        
+        int maxParticlesAllowed = PermissionManager.getMaxParticlesAllowed(pplayer.getPlayer());
+        if (pplayer.getActiveParticles().size() >= maxParticlesAllowed) {
+            LangManager.sendMessage(pplayer, Lang.ADD_REACHED_MAX, maxParticlesAllowed);
             return;
         }
         
@@ -125,6 +132,10 @@ public class AddCommandModule implements CommandModule {
         DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
         
         LangManager.sendMessage(pplayer, Lang.ADD_PARTICLE_APPLIED, newParticle.getEffect().getName(), newParticle.getStyle().getName(), newParticle.getDataString());
+        
+        if (ParticleStyleManager.isCustomHandled(newParticle.getStyle())) {
+            LangManager.sendMessage(pplayer, Lang.STYLE_EVENT_SPAWNING_INFO, newParticle.getStyle().getName());
+        }
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {

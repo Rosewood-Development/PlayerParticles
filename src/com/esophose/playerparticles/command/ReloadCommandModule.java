@@ -6,13 +6,14 @@ import java.util.List;
 import com.esophose.playerparticles.PlayerParticles;
 import com.esophose.playerparticles.manager.LangManager;
 import com.esophose.playerparticles.manager.LangManager.Lang;
+import com.esophose.playerparticles.manager.PermissionManager;
 import com.esophose.playerparticles.particles.PPlayer;
 
 public class ReloadCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
-        if (pplayer.getPlayer().hasPermission("playerparticles.reload")) {
-            ((PlayerParticles)PlayerParticles.getPlugin()).reload();
+        if (PermissionManager.canReloadPlugin(pplayer.getPlayer())) {
+            ((PlayerParticles)PlayerParticles.getPlugin()).reload(false);
             LangManager.sendMessage(pplayer, Lang.RELOAD_SUCCESS);
         } else {
             LangManager.sendMessage(pplayer, Lang.RELOAD_NO_PERMISSION);

@@ -50,6 +50,7 @@ id-invalid: '&cThe ID you entered is invalid, it must be a positive whole number
 id-unknown: '&cYou do not have a particle applied with the ID &b{0}&c!'
 
 # Add Command
+add-reached-max: '&cUnable to apply particle, you have reached the maximum amount of &b{0} &callowed!'
 add-particle-applied: '&aA new particle has been applied with the effect &b{0}&a, style &b{1}&a, and data &b{2}&a!'
 
 # Data Command
@@ -62,14 +63,17 @@ edit-success-style: '&aYour particle with an ID of &b{0} &ahas had its style cha
 edit-success-data: '&aYour particle with an ID of &b{0} &ahas had its data changed to &b{1}&a!'
 
 # Group Command
-group-invalid: '&cA group does not exist with the name &b{0}&c!'
+group-invalid: '&cA saved group or preset group does not exist with the name &b{0}&c!'
+group-preset-no-permission: '&cYou are missing permission for an effect or style to use the preset group &b{0}&c!'
 group-reserved: '&cThe group name &bactive &cis reserved and cannot be used!'
 group-no-name: '&cYou did not provide a group name! &b/pp {0} <groupName>'
 group-save-reached-max: '&cUnable to save group, you have reached the max number of groups!'
 group-save-no-particles: '&cUnable to save group, you do not have any particles applied!'
 group-save-success: '&aYour current particles have been saved under the group named &b{0}&a!'
 group-save-success-overwrite: '&aThe group named &b{0} &ahas been updated with your current particles!'
-group-load-success: '&aApplied &b{0} &aparticles from the group &b{1}&a!'
+group-load-success: '&aApplied &b{0} &aparticle(s) from your saved group named &b{1}&a!'
+group-load-preset-success: '&aApplied &b{0} &aparticle(s) from the preset group named &b{1}&a!'
+group-remove-preset: '&cYou cannot remove a preset group!'
 group-remove-success: '&aRemoved the particle group named &b{0}&a!'
 group-info-header: '&eThe group &b{0} &ehas the following particles:'
 group-list-none: '&eYou do not have any particle groups saved!'
@@ -100,6 +104,7 @@ effect-list-empty: '&cYou do not have permission to use any effects!'
 
 # Styles
 style-no-permission: '&cYou do not have permission to use the style &b{0} &c!'
+style-event-spawning-info: '&eNote: The style &b{0} &espawns particles based on an event.'
 style-invalid: '&cThe style &b{0} &cdoes not exist! Use &b/pp styles &cfor a list of styles you can use.'
 style-list: '&eYou can use the following styles: &b{0}'
 

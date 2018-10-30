@@ -6,6 +6,9 @@
 #   effect and style!                                  #
 # * Feel free to create your own, they will be         #
 #   available for users to select within the GUI!      #
+# * This file is not automatically updated. If you     #
+#   want to reset the file to its defaults, simply     #
+#   delete it and run the command '/pp reload'.        #
 # ==================================================== #
 
 raincloud:

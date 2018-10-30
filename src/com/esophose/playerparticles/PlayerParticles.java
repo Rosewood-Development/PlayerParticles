@@ -5,22 +5,8 @@
  * * Permission to allow players to overrule the max particle groups allowed in the config playerparticles.groups.unlimited
  * * Setting in config.yml to disable non-event styles while the player is moving
  * * Setting in config.yml for max particles allowed per player, default 3
- * * Permission to allow players to overrule the max particles allowed playerparticles.particle.max
- * * Permissions for the following:
- *     - playerparticles.particles.max.1
- *     - playerparticles.particles.max.2
- *     - playerparticles.particles.max.3
- *     - playerparticles.particles.max.4
- *     - playerparticles.particles.max.5
- *     - playerparticles.particles.max.6
- *     - playerparticles.particles.max.7
- *     - playerparticles.particles.max.8
- *     - playerparticles.particles.max.9
- *     - playerparticles.particles.max.10
+ * * Permission to allow players to overrule the max particles allowed in the config.yml
  *     - playerparticles.particles.max.unlimited
- *     Note: The default max particles in the config.yml is used instead if the playerparticles.particles.max.# is lower
- *     Note: The highest number the user has permission for is how many they are able to use
- *           Ex. they have 4 and 7, they will have a max of 7
  */
 
 package com.esophose.playerparticles;
@@ -41,9 +27,11 @@ import com.esophose.playerparticles.database.DatabaseConnector;
 import com.esophose.playerparticles.database.MySqlDatabaseConnector;
 import com.esophose.playerparticles.database.SqliteDatabaseConnector;
 import com.esophose.playerparticles.gui.PlayerParticlesGui;
-import com.esophose.playerparticles.manager.DataManager;
 import com.esophose.playerparticles.manager.LangManager;
 import com.esophose.playerparticles.manager.ParticleManager;
+import com.esophose.playerparticles.manager.SettingManager;
+import com.esophose.playerparticles.manager.SettingManager.PSetting;
+import com.esophose.playerparticles.particles.ParticleGroup;
 import com.esophose.playerparticles.styles.DefaultStyles;
 import com.esophose.playerparticles.updater.PluginUpdateListener;
 import com.esophose.playerparticles.updater.Updater;
@@ -89,8 +77,9 @@ public class PlayerParticles extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlayerParticlesGui(), this);
 
         saveDefaultConfig();
-        double configVersion = getConfig().getDouble("version");
-        if (configVersion < Double.parseDouble(getDescription().getVersion())) {
+        double configVersion = PSetting.VERSION.getDouble();
+        boolean updatePluginSettings = configVersion < Double.parseDouble(getDescription().getVersion());
+        if (updatePluginSettings) {
             File configFile = new File(getDataFolder(), "config.yml");
             if (configFile.exists()) {
                 configFile.delete();
@@ -100,7 +89,7 @@ public class PlayerParticles extends JavaPlugin {
             getLogger().warning("The config.yml has been updated to v" + getDescription().getVersion() + "!");
         }
 
-        if (shouldCheckUpdates()) {
+        if (PSetting.CHECK_UPDATES.getBoolean()) {
             new BukkitRunnable() {
                 public void run() {
                     try { // This can throw an exception if the server has no internet connection or if the Curse API is down
@@ -116,7 +105,7 @@ public class PlayerParticles extends JavaPlugin {
             }.runTaskAsynchronously(this);
         }
         
-        this.reload();
+        this.reload(updatePluginSettings);
     }
 
     /**
@@ -131,7 +120,7 @@ public class PlayerParticles extends JavaPlugin {
     /**
      * Reloads the settings of the plugin
      */
-    public void reload() {
+    public void reload(boolean updatePluginSettings) {
         this.reloadConfig();
         
         // If not null, plugin is already loaded
@@ -145,10 +134,12 @@ public class PlayerParticles extends JavaPlugin {
             DefaultStyles.registerStyles(); // Only ever load styles once
         }
         
-        configureDatabase(getConfig().getBoolean("database-enable"));
+        // This runs before the SettingManager is reloaded, the credentials will not be stored in memory for more than a few milliseconds
+        configureDatabase(PSetting.DATABASE_ENABLE.getBoolean()); 
         
-        DataManager.reload();
-        LangManager.reload();
+        SettingManager.reload();
+        LangManager.reload(updatePluginSettings);
+        ParticleGroup.reload();
         
         PlayerParticlesGui.setup();
         
@@ -175,15 +166,6 @@ public class PlayerParticles extends JavaPlugin {
     }
 
     /**
-     * Checks the config if the plugin can look for updates
-     * 
-     * @return True if check-updates is set to true in the config
-     */
-    public boolean shouldCheckUpdates() {
-        return getConfig().getBoolean("check-updates");
-    }
-
-    /**
      * Checks if database-enable is true in the config, if it is then uses MySql
      * Gets the database connection information from the config and tries to connect to the server
      * Removes old table from previous versions of the plugin
@@ -193,7 +175,7 @@ public class PlayerParticles extends JavaPlugin {
      */
     private void configureDatabase(boolean useMySql) {
         if (useMySql) {
-            databaseConnector = new MySqlDatabaseConnector(this.getConfig());
+            databaseConnector = new MySqlDatabaseConnector();
         } else {
             databaseConnector = new SqliteDatabaseConnector(this.getDataFolder().getAbsolutePath());
         }
@@ -260,7 +242,7 @@ public class PlayerParticles extends JavaPlugin {
         final Plugin playerParticles = this;
         new BukkitRunnable() {
             public void run() {
-                long ticks = getConfig().getLong("ticks-per-particle");
+                long ticks = PSetting.TICKS_PER_PARTICLE.getLong();
                 particleTask = new ParticleManager().runTaskTimer(playerParticles, 0, ticks);
             }
         }.runTaskLater(playerParticles, 1);

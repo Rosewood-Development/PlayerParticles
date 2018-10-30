@@ -3,9 +3,8 @@ package com.esophose.playerparticles.database;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import org.bukkit.configuration.file.FileConfiguration;
-
 import com.esophose.playerparticles.PlayerParticles;
+import com.esophose.playerparticles.manager.SettingManager.PSetting;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -14,12 +13,12 @@ public class MySqlDatabaseConnector implements DatabaseConnector {
     private HikariDataSource hikari;
     private boolean initializedSuccessfully = false;
 
-    public MySqlDatabaseConnector(FileConfiguration pluginConfig) {
-        String hostname = pluginConfig.getString("database-hostname");
-        String port = pluginConfig.getString("database-port");
-        String database = pluginConfig.getString("database-name");
-        String user = pluginConfig.getString("database-user-name");
-        String pass = pluginConfig.getString("database-user-password");
+    public MySqlDatabaseConnector() {
+        String hostname = PSetting.DATABASE_HOSTNAME.getString();
+        String port = PSetting.DATABASE_PORT.getString();
+        String database = PSetting.DATABASE_NAME.getString();
+        String user = PSetting.DATABASE_USER_NAME.getString();
+        String pass = PSetting.DATABASE_USER_PASSWORD.getString();
 
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl("jdbc:mysql://" + hostname + ":" + port + "/" + database);

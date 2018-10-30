@@ -12,7 +12,7 @@ public class DefaultCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         // The default command just opens the GUI, execute the GUICommandModule
-        ParticleCommandHandler.findMatchingCommand("gui").onCommandExecute(pplayer, new String[] { "byDefault" });
+        ParticleCommandHandler.findMatchingCommand("gui").onCommandExecute(pplayer, new String[] { "_byDefault_" });
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {

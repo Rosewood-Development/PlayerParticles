@@ -3,21 +3,21 @@ package com.esophose.playerparticles.command;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.esophose.playerparticles.manager.DataManager;
 import com.esophose.playerparticles.manager.LangManager;
 import com.esophose.playerparticles.manager.LangManager.Lang;
+import com.esophose.playerparticles.manager.PermissionManager;
 import com.esophose.playerparticles.particles.PPlayer;
 
 public class WorldsCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
-        if (DataManager.getDisabledWorlds() == null || DataManager.getDisabledWorlds().isEmpty()) {
+        if (PermissionManager.getDisabledWorlds() == null || PermissionManager.getDisabledWorlds().isEmpty()) {
             LangManager.sendMessage(pplayer, Lang.DISABLED_WORLDS_NONE);
             return;
         }
 
         String worlds = "";
-        for (String s : DataManager.getDisabledWorlds()) {
+        for (String s : PermissionManager.getDisabledWorlds()) {
             worlds += s + ", ";
         }
         if (worlds.length() > 2) worlds = worlds.substring(0, worlds.length() - 2);

@@ -8,11 +8,11 @@ import java.nio.file.Paths;
 import java.text.MessageFormat;
 
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import com.esophose.playerparticles.PlayerParticles;
+import com.esophose.playerparticles.manager.SettingManager.PSetting;
 import com.esophose.playerparticles.particles.PPlayer;
 
 public class LangManager {
@@ -64,6 +64,7 @@ public class LangManager {
         ID_UNKNOWN,
         
         // Add Command
+        ADD_REACHED_MAX,
         ADD_PARTICLE_APPLIED,
         
         // Data Command
@@ -77,6 +78,7 @@ public class LangManager {
         
         // Group Command
         GROUP_INVALID,
+        GROUP_PRESET_NO_PERMISSION,
         GROUP_RESERVED,
         GROUP_NO_NAME,
         GROUP_SAVE_REACHED_MAX,
@@ -84,6 +86,8 @@ public class LangManager {
         GROUP_SAVE_SUCCESS,
         GROUP_SAVE_SUCCESS_OVERWRITE,
         GROUP_LOAD_SUCCESS,
+        GROUP_LOAD_PRESET_SUCCESS,
+        GROUP_REMOVE_PRESET,
         GROUP_REMOVE_SUCCESS,
         GROUP_INFO_HEADER,
         GROUP_LIST_NONE,
@@ -114,6 +118,7 @@ public class LangManager {
         
         // Styles
         STYLE_NO_PERMISSION,
+        STYLE_EVENT_SPAWNING_INFO,
         STYLE_INVALID,
         STYLE_LIST,
         
@@ -211,38 +216,25 @@ public class LangManager {
             return new MessageFormat(this.message).format(replacements);
         }
     }
-
-    /**
-     * Stores if messages and their prefixes should be displayed
-     */
-    private static boolean messagesEnabled, prefixEnabled;
-    /**
-     * The prefix to place before all sent messages contained in the config
-     */
-    private static String messagePrefix;
+    
     /**
      * The current lang file name
      */
     private static String langFileName;
+    
+    private LangManager() {
+        
+    }
 
     /**
      * Used to set up the LangManager
      * This should only get called once by the PlayerParticles class, however
      * calling it multiple times wont affect anything negatively
      */
-    public static void reload() {
-        FileConfiguration config = PlayerParticles.getPlugin().getConfig();
-        messagesEnabled = config.getBoolean("messages-enabled");
-        prefixEnabled = config.getBoolean("use-message-prefix");
-        messagePrefix = parseColors(config.getString("message-prefix"));
-
-        YamlConfiguration lang = configureLangFile(config);
-        if (lang == null) {
-            messagesEnabled = false;
-        } else {
-            for (Lang messageType : Lang.values())
-                messageType.setMessage(lang);
-        }
+    public static void reload(boolean resetLangFile) {
+        YamlConfiguration lang = configureLangFile(resetLangFile);
+        for (Lang messageType : Lang.values())
+            messageType.setMessage(lang);
     }
 
     /**
@@ -250,13 +242,20 @@ public class LangManager {
      * If it doesn't exist, default to default.lang
      * If default.lang doesn't exist, copy the file from this .jar to the target directory
      * 
-     * @param config The plugin's configuration file
      * @return The YamlConfiguration of the target .lang file
      */
-    private static YamlConfiguration configureLangFile(FileConfiguration config) {
+    private static YamlConfiguration configureLangFile(boolean resetLangFile) {
         File pluginDataFolder = PlayerParticles.getPlugin().getDataFolder();
-        langFileName = config.getString("lang-file");
+        langFileName = PSetting.LANG_FILE.getString();
         File targetLangFile = new File(pluginDataFolder.getAbsolutePath() + "/lang/" + langFileName);
+        
+        if (resetLangFile) {
+            File defaultLangFile = new File(pluginDataFolder.getAbsolutePath() + "/lang/default.lang");
+            if (defaultLangFile.exists()) {
+                defaultLangFile.delete();
+                PlayerParticles.getPlugin().getLogger().warning("default.lang has been reset!");
+            }
+        }
 
         if (!targetLangFile.exists()) { // Target .lang file didn't exist, default to default.lang
             if (!langFileName.equals("default.lang")) {
@@ -272,7 +271,7 @@ public class LangManager {
                     return YamlConfiguration.loadConfiguration(targetLangFile);
                 } catch (IOException ex) {
                     ex.printStackTrace();
-                    PlayerParticles.getPlugin().getLogger().severe("Unable to write default.lang to disk! All messages for the plugin have been disabled until this is fixed!");
+                    PlayerParticles.getPlugin().getLogger().severe("Unable to write default.lang to disk! You and your players will be seeing lots of error messages!");
                     return null;
                 }
             }
@@ -300,14 +299,14 @@ public class LangManager {
      * @param replacements The replacements for the message
      */
     public static void sendMessage(Player player, Lang messageType, Object... replacements) {
-        if (!messagesEnabled) return;
+        if (!PSetting.MESSAGES_ENABLED.getBoolean()) return;
 
         String message = messageType.get(replacements);
 
         if (message.length() == 0) return;
 
-        if (prefixEnabled) {
-            message = messagePrefix + " " + message;
+        if (PSetting.USE_MESSAGE_PREFIX.getBoolean()) {
+            message = parseColors(PSetting.MESSAGE_PREFIX.getString()) + " " + message;
         }
 
         if (message.trim().equals("")) return;
@@ -334,12 +333,12 @@ public class LangManager {
      * @param message The message to send to the player
      */
     public static void sendCustomMessage(Player player, String message) {
-        if (!messagesEnabled) return;
+        if (!PSetting.MESSAGES_ENABLED.getBoolean()) return;
 
         if (message.trim().length() == 0) return;
 
-        if (prefixEnabled) {
-            message = messagePrefix + " " + message;
+        if (PSetting.USE_MESSAGE_PREFIX.getBoolean()) {
+            message = parseColors(PSetting.MESSAGE_PREFIX.getString()) + " " + message;
         }
 
         player.sendMessage(message);
