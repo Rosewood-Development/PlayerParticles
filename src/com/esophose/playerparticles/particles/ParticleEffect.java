@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
+import com.esophose.playerparticles.manager.SettingManager.PSetting;
 import com.esophose.playerparticles.styles.api.PParticle;
 
 @SuppressWarnings("deprecation")
@@ -76,7 +77,6 @@ public enum ParticleEffect {
     UNDERWATER("SUSPENDED_DEPTH", "SUSPENDED_DEPTH"),
     WITCH("SPELL_WITCH", "SPELL_WTICH");
 
-    private static final int PARTICLE_DISPLAY_RANGE_SQUARED = 36864; // (12 chunks * 16 blocks per chunk)^2
     private static final Map<String, ParticleEffect> NAME_MAP = new HashMap<String, ParticleEffect>();
     private static boolean VERSION_13; // This is a particle unique to Minecraft 1.13, this is a reliable way of telling what server version is running
     private static Constructor<?> DustOptions_CONSTRUCTOR;
@@ -194,17 +194,18 @@ public enum ParticleEffect {
      * 
      * @param particle The ParticlePair, given the effect/style/data
      * @param pparticle The particle spawn information
+     * @param isFixedEffect If the particle is spawned from a fixed effect
      */
-    public static void display(ParticlePair particle, PParticle pparticle) {
+    public static void display(ParticlePair particle, PParticle pparticle, boolean isFixedEffect) {
         ParticleEffect effect = particle.getEffect();
         int count = pparticle.isDirectional() ? 0 : 1;
         
         if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-            effect.display(particle.getSpawnMaterial(), pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), 1, pparticle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
+            effect.display(particle.getSpawnMaterial(), pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), 1, pparticle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)), isFixedEffect);
         } else if (effect.hasProperty(ParticleProperty.COLORABLE)) {
-            effect.display(particle.getSpawnColor(), pparticle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
+            effect.display(particle.getSpawnColor(), pparticle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)), isFixedEffect);
         } else {
-            effect.display(pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), count, pparticle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
+            effect.display(pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), count, pparticle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)), isFixedEffect);
         }
     }
 
@@ -217,14 +218,15 @@ public enum ParticleEffect {
      * @param speed Display speed of the particles
      * @param amount Amount of particles
      * @param center Center location of the effect
+     * @param isFixedEffect If the particle is spawned from a fixed effect
      * @throws ParticleDataException If the particle effect requires additional data
      */
-    public void display(double offsetX, double offsetY, double offsetZ, double speed, int amount, Location center) throws ParticleDataException {
+    public void display(double offsetX, double offsetY, double offsetZ, double speed, int amount, Location center, boolean isFixedEffect) throws ParticleDataException {
         if (hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
             throw new ParticleDataException("This particle effect requires additional data");
         }
 
-        for (Player player : getPlayersInRange(center)) {
+        for (Player player : getPlayersInRange(center, isFixedEffect)) {
             player.spawnParticle(internalEnum, center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed);
         }
     }
@@ -234,9 +236,10 @@ public enum ParticleEffect {
      * 
      * @param color Color of the particle
      * @param center Center location of the effect
+     * @param isFixedEffect If the particle is spawned from a fixed effect
      * @throws ParticleColorException If the particle effect is not colorable or the color type is incorrect
      */
-    public void display(ParticleColor color, Location center) throws ParticleColorException {
+    public void display(ParticleColor color, Location center, boolean isFixedEffect) throws ParticleColorException {
         if (!hasProperty(ParticleProperty.COLORABLE)) {
             throw new ParticleColorException("This particle effect is not colorable");
         }
@@ -250,11 +253,11 @@ public enum ParticleEffect {
                 
             }
 
-            for (Player player : getPlayersInRange(center)) {
+            for (Player player : getPlayersInRange(center, isFixedEffect)) {
                 player.spawnParticle(internalEnum, center.getX(), center.getY(), center.getZ(), 1, 0, 0, 0, 0, dustData);
             }
         } else {
-            for (Player player : getPlayersInRange(center)) {
+            for (Player player : getPlayersInRange(center, isFixedEffect)) {
                 // Minecraft clients require that you pass a non-zero value if the Red value should be zero
                 player.spawnParticle(internalEnum, center.getX(), center.getY(), center.getZ(), 0, this == ParticleEffect.DUST && color.getValueX() == 0 ? Float.MIN_VALUE : color.getValueX(), color.getValueY(), color.getValueZ(), 1);
             }
@@ -273,9 +276,10 @@ public enum ParticleEffect {
      * @param speed Display speed of the particles
      * @param amount Amount of particles
      * @param center Center location of the effect
+     * @param isFixedEffect If the particle is spawned from a fixed effect
      * @throws ParticleDataException If the particle effect does not require additional data or if the data type is incorrect
      */
-    public void display(Material spawnMaterial, double offsetX, double offsetY, double offsetZ, double speed, int amount, Location center) throws ParticleDataException {
+    public void display(Material spawnMaterial, double offsetX, double offsetY, double offsetZ, double speed, int amount, Location center, boolean isFixedEffect) throws ParticleDataException {
         if (!hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
             throw new ParticleDataException("This particle effect does not require additional data");
         }
@@ -295,7 +299,7 @@ public enum ParticleEffect {
             extraData = null;
         }
 
-        for (Player player : getPlayersInRange(center))
+        for (Player player : getPlayersInRange(center, isFixedEffect))
             player.spawnParticle(internalEnum, center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed, extraData);
     }
 
@@ -305,11 +309,12 @@ public enum ParticleEffect {
      * @param center The center of the radius to check around
      * @return A List of Players within the particle display range
      */
-    private List<Player> getPlayersInRange(Location center) {
+    private List<Player> getPlayersInRange(Location center, boolean isFixedEffect) {
         List<Player> players = new ArrayList<Player>();
+        int range = isFixedEffect ? PSetting.PARTICLE_RENDER_RANGE_PLAYER.getInt() : PSetting.PARTICLE_RENDER_RANGE_FIXED_EFFECT.getInt();
 
         for (Player p : Bukkit.getOnlinePlayers())
-            if (p.getWorld().equals(center.getWorld()) && center.distanceSquared(p.getLocation()) <= PARTICLE_DISPLAY_RANGE_SQUARED) 
+            if (p.getWorld().equals(center.getWorld()) && center.distanceSquared(p.getLocation()) <= range * range) 
                 players.add(p);
 
         return players;

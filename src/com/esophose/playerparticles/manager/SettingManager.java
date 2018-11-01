@@ -19,6 +19,10 @@ public class SettingManager {
         VERSION(PSettingType.DOUBLE),
         TICKS_PER_PARTICLE(PSettingType.LONG),
         CHECK_UPDATES(PSettingType.BOOLEAN),
+        GUI_ENABLED(PSettingType.BOOLEAN),
+        
+        PARTICLE_RENDER_RANGE_PLAYER(PSettingType.INTEGER),
+        PARTICLE_RENDER_RANGE_FIXED_EFFECT(PSettingType.INTEGER),
         
         MESSAGES_ENABLED(PSettingType.BOOLEAN),
         USE_MESSAGE_PREFIX(PSettingType.BOOLEAN),

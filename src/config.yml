@@ -74,6 +74,14 @@ max-fixed-effect-creation-distance: 32
 # Default: 1
 ticks-per-particle: 1
 
+# From how many blocks away should a player be able to see the particles from another player?
+# Default: 48
+particle-render-range-player: 48
+
+# From how many blocks away should a player be able to see the particles from a fixed effect?
+# Default: 192
+particle-render-range-fixed-effect: 192
+
 # ================================================================ #
 #                     DATABASE CONFIGURATION                       #
 # Information:                                                     #

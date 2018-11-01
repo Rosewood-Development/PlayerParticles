@@ -34,6 +34,7 @@ import com.esophose.playerparticles.manager.DataManager;
 import com.esophose.playerparticles.manager.LangManager;
 import com.esophose.playerparticles.manager.LangManager.Lang;
 import com.esophose.playerparticles.manager.PermissionManager;
+import com.esophose.playerparticles.manager.SettingManager.PSetting;
 import com.esophose.playerparticles.particles.PPlayer;
 import com.esophose.playerparticles.particles.ParticleEffect;
 import com.esophose.playerparticles.particles.ParticleEffect.NoteColor;
@@ -67,7 +68,6 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
 
     private static final int INVENTORY_SIZE = 54;
     private static HashMap<UUID, GuiInventory> playerGuiInventories;
-    private static boolean guiEnabled;
 
     /**
      * Cached icons to prevent calling config over and over
@@ -147,8 +147,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
     public static void setup() {
         FileConfiguration config = PlayerParticles.getPlugin().getConfig();
 
-        guiEnabled = config.getBoolean("gui-enabled");
-        if (!guiEnabled) return;
+        if (!PSetting.GUI_ENABLED.getBoolean()) return;
 
         playerGuiInventories = new HashMap<UUID, GuiInventory>();
         effectIcons = new HashMap<String, Material>();
@@ -369,7 +368,7 @@ public class PlayerParticlesGui extends BukkitRunnable implements Listener {
      * @return True if the GUI is disabled
      */
     public static boolean isGuiDisabled() {
-        return !guiEnabled;
+        return !PSetting.GUI_ENABLED.getBoolean();
     }
 
     /**

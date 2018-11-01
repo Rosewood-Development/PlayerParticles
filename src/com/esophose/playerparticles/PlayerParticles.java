@@ -1,12 +1,7 @@
 /*
  * TODO: v5.3
  * + Add new style 'tornado'
- * * Setting in config.yml for max number of particle groups, default 10
- * * Permission to allow players to overrule the max particle groups allowed in the config playerparticles.groups.unlimited
  * * Setting in config.yml to disable non-event styles while the player is moving
- * * Setting in config.yml for max particles allowed per player, default 3
- * * Permission to allow players to overrule the max particles allowed in the config.yml
- *     - playerparticles.particles.max.unlimited
  */
 
 package com.esophose.playerparticles;
@@ -68,7 +63,7 @@ public class PlayerParticles extends JavaPlugin {
      */
     public void onEnable() {
         pluginInstance = Bukkit.getServer().getPluginManager().getPlugin("PlayerParticles");
-
+        
         getCommand("pp").setTabCompleter(new ParticleCommandHandler());
         getCommand("pp").setExecutor(new ParticleCommandHandler());
 

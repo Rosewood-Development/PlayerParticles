@@ -123,7 +123,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
     private void displayParticles(ParticlePair particle, Location location) {
         if (!ParticleStyleManager.isCustomHandled(particle.getStyle()))
             for (PParticle pparticle : particle.getStyle().getParticles(particle, location))
-                ParticleEffect.display(particle, pparticle);
+                ParticleEffect.display(particle, pparticle, false);
     }
 
     /**
@@ -134,7 +134,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      */
     public static void displayParticles(ParticlePair particle, List<PParticle> particles) {
         for (PParticle pparticle : particles)
-            ParticleEffect.display(particle, pparticle);
+            ParticleEffect.display(particle, pparticle, false);
     }
 
     /**
@@ -145,7 +145,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
     private void displayFixedParticleEffect(FixedParticleEffect fixedEffect) {
         ParticlePair particle = fixedEffect.getParticlePair();
         for (PParticle pparticle : particle.getStyle().getParticles(particle, fixedEffect.getLocation()))
-            ParticleEffect.display(particle, pparticle);
+            ParticleEffect.display(particle, pparticle, true);
     }
 
     public static OrdinaryColor getRainbowParticleColor() {
