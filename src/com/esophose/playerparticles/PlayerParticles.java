@@ -209,9 +209,9 @@ public class PlayerParticles extends JavaPlugin {
     			
     			// Try to create the tables just in case they don't exist
     			try (Statement createStatement = connection.createStatement()) {
+                    createStatement.addBatch("CREATE TABLE IF NOT EXISTS pp_particle (uuid VARCHAR(36), group_uuid VARCHAR(36), id SMALLINT, effect VARCHAR(100), style VARCHAR(100), item_material VARCHAR(100), block_material VARCHAR(100), note SMALLINT, r SMALLINT, g SMALLINT, b SMALLINT, PRIMARY KEY(uuid))");
     			    createStatement.addBatch("CREATE TABLE IF NOT EXISTS pp_group (uuid VARCHAR(36), owner_uuid VARCHAR(36), name VARCHAR(100), PRIMARY KEY(uuid))");
                     createStatement.addBatch("CREATE TABLE IF NOT EXISTS pp_fixed (owner_uuid VARCHAR(36), id SMALLINT, particle_uuid VARCHAR(36), world VARCHAR(100), xPos DOUBLE, yPos DOUBLE, zPos DOUBLE, PRIMARY KEY(owner_uuid, id), FOREIGN KEY(particle_uuid) REFERENCES pp_particle(uuid))");
-                    createStatement.addBatch("CREATE TABLE IF NOT EXISTS pp_particle (uuid VARCHAR(36), group_uuid VARCHAR(36), id SMALLINT, effect VARCHAR(100), style VARCHAR(100), item_material VARCHAR(100), block_material VARCHAR(100), note SMALLINT, r SMALLINT, g SMALLINT, b SMALLINT, PRIMARY KEY(uuid))");
                     int[] results = createStatement.executeBatch();
                     if (results[0] + results[1] + results[2] > 0) {
                         getLogger().warning("Updated " + (useMySql ? "MySQL" : "SQLite") + " database schema.");
@@ -238,7 +238,7 @@ public class PlayerParticles extends JavaPlugin {
         new BukkitRunnable() {
             public void run() {
                 long ticks = PSetting.TICKS_PER_PARTICLE.getLong();
-                particleTask = new ParticleManager().runTaskTimer(playerParticles, 0, ticks);
+                particleTask = new ParticleManager().runTaskTimer(playerParticles, 5, ticks);
             }
         }.runTaskLater(playerParticles, 1);
     }

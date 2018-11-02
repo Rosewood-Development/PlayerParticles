@@ -173,7 +173,9 @@ public class DataManager {
                     ResultSet result = statement.executeQuery();
                     while (result.next()) {
                         UUID playerUUID = UUID.fromString(result.getString("owner_uuid"));
-                        getPPlayer(playerUUID, (pplayer) -> { });
+                        sync(() -> {
+                            getPPlayer(playerUUID, (pplayer) -> { });
+                        });
                     }
                 }
             });
