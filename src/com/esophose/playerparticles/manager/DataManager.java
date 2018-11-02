@@ -273,7 +273,9 @@ public class DataManager {
                     statement.setString(2, group.getName());
 
                     ResultSet result = statement.executeQuery();
-                    groupUUID = result.getString("uuid");
+                    if (result.next()) {
+                        groupUUID = result.getString("uuid");
+                    }
                 }
 
                 // Execute particle delete update
@@ -362,7 +364,9 @@ public class DataManager {
                     statement.setInt(2, id);
 
                     ResultSet result = statement.executeQuery();
-                    particleUUID = result.getString("particle_uuid");
+                    if (result.next()) {
+                        particleUUID = result.getString("particle_uuid");
+                    }
                 }
 
                 String particleDeleteQuery = "DELETE FROM pp_particle WHERE uuid = ?";
