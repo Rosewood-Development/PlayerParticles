@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import com.esophose.playerparticles.PlayerParticles;
 import com.esophose.playerparticles.manager.DataManager;
@@ -22,12 +23,15 @@ import com.esophose.playerparticles.particles.PPlayer;
 public class GuiHandler extends BukkitRunnable implements Listener {
 
     private static List<GuiInventory> guiInventories = new ArrayList<GuiInventory>();
+    private static BukkitTask guiTask = null;
 
     /**
      * Initializes all the static values for this class
      */
     public static void setup() {
-        new GuiHandler().runTaskTimer(PlayerParticles.getPlugin(), 0, 10);
+        if (guiTask != null)
+            guiTask.cancel();
+        guiTask = new GuiHandler().runTaskTimer(PlayerParticles.getPlugin(), 0, 10);
     }
 
     /**
@@ -115,12 +119,13 @@ public class GuiHandler extends BukkitRunnable implements Listener {
     
     /**
      * Changes the player's inventory to another one
+     * 
+     * @param nextInventory The GuiInventory to transition to
      */
     protected static void transition(GuiInventory nextInventory) {
         removeGuiInventory(nextInventory.getPPlayer());
         guiInventories.add(nextInventory);
         nextInventory.getPPlayer().getPlayer().openInventory(nextInventory.getInventory());
-        System.out.println("Transitioned inventories");
     }
     
     /**

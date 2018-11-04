@@ -2,6 +2,7 @@ package com.esophose.playerparticles.command;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import org.bukkit.entity.Player;
@@ -215,8 +216,11 @@ public class GroupCommandModule implements CommandModule {
             }
         }
         
+        List<ParticlePair> particles = group.getParticles();
+        particles.sort(Comparator.comparingInt(ParticlePair::getId));
+        
         LangManager.sendMessage(pplayer, Lang.GROUP_INFO_HEADER, groupName);
-        for (ParticlePair particle : group.getParticles())
+        for (ParticlePair particle : particles)
             LangManager.sendMessage(pplayer, Lang.LIST_OUTPUT, particle.getId(), particle.getEffect().getName(), particle.getStyle().getName(), particle.getDataString());
     }
     
@@ -227,6 +231,7 @@ public class GroupCommandModule implements CommandModule {
      */
     private void onList(PPlayer pplayer) {
         List<ParticleGroup> groups = pplayer.getParticleGroups();
+        groups.sort(Comparator.comparing(ParticleGroup::getName));
         
         String groupsList = "";
         for (ParticleGroup group : groups)

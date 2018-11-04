@@ -31,7 +31,7 @@ messages-enabled: true
 # Default: true
 use-message-prefix: true
 
-# The prefix to use for all PlayerParticle messages
+# The prefix to use for all PlayerParticles messages
 # This is useless if use-message-prefix is set to false
 # Default: '&7[&3PlayerParticles&7]'
 message-prefix: '&7[&3PlayerParticles&7]'
@@ -49,12 +49,12 @@ disabled-worlds: []
 #  - add_more_under_these
 
 # The maximum number of particles a player can apply at once
-# The GUI will only display up to 14, don't set this any higher than that
+# The GUI will only display up to 21, don't set this any higher than that
 # Default: 3
 max-particles: 3
 
 # The maximum number of groups a player can have saved
-# The GUI will only display up to 14, don't set this any higher than that
+# The GUI will only display up to 21, don't set this any higher than that
 # Default: 10
 max-groups: 10
 
@@ -133,165 +133,213 @@ database-user-password: ''
 # * You MUST use the Spigot-given name for it to work. You can see    #
 #   all the Spigot-given names at the link below:                     #
 #   https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html #
+# * If two icons are listed, the second one is used for below MC 1.13 #
 # =================================================================== #
 
-gui-icon: 
-  main-menu:
-    EFFECT: BLAZE_POWDER
-    STYLE: NETHER_STAR
-    DATA: BOOK
-  effect: # 1.13 and up
-    AMBIENT_ENTITY_EFFECT: BEACON
-    ANGRY_VILLAGER: IRON_DOOR
-    BARRIER: BARRIER
-    BLOCK: STONE
-    BUBBLE: BUBBLE_CORAL
-    BUBBLE_COLUMN_UP: MAGMA_BLOCK
-    BUBBLE_POP: BUBBLE_CORAL_FAN
-    CLOUD: WHITE_WOOL
-    CRIT: IRON_SWORD
-    CURRENT_DOWN: SOUL_SAND
-    DAMAGE_INDICATOR: BOW
-    DOLPHIN: DOLPHIN_SPAWN_EGG
-    DRAGON_BREATH: DRAGON_BREATH
-    DRIPPING_LAVA: LAVA_BUCKET
-    DRIPPING_WATER: WATER_BUCKET
-    DUST: REDSTONE
-    ENCHANT: ENCHANTING_TABLE
-    ENCHANTED_HIT: DIAMOND_SWORD
-    END_ROD: END_ROD
-    ENTITY_EFFECT: GLOWSTONE_DUST
-    EXPLOSION: FIRE_CHARGE
-    EXPLOSION_EMITTER: TNT
-    FALLING_DUST: SAND
-    FIREWORK: FIREWORK_ROCKET
-    FISHING: FISHING_ROD
-    FLAME: BLAZE_POWDER
-    HAPPY_VILLAGER: DARK_OAK_DOOR
-    HEART: POPPY
-    INSTANT_EFFECT: SPLASH_POTION
-    ITEM: ITEM_FRAME
-    ITEM_SLIME: SLIME_BALL
-    ITEM_SNOWBALL: SNOWBALL
-    LARGE_SMOKE: COBWEB
-    LAVA: MAGMA_CREAM
-    MYCELIUM: MYCELIUM
-    NAUTILUS: HEART_OF_THE_SEA
-    NOTE: NOTE_BLOCK
-    POOF: FIREWORK_STAR
-    PORTAL: OBSIDIAN
-    RAIN: PUFFERFISH_BUCKET
-    SMOKE: TORCH
-    SPELL: POTION
-    SPIT: LLAMA_SPAWN_EGG
-    SPLASH: SALMON
-    SQUID_INK: INK_SAC
-    SWEEP_ATTACK: GOLDEN_SWORD
-    TOTEM_OF_UNDYING: TOTEM
-    UNDERWATER: TURTLE_HELMET
-    WITCH: CAULDRON
-  effect-legacy: # 1.9 to 1.12
-    AMBIENT_ENTITY_EFFECT: BEACON
-    ANGRY_VILLAGER: IRON_DOOR
-    BARRIER: BARRIER
-    BLOCK: STONE
-    BUBBLE: GLASS
-    CLOUD: WOOL
-    CRIT: IRON_SWORD
-    DAMAGE_INDICATOR: BOW
-    DRAGON_BREATH: DRAGONS_BREATH
-    DRIPPING_LAVA: LAVA_BUCKET
-    DRIPPING_WATER: WATER_BUCKET
-    DUST: REDSTONE
-    ENCHANT: ENCHANTMENT_TABLE
-    ENCHANTED_HIT: DIAMOND_SWORD
-    END_ROD: END_ROD
-    ENTITY_EFFECT: GLOWSTONE_DUST
-    EXPLOSION: FIREBALL
-    EXPLOSION_EMITTER: TNT
-    FALLING_DUST: SAND
-    FIREWORK: FIREWORK
-    FISHING: FISHING_ROD
-    FLAME: BLAZE_POWDER
-    FOOTSTEP: GRASS
-    HAPPY_VILLAGER: WOOD_DOOR
-    HEART: RED_ROSE
-    INSTANT_EFFECT: POTION
-    ITEM: ITEM_FRAME
-    ITEM_SLIME: SLIME_BALL
-    ITEM_SNOWBALL: SNOWBALL
-    LARGE_SMOKE: WEB
-    LAVA: MAGMA_CREAM
-    MYCELIUM: MYCEL
-    NOTE: NOTE_BLOCK
-    POOF: FIREWORK_CHARGE
-    PORTAL: OBSIDIAN
-    RAIN: LAPIS_BLOCK
-    SMOKE: TORCH
-    SPELL: GLASS_BOTTLE
-    SPIT: PUMPKIN_SEEDS
-    SPLASH: FISH
-    SWEEP_ATTACK: GOLD_SWORD
-    TOTEM_OF_UNDYING: TOTEM
-    UNDERWATER: BOAT
-    WITCH: CAULDRON
-  style: # 1.13 and up
-    ARROWS: BOW
-    BATMAN: COAL
-    BEAM: POWERED_RAIL
-    BLOCKBREAK: IRON_PICKAXE
-    BLOCKEDIT: DISPENSER
-    BLOCKPLACE: OAK_PLANKS
-    CHAINS: TRIPWIRE_HOOK
-    COMPANION: NAME_TAG
-    CUBE: STONE
-    FEET: GRASS
-    HALO: END_PORTAL_FRAME
-    HURT: CACTUS
-    INVOCATION: ENDER_EYE
-    MOVE: PISTON
-    NONE: GLASS_PANE
-    ORBIT: ENCHANTING_TABLE
-    OVERHEAD: GLOWSTONE
-    POINT: STONE_BUTTON
-    QUADHELIX: NAUTILUS_SHELL
-    NORMAL: DIRT
-    RINGS: STRING
-    SPHERE: HEART_OF_THE_SEA
-    SPIN: BEACON
-    SPIRAL: HOPPER
-    SWORDS: IRON_SWORD
-    THICK: COBWEB
-    VORTEX: GLOWSTONE_DUST
-    WINGS: ELYTRA
-  style-legacy:  # 1.9 to 1.12
-    ARROWS: BOW
-    BATMAN: COAL
-    BEAM: POWERED_RAIL
-    BLOCKBREAK: IRON_PICKAXE
-    BLOCKEDIT: DISPENSER
-    BLOCKPLACE: WOOD
-    CHAINS: TRIPWIRE_HOOK
-    COMPANION: NAME_TAG
-    CUBE: STONE
-    FEET: GRASS
-    HALO: ENDER_PORTAL_FRAME
-    HURT: CACTUS
-    INVOCATION: EYE_OF_ENDER
-    MOVE: PISTON_BASE
-    NORMAL: DIRT
-    ORBIT: ENCHANTMENT_TABLE
-    OVERHEAD: GLOWSTONE
-    POINT: STONE_BUTTON
-    QUADHELIX: ACTIVATOR_RAIL
-    RINGS: STRING
-    SPHERE: SNOW_BALL
-    SPIN: BEACON
-    SPIRAL: HOPPER
-    SWORDS: IRON_SWORD
-    THICK: VINE
-    VORTEX: GLOWSTONE_DUST
-    WINGS: ELYTRA
+gui-icon:
+  misc:
+    particles:
+      - BLAZE_POWDER
+    groups:
+      - CHEST
+    preset_groups:
+      - ENDER_CHEST
+    back:
+      - ARROW
+    create:
+      - WRITABLE_BOOK
+      - BOOK_AND_QUILL
+    edit_effect:
+      - FIREWORK_ROCKET
+      - FIREWORK
+    edit_style:
+      - NETHER_STAR
+    edit_data:
+      - BOOK
+    randomize:
+      - HOPPER
+  effect:
+    ambient_entity_effect:
+      - BEACON
+    angry_villager:
+      - IRON_DOOR
+    barrier:
+      - BARRIER
+    block:
+      - STONE
+    bubble:
+      - BUBBLE_CORAL
+      - GLASS
+    bubble_column_up:
+      - MAGMA_BLOCK
+    bubble_pop:
+      - BUBBLE_CORAL_FAN
+    cloud:
+      - WHITE_WOOL
+      - WOOL
+    crit:
+      - IRON_SWORD
+    current_down:
+      - SOUL_SAND
+    damage_indicator:
+      - BOW
+    dolphin:
+      - DOLPHIN_SPAWN_EGG
+    dragon_breath:
+      - DRAGON_BREATH
+      - DRAGONS_BREATH
+    dripping_lava:
+      - LAVA_BUCKET
+    dripping_water:
+      - WATER_BUCKET
+    dust:
+      - REDSTONE
+    enchant:
+      - ENCHANTING_TABLE
+      - ENCHANTMENT_TABLE
+    enchanted_hit:
+      - DIAMOND_SWORD
+    end_rod:
+      - END_ROD
+    entity_effect:
+      - GLOWSTONE_DUST
+    explosion:
+      - FIRE_CHARGE
+      - FIREBALL
+    explosion_emitter:
+      - TNT
+    falling_dust:
+      - SAND
+    firework:
+      - FIREWORK_ROCKET
+      - FIREWORK
+    fishing:
+      - FISHING_ROD
+    flame:
+      - BLAZE_POWDER
+    footstep:
+      - GRASS
+    happy_villager:
+      - DARK_OAK_DOOR
+      - WOOD_DOOR
+    heart:
+      - POPPY
+      - RED_ROSE
+    instant_effect:
+      - SPLASH_POTION
+      - POTION
+    item:
+      - ITEM_FRAME
+    item_slime:
+      - SLIME_BALL
+    item_snowball:
+      - SNOWBALL
+    large_smoke:
+      - COBWEB
+      - WEB
+    lava:
+      - MAGMA_CREAM
+    mycelium:
+      - MYCELIUM
+      - MYCEL
+    nautilus:
+      - HEART_OF_THE_SEA
+    note:
+      - NOTE_BLOCK
+    poof:
+      - FIREWORK_STAR
+      - FIREWORK_CHARGE
+    portal:
+      - OBSIDIAN
+    rain:
+      - PUFFERFISH_BUCKET
+      - LAPIS_BLOCK
+    smoke:
+      - TORCH
+    spell:
+      - POTION
+      - GLASS_BOTTLE
+    spit:
+      - LLAMA_SPAWN_EGG
+      - PUMPKIN_SEEDS
+    splash:
+      - SALMON
+      - FISH
+    squid_ink:
+      - INK_SAC
+    sweep_attack:
+      - GOLDEN_SWORD
+      - GOLD_SWORD
+    totem_of_undying:
+      - TOTEM
+    underwater:
+      - TURTLE_HELMET
+    witch:
+      - CAULDRON
+  style:
+    arrows:
+      - BOW
+    batman:
+      - BAT_SPAWN_EGG
+      - COAL
+    beam:
+      - POWERED_RAIL
+    blockbreak:
+      - IRON_PICKAXE
+    blockedit:
+      - DISPENSER
+    blockplace:
+      - OAK_PLANKS
+      - WOOD
+    chains:
+      - TRIPWIRE_HOOK
+    companion:
+      - NAME_TAG
+    cube:
+      - STONE
+    feet:
+      - GRASS
+    halo:
+      - END_PORTAL_FRAME
+      - ENDER_PORTAL_FRAME
+    hurt:
+      - CACTUS
+    invocation:
+      - ENDER_EYE
+      - EYE_OF_ENDER
+    move:
+      - PISTON
+      - PISTON_BASE
+    normal:
+      - DIRT
+    orbit:
+      - ENCHANTING_TABLE
+      - ENCHANTMENT_TABLE
+    overhead:
+      - GLOWSTONE
+    point:
+      - STONE_BUTTON
+    quadhelix:
+      - NAUTILUS_SHELL
+      - ACTIVATOR_RAIL
+    rings:
+      - STRING
+    sphere:
+      - HEART_OF_THE_SEA
+      - SNOWBALL
+    spin:
+      - BEACON
+    spiral:
+      - HOPPER
+    swords:
+      - IRON_SWORD
+    thick:
+      - COBWEB
+      - WEB
+    vortex:
+      - GLOWSTONE_DUST
+    wings:
+      - ELYTRA
 
 # That's everything! You reached the end of the configuration.
 # Enjoy the plugin!

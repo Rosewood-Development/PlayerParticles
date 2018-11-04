@@ -177,16 +177,36 @@ public class LangManager {
         // GUI
         GUI_DISABLED,
         GUI_BY_DEFAULT,
+        GUI_COLOR_ICON_NAME,
+        GUI_COLOR_INFO,
+        GUI_COLOR_SUBTEXT,
+        GUI_COLOR_UNAVAILABLE,
         GUI_BACK_BUTTON,
-        GUI_ICON_NAME_COLOR,
-        GUI_ICON_CURRENT_ACTIVE,
-        GUI_ICON_SETS_TO,
-        GUI_ICON_SET_YOUR,
-        GUI_NO_ACCESS_TO,
-        GUI_NO_DATA; // @formatter:on
+        GUI_CLICK_TO_LOAD,
+        GUI_SHIFT_CLICK_TO_DELETE,
+        GUI_PARTICLE_INFO,
+        GUI_PLAYERPARTICLES,
+        GUI_ACTIVE_PARTICLES,
+        GUI_SAVED_GROUPS,
+        GUI_FIXED_EFFECTS,
+        GUI_MANAGE_YOUR_PARTICLES,
+        GUI_MANAGE_YOUR_PARTICLES_DESCRIPTION,
+        GUI_MANAGE_YOUR_GROUPS,
+        GUI_MANAGE_YOUR_GROUPS_DESCRIPTION,
+        GUI_LOAD_A_PRESET_GROUP,
+        GUI_LOAD_A_PRESET_GROUP_DESCRIPTION,
+        GUI_SAVE_GROUP,
+        GUI_SAVE_GROUP_DESCRIPTION,
+        GUI_SAVE_GROUP_DESCRIPTION_2;
+        // @formatter:on
 
         private String message;
 
+        /**
+         * Gets the name of the message in the config
+         * 
+         * @return The location in the config that this message is located
+         */
         private String getConfigName() {
             return this.name().toLowerCase().replaceAll("_", "-");
         }
@@ -230,6 +250,8 @@ public class LangManager {
      * Used to set up the LangManager
      * This should only get called once by the PlayerParticles class, however
      * calling it multiple times wont affect anything negatively
+     * 
+     * @param resetLangFile If the default.lang file should be updated to the latest version
      */
     public static void reload(boolean resetLangFile) {
         YamlConfiguration lang = configureLangFile(resetLangFile);
@@ -242,6 +264,7 @@ public class LangManager {
      * If it doesn't exist, default to default.lang
      * If default.lang doesn't exist, copy the file from this .jar to the target directory
      * 
+     * @param resetLangFile If the default.lang file should be updated to the latest version
      * @return The YamlConfiguration of the target .lang file
      */
     private static YamlConfiguration configureLangFile(boolean resetLangFile) {

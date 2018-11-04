@@ -5,9 +5,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -84,8 +85,6 @@ public class ParticleGroup {
     
     /**
      * Loads the preset groups from the groups.yml file
-     * 
-     * @param pluginDataFolder
      */
     public static void reload() {
         presetGroups = new HashMap<ParticleGroup, Material>();
@@ -213,7 +212,8 @@ public class ParticleGroup {
                 }
                 
                 if (iconMaterial == null) {
-                    
+                    PlayerParticles.getPlugin().getLogger().severe("Missing icon for group '" + groupName + "'! Defaulting to ENDER_CHEST");
+                    iconMaterial = Material.ENDER_CHEST;
                 }
                 
                 presetGroups.put(new ParticleGroup(groupName, particles), iconMaterial);
@@ -223,11 +223,21 @@ public class ParticleGroup {
         }
     }
     
-    public static Set<Entry<ParticleGroup, Material>> getPresetGroupsForGUIForPlayer(Player player) {
-        Set<Entry<ParticleGroup, Material>> groups = new HashSet<Entry<ParticleGroup, Material>>();
-        for (Entry<ParticleGroup, Material> entry : presetGroups.entrySet())
-            if (entry.getKey().canPlayerUse(player))
-                groups.add(entry);
+    /**
+     * Gets all the preset ParticleGroups ordered for display in the GUI
+     * 
+     * @param player The player
+     * @return a List of preset ParticleGroups the player can use
+     */
+    public static List<Entry<ParticleGroup, Material>> getPresetGroupsForGUIForPlayer(Player player) {
+        List<Entry<ParticleGroup, Material>> groups = new ArrayList<Entry<ParticleGroup, Material>>();
+        List<ParticleGroup> orderedGroups = new ArrayList<ParticleGroup>();
+        orderedGroups.addAll(presetGroups.keySet());
+        orderedGroups.sort(Comparator.comparing(ParticleGroup::getName));
+        
+        for (ParticleGroup group : orderedGroups) 
+            if (group.canPlayerUse(player))
+                groups.add(new AbstractMap.SimpleEntry<ParticleGroup, Material>(group, presetGroups.get(group)));
         return groups;
     }
     

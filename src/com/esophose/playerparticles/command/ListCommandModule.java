@@ -1,6 +1,7 @@
 package com.esophose.playerparticles.command;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import com.esophose.playerparticles.manager.LangManager;
@@ -12,6 +13,7 @@ public class ListCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         List<ParticlePair> particles = pplayer.getActiveParticles();
+        particles.sort(Comparator.comparingInt(ParticlePair::getId));
         
         if (particles.isEmpty()) {
             LangManager.sendMessage(pplayer, Lang.LIST_NONE);

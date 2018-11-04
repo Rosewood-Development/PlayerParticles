@@ -420,6 +420,7 @@ public class DataManager {
     /**
      * Provides an easy way to run a section of code either synchronously or asynchronously using a callback
      */
+    @FunctionalInterface
     private static interface SyncInterface {
         public void execute();
     }
@@ -427,6 +428,7 @@ public class DataManager {
     /**
      * Allows callbacks to be passed between configuration methods and executed for returning objects after database queries
      */
+    @FunctionalInterface
     public static interface ConfigurationCallback<T> {
         public void execute(T obj);
     }

@@ -82,18 +82,5 @@ public interface CommandModule {
             LangManager.sendCustomMessage(pplayer, new MessageFormat(ChatColor.YELLOW + "/pp {0} {1} - {2}").format(args));
         }
     }
-    
-    /**
-     * Displays a command's sub-command usage to the player
-     * 
-     * @param pplayer The PPlayer to display the command usage to
-     * @param command The command to display usage for
-     * @param subCommandName The name of the command's sub-command to display usage for
-     * @param subCommandArgs The sub-command's arguments
-     */
-    public static void printSubcommandUsage(PPlayer pplayer, CommandModule command, String subCommandName, String subCommandArgs) {
-        Object[] args = new Object[] { command.getName(), subCommandName, subCommandArgs };
-        LangManager.sendCustomMessage(pplayer, new MessageFormat(ChatColor.YELLOW + "/pp {0} {1} {2}").format(args));
-    }
 
 }

@@ -77,8 +77,8 @@ public enum ParticleEffect {
     UNDERWATER("SUSPENDED_DEPTH", "SUSPENDED_DEPTH"),
     WITCH("SPELL_WITCH", "SPELL_WTICH");
 
+    public static boolean VERSION_13; // This is a particle unique to Minecraft 1.13, this is a reliable way of telling what server version is running
     private static final Map<String, ParticleEffect> NAME_MAP = new HashMap<String, ParticleEffect>();
-    private static boolean VERSION_13; // This is a particle unique to Minecraft 1.13, this is a reliable way of telling what server version is running
     private static Constructor<?> DustOptions_CONSTRUCTOR;
     private static Method createBlockData_METHOD;
     private final Particle internalEnum;
@@ -307,6 +307,7 @@ public enum ParticleEffect {
      * Gets a List of Players within the particle display range
      * 
      * @param center The center of the radius to check around
+     * @param isFixedEffect If the particle is spawned from a fixed effect
      * @return A List of Players within the particle display range
      */
     private List<Player> getPlayersInRange(Location center, boolean isFixedEffect) {

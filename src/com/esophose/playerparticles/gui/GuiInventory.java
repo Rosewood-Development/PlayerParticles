@@ -127,6 +127,8 @@ public abstract class GuiInventory {
     
     /**
      * Handles clicks of GuiActionButtons
+     * 
+     * @param event The InventoryClickEvent triggered when the player clicks a GuiActionButton
      */
     public void onClick(InventoryClickEvent event) {
         int slot = event.getSlot();
@@ -134,7 +136,7 @@ public abstract class GuiInventory {
         
         for (GuiActionButton button : this.actionButtons) {
             if (button.getSlot() == slot) {
-                button.handleClick(isShiftClick);
+                button.handleClick(button, isShiftClick);
                 break;
             }
         }

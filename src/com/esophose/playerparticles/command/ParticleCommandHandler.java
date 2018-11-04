@@ -90,7 +90,11 @@ public class ParticleCommandHandler implements CommandExecutor, TabCompleter {
      * @return true
      */
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) return true;
+        if (!(sender instanceof Player)) {
+            sender.sendMessage("Error: PlayerParticles only supports players executing commands.");
+            return true;
+        }
+        
         Player p = (Player) sender;
 
         DataManager.getPPlayer(p.getUniqueId(), (pplayer) -> {

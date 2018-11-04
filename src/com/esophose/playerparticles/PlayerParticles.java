@@ -116,6 +116,8 @@ public class PlayerParticles extends JavaPlugin {
     
     /**
      * Reloads the settings of the plugin
+     * 
+     * @param updatePluginSettings True if the settings should be updated to the latest version of the plugin
      */
     public void reload(boolean updatePluginSettings) {
         this.reloadConfig();
