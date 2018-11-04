@@ -1,7 +1,9 @@
 /*
  * TODO: v5.3
  * + Add new style 'tornado'
+ * * Adjust PParticles to use a Vector instead of a Location
  * * Setting in config.yml to disable non-event styles while the player is moving
+ * * Finish rewriting the GUI
  */
 
 package com.esophose.playerparticles;
@@ -21,7 +23,7 @@ import com.esophose.playerparticles.command.ParticleCommandHandler;
 import com.esophose.playerparticles.database.DatabaseConnector;
 import com.esophose.playerparticles.database.MySqlDatabaseConnector;
 import com.esophose.playerparticles.database.SqliteDatabaseConnector;
-import com.esophose.playerparticles.gui.PlayerParticlesGui;
+import com.esophose.playerparticles.gui.GuiHandler;
 import com.esophose.playerparticles.manager.LangManager;
 import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.manager.SettingManager;
@@ -69,7 +71,7 @@ public class PlayerParticles extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new ParticleManager(), this);
         Bukkit.getPluginManager().registerEvents(new PluginUpdateListener(), this);
-        Bukkit.getPluginManager().registerEvents(new PlayerParticlesGui(), this);
+        Bukkit.getPluginManager().registerEvents(new GuiHandler(), this);
 
         saveDefaultConfig();
         double configVersion = PSetting.VERSION.getDouble();
@@ -109,7 +111,7 @@ public class PlayerParticles extends JavaPlugin {
      */
     public void onDisable() {
         databaseConnector.closeConnection();
-        PlayerParticlesGui.forceCloseAllOpenGUIs();
+        GuiHandler.forceCloseAllOpenGUIs();
     }
     
     /**
@@ -124,7 +126,7 @@ public class PlayerParticles extends JavaPlugin {
             particleTask = null;
             databaseConnector.closeConnection();
             databaseConnector = null;
-            PlayerParticlesGui.forceCloseAllOpenGUIs();
+            GuiHandler.forceCloseAllOpenGUIs();
         } else {
             DefaultStyles.registerStyles(); // Only ever load styles once
         }
@@ -136,7 +138,7 @@ public class PlayerParticles extends JavaPlugin {
         LangManager.reload(updatePluginSettings);
         ParticleGroup.reload();
         
-        PlayerParticlesGui.setup();
+        GuiHandler.setup();
         
         ParticleManager.refreshData();
         startParticleTask();
@@ -172,6 +174,11 @@ public class PlayerParticles extends JavaPlugin {
         if (useMySql) {
             databaseConnector = new MySqlDatabaseConnector();
         } else {
+            try {
+                Class.forName("org.sqlite.JDBC"); // This is required to put here for Spigot 1.9 and 1.10 for some reason
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
             databaseConnector = new SqliteDatabaseConnector(this.getDataFolder().getAbsolutePath());
         }
 

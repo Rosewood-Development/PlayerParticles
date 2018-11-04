@@ -4,6 +4,7 @@
 # * The groups listed within this file will be         #
 #   available to all players who have access to the    #
 #   effect and style!                                  #
+# * The GUI is capable of displaying up to 28 groups.  #
 # * Feel free to create your own, they will be         #
 #   available for users to select within the GUI!      #
 # * This file is not automatically updated. If you     #
@@ -11,7 +12,11 @@
 #   delete it and run the command '/pp reload'.        #
 # ==================================================== #
 
+# Icons MUST use the names found at the link below:
+# https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
+
 raincloud:
+    icon: 'ENDER_CHEST'
     1:
         effect: 'cloud'
         style: 'overhead'
@@ -21,6 +26,7 @@ raincloud:
         style: 'overhead'
         data: ''
 rainbows:
+    icon: 'ENDER_CHEST'
     1:
         effect: 'dust'
         style: 'orbit'

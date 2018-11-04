@@ -23,6 +23,8 @@
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
+          <fork>true</fork>
+          <executable>C:\Program Files\Java\jdk1.8.0_161\bin\javac</executable>
         </configuration>
       </plugin>
       <plugin>
@@ -195,7 +197,7 @@
       <groupId>org.xerial</groupId>
       <artifactId>sqlite-jdbc</artifactId>
       <version>3.23.1</version>
-	</dependency>
+    </dependency>
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>

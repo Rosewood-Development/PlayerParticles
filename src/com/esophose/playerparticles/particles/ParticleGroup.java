@@ -6,7 +6,10 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,7 +29,7 @@ import com.esophose.playerparticles.util.ParticleUtils;
 public class ParticleGroup {
     
     public static final String DEFAULT_NAME = "active";
-    private static List<ParticleGroup> presetGroups;
+    private static HashMap<ParticleGroup, Material> presetGroups;
 
     private String name;
     private List<ParticlePair> particles;
@@ -85,7 +88,7 @@ public class ParticleGroup {
      * @param pluginDataFolder
      */
     public static void reload() {
-        presetGroups = new ArrayList<ParticleGroup>();
+        presetGroups = new HashMap<ParticleGroup, Material>();
         
         File pluginDataFolder = PlayerParticles.getPlugin().getDataFolder();
         File groupsFile = new File(pluginDataFolder.getAbsolutePath() + File.separator + "groups.yml");
@@ -105,10 +108,16 @@ public class ParticleGroup {
         for (String groupName : groupNames) {
             try {
                 List<ParticlePair> particles = new ArrayList<ParticlePair>();
+                Material iconMaterial = null;
                 ConfigurationSection groupSection = groupsYaml.getConfigurationSection(groupName);
                 
                 Set<String> particleKeys = groupSection.getKeys(false);
                 for (String stringId : particleKeys) {
+                    if (stringId.equalsIgnoreCase("icon")) {
+                        iconMaterial = Material.valueOf(groupSection.getString("icon"));
+                        continue;
+                    }
+                    
                     ConfigurationSection particleSection = groupSection.getConfigurationSection(stringId);
                     
                     int id = Integer.parseInt(stringId);
@@ -203,11 +212,23 @@ public class ParticleGroup {
                     particles.add(new ParticlePair(null, id, effect, style, blockData, blockData, colorData, noteColorData));
                 }
                 
-                presetGroups.add(new ParticleGroup(groupName, particles));
+                if (iconMaterial == null) {
+                    
+                }
+                
+                presetGroups.put(new ParticleGroup(groupName, particles), iconMaterial);
             } catch (Exception ex) {
                 PlayerParticles.getPlugin().getLogger().severe("An error occurred while parsing the groups.yml file!");
             }
         }
+    }
+    
+    public static Set<Entry<ParticleGroup, Material>> getPresetGroupsForGUIForPlayer(Player player) {
+        Set<Entry<ParticleGroup, Material>> groups = new HashSet<Entry<ParticleGroup, Material>>();
+        for (Entry<ParticleGroup, Material> entry : presetGroups.entrySet())
+            if (entry.getKey().canPlayerUse(player))
+                groups.add(entry);
+        return groups;
     }
     
     /**
@@ -217,7 +238,7 @@ public class ParticleGroup {
      * @return a List of preset ParticleGroups the player can use
      */
     public static List<ParticleGroup> getPresetGroupsForPlayer(Player player) {
-        return presetGroups.stream().filter(x -> x.canPlayerUse(player)).collect(Collectors.toList());
+        return presetGroups.keySet().stream().filter(x -> x.canPlayerUse(player)).collect(Collectors.toList());
     }
     
     /**
@@ -227,7 +248,7 @@ public class ParticleGroup {
      * @return The preset ParticleGroup if it exists, otherwise null 
      */
     public static ParticleGroup getPresetGroup(String groupName) {
-        for (ParticleGroup group : presetGroups)
+        for (ParticleGroup group : presetGroups.keySet())
             if (group.getName().equalsIgnoreCase(groupName))
                 return group;
         return null;

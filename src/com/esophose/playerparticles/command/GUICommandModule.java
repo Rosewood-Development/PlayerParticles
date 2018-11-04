@@ -3,11 +3,10 @@ package com.esophose.playerparticles.command;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.esophose.playerparticles.gui.PlayerParticlesGui;
-import com.esophose.playerparticles.gui.PlayerParticlesGui.GuiState;
+import com.esophose.playerparticles.gui.GuiHandler;
 import com.esophose.playerparticles.manager.LangManager;
-import com.esophose.playerparticles.manager.PermissionManager;
 import com.esophose.playerparticles.manager.LangManager.Lang;
+import com.esophose.playerparticles.manager.PermissionManager;
 import com.esophose.playerparticles.particles.PPlayer;
 
 public class GUICommandModule implements CommandModule {
@@ -18,7 +17,7 @@ public class GUICommandModule implements CommandModule {
             byDefault = true;
         }
 
-        if (PlayerParticlesGui.isGuiDisabled()) {
+        if (GuiHandler.isGuiDisabled()) {
             if (byDefault) {
                 LangManager.sendMessage(pplayer, Lang.COMMAND_ERROR_UNKNOWN);
             } else {
@@ -40,7 +39,7 @@ public class GUICommandModule implements CommandModule {
             LangManager.sendMessage(pplayer, Lang.GUI_BY_DEFAULT);
         }
 
-        PlayerParticlesGui.changeState(pplayer, GuiState.DEFAULT);
+        GuiHandler.openDefault(pplayer);
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {

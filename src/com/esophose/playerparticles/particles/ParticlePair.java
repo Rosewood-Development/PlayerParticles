@@ -50,8 +50,10 @@ public class ParticlePair {
      * @param effect The player's new particle effect
      */
     public void setEffect(ParticleEffect effect) {
-        if (effect == null) effect = ParticleEffect.FLAME;
-        this.effect = effect;
+        if (effect == null) 
+            this.effect = getDefault().getEffect();
+        else
+            this.effect = effect;
     }
 
     /**
@@ -60,8 +62,10 @@ public class ParticlePair {
      * @param style The player's new particle style
      */
     public void setStyle(ParticleStyle style) {
-        if (style == null) style = DefaultStyles.NORMAL;
-        this.style = style;
+        if (style == null) 
+            this.style = getDefault().getStyle();
+        else
+            this.style = style;
     }
 
     /**
@@ -70,8 +74,10 @@ public class ParticlePair {
      * @param itemMaterial The player's new item material
      */
     public void setItemMaterial(Material itemMaterial) {
-        if (itemMaterial == null || itemMaterial.isBlock()) itemMaterial = ParticleUtils.closestMatchWithFallback("IRON_SHOVEL", "IRON_SPADE");
-        this.itemMaterial = itemMaterial;
+        if (itemMaterial == null || itemMaterial.isBlock()) 
+            this.itemMaterial = getDefault().getItemMaterial();
+        else 
+            this.itemMaterial = itemMaterial;
     }
 
     /**
@@ -80,8 +86,10 @@ public class ParticlePair {
      * @param blockMaterial The player's new block material
      */
     public void setBlockMaterial(Material blockMaterial) {
-        if (blockMaterial == null) blockMaterial = Material.STONE;
-        this.blockMaterial = blockMaterial;
+        if (blockMaterial == null || !blockMaterial.isBlock()) 
+            this.blockMaterial = getDefault().getBlockMaterial();
+        else 
+            this.blockMaterial = blockMaterial;
     }
 
     /**
@@ -90,8 +98,10 @@ public class ParticlePair {
      * @param colorData The player's new color data
      */
     public void setColor(OrdinaryColor colorData) {
-        if (colorData == null) colorData = new OrdinaryColor(0, 0, 0);
-        this.color = colorData;
+        if (colorData == null) 
+            this.color = getDefault().getColor();
+        else 
+            this.color = colorData;
     }
 
     /**
@@ -100,8 +110,10 @@ public class ParticlePair {
      * @param noteColorData The player's new note color data
      */
     public void setNoteColor(NoteColor noteColorData) {
-        if (noteColorData == null) noteColorData = new NoteColor(0);
-        this.noteColor = noteColorData;
+        if (noteColorData == null) 
+            this.noteColor = getDefault().getNoteColor();
+        else 
+            this.noteColor = noteColorData;
     }
 
     /**
@@ -254,7 +266,6 @@ public class ParticlePair {
      * 
      * @return A ParticlePair with default values
      */
-    @Deprecated // TODO: REMOVE ONCE NEW GUI IS DONE
     public static ParticlePair getDefault() {
         return new ParticlePair(null, // @formatter:off
     							-1, 

@@ -49,10 +49,12 @@ disabled-worlds: []
 #  - add_more_under_these
 
 # The maximum number of particles a player can apply at once
+# The GUI will only display up to 14, don't set this any higher than that
 # Default: 3
 max-particles: 3
 
 # The maximum number of groups a player can have saved
+# The GUI will only display up to 14, don't set this any higher than that
 # Default: 10
 max-groups: 10
 
