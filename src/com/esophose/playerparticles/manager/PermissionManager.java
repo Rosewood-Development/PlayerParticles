@@ -175,7 +175,7 @@ public class PermissionManager {
      * @param p The player to get effect names for
      * @return A String List of all effect names the given player has permission for
      */
-    public static List<String> getEffectsUserHasPermissionFor(Player p) {
+    public static List<String> getEffectNamesUserHasPermissionFor(Player p) {
         List<String> list = new ArrayList<String>();
         for (ParticleEffect pe : ParticleEffect.getSupportedEffects())
             if (hasEffectPermission(p, pe)) 
@@ -189,11 +189,39 @@ public class PermissionManager {
      * @param p The player to get style names for
      * @return A String List of all style names the given player has permission for
      */
-    public static List<String> getStylesUserHasPermissionFor(Player p) {
+    public static List<String> getStyleNamesUserHasPermissionFor(Player p) {
         List<String> list = new ArrayList<String>();
         for (ParticleStyle ps : ParticleStyleManager.getStyles())
             if (hasStylePermission(p, ps)) 
                 list.add(ps.getName());
+        return list;
+    }
+    
+    /**
+     * Gets a List of all effects a player has permission for
+     * 
+     * @param p The player to get effects for
+     * @return A List of all effects the given player has permission for
+     */
+    public static List<ParticleEffect> getEffectsUserHasPermissionFor(Player p) {
+        List<ParticleEffect> list = new ArrayList<ParticleEffect>();
+        for (ParticleEffect pe : ParticleEffect.getSupportedEffects())
+            if (hasEffectPermission(p, pe)) 
+                list.add(pe);
+        return list;
+    }
+
+    /**
+     * Gets a List of all styles a player has permission for
+     * 
+     * @param p The player to get styles for
+     * @return A List of all styles the given player has permission for
+     */
+    public static List<ParticleStyle> getStylesUserHasPermissionFor(Player p) {
+        List<ParticleStyle> list = new ArrayList<ParticleStyle>();
+        for (ParticleStyle ps : ParticleStyleManager.getStyles())
+            if (hasStylePermission(p, ps)) 
+                list.add(ps);
         return list;
     }
 

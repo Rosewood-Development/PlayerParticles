@@ -154,7 +154,7 @@ public class EditCommandModule implements CommandModule {
                         return;
                     }
 
-                    if (note < 0 || note > 23) {
+                    if (note < 0 || note > 24) {
                         LangManager.sendMessage(pplayer, Lang.DATA_INVALID_NOTE);
                         return;
                     }
@@ -253,11 +253,11 @@ public class EditCommandModule implements CommandModule {
                 switch (args[1].toLowerCase()) {
                 case "effect":
                     if (args.length == 3)
-                        StringUtil.copyPartialMatches(args[2], PermissionManager.getEffectsUserHasPermissionFor(p), matches);
+                        StringUtil.copyPartialMatches(args[2], PermissionManager.getEffectNamesUserHasPermissionFor(p), matches);
                     break;
                 case "style":
                     if (args.length == 3)
-                        StringUtil.copyPartialMatches(args[2], PermissionManager.getStylesUserHasPermissionFor(p), matches);
+                        StringUtil.copyPartialMatches(args[2], PermissionManager.getStyleNamesUserHasPermissionFor(p), matches);
                     break;
                 case "data":
                     ParticleEffect effect = pplayer.getActiveParticle(id).getEffect();
@@ -265,7 +265,7 @@ public class EditCommandModule implements CommandModule {
                         List<String> possibleValues = new ArrayList<String>();
                         if (effect == ParticleEffect.NOTE) { // Note data
                             if (args.length == 3) {
-                                possibleValues.add("<0-23>");
+                                possibleValues.add("<0-24>");
                                 possibleValues.add("rainbow");
                             }
                         } else { // Color data

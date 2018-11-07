@@ -8,7 +8,7 @@ import org.bukkit.Bukkit;
 import com.esophose.playerparticles.manager.DataManager;
 import com.esophose.playerparticles.manager.LangManager;
 import com.esophose.playerparticles.manager.LangManager.Lang;
-import com.esophose.playerparticles.manager.SettingManager.GUIIcon;
+import com.esophose.playerparticles.manager.SettingManager.GuiIcon;
 import com.esophose.playerparticles.particles.PPlayer;
 import com.esophose.playerparticles.particles.ParticleGroup;
 import com.esophose.playerparticles.particles.ParticlePair;
@@ -42,7 +42,7 @@ public class GuiInventoryManageGroups extends GuiInventory {
             lore[i] = LangManager.getText(Lang.GUI_COLOR_UNAVAILABLE) + LangManager.getText(Lang.GUI_SHIFT_CLICK_TO_DELETE);
             
             // Load Group Buttons
-            GuiActionButton groupButton = new GuiActionButton(index, GUIIcon.GROUPS.get(), LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + group.getName(), lore, (button, isShiftClick) -> {
+            GuiActionButton groupButton = new GuiActionButton(index, GuiIcon.GROUPS.get(), LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + group.getName(), lore, (button, isShiftClick) -> {
                 if (isShiftClick) {
                     DataManager.removeParticleGroup(pplayer.getUniqueId(), group);
                     
@@ -70,7 +70,7 @@ public class GuiInventoryManageGroups extends GuiInventory {
         
         // Save Group Button
         GuiActionButton saveGroupButton = new GuiActionButton(40, 
-                                                              GUIIcon.CREATE.get(), 
+                                                              GuiIcon.CREATE.get(), 
                                                               LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_SAVE_GROUP),
                                                               new String[] { 
                                                                   LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SAVE_GROUP_DESCRIPTION),
@@ -80,7 +80,7 @@ public class GuiInventoryManageGroups extends GuiInventory {
         this.actionButtons.add(saveGroupButton);
         
         // Back Button
-        GuiActionButton backButton = new GuiActionButton(INVENTORY_SIZE - 1, GUIIcon.BACK.get(), LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_BACK_BUTTON), new String[] {}, (button, isShiftClick) -> {
+        GuiActionButton backButton = new GuiActionButton(INVENTORY_SIZE - 1, GuiIcon.BACK.get(), LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_BACK_BUTTON), new String[] {}, (button, isShiftClick) -> {
             GuiHandler.transition(new GuiInventoryDefault(pplayer));
         });
         this.actionButtons.add(backButton);

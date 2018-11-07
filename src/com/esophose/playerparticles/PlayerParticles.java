@@ -1,9 +1,9 @@
 /*
- * TODO: v5.3
+ * TODO: v5.3 (actually v6)
  * + Add new style 'tornado'
+ * + Add new style 'doubleorbit'
  * * Adjust PParticles to use a Vector instead of a Location
  * * Setting in config.yml to disable non-event styles while the player is moving
- * * Finish rewriting the GUI
  */
 
 package com.esophose.playerparticles;

@@ -15,7 +15,7 @@ public class EffectsCommandModule implements CommandModule {
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         Player p = pplayer.getPlayer();
 
-        List<String> effectList = PermissionManager.getEffectsUserHasPermissionFor(p);
+        List<String> effectList = PermissionManager.getEffectNamesUserHasPermissionFor(p);
         if (effectList.isEmpty()) {
             LangManager.sendMessage(p, Lang.EFFECT_LIST_EMPTY);
             return;

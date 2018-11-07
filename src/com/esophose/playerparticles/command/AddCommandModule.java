@@ -73,7 +73,7 @@ public class AddCommandModule implements CommandModule {
                             return;
                         }
 
-                        if (note < 0 || note > 23) {
+                        if (note < 0 || note > 24) {
                             LangManager.sendMessage(pplayer, Lang.DATA_INVALID_NOTE);
                             return;
                         }
@@ -143,10 +143,10 @@ public class AddCommandModule implements CommandModule {
         List<String> matches = new ArrayList<String>();
 
         if (args.length <= 1) { // Effect name
-            if (args.length == 0) matches = PermissionManager.getEffectsUserHasPermissionFor(p);
-            else StringUtil.copyPartialMatches(args[0], PermissionManager.getEffectsUserHasPermissionFor(p), matches);
+            if (args.length == 0) matches = PermissionManager.getEffectNamesUserHasPermissionFor(p);
+            else StringUtil.copyPartialMatches(args[0], PermissionManager.getEffectNamesUserHasPermissionFor(p), matches);
         } else if (args.length == 2) { // Style name
-            StringUtil.copyPartialMatches(args[1], PermissionManager.getStylesUserHasPermissionFor(p), matches);
+            StringUtil.copyPartialMatches(args[1], PermissionManager.getStyleNamesUserHasPermissionFor(p), matches);
         } else if (args.length >= 3) { // Data
             ParticleEffect effect = ParticleEffect.fromName(args[0]);
             if (effect != null) {
@@ -154,7 +154,7 @@ public class AddCommandModule implements CommandModule {
                     List<String> possibleValues = new ArrayList<String>();
                     if (effect == ParticleEffect.NOTE) { // Note data
                         if (args.length == 3) {
-                            possibleValues.add("<0-23>");
+                            possibleValues.add("<0-24>");
                             possibleValues.add("rainbow");
                         }
                     } else { // Color data

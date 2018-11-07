@@ -92,7 +92,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
 
         if (hue % 5 == 0) { // Only increment note by 4 notes per second
             note++;
-            note %= 24;
+            note %= 25;
         }
 
         // Loop over backwards so we can remove pplayers if need be

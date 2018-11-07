@@ -10,7 +10,7 @@ import org.bukkit.Material;
 import com.esophose.playerparticles.manager.DataManager;
 import com.esophose.playerparticles.manager.LangManager;
 import com.esophose.playerparticles.manager.LangManager.Lang;
-import com.esophose.playerparticles.manager.SettingManager.GUIIcon;
+import com.esophose.playerparticles.manager.SettingManager.GuiIcon;
 import com.esophose.playerparticles.particles.PPlayer;
 import com.esophose.playerparticles.particles.ParticleGroup;
 import com.esophose.playerparticles.particles.ParticlePair;
@@ -61,7 +61,7 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
         }
         
         // Back Button
-        GuiActionButton backButton = new GuiActionButton(INVENTORY_SIZE - 1, GUIIcon.BACK.get(), LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_BACK_BUTTON), new String[] {}, (button, isShiftClick) -> {
+        GuiActionButton backButton = new GuiActionButton(INVENTORY_SIZE - 1, GuiIcon.BACK.get(), LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_BACK_BUTTON), new String[] {}, (button, isShiftClick) -> {
             GuiHandler.transition(new GuiInventoryDefault(pplayer));
         });
         this.actionButtons.add(backButton);

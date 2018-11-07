@@ -312,10 +312,10 @@ public enum ParticleEffect {
      */
     private List<Player> getPlayersInRange(Location center, boolean isFixedEffect) {
         List<Player> players = new ArrayList<Player>();
-        int range = isFixedEffect ? PSetting.PARTICLE_RENDER_RANGE_PLAYER.getInt() : PSetting.PARTICLE_RENDER_RANGE_FIXED_EFFECT.getInt();
+        int range = !isFixedEffect ? PSetting.PARTICLE_RENDER_RANGE_PLAYER.getInt() : PSetting.PARTICLE_RENDER_RANGE_FIXED_EFFECT.getInt();
 
         for (Player p : Bukkit.getOnlinePlayers())
-            if (p.getWorld().equals(center.getWorld()) && center.distanceSquared(p.getLocation()) <= range * range) 
+            if (p.getWorld().equals(center.getWorld()) && center.distanceSquared(p.getLocation()) <= range * range)
                 players.add(p);
 
         return players;

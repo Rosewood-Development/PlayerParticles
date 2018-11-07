@@ -59,10 +59,20 @@ public class ParticleUtils {
         return mat;
     }
 
+    /**
+     * Gets all block materials in the game
+     * 
+     * @return A List of all block material names available in the game
+     */
     public static List<String> getAllBlockMaterials() {
         return blockMaterials;
     }
 
+    /**
+     * Gets all item materials in the game
+     * 
+     * @return A List of all item material names available in the game
+     */
     public static List<String> getAllItemMaterials() {
         return itemMaterials;
     }

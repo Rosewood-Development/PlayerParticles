@@ -3,14 +3,12 @@ package com.esophose.playerparticles.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.material.Dye;
 
 import com.esophose.playerparticles.particles.PPlayer;
 import com.esophose.playerparticles.util.ParticleUtils;
@@ -18,17 +16,17 @@ import com.esophose.playerparticles.util.ParticleUtils;
 public abstract class GuiInventory {
     
     protected enum BorderColor {
-        WHITE(DyeColor.WHITE, "WHITE_STAINED_GLASS_PANE"),
-        ORANGE(DyeColor.ORANGE, "ORANGE_STAINED_GLASS_PANE"),
-        RED(DyeColor.RED, "RED_STAINED_GLASS_PANE"),
-        BROWN(DyeColor.BROWN, "BROWN_STAINED_GLASS_PANE"),
-        GREEN(DyeColor.GREEN, "GREEN_STAINED_GLASS_PANE");
+        WHITE(0, "WHITE_STAINED_GLASS_PANE"),
+        ORANGE(1, "ORANGE_STAINED_GLASS_PANE"),
+        RED(14, "RED_STAINED_GLASS_PANE"),
+        BROWN(12, "BROWN_STAINED_GLASS_PANE"),
+        GREEN(13, "GREEN_STAINED_GLASS_PANE");
         
-        private DyeColor dyeColor;
+        private short data;
         private Material material;
         
-        private BorderColor(DyeColor dyeColor, String materialName) {
-            this.dyeColor = dyeColor;
+        private BorderColor(int data, String materialName) {
+            this.data = (short)data;
             this.material = ParticleUtils.closestMatch(materialName);
         }
         
@@ -37,8 +35,8 @@ public abstract class GuiInventory {
             ItemStack borderIcon;
             if (this.material != null) { // Use 1.13 materials
                 borderIcon = new ItemStack(this.material, 1);
-            } else { // Use < 1.13 dye colors
-                borderIcon = new Dye(this.dyeColor).toItemStack(1);
+            } else { // Use < 1.13 data values
+                borderIcon = new ItemStack(Material.GLASS_PANE, 1, this.data);
             }
             
             ItemMeta meta = borderIcon.getItemMeta();
@@ -128,9 +126,11 @@ public abstract class GuiInventory {
     /**
      * Handles clicks of GuiActionButtons
      * 
-     * @param event The InventoryClickEvent triggered when the player clicks a GuiActionButton
+     * @param event The InventoryClickEvent triggered when the player clicks in a GuiInventory
      */
     public void onClick(InventoryClickEvent event) {
+        if (event.getClickedInventory() == null || !event.getClickedInventory().equals(this.inventory)) return;
+        
         int slot = event.getSlot();
         boolean isShiftClick = event.isShiftClick();
         
@@ -140,6 +140,11 @@ public abstract class GuiInventory {
                 break;
             }
         }
+    }
+    
+    @FunctionalInterface
+    public static interface GuiInventoryEditFinishedCallback {
+        public void execute();
     }
 
 }

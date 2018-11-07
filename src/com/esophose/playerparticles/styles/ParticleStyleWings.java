@@ -18,7 +18,7 @@ public class ParticleStyleWings implements ParticleStyle {
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<PParticle>();
         if (spawnTimer == 0) {
-            for (double t = 0; t < Math.PI * 2; t += Math.PI / 64) {
+            for (double t = 0; t < Math.PI * 2; t += Math.PI / 48) {
                 double x = Math.sin(t) * (Math.pow(Math.E, Math.cos(t)) - 2 * Math.cos(t * 4) - Math.pow(Math.sin(t / 12), 5)) / 2;
                 double y = Math.cos(t) * (Math.pow(Math.E, Math.cos(t)) - 2 * Math.cos(t * 4) - Math.pow(Math.sin(t / 12), 5)) / 2;
                 Vector v = VectorUtils.rotateAroundAxisY(new Vector(x, y, -0.3), -Math.toRadians(location.getYaw()));

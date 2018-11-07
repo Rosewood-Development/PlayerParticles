@@ -10,7 +10,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import com.esophose.playerparticles.manager.LangManager;
 import com.esophose.playerparticles.manager.LangManager.Lang;
-import com.esophose.playerparticles.manager.SettingManager.GUIIcon;
+import com.esophose.playerparticles.manager.SettingManager.GuiIcon;
 import com.esophose.playerparticles.particles.PPlayer;
 import com.esophose.playerparticles.util.ParticleUtils;
 
@@ -36,7 +36,9 @@ public class GuiInventoryDefault extends GuiInventory {
         String[] currentIconLore = new String[] {
             LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_ACTIVE_PARTICLES, pplayer.getActiveParticles().size()),
             LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SAVED_GROUPS, pplayer.getParticleGroups().size()),
-            LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_FIXED_EFFECTS, pplayer.getFixedEffectIds().size())
+            LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_FIXED_EFFECTS, pplayer.getFixedEffectIds().size()),
+            "",
+            LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_COMMANDS_INFO)
         };
         currentIconMeta.setLore(Arrays.asList(currentIconLore));
         currentIconMeta.setOwner(pplayer.getPlayer().getName());
@@ -46,32 +48,32 @@ public class GuiInventoryDefault extends GuiInventory {
         
         // Manage Your Particles button
         GuiActionButton manageYourParticlesButton = new GuiActionButton(38, 
-                                                                        GUIIcon.PARTICLES.get(), 
+                                                                        GuiIcon.PARTICLES.get(), 
                                                                         LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_MANAGE_YOUR_PARTICLES), 
                                                                         new String[] { LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_MANAGE_YOUR_PARTICLES_DESCRIPTION) }, 
                                                                         (button, isShiftClick) -> {
-            GuiHandler.transition(new GuiInventoryManageParticles(pplayer));
-        });
+                                                                            GuiHandler.transition(new GuiInventoryManageParticles(pplayer));
+                                                                        });
         this.actionButtons.add(manageYourParticlesButton);
         
         // Manage Your Groups button
         GuiActionButton manageYourGroupsButton = new GuiActionButton(40, 
-                                                                     GUIIcon.GROUPS.get(), 
+                                                                     GuiIcon.GROUPS.get(), 
                                                                      LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_MANAGE_YOUR_GROUPS), 
                                                                      new String[] { LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_MANAGE_YOUR_GROUPS_DESCRIPTION) }, 
                                                                      (button, isShiftClick) -> {
-            GuiHandler.transition(new GuiInventoryManageGroups(pplayer));
-        });
+                                                                         GuiHandler.transition(new GuiInventoryManageGroups(pplayer));
+                                                                     });
         this.actionButtons.add(manageYourGroupsButton);
         
         // Load Preset Groups
         GuiActionButton loadPresetGroups = new GuiActionButton(42, 
-                                                               GUIIcon.PRESET_GROUPS.get(), 
+                                                               GuiIcon.PRESET_GROUPS.get(), 
                                                                LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_LOAD_A_PRESET_GROUP), 
                                                                new String[] { LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_LOAD_A_PRESET_GROUP_DESCRIPTION) }, 
                                                                (button, isShiftClick) -> {
-            GuiHandler.transition(new GuiInventoryLoadPresetGroups(pplayer));
-        });
+                                                                   GuiHandler.transition(new GuiInventoryLoadPresetGroups(pplayer));
+                                                               });
         this.actionButtons.add(loadPresetGroups);
         
         this.populate();

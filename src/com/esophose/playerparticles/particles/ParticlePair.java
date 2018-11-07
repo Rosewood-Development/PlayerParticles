@@ -260,39 +260,39 @@ public class ParticlePair {
     public ParticlePair clone() {
         return new ParticlePair(this.ownerUUID, this.id, this.effect, this.style, this.itemMaterial, this.blockMaterial, this.color, this.noteColor);
     }
-
+    
     /**
      * Gets a ParticlePair with the default values applied
+     * Used for getting internal default values in the cases that null is specified
      * 
      * @return A ParticlePair with default values
      */
-    public static ParticlePair getDefault() {
+    private static ParticlePair getDefault() {
         return new ParticlePair(null, // @formatter:off
-    							-1, 
+                                -1, 
+                                ParticleEffect.FLAME, 
+                                DefaultStyles.NORMAL, 
+                                ParticleUtils.closestMatchWithFallback("IRON_SHOVEL", "IRON_SPADE"), 
+                                Material.STONE, 
+                                new OrdinaryColor(0, 0, 0), 
+                                new NoteColor(0)); // @formatter:on
+    }
+
+    /**
+     * Gets a ParticlePair for a PPlayer with the default values applied
+     * 
+     * @param pplayer The PPlayer that will own this ParticlePair
+     * @return A ParticlePair with default values
+     */
+    public static ParticlePair getNextDefault(PPlayer pplayer) {
+        return new ParticlePair(pplayer.getUniqueId(), // @formatter:off
+                                pplayer.getNextActiveParticleId(), 
     							ParticleEffect.FLAME, 
     							DefaultStyles.NORMAL, 
     							ParticleUtils.closestMatchWithFallback("IRON_SHOVEL", "IRON_SPADE"), 
     							Material.STONE, 
     							new OrdinaryColor(0, 0, 0), 
     							new NoteColor(0)); // @formatter:on
-    }
-
-    /**
-     * Gets a ParticlePair with the default values applied
-     * 
-     * @param ownerUUID The owner of this ParticlePair
-     * @return A ParticlePair with default values
-     */
-    @Deprecated // TODO: REMOVE ONCE NEW GUI IS DONE
-    public static ParticlePair getDefault(UUID ownerUUID) {
-        return new ParticlePair(ownerUUID, // @formatter:off
-								1, 
-								ParticleEffect.FLAME, 
-								DefaultStyles.NORMAL, 
-								ParticleUtils.closestMatchWithFallback("IRON_SHOVEL", "IRON_SPADE"), 
-								Material.STONE, 
-								new OrdinaryColor(0, 0, 0), 
-								new NoteColor(0)); // @formatter:on
     }
 
 }

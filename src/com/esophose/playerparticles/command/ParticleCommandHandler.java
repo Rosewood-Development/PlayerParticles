@@ -102,7 +102,7 @@ public class ParticleCommandHandler implements CommandExecutor, TabCompleter {
             CommandModule commandModule = findMatchingCommand(commandName);
 
             if (commandModule != null) {
-                if (commandModule.requiresEffects() && PermissionManager.getEffectsUserHasPermissionFor(p).isEmpty()) {
+                if (commandModule.requiresEffects() && PermissionManager.getEffectNamesUserHasPermissionFor(p).isEmpty()) {
                     LangManager.sendMessage(p, Lang.COMMAND_ERROR_NO_EFFECTS);
                 } else {
                     String[] cmdArgs = new String[0];

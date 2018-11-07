@@ -45,8 +45,8 @@ public class DataCommandModule implements CommandModule {
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
         List<String> matches = new ArrayList<String>();
         if (args.length <= 1) {
-            if (args.length == 0) matches = PermissionManager.getEffectsUserHasPermissionFor(pplayer.getPlayer());
-            else StringUtil.copyPartialMatches(args[0], PermissionManager.getEffectsUserHasPermissionFor(pplayer.getPlayer()), matches);
+            if (args.length == 0) matches = PermissionManager.getEffectNamesUserHasPermissionFor(pplayer.getPlayer());
+            else StringUtil.copyPartialMatches(args[0], PermissionManager.getEffectNamesUserHasPermissionFor(pplayer.getPlayer()), matches);
         }
         return matches;
     }

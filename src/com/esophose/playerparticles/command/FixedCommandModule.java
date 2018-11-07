@@ -201,7 +201,7 @@ public class FixedCommandModule implements CommandModule {
                             return;
                         }
 
-                        if (note < 0 || note > 23) {
+                        if (note < 0 || note > 24) {
                             LangManager.sendMessage(p, Lang.FIXED_CREATE_DATA_ERROR);
                             return;
                         }
@@ -445,9 +445,9 @@ public class FixedCommandModule implements CommandModule {
                 }
                 
                 if (args.length == 5) {
-                    StringUtil.copyPartialMatches(args[4], PermissionManager.getEffectsUserHasPermissionFor(p), matches);
+                    StringUtil.copyPartialMatches(args[4], PermissionManager.getEffectNamesUserHasPermissionFor(p), matches);
                 } else if (args.length == 6) {
-                    StringUtil.copyPartialMatches(args[5], PermissionManager.getStylesUserHasPermissionFor(p), matches);
+                    StringUtil.copyPartialMatches(args[5], PermissionManager.getStyleNamesUserHasPermissionFor(p), matches);
                 } else if (args.length >= 7) {
                     ParticleEffect effect = ParticleEffect.fromName(args[4]);
                     if (effect != null) {
@@ -455,7 +455,7 @@ public class FixedCommandModule implements CommandModule {
                             List<String> possibleValues = new ArrayList<String>();
                             if (effect == ParticleEffect.NOTE) { // Note data
                                 if (args.length == 7) {
-                                    possibleValues.add("<0-23>");
+                                    possibleValues.add("<0-24>");
                                     possibleValues.add("rainbow");
                                 }
                             } else { // Color data

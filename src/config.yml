@@ -158,6 +158,8 @@ gui-icon:
       - BOOK
     randomize:
       - HOPPER
+    reset:
+      - BARRIER
   effect:
     ambient_entity_effect:
       - BEACON

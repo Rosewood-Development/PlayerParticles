@@ -21,8 +21,7 @@ public class SettingManager {
         LONG,
         DOUBLE,
         STRING,
-        STRING_LIST,
-        MATERIAL
+        STRING_LIST
     }
     
     /**
@@ -100,15 +99,6 @@ public class SettingManager {
                 case STRING_LIST:
                     this.value = PlayerParticles.getPlugin().getConfig().getStringList(configPath);
                     break;
-                case MATERIAL:
-                    String materialName = PlayerParticles.getPlugin().getConfig().getString(configPath);
-                    Material material = ParticleUtils.closestMatch(materialName);
-                    if (material == null) {
-                        material = Material.BARRIER;
-                        PlayerParticles.getPlugin().getLogger().severe("Invalid block/item name for '" + this.name().toLowerCase().replace('_', '-') + "' in config.yml: '" + materialName + "'");
-                    }
-                    this.value = material;
-                    break;
                 }
             }
             return this.value;
@@ -179,7 +169,10 @@ public class SettingManager {
         }
     }
     
-    public enum GUIIcon {
+    /**
+     * Used for grabbing/caching configurable GUI Icons from the config.yml
+     */
+    public enum GuiIcon {
         PARTICLES,
         GROUPS,
         PRESET_GROUPS,
@@ -189,13 +182,14 @@ public class SettingManager {
         EDIT_STYLE,
         EDIT_DATA,
         RANDOMIZE,
+        RESET,
         
         EFFECT,
         STYLE;
         
         private Map<String, Material> materials;
         
-        private GUIIcon() {
+        private GuiIcon() {
             this.materials = new HashMap<String, Material>();
         }
         

@@ -26,17 +26,13 @@ public class GUICommandModule implements CommandModule {
             return;
         }
 
-        if (PermissionManager.getEffectsUserHasPermissionFor(pplayer.getPlayer()).isEmpty()) {
+        if (PermissionManager.getEffectNamesUserHasPermissionFor(pplayer.getPlayer()).isEmpty()) {
             if (byDefault) {
                 LangManager.sendMessage(pplayer, Lang.COMMAND_ERROR_UNKNOWN);
             } else {
                 LangManager.sendMessage(pplayer, Lang.COMMAND_ERROR_NO_EFFECTS);
             }
             return;
-        }
-
-        if (byDefault) {
-            LangManager.sendMessage(pplayer, Lang.GUI_BY_DEFAULT);
         }
 
         GuiHandler.openDefault(pplayer);
