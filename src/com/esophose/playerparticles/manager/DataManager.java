@@ -345,6 +345,52 @@ public class DataManager {
             pplayer.addFixedEffect(fixedEffect);
         });
     }
+    
+    /**
+     * Updates a fixed effect's particle values
+     * 
+     * @param fixedEffect The fixed effect to update
+     */
+    public static void updateFixedEffect(FixedParticleEffect fixedEffect) {
+        async(() -> {
+            PlayerParticles.getDBConnector().connect((connection) -> {
+                // Update fixed effect
+                String fixedEffectQuery = "UPDATE pp_fixed SET xPos = ?, yPos = ?, zPos = ? WHERE owner_uuid = ? AND id = ?";
+                try (PreparedStatement statement = connection.prepareStatement(fixedEffectQuery)) {
+                    statement.setDouble(1, fixedEffect.getLocation().getX());
+                    statement.setDouble(2, fixedEffect.getLocation().getY());
+                    statement.setDouble(3, fixedEffect.getLocation().getZ());
+                    statement.setString(4, fixedEffect.getOwnerUniqueId().toString());
+                    statement.setInt(5, fixedEffect.getId());
+                    statement.executeUpdate();
+                }
+                
+                // Update particle
+                String particleUpdateQuery = "UPDATE pp_particle " +
+                                             "SET effect = ?, style = ?, item_material = ?, block_material = ?, note = ?, r = ?, g = ?, b = ? " +
+                                             "WHERE uuid = (SELECT particle_uuid FROM pp_fixed WHERE owner_uuid = ? AND id = ?)";
+                try (PreparedStatement statement = connection.prepareStatement(particleUpdateQuery)) {
+                    ParticlePair particle = fixedEffect.getParticlePair();
+                    statement.setString(1, particle.getEffect().getName());
+                    statement.setString(2, particle.getStyle().getName());
+                    statement.setString(3, particle.getItemMaterial().name());
+                    statement.setString(4, particle.getBlockMaterial().name());
+                    statement.setInt(5, particle.getNoteColor().getNote());
+                    statement.setInt(6, particle.getColor().getRed());
+                    statement.setInt(7, particle.getColor().getGreen());
+                    statement.setInt(8, particle.getColor().getBlue());
+                    statement.setString(9, fixedEffect.getOwnerUniqueId().toString());
+                    statement.setInt(10, fixedEffect.getId());
+                    statement.executeUpdate();
+                }
+            });
+        });
+        
+        getPPlayer(fixedEffect.getOwnerUniqueId(), (pplayer) -> {
+            pplayer.removeFixedEffect(fixedEffect.getId());
+            pplayer.addFixedEffect(fixedEffect);
+        });
+    }
 
     /**
      * Deletes a fixed effect from save data

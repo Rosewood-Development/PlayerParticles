@@ -196,9 +196,9 @@ public class ParticlePair {
     public ParticleColor getSpawnColor() {
         if (this.effect.hasProperty(ParticleProperty.COLORABLE)) {
             if (this.effect == ParticleEffect.NOTE) {
-                if (this.noteColor.getValueX() * 24 == 99) {
+                if (this.noteColor.getNote() == 99) {
                     return ParticleManager.getRainbowNoteParticleColor();
-                } else if (this.noteColor.getValueX() * 24 == 98) {
+                } else if (this.noteColor.getNote() == 98) {
                     return ParticleManager.getRandomNoteParticleColor();
                 }
                 return this.noteColor;
@@ -243,12 +243,12 @@ public class ParticlePair {
             return this.itemMaterial.toString().toLowerCase();
         } else if (this.effect.hasProperty(ParticleProperty.COLORABLE)) {
             if (this.effect == ParticleEffect.NOTE) {
-                if (this.noteColor.getValueX() * 24 == 99) {
+                if (this.noteColor.getNote()  == 99) {
                     return LangManager.getText(Lang.RAINBOW);
-                } else if ((int)(this.noteColor.getValueX() * 24) == 98) {
+                } else if (this.noteColor.getNote() == 98) {
                     return LangManager.getText(Lang.RANDOM);
                 }
-                return LangManager.getText(Lang.GUI_SELECT_DATA_NOTE, (int) (this.noteColor.getValueX() * 24));
+                return LangManager.getText(Lang.GUI_SELECT_DATA_NOTE, this.noteColor.getNote());
             } else {
                 if (this.color.getRed() == 999 && this.color.getGreen() == 999 && this.color.getBlue() == 999) {
                     return LangManager.getText(Lang.RAINBOW);

@@ -88,5 +88,18 @@ public class FixedParticleEffect {
     public Location getLocation() {
         return this.location.clone();
     }
+    
+    /**
+     * Updates the coordinates of the FixedParticleEffect
+     * 
+     * @param x The new X coordinate
+     * @param y The new Y coordinate
+     * @param z The new Z coordinate
+     */
+    public void setCoordinates(double x, double y, double z) {
+        this.location.setX(x);
+        this.location.setY(y);
+        this.location.setZ(z);
+    }
 
 }

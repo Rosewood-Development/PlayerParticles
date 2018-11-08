@@ -12,7 +12,7 @@ import com.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class ParticleStyleInvocation implements ParticleStyle {
     
-    private int points = 5;
+    private int points = 6;
     private double radius = 3.5;
     private double step = 0;
     private int circleStep = 0;

@@ -539,7 +539,7 @@ public enum ParticleEffect {
          */
         @Override
         public float getValueX() {
-            return (float) note / 24F;
+            return (float) this.note / 24F;
         }
 
         /**

@@ -36,7 +36,7 @@ public abstract class GuiInventory {
             if (this.material != null) { // Use 1.13 materials
                 borderIcon = new ItemStack(this.material, 1);
             } else { // Use < 1.13 data values
-                borderIcon = new ItemStack(Material.GLASS_PANE, 1, this.data);
+                borderIcon = new ItemStack(ParticleUtils.closestMatch("THIN_GLASS"), 1, this.data);
             }
             
             ItemMeta meta = borderIcon.getItemMeta();
