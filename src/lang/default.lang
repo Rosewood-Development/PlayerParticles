@@ -160,7 +160,7 @@ fixed-edit-style-no-permission: '&cUnable to edit fixed effect, you do not have 
 fixed-edit-style-non-fixable: '&cUnable to edit fixed effect, the style &b{0} &ccan not be used in fixed effects!'
 fixed-edit-data-error: '&cUnable to edit fixed effect, the data provided is not correct! Use &b/pp data <effect> &cto find the correct data format!'
 fixed-edit-data-none: '&cUnable to edit fixed effect, the effect does not require any data!'
-fixed-edit-success: '&aUpdated the &b{0} of the fixed effect with an ID of &b{0}!'
+fixed-edit-success: '&aUpdated the &b{0} &aof the fixed effect with an ID of &b{1}!'
 
 fixed-remove-invalid: '&cUnable to remove fixed effect, you do not have a fixed effect with the ID of &b{0}&c!'
 fixed-remove-no-args: '&cYou did not specify an ID to remove!'
