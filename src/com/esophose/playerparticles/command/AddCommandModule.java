@@ -64,6 +64,8 @@ public class AddCommandModule implements CommandModule {
                 if (effect == ParticleEffect.NOTE) {
                     if (args[2].equalsIgnoreCase("rainbow")) {
                         noteColorData = new NoteColor(99);
+                    } else if (args[2].equalsIgnoreCase("random")) {
+                        noteColorData = new NoteColor(98);
                     } else {
                         int note = -1;
                         try {
@@ -83,6 +85,8 @@ public class AddCommandModule implements CommandModule {
                 } else {
                     if (args[2].equalsIgnoreCase("rainbow")) {
                         colorData = new OrdinaryColor(999, 999, 999);
+                    } else if (args[2].equalsIgnoreCase("random")) {
+                        colorData = new OrdinaryColor(998, 998, 998);
                     } else {
                         int r = -1;
                         int g = -1;
@@ -156,17 +160,19 @@ public class AddCommandModule implements CommandModule {
                         if (args.length == 3) {
                             possibleValues.add("<0-24>");
                             possibleValues.add("rainbow");
+                            possibleValues.add("random");
                         }
                     } else { // Color data
-                        if (args.length <= 5 && !args[2].equalsIgnoreCase("rainbow")) {
+                        if (args.length <= 5 && !args[2].equalsIgnoreCase("rainbow") && !args[2].equalsIgnoreCase("random")) {
                             possibleValues.add("<0-255>");
                         }
-                        if (args.length <= 4 && !args[2].equalsIgnoreCase("rainbow")) {
+                        if (args.length <= 4 && !args[2].equalsIgnoreCase("rainbow") && !args[2].equalsIgnoreCase("random")) {
                             possibleValues.add("<0-255> <0-255>");
                         }
                         if (args.length <= 3) {
                             possibleValues.add("<0-255> <0-255> <0-255>");
                             possibleValues.add("rainbow");
+                            possibleValues.add("random");
                         }
                     }
                     StringUtil.copyPartialMatches(args[args.length - 1], possibleValues, matches);

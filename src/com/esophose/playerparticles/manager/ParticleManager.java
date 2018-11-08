@@ -3,6 +3,7 @@ package com.esophose.playerparticles.manager;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -37,6 +38,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      */
     private static int hue = 0;
     private static int note = 0;
+    private static final Random RANDOM = new Random();
 
     /**
      * Adds the player to the array when they join
@@ -148,13 +150,42 @@ public class ParticleManager extends BukkitRunnable implements Listener {
             ParticleEffect.display(particle, pparticle, true);
     }
 
+    /**
+     * Gets the rainbow OrdinaryColor for particle spawning with data 'rainbow'
+     * 
+     * @return The rainbow OrdinaryColor for particle spawning with data 'rainbow'
+     */
     public static OrdinaryColor getRainbowParticleColor() {
         Color rgb = Color.getHSBColor(hue / 360F, 1.0F, 1.0F);
         return new OrdinaryColor(rgb.getRed(), rgb.getGreen(), rgb.getBlue());
     }
 
+    /**
+     * Gets the rainbow NoteColor for particle spawning with data 'rainbow'
+     * 
+     * @return The rainbow NoteColor for particle spawning with data 'rainbow'
+     */
     public static NoteColor getRainbowNoteParticleColor() {
         return new NoteColor(note);
+    }
+    
+    /**
+     * Gets a randomized OrdinaryColor for particle spawning with data 'random'
+     * 
+     * @return A randomized OrdinaryColor for particle spawning with data 'random'
+     */
+    public static OrdinaryColor getRandomParticleColor() {
+        Color rgb = new Color(RANDOM.nextInt(256), RANDOM.nextInt(256), RANDOM.nextInt(256));
+        return new OrdinaryColor(rgb.getRed(), rgb.getGreen(), rgb.getBlue());
+    }
+    
+    /**
+     * Gets a randomized NoteColor for particle spawning with data 'random'
+     * 
+     * @return A randomized NoteColor for particle spawning with data 'random'
+     */
+    public static NoteColor getRandomNoteParticleColor() {
+        return new NoteColor(RANDOM.nextInt(25));
     }
 
 }

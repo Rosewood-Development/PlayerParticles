@@ -3,7 +3,7 @@
  * + Add new style 'tornado'
  * + Add new style 'doubleorbit'
  * * Adjust PParticles to use a Vector instead of a Location
- * * Setting in config.yml to disable non-event styles while the player is moving
+ * * Setting in config.yml to make non-event styles display particles using DefaultStyles.FEET while the player is moving
  */
 
 package com.esophose.playerparticles;

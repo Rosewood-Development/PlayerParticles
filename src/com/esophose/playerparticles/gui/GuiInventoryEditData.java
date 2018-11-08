@@ -1,6 +1,8 @@
 package com.esophose.playerparticles.gui;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -136,6 +138,13 @@ public class GuiInventoryEditData extends GuiInventory {
         this.populate();
     }
     
+    /**
+     * Populates the Inventory with available color data options
+     * 
+     * @param editingParticle The ParticlePair that's being edited
+     * @param callbackList The List of GuiInventoryEditFinishedCallbacks 
+     * @param callbackListPosition The index of the callbackList we're currently at
+     */
     private void populateColorData(ParticlePair editingParticle, List<GuiInventoryEditFinishedCallback> callbackList, int callbackListPosition) {
         int index = 10;
         int nextWrap = 17;
@@ -162,17 +171,39 @@ public class GuiInventoryEditData extends GuiInventory {
         }
         
         // Rainbow Color Data Button
-        GuiActionButton setRainbowColorButton = new GuiActionButton(40,
+        GuiActionButton setRainbowColorButton = new GuiActionButton(39,
                                                                     rainbowColorMapping,
-                                                                    LangManager.getText(Lang.RAINBOW),
+                                                                    LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.RAINBOW),
                                                                     new String[] { LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SELECT_DATA_DESCRIPTION, LangManager.getText(Lang.RAINBOW)) },
                                                                     (button, isShiftClick) -> {
                                                                         editingParticle.setColor(new OrdinaryColor(999, 999, 999));
                                                                         callbackList.get(callbackListPosition + 1).execute();
                                                                     });
         this.actionButtons.add(setRainbowColorButton);
+        
+        // Rainbow Color Data Button
+        List<ColorData> randomizedColorsList = Arrays.asList(colorMapping.clone());
+        Collections.shuffle(randomizedColorsList);
+        ColorData[] randomizedColors = new ColorData[randomizedColorsList.size()];
+        randomizedColors = randomizedColorsList.toArray(randomizedColors);
+        GuiActionButton setRandomColorButton = new GuiActionButton(41,
+                                                                   randomizedColors,
+                                                                   LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.RANDOM),
+                                                                   new String[] { LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SELECT_DATA_DESCRIPTION, LangManager.getText(Lang.RANDOM)) },
+                                                                   (button, isShiftClick) -> {
+                                                                       editingParticle.setColor(new OrdinaryColor(998, 998, 998));
+                                                                       callbackList.get(callbackListPosition + 1).execute();
+                                                                   });
+        this.actionButtons.add(setRandomColorButton);
     }
     
+    /**
+     * Populates the Inventory with available note data options
+     * 
+     * @param editingParticle The ParticlePair that's being edited
+     * @param callbackList The List of GuiInventoryEditFinishedCallbacks 
+     * @param callbackListPosition The index of the callbackList we're currently at
+     */
     private void populateNoteData(ParticlePair editingParticle, List<GuiInventoryEditFinishedCallback> callbackList, int callbackListPosition) {
         for (int i = 0; i < noteColorMapping.length; i++) {
             ColorData colorData = noteColorMapping[i];
@@ -192,18 +223,40 @@ public class GuiInventoryEditData extends GuiInventory {
             this.actionButtons.add(setColorButton);
         }
         
-        // Rainbow Color Data Button
-        GuiActionButton setRainbowColorButton = new GuiActionButton(40,
+        // Rainbow Note Data Button
+        GuiActionButton setRainbowColorButton = new GuiActionButton(39,
                                                                     rainbowColorMapping,
-                                                                    LangManager.getText(Lang.RAINBOW),
+                                                                    LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.RAINBOW),
                                                                     new String[] { LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SELECT_DATA_DESCRIPTION, LangManager.getText(Lang.RAINBOW)) },
                                                                     (button, isShiftClick) -> {
                                                                         editingParticle.setNoteColor(new NoteColor(99));
                                                                         callbackList.get(callbackListPosition + 1).execute();
                                                                     });
         this.actionButtons.add(setRainbowColorButton);
+        
+        // Rainbow Note Data Button
+        List<ColorData> randomizedColorsList = Arrays.asList(colorMapping.clone());
+        Collections.shuffle(randomizedColorsList);
+        ColorData[] randomizedColors = new ColorData[randomizedColorsList.size()];
+        randomizedColors = randomizedColorsList.toArray(randomizedColors);
+        GuiActionButton setRandomColorButton = new GuiActionButton(41,
+                                                                   randomizedColors,
+                                                                   LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.RANDOM),
+                                                                   new String[] { LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SELECT_DATA_DESCRIPTION, LangManager.getText(Lang.RANDOM)) },
+                                                                   (button, isShiftClick) -> {
+                                                                       editingParticle.setNoteColor(new NoteColor(98));
+                                                                       callbackList.get(callbackListPosition + 1).execute();
+                                                                   });
+        this.actionButtons.add(setRandomColorButton);
     }
     
+    /**
+     * Populates the Inventory with available item data options
+     * 
+     * @param editingParticle The ParticlePair that's being edited
+     * @param callbackList The List of GuiInventoryEditFinishedCallbacks 
+     * @param callbackListPosition The index of the callbackList we're currently at
+     */
     private void populateItemData(ParticlePair editingParticle, List<GuiInventoryEditFinishedCallback> callbackList, int callbackListPosition) {
         List<Material> materialBag = new ArrayList<Material>();
         while (materialBag.size() < 36) { // Grab 36 random materials that are an item
@@ -236,6 +289,13 @@ public class GuiInventoryEditData extends GuiInventory {
         this.actionButtons.add(randomizeButton);
     }
     
+    /**
+     * Populates the Inventory with available block data options
+     * 
+     * @param editingParticle The ParticlePair that's being edited
+     * @param callbackList The List of GuiInventoryEditFinishedCallbacks 
+     * @param callbackListPosition The index of the callbackList we're currently at
+     */
     private void populateBlockData(ParticlePair editingParticle, List<GuiInventoryEditFinishedCallback> callbackList, int callbackListPosition) {
         List<Material> materialBag = new ArrayList<Material>();
         while (materialBag.size() < 36) { // Grab 36 random materials that are an item

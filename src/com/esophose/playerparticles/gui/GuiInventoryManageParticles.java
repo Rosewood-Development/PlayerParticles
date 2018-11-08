@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 
 import com.esophose.playerparticles.manager.DataManager;
 import com.esophose.playerparticles.manager.LangManager;
+import com.esophose.playerparticles.manager.PermissionManager;
 import com.esophose.playerparticles.manager.LangManager.Lang;
 import com.esophose.playerparticles.manager.SettingManager.GuiIcon;
 import com.esophose.playerparticles.particles.PPlayer;
@@ -68,11 +69,14 @@ public class GuiInventoryManageParticles extends GuiInventory {
         }
         
         // Create New Particle Button
+        boolean canCreate = pplayer.getActiveParticles().size() < PermissionManager.getMaxParticlesAllowed(pplayer.getPlayer());
+        String lore = LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_CREATE_PARTICLE_DESCRIPTION);
         GuiActionButton createNewParticle = new GuiActionButton(38, 
                                                                 GuiIcon.CREATE.get(), 
                                                                 LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_CREATE_PARTICLE),
-                                                                new String[] { LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_CREATE_PARTICLE_DESCRIPTION) },
+                                                                canCreate ? new String[] { lore } : new String[] { lore, LangManager.getText(Lang.GUI_COLOR_UNAVAILABLE) + LangManager.getText(Lang.GUI_CREATE_PARTICLE_UNAVAILABLE) },
                                                                 (button, isShiftClick) -> {
+                                                                    if (!canCreate) return;
                                                                     ParticlePair editingParticle = ParticlePair.getNextDefault(pplayer);
                                                                     List<GuiInventoryEditFinishedCallback> callbacks = new ArrayList<GuiInventoryEditFinishedCallback>();
                                                                     callbacks.add(() -> GuiHandler.transition(new GuiInventoryManageParticles(pplayer)));

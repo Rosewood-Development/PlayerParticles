@@ -198,11 +198,15 @@ public class ParticlePair {
             if (this.effect == ParticleEffect.NOTE) {
                 if (this.noteColor.getValueX() * 24 == 99) {
                     return ParticleManager.getRainbowNoteParticleColor();
+                } else if (this.noteColor.getValueX() * 24 == 98) {
+                    return ParticleManager.getRandomNoteParticleColor();
                 }
                 return this.noteColor;
             } else {
                 if (this.color.getRed() == 999 && this.color.getGreen() == 999 && this.color.getBlue() == 999) {
                     return ParticleManager.getRainbowParticleColor();
+                } else if (this.color.getRed() == 998 && this.color.getGreen() == 998 && this.color.getBlue() == 998) {
+                    return ParticleManager.getRandomParticleColor();
                 } else {
                     return this.color;
                 }
@@ -241,17 +245,21 @@ public class ParticlePair {
             if (this.effect == ParticleEffect.NOTE) {
                 if (this.noteColor.getValueX() * 24 == 99) {
                     return LangManager.getText(Lang.RAINBOW);
+                } else if ((int)(this.noteColor.getValueX() * 24) == 98) {
+                    return LangManager.getText(Lang.RANDOM);
                 }
-                return "note #" + (int) (this.noteColor.getValueX() * 24);
+                return LangManager.getText(Lang.GUI_SELECT_DATA_NOTE, (int) (this.noteColor.getValueX() * 24));
             } else {
                 if (this.color.getRed() == 999 && this.color.getGreen() == 999 && this.color.getBlue() == 999) {
                     return LangManager.getText(Lang.RAINBOW);
+                } else if (this.color.getRed() == 998 && this.color.getGreen() == 998 && this.color.getBlue() == 998) {
+                    return LangManager.getText(Lang.RANDOM);
                 } else {
                     return ChatColor.RED + "" + this.color.getRed() + " " + ChatColor.GREEN + this.color.getGreen() + " " + ChatColor.AQUA + this.color.getBlue();
                 }
             }
         }
-        return "none";
+        return LangManager.getText(Lang.GUI_DATA_NONE);
     }
     
     /**

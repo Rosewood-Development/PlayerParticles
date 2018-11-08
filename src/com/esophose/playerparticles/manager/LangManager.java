@@ -110,6 +110,9 @@ public class LangManager {
         // Rainbow
         RAINBOW,
         
+        // Random
+        RANDOM,
+        
         // Effects
         EFFECT_NO_PERMISSION,
         EFFECT_INVALID,
@@ -210,8 +213,10 @@ public class LangManager {
         GUI_EDIT_DATA,
         GUI_EDIT_DATA_DESCRIPTION,
         GUI_EDIT_DATA_UNAVAILABLE,
+        GUI_DATA_NONE,
         GUI_CREATE_PARTICLE,
         GUI_CREATE_PARTICLE_DESCRIPTION,
+        GUI_CREATE_PARTICLE_UNAVAILABLE,
         GUI_SELECT_EFFECT,
         GUI_SELECT_EFFECT_DESCRIPTION,
         GUI_SELECT_STYLE,

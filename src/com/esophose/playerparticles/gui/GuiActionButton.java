@@ -42,7 +42,7 @@ public class GuiActionButton {
      * Constructor for creating non-animated icons
      * 
      * @param slot The slot ID of the inventory
-     * @param icons The Materials that this icon will use
+     * @param icon The Material that this icon will use
      * @param name The name that this icon will use
      * @param lore The lore of this icon
      * @param onClick The callback to execute when this button is clicked
@@ -123,6 +123,7 @@ public class GuiActionButton {
     /**
      * Executes the onClick callback passed in the constructor
      * 
+     * @param button The button that was clicked
      * @param isShiftClick If the player was holding shift when they clicked
      */
     public void handleClick(GuiActionButton button, boolean isShiftClick) {

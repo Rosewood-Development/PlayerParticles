@@ -400,7 +400,7 @@ public enum ParticleEffect {
          *             or higher than 255
          */
         public OrdinaryColor(int red, int green, int blue) throws IllegalArgumentException {
-            if (red == 999 && green == 999 && blue == 999) {
+            if ((red == 999 && green == 999 && blue == 999) || (red == 998 && green == 998 && blue == 998)) { // Allow rainbow and random values
                 this.red = red;
                 this.green = green;
                 this.blue = blue;
@@ -463,7 +463,7 @@ public enum ParticleEffect {
          */
         @Override
         public float getValueX() {
-            if (red == 999) return 0F;
+            if (red == 999 || red == 998) return 0F;
             return (float) red / 255F;
         }
 
@@ -474,7 +474,7 @@ public enum ParticleEffect {
          */
         @Override
         public float getValueY() {
-            if (green == 999) return 0F;
+            if (green == 999 || green == 998) return 0F;
             return (float) green / 255F;
         }
 
@@ -485,7 +485,7 @@ public enum ParticleEffect {
          */
         @Override
         public float getValueZ() {
-            if (blue == 999) return 0F;
+            if (blue == 999 || blue == 998) return 0F;
             return (float) blue / 255F;
         }
     }
@@ -510,7 +510,7 @@ public enum ParticleEffect {
          *             higher than 24
          */
         public NoteColor(int note) throws IllegalArgumentException {
-            if (note == 99) {
+            if (note == 99 || note == 98) { // Allow rainbow and random values
                 this.note = note;
             } else {
                 if (note < 0) {

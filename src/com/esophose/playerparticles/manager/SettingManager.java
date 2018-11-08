@@ -218,6 +218,7 @@ public class SettingManager {
          * Gets the Material for this icon
          * Tries to get from cache first, otherwise loads it
          * 
+         * @param configPath Where to look in the config.yml for the Material name
          * @return The path in the config.yml to lookup
          */
         private Material getInternal(String configPath) {
