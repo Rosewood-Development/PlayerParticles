@@ -1,26 +1,28 @@
 package com.esophose.playerparticles.styles;
 
+import java.util.List;
+
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import com.esophose.playerparticles.PPlayer;
-import com.esophose.playerparticles.manager.PPlayerDataManager;
+import com.esophose.playerparticles.manager.DataManager;
 import com.esophose.playerparticles.manager.ParticleManager;
-import com.esophose.playerparticles.manager.PermissionManager;
+import com.esophose.playerparticles.particles.PPlayer;
+import com.esophose.playerparticles.particles.ParticlePair;
 import com.esophose.playerparticles.styles.api.PParticle;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class ParticleStyleMove implements ParticleStyle, Listener {
-    
-    public PParticle[] getParticles(PPlayer pplayer, Location location) {
-        return DefaultStyles.NONE.getParticles(pplayer, location);
+
+    public List<PParticle> getParticles(ParticlePair particle, Location location) {
+        return DefaultStyles.NORMAL.getParticles(particle, location);
     }
 
     public void updateTimers() {
-        
+
     }
 
     public String getName() {
@@ -30,15 +32,15 @@ public class ParticleStyleMove implements ParticleStyle, Listener {
     public boolean canBeFixed() {
         return false;
     }
-    
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerMove(PlayerMoveEvent e) {
-        PPlayer pplayer = PPlayerDataManager.getInstance().getPPlayer(e.getPlayer().getUniqueId());
-        if (pplayer != null && pplayer.getParticleStyle() == DefaultStyles.MOVE) {
-            if (PermissionManager.hasStylePermission(e.getPlayer(), DefaultStyles.MOVE)) {
-                Location loc = e.getPlayer().getLocation();
+        PPlayer pplayer = DataManager.getPPlayer(e.getPlayer().getUniqueId());
+        if (pplayer != null) {
+            for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.MOVE)) {
+                Location loc = e.getPlayer().getLocation().clone();
                 loc.setY(loc.getY() + 0.05);
-                ParticleManager.displayParticles(pplayer, DefaultStyles.MOVE.getParticles(pplayer, loc));
+                ParticleManager.displayParticles(particle, DefaultStyles.MOVE.getParticles(particle, loc));
             }
         }
     }

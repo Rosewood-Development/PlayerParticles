@@ -1,11 +1,3 @@
-/**
- * Copyright Esophose 2018
- * While using any of the code provided by this plugin
- * you must not claim it as your own. This plugin may
- * be modified and installed on a server, but may not
- * be distributed to any person by any means.
- */
-
 package com.esophose.playerparticles.particles;
 
 import java.lang.reflect.Constructor;
@@ -26,13 +18,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
-/**
- * Heavily modified to work with the Spigot Particle API
- * 
- * @author Esophose
- */
+import com.esophose.playerparticles.manager.SettingManager.PSetting;
+import com.esophose.playerparticles.styles.api.PParticle;
+
+@SuppressWarnings("deprecation")
 public enum ParticleEffect {
-    
+
     // Ordered and named by their Minecraft 1.13 internal names
     AMBIENT_ENTITY_EFFECT("SPELL_MOB_AMBIENT", "SPELL_MOB_AMBIENT", ParticleProperty.COLORABLE),
     ANGRY_VILLAGER("VILLAGER_ANGRY", "VILLAGER_ANGRY"),
@@ -50,7 +41,7 @@ public enum ParticleEffect {
     DRIPPING_LAVA("DRIP_LAVA", "DRIP_LAVA"),
     DRIPPING_WATER("DRIP_WATER", "DRIP_WATER"),
     DUST("REDSTONE", "REDSTONE", ParticleProperty.COLORABLE),
-    //ELDER_GUARDIAN("MOB_APPEARANCE", "MOB_APPEARANCE"), // No thank you
+    // ELDER_GUARDIAN("MOB_APPEARANCE", "MOB_APPEARANCE"), // No thank you
     ENCHANT("ENCHANTMENT_TABLE", "ENCHANTMENT_TABLE"),
     ENCHANTED_HIT("CRIT_MAGIC", "CRIT_MAGIC"),
     END_ROD("END_ROD", "END_ROD"),
@@ -65,14 +56,13 @@ public enum ParticleEffect {
     HAPPY_VILLAGER("VILLAGER_HAPPY", "VILLAGER_HAPPY"),
     HEART("HEART", "HEART"),
     INSTANT_EFFECT("SPELL_INSTANT", "SPELL_INSTANT"),
-    ITEM("ITEM_CRACK", "ITEM_CRACK", ParticleProperty.REQUIRES_MATERIAL_DATA), 
+    ITEM("ITEM_CRACK", "ITEM_CRACK", ParticleProperty.REQUIRES_MATERIAL_DATA),
     ITEM_SLIME("SLIME", "SLIME"),
     ITEM_SNOWBALL("SNOWBALL", "SNOWBALL"),
     LARGE_SMOKE("SMOKE_LARGE", "SMOKE_LARGE"),
     LAVA("LAVA", "LAVA"),
     MYCELIUM("TOWN_AURA", "TOWN_AURA"),
     NAUTILUS("NAUTILUS", null),
-    NONE("", ""), // Custom effect to represent none selected
     NOTE("NOTE", "NOTE", ParticleProperty.COLORABLE),
     POOF("EXPLOSION_NORMAL", "EXPLOSION_NORMAL"), // The 1.13 combination of explode and showshovel
     PORTAL("PORTAL", "PORTAL"),
@@ -86,10 +76,9 @@ public enum ParticleEffect {
     TOTEM_OF_UNDYING("TOTEM", "TOTEM"),
     UNDERWATER("SUSPENDED_DEPTH", "SUSPENDED_DEPTH"),
     WITCH("SPELL_WITCH", "SPELL_WTICH");
-    
-    private static final int PARTICLE_DISPLAY_RANGE_SQUARED = 36864; // (12 chunks * 16 blocks per chunk)^2
+
+    public static boolean VERSION_13; // This is a particle unique to Minecraft 1.13, this is a reliable way of telling what server version is running
     private static final Map<String, ParticleEffect> NAME_MAP = new HashMap<String, ParticleEffect>();
-    private static boolean VERSION_13; // This is a particle unique to Minecraft 1.13, this is a reliable way of telling what server version is running
     private static Constructor<?> DustOptions_CONSTRUCTOR;
     private static Method createBlockData_METHOD;
     private final Particle internalEnum;
@@ -101,12 +90,12 @@ public enum ParticleEffect {
         for (ParticleEffect effect : values()) {
             NAME_MAP.put(effect.getName(), effect);
         }
-        
+
         try {
             VERSION_13 = Particle.valueOf("NAUTILUS") != null;
             DustOptions_CONSTRUCTOR = Particle.REDSTONE.getDataType().getConstructor(Color.class, float.class);
             createBlockData_METHOD = Material.class.getMethod("createBlockData");
-        } catch (Exception e) { 
+        } catch (Exception e) {
             DustOptions_CONSTRUCTOR = null;
             createBlockData_METHOD = null;
             VERSION_13 = false;
@@ -116,8 +105,8 @@ public enum ParticleEffect {
     /**
      * Construct a new particle effect
      * 
-     * @param enumName Name of the Particle Enum when the server version is >= 1.13
-     * @param enumNameLegacy Name of the Particle Enum when the server version is < 1.13
+     * @param enumName Name of the Particle Enum when the server version is greater than or equal to 1.13
+     * @param enumNameLegacy Name of the Particle Enum when the server version is less than 1.13
      * @param properties Properties of this particle effect
      */
     private ParticleEffect(String enumName, String enumNameLegacy, ParticleProperty... properties) {
@@ -130,7 +119,7 @@ public enum ParticleEffect {
                 break;
             }
         }
-        
+
         this.internalEnum = matchingEnum; // Will be null if this server's version doesn't support this particle type
     }
 
@@ -169,7 +158,7 @@ public enum ParticleEffect {
      * @return Whether the particle effect is supported or not
      */
     public boolean isSupported() {
-        return this == NONE || this.internalEnum != null;
+        return this.internalEnum != null;
     }
 
     /**
@@ -199,27 +188,25 @@ public enum ParticleEffect {
         }
         return null;
     }
-
+    
     /**
-     * Determine if the data type for a particle effect is correct
+     * Invokes the correct spawn method for the particle information given
      * 
-     * @param effect Particle effect
-     * @param data Particle data
-     * @return Whether the data type is correct or not
+     * @param particle The ParticlePair, given the effect/style/data
+     * @param pparticle The particle spawn information
+     * @param isFixedEffect If the particle is spawned from a fixed effect
      */
-    private static boolean isDataCorrect(ParticleEffect effect, ParticleData data) {
-        return ((effect == BLOCK || effect == FALLING_DUST) && data instanceof BlockData) || (effect == ITEM && data instanceof ItemData);
-    }
-
-    /**
-     * Determine if the color type for a particle effect is correct
-     * 
-     * @param effect Particle effect
-     * @param color Particle color
-     * @return Whether the color type is correct or not
-     */
-    private static boolean isColorCorrect(ParticleEffect effect, ParticleColor color) {
-        return ((effect == ENTITY_EFFECT || effect == AMBIENT_ENTITY_EFFECT || effect == DUST) && color instanceof OrdinaryColor) || (effect == NOTE && color instanceof NoteColor);
+    public static void display(ParticlePair particle, PParticle pparticle, boolean isFixedEffect) {
+        ParticleEffect effect = particle.getEffect();
+        int count = pparticle.isDirectional() ? 0 : 1;
+        
+        if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
+            effect.display(particle.getSpawnMaterial(), pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), 1, pparticle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)), isFixedEffect);
+        } else if (effect.hasProperty(ParticleProperty.COLORABLE)) {
+            effect.display(particle.getSpawnColor(), pparticle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)), isFixedEffect);
+        } else {
+            effect.display(pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), count, pparticle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)), isFixedEffect);
+        }
     }
 
     /**
@@ -231,15 +218,17 @@ public enum ParticleEffect {
      * @param speed Display speed of the particles
      * @param amount Amount of particles
      * @param center Center location of the effect
+     * @param isFixedEffect If the particle is spawned from a fixed effect
      * @throws ParticleDataException If the particle effect requires additional data
      */
-    public void display(float offsetX, float offsetY, float offsetZ, float speed, int amount, Location center) throws ParticleDataException {
+    public void display(double offsetX, double offsetY, double offsetZ, double speed, int amount, Location center, boolean isFixedEffect) throws ParticleDataException {
         if (hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
             throw new ParticleDataException("This particle effect requires additional data");
         }
-        
-        for (Player player : getPlayersInRange(center))
+
+        for (Player player : getPlayersInRange(center, isFixedEffect)) {
             player.spawnParticle(internalEnum, center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed);
+        }
     }
 
     /**
@@ -247,29 +236,29 @@ public enum ParticleEffect {
      * 
      * @param color Color of the particle
      * @param center Center location of the effect
+     * @param isFixedEffect If the particle is spawned from a fixed effect
      * @throws ParticleColorException If the particle effect is not colorable or the color type is incorrect
      */
-    public void display(ParticleColor color, Location center) throws ParticleColorException {
+    public void display(ParticleColor color, Location center, boolean isFixedEffect) throws ParticleColorException {
         if (!hasProperty(ParticleProperty.COLORABLE)) {
             throw new ParticleColorException("This particle effect is not colorable");
         }
-        if (!isColorCorrect(this, color)) {
-            throw new ParticleColorException("The particle color type is incorrect");
-        }
 
         if (this == DUST && VERSION_13) { // DUST uses a special data object for spawning in 1.13
-            OrdinaryColor dustColor = (OrdinaryColor)color;
+            OrdinaryColor dustColor = (OrdinaryColor) color;
             Object dustData = null;
             try { // The DustData class doesn't exist in Minecraft versions less than 1.13... so this is disgusting... but it works great
                 dustData = DustOptions_CONSTRUCTOR.newInstance(Color.fromRGB(dustColor.getRed(), dustColor.getGreen(), dustColor.getBlue()), 1); // Wait, you can change the size of these now??? AWESOME! I might implement this in the future!
-            } catch (Exception e) { }
-            
-            for (Player player : getPlayersInRange(center)) {
+            } catch (Exception e) {
+                
+            }
+
+            for (Player player : getPlayersInRange(center, isFixedEffect)) {
                 player.spawnParticle(internalEnum, center.getX(), center.getY(), center.getZ(), 1, 0, 0, 0, 0, dustData);
             }
         } else {
-            for (Player player : getPlayersInRange(center)) {
-             // Minecraft clients require that you pass a non-zero value if the Red value should be zero
+            for (Player player : getPlayersInRange(center, isFixedEffect)) {
+                // Minecraft clients require that you pass a non-zero value if the Red value should be zero
                 player.spawnParticle(internalEnum, center.getX(), center.getY(), center.getZ(), 0, this == ParticleEffect.DUST && color.getValueX() == 0 ? Float.MIN_VALUE : color.getValueX(), color.getValueY(), color.getValueZ(), 1);
             }
         }
@@ -280,53 +269,55 @@ public enum ParticleEffect {
      * visible for all players within a certain range in the world of @param
      * center
      * 
-     * @param data Data of the effect
+     * @param spawnMaterial Material of the effect
      * @param offsetX Maximum distance particles can fly away from the center on the x-axis
      * @param offsetY Maximum distance particles can fly away from the center on the y-axis
      * @param offsetZ Maximum distance particles can fly away from the center on the z-axis
      * @param speed Display speed of the particles
      * @param amount Amount of particles
      * @param center Center location of the effect
+     * @param isFixedEffect If the particle is spawned from a fixed effect
      * @throws ParticleDataException If the particle effect does not require additional data or if the data type is incorrect
      */
-    public void display(ParticleData data, float offsetX, float offsetY, float offsetZ, float speed, int amount, Location center) throws ParticleDataException {
+    public void display(Material spawnMaterial, double offsetX, double offsetY, double offsetZ, double speed, int amount, Location center, boolean isFixedEffect) throws ParticleDataException {
         if (!hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
             throw new ParticleDataException("This particle effect does not require additional data");
         }
-        if (!isDataCorrect(this, data)) {
-            throw new ParticleDataException("The particle data type is incorrect");
-        }
+
         Object extraData = null;
-        if (internalEnum.getDataType().getTypeName().equals("org.bukkit.block.data.BlockData")) { 
+        if (internalEnum.getDataType().getTypeName().equals("org.bukkit.block.data.BlockData")) {
             try { // The Material.createBlockData() method doesn't exist in Minecraft versions less than 1.13... so this is disgusting... but it works great
-                extraData = createBlockData_METHOD.invoke(data.getMaterial());
-            } catch (Exception e) { }
+                extraData = createBlockData_METHOD.invoke(spawnMaterial);
+            } catch (Exception e) {
+                
+            }
         } else if (internalEnum.getDataType() == ItemStack.class) {
-            extraData = new ItemStack(data.getMaterial());
+            extraData = new ItemStack(spawnMaterial);
         } else if (internalEnum.getDataType() == MaterialData.class) {
-            extraData = new MaterialData(data.getMaterial()); // Deprecated, only used in versions < 1.13
+            extraData = new MaterialData(spawnMaterial); // Deprecated, only used in versions < 1.13
         } else {
-            System.out.println(internalEnum.getDataType());
             extraData = null;
         }
-        
-        for (Player player : getPlayersInRange(center))
+
+        for (Player player : getPlayersInRange(center, isFixedEffect))
             player.spawnParticle(internalEnum, center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed, extraData);
     }
-    
+
     /**
-     * Gets a List<Player> of players within the particle display range
+     * Gets a List of Players within the particle display range
      * 
      * @param center The center of the radius to check around
-     * @return A List<Player> of the players within the particle display range
+     * @param isFixedEffect If the particle is spawned from a fixed effect
+     * @return A List of Players within the particle display range
      */
-    private List<Player> getPlayersInRange(Location center) {
+    private List<Player> getPlayersInRange(Location center, boolean isFixedEffect) {
         List<Player> players = new ArrayList<Player>();
-        
-        for (Player p : Bukkit.getOnlinePlayers()) 
-            if (p.getWorld().equals(center.getWorld()) && center.distanceSquared(p.getLocation()) <= PARTICLE_DISPLAY_RANGE_SQUARED) 
+        int range = !isFixedEffect ? PSetting.PARTICLE_RENDER_RANGE_PLAYER.getInt() : PSetting.PARTICLE_RENDER_RANGE_FIXED_EFFECT.getInt();
+
+        for (Player p : Bukkit.getOnlinePlayers())
+            if (p.getWorld().equals(center.getWorld()) && center.distanceSquared(p.getLocation()) <= range * range)
                 players.add(p);
-        
+
         return players;
     }
 
@@ -348,83 +339,6 @@ public enum ParticleEffect {
          * The particle effect uses the offsets as color values
          */
         COLORABLE;
-    }
-
-    /**
-     * Represents the particle data for effects like
-     * {@link ParticleEffect#ITEM}, {@link ParticleEffect#BLOCK}, and {@link ParticleEffect#FALLING_DUST}
-     * <p>
-     * This class is part of the <b>ParticleEffect Library</b> and follows the
-     * same usage conditions
-     * 
-     * @author DarkBlade12
-     * @since 1.6
-     */
-    public static abstract class ParticleData {
-        private final Material material;
-
-        /**
-         * Construct a new particle data
-         * 
-         * @param material Material of the item/block
-         */
-        public ParticleData(Material material) {
-            this.material = material;
-        }
-
-        /**
-         * Returns the material of this data
-         * 
-         * @return The material
-         */
-        public Material getMaterial() {
-            return material;
-        }
-    }
-
-    /**
-     * Represents the item data for the {@link ParticleEffect#ITEM} effect
-     * <p>
-     * This class is part of the <b>ParticleEffect Library</b> and follows the
-     * same usage conditions
-     * 
-     * @author DarkBlade12
-     * @since 1.6
-     */
-    public static final class ItemData extends ParticleData {
-        /**
-         * Construct a new item data
-         * 
-         * @param material Material of the item
-         */
-        public ItemData(Material material) {
-            super(material);
-        }
-    }
-
-    /**
-     * Represents the block data for the {@link ParticleEffect#BLOCK} and
-     * {@link ParticleEffect#FALLING_DUST} effects
-     * <p>
-     * This class is part of the <b>ParticleEffect Library</b> and follows the
-     * same usage conditions
-     * 
-     * @author DarkBlade12
-     * @since 1.6
-     */
-    public static final class BlockData extends ParticleData {
-        /**
-         * Construct a new block data
-         * 
-         * @param material Material of the block
-         * @throws IllegalArgumentException If the material is not a block
-         */
-        public BlockData(Material material) throws IllegalArgumentException {
-            super(material);
-            if (!material.isBlock()) {
-                throw new IllegalArgumentException("The material is not a block");
-            }
-        }
     }
 
     /**
@@ -486,7 +400,7 @@ public enum ParticleEffect {
          *             or higher than 255
          */
         public OrdinaryColor(int red, int green, int blue) throws IllegalArgumentException {
-            if (red == 999 && green == 999 && blue == 999) {
+            if ((red == 999 && green == 999 && blue == 999) || (red == 998 && green == 998 && blue == 998)) { // Allow rainbow and random values
                 this.red = red;
                 this.green = green;
                 this.blue = blue;
@@ -549,7 +463,7 @@ public enum ParticleEffect {
          */
         @Override
         public float getValueX() {
-            if (red == 999) return 0F;
+            if (red == 999 || red == 998) return 0F;
             return (float) red / 255F;
         }
 
@@ -560,7 +474,7 @@ public enum ParticleEffect {
          */
         @Override
         public float getValueY() {
-            if (green == 999) return 0F;
+            if (green == 999 || green == 998) return 0F;
             return (float) green / 255F;
         }
 
@@ -571,7 +485,7 @@ public enum ParticleEffect {
          */
         @Override
         public float getValueZ() {
-            if (blue == 999) return 0F;
+            if (blue == 999 || blue == 998) return 0F;
             return (float) blue / 255F;
         }
     }
@@ -596,7 +510,7 @@ public enum ParticleEffect {
          *             higher than 24
          */
         public NoteColor(int note) throws IllegalArgumentException {
-            if (note == 99) {
+            if (note == 99 || note == 98) { // Allow rainbow and random values
                 this.note = note;
             } else {
                 if (note < 0) {
@@ -610,13 +524,22 @@ public enum ParticleEffect {
         }
 
         /**
+         * Returns the note value
+         * 
+         * @return The note value
+         */
+        public int getNote() {
+            return this.note;
+        }
+
+        /**
          * Returns the note value divided by 24
          * 
          * @return The offsetX value
          */
         @Override
         public float getValueX() {
-            return (float) note / 24F;
+            return (float) this.note / 24F;
         }
 
         /**

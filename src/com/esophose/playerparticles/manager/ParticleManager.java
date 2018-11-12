@@ -1,16 +1,9 @@
-/**
- * Copyright Esophose 2018
- * While using any of the code provided by this plugin
- * you must not claim it as your own. This plugin may
- * be modified and installed on a server, but may not
- * be distributed to any person by any means.
- */
-
 package com.esophose.playerparticles.manager;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.UUID;
+import java.util.List;
+import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -23,26 +16,21 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.esophose.playerparticles.PPlayer;
 import com.esophose.playerparticles.particles.FixedParticleEffect;
+import com.esophose.playerparticles.particles.PPlayer;
 import com.esophose.playerparticles.particles.ParticleEffect;
 import com.esophose.playerparticles.particles.ParticleEffect.NoteColor;
 import com.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
-import com.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
+import com.esophose.playerparticles.particles.ParticlePair;
 import com.esophose.playerparticles.styles.api.PParticle;
 import com.esophose.playerparticles.styles.api.ParticleStyleManager;
 
 public class ParticleManager extends BukkitRunnable implements Listener {
 
     /**
-     * The list containing all the player effect info
+     * The list containing all the loaded PPlayer info
      */
-    public static ArrayList<PPlayer> particlePlayers = new ArrayList<PPlayer>();
-
-    /**
-     * The list containing all the fixed effect info
-     */
-    public static ArrayList<FixedParticleEffect> fixedParticleEffects = new ArrayList<FixedParticleEffect>();
+    public static List<PPlayer> particlePlayers = new ArrayList<PPlayer>();
 
     /**
      * Rainbow particle effect hue and note color used for rainbow colorable effects
@@ -50,6 +38,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      */
     private static int hue = 0;
     private static int note = 0;
+    private static final Random RANDOM = new Random();
 
     /**
      * Adds the player to the array when they join
@@ -58,7 +47,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent e) {
-        PPlayerDataManager.getInstance().loadPPlayer(e.getPlayer().getUniqueId());
+        DataManager.getPPlayer(e.getPlayer().getUniqueId(), (pplayer) -> { }); // Loads the PPlayer from the database
     }
 
     /**
@@ -68,88 +57,29 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent e) {
-        PPlayer pplayer = PPlayerDataManager.getInstance().getPPlayer(e.getPlayer().getUniqueId());
-        if (pplayer != null)
-            particlePlayers.remove(pplayer);
+        PPlayer pplayer = DataManager.getPPlayer(e.getPlayer().getUniqueId());
+        if (pplayer != null && pplayer.getFixedEffectIds().isEmpty()) particlePlayers.remove(pplayer); // Unload the PPlayer if they don't have any fixed effects
     }
 
     /**
-     * Adds all fixed effects from the config
-     */
-    public static void addAllFixedEffects() {
-        PPlayerDataManager.getInstance().getAllFixedEffects((fixedEffects) -> {
-            fixedParticleEffects.addAll(fixedEffects);
-        });
-    }
-
-    /**
-     * Removes all fixed effects for the given pplayer
+     * Gets the PPlayers that are loaded
      * 
-     * @param pplayerUUID The pplayer to remove the fixed effects from
+     * @return The loaded PPlayers
      */
-    public static void removeAllFixedEffectsForPlayer(UUID pplayerUUID) {
-        for (int i = fixedParticleEffects.size() - 1; i >= 0; i--) 
-            if (fixedParticleEffects.get(i).getOwnerUniqueId().equals(pplayerUUID)) 
-                fixedParticleEffects.remove(i);
+    public static List<PPlayer> getPPlayers() {
+        return particlePlayers;
     }
 
     /**
-     * Adds a fixed effect
-     * 
-     * @param fixedEffect The fixed effect to add
+     * Loads all FixedParticleEffects from the database
+     * Loads all online PPlayers from the database
      */
-    public static void addFixedEffect(FixedParticleEffect fixedEffect) {
-        fixedParticleEffects.add(fixedEffect);
-    }
-
-    /**
-     * Removes a fixed effect for the given pplayer with the given id
-     * 
-     * @param pplayerUUID The pplayer to remove the fixed effect from
-     * @param id The id of the fixed effect to remove
-     */
-    public static void removeFixedEffectForPlayer(UUID pplayerUUID, int id) {
-        for (int i = fixedParticleEffects.size() - 1; i >= 0; i--) 
-            if (fixedParticleEffects.get(i).getOwnerUniqueId().equals(pplayerUUID) && fixedParticleEffects.get(i).getId() == id) 
-                fixedParticleEffects.remove(i);
-    }
-
-    /**
-     * Clears the list then adds everybody on the server
-     * Used for when the server reloads and we can't rely on players rejoining
-     */
-    public static void refreshPPlayers() {
+    public static void refreshData() {
         particlePlayers.clear();
-        for (Player player : Bukkit.getOnlinePlayers()) 
-            PPlayerDataManager.getInstance().loadPPlayer(player.getUniqueId());
-    }
-
-    /**
-     * Overrides an existing PPlayer with the same UUID
-     * 
-     * @param pplayer The PPlayer to override
-     */
-    public static void updateIfContains(PPlayer pplayer) {
-        for (PPlayer pp : particlePlayers) {
-            if (pp.getUniqueId() == pplayer.getUniqueId()) {
-                particlePlayers.remove(pp);
-                particlePlayers.add(pplayer);
-                break;
-            }
+        DataManager.loadFixedEffects();
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            DataManager.getPPlayer(player.getUniqueId(), (pplayer) -> { }); // Loads the PPlayer from the database
         }
-    }
-
-    /**
-     * Gets an effect type from a string, used for getting ParticleEffects from the saved data
-     * 
-     * @param effectName The name of the particle to check for
-     * @return The ParticleEffect with the given name, will be null if name was not found
-     */
-    public static ParticleEffect effectFromString(String effectName) {
-        for (ParticleEffect effect : ParticleEffect.getSupportedEffects()) {
-            if (effect.getName().equalsIgnoreCase(effectName)) return effect;
-        }
-        return null;
     }
 
     /**
@@ -162,9 +92,9 @@ public class ParticleManager extends BukkitRunnable implements Listener {
         hue++;
         hue %= 360;
 
-        if (hue % 10 == 0) { // Only increment note by 2 notes per second
+        if (hue % 5 == 0) { // Only increment note by 4 notes per second
             note++;
-            note %= 24;
+            note %= 25;
         }
 
         // Loop over backwards so we can remove pplayers if need be
@@ -172,85 +102,41 @@ public class ParticleManager extends BukkitRunnable implements Listener {
             PPlayer pplayer = particlePlayers.get(i);
             Player player = pplayer.getPlayer();
 
-            if (player == null) { // Skip and remove, why are they still in the array if they are offline?
-                particlePlayers.remove(i);
-                continue;
-            }
-
-            // Perform validity checks
-            boolean valid = true;
-
             // Don't show their particles if they are in spectator mode
-            if (player.getGameMode() == GameMode.SPECTATOR) {
-                valid = false;
-            }
-
-            if (PPlayerDataManager.getInstance().isWorldDisabled(player.getWorld().getName())) {
-                valid = false;
-            }
-
-            if (!valid) continue;
-
-            Location loc = player.getLocation();
-            loc.setY(loc.getY() + 1);
-            displayParticles(pplayer, loc);
-        }
-
-        // Loop for FixedParticleEffects
-        for (FixedParticleEffect effect : fixedParticleEffects) {
-            boolean valid = true;
-            for (PPlayer pplayer : particlePlayers) {
-                if (pplayer.getUniqueId() == effect.getOwnerUniqueId()) {
-                    valid = PermissionManager.canUseFixedEffects(Bukkit.getPlayer(pplayer.getUniqueId()));
-                }
-            }
-
-            if (valid) {
-                displayFixedParticleEffect(effect);
-            }
+            // Don't spawn particles if the world doesn't allow it
+            if (player != null && player.getGameMode() != GameMode.SPECTATOR && !PermissionManager.isWorldDisabled(player.getWorld().getName()))
+                for (ParticlePair particles : pplayer.getActiveParticles())
+                    displayParticles(particles, player.getLocation().clone().add(0, 1, 0));
+            
+            // Loop for FixedParticleEffects
+            // Don't spawn particles if the world doesn't allow it
+            for (FixedParticleEffect effect : pplayer.getFixedParticles())
+                if (!PermissionManager.isWorldDisabled(effect.getLocation().getWorld().getName())) 
+                    displayFixedParticleEffect(effect);
         }
     }
 
     /**
      * Displays particles at the given player location with their settings
      * 
-     * @param pplayer The PPlayer to use for getting particle settings
+     * @param particle The ParticlePair to use for getting particle settings
      * @param location The location to display at
      */
-    private void displayParticles(PPlayer pplayer, Location location) {
-        if (!ParticleStyleManager.isCustomHandled(pplayer.getParticleStyle())) {
-            ParticleEffect effect = pplayer.getParticleEffect();
-            if (effect == ParticleEffect.NONE) return;
-            for (PParticle particle : pplayer.getParticleStyle().getParticles(pplayer, location)) {
-                if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-                    effect.display(pplayer.getParticleSpawnData(), particle.getXOff(), particle.getYOff(), particle.getZOff(), particle.getSpeed(), 1, particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
-                } else if (effect.hasProperty(ParticleProperty.COLORABLE)) {
-                    effect.display(pplayer.getParticleSpawnColor(), particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
-                } else {
-                    effect.display(particle.getXOff(), particle.getYOff(), particle.getZOff(), particle.getSpeed(), 1, particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
-                }
-            }
-        }
+    private void displayParticles(ParticlePair particle, Location location) {
+        if (!ParticleStyleManager.isCustomHandled(particle.getStyle()))
+            for (PParticle pparticle : particle.getStyle().getParticles(particle, location))
+                ParticleEffect.display(particle, pparticle, false);
     }
 
     /**
      * An alternative method used for custom handled styles
      * 
-     * @param pplayer The PPlayer to use for getting particle settings
+     * @param particle The ParticlePair to use for getting particle settings
      * @param particles The particles to display
      */
-    public static void displayParticles(PPlayer pplayer, PParticle[] particles) {
-        ParticleEffect effect = pplayer.getParticleEffect();
-        if (effect == ParticleEffect.NONE) return;
-        for (PParticle particle : particles) {
-            if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-                effect.display(pplayer.getParticleSpawnData(), particle.getXOff(), particle.getYOff(), particle.getZOff(), particle.getSpeed(), 1, particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
-            } else if (effect.hasProperty(ParticleProperty.COLORABLE)) {
-                effect.display(pplayer.getParticleSpawnColor(), particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
-            } else {
-                effect.display(particle.getXOff(), particle.getYOff(), particle.getZOff(), particle.getSpeed(), 1, particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
-            }
-        }
+    public static void displayParticles(ParticlePair particle, List<PParticle> particles) {
+        for (PParticle pparticle : particles)
+            ParticleEffect.display(particle, pparticle, false);
     }
 
     /**
@@ -259,26 +145,47 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      * @param fixedEffect The fixed effect to display
      */
     private void displayFixedParticleEffect(FixedParticleEffect fixedEffect) {
-        PPlayer fakePPlayer = new PPlayer(fixedEffect.getOwnerUniqueId(), fixedEffect.getParticleEffect(), fixedEffect.getParticleStyle(), null, null, null, null);
-        ParticleEffect effect = fixedEffect.getParticleEffect();
-        for (PParticle particle : fixedEffect.getParticleStyle().getParticles(fakePPlayer, fixedEffect.getLocation())) {
-            if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-                effect.display(fixedEffect.getParticleSpawnData(), particle.getXOff(), particle.getYOff(), particle.getZOff(), particle.getSpeed(), 1, particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
-            } else if (effect.hasProperty(ParticleProperty.COLORABLE)) {
-                effect.display(fixedEffect.getParticleSpawnColor(), particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
-            } else {
-                effect.display(particle.getXOff(), particle.getYOff(), particle.getZOff(), particle.getSpeed(), 1, particle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)));
-            }
-        }
+        ParticlePair particle = fixedEffect.getParticlePair();
+        for (PParticle pparticle : particle.getStyle().getParticles(particle, fixedEffect.getLocation()))
+            ParticleEffect.display(particle, pparticle, true);
     }
 
+    /**
+     * Gets the rainbow OrdinaryColor for particle spawning with data 'rainbow'
+     * 
+     * @return The rainbow OrdinaryColor for particle spawning with data 'rainbow'
+     */
     public static OrdinaryColor getRainbowParticleColor() {
         Color rgb = Color.getHSBColor(hue / 360F, 1.0F, 1.0F);
         return new OrdinaryColor(rgb.getRed(), rgb.getGreen(), rgb.getBlue());
     }
 
+    /**
+     * Gets the rainbow NoteColor for particle spawning with data 'rainbow'
+     * 
+     * @return The rainbow NoteColor for particle spawning with data 'rainbow'
+     */
     public static NoteColor getRainbowNoteParticleColor() {
         return new NoteColor(note);
+    }
+    
+    /**
+     * Gets a randomized OrdinaryColor for particle spawning with data 'random'
+     * 
+     * @return A randomized OrdinaryColor for particle spawning with data 'random'
+     */
+    public static OrdinaryColor getRandomParticleColor() {
+        Color rgb = new Color(RANDOM.nextInt(256), RANDOM.nextInt(256), RANDOM.nextInt(256));
+        return new OrdinaryColor(rgb.getRed(), rgb.getGreen(), rgb.getBlue());
+    }
+    
+    /**
+     * Gets a randomized NoteColor for particle spawning with data 'random'
+     * 
+     * @return A randomized NoteColor for particle spawning with data 'random'
+     */
+    public static NoteColor getRandomNoteParticleColor() {
+        return new NoteColor(RANDOM.nextInt(25));
     }
 
 }

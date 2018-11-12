@@ -1,11 +1,3 @@
-/**
- * Copyright Esophose 2018
- * While using any of the code provided by this plugin
- * you must not claim it as your own. This plugin may
- * be modified and installed on a server, but may not
- * be distributed to any person by any means.
- */
-
 package com.esophose.playerparticles.styles.api;
 
 import org.bukkit.Location;
@@ -13,11 +5,12 @@ import org.bukkit.Location;
 public class PParticle {
 
     /**
-     * Data that affects the particle
+     * Data that determines where the particle will spawn
      */
     private Location location;
-    private float speed;
-    private float xOff, yOff, zOff;
+    private double speed;
+    private double xOff, yOff, zOff;
+    private boolean directional;
 
     /**
      * The constructor with all the fancy parameters for customization
@@ -27,13 +20,28 @@ public class PParticle {
      * @param yOff The offset for the y-axis
      * @param zOff The offset for the z-axis
      * @param speed The speed the particle will move at
+     * @param directional If the particle should use the x, y, and z offsets as directions instead
      */
-    public PParticle(Location location, float xOff, float yOff, float zOff, float speed) {
+    public PParticle(Location location, double xOff, double yOff, double zOff, double speed, boolean directional) {
         this.location = location;
         this.xOff = xOff;
         this.yOff = yOff;
         this.zOff = zOff;
         this.speed = speed;
+        this.directional = directional;
+    }
+    
+    /**
+     * The constructor with all the fancy parameters for customization
+     * 
+     * @param location The location to display the particle at
+     * @param xOff The offset for the x-axis
+     * @param yOff The offset for the y-axis
+     * @param zOff The offset for the z-axis
+     * @param speed The speed the particle will move at
+     */
+    public PParticle(Location location, double xOff, double yOff, double zOff, double speed) {
+        this(location, xOff, yOff, zOff, speed, false);
     }
 
     /**
@@ -43,7 +51,7 @@ public class PParticle {
      * @param location The location to display the particles at
      */
     public PParticle(Location location) {
-        this(location, 0.0F, 0.0F, 0.0F, 0.0F);
+        this(location, 0.0F, 0.0F, 0.0F, 0.0F, false);
     }
 
     /**
@@ -75,8 +83,17 @@ public class PParticle {
      * 
      * @return The particle's speed
      */
-    public float getSpeed() {
+    public double getSpeed() {
         return this.speed;
+    }
+    
+    /**
+     * Gets if the particle is directional
+     * 
+     * @return If the particle is directional
+     */
+    public boolean isDirectional() {
+        return this.directional;
     }
 
     /**
@@ -84,7 +101,7 @@ public class PParticle {
      * 
      * @return The x-axis offset
      */
-    public float getXOff() {
+    public double getXOff() {
         return this.xOff;
     }
 
@@ -93,7 +110,7 @@ public class PParticle {
      * 
      * @return The y-axis offset
      */
-    public float getYOff() {
+    public double getYOff() {
         return this.yOff;
     }
 
@@ -102,7 +119,7 @@ public class PParticle {
      * 
      * @return The z-axis offset
      */
-    public float getZOff() {
+    public double getZOff() {
         return this.zOff;
     }
 

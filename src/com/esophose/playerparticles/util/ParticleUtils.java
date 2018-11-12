@@ -1,11 +1,3 @@
-/**
- * Copyright Esophose 2018
- * While using any of the code provided by this plugin
- * you must not claim it as your own. This plugin may
- * be modified and installed on a server, but may not
- * be distributed to any person by any means.
- */
-
 package com.esophose.playerparticles.util;
 
 import java.util.ArrayList;
@@ -14,6 +6,21 @@ import java.util.List;
 import org.bukkit.Material;
 
 public class ParticleUtils {
+    
+    private static List<String> blockMaterials, itemMaterials;
+    
+    static {
+        blockMaterials = new ArrayList<String>();
+        itemMaterials = new ArrayList<String>();
+        
+        for (Material mat : Material.values()) {
+            if (mat.isBlock()) {
+                blockMaterials.add(mat.name().toLowerCase());
+            } else {
+                itemMaterials.add(mat.name().toLowerCase());
+            }
+        }
+    }
 
     /**
      * Finds a block/item as a material from a string
@@ -34,7 +41,7 @@ public class ParticleUtils {
                 return material; 
         return null;
     } // @formatter:on
-    
+
     /**
      * Finds a block/item as a material from a list of possible strings
      * Contains a fallback to the barrier icon just in case
@@ -46,28 +53,28 @@ public class ParticleUtils {
         Material mat = null;
         for (String name : input) {
             mat = closestMatch(name);
-            if (mat != null)
-                return mat;
+            if (mat != null) return mat;
         }
-        if (mat == null)
-            mat = Material.BARRIER;
+        if (mat == null) mat = Material.BARRIER;
         return mat;
     }
-    
+
+    /**
+     * Gets all block materials in the game
+     * 
+     * @return A List of all block material names available in the game
+     */
     public static List<String> getAllBlockMaterials() {
-        List<String> materials = new ArrayList<String>();
-        for (Material mat : Material.values())
-            if (mat.isBlock())
-                materials.add(mat.name().toLowerCase());
-        return materials;
+        return blockMaterials;
     }
-    
+
+    /**
+     * Gets all item materials in the game
+     * 
+     * @return A List of all item material names available in the game
+     */
     public static List<String> getAllItemMaterials() {
-        List<String> materials = new ArrayList<String>();
-        for (Material mat : Material.values())
-            if (!mat.isBlock())
-                materials.add(mat.name().toLowerCase());
-        return materials;
+        return itemMaterials;
     }
 
     /**
@@ -86,7 +93,8 @@ public class ParticleUtils {
             }
         }
         for (int i = 0; i < n.length; ++i)
-            if (n[i] != i + 1) return i + 1;
+            if (n[i] != i + 1) 
+                return i + 1;
         return n.length + 1;
     }
 

@@ -10,15 +10,31 @@
 #               Welcome to the beginning               #
 # ==================================================== #
 
+# This value is the version of the plugin that last modified the config file
 # Changing this value will reset your config on the next server reload / restart. 
 # I don't recommend changing it
-# NOTE: Updating to a new version of the plugin will change this number and delete your config. 
-#       Make sure you create a backup each time before you update!
-version: 5.2
+version: 5.3
 
 # Check for new versions of the plugin
 # Default: true
 check-updates: true
+
+# The .lang file to use in the ./lang/ folder
+# Default: 'default.lang'
+lang-file: 'default.lang'
+
+# If you're using other plugins to execute commands you may wish to turn off messages
+# Default: true
+messages-enabled: true
+
+# Whether or not to use the message-prefix field when displaying messages
+# Default: true
+use-message-prefix: true
+
+# The prefix to use for all PlayerParticles messages
+# This is useless if use-message-prefix is set to false
+# Default: '&7[&3PlayerParticles&7]'
+message-prefix: '&7[&3PlayerParticles&7]'
 
 # If the command /pp gui is enabled
 # Disable this if you have your own custom GUI through another plugin
@@ -32,6 +48,16 @@ disabled-worlds: []
 #  - your_world_name_here
 #  - add_more_under_these
 
+# The maximum number of particles a player can apply at once
+# The GUI will only display up to 21, don't set this any higher than that
+# Default: 3
+max-particles: 3
+
+# The maximum number of groups a player can have saved
+# The GUI will only display up to 21, don't set this any higher than that
+# Default: 10
+max-groups: 10
+
 # Max fixed effects per player
 # Default: 5
 max-fixed-effects: 5
@@ -40,8 +66,8 @@ max-fixed-effects: 5
 # Determines how far away a player may create a fixed effect from themselves
 # This measurement is in blocks
 # Set to 0 for infinite distance
-# Default: 128
-max-fixed-effect-creation-distance: 128
+# Default: 32
+max-fixed-effect-creation-distance: 32
 
 # How many ticks to wait before spawning more particles
 # Increasing this value may cause less lag (if there was any), but will decrease prettiness
@@ -50,387 +76,13 @@ max-fixed-effect-creation-distance: 128
 # Default: 1
 ticks-per-particle: 1
 
-# ================================================================ #
-#                     MESSAGE CONFIGURATION                        #
-# Important Notes:                                                 #
-# * You can use the & symbol to color the messages                 #
-# * {TYPE} Will be replaced with whatever that message requires    #
-# * You cannot use the apostrophe character! ( ' )                 #
-# ================================================================ #
-
-# If you're using other plugins to execute commands you may wish to turn off messages
-# Default: true
-messages-enabled: true
-
-# Whether or not to use the message-prefix field when displaying messages
-# Default: true
-use-message-prefix: true
-
-# The prefix to use for all PlayerParticle messages
-# This is useless if use-message-prefix is set to false
-# Default: '&7[&3PlayerParticles&7]'
-message-prefix: '&7[&3PlayerParticles&7]'
-
-# ------------- #
-#   Particles   #
-# ------------- #
-
-# No Particle Permission
-# Default: '&cYou do not have permission to use &b{TYPE} &cparticles!'
-message-no-permission: '&cYou do not have permission to use &b{TYPE} &cparticles!'
-
-# /pp list No Particles
-# Default: '&cYou do not have permission to use any particles!'
-message-no-particles: '&cYou do not have permission to use any particles!'
-
-# Now Using Particles
-# Default: '&aNow using &b{TYPE} &aparticles!'
-message-now-using: '&aNow using &b{TYPE} &aparticles!'
-
-# Cleared Particles
-# Default: '&aYour particles have been cleared!'
-message-cleared-particles: '&aYour particles have been cleared!'
-
-# Invalid Particle Type
-# Default: '&cInvalid particle type! &b/pp effects'
-message-invalid-type: '&cInvalid particle type! &b/pp effects &c| &b/pp effect <type>'
-
-# Particle Command Usage
-# You should not change the text here, only the coloring
-# Default: '&b/pp effect <type>'
-message-particle-usage: '&b/pp effect <type>'
-
-# -------------- #
-#     Styles     #
-# -------------- #
-
-# No Style Permission
-# Default: '&cYou do not have permission to use the style type &b{TYPE}&c!'
-message-no-permission-style: '&cYou do not have permission to use the style type &b{TYPE}&c!'
-
-# /pp styles No Styles
-# Default: '&cYou do not have permission to use any styles!'
-message-no-styles: '&cYou do not have permission to use any styles!'
-
-# Now Using Style
-# Default: '&aNow using the style type &b{TYPE}&a!'
-message-now-using-style: '&aNow using the style type &b{TYPE}&a!'
-
-# Cleared Style
-# Default: '&aYour style has been cleared!'
-message-cleared-style: '&aYour style has been cleared!'
-
-# Invalid Style Type
-# Default: '&cInvalid style type! &b/pp styles &c| &b/pp style <type>'
-message-invalid-type-style: '&cInvalid style type! &b/pp styles &c| &b/pp style <type>'
-
-# Style Command Usage
-# You should not change the text here, only the coloring
-# Default: '&b/pp style <type>'
-message-style-usage: '&b/pp style <type>'
-
-# ------------ #
-#     Data     #
-# ------------ #
-
-# Data Usage
-# Default: '&eYour current effect requires &b{TYPE} &edata!'
-message-data-usage: '&eYour current effect requires &b{TYPE} &edata!'
-
-# No Data Required
-# Default: '&eYour current effect does not use any data!'
-message-no-data-usage: '&eYour current effect does not use any data!'
-
-# Data Applied
-# Default: '&aYour &b{TYPE} &adata has been applied!'
-message-data-applied: '&aYour &b{TYPE} &adata has been applied!'
-
-# Invalid Data Arguments
-# Default: '&cInvalid &b{TYPE} &cdata arguments!'
-message-data-invalid-arguments: '&cInvalid &b{TYPE} &cdata arguments!'
-
-# Unknown Material
-# Default: '&cThe {TYPE} name you supplied is invalid!'
-message-data-material-unknown: '&cThe &b{TYPE} &cname you supplied is invalid!'
-
-# Mismatched Material
-# Default: '&cThe material supplied is not of type &b{TYPE}&c!'
-message-data-material-mismatch: '&cThe material supplied is not of type &b{TYPE}&c!'
-
-# Note Data Usage
-# You should not change the text here, only the coloring
-# Default: '&b/pp data [<0-23>]|[rainbow]'
-message-note-data-usage: '&b/pp data [<0-23>]|[rainbow]'
-
-# Color Data Usage
-# You should not change the text here, only the coloring
-# Default: '&b/pp data [<0-255> <0-255> <0-255>]|[rainbow]'
-message-color-data-usage: '&b/pp data [<0-255> <0-255> <0-255>]|[rainbow]'
-
-# Item Data Usage
-# You should not change the text here, only the coloring
-# Default: '&b/pp data <itemName/ID>'
-message-item-data-usage: '&b/pp data <itemName>'
-
-# Block Data Usage
-# You should not change the text here, only the coloring
-# Default: '&b/pp data <blockName/ID>'
-message-block-data-usage: '&b/pp data <blockName>'
-
-# ---------------- #
-#     Prefixes     #
-# ---------------- #
-
-# You Can Use Particles
-# Default: '&eYou can use:'
-message-use: '&eYou can use:&b'
-
-# Usage
-# Default: '&eUsage:'
-message-usage: '&eUsage:'
-
-# Available Commands
-# Default: '&eAvailable commands: &beffect, effects, style, styles, data, fixed, reset, gui, worlds, version, help'
-message-available-commands: '&eAvailable commands: &beffect, effects, style, styles, data, fixed, reset, gui, worlds, version, help'
-
-# Disabled Worlds
-# Default: '&eParticles are disabled in these worlds:&b'
-message-disabled-worlds: '&eParticles are disabled in these worlds:&b'
-
-# ------------------ #
-#   Alt. Execution
-# ------------------ #
-
-# Executed For Player
-# Default: '&aCommand executed for &b{TYPE}'
-message-executed-for-player: '&aCommand executed for &b{TYPE}'
-
-# Failed Execute Not Found
-# Default: '&cFailed to execute for &b{TYPE}&c! Player not found!'
-message-failed-execute-not-found: '&cFailed to execute command for &b{TYPE}&c! Player not found!'
-
-# Failed Execute No Permission
-# Default: '&cFailed to execute for &b{TYPE}&c! You do not have permission!'
-message-failed-execute-no-permission: '&cFailed to execute command for &b{TYPE}&c! You do not have permission!'
-
-# ----------------- #
-#   Fixed Effects
-# ----------------- #
-
-# -- Create -- #
-
-# Missing Creation Arguments
-# Default: '&cUnable to create fixed effect, you are missing &b{TYPE} &crequired arguments!'
-message-create-fixed-missing-args: '&cUnable to create fixed effect, you are missing &b{TYPE} &crequired arguments!'
-
-# Invalid Coordinates
-# Default: '&cUnable to create fixed effect, one or more coordinates you entered is invalid!'
-message-create-fixed-invalid-coords: '&cUnable to create fixed effect, one or more coordinates you entered is invalid!'
-
-# Coords Out Of Range
-# Default: '&cUnable to create fixed effect, you must be within &b{TYPE}&c blocks of your desired location!'
-message-create-fixed-out-of-range: '&cUnable to create fixed effect, you must be within &b{TYPE}&c blocks of your desired location!'
-
-# Invalid Effect
-# Default: '&cUnable to create fixed effect, an effect with the name &b{TYPE} &cdoes not exist!'
-message-create-fixed-invalid-effect: '&cUnable to create fixed effect, an effect with the name &b{TYPE} &cdoes not exist!'
-
-# No Permission Effect
-# Default: '&cUnable to create fixed effect, you do not have permission to use the effect &b{TYPE}&c!'
-message-create-fixed-no-permission-effect: '&cUnable to create fixed effect, you do not have permission to use the effect &b{TYPE}&c!'
-
-# Invalid Style
-# Default: '&cUnable to create fixed effect, a style with the name &b{TYPE} &cdoes not exist!'
-message-create-fixed-invalid-style: '&cUnable to create fixed effect, a style with the name &b{TYPE} &cdoes not exist!'
-
-# No Permission Style
-# Default: '&cUnable to create fixed effect, you do not have permission to use the style &b{TYPE}&c!'
-message-create-fixed-no-permission-style: '&cUnable to create fixed effect, you do not have permission to use the style &b{TYPE}&c!'
-
-# Style Not Fixable
-# Default: '&cThe style &b{TYPE} &cprovided can not be used in fixed effects!'
-message-create-fixed-non-fixable-style: '&cThe style &b{TYPE} &ccan not be used in fixed effects!'
-
-# Data Error
-# Default: '&cUnable to create fixed effect, the data provided is not correct! This effect requires &b{TYPE}&c!'
-message-create-fixed-data-error: '&cUnable to create fixed effect, the data provided is not correct! This effect requires &b{TYPE}&c data!'
-
-# Creation Success
-# Default: '&aYour fixed effect has been created!'
-message-create-fixed-success: '&aYour fixed effect has been created!'
-
-# -- Remove -- #
-
-# Could Not Remove
-# Default: '&cUnable to remove, you do not have a fixed effect with the id of &b{TYPE}&c!'
-message-remove-fixed-nonexistant: '&cUnable to remove, you do not have a fixed effect with the id of &b{TYPE}&c!'
-
-# No Args Remove
-# Default: '&cYou did not specify an id to remove!'
-message-remove-fixed-no-args: '&cYou did not specify an id to remove!'
-
-# Invalid Args Remove
-# Default: '&cUnable to remove, the id specified must be a number!'
-message-remove-fixed-invalid-args: '&cUnable to remove, the id specified must be a number!'
-
-# Effect Removed
-# Default: '&aYour fixed effect with the id &b{TYPE}&a has been removed!'
-message-remove-fixed-success: '&aYour fixed effect with the id &b{TYPE}&a has been removed!'
-
-# -- List -- #
-
-# List Success
-# Default: '&eYou have fixed effects with these ids: &b'
-message-list-fixed-success: '&eYou have fixed effects with these ids: &b'
-
-# List None
-# Default: '&eYou do not have any fixed effects!'
-message-list-fixed-none: '&eYou do not have any fixed effects!'
-
-# -- Info -- #
-
-# Could Not Get Info
-# Default: '&cUnable to get info, you do not have a fixed effect with the id of &b{TYPE}&c!'
-message-info-fixed-nonexistant: '&cUnable to get info, you do not have a fixed effect with the id of &b{TYPE}&c!'
-
-# No Args Info
-# Default: '&cYou did not specify an id to display info for!'
-message-info-fixed-no-args: '&cYou did not specify an id to display info for!'
-
-# Invalid Args Info
-# Default: '&cUnable to get info, the id specified must be a number!'
-message-info-fixed-invalid-args: '&cUnable to get info, the id specified must be a number!'
-
-# Fixed Effect Info
-# Key:
-#   {0} = ID
-#   {1} = World Name
-#   {2} = World X Position
-#   {3} = World Y Position
-#   {4} = World Z Position
-#   {5} = Effect Name
-#   {6} = Style Name
-#   {7} = Data
-# Default: '&eID: &b{0} &eWorld: &b{1} &eX: &b{2} &eY: &b{3} &eZ: &b{4} &eEffect: &b{5} &eStyle: &b{6} &eData: &b{7}'
-message-info-fixed-info: '&eID: &b{0} &eWorld: &b{1} &eX: &b{2} &eY: &b{3} &eZ: &b{4} &eEffect: &b{5} &eStyle: &b{6} &eData: &b{7}'
-
-# -- Clear -- #
-
-# No Permission Clear
-# Default: '&cYou do not have permission to clear fixed effects of other players!'
-message-clear-no-permission: '&cYou do not have permission to clear fixed effects of other players!'
-
-# No Arguments Clear
-# Default: '&cYou did not provide a radius to clear fixed effects for!'
-message-clear-no-args: '&cYou did not provide a radius to clear fixed effects for!'
-
-# Invalid Arguments Clear
-# Default: '&cThe radius you provided is invalid. Make sure it is a positive whole number!'
-message-clear-invalid-args: '&cThe radius you provided is invalid. Make sure it is a positive whole number!'
-
-# Successfully Cleared
-# Key:
-#   {0} = Number of effects cleared
-#   {1} = The provided radius
-# Default: '&aCleared &b{0} &afixed effects within &b{1} &ablocks of your location!'
-message-clear-success: '&aCleared &b{0} &afixed effects within &b{1} &ablocks of your location!'
-
-# -- Other -- #
-
-# No Permission Fixed
-# Default: '&cYou do not have permission to use fixed effects!'
-message-no-permission-fixed: '&cYou do not have permission to use fixed effects!'
-
-# Reached Max Allowed
-# Default: '&cYou have reached the maximum allowed fixed effects!'
-message-max-fixed-effects-reached: '&cYou have reached the maximum allowed fixed effects!'
-
-# Invalid Fixed Command
-# Default: '&cInvalid sub-command for &b/pp fixed&c!'
-message-invalid-fixed-command: '&cInvalid subcommand for &b/pp fixed&c! &eCommands: '
-
-# -- Command Descriptions -- #
-
-# Fixed Command Description For Create
-# Default '&e/pp fixed create <x> <y> <z> <effect> <style> [data]'
-message-fixed-command-desc-create: '&e/pp fixed create <x> <y> <z> <effect> <style> [data] - Creates a new fixed effect'
-
-# Fixed Command Description For Remove
-# Default: '&e/pp fixed remove <id>'
-message-fixed-command-desc-remove: '&e/pp fixed remove <id> - Removes a fixed effect by its id'
-
-# Fixed Command Description For List
-# Default: '&e/pp fixed list - Lists all ids of your fixed effects'
-message-fixed-command-desc-list: '&e/pp fixed list - Lists all ids of your fixed effects'
-
-# Fixed Command Description For Information
-# Default: '&e/pp fixed info <id> - Gets info on one of your fixed effects'
-message-fixed-command-desc-info: '&e/pp fixed info <id> - Gets info on one of your fixed effects'
-
-# Fixed Command Description For Clear
-# Default: '&e/pp fixed clear <radius> - Clears all fixed effects of all players within the given radius'
-message-fixed-command-desc-clear: '&e/pp fixed clear <radius> - Clears all fixed effects of all players within the given radius'
-
-# ------------- #
-#      GUI      #
-# ------------- #
-
-# Disabled
-# Default: '&cThe server administrator has disabled the GUI.'
-message-gui-disabled: '&cThe server administrator has disabled the GUI.'
-
-# Opened By Default
-# Default: '&eWe opened the GUI for you because you did not specify a command. View other commands with &b/pp help&e or use &b/pp gui&e to avoid this message.'
-message-gui-by-default: '&eWe opened the GUI for you because you did not specify a command. View other commands with &b/pp help&e or use &b/pp gui&e to avoid this message.'
-
-# Back Button
-# Default: '&eGo Back'
-message-gui-back-button: '&eGo Back'
-
-# Icon Name Color
-# Default: '&a'
-message-gui-icon-name-color: '&a'
-
-# Currently Active Effect/Style
-# Default: '&d- Your current {TYPE} -'
-message-gui-icon-current-active: '&d- Your current {TYPE} -'
-
-# Sets your style/effect to {effect name}
-# The effect/style name will be added to the end
-# Default: '&eSets your {TYPE} to '
-message-gui-icon-sets-to: '&eSets your {TYPE} to &b'
-
-# Select Your 
-# Default: '&eSelect your {TYPE}'
-message-gui-icon-set-your: '&eSelect your {TYPE}'
-
-# No Access To
-# Default: '&cYou have no access to any {TYPE}!'
-message-gui-no-access-to: '&cYou have no access to any {TYPE}!'
-
-# No Data
-# Default: '&cYour effect does not use any data!'
-message-gui-no-data: '&cYour effect does not use any data!'
-
-# ------------- #
-#     Other     #
-# ------------- #
-
-# Reset
-# Default: '&aYour effect, style, and data have all been reset!'
-message-reset: '&aYour effect, style, and data have all been reset!'
-
-# Invalid Arguments
-# Default: '&cInvalid arguments! &a/pp help'
-message-invalid-arguments: '&cInvalid arguments! &b/pp help'
-
-# Disabled Worlds None
-# Default: '&eParticles are not disabled in any worlds!'
-message-disabled-worlds-none: '&eParticles are not disabled in any worlds!'
-
-# Command Usage
-# Default: '&eCommand Usage: /pp <command>'
-message-command-usage: '&eCommand Usage: &b/pp <command>'
+# From how many blocks away should a player be able to see the particles from another player?
+# Default: 48
+particle-render-range-player: 48
+
+# From how many blocks away should a player be able to see the particles from a fixed effect?
+# Default: 192
+particle-render-range-fixed-effect: 192
 
 # ================================================================ #
 #                     DATABASE CONFIGURATION                       #
@@ -481,152 +133,215 @@ database-user-password: ''
 # * You MUST use the Spigot-given name for it to work. You can see    #
 #   all the Spigot-given names at the link below:                     #
 #   https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html #
+# * If two icons are listed, the second one is used for below MC 1.13 #
 # =================================================================== #
 
-gui-icon: 
-  main-menu:
-    EFFECT: BLAZE_POWDER
-    STYLE: NETHER_STAR
-    DATA: BOOK
-  effect: # 1.13 and up
-    AMBIENT_ENTITY_EFFECT: BEACON
-    ANGRY_VILLAGER: IRON_DOOR
-    BARRIER: BARRIER
-    BLOCK: STONE
-    BUBBLE: BUBBLE_CORAL
-    BUBBLE_COLUMN_UP: MAGMA_BLOCK
-    BUBBLE_POP: BUBBLE_CORAL_FAN
-    CLOUD: WHITE_WOOL
-    CRIT: IRON_SWORD
-    CURRENT_DOWN: SOUL_SAND
-    DAMAGE_INDICATOR: BOW
-    DOLPHIN: DOLPHIN_SPAWN_EGG
-    DRAGON_BREATH: DRAGON_BREATH
-    DRIPPING_LAVA: LAVA_BUCKET
-    DRIPPING_WATER: WATER_BUCKET
-    DUST: REDSTONE
-    ENCHANT: ENCHANTING_TABLE
-    ENCHANTED_HIT: DIAMOND_SWORD
-    END_ROD: END_ROD
-    ENTITY_EFFECT: GLOWSTONE_DUST
-    EXPLOSION: FIRE_CHARGE
-    EXPLOSION_EMITTER: TNT
-    FALLING_DUST: SAND
-    FIREWORK: FIREWORK_ROCKET
-    FISHING: FISHING_ROD
-    FLAME: BLAZE_POWDER
-    HAPPY_VILLAGER: DARK_OAK_DOOR
-    HEART: POPPY
-    INSTANT_EFFECT: SPLASH_POTION
-    ITEM: ITEM_FRAME
-    ITEM_SLIME: SLIME_BALL
-    ITEM_SNOWBALL: SNOWBALL
-    LARGE_SMOKE: COBWEB
-    LAVA: MAGMA_CREAM
-    MYCELIUM: MYCELIUM
-    NAUTILUS: HEART_OF_THE_SEA
-    NONE: GLASS_PANE
-    NOTE: NOTE_BLOCK
-    POOF: FIREWORK_STAR
-    PORTAL: OBSIDIAN
-    RAIN: PUFFERFISH_BUCKET
-    SMOKE: TORCH
-    SPELL: POTION
-    SPIT: LLAMA_SPAWN_EGG
-    SPLASH: SALMON
-    SQUID_INK: INK_SAC
-    SWEEP_ATTACK: GOLDEN_SWORD
-    TOTEM_OF_UNDYING: TOTEM
-    UNDERWATER: TURTLE_HELMET
-    WITCH: CAULDRON
-  effect-legacy: # 1.9 to 1.12
-    AMBIENT_ENTITY_EFFECT: BEACON
-    ANGRY_VILLAGER: IRON_DOOR
-    BARRIER: BARRIER
-    BLOCK: STONE
-    BUBBLE: GLASS
-    CLOUD: WOOL
-    CRIT: IRON_SWORD
-    DAMAGE_INDICATOR: BOW
-    DRAGON_BREATH: DRAGONS_BREATH
-    DRIPPING_LAVA: LAVA_BUCKET
-    DRIPPING_WATER: WATER_BUCKET
-    DUST: REDSTONE
-    ENCHANT: ENCHANTMENT_TABLE
-    ENCHANTED_HIT: DIAMOND_SWORD
-    END_ROD: END_ROD
-    ENTITY_EFFECT: GLOWSTONE_DUST
-    EXPLOSION: FIREBALL
-    EXPLOSION_EMITTER: TNT
-    FALLING_DUST: SAND
-    FIREWORK: FIREWORK
-    FISHING: FISHING_ROD
-    FLAME: BLAZE_POWDER
-    FOOTSTEP: GRASS
-    HAPPY_VILLAGER: WOOD_DOOR
-    HEART: RED_ROSE
-    INSTANT_EFFECT: POTION
-    ITEM: ITEM_FRAME
-    ITEM_SLIME: SLIME_BALL
-    ITEM_SNOWBALL: SNOWBALL
-    LARGE_SMOKE: WEB
-    LAVA: MAGMA_CREAM
-    MYCELIUM: MYCEL
-    NONE: THIN_GLASS
-    NOTE: NOTE_BLOCK
-    POOF: FIREWORK_CHARGE
-    PORTAL: OBSIDIAN
-    RAIN: LAPIS_BLOCK
-    SMOKE: TORCH
-    SPELL: GLASS_BOTTLE
-    SPIT: PUMPKIN_SEEDS
-    SPLASH: FISH
-    SWEEP_ATTACK: GOLD_SWORD
-    TOTEM_OF_UNDYING: TOTEM
-    UNDERWATER: BOAT
-    WITCH: CAULDRON
-  style: # 1.13 and up
-    ARROWS: BOW
-    BEAM: POWERED_RAIL
-    BLOCKBREAK: IRON_PICKAXE
-    BLOCKEDIT: DISPENSER
-    BLOCKPLACE: OAK_PLANKS
-    CUBE: STONE
-    FEET: GRASS
-    HALO: ENDER_PORTAL_FRAME
-    HURT: CACTUS
-    MOVE: PISTON
-    NONE: GLASS_PANE
-    ORBIT: ENCHANTING_TABLE
-    POINT: STONE_BUTTON
-    QUADHELIX: NAUTILUS_SHELL
-    SPHERE: HEART_OF_THE_SEA
-    SPIN: BEACON
-    SPIRAL: HOPPER
-    SWORDS: IRON_SWORD
-    THICK: COBWEB
-    WINGS: ELYTRA
-  style-legacy:  # 1.9 to 1.12
-    ARROWS: BOW
-    BEAM: POWERED_RAIL
-    BLOCKBREAK: IRON_PICKAXE
-    BLOCKEDIT: DISPENSER
-    BLOCKPLACE: WOOD
-    CUBE: STONE
-    FEET: GRASS
-    HALO: ENDER_PORTAL_FRAME
-    HURT: CACTUS
-    MOVE: PISTON_BASE
-    NONE: THIN_GLASS
-    ORBIT: ENCHANTMENT_TABLE
-    POINT: STONE_BUTTON
-    QUADHELIX: ACTIVATOR_RAIL
-    SPHERE: SNOW_BALL
-    SPIN: BEACON
-    SPIRAL: HOPPER
-    SWORDS: IRON_SWORD
-    THICK: VINE
-    WINGS: ELYTRA
+gui-icon:
+  misc:
+    particles:
+      - BLAZE_POWDER
+    groups:
+      - CHEST
+    preset_groups:
+      - ENDER_CHEST
+    back:
+      - ARROW
+    create:
+      - WRITABLE_BOOK
+      - BOOK_AND_QUILL
+    edit_effect:
+      - FIREWORK_ROCKET
+      - FIREWORK
+    edit_style:
+      - NETHER_STAR
+    edit_data:
+      - BOOK
+    randomize:
+      - HOPPER
+    reset:
+      - BARRIER
+  effect:
+    ambient_entity_effect:
+      - BEACON
+    angry_villager:
+      - IRON_DOOR
+    barrier:
+      - BARRIER
+    block:
+      - STONE
+    bubble:
+      - BUBBLE_CORAL
+      - GLASS
+    bubble_column_up:
+      - MAGMA_BLOCK
+    bubble_pop:
+      - BUBBLE_CORAL_FAN
+    cloud:
+      - WHITE_WOOL
+      - WOOL
+    crit:
+      - IRON_SWORD
+    current_down:
+      - SOUL_SAND
+    damage_indicator:
+      - BOW
+    dolphin:
+      - DOLPHIN_SPAWN_EGG
+    dragon_breath:
+      - DRAGON_BREATH
+      - DRAGONS_BREATH
+    dripping_lava:
+      - LAVA_BUCKET
+    dripping_water:
+      - WATER_BUCKET
+    dust:
+      - REDSTONE
+    enchant:
+      - ENCHANTING_TABLE
+      - ENCHANTMENT_TABLE
+    enchanted_hit:
+      - DIAMOND_SWORD
+    end_rod:
+      - END_ROD
+    entity_effect:
+      - GLOWSTONE_DUST
+    explosion:
+      - FIRE_CHARGE
+      - FIREBALL
+    explosion_emitter:
+      - TNT
+    falling_dust:
+      - SAND
+    firework:
+      - FIREWORK_ROCKET
+      - FIREWORK
+    fishing:
+      - FISHING_ROD
+    flame:
+      - BLAZE_POWDER
+    footstep:
+      - GRASS
+    happy_villager:
+      - DARK_OAK_DOOR
+      - WOOD_DOOR
+    heart:
+      - POPPY
+      - RED_ROSE
+    instant_effect:
+      - SPLASH_POTION
+      - POTION
+    item:
+      - ITEM_FRAME
+    item_slime:
+      - SLIME_BALL
+    item_snowball:
+      - SNOWBALL
+    large_smoke:
+      - COBWEB
+      - WEB
+    lava:
+      - MAGMA_CREAM
+    mycelium:
+      - MYCELIUM
+      - MYCEL
+    nautilus:
+      - HEART_OF_THE_SEA
+    note:
+      - NOTE_BLOCK
+    poof:
+      - FIREWORK_STAR
+      - FIREWORK_CHARGE
+    portal:
+      - OBSIDIAN
+    rain:
+      - PUFFERFISH_BUCKET
+      - LAPIS_BLOCK
+    smoke:
+      - TORCH
+    spell:
+      - POTION
+      - GLASS_BOTTLE
+    spit:
+      - LLAMA_SPAWN_EGG
+      - PUMPKIN_SEEDS
+    splash:
+      - SALMON
+      - FISH
+    squid_ink:
+      - INK_SAC
+    sweep_attack:
+      - GOLDEN_SWORD
+      - GOLD_SWORD
+    totem_of_undying:
+      - TOTEM
+    underwater:
+      - TURTLE_HELMET
+    witch:
+      - CAULDRON
+  style:
+    arrows:
+      - BOW
+    batman:
+      - BAT_SPAWN_EGG
+      - COAL
+    beam:
+      - POWERED_RAIL
+    blockbreak:
+      - IRON_PICKAXE
+    blockedit:
+      - DISPENSER
+    blockplace:
+      - OAK_PLANKS
+      - WOOD
+    chains:
+      - TRIPWIRE_HOOK
+    companion:
+      - NAME_TAG
+    cube:
+      - STONE
+    feet:
+      - GRASS
+    halo:
+      - END_PORTAL_FRAME
+      - ENDER_PORTAL_FRAME
+    hurt:
+      - CACTUS
+    invocation:
+      - ENDER_EYE
+      - EYE_OF_ENDER
+    move:
+      - PISTON
+      - PISTON_BASE
+    normal:
+      - DIRT
+    orbit:
+      - ENCHANTING_TABLE
+      - ENCHANTMENT_TABLE
+    overhead:
+      - GLOWSTONE
+    point:
+      - STONE_BUTTON
+    quadhelix:
+      - NAUTILUS_SHELL
+      - ACTIVATOR_RAIL
+    rings:
+      - STRING
+    sphere:
+      - HEART_OF_THE_SEA
+      - SNOWBALL
+    spin:
+      - BEACON
+    spiral:
+      - HOPPER
+    swords:
+      - IRON_SWORD
+    thick:
+      - COBWEB
+      - WEB
+    vortex:
+      - GLOWSTONE_DUST
+    wings:
+      - ELYTRA
 
 # That's everything! You reached the end of the configuration.
 # Enjoy the plugin!

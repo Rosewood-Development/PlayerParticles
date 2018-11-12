@@ -32,7 +32,7 @@ public final class VectorUtils {
      * Not instantiable
      */
     private VectorUtils() {
-        
+
     }
 
     /**

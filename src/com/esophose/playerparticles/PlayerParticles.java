@@ -1,19 +1,9 @@
-/**
- * Copyright Esophose 2018
- * While using any of the code provided by this plugin
- * you must not claim it as your own. This plugin may
- * be modified and installed on a server, but may not
- * be distributed to any person by any means.
- */
-
 /*
- * TODO: v5.2
- * + Command to force set an effect/style for a player
- * + Tab completion for fixed effects
+ * TODO: v5.3 (actually v6)
  * + Add new style 'tornado'
- * + Add new style 'companion'
- * + Add new style 'atom'
- * + Add new style 'rings'
+ * + Add new style 'doubleorbit'
+ * * Adjust PParticles to use a Vector instead of a Location
+ * * Setting in config.yml to make non-event styles display particles using DefaultStyles.FEET while the player is moving
  */
 
 package com.esophose.playerparticles;
@@ -27,16 +17,25 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
-import com.esophose.playerparticles.gui.PlayerParticlesGui;
-import com.esophose.playerparticles.manager.DatabaseManager;
-import com.esophose.playerparticles.manager.MessageManager;
+import com.esophose.playerparticles.command.ParticleCommandHandler;
+import com.esophose.playerparticles.database.DatabaseConnector;
+import com.esophose.playerparticles.database.MySqlDatabaseConnector;
+import com.esophose.playerparticles.database.SqliteDatabaseConnector;
+import com.esophose.playerparticles.gui.GuiHandler;
+import com.esophose.playerparticles.manager.LangManager;
 import com.esophose.playerparticles.manager.ParticleManager;
+import com.esophose.playerparticles.manager.SettingManager;
+import com.esophose.playerparticles.manager.SettingManager.PSetting;
+import com.esophose.playerparticles.particles.ParticleGroup;
 import com.esophose.playerparticles.styles.DefaultStyles;
 import com.esophose.playerparticles.updater.PluginUpdateListener;
 import com.esophose.playerparticles.updater.Updater;
 
 public class PlayerParticles extends JavaPlugin {
+
+    private static Plugin pluginInstance;
 
     /**
      * The version a new update has, will be null if the config has it disabled
@@ -45,90 +44,53 @@ public class PlayerParticles extends JavaPlugin {
     public static String updateVersion = null;
 
     /**
-     * The MySQL database connection manager
+     * The database connection manager
      */
-    public static DatabaseManager mySQL = null;
-
+    private static DatabaseConnector databaseConnector = null;
+    
     /**
-     * Whether or not to use MySQL as determined in the config
+     * The task that spawns the particles
      */
-    public static boolean useMySQL = false;
+    private static BukkitTask particleTask = null;
 
     /**
      * Registers all the styles available by default
      * Saves the default config if it doesn't exist
      * Registers the tab completer and the event listeners
      * Checks if the config needs to be updated to the new version
-     * Makes sure the database is accessable
-     * Updates the map and styleMap @see ParticleCreator
+     * Makes sure the database is accessible
      * Starts the particle spawning task
      * Registers the command executor
      * Checks for any updates if checking is enabled in the config
      */
     public void onEnable() {
-        DefaultStyles.registerStyles();
-        MessageManager.setup();
-        saveDefaultConfig();
-        getCommand("pp").setTabCompleter(new ParticleCommandCompleter());
-        getCommand("pp").setExecutor(new ParticleCommandExecutor());
+        pluginInstance = Bukkit.getServer().getPluginManager().getPlugin("PlayerParticles");
+        
+        getCommand("pp").setTabCompleter(new ParticleCommandHandler());
+        getCommand("pp").setExecutor(new ParticleCommandHandler());
+
         Bukkit.getPluginManager().registerEvents(new ParticleManager(), this);
         Bukkit.getPluginManager().registerEvents(new PluginUpdateListener(), this);
-        Bukkit.getPluginManager().registerEvents(new PlayerParticlesGui(), this);
-        double configVersion = getConfig().getDouble("version");
-        if (configVersion < Double.parseDouble(getDescription().getVersion())) {
-            // Make sure database information gets carried over between config updates
-            boolean databaseEnable = false;
-            String databaseHostname = "";
-            int databasePort = 3306;
-            String databaseName = "";
-            String databaseUserName = "";
-            String databaseUserPassword = "";
-            
+        Bukkit.getPluginManager().registerEvents(new GuiHandler(), this);
+
+        saveDefaultConfig();
+        double configVersion = PSetting.VERSION.getDouble();
+        boolean updatePluginSettings = configVersion < Double.parseDouble(getDescription().getVersion());
+        if (updatePluginSettings) {
             File configFile = new File(getDataFolder(), "config.yml");
             if (configFile.exists()) {
-                databaseEnable = getConfig().getBoolean("database-enable");
-                databaseHostname = getConfig().getString("database-hostname");
-                databasePort = getConfig().getInt("database-port");
-                databaseName = getConfig().getString("database-name");
-                databaseUserName = getConfig().getString("database-user-name");
-                databaseUserPassword = getConfig().getString("database-user-password");
-                if (databaseEnable) { // @formatter:off
-                    getLogger().warning("== WARNING == The PlayerParticles database configuration was detected as database-enable=true. " + 
-                                        "The database configuration has been loaded this time for critical schema updates, but has also been DELETED from the config.yml! " + 
-                                        "This needs to be replaced or else the plugin wont connect to the database on its next load!"); // @formatter:on
-                }
                 configFile.delete();
             }
             saveDefaultConfig();
             reloadConfig();
-            getConfig().set("database-enable", databaseEnable);
-            getConfig().set("database-hostname", databaseHostname);
-            getConfig().set("database-port", databasePort);
-            getConfig().set("database-name", databaseName);
-            getConfig().set("database-user-name", databaseUserName);
-            getConfig().set("database-user-password", databaseUserPassword);
             getLogger().warning("The config.yml has been updated to v" + getDescription().getVersion() + "!");
         }
 
-        if (configVersion < 5.2) {
-            checkDatabase(true); // @formatter:off
-            getLogger().warning("All previous player data has been purged. " + 
-                                "PlayerParticles v" + getDescription().getVersion() + " is not backwards compatible with the previous data schema. " + 
-                                "If you were using regular file storage, the new data file is called pplayerData.yml, the old file playerData.yml is still there. " + 
-                                "If you were using database storage, all data has been deleted."); // @formatter:on
-        } else {
-            checkDatabase(false);
-        }
-
-        checkDatabase(configVersion < 5.2);
-        startParticleTask();
-
-        if (shouldCheckUpdates()) {
+        if (PSetting.CHECK_UPDATES.getBoolean()) {
             new BukkitRunnable() {
                 public void run() {
-                    final File file = getFile();
                     try { // This can throw an exception if the server has no internet connection or if the Curse API is down
-                        Updater updater = new Updater(getPlugin(), 82823, file, Updater.UpdateType.NO_DOWNLOAD, false);
+                        Updater updater = new Updater(pluginInstance, 82823, getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
                         if (Double.parseDouble(updater.getLatestName().replaceAll("PlayerParticles v", "")) > Double.parseDouble(getPlugin().getDescription().getVersion())) {
                             updateVersion = updater.getLatestName().replaceAll("PlayerParticles v", "");
                             getLogger().info("An update (v" + updateVersion + ") is available! You are running v" + getPlugin().getDescription().getVersion());
@@ -139,17 +101,49 @@ public class PlayerParticles extends JavaPlugin {
                 }
             }.runTaskAsynchronously(this);
         }
+        
+        this.reload(updatePluginSettings);
     }
 
     /**
-     * Clean up MySQL connection if it's open
+     * Clean up database connection if it's open
+     * Close all users with an open PlayerParticles GUI
      */
     public void onDisable() {
-        if (useMySQL) {
-            mySQL.closeConnection();
+        databaseConnector.closeConnection();
+        GuiHandler.forceCloseAllOpenGUIs();
+    }
+    
+    /**
+     * Reloads the settings of the plugin
+     * 
+     * @param updatePluginSettings True if the settings should be updated to the latest version of the plugin
+     */
+    public void reload(boolean updatePluginSettings) {
+        this.reloadConfig();
+        
+        // If not null, plugin is already loaded
+        if (particleTask != null) {
+            particleTask.cancel();
+            particleTask = null;
+            databaseConnector.closeConnection();
+            databaseConnector = null;
+            GuiHandler.forceCloseAllOpenGUIs();
+        } else {
+            DefaultStyles.registerStyles(); // Only ever load styles once
         }
-
-        PlayerParticlesGui.forceCloseAllOpenGUIs();
+        
+        // This runs before the SettingManager is reloaded, the credentials will not be stored in memory for more than a few milliseconds
+        configureDatabase(PSetting.DATABASE_ENABLE.getBoolean()); 
+        
+        SettingManager.reload();
+        LangManager.reload(updatePluginSettings);
+        ParticleGroup.reload();
+        
+        GuiHandler.setup();
+        
+        ParticleManager.refreshData();
+        startParticleTask();
     }
 
     /**
@@ -158,99 +152,102 @@ public class PlayerParticles extends JavaPlugin {
      * @return The PlayerParticles plugin instance
      */
     public static Plugin getPlugin() {
-        return Bukkit.getPluginManager().getPlugin("PlayerParticles");
+        return pluginInstance;
     }
-
+    
     /**
-     * Checks the config if the plugin can look for updates
+     * Gets the DatabaseConnector that allows querying the database
      * 
-     * @return True if check-updates is set to true in the config
+     * @return The DatabaseConnector
      */
-    public boolean shouldCheckUpdates() {
-        return getConfig().getBoolean("check-updates");
+    public static DatabaseConnector getDBConnector() {
+        return databaseConnector;
     }
 
     /**
-     * Checks if database-enable is true in the config, if it is then continue
+     * Checks if database-enable is true in the config, if it is then uses MySql
      * Gets the database connection information from the config and tries to connect to the server
      * Removes old table from previous versions of the plugin
      * Creates new tables if they don't exist
-     * Sets useMySQL to true if it connects successfully, and false if it fails or isn't enabled
+     * 
+     * @param useMySql If we should use MySQL as the database type, if false, uses SQLite
      */
-    private void checkDatabase(boolean shouldPurge) {
-        if (getConfig().getBoolean("database-enable")) {
-            mySQL = new DatabaseManager(getConfig());
-            
-            useMySQL = mySQL.isInitialized(); // If something goes wrong, this will be set to false
-            if (!useMySQL) return; // Break out, couldn't set up the database connection
-
-            // Queries are purposely not run in an asynchronous task, this is on plugin startup and shouldn't affect the end users
-            mySQL.connect((connection) -> { // @formatter:off
-                if (shouldPurge) { // Reset the database
-                    try (Statement statement = connection.createStatement()) {
-                        statement.addBatch("DROP TABLE pp_users"); // Drop tables, they will be recreated from scratch
-                        statement.addBatch("DROP TABLE pp_fixed");
-                        statement.addBatch("DROP TABLE pp_data_item");
-                        statement.addBatch("DROP TABLE pp_data_block");
-                        statement.addBatch("DROP TABLE pp_data_color");
-                        statement.addBatch("DROP TABLE pp_data_note");
-                    } catch (SQLException e) {
-                        getLogger().info("Failed to connect to the MySQL Database! Check to see if your login information is correct!");
-                        getLogger().info("Additional information: " + e.getMessage());
-                        useMySQL = false;
-                        return;
-                    }
-                }
-                
-                try (Statement statement = connection.createStatement();
-                     ResultSet res = statement.executeQuery("SHOW TABLES LIKE 'pp_users'")) {
-                    
-                    if (res.next()) { // Database is already created
-                        try (Statement statement2 = connection.createStatement();
-                             ResultSet res2 = statement2.executeQuery("SHOW TABLES LIKE 'pp_fixed'")) {
-                            
-                            if (!res2.next()) { // Is the current database of an old version?
-                                mySQL.updateSQL("CREATE TABLE pp_fixed (uuid VARCHAR(36), player_uuid VARCHAR(36), id SMALLINT, effect VARCHAR(32), style VARCHAR(32), worldName VARCHAR(50), xPos DOUBLE, yPos DOUBLE, zPos DOUBLE);" +
-                                                "ALTER TABLE pp_data_item CHANGE player_uuid uuid VARCHAR(36);" +
-                                                "ALTER TABLE pp_data_block CHANGE player_uuid uuid VARCHAR(36);" +
-                                                "ALTER TABLE pp_data_color CHANGE player_uuid uuid VARCHAR(36);" +
-                                                "ALTER TABLE pp_data_note CHANGE player_uuid uuid VARCHAR(36);");
-                            }
-                        }
-                    } else { // Database isn't created yet
-                        mySQL.updateSQL("CREATE TABLE pp_users (player_uuid VARCHAR(36), effect VARCHAR(32), style VARCHAR(32));" + 
-                                        "CREATE TABLE pp_fixed (uuid VARCHAR(36), player_uuid VARCHAR(36), id SMALLINT, effect VARCHAR(32), style VARCHAR(32), worldName VARCHAR(50), xPos DOUBLE, yPos DOUBLE, zPos DOUBLE);" +
-                                        "CREATE TABLE pp_data_item (uuid VARCHAR(36), material VARCHAR(32));" + 
-                                        "CREATE TABLE pp_data_block (uuid VARCHAR(36), material VARCHAR(32));" +
-                                        "CREATE TABLE pp_data_color (uuid VARCHAR(36), r SMALLINT, g SMALLINT, b SMALLINT);" + 
-                                        "CREATE TABLE pp_data_note (uuid VARCHAR(36), note SMALLINT);");
-                    }
-                    
-                } catch (SQLException e) {
-                    getLogger().info("Failed to connect to the MySQL Database! Check to see if your login information is correct!");
-                    getLogger().info("Additional information: " + e.getMessage());
-                    useMySQL = false;
-                }
-            });
+    private void configureDatabase(boolean useMySql) {
+        if (useMySql) {
+            databaseConnector = new MySqlDatabaseConnector();
         } else {
-            useMySQL = false;
-        } // @formatter:on
+            try {
+                Class.forName("org.sqlite.JDBC"); // This is required to put here for Spigot 1.9 and 1.10 for some reason
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            databaseConnector = new SqliteDatabaseConnector(this.getDataFolder().getAbsolutePath());
+        }
+
+        if (!databaseConnector.isInitialized()) {
+            getLogger().severe("Unable to connect to the MySQL database! Is your login information correct? Falling back to SQLite database instead.");
+            configureDatabase(false);
+            return;
+        }
+
+        databaseConnector.connect((connection) -> {
+            // Check if pp_users exists, if it does, this is an old database schema that needs to be deleted
+            try { // @formatter:off
+    			try (Statement statement = connection.createStatement()) {
+    			    String pp_usersQuery;
+    			    if (useMySql) {
+    			        pp_usersQuery = "SHOW TABLES LIKE 'pp_users'";
+    			    } else {
+    			        pp_usersQuery = "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'pp_users'";
+    			    }
+        			ResultSet result = statement.executeQuery(pp_usersQuery);
+        			if (result.next()) {
+        			    statement.close();
+        			    
+        				Statement dropStatement = connection.createStatement();
+        				dropStatement.addBatch("DROP TABLE IF EXISTS pp_users");
+        				dropStatement.addBatch("DROP TABLE IF EXISTS pp_fixed");
+        				dropStatement.addBatch("DROP TABLE IF EXISTS pp_data_item");
+        				dropStatement.addBatch("DROP TABLE IF EXISTS pp_data_block");
+        				dropStatement.addBatch("DROP TABLE IF EXISTS pp_data_color");
+        				dropStatement.addBatch("DROP TABLE IF EXISTS pp_data_note");
+        				dropStatement.executeBatch();
+        				getLogger().warning("Deleted old " + (useMySql ? "MySQL" : "SQLite") + " database schema, it was out of date.");
+        			}
+        		}
+    			
+    			// Try to create the tables just in case they don't exist
+    			try (Statement createStatement = connection.createStatement()) {
+                    createStatement.addBatch("CREATE TABLE IF NOT EXISTS pp_particle (uuid VARCHAR(36), group_uuid VARCHAR(36), id SMALLINT, effect VARCHAR(100), style VARCHAR(100), item_material VARCHAR(100), block_material VARCHAR(100), note SMALLINT, r SMALLINT, g SMALLINT, b SMALLINT, PRIMARY KEY(uuid))");
+    			    createStatement.addBatch("CREATE TABLE IF NOT EXISTS pp_group (uuid VARCHAR(36), owner_uuid VARCHAR(36), name VARCHAR(100), PRIMARY KEY(uuid))");
+                    createStatement.addBatch("CREATE TABLE IF NOT EXISTS pp_fixed (owner_uuid VARCHAR(36), id SMALLINT, particle_uuid VARCHAR(36), world VARCHAR(100), xPos DOUBLE, yPos DOUBLE, zPos DOUBLE, PRIMARY KEY(owner_uuid, id), FOREIGN KEY(particle_uuid) REFERENCES pp_particle(uuid) ON DELETE CASCADE)");
+                    int[] results = createStatement.executeBatch();
+                    if (results[0] + results[1] + results[2] > 0) {
+                        getLogger().warning("Updated " + (useMySql ? "MySQL" : "SQLite") + " database schema.");
+                    }
+    			}
+    		} catch (SQLException ex) {
+    		    ex.printStackTrace();
+    			if (useMySql) {
+    			    getLogger().severe("Unable to connect to the MySQL database! Is your login information correct? Falling back to SQLite database instead.");
+    			    configureDatabase(false);
+    			} else {
+    			    getLogger().severe("Unable to connect to the SQLite database! This is a critical error, the plugin will be unable to save any data.");
+    			}
+    		}
+    	}); // @formatter:on
     }
 
     /**
-     * Starts the task reponsible for spawning particles
+     * Starts the task responsible for spawning particles
      * Run in the synchronous task so it starts after all plugins have loaded, including extensions
      */
     private void startParticleTask() {
         final Plugin playerParticles = this;
         new BukkitRunnable() {
             public void run() {
-                ParticleManager.refreshPPlayers(); // Add any online players who have particles
-                ParticleManager.addAllFixedEffects(); // Add all fixed effects
-                PlayerParticlesGui.setup();
-
-                long ticks = getConfig().getLong("ticks-per-particle");
-                new ParticleManager().runTaskTimer(playerParticles, 0, ticks);
+                long ticks = PSetting.TICKS_PER_PARTICLE.getLong();
+                particleTask = new ParticleManager().runTaskTimer(playerParticles, 5, ticks);
             }
         }.runTaskLater(playerParticles, 1);
     }
