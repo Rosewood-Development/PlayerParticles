@@ -1,14 +1,7 @@
-/**
- * Copyright Esophose 2018
- * While using any of the code provided by this plugin
- * you must not claim it as your own. This plugin may
- * be modified and installed on a server, but may not
- * be distributed to any person by any means.
- */
-
 package com.esophose.playerparticles.styles.api;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.esophose.playerparticles.PlayerParticles;
 
@@ -17,8 +10,8 @@ public class ParticleStyleManager {
     /**
      * Arrays that contain all registered styles
      */
-    private static ArrayList<ParticleStyle> styles = new ArrayList<ParticleStyle>();
-    private static ArrayList<ParticleStyle> customHandledStyles = new ArrayList<ParticleStyle>();
+    private static List<ParticleStyle> styles = new ArrayList<ParticleStyle>();
+    private static List<ParticleStyle> customHandledStyles = new ArrayList<ParticleStyle>();
 
     /**
      * Registers a style that is put into the plugin's update loop
@@ -26,13 +19,26 @@ public class ParticleStyleManager {
      * @param style The style to add
      */
     public static void registerStyle(ParticleStyle style) {
+        if (style == null) {
+            PlayerParticles.getPlugin().getLogger().severe("Tried to register a null style");
+            return;
+        }
+        
+        if (style.getName() == null || style.getName().trim().equals("")) {
+            PlayerParticles.getPlugin().getLogger().severe("Tried to register a style with a null or empty name: '" + style.getName() + "'");
+            return;
+        }
+        
         for (ParticleStyle testAgainst : styles) {
             if (testAgainst.getName().equalsIgnoreCase(style.getName())) {
-                PlayerParticles.getPlugin().getLogger().severe("Tried to register two styles with the same name spelling: " + style.getName());
+                PlayerParticles.getPlugin().getLogger().severe("Tried to register two styles with the same name spelling: '" + style.getName() + "'");
+                return;
             } else if (testAgainst.equals(style)) {
-                PlayerParticles.getPlugin().getLogger().severe("Tried to register the same style twice: " + style.getName());
+                PlayerParticles.getPlugin().getLogger().severe("Tried to register the same style twice: '" + style.getName() + "'");
+                return;
             }
         }
+        
         styles.add(style);
     }
 
@@ -59,22 +65,20 @@ public class ParticleStyleManager {
     /**
      * Gets all registered styles
      * 
-     * @return An ArrayList of all registered styles
+     * @return A List of ParticleStyles that are registered
      */
-    public static ArrayList<ParticleStyle> getStyles() {
+    public static List<ParticleStyle> getStyles() {
         return styles;
     }
-
+    
     /**
-     * Gets the ParticleStyle with the name given, returns null if not found
+     * Removes all styles from the registry
      * 
-     * @param styleName The string of the style to search for
-     * @return The ParticleStyle with the name requested
+     * It is not recommended to call this
      */
-    public static ParticleStyle styleFromString(String styleName) {
-        for (ParticleStyle style : styles)
-            if (style.getName().equals(styleName)) return style;
-        return null;
+    public static void reset() {
+        styles.clear();
+        customHandledStyles.clear();
     }
 
     /**

@@ -29,7 +29,7 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import com.esophose.playerparticles.PPlayer;
+import com.esophose.playerparticles.particles.ParticlePair;
 import com.esophose.playerparticles.styles.api.PParticle;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
 import com.esophose.playerparticles.util.VectorUtils;
@@ -41,7 +41,7 @@ import com.esophose.playerparticles.util.VectorUtils;
  */
 public class ParticleStyleCube implements ParticleStyle {
 
-    private float edgeLength = 2;
+    private double edgeLength = 2;
     private double angularVelocityX = (Math.PI / 200) / 5;
     private double angularVelocityY = (Math.PI / 170) / 5;
     private double angularVelocityZ = (Math.PI / 155) / 5;
@@ -49,7 +49,7 @@ public class ParticleStyleCube implements ParticleStyle {
     private int step = 0;
     private boolean skipNextStep = false; // Only spawn every 2 ticks
 
-    public PParticle[] getParticles(PPlayer pplayer, Location location) {
+    public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> pparticles = new ArrayList<PParticle>();
 
         if (!skipNextStep) {
@@ -57,7 +57,7 @@ public class ParticleStyleCube implements ParticleStyle {
             xRotation = step * angularVelocityX;
             yRotation = step * angularVelocityY;
             zRotation = step * angularVelocityZ;
-            float a = edgeLength / 2;
+            double a = edgeLength / 2;
             double angleX, angleY;
             Vector v = new Vector();
             for (int i = 0; i < 4; i++) {
@@ -83,7 +83,7 @@ public class ParticleStyleCube implements ParticleStyle {
             }
         }
 
-        return pparticles.toArray(new PParticle[pparticles.size()]);
+        return pparticles;
     }
 
     public void updateTimers() {

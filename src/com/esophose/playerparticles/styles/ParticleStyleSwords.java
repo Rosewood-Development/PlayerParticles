@@ -12,36 +12,36 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-import com.esophose.playerparticles.PPlayer;
-import com.esophose.playerparticles.manager.PPlayerDataManager;
+import com.esophose.playerparticles.manager.DataManager;
 import com.esophose.playerparticles.manager.ParticleManager;
-import com.esophose.playerparticles.manager.PermissionManager;
+import com.esophose.playerparticles.particles.PPlayer;
+import com.esophose.playerparticles.particles.ParticlePair;
 import com.esophose.playerparticles.styles.api.PParticle;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class ParticleStyleSwords implements ParticleStyle, Listener {
-    
+
     private static final List<String> SWORD_NAMES;
-    
+
     static {
         SWORD_NAMES = new ArrayList<String>();
-        SWORD_NAMES.addAll(Arrays.asList("WOOD_SWORD", "STONE_SWORD", "IRON_SWORD", "GOLD_SWORD", "DIAMOND_SWORD"));
+        SWORD_NAMES.addAll(Arrays.asList("WOOD_SWORD", "STONE_SWORD", "IRON_SWORD", "GOLD_SWORD", "GOLDEN_SWORD", "DIAMOND_SWORD", "TRIDENT"));
     }
 
-    public PParticle[] getParticles(PPlayer pplayer, Location location) {
-        PParticle[] baseParticles = DefaultStyles.THICK.getParticles(pplayer, location);
+    public List<PParticle> getParticles(ParticlePair particle, Location location) {
+        List<PParticle> baseParticles = DefaultStyles.THICK.getParticles(particle, location);
 
         int multiplyingFactor = 3; // Uses the same logic as ParticleStyleThick except multiplies the resulting particles by 3x
-        PParticle[] particles = new PParticle[baseParticles.length * multiplyingFactor];
-        for (int i = 0; i < baseParticles.length * multiplyingFactor; i++) {
-            particles[i] = baseParticles[i % baseParticles.length];
+        List<PParticle> particles = new ArrayList<PParticle>();
+        for (int i = 0; i < baseParticles.size() * multiplyingFactor; i++) {
+            particles.add(baseParticles.get(i % baseParticles.size()));
         }
 
         return particles;
     }
 
     public void updateTimers() {
-        
+
     }
 
     public String getName() {
@@ -51,17 +51,17 @@ public class ParticleStyleSwords implements ParticleStyle, Listener {
     public boolean canBeFixed() {
         return false;
     }
-    
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player && event.getEntity() instanceof LivingEntity) {
             Player player = (Player) event.getDamager();
             LivingEntity entity = (LivingEntity) event.getEntity();
-            PPlayer pplayer = PPlayerDataManager.getInstance().getPPlayer(player.getUniqueId());
-            if (pplayer != null && pplayer.getParticleStyle() == DefaultStyles.SWORDS && PermissionManager.hasStylePermission(player, DefaultStyles.SWORDS)) {
-                if (player.getInventory().getItemInMainHand() != null && SWORD_NAMES.contains(player.getInventory().getItemInMainHand().getType().name())) {
+            PPlayer pplayer = DataManager.getPPlayer(player.getUniqueId());
+            if (pplayer != null) {
+                for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.SWORDS)) {
                     Location loc = entity.getLocation().clone().add(0, 1, 0);
-                    ParticleManager.displayParticles(pplayer, DefaultStyles.SWORDS.getParticles(pplayer, loc));
+                    ParticleManager.displayParticles(particle, DefaultStyles.SWORDS.getParticles(particle, loc));
                 }
             }
         }

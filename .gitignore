@@ -38,6 +38,7 @@ Icon
 /.settings
 /doc
 /target
+/images
 
 # Files that might appear on external disk
 .Spotlight-V100

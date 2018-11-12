@@ -10,22 +10,24 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 
-import com.esophose.playerparticles.PPlayer;
-import com.esophose.playerparticles.manager.PPlayerDataManager;
+import com.esophose.playerparticles.manager.DataManager;
 import com.esophose.playerparticles.manager.ParticleManager;
-import com.esophose.playerparticles.manager.PermissionManager;
+import com.esophose.playerparticles.particles.PPlayer;
+import com.esophose.playerparticles.particles.ParticlePair;
 import com.esophose.playerparticles.styles.api.PParticle;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class ParticleStyleBlockPlace implements ParticleStyle, Listener {
 
-    public PParticle[] getParticles(PPlayer pplayer, Location location) {
+    public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<PParticle>();
+        
+        location.add(0.5, 0.5, 0.5); // Center around the block
 
-        for (int i = 0; i < 15; i++) 
-            particles.add(new PParticle(location.clone().add(0.5, 0.5, 0.5), 0.75F, 0.75F, 0.75F, 0.05F));
+        for (int i = 0; i < 15; i++)
+            particles.add(new PParticle(location, 0.75F, 0.75F, 0.75F, 0.05F));
 
-        return particles.toArray(new PParticle[particles.size()]);
+        return particles;
     }
 
     public void updateTimers() {
@@ -43,10 +45,12 @@ public class ParticleStyleBlockPlace implements ParticleStyle, Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
-        PPlayer pplayer = PPlayerDataManager.getInstance().getPPlayer(player.getUniqueId());
-        if (pplayer != null && pplayer.getParticleStyle() == DefaultStyles.BLOCKPLACE && PermissionManager.hasStylePermission(player, DefaultStyles.BLOCKPLACE)) {
-            Location loc = event.getBlockPlaced().getLocation();
-            ParticleManager.displayParticles(pplayer, DefaultStyles.BLOCKPLACE.getParticles(pplayer, loc));
+        PPlayer pplayer = DataManager.getPPlayer(player.getUniqueId());
+        if (pplayer != null) {
+            for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.BLOCKPLACE)) {
+                Location loc = event.getBlock().getLocation().clone();
+                ParticleManager.displayParticles(particle, DefaultStyles.BLOCKPLACE.getParticles(particle, loc));
+            }
         }
     }
 
