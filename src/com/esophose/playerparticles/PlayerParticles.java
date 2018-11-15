@@ -9,9 +9,6 @@
 package com.esophose.playerparticles;
 
 import java.io.File;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -54,14 +51,7 @@ public class PlayerParticles extends JavaPlugin {
     private static BukkitTask particleTask = null;
 
     /**
-     * Registers all the styles available by default
-     * Saves the default config if it doesn't exist
-     * Registers the tab completer and the event listeners
-     * Checks if the config needs to be updated to the new version
-     * Makes sure the database is accessible
-     * Starts the particle spawning task
-     * Registers the command executor
-     * Checks for any updates if checking is enabled in the config
+     * Executes essential tasks for starting up the plugin
      */
     public void onEnable() {
         pluginInstance = Bukkit.getServer().getPluginManager().getPlugin("PlayerParticles");
@@ -75,8 +65,14 @@ public class PlayerParticles extends JavaPlugin {
 
         saveDefaultConfig();
         double configVersion = PSetting.VERSION.getDouble();
-        boolean updatePluginSettings = configVersion < Double.parseDouble(getDescription().getVersion());
+        double currentVersion = Double.parseDouble(getDescription().getVersion());
+        boolean updatePluginSettings = configVersion < currentVersion;
         if (updatePluginSettings) {
+            configureDatabase(PSetting.DATABASE_ENABLE.getBoolean());
+            DataUpdater.updateData(configVersion, currentVersion);
+            databaseConnector.closeConnection();
+            databaseConnector = null;
+            
             File configFile = new File(getDataFolder(), "config.yml");
             if (configFile.exists()) {
                 configFile.delete();
@@ -134,7 +130,8 @@ public class PlayerParticles extends JavaPlugin {
         }
         
         // This runs before the SettingManager is reloaded, the credentials will not be stored in memory for more than a few milliseconds
-        configureDatabase(PSetting.DATABASE_ENABLE.getBoolean()); 
+        configureDatabase(PSetting.DATABASE_ENABLE.getBoolean());
+        DataUpdater.tryCreateTables();
         
         SettingManager.reload();
         LangManager.reload(updatePluginSettings);
@@ -165,10 +162,7 @@ public class PlayerParticles extends JavaPlugin {
     }
 
     /**
-     * Checks if database-enable is true in the config, if it is then uses MySql
-     * Gets the database connection information from the config and tries to connect to the server
-     * Removes old table from previous versions of the plugin
-     * Creates new tables if they don't exist
+     * Determines if we should use MySQL or SQLite based on the useMySql parameter and if we were able to connect successfully
      * 
      * @param useMySql If we should use MySQL as the database type, if false, uses SQLite
      */
@@ -189,53 +183,6 @@ public class PlayerParticles extends JavaPlugin {
             configureDatabase(false);
             return;
         }
-
-        databaseConnector.connect((connection) -> {
-            // Check if pp_users exists, if it does, this is an old database schema that needs to be deleted
-            try { // @formatter:off
-    			try (Statement statement = connection.createStatement()) {
-    			    String pp_usersQuery;
-    			    if (useMySql) {
-    			        pp_usersQuery = "SHOW TABLES LIKE 'pp_users'";
-    			    } else {
-    			        pp_usersQuery = "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'pp_users'";
-    			    }
-        			ResultSet result = statement.executeQuery(pp_usersQuery);
-        			if (result.next()) {
-        			    statement.close();
-        			    
-        				Statement dropStatement = connection.createStatement();
-        				dropStatement.addBatch("DROP TABLE IF EXISTS pp_users");
-        				dropStatement.addBatch("DROP TABLE IF EXISTS pp_fixed");
-        				dropStatement.addBatch("DROP TABLE IF EXISTS pp_data_item");
-        				dropStatement.addBatch("DROP TABLE IF EXISTS pp_data_block");
-        				dropStatement.addBatch("DROP TABLE IF EXISTS pp_data_color");
-        				dropStatement.addBatch("DROP TABLE IF EXISTS pp_data_note");
-        				dropStatement.executeBatch();
-        				getLogger().warning("Deleted old " + (useMySql ? "MySQL" : "SQLite") + " database schema, it was out of date.");
-        			}
-        		}
-    			
-    			// Try to create the tables just in case they don't exist
-    			try (Statement createStatement = connection.createStatement()) {
-                    createStatement.addBatch("CREATE TABLE IF NOT EXISTS pp_particle (uuid VARCHAR(36), group_uuid VARCHAR(36), id SMALLINT, effect VARCHAR(100), style VARCHAR(100), item_material VARCHAR(100), block_material VARCHAR(100), note SMALLINT, r SMALLINT, g SMALLINT, b SMALLINT, PRIMARY KEY(uuid))");
-    			    createStatement.addBatch("CREATE TABLE IF NOT EXISTS pp_group (uuid VARCHAR(36), owner_uuid VARCHAR(36), name VARCHAR(100), PRIMARY KEY(uuid))");
-                    createStatement.addBatch("CREATE TABLE IF NOT EXISTS pp_fixed (owner_uuid VARCHAR(36), id SMALLINT, particle_uuid VARCHAR(36), world VARCHAR(100), xPos DOUBLE, yPos DOUBLE, zPos DOUBLE, PRIMARY KEY(owner_uuid, id), FOREIGN KEY(particle_uuid) REFERENCES pp_particle(uuid) ON DELETE CASCADE)");
-                    int[] results = createStatement.executeBatch();
-                    if (results[0] + results[1] + results[2] > 0) {
-                        getLogger().warning("Updated " + (useMySql ? "MySQL" : "SQLite") + " database schema.");
-                    }
-    			}
-    		} catch (SQLException ex) {
-    		    ex.printStackTrace();
-    			if (useMySql) {
-    			    getLogger().severe("Unable to connect to the MySQL database! Is your login information correct? Falling back to SQLite database instead.");
-    			    configureDatabase(false);
-    			} else {
-    			    getLogger().severe("Unable to connect to the SQLite database! This is a critical error, the plugin will be unable to save any data.");
-    			}
-    		}
-    	}); // @formatter:on
     }
 
     /**

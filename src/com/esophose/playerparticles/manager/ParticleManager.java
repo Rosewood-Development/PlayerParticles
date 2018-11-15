@@ -30,7 +30,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
     /**
      * The list containing all the loaded PPlayer info
      */
-    public static List<PPlayer> particlePlayers = new ArrayList<PPlayer>();
+    private static List<PPlayer> particlePlayers = new ArrayList<PPlayer>();
 
     /**
      * Rainbow particle effect hue and note color used for rainbow colorable effects

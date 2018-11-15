@@ -39,7 +39,7 @@ public class DataManager {
      * @return The PPlayer from cache
      */
     public static PPlayer getPPlayer(UUID playerUUID) {
-        for (PPlayer pp : ParticleManager.particlePlayers)
+        for (PPlayer pp : ParticleManager.getPPlayers())
             if (pp.getUniqueId().equals(playerUUID)) return pp;
         return null;
     }
@@ -63,6 +63,28 @@ public class DataManager {
             List<FixedParticleEffect> fixedParticles = new ArrayList<FixedParticleEffect>();
 
             PlayerParticles.getDBConnector().connect((connection) -> {
+                // Load settings
+                boolean particlesHidden = false;
+                String settingsQuery = "SELECT particles_hidden FROM pp_settings WHERE player_uuid = ?";
+                try (PreparedStatement statement = connection.prepareStatement(settingsQuery)) {
+                    statement.setString(1, playerUUID.toString());
+                    
+                    ResultSet result = statement.executeQuery();
+                    if (result.next()) {
+                        particlesHidden = result.getBoolean("particles_hidden");
+                    } else {
+                        statement.close();
+                        
+                        String updateQuery = "INSERT INTO pp_settings (player_uuid, particles_hidden) VALUES (?, ?)";
+                        try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
+                            updateStatement.setString(1, playerUUID.toString());
+                            updateStatement.setBoolean(2, false);
+                            
+                            updateStatement.executeUpdate();
+                        }
+                    }
+                }
+                
                 // Load particle groups
                 String groupQuery = "SELECT * FROM pp_group g " + // @formatter:off
         					   	    "JOIN pp_particle p ON g.uuid = p.group_uuid " + 
@@ -150,12 +172,14 @@ public class DataManager {
                     groups.add(activeGroup);
                 }
 
-                final PPlayer loadedPPlayer = new PPlayer(playerUUID, groups, fixedParticles);
+                PPlayer loadedPPlayer = new PPlayer(playerUUID, groups, fixedParticles, particlesHidden);
                 
                 sync(() -> {
-                    if (getPPlayer(playerUUID) == null) { // Make sure the PPlayer still isn't added, since this is async it's possible it got ran twice
-                        ParticleManager.particlePlayers.add(loadedPPlayer);
-                        callback.execute(loadedPPlayer);
+                    synchronized (loadedPPlayer) {
+                        if (getPPlayer(playerUUID) == null) { // Make sure the PPlayer still isn't added, since this is async it's possible it got ran twice
+                            ParticleManager.getPPlayers().add(loadedPPlayer); // This will be fine now since loadedPPlayer is synchronized
+                            callback.execute(loadedPPlayer);
+                        }
                     }
                 });
             });
@@ -181,6 +205,30 @@ public class DataManager {
             });
         });
     }
+    
+    /**
+     * Updates the particles_hidden setting in the database and for the PPlayer
+     * 
+     * @param playerUUID
+     * @param particlesHidden
+     */
+    public static void updateSettingParticlesHidden(UUID playerUUID, boolean particlesHidden) {
+        async(() -> {
+           PlayerParticles.getDBConnector().connect((connection) -> {
+               String updateQuery = "UPDATE pp_settings SET particles_hidden = ? WHERE player_uuid = ?";
+               try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
+                   updateStatement.setBoolean(1, particlesHidden);
+                   updateStatement.setString(2, playerUUID.toString());
+                   
+                   updateStatement.executeUpdate();
+               }
+           }); 
+        });
+        
+        getPPlayer(playerUUID, (pplayer) -> {
+            pplayer.setParticlesHidden(particlesHidden);
+        });
+    }
 
     /**
      * Saves a ParticleGroup. If it already exists, update it.
@@ -191,12 +239,12 @@ public class DataManager {
     public static void saveParticleGroup(UUID playerUUID, ParticleGroup group) {
         async(() -> {
             PlayerParticles.getDBConnector().connect((connection) -> {
+                String groupUUID = null;
+                
                 String groupUUIDQuery = "SELECT uuid FROM pp_group WHERE owner_uuid = ? AND name = ?";
                 try (PreparedStatement statement = connection.prepareStatement(groupUUIDQuery)) {
                     statement.setString(1, playerUUID.toString());
                     statement.setString(2, group.getName());
-
-                    String groupUUID = null;
 
                     ResultSet result = statement.executeQuery();
                     if (result.next()) { // Clear out particles from existing group
@@ -218,10 +266,11 @@ public class DataManager {
 
                         groupCreateStatement.executeUpdate();
                     }
-
-                    // Fill group with new particles
-                    String createParticlesQuery = "INSERT INTO pp_particle (uuid, group_uuid, id, effect, style, item_material, block_material, note, r, g, b) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                    PreparedStatement particlesStatement = connection.prepareStatement(createParticlesQuery);
+                }
+                
+                // Fill group with new particles
+                String createParticlesQuery = "INSERT INTO pp_particle (uuid, group_uuid, id, effect, style, item_material, block_material, note, r, g, b) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                try (PreparedStatement particlesStatement = connection.prepareStatement(createParticlesQuery)) {
                     for (ParticlePair particle : group.getParticles()) {
                         particlesStatement.setString(1, UUID.randomUUID().toString());
                         particlesStatement.setString(2, groupUUID);

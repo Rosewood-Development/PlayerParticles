@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
+import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.manager.SettingManager.PSetting;
 import com.esophose.playerparticles.styles.api.PParticle;
 
@@ -314,9 +314,12 @@ public enum ParticleEffect {
         List<Player> players = new ArrayList<Player>();
         int range = !isFixedEffect ? PSetting.PARTICLE_RENDER_RANGE_PLAYER.getInt() : PSetting.PARTICLE_RENDER_RANGE_FIXED_EFFECT.getInt();
 
-        for (Player p : Bukkit.getOnlinePlayers())
-            if (p.getWorld().equals(center.getWorld()) && center.distanceSquared(p.getLocation()) <= range * range)
+        for (PPlayer pplayer : ParticleManager.getPPlayers()) {
+            Player p = pplayer.getPlayer();
+            if (pplayer.canSeeParticles() && p.getWorld().equals(center.getWorld()) && center.distanceSquared(p.getLocation()) <= range * range) {
                 players.add(p);
+            }
+        }
 
         return players;
     }

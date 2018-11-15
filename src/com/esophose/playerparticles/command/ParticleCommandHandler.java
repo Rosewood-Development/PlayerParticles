@@ -41,6 +41,7 @@ public class ParticleCommandHandler implements CommandExecutor, TabCompleter {
         commands.add(new ResetCommandModule());
         commands.add(new StyleCommandModule());
         commands.add(new StylesCommandModule());
+        commands.add(new ToggleCommandModule());
         commands.add(new VersionCommandModule());
         commands.add(new WorldsCommandModule());
     }

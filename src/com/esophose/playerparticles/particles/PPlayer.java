@@ -26,6 +26,11 @@ public class PPlayer {
      * A List of FixedParticleEffects this user has applied
      */
     private List<FixedParticleEffect> fixedParticles;
+    
+    /**
+     * If True, the player will not see any particles spawned by the plugin
+     */
+    private boolean particlesHidden;
 
     /**
      * Constructs a new PPlayer
@@ -33,11 +38,13 @@ public class PPlayer {
      * @param uuid The player UUID
      * @param particleGroups The ParticleGroups this PPlayer has
      * @param fixedParticles The FixedParticleEffects this PPlayer has
+     * @param particlesHidden If this player has all particles hidden from view
      */
-    public PPlayer(UUID uuid, List<ParticleGroup> particleGroups, List<FixedParticleEffect> fixedParticles) {
+    public PPlayer(UUID uuid, List<ParticleGroup> particleGroups, List<FixedParticleEffect> fixedParticles, boolean particlesHidden) {
         this.playerUUID = uuid;
         this.particleGroups = particleGroups;
         this.fixedParticles = fixedParticles;
+        this.particlesHidden = particlesHidden;
     }
 
     /**
@@ -56,6 +63,24 @@ public class PPlayer {
      */
     public Player getPlayer() {
         return Bukkit.getPlayer(this.playerUUID);
+    }
+    
+    /**
+     * Gets if the Player can see particles spawned by the plugin or not
+     * 
+     * @return True if the player can see particles, otherwise false
+     */
+    public boolean canSeeParticles() {
+        return !this.particlesHidden;
+    }
+    
+    /**
+     * Sets if the player can see particles spawned by the plugin or not
+     * 
+     * @param hidden True if the player can see particles, otherwise false
+     */
+    public void setParticlesHidden(boolean hidden) {
+        this.particlesHidden = hidden;
     }
 
     /**

@@ -27,26 +27,26 @@ public class MySqlDatabaseConnector implements DatabaseConnector {
         config.setMaximumPoolSize(5);
 
         try {
-            hikari = new HikariDataSource(config);
-            initializedSuccessfully = true;
+            this.hikari = new HikariDataSource(config);
+            this.initializedSuccessfully = true;
         } catch (Exception ex) {
-            initializedSuccessfully = false;
+            this.initializedSuccessfully = false;
         }
     }
 
     public boolean isInitialized() {
-        return initializedSuccessfully;
+        return this.initializedSuccessfully;
     }
 
     public void closeConnection() {
-        hikari.close();
+        this.hikari.close();
     }
 
     public void connect(ConnectionCallback callback) {
-        try (Connection connection = hikari.getConnection()) {
+        try (Connection connection = this.hikari.getConnection()) {
             callback.execute(connection);
         } catch (SQLException ex) {
-            PlayerParticles.getPlugin().getLogger().severe("An error occurred retrieving a mysql database connection: " + ex.getMessage());
+            PlayerParticles.getPlugin().getLogger().severe("An error occurred retrieving a MySQL database connection: " + ex.getMessage());
         }
     }
 

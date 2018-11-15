@@ -44,6 +44,7 @@ public class LangManager {
         COMMAND_DESCRIPTION_RESET,
         COMMAND_DESCRIPTION_STYLE,
         COMMAND_DESCRIPTION_STYLES,
+        COMMAND_DESCRIPTION_TOGGLE,
         COMMAND_DESCRIPTION_VERSION,
         COMMAND_DESCRIPTION_WORLDS,
         
@@ -107,6 +108,10 @@ public class LangManager {
         LIST_NONE,
         LIST_YOU_HAVE,
         LIST_OUTPUT,
+        
+        // Toggle Command
+        TOGGLE_ON,
+        TOGGLE_OFF,
         
         // Rainbow
         RAINBOW,

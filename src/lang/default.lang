@@ -30,6 +30,7 @@ command-description-remove: 'Removes one of your active particles'
 command-description-reset: 'Removes all your active particles'
 command-description-style: '&cThis command has been removed, use &b/pp help &cto find new commands'
 command-description-styles: 'Display a list of styles you can use'
+command-description-toggle: 'Toggles particle visibility on/off'
 command-description-version: 'Display the current version of the plugin and the author'
 command-description-worlds: 'Find out what worlds particles are disabled in'
 
@@ -93,6 +94,10 @@ remove-success: '&aYour particle with the ID &b{0} &ahas been removed!'
 list-none: '&eYou do not have any active particles!'
 list-you-have: '&eYou have the following particles applied:'
 list-output: '&eID: &b{0} &eEffect: &b{1} &eStyle: &b{2} &eData: &b{3}'
+
+# Toggle Command
+toggle-on: '&eParticles have been toggled &aON&e!'
+toggle-off: '&eParticles have been toggled &cOFF&e!'
 
 # Rainbow
 rainbow: '&cr&6a&ei&an&bb&9o&dw'

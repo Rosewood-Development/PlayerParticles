@@ -27,7 +27,7 @@ public class SqliteDatabaseConnector implements DatabaseConnector {
         try (Connection connection = DriverManager.getConnection(this.connectionString)) {
             callback.execute(connection);
         } catch (SQLException ex) {
-            PlayerParticles.getPlugin().getLogger().severe("An error occurred retrieving an sqlite database connection: " + ex.getMessage());
+            PlayerParticles.getPlugin().getLogger().severe("An error occurred retrieving an SQLite database connection: " + ex.getMessage());
         }
     }
 
