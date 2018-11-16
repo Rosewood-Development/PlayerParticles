@@ -1,8 +1,8 @@
 # __________ __                           __________                __   __        __                            ________
-# \______   \  | _____  ___ __  __________\______   \_____ ________/  |_|__| ____ |  |   ____   ______    ___  _|   ____/
-#  |     ___/  | \__  \<   |  |/ __ \_  __ \     ___/\__  \\_  __ \   __\  |/ ___\|  | _/ __ \ /  ___/    \  \/ /____  \ 
-#  |    |   |  |__/ __ \\___  \  ___/|  | \/    |     / __ \|  | \/|  | |  \  \___|  |_\  ___/ \___ \      \   //       \
-#  |____|   |____(____  / ____|\___  >__|  |____|    (____  /__|   |__| |__|\___  >____/\___  >____  >      \_//______  /
+# \______   \  | _____  ___ __  __________\______   \_____ ________/  |_|__| ____ |  |   ____   ______   ___  __/  _____/
+#  |     ___/  | \__  \<   |  |/ __ \_  __ \     ___/\__  \\_  __ \   __\  |/ ___\|  | _/ __ \ /  ___/   \  \/ /   __  \ 
+#  |    |   |  |__/ __ \\___  \  ___/|  | \/    |     / __ \|  | \/|  | |  \  \___|  |_\  ___/ \___ \     \   /\  |__\  \
+#  |____|   |____(____  / ____|\___  >__|  |____|    (____  /__|   |__| |__|\___  >____/\___  >____  >     \_/  \_____  /
 #                     \/\/         \/                     \/                    \/          \/     \/                 \/ 
 
 # ==================================================== #
@@ -11,9 +11,9 @@
 # ==================================================== #
 
 # This value is the version of the plugin that last modified the config file
-# Changing this value will reset your config on the next server reload / restart. 
-# I don't recommend changing it
-version: 5.3
+# Changing this value manually will likely result in data loss and errors!
+# Do not change this manually unless specifically told to by the plugin author
+version: 6.0
 
 # Check for new versions of the plugin
 # Default: true
@@ -40,6 +40,12 @@ message-prefix: '&7[&3PlayerParticles&7]'
 # Disable this if you have your own custom GUI through another plugin
 # Default: true
 gui-enabled: true
+
+# If true, styles will not display while the player is moving
+# They will instead have the effect displayed at their feet
+# Note: Not all styles abide by this rule, but most will
+# Default: false
+toggle-on-move: false
 
 # The worlds which this plugin is disabled in
 # Remove the [] before you enter world names

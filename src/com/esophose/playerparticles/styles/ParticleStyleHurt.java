@@ -42,6 +42,10 @@ public class ParticleStyleHurt implements ParticleStyle, Listener {
     public boolean canBeFixed() {
         return false;
     }
+    
+    public boolean canToggleWithMovement() {
+        return false;
+    }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onEntityDamage(EntityDamageEvent event) {

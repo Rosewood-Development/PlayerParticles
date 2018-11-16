@@ -49,6 +49,10 @@ public class ParticleStyleArrows implements ParticleStyle, Listener {
     public boolean canBeFixed() {
         return false;
     }
+    
+    public boolean canToggleWithMovement() {
+        return false;
+    }
 
     /**
      * The event used to get all arrows fired by players
@@ -68,7 +72,8 @@ public class ParticleStyleArrows implements ParticleStyle, Listener {
                 }
             }
 
-            if (match) arrows.add((Arrow) e.getProjectile());
+            if (match) 
+                arrows.add((Arrow) e.getProjectile());
         }
     }
 

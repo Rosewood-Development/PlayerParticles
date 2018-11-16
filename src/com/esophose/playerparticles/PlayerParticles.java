@@ -1,9 +1,11 @@
 /*
- * TODO: v5.3 (actually v6)
+ * TODO: v6.0
  * + Add new style 'tornado'
  * + Add new style 'doubleorbit'
- * * Adjust PParticles to use a Vector instead of a Location
- * * Setting in config.yml to make non-event styles display particles using DefaultStyles.FEET while the player is moving
+ * * Adjust style positioning around central point based on if they are being spawned for a player or fixed effect
+ * * Write a class called ConfigManager which manages updating the config.yml between versions so it doesn't have to be deleted every time
+ * * Clean up the '/pp help' menu and command descriptions so each command fits on one line
+ * * Display a note in the GUI under event-based styles
  */
 
 package com.esophose.playerparticles;
@@ -25,6 +27,7 @@ import com.esophose.playerparticles.manager.LangManager;
 import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.manager.SettingManager;
 import com.esophose.playerparticles.manager.SettingManager.PSetting;
+import com.esophose.playerparticles.particles.PPlayerMovementListener;
 import com.esophose.playerparticles.particles.ParticleGroup;
 import com.esophose.playerparticles.styles.DefaultStyles;
 import com.esophose.playerparticles.updater.PluginUpdateListener;
@@ -62,6 +65,7 @@ public class PlayerParticles extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new ParticleManager(), this);
         Bukkit.getPluginManager().registerEvents(new PluginUpdateListener(), this);
         Bukkit.getPluginManager().registerEvents(new GuiHandler(), this);
+        Bukkit.getPluginManager().registerEvents(new PPlayerMovementListener(), this);
 
         saveDefaultConfig();
         double configVersion = PSetting.VERSION.getDouble();

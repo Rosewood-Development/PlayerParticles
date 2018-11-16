@@ -32,6 +32,7 @@ public class SettingManager {
         TICKS_PER_PARTICLE(PSettingType.LONG),
         CHECK_UPDATES(PSettingType.BOOLEAN),
         GUI_ENABLED(PSettingType.BOOLEAN),
+        TOGGLE_ON_MOVE(PSettingType.BOOLEAN),
         
         PARTICLE_RENDER_RANGE_PLAYER(PSettingType.INTEGER),
         PARTICLE_RENDER_RANGE_FIXED_EFFECT(PSettingType.INTEGER),

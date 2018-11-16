@@ -31,6 +31,11 @@ public class PPlayer {
      * If True, the player will not see any particles spawned by the plugin
      */
     private boolean particlesHidden;
+    
+    /**
+     * If the player is moving
+     */
+    private boolean isMoving;
 
     /**
      * Constructs a new PPlayer
@@ -44,7 +49,9 @@ public class PPlayer {
         this.playerUUID = uuid;
         this.particleGroups = particleGroups;
         this.fixedParticles = fixedParticles;
+        
         this.particlesHidden = particlesHidden;
+        this.isMoving = false;
     }
 
     /**
@@ -90,6 +97,19 @@ public class PPlayer {
      */
     public List<ParticleGroup> getParticleGroups() {
         return this.particleGroups;
+    }
+    
+    /**
+     * Sets the player's movement state
+     * 
+     * @param isMoving True if the player is moving, otherwise false if they are standing still
+     */
+    public void setMoving(boolean isMoving) {
+        this.isMoving = isMoving;
+    }
+    
+    public boolean isMoving() {
+        return this.isMoving;
     }
 
     /**

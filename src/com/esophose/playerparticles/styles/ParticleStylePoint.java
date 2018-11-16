@@ -26,5 +26,9 @@ public class ParticleStylePoint implements ParticleStyle {
     public boolean canBeFixed() {
         return true;
     }
+    
+    public boolean canToggleWithMovement() {
+        return false;
+    }
 
 }

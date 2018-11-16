@@ -98,5 +98,9 @@ public class ParticleStyleInvocation implements ParticleStyle {
     public boolean canBeFixed() {
         return true;
     }
+    
+    public boolean canToggleWithMovement() {
+        return true;
+    }
 
 }

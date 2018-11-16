@@ -36,6 +36,12 @@ public interface ParticleStyle {
      */
     public boolean canBeFixed();
     
+    /**
+     * Gets if the style can be replaced with DefaultStyles.FEET when the player is moving
+     * 
+     * @return True if it can be, otherwise False
+     */
+    public boolean canToggleWithMovement();
     
     /**
      * Gets the ParticleStyle with the name given, returns null if not found

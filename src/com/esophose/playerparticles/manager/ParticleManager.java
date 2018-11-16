@@ -16,12 +16,14 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.esophose.playerparticles.manager.SettingManager.PSetting;
 import com.esophose.playerparticles.particles.FixedParticleEffect;
 import com.esophose.playerparticles.particles.PPlayer;
 import com.esophose.playerparticles.particles.ParticleEffect;
 import com.esophose.playerparticles.particles.ParticleEffect.NoteColor;
 import com.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
 import com.esophose.playerparticles.particles.ParticlePair;
+import com.esophose.playerparticles.styles.DefaultStyles;
 import com.esophose.playerparticles.styles.api.PParticle;
 import com.esophose.playerparticles.styles.api.ParticleStyleManager;
 
@@ -106,7 +108,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
             // Don't spawn particles if the world doesn't allow it
             if (player != null && player.getGameMode() != GameMode.SPECTATOR && !PermissionManager.isWorldDisabled(player.getWorld().getName()))
                 for (ParticlePair particles : pplayer.getActiveParticles())
-                    displayParticles(particles, player.getLocation().clone().add(0, 1, 0));
+                    displayParticles(pplayer, particles, player.getLocation().clone().add(0, 1, 0));
             
             // Loop for FixedParticleEffects
             // Don't spawn particles if the world doesn't allow it
@@ -119,13 +121,20 @@ public class ParticleManager extends BukkitRunnable implements Listener {
     /**
      * Displays particles at the given player location with their settings
      * 
+     * @param pplayer The PPlayer to spawn the particles for
      * @param particle The ParticlePair to use for getting particle settings
      * @param location The location to display at
      */
-    private void displayParticles(ParticlePair particle, Location location) {
-        if (!ParticleStyleManager.isCustomHandled(particle.getStyle()))
-            for (PParticle pparticle : particle.getStyle().getParticles(particle, location))
-                ParticleEffect.display(particle, pparticle, false);
+    private void displayParticles(PPlayer pplayer, ParticlePair particle, Location location) {
+        if (!ParticleStyleManager.isCustomHandled(particle.getStyle())) {
+            if (PSetting.TOGGLE_ON_MOVE.getBoolean() && particle.getStyle().canToggleWithMovement() && pplayer.isMoving()) {
+                for (PParticle pparticle : DefaultStyles.FEET.getParticles(particle, location))
+                    ParticleEffect.display(particle, pparticle, false);
+            } else {
+                for (PParticle pparticle : particle.getStyle().getParticles(particle, location))
+                    ParticleEffect.display(particle, pparticle, false);
+            }
+        }  
     }
 
     /**

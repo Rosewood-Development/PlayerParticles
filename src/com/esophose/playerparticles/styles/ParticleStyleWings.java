@@ -40,5 +40,9 @@ public class ParticleStyleWings implements ParticleStyle {
     public boolean canBeFixed() {
         return false;
     }
+    
+    public boolean canToggleWithMovement() {
+        return true;
+    }
 
 }
