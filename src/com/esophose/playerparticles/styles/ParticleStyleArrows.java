@@ -17,16 +17,22 @@ import com.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class ParticleStyleArrows implements ParticleStyle, Listener {
 
-    private String[] arrowEntityNames = new String[] { "ARROW", "SPECTRAL_ARROW", "TIPPED_ARROW" };
+    private static final String[] arrowEntityNames = new String[] { "ARROW", "SPECTRAL_ARROW", "TIPPED_ARROW" };
+    private static final int MAX_ARROWS_PER_PLAYER = 10;
     private List<Arrow> arrows = new ArrayList<Arrow>();
 
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<PParticle>();
 
-        for (Arrow arrow : arrows) {
+        int count = 0;
+        for (int i = arrows.size() - 1; i >= 0; i--) { // Loop backwards so the last-fired arrows are the ones that have particles if they go over the max
+            Arrow arrow = arrows.get(i);
             if (((Player) arrow.getShooter()).getUniqueId() == particle.getOwnerUniqueId()) {
                 particles.add(new PParticle(arrow.getLocation(), 0.05F, 0.05F, 0.05F, 0.0F));
+                count++;
             }
+            
+            if (count >= MAX_ARROWS_PER_PLAYER) break;
         }
 
         return particles;
