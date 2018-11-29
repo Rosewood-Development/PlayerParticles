@@ -21,7 +21,7 @@ public class PluginUpdateListener implements Listener {
             if (PlayerParticles.updateVersion != null) { // @formatter:off
                 LangManager.sendCustomMessage(e.getPlayer(), ChatColor.YELLOW + "An update (" + ChatColor.AQUA + "v" + PlayerParticles.updateVersion + ChatColor.YELLOW + ") is available! " + 
                                                                                 "You are running " + ChatColor.AQUA + "v" + PlayerParticles.getPlugin().getDescription().getVersion() + ChatColor.YELLOW + 
-                                                                                ". https://dev.bukkit.org/projects/playerparticles");
+                                                                                ". https://www.spigotmc.org/resources/playerparticles.40261/");
 			} // @formatter:on
         }
     }

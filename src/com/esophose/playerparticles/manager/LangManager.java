@@ -27,11 +27,14 @@ public class LangManager {
         COMMAND_ERROR_UNKNOWN,
 
         // Command Descriptions
+        COMMAND_DESCRIPTIONS,
+        COMMAND_DESCRIPTIONS_USAGE,
+        COMMAND_DESCRIPTIONS_HELP_1,
+        COMMAND_DESCRIPTIONS_HELP_2,
         COMMAND_DESCRIPTION_ADD,
         COMMAND_DESCRIPTION_DATA,
         COMMAND_DESCRIPTION_DEFAULT,
         COMMAND_DESCRIPTION_EDIT,
-        COMMAND_DESCRIPTION_EFFECT,
         COMMAND_DESCRIPTION_EFFECTS,
         COMMAND_DESCRIPTION_FIXED,
         COMMAND_DESCRIPTION_GROUP,
@@ -42,7 +45,6 @@ public class LangManager {
         COMMAND_DESCRIPTION_RELOAD,
         COMMAND_DESCRIPTION_REMOVE,
         COMMAND_DESCRIPTION_RESET,
-        COMMAND_DESCRIPTION_STYLE,
         COMMAND_DESCRIPTION_STYLES,
         COMMAND_DESCRIPTION_TOGGLE,
         COMMAND_DESCRIPTION_VERSION,
@@ -419,13 +421,14 @@ public class LangManager {
     public static void sendMessage(PPlayer pplayer, Lang messageType, Object... replacements) {
         sendMessage(pplayer.getPlayer(), messageType, replacements);
     }
-
+    
     /**
      * Sends a custom message to a player
      * Used in cases of string building
      * 
      * @param player The player to send the message to
      * @param message The message to send to the player
+     * @param includePrefix If the prefix should be included
      */
     public static void sendCustomMessage(Player player, String message) {
         if (!PSetting.MESSAGES_ENABLED.getBoolean()) return;
@@ -448,6 +451,36 @@ public class LangManager {
      */
     public static void sendCustomMessage(PPlayer pplayer, String message) {
         sendCustomMessage(pplayer.getPlayer(), message);
+    }
+    
+    /**
+     * Sends a message to a Player without the prefix
+     * 
+     * @param player The plaeyr to send the message to
+     * @param messageType The message type to send the player
+     * @param replacements The replacements for the message
+     */
+    public static void sendSimpleMessage(Player player, Lang messageType, Object... replacements) {
+        if (!PSetting.MESSAGES_ENABLED.getBoolean()) return;
+
+        String message = messageType.get(replacements);
+
+        if (message.length() == 0) return;
+
+        if (message.trim().equals("")) return;
+
+        player.sendMessage(message);
+    }
+    
+    /**
+     * Sends a message to a PPlayer without the prefix
+     * 
+     * @param player The plaeyr to send the message to
+     * @param messageType The message type to send the player
+     * @param replacements The replacements for the message
+     */
+    public static void sendSimpleMessage(PPlayer pplayer, Lang messageType, Object... replacements) {
+        sendSimpleMessage(pplayer.getPlayer(), messageType, replacements);
     }
 
     /**

@@ -1,13 +1,10 @@
 package com.esophose.playerparticles.command;
 
-import java.text.MessageFormat;
 import java.util.List;
 
 import com.esophose.playerparticles.manager.LangManager;
 import com.esophose.playerparticles.manager.LangManager.Lang;
 import com.esophose.playerparticles.particles.PPlayer;
-
-import net.md_5.bungee.api.ChatColor;
 
 public interface CommandModule {
 
@@ -63,8 +60,7 @@ public interface CommandModule {
      * @param command The command to display usage for
      */
     public static void printUsage(PPlayer pplayer, CommandModule command) {
-        Object[] args = new Object[] { command.getName(), command.getArguments() };
-        LangManager.sendCustomMessage(pplayer, new MessageFormat(ChatColor.YELLOW + "/pp {0} {1}").format(args));
+        LangManager.sendMessage(pplayer, Lang.COMMAND_DESCRIPTIONS_USAGE, command.getName(), command.getArguments());
     }
     
     /**
@@ -75,11 +71,9 @@ public interface CommandModule {
      */
     public static void printUsageWithDescription(PPlayer pplayer, CommandModule command) {
         if (command.getArguments().length() == 0) {
-            Object[] args = new Object[] { command.getName(), LangManager.getText(command.getDescription()) };
-            LangManager.sendCustomMessage(pplayer, new MessageFormat(ChatColor.YELLOW + "/pp {0} - {1}").format(args));
+            LangManager.sendSimpleMessage(pplayer, Lang.COMMAND_DESCRIPTIONS_HELP_1, command.getName(), LangManager.getText(command.getDescription()));
         } else {
-            Object[] args = new Object[] { command.getName(), command.getArguments(), LangManager.getText(command.getDescription()) };
-            LangManager.sendCustomMessage(pplayer, new MessageFormat(ChatColor.YELLOW + "/pp {0} {1} - {2}").format(args));
+            LangManager.sendSimpleMessage(pplayer, Lang.COMMAND_DESCRIPTIONS_HELP_2, command.getName(), command.getArguments(), LangManager.getText(command.getDescription()));
         }
     }
 

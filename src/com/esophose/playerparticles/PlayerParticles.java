@@ -4,7 +4,6 @@
  * + Add new style 'doubleorbit'
  * * Adjust style positioning around central point based on if they are being spawned for a player or fixed effect
  * * Write a class called ConfigManager which manages updating the config.yml between versions so it doesn't have to be deleted every time
- * * Clean up the '/pp help' menu and command descriptions so each command fits on one line
  * * Display a note in the GUI under event-based styles
  */
 

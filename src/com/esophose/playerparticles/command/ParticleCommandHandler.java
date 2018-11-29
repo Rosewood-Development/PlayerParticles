@@ -29,7 +29,6 @@ public class ParticleCommandHandler implements CommandExecutor, TabCompleter {
         commands.add(new DataCommandModule());
         commands.add(new DefaultCommandModule());
         commands.add(new EditCommandModule());
-        commands.add(new EffectCommandModule());
         commands.add(new EffectsCommandModule());
         commands.add(new FixedCommandModule());
         commands.add(new GroupCommandModule());
@@ -39,7 +38,6 @@ public class ParticleCommandHandler implements CommandExecutor, TabCompleter {
         commands.add(new ReloadCommandModule());
         commands.add(new RemoveCommandModule());
         commands.add(new ResetCommandModule());
-        commands.add(new StyleCommandModule());
         commands.add(new StylesCommandModule());
         commands.add(new ToggleCommandModule());
         commands.add(new VersionCommandModule());
