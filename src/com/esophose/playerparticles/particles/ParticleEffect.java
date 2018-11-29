@@ -316,7 +316,7 @@ public enum ParticleEffect {
 
         for (PPlayer pplayer : ParticleManager.getPPlayers()) {
             Player p = pplayer.getPlayer();
-            if (pplayer.canSeeParticles() && p.getWorld().equals(center.getWorld()) && center.distanceSquared(p.getLocation()) <= range * range) {
+            if (p != null && pplayer.canSeeParticles() && p.getWorld().equals(center.getWorld()) && center.distanceSquared(p.getLocation()) <= range * range) {
                 players.add(p);
             }
         }

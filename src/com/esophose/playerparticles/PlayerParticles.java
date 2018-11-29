@@ -2,9 +2,12 @@
  * TODO: v6.0
  * + Add new style 'tornado'
  * + Add new style 'doubleorbit'
+ * + Add new style 'wings_<type>', multiple new wing types
  * * Adjust style positioning around central point based on if they are being spawned for a player or fixed effect
- * * Write a class called ConfigManager which manages updating the config.yml between versions so it doesn't have to be deleted every time
  * * Display a note in the GUI under event-based styles
+ * 
+ * TODO: v6.1
+ * * Write a class called ConfigManager which manages updating the config.yml between versions so it doesn't have to be deleted every time
  */
 
 package com.esophose.playerparticles;
