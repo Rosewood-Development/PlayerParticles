@@ -305,6 +305,9 @@ gui-icon:
     blockplace:
       - OAK_PLANKS
       - WOOD
+    celebration:
+      - FIREWORK_ROCKET
+      - FIREWORK
     chains:
       - TRIPWIRE_HOOK
     companion:

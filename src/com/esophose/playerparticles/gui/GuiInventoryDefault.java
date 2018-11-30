@@ -1,6 +1,8 @@
 package com.esophose.playerparticles.gui;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -8,10 +10,14 @@ import org.bukkit.SkullType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import com.esophose.playerparticles.manager.DataManager;
 import com.esophose.playerparticles.manager.LangManager;
 import com.esophose.playerparticles.manager.LangManager.Lang;
 import com.esophose.playerparticles.manager.SettingManager.GuiIcon;
 import com.esophose.playerparticles.particles.PPlayer;
+import com.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
+import com.esophose.playerparticles.particles.ParticleGroup;
+import com.esophose.playerparticles.particles.ParticlePair;
 import com.esophose.playerparticles.util.ParticleUtils;
 
 @SuppressWarnings("deprecation")
@@ -47,7 +53,7 @@ public class GuiInventoryDefault extends GuiInventory {
         this.inventory.setItem(13, headIcon);
         
         // Manage Your Particles button
-        GuiActionButton manageYourParticlesButton = new GuiActionButton(38, 
+        GuiActionButton manageYourParticlesButton = new GuiActionButton(20, 
                                                                         GuiIcon.PARTICLES.get(), 
                                                                         LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_MANAGE_YOUR_PARTICLES), 
                                                                         new String[] { LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_MANAGE_YOUR_PARTICLES_DESCRIPTION) }, 
@@ -57,7 +63,7 @@ public class GuiInventoryDefault extends GuiInventory {
         this.actionButtons.add(manageYourParticlesButton);
         
         // Manage Your Groups button
-        GuiActionButton manageYourGroupsButton = new GuiActionButton(40, 
+        GuiActionButton manageYourGroupsButton = new GuiActionButton(22, 
                                                                      GuiIcon.GROUPS.get(), 
                                                                      LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_MANAGE_YOUR_GROUPS), 
                                                                      new String[] { LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_MANAGE_YOUR_GROUPS_DESCRIPTION) }, 
@@ -67,7 +73,7 @@ public class GuiInventoryDefault extends GuiInventory {
         this.actionButtons.add(manageYourGroupsButton);
         
         // Load Preset Groups
-        GuiActionButton loadPresetGroups = new GuiActionButton(42, 
+        GuiActionButton loadPresetGroups = new GuiActionButton(24, 
                                                                GuiIcon.PRESET_GROUPS.get(), 
                                                                LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_LOAD_A_PRESET_GROUP), 
                                                                new String[] { LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_LOAD_A_PRESET_GROUP_DESCRIPTION) }, 
@@ -75,6 +81,122 @@ public class GuiInventoryDefault extends GuiInventory {
                                                                    GuiHandler.transition(new GuiInventoryLoadPresetGroups(pplayer));
                                                                });
         this.actionButtons.add(loadPresetGroups);
+        
+        final ParticlePair editingParticle = pplayer.getActiveParticles().isEmpty() ? ParticlePair.getNextDefault(pplayer) : pplayer.getActiveParticle(1);
+        boolean canEditPrimaryStyleAndData = !pplayer.getActiveParticles().isEmpty();
+        boolean doesEffectUseData = editingParticle.getEffect().hasProperty(ParticleProperty.COLORABLE) || editingParticle.getEffect().hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA);
+        
+        // Edit Primary Effect
+        GuiActionButton editPrimaryEffect = new GuiActionButton(38,
+                                                                GuiIcon.EDIT_EFFECT.get(),
+                                                                LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_EDIT_PRIMARY_EFFECT),
+                                                                new String[] { LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_EDIT_PRIMARY_EFFECT_DESCRIPTION) },
+                                                                (button, isShiftClick) -> {
+                                                                    List<GuiInventoryEditFinishedCallback> callbacks = new ArrayList<GuiInventoryEditFinishedCallback>();
+                                                                    callbacks.add(() -> GuiHandler.transition(new GuiInventoryDefault(pplayer)));
+                                                                    callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditEffect(pplayer, editingParticle, callbacks, 1)));
+                                                                    callbacks.add(() -> {
+                                                                        ParticleGroup group = pplayer.getActiveParticleGroup();
+                                                                        if (!group.getParticles().isEmpty()) {
+                                                                            for (ParticlePair particle : group.getParticles()) {
+                                                                                if (particle.getId() == editingParticle.getId()) {
+                                                                                    particle.setEffect(editingParticle.getEffect());
+                                                                                    break;
+                                                                                }
+                                                                            }
+                                                                        } else {
+                                                                            group.getParticles().add(editingParticle);
+                                                                        }
+                                                                        DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+                                                                        
+                                                                        GuiHandler.transition(new GuiInventoryDefault(pplayer));
+                                                                    });
+                                                                    
+                                                                    callbacks.get(1).execute();
+                                                                });
+        this.actionButtons.add(editPrimaryEffect);
+        
+        // Edit Primary Style
+        String[] editPrimaryStyleLore;
+        if (canEditPrimaryStyleAndData) {
+            editPrimaryStyleLore = new String[] { LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_EDIT_PRIMARY_STYLE_DESCRIPTION) };
+        } else {
+            editPrimaryStyleLore = new String[] {
+                LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_EDIT_PRIMARY_STYLE_DESCRIPTION),
+                LangManager.getText(Lang.GUI_COLOR_UNAVAILABLE) + LangManager.getText(Lang.GUI_EDIT_PRIMARY_STYLE_MISSING_EFFECT)
+            };
+        }
+        GuiActionButton editPrimaryStyle = new GuiActionButton(40,
+                                                               GuiIcon.EDIT_STYLE.get(),
+                                                               LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_EDIT_PRIMARY_STYLE),
+                                                               editPrimaryStyleLore,
+                                                               (button, isShiftClick) -> {
+                                                                   if (!canEditPrimaryStyleAndData) return;
+                                                                   
+                                                                   List<GuiInventoryEditFinishedCallback> callbacks = new ArrayList<GuiInventoryEditFinishedCallback>();
+                                                                   callbacks.add(() -> GuiHandler.transition(new GuiInventoryDefault(pplayer)));
+                                                                   callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditStyle(pplayer, editingParticle, callbacks, 1)));
+                                                                   callbacks.add(() -> {
+                                                                       ParticleGroup group = pplayer.getActiveParticleGroup();
+                                                                       for (ParticlePair particle : group.getParticles()) {
+                                                                           if (particle.getId() == editingParticle.getId()) {
+                                                                               particle.setStyle(editingParticle.getStyle());
+                                                                               break;
+                                                                           }
+                                                                       }
+                                                                       DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+                                                                       
+                                                                       GuiHandler.transition(new GuiInventoryDefault(pplayer));
+                                                                   });
+                                                                   
+                                                                   callbacks.get(1).execute();
+                                                               });
+        this.actionButtons.add(editPrimaryStyle);
+        
+        // Edit Primary Data
+        String[] editPrimaryDataLore;
+        if (canEditPrimaryStyleAndData && doesEffectUseData) {
+            editPrimaryDataLore = new String[] { LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_EDIT_PRIMARY_DATA_DESCRIPTION) };
+        } else if (canEditPrimaryStyleAndData) {
+            editPrimaryDataLore = new String[] { 
+                LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_EDIT_PRIMARY_DATA_DESCRIPTION),
+                LangManager.getText(Lang.GUI_COLOR_UNAVAILABLE) + LangManager.getText(Lang.GUI_EDIT_PRIMARY_DATA_UNAVAILABLE)
+            };
+        } else {
+            editPrimaryDataLore = new String[] { 
+                LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_EDIT_PRIMARY_DATA_DESCRIPTION),
+                LangManager.getText(Lang.GUI_COLOR_UNAVAILABLE) + LangManager.getText(Lang.GUI_EDIT_PRIMARY_DATA_MISSING_EFFECT)
+            };
+        }
+        GuiActionButton editPrimaryData = new GuiActionButton(42,
+                                                              GuiIcon.EDIT_DATA.get(),
+                                                              LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_EDIT_PRIMARY_DATA),
+                                                              editPrimaryDataLore,
+                                                              (button, isShiftClick) -> {
+                                                                  if (!canEditPrimaryStyleAndData || !doesEffectUseData) return;
+                                                                  
+                                                                  List<GuiInventoryEditFinishedCallback> callbacks = new ArrayList<GuiInventoryEditFinishedCallback>();
+                                                                  callbacks.add(() -> GuiHandler.transition(new GuiInventoryDefault(pplayer)));
+                                                                  callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditData(pplayer, editingParticle, callbacks, 1)));
+                                                                  callbacks.add(() -> {
+                                                                      ParticleGroup group = pplayer.getActiveParticleGroup();
+                                                                      for (ParticlePair particle : group.getParticles()) {
+                                                                          if (particle.getId() == editingParticle.getId()) {
+                                                                              particle.setColor(editingParticle.getColor());
+                                                                              particle.setNoteColor(editingParticle.getNoteColor());
+                                                                              particle.setItemMaterial(editingParticle.getItemMaterial());
+                                                                              particle.setBlockMaterial(editingParticle.getBlockMaterial());
+                                                                              break;
+                                                                          }
+                                                                      }
+                                                                      DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+                                                                      
+                                                                      GuiHandler.transition(new GuiInventoryDefault(pplayer));
+                                                                  });
+                                                                  
+                                                                  callbacks.get(1).execute();
+                                                              });
+        this.actionButtons.add(editPrimaryData);
         
         this.populate();
     }

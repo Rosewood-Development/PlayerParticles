@@ -23,7 +23,7 @@ public class ParticleStyleCelebration implements ParticleStyle {
     private final int spawnTime = 15;
 
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
-        return null;
+        return new ArrayList<PParticle>();
     }
 
     /**
@@ -65,7 +65,7 @@ public class ParticleStyleCelebration implements ParticleStyle {
                                 this.location.add(0, 0.25, 0);
                             } else {
                                 List<PParticle> particles = new ArrayList<PParticle>();
-                                for (int i = 0; i < 40; i++) { // Copied directly from PlayerParticles source
+                                for (int i = 0; i < 40; i++) {
                                     double radius = 0.6 + random.nextDouble() * 0.2;
                                     double u = random.nextDouble();
                                     double v = random.nextDouble();

@@ -252,6 +252,13 @@ public class SettingManager {
             
             return material;
         }
+        
+        /**
+         * Resets the setting's value so it will be fetched from the config the next time it's needed
+         */
+        private void resetDefault() {
+            this.materials = new HashMap<String, Material>();
+        }
     }
 
     private SettingManager() {
@@ -264,6 +271,9 @@ public class SettingManager {
     public static void reload() {
         for (PSetting setting : PSetting.values())
             setting.resetDefault();
+        
+        for (GuiIcon icon : GuiIcon.values())
+            icon.resetDefault();
     }
 
 }
