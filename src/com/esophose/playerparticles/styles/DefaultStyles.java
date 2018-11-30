@@ -20,6 +20,7 @@ public class DefaultStyles {
     public static final ParticleStyle BLOCKBREAK = new ParticleStyleBlockBreak();
     public static final ParticleStyle BLOCKEDIT = new ParticleStyleBlockEdit();
     public static final ParticleStyle BLOCKPLACE = new ParticleStyleBlockPlace();
+    public static final ParticleStyle CELEBRATION = new ParticleStyleCelebration();
     public static final ParticleStyle CHAINS = new ParticleStyleChains();
     public static final ParticleStyle COMPANION = new ParticleStyleCompanion();
     public static final ParticleStyle CUBE = new ParticleStyleCube();
@@ -53,6 +54,7 @@ public class DefaultStyles {
         ParticleStyleManager.registerCustomHandledStyle(BLOCKBREAK);
         ParticleStyleManager.registerCustomHandledStyle(BLOCKEDIT);
         ParticleStyleManager.registerCustomHandledStyle(BLOCKPLACE);
+        ParticleStyleManager.registerStyle(CELEBRATION);
         ParticleStyleManager.registerStyle(CHAINS);
         ParticleStyleManager.registerStyle(COMPANION);
         ParticleStyleManager.registerStyle(CUBE);

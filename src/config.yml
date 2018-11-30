@@ -90,6 +90,12 @@ particle-render-range-player: 48
 # Default: 192
 particle-render-range-fixed-effect: 192
 
+# How many out of 360 hue ticks to move per game tick
+# Higher values make the rainbow cycle faster
+# Note: Must be positive whole numbers
+# Default: 2
+rainbow-cycle-speed: 2
+
 # ================================================================ #
 #                     DATABASE CONFIGURATION                       #
 # Information:                                                     #

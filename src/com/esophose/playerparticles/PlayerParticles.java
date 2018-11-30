@@ -2,7 +2,7 @@
  * TODO: v6.0
  * + Add new style 'tornado'
  * + Add new style 'doubleorbit'
- * + Add new style 'wings_<type>', multiple new wing types
+ * + Add new style 'wings_<type>', multiple new wing types: fairy, demon
  * * Adjust style positioning around central point based on if they are being spawned for a player or fixed effect
  * * Display a note in the GUI under event-based styles
  * 

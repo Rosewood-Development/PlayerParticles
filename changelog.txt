@@ -1,5 +1,8 @@
 == UPDATING WILL DELETE YOUR CONFIG.YML ==
 * Create a backup of your config.yml if you wish to import all your old settings!
+=== v6.0 ===
+* Many other changes, the changelog will be updated once the plugin update is about to be released
++ Added setting in config.yml to control how fast the rainbow hue cycles
 === v5.2 ===
 * Added native support for Minecraft 1.13.x
 * Still compatible with Minecraft 1.9 through Minecraft 1.12!

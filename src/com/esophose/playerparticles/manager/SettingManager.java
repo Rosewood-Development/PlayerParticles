@@ -55,6 +55,8 @@ public class SettingManager {
         
         MAX_GROUPS(PSettingType.INTEGER),
         
+        RAINBOW_CYCLE_SPEED(PSettingType.INTEGER),
+        
         DISABLED_WORLDS(PSettingType.STRING_LIST),
         
         LANG_FILE(PSettingType.STRING);

@@ -91,10 +91,10 @@ public class ParticleManager extends BukkitRunnable implements Listener {
     public void run() {
         ParticleStyleManager.updateTimers();
 
-        hue++;
+        hue += PSetting.RAINBOW_CYCLE_SPEED.getInt();
         hue %= 360;
 
-        if (hue % 5 == 0) { // Only increment note by 4 notes per second
+        if (hue % 4 == 0) { // Only increment note by 5 notes per second
             note++;
             note %= 25;
         }
