@@ -1,9 +1,30 @@
 == UPDATING WILL DELETE YOUR CONFIG.YML ==
 * Create a backup of your config.yml if you wish to import all your old settings!
 === v6.0 ===
-* Many other changes, the changelog will be updated once the plugin update is about to be released
-+ Added setting in config.yml to control how fast the rainbow hue cycles
+* Compatible with Minecraft 1.9-1.13, you MUST use a Spigot .jar file, not CraftBukkit
+* All PlayerParticles data (including player particles and fixed effects) will be deleted upon updating. This will never happen again in the future. 
++ Players can now have 3 particles active at the same time (can be increased/decreased in the config.yml)
++ Added Particle Groups, each player can save up to 10 sets of a particles and load them at a later time (can be increased/decreased in the config.yml)
++ Added Preset Particle Groups, these can be configured by the server in the groups.yml file and are available to all players who have permission for the correct effects/styles
+* Changed some of the wildcard permissions work, PLEASE make sure you get these updated if you were using them
++ Removed the commands '/pp effect' and '/pp style'
+* Changed command '/pp data' to '/pp data <effect>'
++ Added the commands '/pp add', '/pp edit', '/pp remove', '/pp group' for managing particles and groups
++ Added the command '/pp toggle' to toggle rendering ALL PlayerParticles particles on/off
++ Added the command '/pp reload', reloads all settings from the config.yml, groups.yml, and target lang file
++ Added sub-command '/pp fixed edit'
+* Modified sub-command '/pp fixed create' to accept the word 'looking' instead of coordinates, 'looking' will set the location to the block you are looking at
++ Added more advanced tab/auto completion for all commands
 - Removed style 'blockedit', apply 'blockplace' and 'blockbreak' at the same time to recreate it
+* Renamed the style 'none' to 'normal'
++ Added the following styles: 'batman', 'celebration', 'chains', 'companion', 'invocation', 'overhead', 'rings', 'vortex'
+* Plugin messages have been separated into the /lang/default.lang file, you can now create your own lang files
+* The target .lang file can be changed in the config.yml
+* The particle render distance for players and fixed effects is now configurable from the config.yml
++ Added setting in config.yml to control how fast the rainbow hue cycles
+* Rewrote how data is stored, playerData.yml has been replaced with playerparticles.db
+* All commands/GUI screens in code are now modular and more efficient
+* Updated the plugin license. TL;DR: You can't sell the plugin .jar file even if you edit it, but you can sell the plugin's permissions on servers
 === v5.2 ===
 * Added native support for Minecraft 1.13.x
 * Still compatible with Minecraft 1.9 through Minecraft 1.12!
