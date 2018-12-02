@@ -14,6 +14,7 @@ import com.esophose.playerparticles.manager.DataManager;
 import com.esophose.playerparticles.manager.LangManager;
 import com.esophose.playerparticles.manager.LangManager.Lang;
 import com.esophose.playerparticles.manager.PermissionManager;
+import com.esophose.playerparticles.particles.PPlayer;
 
 public class ParticleCommandHandler implements CommandExecutor, TabCompleter {
 
@@ -129,14 +130,17 @@ public class ParticleCommandHandler implements CommandExecutor, TabCompleter {
         if (!(sender instanceof Player)) return new ArrayList<String>();
 
         if (cmd.getName().equalsIgnoreCase("pp")) {
+            PPlayer pplayer = DataManager.getPPlayer(((Player) sender).getUniqueId());
+            if (pplayer == null) return new ArrayList<String>();
+            
             if (args.length <= 1) {
                 CommandModule commandModule = findMatchingCommand(""); // Get the default command module
-                return commandModule.onTabComplete(DataManager.getPPlayer(((Player) sender).getUniqueId()), args);
+                return commandModule.onTabComplete(pplayer, args);
             } else if (args.length >= 2) {
                 CommandModule commandModule = findMatchingCommand(args[0]);
                 String[] cmdArgs = Arrays.copyOfRange(args, 1, args.length);
                 if (commandModule != null) {
-                    return commandModule.onTabComplete(DataManager.getPPlayer(((Player) sender).getUniqueId()), cmdArgs);
+                    return commandModule.onTabComplete(pplayer, cmdArgs);
                 }
             }
         }

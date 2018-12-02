@@ -11,6 +11,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.esophose.playerparticles.PlayerParticles;
 import com.esophose.playerparticles.manager.ParticleManager;
+import com.esophose.playerparticles.particles.FixedParticleEffect;
 import com.esophose.playerparticles.particles.PPlayer;
 import com.esophose.playerparticles.particles.ParticleEffect;
 import com.esophose.playerparticles.particles.ParticlePair;
@@ -35,58 +36,64 @@ public class ParticleStyleCelebration implements ParticleStyle {
         if (step == spawnTime) {
             step = 0;
             
-            final Random random = new Random();
+            Random random = new Random();
             for (PPlayer pplayer : ParticleManager.getPPlayers()) {
-                final Player player = pplayer.getPlayer();
+                Player player = pplayer.getPlayer();
                 
-                for (ParticlePair particle : pplayer.getActiveParticles()) {
-                    if (particle.getStyle() != this) continue;
-                    
-                    double angle = random.nextDouble() * Math.PI * 2;
-                    double distanceFrom = 1.25 + random.nextDouble() * 1.5;
-                    double dx = Math.sin(angle) * distanceFrom;
-                    double dz = Math.cos(angle) * distanceFrom;
-                    final Location loc = player.getLocation().clone().add(dx, 1, dz);
-                    final int fuse = 3 + random.nextInt(3);
-
-                    new BukkitRunnable() {
-                        private Location location = loc;
-                        private int fuseLength = fuse;
-                        private int fuseTimer = 0;
-
-                        public void run() {
-                            if (this.fuseTimer < this.fuseLength) {
-                                ParticlePair trail = ParticlePair.getNextDefault(pplayer);
-                                trail.setEffect(ParticleEffect.FIREWORK);
-                                trail.setStyle(DefaultStyles.CELEBRATION);
-                                
-                                ParticleManager.displayParticles(trail, Collections.singletonList(new PParticle(this.location)));
-                                
-                                this.location.add(0, 0.25, 0);
-                            } else {
-                                List<PParticle> particles = new ArrayList<PParticle>();
-                                for (int i = 0; i < 40; i++) {
-                                    double radius = 0.6 + random.nextDouble() * 0.2;
-                                    double u = random.nextDouble();
-                                    double v = random.nextDouble();
-                                    double theta = 2 * Math.PI * u;
-                                    double phi = Math.acos(2 * v - 1);
-                                    double dx = radius * Math.sin(phi) * Math.cos(theta);
-                                    double dy = radius * Math.sin(phi) * Math.sin(theta);
-                                    double dz = radius * Math.cos(phi);
-                                    
-                                    particles.add(new PParticle(this.location.clone().add(dx, dy, dz)));
-                                }
-                                ParticleManager.displayParticles(particle, particles);
-                                
-                                this.cancel();
-                            }
-                            this.fuseTimer++;
-                        }
-                    }.runTaskTimer(PlayerParticles.getPlugin(), 0, 1);
-                }
+                for (ParticlePair particle : pplayer.getActiveParticles())
+                    if (particle.getStyle() == this) 
+                        spawnFirework(player.getLocation(), pplayer, particle, random);
+                
+                for (FixedParticleEffect fixedEffect : pplayer.getFixedParticles())
+                    if (fixedEffect.getParticlePair().getStyle() == this)
+                        spawnFirework(fixedEffect.getLocation(), pplayer, fixedEffect.getParticlePair(), random);
             }
         }
+    }
+    
+    private void spawnFirework(final Location location, final PPlayer pplayer, final ParticlePair particle, final Random random) {
+        double angle = random.nextDouble() * Math.PI * 2;
+        double distanceFrom = 1.25 + random.nextDouble() * 1.5;
+        double dx = Math.sin(angle) * distanceFrom;
+        double dz = Math.cos(angle) * distanceFrom;
+        final Location loc = location.clone().add(dx, 1, dz);
+        final int fuse = 3 + random.nextInt(3);
+
+        new BukkitRunnable() {
+            private Location location = loc;
+            private int fuseLength = fuse;
+            private int fuseTimer = 0;
+
+            public void run() {
+                if (this.fuseTimer < this.fuseLength) {
+                    ParticlePair trail = ParticlePair.getNextDefault(pplayer);
+                    trail.setEffect(ParticleEffect.FIREWORK);
+                    trail.setStyle(DefaultStyles.CELEBRATION);
+                    
+                    ParticleManager.displayParticles(trail, Collections.singletonList(new PParticle(this.location)));
+                    
+                    this.location.add(0, 0.25, 0);
+                } else {
+                    List<PParticle> particles = new ArrayList<PParticle>();
+                    for (int i = 0; i < 40; i++) {
+                        double radius = 0.6 + random.nextDouble() * 0.2;
+                        double u = random.nextDouble();
+                        double v = random.nextDouble();
+                        double theta = 2 * Math.PI * u;
+                        double phi = Math.acos(2 * v - 1);
+                        double dx = radius * Math.sin(phi) * Math.cos(theta);
+                        double dy = radius * Math.sin(phi) * Math.sin(theta);
+                        double dz = radius * Math.cos(phi);
+                        
+                        particles.add(new PParticle(this.location.clone().add(dx, dy, dz)));
+                    }
+                    ParticleManager.displayParticles(particle, particles);
+                    
+                    this.cancel();
+                }
+                this.fuseTimer++;
+            }
+        }.runTaskTimer(PlayerParticles.getPlugin(), 0, 1);
     }
 
     public String getName() {
@@ -99,6 +106,10 @@ public class ParticleStyleCelebration implements ParticleStyle {
 
     public boolean canToggleWithMovement() {
         return true;
+    }
+    
+    public double getFixedEffectOffset() {
+        return 0;
     }
 
 }

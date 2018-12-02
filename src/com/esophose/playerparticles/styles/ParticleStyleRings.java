@@ -62,5 +62,9 @@ public class ParticleStyleRings implements ParticleStyle {
     public boolean canToggleWithMovement() {
         return true;
     }
+    
+    public double getFixedEffectOffset() {
+        return 0;
+    }
 
 }

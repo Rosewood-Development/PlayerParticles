@@ -30,5 +30,9 @@ public class ParticleStylePoint implements ParticleStyle {
     public boolean canToggleWithMovement() {
         return false;
     }
+    
+    public double getFixedEffectOffset() {
+        return -0.5;
+    }
 
 }

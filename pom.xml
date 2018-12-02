@@ -54,7 +54,7 @@
                   </excludes>
                 </filter>
               </filters>
-              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.13\plugins\update\PlayerParticles v6.0.jar</outputFile>
+              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.13\plugins\update\PlayerParticles v${project.version}.jar</outputFile>
             </configuration>
           </execution>
           <execution>
@@ -81,7 +81,7 @@
                   </excludes>
                 </filter>
               </filters>
-              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.12\plugins\update\PlayerParticles v6.0.jar</outputFile>
+              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.12\plugins\update\PlayerParticles v${project.version}.jar</outputFile>
             </configuration>
           </execution>
           <execution>
@@ -108,7 +108,7 @@
                   </excludes>
                 </filter>
               </filters>
-              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.11\plugins\update\PlayerParticles v6.0.jar</outputFile>
+              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.11\plugins\update\PlayerParticles v${project.version}.jar</outputFile>
             </configuration>
           </execution>
           <execution>
@@ -135,7 +135,7 @@
                   </excludes>
                 </filter>
               </filters>
-              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.10\plugins\update\PlayerParticles v6.0.jar</outputFile>
+              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.10\plugins\update\PlayerParticles v${project.version}.jar</outputFile>
             </configuration>
           </execution>
           <execution>
@@ -162,7 +162,7 @@
                   </excludes>
                 </filter>
               </filters>
-              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.9\plugins\update\PlayerParticles v6.0.jar</outputFile>
+              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.9\plugins\update\PlayerParticles v${project.version}.jar</outputFile>
             </configuration>
           </execution>
         </executions>

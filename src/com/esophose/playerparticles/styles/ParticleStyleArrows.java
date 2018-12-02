@@ -59,6 +59,10 @@ public class ParticleStyleArrows implements ParticleStyle, Listener {
     public boolean canToggleWithMovement() {
         return false;
     }
+    
+    public double getFixedEffectOffset() {
+        return 0;
+    }
 
     /**
      * The event used to get all arrows fired by players

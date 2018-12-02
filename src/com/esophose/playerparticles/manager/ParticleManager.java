@@ -155,7 +155,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      */
     private void displayFixedParticleEffect(FixedParticleEffect fixedEffect) {
         ParticlePair particle = fixedEffect.getParticlePair();
-        for (PParticle pparticle : particle.getStyle().getParticles(particle, fixedEffect.getLocation()))
+        for (PParticle pparticle : particle.getStyle().getParticles(particle, fixedEffect.getLocation().clone().add(0, particle.getStyle().getFixedEffectOffset(), 0)))
             ParticleEffect.display(particle, pparticle, true);
     }
 

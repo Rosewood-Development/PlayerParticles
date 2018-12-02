@@ -18,7 +18,6 @@ public class DefaultStyles {
     public static final ParticleStyle BATMAN = new ParticleStyleBatman();
     public static final ParticleStyle BEAM = new ParticleStyleBeam();
     public static final ParticleStyle BLOCKBREAK = new ParticleStyleBlockBreak();
-    public static final ParticleStyle BLOCKEDIT = new ParticleStyleBlockEdit();
     public static final ParticleStyle BLOCKPLACE = new ParticleStyleBlockPlace();
     public static final ParticleStyle CELEBRATION = new ParticleStyleCelebration();
     public static final ParticleStyle CHAINS = new ParticleStyleChains();
@@ -52,7 +51,6 @@ public class DefaultStyles {
         ParticleStyleManager.registerStyle(BATMAN);
         ParticleStyleManager.registerStyle(BEAM);
         ParticleStyleManager.registerCustomHandledStyle(BLOCKBREAK);
-        ParticleStyleManager.registerCustomHandledStyle(BLOCKEDIT);
         ParticleStyleManager.registerCustomHandledStyle(BLOCKPLACE);
         ParticleStyleManager.registerStyle(CELEBRATION);
         ParticleStyleManager.registerStyle(CHAINS);
@@ -83,7 +81,6 @@ public class DefaultStyles {
         manager.registerEvents((Listener) ARROWS, playerParticles);
         manager.registerEvents((Listener) BLOCKBREAK, playerParticles);
         manager.registerEvents((Listener) BLOCKPLACE, playerParticles);
-        manager.registerEvents((Listener) BLOCKEDIT, playerParticles);
         manager.registerEvents((Listener) HURT, playerParticles);
         manager.registerEvents((Listener) MOVE, playerParticles);
         manager.registerEvents((Listener) SWORDS, playerParticles);

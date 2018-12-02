@@ -209,8 +209,8 @@ public class DataManager {
     /**
      * Updates the particles_hidden setting in the database and for the PPlayer
      * 
-     * @param playerUUID
-     * @param particlesHidden
+     * @param playerUUID The player to hide PlayerParticles from
+     * @param particlesHidden True if the particles should be hidden, otherwise False
      */
     public static void updateSettingParticlesHidden(UUID playerUUID, boolean particlesHidden) {
         async(() -> {

@@ -45,6 +45,10 @@ public class ParticleStyleBlockPlace implements ParticleStyle, Listener {
     public boolean canToggleWithMovement() {
         return false;
     }
+    
+    public double getFixedEffectOffset() {
+        return 0;
+    }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockPlace(BlockPlaceEvent event) {

@@ -300,8 +300,6 @@ gui-icon:
       - POWERED_RAIL
     blockbreak:
       - IRON_PICKAXE
-    blockedit:
-      - DISPENSER
     blockplace:
       - OAK_PLANKS
       - WOOD

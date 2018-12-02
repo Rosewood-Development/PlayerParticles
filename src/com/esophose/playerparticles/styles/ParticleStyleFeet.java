@@ -32,5 +32,9 @@ public class ParticleStyleFeet implements ParticleStyle {
     public boolean canToggleWithMovement() {
         return false;
     }
+    
+    public double getFixedEffectOffset() {
+        return 0.5;
+    }
 
 }

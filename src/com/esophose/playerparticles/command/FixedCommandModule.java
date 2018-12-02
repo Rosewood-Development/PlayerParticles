@@ -378,6 +378,9 @@ public class FixedCommandModule implements CommandModule {
             } else if (!PermissionManager.hasStylePermission(pplayer.getPlayer(), style)) {
                 LangManager.sendMessage(pplayer, Lang.FIXED_EDIT_STYLE_NO_PERMISSION, style.getName());
                 return;
+            } else if (!style.canBeFixed()) {
+                LangManager.sendMessage(p, Lang.FIXED_EDIT_STYLE_NON_FIXABLE, style.getName());
+                return;
             }
             
             fixedEffect.getParticlePair().setStyle(style);

@@ -44,6 +44,13 @@ public interface ParticleStyle {
     public boolean canToggleWithMovement();
     
     /**
+     * The Y-axis offset to be applied when using '/pp fixed create looking'
+     * 
+     * @return How far to move the style up or down to get it centered on the block properly
+     */
+    public double getFixedEffectOffset();
+    
+    /**
      * Gets the ParticleStyle with the name given, returns null if not found
      * 
      * @param styleName The string of the style to search for

@@ -437,7 +437,6 @@ public class LangManager {
      * 
      * @param player The player to send the message to
      * @param message The message to send to the player
-     * @param includePrefix If the prefix should be included
      */
     public static void sendCustomMessage(Player player, String message) {
         if (!PSetting.MESSAGES_ENABLED.getBoolean()) return;
@@ -465,7 +464,7 @@ public class LangManager {
     /**
      * Sends a message to a Player without the prefix
      * 
-     * @param player The plaeyr to send the message to
+     * @param player The player to send the message to
      * @param messageType The message type to send the player
      * @param replacements The replacements for the message
      */
@@ -484,7 +483,7 @@ public class LangManager {
     /**
      * Sends a message to a PPlayer without the prefix
      * 
-     * @param player The plaeyr to send the message to
+     * @param pplayer The player to send the message to
      * @param messageType The message type to send the player
      * @param replacements The replacements for the message
      */
