@@ -1,8 +1,4 @@
 /*
- * TODO: v6.1
- * + Add \n support for GUI messages to break lore onto a new line
- * * Make the GUI ignore empty lore lines rather than putting an empty line there
- * 
  * TODO: v6.2
  * + Add new style 'tornado'
  * + Add new style 'doubleorbit'

@@ -13,6 +13,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import com.esophose.playerparticles.manager.DataManager;
 import com.esophose.playerparticles.manager.LangManager;
 import com.esophose.playerparticles.manager.LangManager.Lang;
+import com.esophose.playerparticles.manager.PermissionManager;
 import com.esophose.playerparticles.manager.SettingManager.GuiIcon;
 import com.esophose.playerparticles.particles.PPlayer;
 import com.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
@@ -52,8 +53,27 @@ public class GuiInventoryDefault extends GuiInventory {
         
         this.inventory.setItem(13, headIcon);
         
+        // Define what slots to put the icons at based on what other slots are visible
+        boolean manageGroupsVisible = PermissionManager.canPlayerSaveGroups(pplayer);
+        boolean loadPresetGroupVisible = !ParticleGroup.getPresetGroupsForPlayer(pplayer.getPlayer()).isEmpty();
+        int manageParticlesSlot = -1, manageGroupsSlot = -1, loadPresetGroupSlot = -1;
+        
+        if (!manageGroupsVisible && !loadPresetGroupVisible) {
+            manageParticlesSlot = 22;
+        } else if (!manageGroupsVisible) {
+            manageParticlesSlot = 21;
+            loadPresetGroupSlot = 23;
+        } else if (!loadPresetGroupVisible) {
+            manageParticlesSlot = 21;
+            manageGroupsSlot = 23;
+        } else {
+            manageParticlesSlot = 20;
+            manageGroupsSlot = 22;
+            loadPresetGroupSlot = 24;
+        }
+        
         // Manage Your Particles button
-        GuiActionButton manageYourParticlesButton = new GuiActionButton(20, 
+        GuiActionButton manageYourParticlesButton = new GuiActionButton(manageParticlesSlot, 
                                                                         GuiIcon.PARTICLES.get(), 
                                                                         LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_MANAGE_YOUR_PARTICLES), 
                                                                         new String[] { LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_MANAGE_YOUR_PARTICLES_DESCRIPTION) }, 
@@ -63,24 +83,28 @@ public class GuiInventoryDefault extends GuiInventory {
         this.actionButtons.add(manageYourParticlesButton);
         
         // Manage Your Groups button
-        GuiActionButton manageYourGroupsButton = new GuiActionButton(22, 
-                                                                     GuiIcon.GROUPS.get(), 
-                                                                     LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_MANAGE_YOUR_GROUPS), 
-                                                                     new String[] { LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_MANAGE_YOUR_GROUPS_DESCRIPTION) }, 
-                                                                     (button, isShiftClick) -> {
-                                                                         GuiHandler.transition(new GuiInventoryManageGroups(pplayer));
-                                                                     });
-        this.actionButtons.add(manageYourGroupsButton);
+        if (manageGroupsVisible) {
+            GuiActionButton manageYourGroupsButton = new GuiActionButton(manageGroupsSlot, 
+                                                                         GuiIcon.GROUPS.get(), 
+                                                                         LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_MANAGE_YOUR_GROUPS), 
+                                                                         new String[] { LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_MANAGE_YOUR_GROUPS_DESCRIPTION) }, 
+                                                                         (button, isShiftClick) -> {
+                                                                             GuiHandler.transition(new GuiInventoryManageGroups(pplayer));
+                                                                         });
+            this.actionButtons.add(manageYourGroupsButton);
+        }
         
         // Load Preset Groups
-        GuiActionButton loadPresetGroups = new GuiActionButton(24, 
-                                                               GuiIcon.PRESET_GROUPS.get(), 
-                                                               LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_LOAD_A_PRESET_GROUP), 
-                                                               new String[] { LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_LOAD_A_PRESET_GROUP_DESCRIPTION) }, 
-                                                               (button, isShiftClick) -> {
-                                                                   GuiHandler.transition(new GuiInventoryLoadPresetGroups(pplayer));
-                                                               });
-        this.actionButtons.add(loadPresetGroups);
+        if (loadPresetGroupVisible) {
+            GuiActionButton loadPresetGroups = new GuiActionButton(loadPresetGroupSlot, 
+                                                                   GuiIcon.PRESET_GROUPS.get(), 
+                                                                   LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_LOAD_A_PRESET_GROUP), 
+                                                                   new String[] { LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_LOAD_A_PRESET_GROUP_DESCRIPTION) }, 
+                                                                   (button, isShiftClick) -> {
+                                                                       GuiHandler.transition(new GuiInventoryLoadPresetGroups(pplayer));
+                                                                   });
+            this.actionButtons.add(loadPresetGroups);
+        }
         
         final ParticlePair editingParticle = pplayer.getPrimaryParticle();
         boolean canEditPrimaryStyleAndData = pplayer.getActiveParticle(1) != null;

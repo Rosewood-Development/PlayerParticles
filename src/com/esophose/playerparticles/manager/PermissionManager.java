@@ -16,7 +16,7 @@ public class PermissionManager {
     
     private static final String PERMISSION_PREFIX = "playerparticles.";
     
-    public enum PPermission {
+    private enum PPermission {
         ALL("*"),
         
         EFFECT_ALL("effect.*"),
@@ -90,6 +90,18 @@ public class PermissionManager {
         if (PPermission.ALL.check(pplayer.getPlayer())) return false;
         if (PPermission.GROUPS_UNLIMITED.check(pplayer.getPlayer())) return false;
         return pplayer.getParticleGroups().size() - 1 >= PSetting.MAX_GROUPS.getInt();
+    }
+    
+    /**
+     * Checks if the given player is able to save groups
+     * 
+     * @param pplayer The player to check
+     * @return If the player has permission to save groups
+     */
+    public static boolean canPlayerSaveGroups(PPlayer pplayer) {
+        if (PPermission.ALL.check(pplayer.getPlayer())) return true;
+        if (PPermission.GROUPS_UNLIMITED.check(pplayer.getPlayer())) return true;
+        return PSetting.MAX_GROUPS.getInt() != 0;
     }
     
     /**
