@@ -1,9 +1,15 @@
 /*
  * TODO: v6.1
- * * Write a class called ConfigManager which manages updating the config.yml between versions so it doesn't have to be deleted every time
+ * + Add \n support for GUI messages to break lore onto a new line
+ * * Make the GUI ignore empty lore lines rather than putting an empty line there
+ * 
+ * TODO: v6.2
  * + Add new style 'tornado'
  * + Add new style 'doubleorbit'
  * + Add new style 'wings_<type>', multiple new wing types: fairy, demon
+ * * Create lore line parser
+ * * Make it so lore lines of the GUI are removed if the string is empty in the config
+ * * Add ability to add line breaks to the lore with \n
  */
 
 package com.esophose.playerparticles;

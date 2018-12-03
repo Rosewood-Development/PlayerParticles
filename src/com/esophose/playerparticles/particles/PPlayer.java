@@ -255,5 +255,17 @@ public class PPlayer {
             ids[i] = activeParticles.get(i).getId();
         return ParticleUtils.getSmallestPositiveInt(ids);
     }
+    
+    /**
+     * Gets the primary particle (ID 1) for the PPlayer
+     * @return
+     */
+    public ParticlePair getPrimaryParticle() {
+        ParticlePair primaryParticle = this.getActiveParticle(1);
+        if (primaryParticle == null) {
+            primaryParticle = ParticlePair.getNextDefault(this);
+        }
+        return primaryParticle;
+    }
 
 }

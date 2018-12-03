@@ -82,8 +82,8 @@ public class GuiInventoryDefault extends GuiInventory {
                                                                });
         this.actionButtons.add(loadPresetGroups);
         
-        final ParticlePair editingParticle = pplayer.getActiveParticles().isEmpty() ? ParticlePair.getNextDefault(pplayer) : pplayer.getActiveParticle(1);
-        boolean canEditPrimaryStyleAndData = !pplayer.getActiveParticles().isEmpty();
+        final ParticlePair editingParticle = pplayer.getPrimaryParticle();
+        boolean canEditPrimaryStyleAndData = pplayer.getActiveParticle(1) != null;
         boolean doesEffectUseData = editingParticle.getEffect().hasProperty(ParticleProperty.COLORABLE) || editingParticle.getEffect().hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA);
         
         // Edit Primary Effect
