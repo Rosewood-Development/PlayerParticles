@@ -1,7 +1,9 @@
 package com.esophose.playerparticles.gui;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -112,7 +114,7 @@ public class GuiActionButton {
         ItemMeta itemMeta = itemStack.getItemMeta();
         
         itemMeta.setDisplayName(this.name);
-        itemMeta.setLore(Arrays.asList(this.lore));
+        itemMeta.setLore(parseLore(this.lore));
         itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_POTION_EFFECTS);
         
         itemStack.setItemMeta(itemMeta);
@@ -145,6 +147,34 @@ public class GuiActionButton {
      */
     public boolean isTickable() {
         return this.icons != null ? this.icons.length > 1 : this.colors.length > 1;
+    }
+    
+    /**
+     * Builds lore from a list of Strings
+     * Parses \n as a new lore line
+     * Ignores empty lore lines
+     * 
+     * @param lore The lines of lore
+     * @return A parsed list of lore text
+     */
+    private List<String> parseLore(String... lore) {
+        List<String> parsedLore = new ArrayList<String>();
+        for (String line : lore) {
+            // Try to maintain the color going to the next line if it's split
+            // If there is no color, just ignore it
+            String lineColor = "";
+            if (line.length() >= 2 && line.charAt(0) == ChatColor.COLOR_CHAR) {
+                lineColor = line.substring(0, 2);
+            }
+            
+            // Split the lore along \n onto a new line if any exist
+            String[] splitLines = line.split("\\\\n");
+            for (String parsedLine : splitLines) {
+                if (ChatColor.stripColor(parsedLine).isEmpty()) continue;
+                parsedLore.add(lineColor + parsedLine);
+            }
+        }
+        return parsedLore;
     }
     
     /**

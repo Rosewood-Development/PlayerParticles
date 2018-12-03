@@ -39,6 +39,8 @@ public class DataUpdater {
             updateFrom_legacy_to_current();
         } else if (configVersion == 5.3) {
             updateFrom_5_3_to_current();
+        } else if (configVersion == 6.0) {
+            PlayerParticles.getPlugin().getLogger().warning("Found nothing to update.");
         }
         
         PlayerParticles.getPlugin().getLogger().warning("Finished updating SQLite/MySQL data from " + (configVersion < 5.3 ? "a legacy version" : "v" + configVersion) + " to v" + PlayerParticles.getPlugin().getDescription().getVersion());

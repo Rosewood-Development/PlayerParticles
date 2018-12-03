@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.esophose.playerparticles</groupId>
   <artifactId>PlayerParticles</artifactId>
-  <version>6.0</version>
+  <version>6.1</version>
   <name>PlayerParticles</name>
   <url>https://github.com/Esophose/PlayerParticles</url>
   <description>Display particles around your player using customized styles and data!</description>

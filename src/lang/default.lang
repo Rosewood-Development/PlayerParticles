@@ -3,6 +3,7 @@
 # Important Notes:                                                 #
 # * You can use the & symbol to color the messages                 #
 # * {#} Will be replaced with whatever that message requires       #
+# * \n Will split the lore line in the #GUI section                #
 # * Do NOT use the apostrophe character in any message! ( ' )      #
 # * PLEASE MAKE YOUR OWN .lang FILE IF YOU WANT CUSTOM MESSAGES!   #
 # * This file will be overridden almost every plugin update!       #

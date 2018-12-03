@@ -97,7 +97,7 @@ public class GuiInventoryDefault extends GuiInventory {
                                                                     callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditEffect(pplayer, editingParticle, callbacks, 1)));
                                                                     callbacks.add(() -> {
                                                                         ParticleGroup group = pplayer.getActiveParticleGroup();
-                                                                        if (!group.getParticles().isEmpty()) {
+                                                                        if (canEditPrimaryStyleAndData) {
                                                                             for (ParticlePair particle : group.getParticles()) {
                                                                                 if (particle.getId() == editingParticle.getId()) {
                                                                                     particle.setEffect(editingParticle.getEffect());
