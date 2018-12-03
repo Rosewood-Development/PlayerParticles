@@ -1,5 +1,11 @@
 == UPDATING WILL DELETE YOUR CONFIG.YML ==
 * Create a backup of your config.yml if you wish to import all your old settings!
+=== v6.1 ===
+* Fix a bug where sometimes the GUI was unable to be opened due to an error
+* You can now use \n on the GUI lore lines in the *.lang file to break them into multiple lines
+* Blank lore lines in the *.lang file will no longer show up on the items in the GUI
+* If max-groups is set to 0 and the player doesn't have the permission playerparticles.groups.unlimited, the groups icon in the GUI will be invisible
+* If the groups.yml file has no entries, then the preset groups icon in the GUI will be invisible
 === v6.0 ===
 * Compatible with Minecraft 1.9-1.13, you MUST use a Spigot .jar file, not CraftBukkit
 * All PlayerParticles data (including player particles and fixed effects) will be deleted upon updating. This will never happen again in the future. 
