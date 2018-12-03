@@ -89,7 +89,7 @@ public class PermissionManager {
     public static boolean hasPlayerReachedMaxGroups(PPlayer pplayer) {
         if (PPermission.ALL.check(pplayer.getPlayer())) return false;
         if (PPermission.GROUPS_UNLIMITED.check(pplayer.getPlayer())) return false;
-        return pplayer.getParticleGroups().size() >= PSetting.MAX_GROUPS.getInt();
+        return pplayer.getParticleGroups().size() - 1 >= PSetting.MAX_GROUPS.getInt();
     }
     
     /**
