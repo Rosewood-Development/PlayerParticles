@@ -1,12 +1,12 @@
 package com.esophose.playerparticles.updater;
 
-import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import com.esophose.playerparticles.PlayerParticles;
 import com.esophose.playerparticles.manager.LangManager;
+import com.esophose.playerparticles.manager.LangManager.Lang;
 
 public class PluginUpdateListener implements Listener {
 
@@ -17,12 +17,8 @@ public class PluginUpdateListener implements Listener {
      */
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
-        if (e.getPlayer().isOp()) {
-            if (PlayerParticles.updateVersion != null) { // @formatter:off
-                LangManager.sendCustomMessage(e.getPlayer(), ChatColor.YELLOW + "An update (" + ChatColor.AQUA + "v" + PlayerParticles.updateVersion + ChatColor.YELLOW + ") is available! " + 
-                                                                                "You are running " + ChatColor.AQUA + "v" + PlayerParticles.getPlugin().getDescription().getVersion() + ChatColor.YELLOW + 
-                                                                                ". https://www.spigotmc.org/resources/playerparticles.40261/");
-			} // @formatter:on
+        if (e.getPlayer().isOp() && PlayerParticles.updateVersion != null) {
+            LangManager.sendCommandSenderMessage(e.getPlayer(), Lang.UPDATE_AVAILABLE, PlayerParticles.updateVersion, PlayerParticles.getPlugin().getDescription().getVersion());
         }
     }
 

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.esophose.playerparticles.styles.api.ParticleStyle;
@@ -70,6 +71,15 @@ public class PPlayer {
      */
     public Player getPlayer() {
         return Bukkit.getPlayer(this.playerUUID);
+    }
+    
+    /**
+     * Gets the destination for messages
+     * 
+     * @return The destination for messages
+     */
+    public CommandSender getMessageDestination() {
+        return this.getPlayer();
     }
     
     /**
@@ -258,7 +268,8 @@ public class PPlayer {
     
     /**
      * Gets the primary particle (ID 1) for the PPlayer
-     * @return
+     * 
+     * @return The particle with an ID of 1 for the PPlayer or a new one if one doesn't exist
      */
     public ParticlePair getPrimaryParticle() {
         ParticlePair primaryParticle = this.getActiveParticle(1);

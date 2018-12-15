@@ -13,7 +13,7 @@
 # This value is the version of the plugin that last modified the config file
 # Changing this value manually will likely result in data loss and errors!
 # Do not change this manually unless specifically told to by the plugin author
-version: 6.1
+version: 6.2
 
 # Check for new versions of the plugin
 # Default: true

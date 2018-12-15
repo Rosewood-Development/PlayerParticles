@@ -35,17 +35,17 @@ public class FixedCommandModule implements CommandModule {
         Player p = pplayer.getPlayer();
 
         if (!PermissionManager.canUseFixedEffects(p)) {
-            LangManager.sendMessage(p, Lang.FIXED_NO_PERMISSION);
+            LangManager.sendMessage(pplayer, Lang.FIXED_NO_PERMISSION);
             return;
         }
 
         if (args.length == 0) { // General information on command
-            LangManager.sendMessage(p, Lang.COMMAND_DESCRIPTION_FIXED_CREATE);
-            LangManager.sendMessage(p, Lang.COMMAND_DESCRIPTION_FIXED_EDIT);
-            LangManager.sendMessage(p, Lang.COMMAND_DESCRIPTION_FIXED_REMOVE);
-            LangManager.sendMessage(p, Lang.COMMAND_DESCRIPTION_FIXED_LIST);
-            LangManager.sendMessage(p, Lang.COMMAND_DESCRIPTION_FIXED_INFO);
-            LangManager.sendMessage(p, Lang.COMMAND_DESCRIPTION_FIXED_CLEAR);
+            LangManager.sendMessage(pplayer, Lang.COMMAND_DESCRIPTION_FIXED_CREATE);
+            LangManager.sendMessage(pplayer, Lang.COMMAND_DESCRIPTION_FIXED_EDIT);
+            LangManager.sendMessage(pplayer, Lang.COMMAND_DESCRIPTION_FIXED_REMOVE);
+            LangManager.sendMessage(pplayer, Lang.COMMAND_DESCRIPTION_FIXED_LIST);
+            LangManager.sendMessage(pplayer, Lang.COMMAND_DESCRIPTION_FIXED_INFO);
+            LangManager.sendMessage(pplayer, Lang.COMMAND_DESCRIPTION_FIXED_CLEAR);
             return;
         }
 
@@ -76,13 +76,13 @@ public class FixedCommandModule implements CommandModule {
             handleClear(pplayer, p, cmdArgs);
             return;
         default:
-            LangManager.sendMessage(p, Lang.FIXED_INVALID_COMMAND);
-            LangManager.sendMessage(p, Lang.COMMAND_DESCRIPTION_FIXED_CREATE);
-            LangManager.sendMessage(p, Lang.COMMAND_DESCRIPTION_FIXED_EDIT);
-            LangManager.sendMessage(p, Lang.COMMAND_DESCRIPTION_FIXED_REMOVE);
-            LangManager.sendMessage(p, Lang.COMMAND_DESCRIPTION_FIXED_LIST);
-            LangManager.sendMessage(p, Lang.COMMAND_DESCRIPTION_FIXED_INFO);
-            LangManager.sendMessage(p, Lang.COMMAND_DESCRIPTION_FIXED_CLEAR);
+            LangManager.sendMessage(pplayer, Lang.FIXED_INVALID_COMMAND);
+            LangManager.sendMessage(pplayer, Lang.COMMAND_DESCRIPTION_FIXED_CREATE);
+            LangManager.sendMessage(pplayer, Lang.COMMAND_DESCRIPTION_FIXED_EDIT);
+            LangManager.sendMessage(pplayer, Lang.COMMAND_DESCRIPTION_FIXED_REMOVE);
+            LangManager.sendMessage(pplayer, Lang.COMMAND_DESCRIPTION_FIXED_LIST);
+            LangManager.sendMessage(pplayer, Lang.COMMAND_DESCRIPTION_FIXED_INFO);
+            LangManager.sendMessage(pplayer, Lang.COMMAND_DESCRIPTION_FIXED_CLEAR);
         }
     }
     
@@ -96,12 +96,12 @@ public class FixedCommandModule implements CommandModule {
     private void handleCreate(PPlayer pplayer, Player p, String[] args) {
         boolean reachedMax = PermissionManager.hasPlayerReachedMaxFixedEffects(pplayer);
         if (reachedMax) {
-            LangManager.sendMessage(p, Lang.FIXED_MAX_REACHED);
+            LangManager.sendMessage(pplayer, Lang.FIXED_MAX_REACHED);
             return;
         }
 
         if (args.length < 5 && !(args.length > 0 && args[0].equalsIgnoreCase("looking") && args.length >= 3)) {
-            LangManager.sendMessage(p, Lang.FIXED_CREATE_MISSING_ARGS, 5 - args.length);
+            LangManager.sendMessage(pplayer, Lang.FIXED_CREATE_MISSING_ARGS, 5 - args.length);
             return;
         }
 
@@ -111,7 +111,7 @@ public class FixedCommandModule implements CommandModule {
             Block targetBlock = p.getTargetBlock((Set<Material>)null, 8);
             int maxDistanceSqrd = 6 * 6;
             if (targetBlock.getLocation().distanceSquared(p.getLocation()) > maxDistanceSqrd) {
-                LangManager.sendMessage(p, Lang.FIXED_CREATE_LOOKING_TOO_FAR);
+                LangManager.sendMessage(pplayer, Lang.FIXED_CREATE_LOOKING_TOO_FAR);
                 return;
             }
             
@@ -152,7 +152,7 @@ public class FixedCommandModule implements CommandModule {
                     zPos = Double.parseDouble(args[2]);
                 }
             } catch (Exception e) {
-                LangManager.sendMessage(p, Lang.FIXED_CREATE_INVALID_COORDS);
+                LangManager.sendMessage(pplayer, Lang.FIXED_CREATE_INVALID_COORDS);
                 return;
             }
         }
@@ -160,30 +160,30 @@ public class FixedCommandModule implements CommandModule {
         double distanceFromEffect = p.getLocation().distance(new Location(p.getWorld(), xPos, yPos, zPos));
         int maxCreationDistance = PermissionManager.getMaxFixedEffectCreationDistance();
         if (maxCreationDistance != 0 && distanceFromEffect > maxCreationDistance) {
-            LangManager.sendMessage(p, Lang.FIXED_CREATE_OUT_OF_RANGE, maxCreationDistance);
+            LangManager.sendMessage(pplayer, Lang.FIXED_CREATE_OUT_OF_RANGE, maxCreationDistance);
             return;
         }
 
         ParticleEffect effect = ParticleEffect.fromName(args[3]);
         if (effect == null) {
-            LangManager.sendMessage(p, Lang.FIXED_CREATE_EFFECT_INVALID, args[3]);
+            LangManager.sendMessage(pplayer, Lang.FIXED_CREATE_EFFECT_INVALID, args[3]);
             return;
         } else if (!PermissionManager.hasEffectPermission(p, effect)) {
-            LangManager.sendMessage(p, Lang.FIXED_CREATE_EFFECT_NO_PERMISSION, effect.getName());
+            LangManager.sendMessage(pplayer, Lang.FIXED_CREATE_EFFECT_NO_PERMISSION, effect.getName());
             return;
         }
 
         ParticleStyle style = ParticleStyle.fromName(args[4]);
         if (style == null) {
-            LangManager.sendMessage(p, Lang.FIXED_CREATE_STYLE_INVALID, args[4]);
+            LangManager.sendMessage(pplayer, Lang.FIXED_CREATE_STYLE_INVALID, args[4]);
             return;
         } else if (!PermissionManager.hasStylePermission(p, style)) {
-            LangManager.sendMessage(p, Lang.FIXED_CREATE_STYLE_NO_PERMISSION, args[4]);
+            LangManager.sendMessage(pplayer, Lang.FIXED_CREATE_STYLE_NO_PERMISSION, args[4]);
             return;
         }
 
         if (!style.canBeFixed()) {
-            LangManager.sendMessage(p, Lang.FIXED_CREATE_STYLE_NON_FIXABLE, style.getName());
+            LangManager.sendMessage(pplayer, Lang.FIXED_CREATE_STYLE_NON_FIXABLE, style.getName());
             return;
         }
 
@@ -204,12 +204,12 @@ public class FixedCommandModule implements CommandModule {
                         try {
                             note = Integer.parseInt(args[5]);
                         } catch (Exception e) {
-                            LangManager.sendMessage(p, Lang.FIXED_CREATE_DATA_ERROR);
+                            LangManager.sendMessage(pplayer, Lang.FIXED_CREATE_DATA_ERROR);
                             return;
                         }
 
                         if (note < 0 || note > 24) {
-                            LangManager.sendMessage(p, Lang.FIXED_CREATE_DATA_ERROR);
+                            LangManager.sendMessage(pplayer, Lang.FIXED_CREATE_DATA_ERROR);
                             return;
                         }
 
@@ -230,12 +230,12 @@ public class FixedCommandModule implements CommandModule {
                             g = Integer.parseInt(args[6]);
                             b = Integer.parseInt(args[7]);
                         } catch (Exception e) {
-                            LangManager.sendMessage(p, Lang.FIXED_CREATE_DATA_ERROR);
+                            LangManager.sendMessage(pplayer, Lang.FIXED_CREATE_DATA_ERROR);
                             return;
                         }
 
                         if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
-                            LangManager.sendMessage(p, Lang.FIXED_CREATE_DATA_ERROR);
+                            LangManager.sendMessage(pplayer, Lang.FIXED_CREATE_DATA_ERROR);
                             return;
                         }
 
@@ -250,7 +250,7 @@ public class FixedCommandModule implements CommandModule {
                         if (material == null) material = Material.matchMaterial(args[5]);
                         if (material == null || !material.isBlock()) throw new Exception();
                     } catch (Exception e) {
-                        LangManager.sendMessage(p, Lang.FIXED_CREATE_DATA_ERROR);
+                        LangManager.sendMessage(pplayer, Lang.FIXED_CREATE_DATA_ERROR);
                         return;
                     }
 
@@ -262,7 +262,7 @@ public class FixedCommandModule implements CommandModule {
                         if (material == null) material = Material.matchMaterial(args[5]);
                         if (material == null || material.isBlock()) throw new Exception();
                     } catch (Exception e) {
-                        LangManager.sendMessage(p, Lang.FIXED_CREATE_DATA_ERROR);
+                        LangManager.sendMessage(pplayer, Lang.FIXED_CREATE_DATA_ERROR);
                         return;
                     }
 
@@ -275,7 +275,7 @@ public class FixedCommandModule implements CommandModule {
         ParticlePair particle = new ParticlePair(pplayer.getUniqueId(), nextFixedEffectId, effect, style, itemData, blockData, colorData, noteColorData);
         FixedParticleEffect fixedEffect = new FixedParticleEffect(p.getUniqueId(), nextFixedEffectId, p.getLocation().getWorld().getName(), xPos, yPos, zPos, particle);
 
-        LangManager.sendMessage(p, Lang.FIXED_CREATE_SUCCESS);
+        LangManager.sendMessage(pplayer, Lang.FIXED_CREATE_SUCCESS);
         DataManager.saveFixedEffect(fixedEffect);
     }
     
@@ -288,7 +288,7 @@ public class FixedCommandModule implements CommandModule {
      */
     private void handleEdit(PPlayer pplayer, Player p, String[] args) {
         if (args.length < 3) {
-            LangManager.sendMessage(p, Lang.FIXED_EDIT_MISSING_ARGS);
+            LangManager.sendMessage(pplayer, Lang.FIXED_EDIT_MISSING_ARGS);
             return;
         }
         
@@ -296,13 +296,13 @@ public class FixedCommandModule implements CommandModule {
         try {
             id = Integer.parseInt(args[0]);
         } catch (Exception ex) {
-            LangManager.sendMessage(p, Lang.FIXED_EDIT_INVALID_ID);
+            LangManager.sendMessage(pplayer, Lang.FIXED_EDIT_INVALID_ID);
             return;
         }
         
         FixedParticleEffect fixedEffect = pplayer.getFixedEffectById(id);
         if (fixedEffect == null) {
-            LangManager.sendMessage(p, Lang.FIXED_EDIT_INVALID_ID);
+            LangManager.sendMessage(pplayer, Lang.FIXED_EDIT_INVALID_ID);
             return;
         }
         
@@ -314,7 +314,7 @@ public class FixedCommandModule implements CommandModule {
                 Block targetBlock = p.getTargetBlock((Set<Material>)null, 8);
                 int maxDistanceSqrd = 6 * 6;
                 if (targetBlock.getLocation().distanceSquared(p.getLocation()) > maxDistanceSqrd) {
-                    LangManager.sendMessage(p, Lang.FIXED_EDIT_LOOKING_TOO_FAR);
+                    LangManager.sendMessage(pplayer, Lang.FIXED_EDIT_LOOKING_TOO_FAR);
                     return;
                 }
                 
@@ -346,7 +346,7 @@ public class FixedCommandModule implements CommandModule {
                         zPos = Double.parseDouble(args[4]);
                     }
                 } catch (Exception e) {
-                    LangManager.sendMessage(p, Lang.FIXED_EDIT_INVALID_COORDS);
+                    LangManager.sendMessage(pplayer, Lang.FIXED_EDIT_INVALID_COORDS);
                     return;
                 }
             }
@@ -354,7 +354,7 @@ public class FixedCommandModule implements CommandModule {
             double distanceFromEffect = p.getLocation().distance(new Location(p.getWorld(), xPos, yPos, zPos));
             int maxCreationDistance = PermissionManager.getMaxFixedEffectCreationDistance();
             if (maxCreationDistance != 0 && distanceFromEffect > maxCreationDistance) {
-                LangManager.sendMessage(p, Lang.FIXED_EDIT_OUT_OF_RANGE, maxCreationDistance);
+                LangManager.sendMessage(pplayer, Lang.FIXED_EDIT_OUT_OF_RANGE, maxCreationDistance);
                 return;
             }
             
@@ -379,7 +379,7 @@ public class FixedCommandModule implements CommandModule {
                 LangManager.sendMessage(pplayer, Lang.FIXED_EDIT_STYLE_NO_PERMISSION, style.getName());
                 return;
             } else if (!style.canBeFixed()) {
-                LangManager.sendMessage(p, Lang.FIXED_EDIT_STYLE_NON_FIXABLE, style.getName());
+                LangManager.sendMessage(pplayer, Lang.FIXED_EDIT_STYLE_NON_FIXABLE, style.getName());
                 return;
             }
             
@@ -402,12 +402,12 @@ public class FixedCommandModule implements CommandModule {
                         try {
                             note = Integer.parseInt(args[2]);
                         } catch (Exception e) {
-                            LangManager.sendMessage(p, Lang.FIXED_EDIT_DATA_ERROR);
+                            LangManager.sendMessage(pplayer, Lang.FIXED_EDIT_DATA_ERROR);
                             return;
                         }
 
                         if (note < 0 || note > 24) {
-                            LangManager.sendMessage(p, Lang.FIXED_EDIT_DATA_ERROR);
+                            LangManager.sendMessage(pplayer, Lang.FIXED_EDIT_DATA_ERROR);
                             return;
                         }
 
@@ -428,12 +428,12 @@ public class FixedCommandModule implements CommandModule {
                             g = Integer.parseInt(args[3]);
                             b = Integer.parseInt(args[4]);
                         } catch (Exception e) {
-                            LangManager.sendMessage(p, Lang.FIXED_EDIT_DATA_ERROR);
+                            LangManager.sendMessage(pplayer, Lang.FIXED_EDIT_DATA_ERROR);
                             return;
                         }
 
                         if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
-                            LangManager.sendMessage(p, Lang.FIXED_EDIT_DATA_ERROR);
+                            LangManager.sendMessage(pplayer, Lang.FIXED_EDIT_DATA_ERROR);
                             return;
                         }
 
@@ -448,7 +448,7 @@ public class FixedCommandModule implements CommandModule {
                         if (material == null) material = Material.matchMaterial(args[2]);
                         if (material == null || !material.isBlock()) throw new Exception();
                     } catch (Exception e) {
-                        LangManager.sendMessage(p, Lang.FIXED_EDIT_DATA_ERROR);
+                        LangManager.sendMessage(pplayer, Lang.FIXED_EDIT_DATA_ERROR);
                         return;
                     }
 
@@ -460,7 +460,7 @@ public class FixedCommandModule implements CommandModule {
                         if (material == null) material = Material.matchMaterial(args[2]);
                         if (material == null || material.isBlock()) throw new Exception();
                     } catch (Exception e) {
-                        LangManager.sendMessage(p, Lang.FIXED_EDIT_DATA_ERROR);
+                        LangManager.sendMessage(pplayer, Lang.FIXED_EDIT_DATA_ERROR);
                         return;
                     }
 
@@ -476,7 +476,7 @@ public class FixedCommandModule implements CommandModule {
             fixedEffect.getParticlePair().setItemMaterial(itemData);
             fixedEffect.getParticlePair().setBlockMaterial(blockData);
         } else {
-            LangManager.sendMessage(p, Lang.FIXED_EDIT_INVALID_PROPERTY);
+            LangManager.sendMessage(pplayer, Lang.FIXED_EDIT_INVALID_PROPERTY);
             return;
         }
         
@@ -493,7 +493,7 @@ public class FixedCommandModule implements CommandModule {
      */
     private void handleRemove(PPlayer pplayer, Player p, String[] args) {
         if (args.length < 1) {
-            LangManager.sendMessage(p, Lang.FIXED_REMOVE_NO_ARGS);
+            LangManager.sendMessage(pplayer, Lang.FIXED_REMOVE_NO_ARGS);
             return;
         }
 
@@ -501,15 +501,15 @@ public class FixedCommandModule implements CommandModule {
         try {
             id = Integer.parseInt(args[0]);
         } catch (Exception e) {
-            LangManager.sendMessage(p, Lang.FIXED_REMOVE_ARGS_INVALID);
+            LangManager.sendMessage(pplayer, Lang.FIXED_REMOVE_ARGS_INVALID);
             return;
         }
 
         if (pplayer.getFixedEffectById(id) != null) {
             DataManager.removeFixedEffect(pplayer.getUniqueId(), id);
-            LangManager.sendMessage(p, Lang.FIXED_REMOVE_SUCCESS, id);
+            LangManager.sendMessage(pplayer, Lang.FIXED_REMOVE_SUCCESS, id);
         } else {
-            LangManager.sendMessage(p, Lang.FIXED_REMOVE_INVALID, id);
+            LangManager.sendMessage(pplayer, Lang.FIXED_REMOVE_INVALID, id);
         }
     }
     
@@ -525,7 +525,7 @@ public class FixedCommandModule implements CommandModule {
         Collections.sort(ids);
 
         if (ids.isEmpty()) {
-            LangManager.sendMessage(p, Lang.FIXED_LIST_NONE);
+            LangManager.sendMessage(pplayer, Lang.FIXED_LIST_NONE);
             return;
         }
 
@@ -537,7 +537,7 @@ public class FixedCommandModule implements CommandModule {
             msg += id;
         }
 
-        LangManager.sendMessage(p, Lang.FIXED_LIST_SUCCESS, msg);
+        LangManager.sendMessage(pplayer, Lang.FIXED_LIST_SUCCESS, msg);
     }
     
     /**
@@ -549,7 +549,7 @@ public class FixedCommandModule implements CommandModule {
      */
     private void handleInfo(PPlayer pplayer, Player p, String[] args) {
         if (args.length < 1) {
-            LangManager.sendMessage(p, Lang.FIXED_INFO_NO_ARGS);
+            LangManager.sendMessage(pplayer, Lang.FIXED_INFO_NO_ARGS);
             return;
         }
 
@@ -557,20 +557,20 @@ public class FixedCommandModule implements CommandModule {
         try {
             id = Integer.parseInt(args[0]);
         } catch (Exception e) {
-            LangManager.sendMessage(p, Lang.FIXED_INFO_INVALID_ARGS);
+            LangManager.sendMessage(pplayer, Lang.FIXED_INFO_INVALID_ARGS);
             return;
         }
 
         FixedParticleEffect fixedEffect = pplayer.getFixedEffectById(id);
         if (fixedEffect == null) {
-            LangManager.sendMessage(p, Lang.FIXED_INFO_INVALID, id);
+            LangManager.sendMessage(pplayer, Lang.FIXED_INFO_INVALID, id);
             return;
         }
 
         ParticlePair particle = fixedEffect.getParticlePair();
 
         DecimalFormat df = new DecimalFormat("0.##"); // Decimal formatter so the coords aren't super long
-        LangManager.sendMessage(p, // @formatter:off
+        LangManager.sendMessage(pplayer, // @formatter:off
                                 Lang.FIXED_INFO_SUCCESS,
                                 fixedEffect.getId(),
                                 fixedEffect.getLocation().getWorld().getName(),
@@ -592,12 +592,12 @@ public class FixedCommandModule implements CommandModule {
      */
     private void handleClear(PPlayer pplayer, Player p, String[] args) {
         if (!PermissionManager.canClearFixedEffects(p)) {
-            LangManager.sendMessage(p, Lang.FIXED_CLEAR_NO_PERMISSION);
+            LangManager.sendMessage(pplayer, Lang.FIXED_CLEAR_NO_PERMISSION);
             return;
         }
 
         if (args.length < 1) {
-            LangManager.sendMessage(p, Lang.FIXED_CLEAR_NO_ARGS);
+            LangManager.sendMessage(pplayer, Lang.FIXED_CLEAR_NO_ARGS);
             return;
         }
 
@@ -605,7 +605,7 @@ public class FixedCommandModule implements CommandModule {
         try {
             radius = Math.abs(Integer.parseInt(args[0]));
         } catch (Exception e) {
-            LangManager.sendMessage(p, Lang.FIXED_CLEAR_INVALID_ARGS);
+            LangManager.sendMessage(pplayer, Lang.FIXED_CLEAR_INVALID_ARGS);
             return;
         }
 
@@ -619,7 +619,7 @@ public class FixedCommandModule implements CommandModule {
         for (FixedParticleEffect fixedEffect : fixedEffectsToRemove)
             DataManager.removeFixedEffect(fixedEffect.getOwnerUniqueId(), fixedEffect.getId());
 
-        LangManager.sendMessage(p, Lang.FIXED_CLEAR_SUCCESS, fixedEffectsToRemove.size(), radius);
+        LangManager.sendMessage(pplayer, Lang.FIXED_CLEAR_SUCCESS, fixedEffectsToRemove.size(), radius);
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {

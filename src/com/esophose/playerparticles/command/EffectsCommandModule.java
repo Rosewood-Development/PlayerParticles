@@ -17,7 +17,7 @@ public class EffectsCommandModule implements CommandModule {
 
         List<String> effectList = PermissionManager.getEffectNamesUserHasPermissionFor(p);
         if (effectList.isEmpty()) {
-            LangManager.sendMessage(p, Lang.EFFECT_LIST_EMPTY);
+            LangManager.sendMessage(pplayer, Lang.EFFECT_LIST_EMPTY);
             return;
         }
 
@@ -30,7 +30,7 @@ public class EffectsCommandModule implements CommandModule {
             toSend = toSend.substring(0, toSend.length() - 2);
         }
 
-        LangManager.sendMessage(p, Lang.EFFECT_LIST, toSend);
+        LangManager.sendMessage(pplayer, Lang.EFFECT_LIST, toSend);
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {

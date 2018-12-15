@@ -3,6 +3,7 @@ package com.esophose.playerparticles.manager;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.esophose.playerparticles.manager.SettingManager.PSetting;
@@ -66,6 +67,17 @@ public class PermissionManager {
     
     private PermissionManager() {
         
+    }
+    
+    /**
+     * Checks if a player can use /ppo
+     * 
+     * @param sender The CommandSender to check
+     * @return If the player can use /ppo
+     */
+    public static boolean canOverride(CommandSender sender) {
+        if (!(sender instanceof Player)) return true;
+        return PPermission.ALL.check((Player)sender);
     }
     
     /**

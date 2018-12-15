@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import com.esophose.playerparticles.manager.DataManager;
@@ -19,20 +18,18 @@ import com.esophose.playerparticles.particles.ParticlePair;
 public class GroupCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
-        Player p = pplayer.getPlayer();
-        
         List<String> validCommands = Arrays.asList(new String[] { "save", "load", "remove", "info", "list" });
         if (args.length == 0 || !validCommands.contains(args[0])) {
-            LangManager.sendMessage(p, Lang.COMMAND_DESCRIPTION_GROUP_SAVE);
-            LangManager.sendMessage(p, Lang.COMMAND_DESCRIPTION_GROUP_LOAD);
-            LangManager.sendMessage(p, Lang.COMMAND_DESCRIPTION_GROUP_REMOVE);
-            LangManager.sendMessage(p, Lang.COMMAND_DESCRIPTION_GROUP_INFO);
-            LangManager.sendMessage(p, Lang.COMMAND_DESCRIPTION_GROUP_LIST);
+            LangManager.sendMessage(pplayer, Lang.COMMAND_DESCRIPTION_GROUP_SAVE);
+            LangManager.sendMessage(pplayer, Lang.COMMAND_DESCRIPTION_GROUP_LOAD);
+            LangManager.sendMessage(pplayer, Lang.COMMAND_DESCRIPTION_GROUP_REMOVE);
+            LangManager.sendMessage(pplayer, Lang.COMMAND_DESCRIPTION_GROUP_INFO);
+            LangManager.sendMessage(pplayer, Lang.COMMAND_DESCRIPTION_GROUP_LIST);
             return;
         }
         
         if (args.length == 1 && !args[0].equalsIgnoreCase("list")) {
-            LangManager.sendMessage(p, Lang.GROUP_NO_NAME, args[0].toLowerCase());
+            LangManager.sendMessage(pplayer, Lang.GROUP_NO_NAME, args[0].toLowerCase());
             return;
         }
 
@@ -53,11 +50,11 @@ public class GroupCommandModule implements CommandModule {
             onList(pplayer);
             break;
         default:
-            LangManager.sendMessage(p, Lang.COMMAND_DESCRIPTION_GROUP_SAVE);
-            LangManager.sendMessage(p, Lang.COMMAND_DESCRIPTION_GROUP_LOAD);
-            LangManager.sendMessage(p, Lang.COMMAND_DESCRIPTION_GROUP_REMOVE);
-            LangManager.sendMessage(p, Lang.COMMAND_DESCRIPTION_GROUP_INFO);
-            LangManager.sendMessage(p, Lang.COMMAND_DESCRIPTION_GROUP_LIST);
+            LangManager.sendMessage(pplayer, Lang.COMMAND_DESCRIPTION_GROUP_SAVE);
+            LangManager.sendMessage(pplayer, Lang.COMMAND_DESCRIPTION_GROUP_LOAD);
+            LangManager.sendMessage(pplayer, Lang.COMMAND_DESCRIPTION_GROUP_REMOVE);
+            LangManager.sendMessage(pplayer, Lang.COMMAND_DESCRIPTION_GROUP_INFO);
+            LangManager.sendMessage(pplayer, Lang.COMMAND_DESCRIPTION_GROUP_LIST);
             break;
         }
     }

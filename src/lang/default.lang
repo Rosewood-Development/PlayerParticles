@@ -36,6 +36,7 @@ command-description-styles: 'Display a list of styles you can use'
 command-description-toggle: 'Toggles particle visibility on/off'
 command-description-version: 'Display the plugin version and author'
 command-description-worlds: 'Find out what worlds particles are disabled in'
+command-description-other: 'Execute a /pp command for another player'
 
 # Sub-Command Usage
 command-description-fixed-create: '&e/pp fixed create <<x> <y> <z>|<looking>> <effect> <style> [data] - Creates a new fixed effect'
@@ -53,6 +54,13 @@ command-description-group-info: '&e/pp group info <name> - List the particles sa
 # Command ID Lookup
 id-invalid: '&cThe ID you entered is invalid, it must be a positive whole number!'
 id-unknown: '&cYou do not have a particle applied with the ID &b{0}&c!'
+
+# Other Command
+other-no-permission: '&cYou do not have permission to execute PlayerParticles commands for other players!'
+other-missing-args: '&cYou are missing some arguments. &b/ppo <player> <command>'
+other-unknown-player: '&cThe player &b{0} &cwas not found. They must be online.'
+other-unknown-command: '&cThe command &b/pp {0} &cdoes not exist.'
+other-success: '&eExecuted /pp command for &b{0}&e. Output:'
 
 # Add Command
 add-reached-max: '&cUnable to apply particle, you have reached the maximum amount of &b{0} &callowed!'
@@ -168,7 +176,7 @@ fixed-edit-style-no-permission: '&cUnable to edit fixed effect, you do not have 
 fixed-edit-style-non-fixable: '&cUnable to edit fixed effect, the style &b{0} &ccan not be used in fixed effects!'
 fixed-edit-data-error: '&cUnable to edit fixed effect, the data provided is not correct! Use &b/pp data <effect> &cto find the correct data format!'
 fixed-edit-data-none: '&cUnable to edit fixed effect, the effect does not require any data!'
-fixed-edit-success: '&aUpdated the &b{0} &aof the fixed effect with an ID of &b{1}!'
+fixed-edit-success: '&aUpdated the &b{0} &aof the fixed effect with an ID of &b{1}&a!'
 
 fixed-remove-invalid: '&cUnable to remove fixed effect, you do not have a fixed effect with the ID of &b{0}&c!'
 fixed-remove-no-args: '&cYou did not specify an ID to remove!'
@@ -268,3 +276,6 @@ gui-edit-data-color-black: '&8black'
 gui-edit-data-color-gray: '&8gray'
 gui-edit-data-color-light-gray: '&7light gray'
 gui-edit-data-color-white: '&fwhite'
+
+# Update Available
+update-available: '&eAn update (&b{0}&e) is available! You are running &bv{1}&e. https://www.spigotmc.org/resources/playerparticles.40261/'

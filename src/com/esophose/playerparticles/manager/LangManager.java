@@ -8,8 +8,8 @@ import java.nio.file.Paths;
 import java.text.MessageFormat;
 
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 
 import com.esophose.playerparticles.PlayerParticles;
 import com.esophose.playerparticles.manager.SettingManager.PSetting;
@@ -49,6 +49,7 @@ public class LangManager {
         COMMAND_DESCRIPTION_TOGGLE,
         COMMAND_DESCRIPTION_VERSION,
         COMMAND_DESCRIPTION_WORLDS,
+        COMMAND_DESCRIPTION_OTHER,
         
         // Sub-Command Usage
         COMMAND_DESCRIPTION_FIXED_CREATE,
@@ -66,6 +67,13 @@ public class LangManager {
         // ID Lookup
         ID_INVALID,
         ID_UNKNOWN,
+        
+        // Other Command
+        OTHER_NO_PERMISSION,
+        OTHER_MISSING_ARGS,
+        OTHER_UNKNOWN_PLAYER,
+        OTHER_UNKNOWN_COMMAND,
+        OTHER_SUCCESS,
         
         // Add Command
         ADD_REACHED_MAX,
@@ -280,7 +288,11 @@ public class LangManager {
         GUI_EDIT_DATA_COLOR_BLACK,
         GUI_EDIT_DATA_COLOR_GRAY,
         GUI_EDIT_DATA_COLOR_LIGHT_GRAY,
-        GUI_EDIT_DATA_COLOR_WHITE;
+        GUI_EDIT_DATA_COLOR_WHITE,
+        
+        // Update Available
+        UPDATE_AVAILABLE;
+        
         // @formatter:on
 
         private String message;
@@ -398,13 +410,13 @@ public class LangManager {
     }
 
     /**
-     * Sends a message to the given player
+     * Sends a message to the given PPlayer
      * 
-     * @param player The player to send the message to
+     * @param pplayer The player to send the message to
      * @param messageType The message to send to the player
      * @param replacements The replacements for the message
      */
-    public static void sendMessage(Player player, Lang messageType, Object... replacements) {
+    public static void sendMessage(PPlayer pplayer, Lang messageType, Object... replacements) {
         if (!PSetting.MESSAGES_ENABLED.getBoolean()) return;
 
         String message = messageType.get(replacements);
@@ -417,37 +429,7 @@ public class LangManager {
 
         if (message.trim().equals("")) return;
 
-        player.sendMessage(message);
-    }
-
-    /**
-     * Sends a message to the given PPlayer
-     * 
-     * @param pplayer The player to send the message to
-     * @param messageType The message to send to the player
-     * @param replacements The replacements for the message
-     */
-    public static void sendMessage(PPlayer pplayer, Lang messageType, Object... replacements) {
-        sendMessage(pplayer.getPlayer(), messageType, replacements);
-    }
-    
-    /**
-     * Sends a custom message to a player
-     * Used in cases of string building
-     * 
-     * @param player The player to send the message to
-     * @param message The message to send to the player
-     */
-    public static void sendCustomMessage(Player player, String message) {
-        if (!PSetting.MESSAGES_ENABLED.getBoolean()) return;
-
-        if (message.trim().length() == 0) return;
-
-        if (PSetting.USE_MESSAGE_PREFIX.getBoolean()) {
-            message = parseColors(PSetting.MESSAGE_PREFIX.getString()) + " " + message;
-        }
-
-        player.sendMessage(message);
+        pplayer.getMessageDestination().sendMessage(message);
     }
 
     /**
@@ -458,26 +440,15 @@ public class LangManager {
      * @param message The message to send to the player
      */
     public static void sendCustomMessage(PPlayer pplayer, String message) {
-        sendCustomMessage(pplayer.getPlayer(), message);
-    }
-    
-    /**
-     * Sends a message to a Player without the prefix
-     * 
-     * @param player The player to send the message to
-     * @param messageType The message type to send the player
-     * @param replacements The replacements for the message
-     */
-    public static void sendSimpleMessage(Player player, Lang messageType, Object... replacements) {
         if (!PSetting.MESSAGES_ENABLED.getBoolean()) return;
 
-        String message = messageType.get(replacements);
+        if (message.trim().length() == 0) return;
 
-        if (message.length() == 0) return;
+        if (PSetting.USE_MESSAGE_PREFIX.getBoolean()) {
+            message = parseColors(PSetting.MESSAGE_PREFIX.getString()) + " " + message;
+        }
 
-        if (message.trim().equals("")) return;
-
-        player.sendMessage(message);
+        pplayer.getMessageDestination().sendMessage(message);
     }
     
     /**
@@ -488,7 +459,38 @@ public class LangManager {
      * @param replacements The replacements for the message
      */
     public static void sendSimpleMessage(PPlayer pplayer, Lang messageType, Object... replacements) {
-        sendSimpleMessage(pplayer.getPlayer(), messageType, replacements);
+        if (!PSetting.MESSAGES_ENABLED.getBoolean()) return;
+
+        String message = messageType.get(replacements);
+
+        if (message.length() == 0) return;
+
+        if (message.trim().equals("")) return;
+
+        pplayer.getMessageDestination().sendMessage(message);
+    }
+    
+    /**
+     * Sends a message to a CommandSender
+     * 
+     * @param sender The CommandSender to send the message to
+     * @param messageType The message type to send the player
+     * @param replacements The replacements for the message
+     */
+    public static void sendCommandSenderMessage(CommandSender sender, Lang messageType, Object... replacements) {
+        if (!PSetting.MESSAGES_ENABLED.getBoolean()) return;
+
+        String message = messageType.get(replacements);
+
+        if (message.length() == 0) return;
+
+        if (PSetting.USE_MESSAGE_PREFIX.getBoolean()) {
+            message = parseColors(PSetting.MESSAGE_PREFIX.getString()) + " " + message;
+        }
+
+        if (message.trim().equals("")) return;
+
+        sender.sendMessage(message);
     }
 
     /**

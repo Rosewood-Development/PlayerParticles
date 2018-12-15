@@ -157,7 +157,7 @@ public class GuiActionButton {
      * @param lore The lines of lore
      * @return A parsed list of lore text
      */
-    private List<String> parseLore(String... lore) {
+    public static List<String> parseLore(String... lore) {
         List<String> parsedLore = new ArrayList<String>();
         for (String line : lore) {
             // Try to maintain the color going to the next line if it's split

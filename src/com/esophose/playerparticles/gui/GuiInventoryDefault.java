@@ -1,7 +1,6 @@
 package com.esophose.playerparticles.gui;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -42,12 +41,12 @@ public class GuiInventoryDefault extends GuiInventory {
         currentIconMeta.setDisplayName(LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + pplayer.getPlayer().getName());
         String[] currentIconLore = new String[] {
             LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_ACTIVE_PARTICLES, pplayer.getActiveParticles().size()),
-            LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SAVED_GROUPS, pplayer.getParticleGroups().size()),
+            LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SAVED_GROUPS, pplayer.getParticleGroups().size() - 1),
             LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_FIXED_EFFECTS, pplayer.getFixedEffectIds().size()),
-            "",
+            " ",
             LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_COMMANDS_INFO)
         };
-        currentIconMeta.setLore(Arrays.asList(currentIconLore));
+        currentIconMeta.setLore(GuiActionButton.parseLore(currentIconLore));
         currentIconMeta.setOwner(pplayer.getPlayer().getName());
         headIcon.setItemMeta(currentIconMeta);
         

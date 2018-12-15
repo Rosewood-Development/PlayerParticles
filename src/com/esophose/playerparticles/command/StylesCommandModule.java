@@ -25,7 +25,7 @@ public class StylesCommandModule implements CommandModule {
             toSend = toSend.substring(0, toSend.length() - 2);
         }
 
-        LangManager.sendMessage(p, Lang.STYLE_LIST, toSend);
+        LangManager.sendMessage(pplayer, Lang.STYLE_LIST, toSend);
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {

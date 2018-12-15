@@ -1,11 +1,8 @@
 /*
- * TODO: v6.2
+ * TODO: v6.3
  * + Add new style 'tornado'
  * + Add new style 'doubleorbit'
- * + Add new style 'wings_<type>', multiple new wing types: fairy, demon
- * * Create lore line parser
- * * Make it so lore lines of the GUI are removed if the string is empty in the config
- * * Add ability to add line breaks to the lore with \n
+ * + Add new style(s) 'wings_<type>', multiple new wing types: fairy, demon
  */
 
 package com.esophose.playerparticles;
@@ -13,6 +10,7 @@ package com.esophose.playerparticles;
 import java.io.File;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -59,9 +57,8 @@ public class PlayerParticles extends JavaPlugin {
     public void onEnable() {
         pluginInstance = Bukkit.getServer().getPluginManager().getPlugin("PlayerParticles");
         
-        getCommand("pp").setTabCompleter(new ParticleCommandHandler());
-        getCommand("pp").setExecutor(new ParticleCommandHandler());
-
+        this.registerCommands();
+        
         Bukkit.getPluginManager().registerEvents(new ParticleManager(), this);
         Bukkit.getPluginManager().registerEvents(new PluginUpdateListener(), this);
         Bukkit.getPluginManager().registerEvents(new GuiHandler(), this);
@@ -112,6 +109,20 @@ public class PlayerParticles extends JavaPlugin {
     public void onDisable() {
         databaseConnector.closeConnection();
         GuiHandler.forceCloseAllOpenGUIs();
+    }
+    
+    /**
+     * Registers the commands for the plugin
+     */
+    private void registerCommands() {
+        ParticleCommandHandler pch = new ParticleCommandHandler();
+        PluginCommand pp = this.getCommand("pp");
+        PluginCommand ppo = this.getCommand("ppo");
+        
+        pp.setTabCompleter(pch);
+        pp.setExecutor(pch);
+        ppo.setTabCompleter(pch);
+        ppo.setExecutor(pch);
     }
     
     /**
