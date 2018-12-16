@@ -15,6 +15,7 @@ public class HelpCommandModule implements CommandModule {
         for (CommandModule cmd : cmds)
             if (!(cmd instanceof DefaultCommandModule))
                 CommandModule.printUsageWithDescription(pplayer, cmd);
+        LangManager.sendSimpleMessage(pplayer, Lang.COMMAND_DESCRIPTIONS_HELP_OTHER);
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {

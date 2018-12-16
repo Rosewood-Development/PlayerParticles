@@ -9,4 +9,4 @@ commands:
     pp:
         description: The main PlayerParticles command. By default, opens the GUI.
     ppo: 
-        description: The secondary PlayerParticles command. Used for modifying the particles of other players.
+        description: Allows executing a /pp command for another player.

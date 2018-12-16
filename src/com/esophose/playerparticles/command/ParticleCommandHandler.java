@@ -4,20 +4,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.util.StringUtil;
 
 import com.esophose.playerparticles.manager.DataManager;
 import com.esophose.playerparticles.manager.LangManager;
 import com.esophose.playerparticles.manager.LangManager.Lang;
 import com.esophose.playerparticles.manager.PermissionManager;
-import com.esophose.playerparticles.particles.OtherPPlayer;
 import com.esophose.playerparticles.particles.PPlayer;
+
+import net.md_5.bungee.api.ChatColor;
 
 public class ParticleCommandHandler implements CommandExecutor, TabCompleter {
 
@@ -25,6 +24,7 @@ public class ParticleCommandHandler implements CommandExecutor, TabCompleter {
      * A list of all commands
      */
     private static List<CommandModule> commands;
+    private static CommandModuleSecondary ppoCommand;
 
     static {
         commands = new ArrayList<CommandModule>();
@@ -46,6 +46,8 @@ public class ParticleCommandHandler implements CommandExecutor, TabCompleter {
         commands.add(new ToggleCommandModule());
         commands.add(new VersionCommandModule());
         commands.add(new WorldsCommandModule());
+        
+        ppoCommand = new OtherCommandModule();
     }
 
     /**
@@ -95,7 +97,7 @@ public class ParticleCommandHandler implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (cmd.getName().equalsIgnoreCase("pp")) {
             if (!(sender instanceof Player)) {
-                sender.sendMessage("Error: PlayerParticles only supports players executing commands.");
+                sender.sendMessage(ChatColor.RED + "Error: This command can only be executed by a player.");
                 return true;
             }
             
@@ -118,41 +120,7 @@ public class ParticleCommandHandler implements CommandExecutor, TabCompleter {
                 }
             });
         } else if (cmd.getName().equalsIgnoreCase("ppo")) {
-            if (!PermissionManager.canOverride(sender)) {
-                LangManager.sendCommandSenderMessage(sender, Lang.OTHER_NO_PERMISSION);
-                return true;
-            }
-            
-            if (args.length < 2) {
-                LangManager.sendCommandSenderMessage(sender, Lang.OTHER_MISSING_ARGS);
-                return true;
-            }
-            
-            Player other = Bukkit.getPlayer(args[0]);
-            if (other == null) {
-                LangManager.sendCommandSenderMessage(sender, Lang.OTHER_UNKNOWN_PLAYER, args[0]);
-                return true;
-            }
-            
-            CommandModule commandModule = findMatchingCommand(args[1]);
-            if (commandModule == null) {
-                LangManager.sendCommandSenderMessage(sender, Lang.OTHER_UNKNOWN_COMMAND, args[1]);
-                return true;
-            }
-            
-            if (commandModule.requiresEffects() && PermissionManager.getEffectNamesUserHasPermissionFor(other).isEmpty()) {
-                LangManager.sendCommandSenderMessage(sender, Lang.COMMAND_ERROR_NO_EFFECTS);
-                return true;
-            }
-            
-            DataManager.getPPlayer(other.getUniqueId(), (pplayer) -> {
-                OtherPPlayer otherPPlayer = new OtherPPlayer(sender, pplayer);
-                
-                LangManager.sendCommandSenderMessage(sender, Lang.OTHER_SUCCESS, other.getName());
-                
-                String[] cmdArgs = Arrays.copyOfRange(args, 2, args.length);
-                commandModule.onCommandExecute(otherPPlayer, cmdArgs);
-            });
+            ppoCommand.onCommandExecute(sender, args);
         }
         
         return true;
@@ -185,33 +153,7 @@ public class ParticleCommandHandler implements CommandExecutor, TabCompleter {
                 }
             }
         } else if (cmd.getName().equalsIgnoreCase("ppo")) {
-            List<String> completions = new ArrayList<String>();
-            
-            if (args.length < 2) {
-                List<String> playerNames = new ArrayList<String>();
-                for (Player player : Bukkit.getOnlinePlayers()) 
-                    playerNames.add(player.getName());
-                
-                if (args.length == 0) completions = playerNames;
-                else StringUtil.copyPartialMatches(args[0], playerNames, completions);
-            } else if (args.length == 2) {
-                List<String> commandNames = ParticleCommandHandler.getCommandNames();
-                StringUtil.copyPartialMatches(args[1], commandNames, completions);
-            } else {
-                Player otherPlayer = Bukkit.getPlayer(args[0]);
-                if (otherPlayer != null) {
-                    PPlayer other = DataManager.getPPlayer(otherPlayer.getUniqueId());
-                    if (other != null) {
-                        CommandModule commandModule = findMatchingCommand(args[1]);
-                        if (commandModule != null) {
-                            String[] cmdArgs = Arrays.copyOfRange(args, 2, args.length);
-                            completions = commandModule.onTabComplete(other, cmdArgs);
-                        }
-                    }
-                }
-            }
-            
-            return completions;
+            return ppoCommand.onTabComplete(sender, args);
         }
         
         return new ArrayList<String>();
