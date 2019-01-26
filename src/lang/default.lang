@@ -99,7 +99,12 @@ reload-no-permission: '&cYou do not have permission to reload the plugin setting
 
 # Remove Command
 remove-no-args: '&cYou did not specify an ID to remove! &b/pp remove <ID>'
-remove-success: '&aYour particle with the ID &b{0} &ahas been removed!'
+remove-id-success: '&aYour particle with the ID &b{0} &ahas been removed!'
+remove-effect-success: '&aRemoved &b{0} &aof your particles with the effect of &b{1}&a!'
+remove-effect-none: '&cYou do not have any particles applied with the effect &b{0}&c!'
+remove-style-success: '&aRemoved &b{0} &aof your particles with the style of &b{1}&a!'
+remove-style-none: '&cYou do not have any particles applied with the style &b{0}&c!'
+remove-unknown: '&cAn effect or style with the name of &b{0} &cdoes not exist!'
 
 # List Command
 list-none: '&eYou do not have any active particles!'
@@ -111,10 +116,10 @@ toggle-on: '&eParticles have been toggled &aON&e!'
 toggle-off: '&eParticles have been toggled &cOFF&e!'
 
 # Rainbow
-rainbow: '&cr&6a&ei&an&bb&9o&dw'
+rainbow: '&cR&6a&ei&an&bb&9o&dw'
 
 # Random
-random: 'random'
+random: 'Random'
 
 # Effects
 effect-no-permission: '&cYou do not have permission to use the effect &b{0} &c!'
@@ -200,6 +205,9 @@ fixed-no-permission: '&cYou do not have permission to use fixed effects!'
 fixed-max-reached: '&cYou have reached the maximum allowed fixed effects!'
 fixed-invalid-command: '&cInvalid sub-command for &b/pp fixed&c!'
 
+# Update Available
+update-available: '&eAn update (&b{0}&e) is available! You are running &bv{1}&e. https://www.spigotmc.org/resources/playerparticles.40261/'
+
 # GUI
 gui-disabled: '&cThe server administrator has disabled the GUI!'
 gui-color-icon-name: '&a'
@@ -231,8 +239,9 @@ gui-manage-your-groups-description: 'Create, delete, and load your particle grou
 gui-load-a-preset-group: 'Load A Preset Group'
 gui-load-a-preset-group-description: 'Load a premade particle group'
 gui-save-group: 'Save New Group'
-gui-save-group-description: 'You can save a new group using the following command:'
-gui-save-group-description-2: '/pp group save <groupName>'
+gui-save-group-description: 'Click to save a new group. You will be prompted\nto enter the new group name in chat.'
+gui-save-group-full: 'You have reached the max number of groups'
+gui-save-group-hotbar-message: '&eType &b1 &eword in chat for the new group name. Type "&ccancel&e" to cancel. (&b{0}&es left)'
 gui-reset-particles: 'Reset Your Particles'
 gui-reset-particles-description: 'Deletes all your active particles'
 gui-particle-name: 'Particle #{0}'
@@ -276,6 +285,3 @@ gui-edit-data-color-black: '&8black'
 gui-edit-data-color-gray: '&8gray'
 gui-edit-data-color-light-gray: '&7light gray'
 gui-edit-data-color-white: '&fwhite'
-
-# Update Available
-update-available: '&eAn update (&b{0}&e) is available! You are running &bv{1}&e. https://www.spigotmc.org/resources/playerparticles.40261/'

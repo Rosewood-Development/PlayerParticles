@@ -11,6 +11,7 @@ import com.esophose.playerparticles.manager.SettingManager.GuiIcon;
 import com.esophose.playerparticles.particles.PPlayer;
 import com.esophose.playerparticles.particles.ParticleEffect;
 import com.esophose.playerparticles.particles.ParticlePair;
+import com.esophose.playerparticles.util.ParticleUtils;
 
 public class GuiInventoryEditEffect extends GuiInventory {
 
@@ -23,8 +24,8 @@ public class GuiInventoryEditEffect extends GuiInventory {
             ParticleEffect effect = effectsUserHasPermissionFor.get(i);
             GuiActionButton selectButton = new GuiActionButton(i, 
                                                                GuiIcon.EFFECT.get(effect.getName()), 
-                                                               LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + effect.getName(),
-                                                               new String[] { LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SELECT_EFFECT_DESCRIPTION, effect.getName()) },
+                                                               LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + ParticleUtils.formatName(effect.getName()),
+                                                               new String[] { LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SELECT_EFFECT_DESCRIPTION, ParticleUtils.formatName(effect.getName())) },
                                                                (button, isShiftClick) -> {
                                                                    editingParticle.setEffect(effect);
                                                                    callbackList.get(callbackListPosition + 1).execute();

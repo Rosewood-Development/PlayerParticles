@@ -21,6 +21,10 @@ public class ParticleUtils {
             }
         }
     }
+    
+    private ParticleUtils() { 
+                
+    }
 
     /**
      * Finds a block/item as a material from a string
@@ -75,6 +79,20 @@ public class ParticleUtils {
      */
     public static List<String> getAllItemMaterials() {
         return itemMaterials;
+    }
+    
+    /**
+     * Formats a string from the format "word_word" to "Word Word"
+     * 
+     * @param string The input string
+     * @return The input string but formatted with each word capitalized
+     */
+    public static String formatName(String string) {
+        String[] words = string.split("_");
+        String result = "";
+        for (String word : words) 
+            result += Character.toUpperCase(word.charAt(0)) + word.substring(1).toLowerCase() + " ";
+        return result;
     }
 
     /**

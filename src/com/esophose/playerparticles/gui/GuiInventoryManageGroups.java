@@ -1,17 +1,22 @@
 package com.esophose.playerparticles.gui;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 import org.bukkit.Bukkit;
 
+import com.esophose.playerparticles.gui.hook.PlayerChatHook;
+import com.esophose.playerparticles.gui.hook.PlayerChatHookData;
 import com.esophose.playerparticles.manager.DataManager;
 import com.esophose.playerparticles.manager.LangManager;
+import com.esophose.playerparticles.manager.PermissionManager;
 import com.esophose.playerparticles.manager.LangManager.Lang;
 import com.esophose.playerparticles.manager.SettingManager.GuiIcon;
 import com.esophose.playerparticles.particles.PPlayer;
 import com.esophose.playerparticles.particles.ParticleGroup;
 import com.esophose.playerparticles.particles.ParticlePair;
+import com.esophose.playerparticles.util.ParticleUtils;
 
 public class GuiInventoryManageGroups extends GuiInventory {
 
@@ -36,7 +41,7 @@ public class GuiInventoryManageGroups extends GuiInventory {
             lore[0] = LangManager.getText(Lang.GUI_COLOR_SUBTEXT) + LangManager.getText(Lang.GUI_CLICK_TO_LOAD, particles.size());
             int i = 1;
             for (ParticlePair particle : particles) {
-                lore[i] = LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_PARTICLE_INFO, particle.getId(), particle.getEffect().getName(), particle.getStyle().getName(), particle.getDataString());
+                lore[i] = LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_PARTICLE_INFO, particle.getId(), ParticleUtils.formatName(particle.getEffect().getName()), ParticleUtils.formatName(particle.getStyle().getName()), particle.getDataString());
                 i++;
             }
             lore[i] = LangManager.getText(Lang.GUI_COLOR_UNAVAILABLE) + LangManager.getText(Lang.GUI_SHIFT_CLICK_TO_DELETE);
@@ -68,15 +73,67 @@ public class GuiInventoryManageGroups extends GuiInventory {
             if (index > maxIndex) break; // Overflowed the available space
         }
         
+        boolean canSaveGroup = !PermissionManager.hasPlayerReachedMaxGroups(pplayer);
+        String[] lore;
+        if (canSaveGroup) {
+            lore = new String[] { LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SAVE_GROUP_DESCRIPTION) };
+        } else {
+            lore = new String[] { 
+                LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SAVE_GROUP_DESCRIPTION), 
+                LangManager.getText(Lang.GUI_COLOR_UNAVAILABLE) + LangManager.getText(Lang.GUI_SAVE_GROUP_FULL)
+            };
+        }
+        
         // Save Group Button
         GuiActionButton saveGroupButton = new GuiActionButton(40, 
                                                               GuiIcon.CREATE.get(), 
                                                               LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_SAVE_GROUP),
-                                                              new String[] { 
-                                                                  LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SAVE_GROUP_DESCRIPTION),
-                                                                  LangManager.getText(Lang.GUI_COLOR_SUBTEXT) + LangManager.getText(Lang.GUI_SAVE_GROUP_DESCRIPTION_2),
-                                                              },
-                                                              (button, isShiftClick) -> {}); // Does nothing on click
+                                                              lore,
+                                                              (button, isShiftClick) -> {
+                                                                  if (!canSaveGroup) return;
+                                                                  
+                                                                  PlayerChatHook.addHook(new PlayerChatHookData(pplayer.getUniqueId(), 15, (textEntered) -> {
+                                                                      if (textEntered == null || textEntered.equalsIgnoreCase("cancel")) {
+                                                                          GuiHandler.transition(new GuiInventoryManageGroups(pplayer));
+                                                                      } else {
+                                                                          String groupName = textEntered.split(" ")[0];
+                                                                          
+                                                                          // Check that the groupName isn't the reserved name
+                                                                          if (groupName.equalsIgnoreCase(ParticleGroup.DEFAULT_NAME)) {
+                                                                              LangManager.sendMessage(pplayer, Lang.GROUP_RESERVED);
+                                                                              return;
+                                                                          }
+                                                                          
+                                                                          // The database column can only hold up to 100 characters, cut it off there
+                                                                          if (groupName.length() >= 100) {
+                                                                              groupName = groupName.substring(0, 100);
+                                                                          }
+                                                                          
+                                                                          // Use the existing group if available, otherwise create a new one
+                                                                          ParticleGroup group = pplayer.getParticleGroupByName(groupName);
+                                                                          boolean groupUpdated = false;
+                                                                          if (group == null) {
+                                                                              List<ParticlePair> particles = new ArrayList<ParticlePair>();
+                                                                              for (ParticlePair particle : pplayer.getActiveParticles())
+                                                                                  particles.add(particle.clone()); // Make sure the ParticlePairs aren't the same references in both the active and saved group
+                                                                              group = new ParticleGroup(groupName, particles);
+                                                                          } else {
+                                                                              groupUpdated = true;
+                                                                          }
+                                                                          
+                                                                          // Apply changes and notify player
+                                                                          DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+                                                                          if (groupUpdated) {
+                                                                              LangManager.sendMessage(pplayer, Lang.GROUP_SAVE_SUCCESS_OVERWRITE, groupName);
+                                                                          } else {
+                                                                              LangManager.sendMessage(pplayer, Lang.GROUP_SAVE_SUCCESS, groupName);
+                                                                          }
+                                                                          
+                                                                          GuiHandler.transition(new GuiInventoryManageGroups(pplayer));
+                                                                      }
+                                                                  }));
+                                                                  pplayer.getPlayer().closeInventory();
+                                                              });
         this.actionButtons.add(saveGroupButton);
         
         // Back Button

@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.esophose.playerparticles.manager.SettingManager.PSetting;
 import com.esophose.playerparticles.particles.PPlayer;
 import com.esophose.playerparticles.util.ParticleUtils;
 
@@ -36,7 +39,7 @@ public abstract class GuiInventory {
             if (this.material != null) { // Use 1.13 materials
                 borderIcon = new ItemStack(this.material, 1);
             } else { // Use < 1.13 data values
-                borderIcon = new ItemStack(ParticleUtils.closestMatch("THIN_GLASS"), 1, this.data);
+                borderIcon = new ItemStack(ParticleUtils.closestMatch("STAINED_GLASS_PANE"), 1, this.data);
             }
             
             ItemMeta meta = borderIcon.getItemMeta();
@@ -137,6 +140,12 @@ public abstract class GuiInventory {
         for (GuiActionButton button : this.actionButtons) {
             if (button.getSlot() == slot) {
                 button.handleClick(button, isShiftClick);
+                if (PSetting.GUI_BUTTON_SOUND.getBoolean()) {
+                    if (event.getWhoClicked() instanceof Player) {
+                        Player player = (Player) event.getWhoClicked();
+                        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1);
+                    }
+                }
                 break;
             }
         }

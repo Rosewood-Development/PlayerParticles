@@ -112,7 +112,12 @@ public class LangManager {
         
         // Remove Command
         REMOVE_NO_ARGS,
-        REMOVE_SUCCESS,
+        REMOVE_ID_SUCCESS,
+        REMOVE_EFFECT_SUCCESS,
+        REMOVE_EFFECT_NONE,
+        REMOVE_STYLE_SUCCESS,
+        REMOVE_STYLE_NONE,
+        REMOVE_UNKNOWN,
         
         // List Command
         LIST_NONE,
@@ -213,6 +218,9 @@ public class LangManager {
         FIXED_MAX_REACHED,
         FIXED_INVALID_COMMAND,
         
+        // Update Available
+        UPDATE_AVAILABLE,
+        
         // GUI
         GUI_DISABLED,
         GUI_COLOR_ICON_NAME,
@@ -245,7 +253,8 @@ public class LangManager {
         GUI_LOAD_A_PRESET_GROUP_DESCRIPTION,
         GUI_SAVE_GROUP,
         GUI_SAVE_GROUP_DESCRIPTION,
-        GUI_SAVE_GROUP_DESCRIPTION_2,
+        GUI_SAVE_GROUP_FULL,
+        GUI_SAVE_GROUP_HOTBAR_MESSAGE,
         GUI_RESET_PARTICLES,
         GUI_RESET_PARTICLES_DESCRIPTION,
         GUI_PARTICLE_NAME,
@@ -288,12 +297,7 @@ public class LangManager {
         GUI_EDIT_DATA_COLOR_BLACK,
         GUI_EDIT_DATA_COLOR_GRAY,
         GUI_EDIT_DATA_COLOR_LIGHT_GRAY,
-        GUI_EDIT_DATA_COLOR_WHITE,
-        
-        // Update Available
-        UPDATE_AVAILABLE;
-        
-        // @formatter:on
+        GUI_EDIT_DATA_COLOR_WHITE; // @formatter:on
 
         private String message;
 

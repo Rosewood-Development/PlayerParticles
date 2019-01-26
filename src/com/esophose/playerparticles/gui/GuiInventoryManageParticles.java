@@ -15,6 +15,7 @@ import com.esophose.playerparticles.particles.PPlayer;
 import com.esophose.playerparticles.particles.ParticleGroup;
 import com.esophose.playerparticles.particles.ParticlePair;
 import com.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
+import com.esophose.playerparticles.util.ParticleUtils;
 
 public class GuiInventoryManageParticles extends GuiInventory {
 
@@ -36,7 +37,7 @@ public class GuiInventoryManageParticles extends GuiInventory {
                                                                LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_PARTICLE_NAME, particle.getId()),
                                                                new String[] {
                                                                    LangManager.getText(Lang.GUI_COLOR_SUBTEXT) + LangManager.getText(Lang.GUI_CLICK_TO_EDIT_PARTICLE, particles.size()),
-                                                                   LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_PARTICLE_INFO, particle.getId(), particle.getEffect().getName(), particle.getStyle().getName(), particle.getDataString()),
+                                                                   LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_PARTICLE_INFO, particle.getId(), ParticleUtils.formatName(particle.getEffect().getName()), ParticleUtils.formatName(particle.getStyle().getName()), particle.getDataString()),
                                                                    LangManager.getText(Lang.GUI_COLOR_UNAVAILABLE) + LangManager.getText(Lang.GUI_SHIFT_CLICK_TO_DELETE)
                                                                },
                                                                (button, isShiftClick) -> {

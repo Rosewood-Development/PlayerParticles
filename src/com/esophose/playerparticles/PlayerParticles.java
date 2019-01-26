@@ -1,8 +1,14 @@
 /*
- * TODO: v6.3
- * + Add new style 'tornado'
- * + Add new style 'doubleorbit'
+ * TODO: v6.4+
  * + Add new style(s) 'wings_<type>', multiple new wing types: fairy, demon
+ * + Add ability to create/manage fixed effects from the GUI (may get implemented later)
+ */
+
+/*
+ * TODO: v6.3
+ * + Add named colors to the color data
+ * * Display effects/styles in the GUI formatted to be more readable
+ * + Possibly add a couple new styles (tornado, doubleorbit)
  */
 
 package com.esophose.playerparticles;
@@ -12,6 +18,7 @@ import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -21,6 +28,7 @@ import com.esophose.playerparticles.database.DatabaseConnector;
 import com.esophose.playerparticles.database.MySqlDatabaseConnector;
 import com.esophose.playerparticles.database.SqliteDatabaseConnector;
 import com.esophose.playerparticles.gui.GuiHandler;
+import com.esophose.playerparticles.gui.hook.PlayerChatHook;
 import com.esophose.playerparticles.manager.LangManager;
 import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.manager.SettingManager;
@@ -59,10 +67,12 @@ public class PlayerParticles extends JavaPlugin {
         
         this.registerCommands();
         
-        Bukkit.getPluginManager().registerEvents(new ParticleManager(), this);
-        Bukkit.getPluginManager().registerEvents(new PluginUpdateListener(), this);
-        Bukkit.getPluginManager().registerEvents(new GuiHandler(), this);
-        Bukkit.getPluginManager().registerEvents(new PPlayerMovementListener(), this);
+        PluginManager pm = Bukkit.getPluginManager();
+        pm.registerEvents(new ParticleManager(), this);
+        pm.registerEvents(new PluginUpdateListener(), this);
+        pm.registerEvents(new GuiHandler(), this);
+        pm.registerEvents(new PPlayerMovementListener(), this);
+        pm.registerEvents(new PlayerChatHook(), this);
 
         saveDefaultConfig();
         double configVersion = PSetting.VERSION.getDouble();
@@ -153,6 +163,7 @@ public class PlayerParticles extends JavaPlugin {
         ParticleGroup.reload();
         
         GuiHandler.setup();
+        PlayerChatHook.setup();
         
         ParticleManager.refreshData();
         startParticleTask();

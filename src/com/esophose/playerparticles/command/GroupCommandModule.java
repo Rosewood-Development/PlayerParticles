@@ -176,8 +176,8 @@ public class GroupCommandModule implements CommandModule {
             group = ParticleGroup.getPresetGroup(groupName);
             if (group != null) {
                 LangManager.sendMessage(pplayer, Lang.GROUP_REMOVE_PRESET);
-                return;
             }
+            return;
         }
         
         // Delete the group and notify player
