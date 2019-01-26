@@ -338,6 +338,9 @@ gui-icon:
       - GLOWSTONE
     point:
       - STONE_BUTTON
+    pulse:
+      - REDSTONE_TORCH
+      - REDSTONE_TORCH_ON
     quadhelix:
       - NAUTILUS_SHELL
       - ACTIVATOR_RAIL

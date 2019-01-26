@@ -2,12 +2,9 @@
  * TODO: v6.4+
  * + Add new style(s) 'wings_<type>', multiple new wing types: fairy, demon
  * + Add ability to create/manage fixed effects from the GUI (may get implemented later)
- */
-
-/*
- * TODO: v6.3
  * + Add named colors to the color data
- * * Display effects/styles in the GUI formatted to be more readable
+ * + Add effect/style name customization through config files
+ * + Add effect/style settings folder that lets you disable effects/style and edit style properties
  * + Possibly add a couple new styles (tornado, doubleorbit)
  */
 

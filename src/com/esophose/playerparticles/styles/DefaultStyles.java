@@ -32,6 +32,7 @@ public class DefaultStyles {
     public static final ParticleStyle ORBIT = new ParticleStyleOrbit();
     public static final ParticleStyle OVERHEAD = new ParticleStyleOverhead();
     public static final ParticleStyle POINT = new ParticleStylePoint();
+    public static final ParticleStyle PULSE = new ParticleStylePulse();
     public static final ParticleStyle QUADHELIX = new ParticleStyleQuadhelix();
     public static final ParticleStyle RINGS = new ParticleStyleRings();
     public static final ParticleStyle SPHERE = new ParticleStyleSphere();
@@ -65,6 +66,7 @@ public class DefaultStyles {
         ParticleStyleManager.registerStyle(ORBIT);
         ParticleStyleManager.registerStyle(OVERHEAD);
         ParticleStyleManager.registerStyle(POINT);
+        ParticleStyleManager.registerStyle(PULSE);
         ParticleStyleManager.registerStyle(QUADHELIX);
         ParticleStyleManager.registerStyle(RINGS);
         ParticleStyleManager.registerStyle(SPHERE);
