@@ -62,7 +62,7 @@ public class DataManager {
             List<ParticleGroup> groups = new ArrayList<ParticleGroup>();
             List<FixedParticleEffect> fixedParticles = new ArrayList<FixedParticleEffect>();
 
-            PlayerParticles.getDBConnector().connect((connection) -> {
+            PlayerParticles.getPlugin().getDBConnector().connect((connection) -> {
                 // Load settings
                 boolean particlesHidden = false;
                 String settingsQuery = "SELECT particles_hidden FROM pp_settings WHERE player_uuid = ?";
@@ -191,7 +191,7 @@ public class DataManager {
      */
     public static void loadFixedEffects() {
         async(() -> {
-            PlayerParticles.getDBConnector().connect((connection) -> {
+            PlayerParticles.getPlugin().getDBConnector().connect((connection) -> {
                 String query = "SELECT DISTINCT owner_uuid FROM pp_fixed";
                 try (PreparedStatement statement = connection.prepareStatement(query)) {
                     ResultSet result = statement.executeQuery();
@@ -214,7 +214,7 @@ public class DataManager {
      */
     public static void updateSettingParticlesHidden(UUID playerUUID, boolean particlesHidden) {
         async(() -> {
-           PlayerParticles.getDBConnector().connect((connection) -> {
+           PlayerParticles.getPlugin().getDBConnector().connect((connection) -> {
                String updateQuery = "UPDATE pp_settings SET particles_hidden = ? WHERE player_uuid = ?";
                try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
                    updateStatement.setBoolean(1, particlesHidden);
@@ -238,7 +238,7 @@ public class DataManager {
      */
     public static void saveParticleGroup(UUID playerUUID, ParticleGroup group) {
         async(() -> {
-            PlayerParticles.getDBConnector().connect((connection) -> {
+            PlayerParticles.getPlugin().getDBConnector().connect((connection) -> {
                 String groupUUID = null;
                 
                 String groupUUIDQuery = "SELECT uuid FROM pp_group WHERE owner_uuid = ? AND name = ?";
@@ -310,7 +310,7 @@ public class DataManager {
      */
     public static void removeParticleGroup(UUID playerUUID, ParticleGroup group) {
         async(() -> {
-            PlayerParticles.getDBConnector().connect((connection) -> {
+            PlayerParticles.getPlugin().getDBConnector().connect((connection) -> {
                 String groupQuery = "SELECT * FROM pp_group WHERE owner_uuid = ? AND name = ?";
                 String particleDeleteQuery = "DELETE FROM pp_particle WHERE group_uuid = ?";
                 String groupDeleteQuery = "DELETE FROM pp_group WHERE uuid = ?";
@@ -356,7 +356,7 @@ public class DataManager {
      */
     public static void saveFixedEffect(FixedParticleEffect fixedEffect) {
         async(() -> {
-            PlayerParticles.getDBConnector().connect((connection) -> {
+            PlayerParticles.getPlugin().getDBConnector().connect((connection) -> {
                 String particleUUID = UUID.randomUUID().toString();
 
                 String particleQuery = "INSERT INTO pp_particle (uuid, group_uuid, id, effect, style, item_material, block_material, note, r, g, b) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -402,7 +402,7 @@ public class DataManager {
      */
     public static void updateFixedEffect(FixedParticleEffect fixedEffect) {
         async(() -> {
-            PlayerParticles.getDBConnector().connect((connection) -> {
+            PlayerParticles.getPlugin().getDBConnector().connect((connection) -> {
                 // Update fixed effect
                 String fixedEffectQuery = "UPDATE pp_fixed SET xPos = ?, yPos = ?, zPos = ? WHERE owner_uuid = ? AND id = ?";
                 try (PreparedStatement statement = connection.prepareStatement(fixedEffectQuery)) {
@@ -450,7 +450,7 @@ public class DataManager {
      */
     public static void removeFixedEffect(UUID playerUUID, int id) {
         async(() -> {
-            PlayerParticles.getDBConnector().connect((connection) -> {
+            PlayerParticles.getPlugin().getDBConnector().connect((connection) -> {
                 String particleUUID = null;
 
                 String particleUUIDQuery = "SELECT particle_uuid FROM pp_fixed WHERE owner_uuid = ? AND id = ?";

@@ -41,29 +41,32 @@ import com.esophose.playerparticles.updater.Updater;
 
 public class PlayerParticles extends JavaPlugin {
 
-    private static Plugin pluginInstance;
+    /**
+     * The running instance of PlayerParticles on the server
+     */
+    private static PlayerParticles pluginInstance;
 
     /**
      * The version a new update has, will be null if the config has it disabled
      * or if there is no new version
      */
-    public static String updateVersion = null;
+    public String updateVersion = null;
 
     /**
      * The database connection manager
      */
-    private static DatabaseConnector databaseConnector = null;
+    private DatabaseConnector databaseConnector = null;
     
     /**
      * The task that spawns the particles
      */
-    private static BukkitTask particleTask = null;
+    private BukkitTask particleTask = null;
 
     /**
      * Executes essential tasks for starting up the plugin
      */
     public void onEnable() {
-        pluginInstance = Bukkit.getServer().getPluginManager().getPlugin("PlayerParticles");
+        pluginInstance = (PlayerParticles)Bukkit.getServer().getPluginManager().getPlugin("PlayerParticles");
         
         this.registerCommands();
         
@@ -174,7 +177,7 @@ public class PlayerParticles extends JavaPlugin {
      * 
      * @return The PlayerParticles plugin instance
      */
-    public static Plugin getPlugin() {
+    public static PlayerParticles getPlugin() {
         return pluginInstance;
     }
     
@@ -183,8 +186,18 @@ public class PlayerParticles extends JavaPlugin {
      * 
      * @return The DatabaseConnector
      */
-    public static DatabaseConnector getDBConnector() {
+    public DatabaseConnector getDBConnector() {
         return databaseConnector;
+    }
+    
+    /**
+     * Gets the latest available version of the plugin
+     * Will be null if no update is available
+     * 
+     * @return The latest version available for the plugin
+     */
+    public String getUpdateVersion() {
+        return this.updateVersion;
     }
 
     /**
