@@ -41,6 +41,8 @@ public class DefaultStyles {
     public static final ParticleStyle SWORDS = new ParticleStyleSwords();
     public static final ParticleStyle THICK = new ParticleStyleThick();
     public static final ParticleStyle VORTEX = new ParticleStyleVortex();
+    public static final ParticleStyle WHIRL = new ParticleStyleWhirl();
+    public static final ParticleStyle WHIRLWIND = new ParticleStyleWhirlwind();
     public static final ParticleStyle WINGS = new ParticleStyleWings();
 
     /**
@@ -75,6 +77,8 @@ public class DefaultStyles {
         ParticleStyleManager.registerCustomHandledStyle(SWORDS);
         ParticleStyleManager.registerStyle(THICK);
         ParticleStyleManager.registerStyle(VORTEX);
+        ParticleStyleManager.registerStyle(WHIRL);
+        ParticleStyleManager.registerStyle(WHIRLWIND);
         ParticleStyleManager.registerStyle(WINGS);
 
         // Register their events

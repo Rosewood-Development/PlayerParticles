@@ -1,7 +1,8 @@
 == UPDATING WILL DELETE YOUR CONFIG.YML ==
 * Create a backup of your config.yml if you wish to import all your old settings!
-=== v6.3 (Implemented so far) ===
+=== v6.3 ===
 + Added the ability to remove particles by id/effect/style using '/pp remove <id>|<effect>|<style>'
++ Added new styles 'pulse', 'whirl', and 'whirlwind'
 + The "Save New Group" button in the GUI now actually saves a new group and prompts for a name in chat (15 second timeout)
 + Added a click sound to the GUI for button clicks (Can be disabled in the config.yml)
 * Reduced the number of particles that spawn for the styles 'blockbreak', 'blockplace', and 'swords'

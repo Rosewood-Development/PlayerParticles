@@ -345,7 +345,7 @@ gui-icon:
       - NAUTILUS_SHELL
       - ACTIVATOR_RAIL
     rings:
-      - STRING
+      - LEAD
     sphere:
       - HEART_OF_THE_SEA
       - SNOWBALL
@@ -360,6 +360,10 @@ gui-icon:
       - WEB
     vortex:
       - GLOWSTONE_DUST
+    whirl:
+      - FEATHER
+    whirlwind: 
+      - STRING
     wings:
       - ELYTRA
 
