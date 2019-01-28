@@ -33,7 +33,9 @@ public class SettingManager {
         CHECK_UPDATES(PSettingType.BOOLEAN),
         GUI_ENABLED(PSettingType.BOOLEAN),
         GUI_BUTTON_SOUND(PSettingType.BOOLEAN),
+        
         TOGGLE_ON_MOVE(PSettingType.BOOLEAN),
+        TOGGLE_ON_MOVE_DELAY(PSettingType.INTEGER),
         
         PARTICLE_RENDER_RANGE_PLAYER(PSettingType.INTEGER),
         PARTICLE_RENDER_RANGE_FIXED_EFFECT(PSettingType.INTEGER),

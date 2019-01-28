@@ -51,6 +51,12 @@ gui-button-sound: true
 # Default: false
 toggle-on-move: false
 
+# The time (in ticks) a player has to be standing still before they are considered to be stopped
+# This setting has no effect if toggle-on-move is set to false
+# The value must be a positive whole number
+# Default: 9
+toggle-on-move-delay: 9
+
 # The worlds which this plugin is disabled in
 # Remove the [] before you enter world names
 # Default: []
