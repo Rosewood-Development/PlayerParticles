@@ -32,6 +32,7 @@ public class DefaultStyles {
     public static final ParticleStyle ORBIT = new ParticleStyleOrbit();
     public static final ParticleStyle OVERHEAD = new ParticleStyleOverhead();
     public static final ParticleStyle POINT = new ParticleStylePoint();
+    public static final ParticleStyle POPPER = new ParticleStylePopper();
     public static final ParticleStyle PULSE = new ParticleStylePulse();
     public static final ParticleStyle QUADHELIX = new ParticleStyleQuadhelix();
     public static final ParticleStyle RINGS = new ParticleStyleRings();
@@ -40,6 +41,7 @@ public class DefaultStyles {
     public static final ParticleStyle SPIRAL = new ParticleStyleSpiral();
     public static final ParticleStyle SWORDS = new ParticleStyleSwords();
     public static final ParticleStyle THICK = new ParticleStyleThick();
+    public static final ParticleStyle TWINS = new ParticleStyleTwins();
     public static final ParticleStyle VORTEX = new ParticleStyleVortex();
     public static final ParticleStyle WHIRL = new ParticleStyleWhirl();
     public static final ParticleStyle WHIRLWIND = new ParticleStyleWhirlwind();
@@ -68,6 +70,7 @@ public class DefaultStyles {
         ParticleStyleManager.registerStyle(ORBIT);
         ParticleStyleManager.registerStyle(OVERHEAD);
         ParticleStyleManager.registerStyle(POINT);
+        ParticleStyleManager.registerStyle(POPPER);
         ParticleStyleManager.registerStyle(PULSE);
         ParticleStyleManager.registerStyle(QUADHELIX);
         ParticleStyleManager.registerStyle(RINGS);
@@ -76,6 +79,7 @@ public class DefaultStyles {
         ParticleStyleManager.registerStyle(SPIRAL);
         ParticleStyleManager.registerCustomHandledStyle(SWORDS);
         ParticleStyleManager.registerStyle(THICK);
+        ParticleStyleManager.registerStyle(TWINS);
         ParticleStyleManager.registerStyle(VORTEX);
         ParticleStyleManager.registerStyle(WHIRL);
         ParticleStyleManager.registerStyle(WHIRLWIND);

@@ -5,6 +5,7 @@
 + Added new styles 'pulse', 'whirl', and 'whirlwind'
 + The "Save New Group" button in the GUI now actually saves a new group and prompts for a name in chat (15 second timeout)
 + Added a click sound to the GUI for button clicks (Can be disabled in the config.yml)
++ Added setting 'toggle-on-move-delay' to the config.yml
 * Reduced the number of particles that spawn for the styles 'blockbreak', 'blockplace', and 'swords'
 * Fix GUI borders showing up as glass panes instead of stained glass panes on servers running 1.12.2 or earlier
 * Fix a console error that occurs when trying to remove a group that doesn't exist

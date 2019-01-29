@@ -13,7 +13,7 @@ import com.esophose.playerparticles.styles.api.ParticleStyle;
 public class ParticleStylePulse implements ParticleStyle {
 
     private int points = 50;
-    private double radius = 0.75;
+    private double radius = 0.5;
     private double step = 0;
     private int numSteps = 15;
 

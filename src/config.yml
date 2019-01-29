@@ -344,6 +344,9 @@ gui-icon:
       - GLOWSTONE
     point:
       - STONE_BUTTON
+    popper:
+      - POPPED_CHORUS_FRUIT
+      - CHORUS_FRUIT_POPPED
     pulse:
       - REDSTONE_TORCH
       - REDSTONE_TORCH_ON
@@ -364,6 +367,9 @@ gui-icon:
     thick:
       - COBWEB
       - WEB
+    twins:
+      - OAK_FENCE
+      - FENCE
     vortex:
       - GLOWSTONE_DUST
     whirl:

@@ -5,12 +5,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.esophose.playerparticles.PlayerParticles;
 import com.esophose.playerparticles.manager.ParticleManager;
+import com.esophose.playerparticles.manager.PermissionManager;
 import com.esophose.playerparticles.particles.FixedParticleEffect;
 import com.esophose.playerparticles.particles.PPlayer;
 import com.esophose.playerparticles.particles.ParticleEffect;
@@ -39,13 +41,13 @@ public class ParticleStyleCelebration implements ParticleStyle {
             Random random = new Random();
             for (PPlayer pplayer : ParticleManager.getPPlayers()) {
                 Player player = pplayer.getPlayer();
-                
-                for (ParticlePair particle : pplayer.getActiveParticles())
-                    if (particle.getStyle() == this) 
-                        spawnFirework(player.getLocation(), pplayer, particle, random);
+                if (player != null && player.getGameMode() != GameMode.SPECTATOR && !PermissionManager.isWorldDisabled(player.getWorld().getName()))
+                    for (ParticlePair particle : pplayer.getActiveParticles())
+                        if (particle.getStyle() == this) 
+                            spawnFirework(player.getLocation(), pplayer, particle, random);
                 
                 for (FixedParticleEffect fixedEffect : pplayer.getFixedParticles())
-                    if (fixedEffect.getParticlePair().getStyle() == this)
+                    if (fixedEffect.getParticlePair().getStyle() == this && !PermissionManager.isWorldDisabled(fixedEffect.getLocation().getWorld().getName()))
                         spawnFirework(fixedEffect.getLocation(), pplayer, fixedEffect.getParticlePair(), random);
             }
         }

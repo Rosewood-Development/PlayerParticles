@@ -39,9 +39,13 @@ public class DataManager {
      * @return The PPlayer from cache
      */
     public static PPlayer getPPlayer(UUID playerUUID) {
-        for (PPlayer pp : ParticleManager.getPPlayers())
-            if (pp.getUniqueId().equals(playerUUID)) return pp;
-        return null;
+        List<PPlayer> pplayers = ParticleManager.getPPlayers();
+        synchronized (pplayers) { // Under rare circumstances, the PPlayers list can be changed while it's looping
+            for (PPlayer pp : pplayers)
+                if (pp.getUniqueId().equals(playerUUID)) 
+                    return pp;
+            return null;
+        }
     }
 
     /**

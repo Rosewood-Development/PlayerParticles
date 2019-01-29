@@ -5,7 +5,6 @@
  * + Add named colors to the color data
  * + Add effect/style name customization through config files
  * + Add effect/style settings folder that lets you disable effects/style and edit style properties
- * + Possibly add a couple new styles (tornado, doubleorbit)
  */
 
 package com.esophose.playerparticles;
