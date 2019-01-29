@@ -8,8 +8,9 @@
 + Added setting 'toggle-on-move-delay' to the config.yml
 * Reduced the number of particles that spawn for the styles 'blockbreak', 'blockplace', and 'swords'
 * Fix GUI borders showing up as glass panes instead of stained glass panes on servers running 1.12.2 or earlier
-* Fix a console error that occurs when trying to remove a group that doesn't exist
-* Fix "[PlayerParticles] An error occurred retrieving an SQLite database connection: [SQLITE_BUSY]  The database file is locked (database is locked)"
+* Fix a console error that occured when trying to remove a group that doesn't exist
+* Fix a console error that occured when a player logs off with the 'celebration' style applied and they have at least 1 fixed effect created
+* Fix a console error "[PlayerParticles] An error occurred retrieving an SQLite database connection: [SQLITE_BUSY]  The database file is locked (database is locked)"
 === v6.2 ===
 + Added command '/ppo' which allows executing a /pp command as another player.
 * Fix not being able to change the lore of the player skull in the GUI
