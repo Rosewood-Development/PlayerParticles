@@ -26,11 +26,11 @@ import com.esophose.playerparticles.database.SqliteDatabaseConnector;
 import com.esophose.playerparticles.gui.GuiHandler;
 import com.esophose.playerparticles.gui.hook.PlayerChatHook;
 import com.esophose.playerparticles.manager.LangManager;
+import com.esophose.playerparticles.manager.ParticleGroupPresetManager;
 import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.manager.SettingManager;
 import com.esophose.playerparticles.manager.SettingManager.PSetting;
 import com.esophose.playerparticles.particles.PPlayerMovementListener;
-import com.esophose.playerparticles.particles.ParticleGroup;
 import com.esophose.playerparticles.styles.DefaultStyles;
 import com.esophose.playerparticles.updater.PluginUpdateListener;
 import com.esophose.playerparticles.updater.Updater;
@@ -159,7 +159,7 @@ public class PlayerParticles extends JavaPlugin {
         
         SettingManager.reload();
         LangManager.reload(updatePluginSettings);
-        ParticleGroup.reload();
+        ParticleGroupPresetManager.reload();
         
         GuiHandler.setup();
         PlayerChatHook.setup();

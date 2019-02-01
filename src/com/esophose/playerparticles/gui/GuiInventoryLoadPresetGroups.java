@@ -2,17 +2,17 @@ package com.esophose.playerparticles.gui;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 
 import com.esophose.playerparticles.manager.DataManager;
 import com.esophose.playerparticles.manager.LangManager;
 import com.esophose.playerparticles.manager.LangManager.Lang;
+import com.esophose.playerparticles.manager.ParticleGroupPresetManager;
 import com.esophose.playerparticles.manager.SettingManager.GuiIcon;
 import com.esophose.playerparticles.particles.PPlayer;
 import com.esophose.playerparticles.particles.ParticleGroup;
+import com.esophose.playerparticles.particles.ParticleGroupPreset;
 import com.esophose.playerparticles.particles.ParticlePair;
 import com.esophose.playerparticles.util.ParticleUtils;
 
@@ -26,11 +26,9 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
         int index = 10;
         int nextWrap = 17;
         int maxIndex = 43;
-        List<Entry<ParticleGroup, Material>> groups = ParticleGroup.getPresetGroupsForGUIForPlayer(pplayer.getPlayer());
-        for (Entry<ParticleGroup, Material> groupEntry : groups) {
-            ParticleGroup group = groupEntry.getKey();
-            Material iconMaterial = groupEntry.getValue();
-            List<ParticlePair> particles = group.getParticles();
+        List<ParticleGroupPreset> groups = ParticleGroupPresetManager.getPresetGroupsForPlayer(pplayer.getPlayer());
+        for (ParticleGroupPreset group : groups) {
+            List<ParticlePair> particles = group.getGroup().getParticles();
             particles.sort(Comparator.comparingInt(ParticlePair::getId));
             
             String[] lore = new String[particles.size() + 1];
@@ -42,7 +40,7 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
             } 
             
             // Load Group Buttons
-            GuiActionButton groupButton = new GuiActionButton(index, iconMaterial, LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + group.getName(), lore, (button, isShiftClick) -> {
+            GuiActionButton groupButton = new GuiActionButton(index, group.getGuiIcon(), LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + group.getDisplayName(), lore, (button, isShiftClick) -> {
                 ParticleGroup activeGroup = pplayer.getActiveParticleGroup();
                 activeGroup.getParticles().clear();
                 for (ParticlePair particle : particles)

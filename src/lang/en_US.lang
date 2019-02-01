@@ -1,5 +1,5 @@
 # ================================================================ #
-#           default.lang (English) MESSAGE CONFIGURATION           #
+#                  en_US.lang MESSAGE CONFIGURATION                #
 # Important Notes:                                                 #
 # * You can use the & symbol to color the messages                 #
 # * {#} Will be replaced with whatever that message requires       #
@@ -241,6 +241,7 @@ gui-load-a-preset-group-description: 'Load a premade particle group'
 gui-save-group: 'Save New Group'
 gui-save-group-description: 'Click to save a new group. You will be prompted\nto enter the new group name in chat.'
 gui-save-group-full: 'You have reached the max number of groups'
+gui-save-group-no-particles: 'You do not have any particles applied'
 gui-save-group-hotbar-message: '&eType &b1 &eword in chat for the new group name. Type "&ccancel&e" to cancel. (&b{0}&es left)'
 gui-reset-particles: 'Reset Your Particles'
 gui-reset-particles-description: 'Deletes all your active particles'

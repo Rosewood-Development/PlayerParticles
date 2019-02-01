@@ -20,8 +20,8 @@ version: 6.3
 check-updates: true
 
 # The .lang file to use in the ./lang/ folder
-# Default: 'default.lang'
-lang-file: 'default.lang'
+# Default: 'en_US.lang'
+lang-file: 'en_US.lang'
 
 # If you're using other plugins to execute commands you may wish to turn off messages
 # Default: true

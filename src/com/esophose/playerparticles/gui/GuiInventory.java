@@ -8,6 +8,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -16,7 +17,7 @@ import com.esophose.playerparticles.manager.SettingManager.PSetting;
 import com.esophose.playerparticles.particles.PPlayer;
 import com.esophose.playerparticles.util.ParticleUtils;
 
-public abstract class GuiInventory {
+public abstract class GuiInventory implements InventoryHolder {
     
     protected enum BorderColor {
         WHITE(0, "WHITE_STAINED_GLASS_PANE"),

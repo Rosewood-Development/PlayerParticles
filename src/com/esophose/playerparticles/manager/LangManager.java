@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.MessageFormat;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -254,6 +256,7 @@ public class LangManager {
         GUI_SAVE_GROUP,
         GUI_SAVE_GROUP_DESCRIPTION,
         GUI_SAVE_GROUP_FULL,
+        GUI_SAVE_GROUP_NO_PARTICLES,
         GUI_SAVE_GROUP_HOTBAR_MESSAGE,
         GUI_RESET_PARTICLES,
         GUI_RESET_PARTICLES_DESCRIPTION,
@@ -350,7 +353,7 @@ public class LangManager {
      * This should only get called once by the PlayerParticles class, however
      * calling it multiple times wont affect anything negatively
      * 
-     * @param resetLangFile If the default.lang file should be updated to the latest version
+     * @param resetLangFile If the default lang files should be updated to the latest version
      */
     public static void reload(boolean resetLangFile) {
         YamlConfiguration lang = configureLangFile(resetLangFile);
@@ -360,43 +363,70 @@ public class LangManager {
 
     /**
      * Loads the target .lang file as defined in the config and grabs its YamlConfiguration
-     * If it doesn't exist, default to default.lang
-     * If default.lang doesn't exist, copy the file from this .jar to the target directory
+     * If it doesn't exist, default to en_US.lang
+     * If the default lang files don't exist, copy the files from this .jar to the target directory
      * 
-     * @param resetLangFile If the default.lang file should be updated to the latest version
+     * @param resetLangFiles If the default lang files should be updated to the latest version
      * @return The YamlConfiguration of the target .lang file
      */
-    private static YamlConfiguration configureLangFile(boolean resetLangFile) {
+    private static YamlConfiguration configureLangFile(boolean resetLangFiles) {
         File pluginDataFolder = PlayerParticles.getPlugin().getDataFolder();
         langFileName = PSetting.LANG_FILE.getString();
         File targetLangFile = new File(pluginDataFolder.getAbsolutePath() + "/lang/" + langFileName);
         
-        if (resetLangFile) {
-            File defaultLangFile = new File(pluginDataFolder.getAbsolutePath() + "/lang/default.lang");
-            if (defaultLangFile.exists()) {
-                defaultLangFile.delete();
-                PlayerParticles.getPlugin().getLogger().warning("default.lang has been reset!");
-            }
-        }
-
-        if (!targetLangFile.exists()) { // Target .lang file didn't exist, default to default.lang
-            if (!langFileName.equals("default.lang")) {
-                PlayerParticles.getPlugin().getLogger().warning("Couldn't find lang file '" + langFileName + "', defaulting to default.lang");
-            }
-            langFileName = "default.lang";
-
-            targetLangFile = new File(pluginDataFolder.getAbsolutePath() + "/lang/" + langFileName);
-            if (!targetLangFile.exists()) { // default.lang didn't exist, create it
-                try (InputStream stream = PlayerParticles.getPlugin().getResource("lang/default.lang")) {
-                    targetLangFile.getParentFile().mkdir(); // Make sure the directory always exists
-                    Files.copy(stream, Paths.get(targetLangFile.getAbsolutePath()));
-                    return YamlConfiguration.loadConfiguration(targetLangFile);
+        Set<String> defaultLangFileNames = new HashSet<String>();
+        defaultLangFileNames.add("en_US.lang");
+        defaultLangFileNames.add("fr_FR.lang");
+        
+        targetLangFile.getParentFile().mkdir(); // Make sure the directory always exists
+        
+        if (resetLangFiles) {
+            for (String fileName : defaultLangFileNames) {
+                File file = new File(pluginDataFolder.getAbsolutePath() + "/lang/" + fileName);
+                
+                // Delete the file if it already exists
+                if (file.exists()) {
+                    file.delete(); 
+                }
+                
+                // Generate the new file
+                try (InputStream stream = PlayerParticles.getPlugin().getResource("lang/" + fileName)) {
+                    Files.copy(stream, Paths.get(file.getAbsolutePath()));
                 } catch (IOException ex) {
                     ex.printStackTrace();
-                    PlayerParticles.getPlugin().getLogger().severe("Unable to write default.lang to disk! You and your players will be seeing lots of error messages!");
-                    return null;
+                    PlayerParticles.getPlugin().getLogger().severe("Unable to write " + fileName + " to disk! This wasn't supposed to happen!");
                 }
             }
+            
+            PlayerParticles.getPlugin().getLogger().warning("The default lang files have been reset!");
+        } else {
+            // Make sure the default lang files still exist, if not, create them
+            boolean foundMissingFile = false;
+            for (String fileName : defaultLangFileNames) {
+                File file = new File(pluginDataFolder.getAbsolutePath() + "/lang/" + fileName);
+                
+                // Generate the new file if it doesn't exist
+                if (!file.exists()) {
+                    foundMissingFile = true;
+                    try (InputStream stream = PlayerParticles.getPlugin().getResource("lang/" + fileName)) {
+                        Files.copy(stream, Paths.get(file.getAbsolutePath()));
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                        PlayerParticles.getPlugin().getLogger().severe("Unable to write " + fileName + " to disk! This wasn't supposed to happen!");
+                    }
+                }
+            }
+            
+            if (foundMissingFile) 
+                PlayerParticles.getPlugin().getLogger().warning("One or more default lang files were missing, recreated them!");
+        }
+
+        if (!targetLangFile.exists()) { // Target .lang file didn't exist, default to en_US.lang
+            if (!langFileName.equals("en_US.lang")) {
+                PlayerParticles.getPlugin().getLogger().warning("Couldn't find lang file '" + langFileName + "', defaulting to en_US.lang");
+            }
+            langFileName = "en_US.lang";
+            targetLangFile = new File(pluginDataFolder.getAbsolutePath() + "/lang/" + langFileName);
         }
 
         return YamlConfiguration.loadConfiguration(targetLangFile);

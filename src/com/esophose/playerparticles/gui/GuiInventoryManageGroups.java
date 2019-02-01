@@ -73,15 +73,21 @@ public class GuiInventoryManageGroups extends GuiInventory {
             if (index > maxIndex) break; // Overflowed the available space
         }
         
-        boolean canSaveGroup = !PermissionManager.hasPlayerReachedMaxGroups(pplayer);
+        boolean hasReachedMax = PermissionManager.hasPlayerReachedMaxGroups(pplayer);
+        boolean hasParticles = !pplayer.getActiveParticles().isEmpty();
         String[] lore;
-        if (canSaveGroup) {
-            lore = new String[] { LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SAVE_GROUP_DESCRIPTION) };
-        } else {
+        if (hasReachedMax) {
             lore = new String[] { 
                 LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SAVE_GROUP_DESCRIPTION), 
                 LangManager.getText(Lang.GUI_COLOR_UNAVAILABLE) + LangManager.getText(Lang.GUI_SAVE_GROUP_FULL)
             };
+        } else if (!hasParticles) {
+            lore = new String[] { 
+                LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SAVE_GROUP_DESCRIPTION), 
+                LangManager.getText(Lang.GUI_COLOR_UNAVAILABLE) + LangManager.getText(Lang.GUI_SAVE_GROUP_NO_PARTICLES)
+            };
+        } else {
+            lore = new String[] { LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SAVE_GROUP_DESCRIPTION) };
         }
         
         // Save Group Button
@@ -90,7 +96,7 @@ public class GuiInventoryManageGroups extends GuiInventory {
                                                               LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_SAVE_GROUP),
                                                               lore,
                                                               (button, isShiftClick) -> {
-                                                                  if (!canSaveGroup) return;
+                                                                  if (hasReachedMax || !hasParticles) return;
                                                                   
                                                                   PlayerChatHook.addHook(new PlayerChatHookData(pplayer.getUniqueId(), 15, (textEntered) -> {
                                                                       if (textEntered == null || textEntered.equalsIgnoreCase("cancel")) {
