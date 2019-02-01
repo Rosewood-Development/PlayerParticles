@@ -1,7 +1,9 @@
 /*
  * TODO: v6.4+
  * + Add new style(s) 'wings_<type>', multiple new wing types: fairy, demon
- * + Add ability to create/manage fixed effects from the GUI (may get implemented later)
+ * + Add ability to create/manage fixed effects from the GUI
+ * * Convert fixed effect ids into names
+ * + Add command '/pp fixed teleport <id>' that requires the permission playerparticles.fixed.teleport
  * + Add named colors to the color data
  * + Add effect/style name customization through config files
  * + Add effect/style settings folder that lets you disable effects/style and edit style properties
@@ -34,6 +36,7 @@ import com.esophose.playerparticles.particles.PPlayerMovementListener;
 import com.esophose.playerparticles.styles.DefaultStyles;
 import com.esophose.playerparticles.updater.PluginUpdateListener;
 import com.esophose.playerparticles.updater.Updater;
+import com.esophose.playerparticles.util.Metrics;
 
 public class PlayerParticles extends JavaPlugin {
 
@@ -46,7 +49,7 @@ public class PlayerParticles extends JavaPlugin {
      * The version a new update has, will be null if the config has it disabled
      * or if there is no new version
      */
-    public String updateVersion = null;
+    private String updateVersion = null;
 
     /**
      * The database connection manager
@@ -65,7 +68,7 @@ public class PlayerParticles extends JavaPlugin {
         pluginInstance = (PlayerParticles)Bukkit.getServer().getPluginManager().getPlugin("PlayerParticles");
         
         this.registerCommands();
-        
+
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new ParticleManager(), this);
         pm.registerEvents(new PluginUpdateListener(), this);
@@ -106,6 +109,10 @@ public class PlayerParticles extends JavaPlugin {
                     }
                 }
             }.runTaskAsynchronously(this);
+        }
+        
+        if (PSetting.SEND_METRICS.getBoolean()) {
+            new Metrics(this);
         }
         
         this.reload(updatePluginSettings);

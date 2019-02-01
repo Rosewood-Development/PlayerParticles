@@ -7,6 +7,9 @@
 + Added a click sound to the GUI for button clicks (Can be disabled in the config.yml)
 + Added setting 'toggle-on-move-delay' to the config.yml
 + Added new lang file fr_FR.lang (French)
++ Added extra customization to the preset groups
++ Added bStats metrics (Can be disabled in the config.yml by setting send-metrics to false)
+* The preset groups file was renamed from groups.yml to preset_groups.yml, you'll need to update the new file
 * Renamed default.lang to en_US.lang
 * Reduced the number of particles that spawn for the styles 'blockbreak', 'blockplace', and 'swords'
 * Fix GUI borders showing up as glass panes instead of stained glass panes on servers running 1.12.2 or earlier

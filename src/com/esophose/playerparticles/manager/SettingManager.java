@@ -31,6 +31,7 @@ public class SettingManager {
         VERSION(PSettingType.DOUBLE),
         TICKS_PER_PARTICLE(PSettingType.LONG),
         CHECK_UPDATES(PSettingType.BOOLEAN),
+        SEND_METRICS(PSettingType.BOOLEAN),
         GUI_ENABLED(PSettingType.BOOLEAN),
         GUI_BUTTON_SOUND(PSettingType.BOOLEAN),
         

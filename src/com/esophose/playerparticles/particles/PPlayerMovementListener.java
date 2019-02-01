@@ -18,8 +18,8 @@ import com.esophose.playerparticles.manager.SettingManager.PSetting;
 
 public class PPlayerMovementListener implements Listener {
     
-    private static Map<UUID, Integer> timeSinceLastMovement = new HashMap<UUID, Integer>();
     private static final int CHECK_INTERVAL = 3;
+    private Map<UUID, Integer> timeSinceLastMovement = new HashMap<UUID, Integer>();
     
     public PPlayerMovementListener() {
         new BukkitRunnable() {

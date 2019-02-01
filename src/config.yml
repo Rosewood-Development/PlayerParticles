@@ -19,6 +19,11 @@ version: 6.3
 # Default: true
 check-updates: true
 
+# If metrics should be sent to bStats
+# I would appreciate it if you left this enabled, it helps me get statistics on who uses this plugin
+# Default: true
+send-metrics: true
+
 # The .lang file to use in the ./lang/ folder
 # Default: 'en_US.lang'
 lang-file: 'en_US.lang'
