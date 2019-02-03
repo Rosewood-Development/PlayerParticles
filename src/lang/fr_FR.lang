@@ -4,7 +4,7 @@
 # * You can use the & symbol to color the messages                 #
 # * {#} Will be replaced with whatever that message requires       #
 # * \n Will split the lore line in the #GUI section                #
-# * Do NOT use the apostrophe character in any message! ( ' )      #
+# * Do NOT use a quotation mark character in any message! ( " )    #
 # * PLEASE MAKE YOUR OWN .lang FILE IF YOU WANT CUSTOM MESSAGES!   #
 # * This file will be overridden almost every plugin update!       #
 # ================================================================ #
@@ -31,7 +31,7 @@ command-description-help: "Affichez le menu d aide... Vous y êtes déjà !"
 command-description-info: "Voir la description d une de vos particules actives"
 command-description-list: "Listez les IDs de vos particules actives"
 command-description-reload: "Rechargez le fichier config.yml et de langue"
-command-description-remove: "Supprimez l une de vos particules actives"
+command-description-remove: "Supprimez vos particules actives."
 command-description-reset: "Supprimez toutes vos particules actives"
 command-description-styles: "Affichez une liste des styles de particules que vous utilisez"
 command-description-toggle: "Activez ou déativez vos particules actives"
@@ -99,7 +99,12 @@ reload-no-permission: "&cVous n avez pas la permission pour recharger la configu
 
 # Remove Command
 remove-no-args: "&cVous n avez pas rentrer d ID à supprimer ! &b/pp remove <ID>"
-remove-success: "&aVotre particule avec l ID &b{0} &aa été supprimée !"
+remove-id-success: "&aVotre particule avec l'ID &b{0} &aa été supprimée !"
+remove-effect-success: "&aSuppression de &b{0} &ade votre particule avec l'effet &b{1} &a!"
+remove-effect-none: "&cVous n'avez pas de particules appliquées avec l'effet &b{0} &c!"
+remove-style-success: "&aSuppression &b{0} &ade votre particule avec le style &b{1} &a!"
+remove-style-none: "&cVous n'avez pas de particules appliquées avec le style &b{0} &c!"
+remove-unknown: "&cL'effect avec le nom ou le style &b{0} &cn'existe pas !"
 
 # List Command
 list-none: "&eVous n avez pas de particules actives."
@@ -234,8 +239,10 @@ gui-manage-your-groups-description: "Créez, éditez, et supprimez vos groupes par
 gui-load-a-preset-group: "Chargez un groupe de presets"
 gui-load-a-preset-group-description: "Chargez un groupe de particules déjà fait"
 gui-save-group: "Sauvegardez un nouveau groupe"
-gui-save-group-description: "Sauvegarder un nouveau groupe avec:"
-gui-save-group-description-2: "/pp group save <groupName>"
+gui-save-group-description: "Cliquez pour sauvegardez un nouveau groupe. Vous allez être invité\na écrire un nouveau nom dans le tchat."
+gui-save-group-full: "Vous avez atteint le nombre maximal de groupe !"
+gui-save-group-no-particles: "Vous avez aucunes particules appliquées"
+gui-save-group-hotbar-message: "&eTapez &b1 &enom dans le tchat pour le nouveau nom du groupe. Tapez &ccancel&e pour annuler. (&b{0}&es restants)"
 gui-reset-particles: "Réinitialisez vos particules"
 gui-reset-particles-description: "Supprimez vos particules actives"
 gui-particle-name: "Particule #{0}"

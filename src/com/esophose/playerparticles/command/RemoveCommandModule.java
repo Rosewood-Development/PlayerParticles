@@ -123,7 +123,7 @@ public class RemoveCommandModule implements CommandModule {
     }
 
     public String getArguments() {
-        return "<id>";
+        return "<ID>|<effect>|<style>";
     }
 
     public boolean requiresEffects() {
