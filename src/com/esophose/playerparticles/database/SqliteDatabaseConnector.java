@@ -10,6 +10,7 @@ import com.esophose.playerparticles.PlayerParticles;
 public class SqliteDatabaseConnector implements DatabaseConnector {
 
     private final String connectionString;
+    private Connection connection;
 
     public SqliteDatabaseConnector(String directory) {
         this.connectionString = "jdbc:sqlite:" + directory + File.separator + "playerparticles.db";
@@ -20,14 +21,28 @@ public class SqliteDatabaseConnector implements DatabaseConnector {
     }
 
     public void closeConnection() {
-        // Nothing to do
+        try {
+            if (this.connection != null) {
+                this.connection.close();
+            }
+        } catch (SQLException ex) {
+            PlayerParticles.getPlugin().getLogger().severe("An error occurred closing the SQLite database connection: " + ex.getMessage());
+        }
     }
 
     public void connect(ConnectionCallback callback) {
-        try (Connection connection = DriverManager.getConnection(this.connectionString)) {
-            callback.execute(connection);
+        if (this.connection == null) {
+            try {
+                this.connection = DriverManager.getConnection(this.connectionString);
+            } catch (SQLException ex) {
+                PlayerParticles.getPlugin().getLogger().severe("An error occurred retrieving the SQLite database connection: " + ex.getMessage());
+            }
+        }
+        
+        try {
+            callback.execute(this.connection);
         } catch (SQLException ex) {
-            PlayerParticles.getPlugin().getLogger().severe("An error occurred retrieving an SQLite database connection: " + ex.getMessage());
+            PlayerParticles.getPlugin().getLogger().severe("An error occurred retrieving the SQLite database connection: " + ex.getMessage());
         }
     }
 

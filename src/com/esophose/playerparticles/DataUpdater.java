@@ -13,7 +13,7 @@ public class DataUpdater {
      * If they don't, create them
      */
     protected static void tryCreateTables() {
-        PlayerParticles.getDBConnector().connect((connection) -> {
+        PlayerParticles.getPlugin().getDBConnector().connect((connection) -> {
             try (Statement createStatement = connection.createStatement()) {
                 createStatement.addBatch("CREATE TABLE IF NOT EXISTS pp_settings (player_uuid VARCHAR(36), particles_hidden TINYINT)");
                 createStatement.addBatch("CREATE TABLE IF NOT EXISTS pp_particle (uuid VARCHAR(36), group_uuid VARCHAR(36), id SMALLINT, effect VARCHAR(100), style VARCHAR(100), item_material VARCHAR(100), block_material VARCHAR(100), note SMALLINT, r SMALLINT, g SMALLINT, b SMALLINT, PRIMARY KEY(uuid))");
@@ -50,7 +50,7 @@ public class DataUpdater {
      * Updates the data from versions older than v5.2
      */
     private static void updateFrom_legacy_to_current() {
-        PlayerParticles.getDBConnector().connect((connection) -> {
+        PlayerParticles.getPlugin().getDBConnector().connect((connection) -> {
             try (Statement statement = connection.createStatement()) {
                 statement.addBatch("DROP TABLE IF EXISTS pp_users");
                 statement.addBatch("DROP TABLE IF EXISTS pp_fixed");
@@ -68,7 +68,7 @@ public class DataUpdater {
      * Note: v5.3 was never officially released
      */
     private static void updateFrom_5_3_to_current() {
-        PlayerParticles.getDBConnector().connect((connection) -> {
+        PlayerParticles.getPlugin().getDBConnector().connect((connection) -> {
             // Create player settings table
             try (Statement statement = connection.createStatement()) {
                 String updateQuery = "CREATE TABLE IF NOT EXISTS pp_settings (player_uuid VARCHAR(36), particles_hidden TINYINT)";

@@ -24,7 +24,7 @@ public class ParticleStyleBlockPlace implements ParticleStyle, Listener {
         
         location.add(0.5, 0.5, 0.5); // Center around the block
 
-        for (int i = 0; i < 15; i++)
+        for (int i = 0; i < 10; i++)
             particles.add(new PParticle(location, 0.75F, 0.75F, 0.75F, 0.05F));
 
         return particles;

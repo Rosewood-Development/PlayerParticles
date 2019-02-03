@@ -18,9 +18,8 @@ import com.esophose.playerparticles.manager.SettingManager.PSetting;
 
 public class PPlayerMovementListener implements Listener {
     
-    private static Map<UUID, Integer> timeSinceLastMovement = new HashMap<UUID, Integer>();
-    private static final int STANDING_TIME = 9;
     private static final int CHECK_INTERVAL = 3;
+    private Map<UUID, Integer> timeSinceLastMovement = new HashMap<UUID, Integer>();
     
     public PPlayerMovementListener() {
         new BukkitRunnable() {
@@ -35,8 +34,8 @@ public class PPlayerMovementListener implements Listener {
                         toRemove.add(uuid);
                     } else {
                         int standingTime = timeSinceLastMovement.get(uuid);
-                        pplayer.setMoving(standingTime < STANDING_TIME);
-                        if (standingTime < STANDING_TIME)
+                        pplayer.setMoving(standingTime < PSetting.TOGGLE_ON_MOVE_DELAY.getInt());
+                        if (standingTime < PSetting.TOGGLE_ON_MOVE_DELAY.getInt())
                             timeSinceLastMovement.replace(uuid, standingTime + CHECK_INTERVAL);
                     }
                 }

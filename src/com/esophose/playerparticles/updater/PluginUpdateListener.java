@@ -17,8 +17,8 @@ public class PluginUpdateListener implements Listener {
      */
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
-        if (e.getPlayer().isOp() && PlayerParticles.updateVersion != null) {
-            LangManager.sendCommandSenderMessage(e.getPlayer(), Lang.UPDATE_AVAILABLE, PlayerParticles.updateVersion, PlayerParticles.getPlugin().getDescription().getVersion());
+        if (e.getPlayer().isOp() && PlayerParticles.getPlugin().getUpdateVersion() != null) {
+            LangManager.sendCommandSenderMessage(e.getPlayer(), Lang.UPDATE_AVAILABLE, PlayerParticles.getPlugin().getUpdateVersion(), PlayerParticles.getPlugin().getDescription().getVersion());
         }
     }
 

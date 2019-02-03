@@ -1,5 +1,26 @@
 == UPDATING WILL DELETE YOUR CONFIG.YML ==
 * Create a backup of your config.yml if you wish to import all your old settings!
+=== v6.3 ===
++ Added the ability to remove particles by id/effect/style using '/pp remove <id>|<effect>|<style>'
++ Added new styles 'popper', 'pulse', 'twins', 'whirl', and 'whirlwind'
++ The "Save New Group" button in the GUI now actually saves a new group and prompts for a name in chat (15 second timeout)
++ Added a click sound to the GUI for button clicks (Can be disabled in the config.yml)
++ Added setting 'toggle-on-move-delay' to the config.yml
++ Added new lang file fr_FR.lang (French)
++ Added extra customization to the preset groups
++ Added bStats metrics (Can be disabled in the config.yml by setting send-metrics to false)
+* The preset groups file was renamed from groups.yml to preset_groups.yml, you'll need to update the new file
+* Renamed default.lang to en_US.lang
+* Reduced the number of particles that spawn for the styles 'blockbreak', 'blockplace', and 'swords'
+* Fix GUI borders showing up as glass panes instead of stained glass panes on servers running 1.12.2 or earlier
+* Fix a missing message when trying to remove a group that doesn't exist
+* Fix a console error that occured when trying to remove a group that doesn't exist
+* Fix a console error that occured when a player logs off with the 'celebration' style applied and they have at least 1 fixed effect created
+* Fix a console error "[PlayerParticles] An error occurred retrieving an SQLite database connection: [SQLITE_BUSY]  The database file is locked (database is locked)"
+=== v6.2 ===
++ Added command '/ppo' which allows executing a /pp command as another player.
+* Fix not being able to change the lore of the player skull in the GUI
+* Fix the 'saved groups' count on the player skull in the GUI being one higher than it was supposed to be
 === v6.1 ===
 * Fix a bug where sometimes the GUI was unable to be opened due to an error
 * You can now use \n on the GUI lore lines in the *.lang file to break them into multiple lines

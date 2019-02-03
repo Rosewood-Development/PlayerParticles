@@ -1,8 +1,12 @@
 /*
- * TODO: v6.3
- * + Add new style 'tornado'
- * + Add new style 'doubleorbit'
+ * TODO: v6.4+
  * + Add new style(s) 'wings_<type>', multiple new wing types: fairy, demon
+ * + Add ability to create/manage fixed effects from the GUI
+ * * Convert fixed effect ids into names
+ * + Add command '/pp fixed teleport <id>' that requires the permission playerparticles.fixed.teleport
+ * + Add named colors to the color data
+ * + Add effect/style name customization through config files
+ * + Add effect/style settings folder that lets you disable effects/style and edit style properties
  */
 
 package com.esophose.playerparticles;
@@ -12,6 +16,7 @@ import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -21,48 +26,55 @@ import com.esophose.playerparticles.database.DatabaseConnector;
 import com.esophose.playerparticles.database.MySqlDatabaseConnector;
 import com.esophose.playerparticles.database.SqliteDatabaseConnector;
 import com.esophose.playerparticles.gui.GuiHandler;
+import com.esophose.playerparticles.gui.hook.PlayerChatHook;
 import com.esophose.playerparticles.manager.LangManager;
+import com.esophose.playerparticles.manager.ParticleGroupPresetManager;
 import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.manager.SettingManager;
 import com.esophose.playerparticles.manager.SettingManager.PSetting;
 import com.esophose.playerparticles.particles.PPlayerMovementListener;
-import com.esophose.playerparticles.particles.ParticleGroup;
 import com.esophose.playerparticles.styles.DefaultStyles;
 import com.esophose.playerparticles.updater.PluginUpdateListener;
 import com.esophose.playerparticles.updater.Updater;
+import com.esophose.playerparticles.util.Metrics;
 
 public class PlayerParticles extends JavaPlugin {
 
-    private static Plugin pluginInstance;
+    /**
+     * The running instance of PlayerParticles on the server
+     */
+    private static PlayerParticles pluginInstance;
 
     /**
      * The version a new update has, will be null if the config has it disabled
      * or if there is no new version
      */
-    public static String updateVersion = null;
+    private String updateVersion = null;
 
     /**
      * The database connection manager
      */
-    private static DatabaseConnector databaseConnector = null;
+    private DatabaseConnector databaseConnector = null;
     
     /**
      * The task that spawns the particles
      */
-    private static BukkitTask particleTask = null;
+    private BukkitTask particleTask = null;
 
     /**
      * Executes essential tasks for starting up the plugin
      */
     public void onEnable() {
-        pluginInstance = Bukkit.getServer().getPluginManager().getPlugin("PlayerParticles");
+        pluginInstance = (PlayerParticles)Bukkit.getServer().getPluginManager().getPlugin("PlayerParticles");
         
         this.registerCommands();
-        
-        Bukkit.getPluginManager().registerEvents(new ParticleManager(), this);
-        Bukkit.getPluginManager().registerEvents(new PluginUpdateListener(), this);
-        Bukkit.getPluginManager().registerEvents(new GuiHandler(), this);
-        Bukkit.getPluginManager().registerEvents(new PPlayerMovementListener(), this);
+
+        PluginManager pm = Bukkit.getPluginManager();
+        pm.registerEvents(new ParticleManager(), this);
+        pm.registerEvents(new PluginUpdateListener(), this);
+        pm.registerEvents(new GuiHandler(), this);
+        pm.registerEvents(new PPlayerMovementListener(), this);
+        pm.registerEvents(new PlayerChatHook(), this);
 
         saveDefaultConfig();
         double configVersion = PSetting.VERSION.getDouble();
@@ -97,6 +109,10 @@ public class PlayerParticles extends JavaPlugin {
                     }
                 }
             }.runTaskAsynchronously(this);
+        }
+        
+        if (PSetting.SEND_METRICS.getBoolean()) {
+            new Metrics(this);
         }
         
         this.reload(updatePluginSettings);
@@ -150,9 +166,10 @@ public class PlayerParticles extends JavaPlugin {
         
         SettingManager.reload();
         LangManager.reload(updatePluginSettings);
-        ParticleGroup.reload();
+        ParticleGroupPresetManager.reload();
         
         GuiHandler.setup();
+        PlayerChatHook.setup();
         
         ParticleManager.refreshData();
         startParticleTask();
@@ -163,7 +180,7 @@ public class PlayerParticles extends JavaPlugin {
      * 
      * @return The PlayerParticles plugin instance
      */
-    public static Plugin getPlugin() {
+    public static PlayerParticles getPlugin() {
         return pluginInstance;
     }
     
@@ -172,8 +189,18 @@ public class PlayerParticles extends JavaPlugin {
      * 
      * @return The DatabaseConnector
      */
-    public static DatabaseConnector getDBConnector() {
+    public DatabaseConnector getDBConnector() {
         return databaseConnector;
+    }
+    
+    /**
+     * Gets the latest available version of the plugin
+     * Will be null if no update is available
+     * 
+     * @return The latest version available for the plugin
+     */
+    public String getUpdateVersion() {
+        return this.updateVersion;
     }
 
     /**

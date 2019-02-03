@@ -206,7 +206,7 @@ public class PermissionManager {
                 list.add(pe.getName());
         return list;
     }
-
+    
     /**
      * Gets a String List of all style names a player has permission for
      * 
@@ -217,6 +217,20 @@ public class PermissionManager {
         List<String> list = new ArrayList<String>();
         for (ParticleStyle ps : ParticleStyleManager.getStyles())
             if (hasStylePermission(p, ps)) 
+                list.add(ps.getName());
+        return list;
+    }
+
+    /**
+     * Gets a String List of all fixable style names a player has permission for
+     * 
+     * @param p The player to get style names for
+     * @return A String List of all fixable style names the given player has permission for
+     */
+    public static List<String> getFixableStyleNamesUserHasPermissionFor(Player p) {
+        List<String> list = new ArrayList<String>();
+        for (ParticleStyle ps : ParticleStyleManager.getStyles())
+            if (ps.canBeFixed() && hasStylePermission(p, ps)) 
                 list.add(ps.getName());
         return list;
     }

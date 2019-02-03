@@ -1,0 +1,82 @@
+# ==================================================== #
+#                     PRESET GROUPS                    #
+# Information:                                         #
+# * The groups listed within this file will be         #
+#   available to all players who have access to the    #
+#   effect and style!                                  #
+# * The GUI is capable of displaying up to 28 groups.  #
+# * Feel free to create your own, they will be         #
+#   available for users to select within the GUI!      #
+# * This file is not automatically updated. If you     #
+#   want to reset the file to its defaults, simply     #
+#   delete it and run the command '/pp reload'.        #
+# ==================================================== #
+#
+# Use the following format for adding new groups:
+# group-name:
+#     display-name: 'My Amazing Group'
+#     gui-icon: 'ENDER_CHEST'
+#     permission: 'playerparticles.group.group-name'
+#     allow-permission-override: true
+#     1:
+#         effect: 'dust'
+#         style: 'wings'
+#         data: '255 255 255'
+#     2: 
+#         effect: 'cloud'
+#         style: 'overhead'
+#         data: ''
+#
+# What everything means:
+# group-name: The name of the group, how it will be applied by using /pp group load <group-name>.
+# display-name: The display name of the group, how it will show up in the GUI, this is required.
+# gui-icon: The icon to use for the GUI, this is required.
+# permission: The permission that the player must have to see this group, may be left blank as ''. The player must still have permission for all effects/styles within the group in order to use it.
+# allow-permission-override: Allow the player to see and apply the group even if they don't have access to all the effects/styles within it. This does nothing if the permission is set to ''. 
+# 1 (or any positive whole number n): The particle ID. You may have as many of these as you want, they must contain an effect, style, and data property below them. 
+# effect: The effect that the particle will have.
+# style: The style that the particle will have.
+# data: The data that the particle will have.
+#
+# GUI Icons MUST use the names found at the link below:
+# https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
+
+raincloud:
+    display-name: 'Raincloud'
+    gui-icon: 'ENDER_CHEST'
+    permission: ''
+    allow-permission-override: false
+    1:
+        effect: 'cloud'
+        style: 'overhead'
+        data: ''
+    2:
+        effect: 'rain'
+        style: 'overhead'
+        data: ''
+rainbows:
+    display-name: 'Rainbows'
+    gui-icon: 'ENDER_CHEST'
+    permission: ''
+    allow-permission-override: false
+    1:
+        effect: 'dust'
+        style: 'orbit'
+        data: 'rainbow'
+    2: 
+        effect: 'entity_effect'
+        style: 'feet'
+        data: 'rainbow'
+angel:
+    display-name: 'Angel'
+    gui-icon: 'ENDER_CHEST'
+    permission: ''
+    allow-permission-override: false
+    1:
+        effect: 'dust'
+        style: 'wings'
+        data: '255 255 255'
+    2:
+        effect: 'dust'
+        style: 'halo'
+        data: '255 255 0'

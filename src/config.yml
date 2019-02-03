@@ -13,15 +13,20 @@
 # This value is the version of the plugin that last modified the config file
 # Changing this value manually will likely result in data loss and errors!
 # Do not change this manually unless specifically told to by the plugin author
-version: 6.2
+version: 6.3
 
 # Check for new versions of the plugin
 # Default: true
 check-updates: true
 
+# If metrics should be sent to bStats
+# I would appreciate it if you left this enabled, it helps me get statistics on who uses this plugin
+# Default: true
+send-metrics: true
+
 # The .lang file to use in the ./lang/ folder
-# Default: 'default.lang'
-lang-file: 'default.lang'
+# Default: 'en_US.lang'
+lang-file: 'en_US.lang'
 
 # If you're using other plugins to execute commands you may wish to turn off messages
 # Default: true
@@ -41,11 +46,21 @@ message-prefix: '&7[&3PlayerParticles&7]'
 # Default: true
 gui-enabled: true
 
+# If clicking a GUI button should make a noise
+# Default: true
+gui-button-sound: true
+
 # If true, styles will not display while the player is moving
 # They will instead have the effect displayed at their feet
 # Note: Not all styles abide by this rule, but most will
 # Default: false
 toggle-on-move: false
+
+# The time (in ticks) a player has to be standing still before they are considered to be stopped
+# This setting has no effect if toggle-on-move is set to false
+# The value must be a positive whole number
+# Default: 9
+toggle-on-move-delay: 9
 
 # The worlds which this plugin is disabled in
 # Remove the [] before you enter world names
@@ -334,11 +349,17 @@ gui-icon:
       - GLOWSTONE
     point:
       - STONE_BUTTON
+    popper:
+      - POPPED_CHORUS_FRUIT
+      - CHORUS_FRUIT_POPPED
+    pulse:
+      - REDSTONE_TORCH
+      - REDSTONE_TORCH_ON
     quadhelix:
       - NAUTILUS_SHELL
       - ACTIVATOR_RAIL
     rings:
-      - STRING
+      - LEAD
     sphere:
       - HEART_OF_THE_SEA
       - SNOWBALL
@@ -351,8 +372,15 @@ gui-icon:
     thick:
       - COBWEB
       - WEB
+    twins:
+      - OAK_FENCE
+      - FENCE
     vortex:
       - GLOWSTONE_DUST
+    whirl:
+      - FEATHER
+    whirlwind: 
+      - STRING
     wings:
       - ELYTRA
 

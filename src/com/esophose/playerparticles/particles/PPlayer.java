@@ -118,6 +118,11 @@ public class PPlayer {
         this.isMoving = isMoving;
     }
     
+    /**
+     * Gets if a player is moving
+     * 
+     * @return True if the player is moving
+     */
     public boolean isMoving() {
         return this.isMoving;
     }

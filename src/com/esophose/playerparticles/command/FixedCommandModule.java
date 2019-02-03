@@ -661,7 +661,7 @@ public class FixedCommandModule implements CommandModule {
                 if (args.length == 5) {
                     StringUtil.copyPartialMatches(args[4], PermissionManager.getEffectNamesUserHasPermissionFor(p), matches);
                 } else if (args.length == 6) {
-                    StringUtil.copyPartialMatches(args[5], PermissionManager.getStyleNamesUserHasPermissionFor(p), matches);
+                    StringUtil.copyPartialMatches(args[5], PermissionManager.getFixableStyleNamesUserHasPermissionFor(p), matches);
                 } else if (args.length >= 7) {
                     ParticleEffect effect = ParticleEffect.fromName(args[4]);
                     if (effect != null) {
@@ -721,7 +721,7 @@ public class FixedCommandModule implements CommandModule {
                     } else if (property.equals("effect") && args.length == 4) {
                         StringUtil.copyPartialMatches(args[3], PermissionManager.getEffectNamesUserHasPermissionFor(p), matches);
                     } else if (property.equals("style") && args.length == 4) {
-                        StringUtil.copyPartialMatches(args[3], PermissionManager.getStyleNamesUserHasPermissionFor(p), matches);
+                        StringUtil.copyPartialMatches(args[3], PermissionManager.getFixableStyleNamesUserHasPermissionFor(p), matches);
                     } else if (property.equals("data")) {
                         int id = -1;
                         try {

@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.esophose.playerparticles</groupId>
   <artifactId>PlayerParticles</artifactId>
-  <version>6.2</version>
+  <version>6.3</version>
   <name>PlayerParticles</name>
   <url>https://github.com/Esophose/PlayerParticles</url>
   <description>Display particles around your player using customized styles and data!</description>
@@ -173,6 +173,10 @@
     <repository>
       <id>spigot-repo</id>
       <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+    </repository>
+    <repository>
+      <id>CodeMC</id>
+      <url>https://repo.codemc.org/repository/maven-public</url>
     </repository>
   </repositories>
   <dependencies>

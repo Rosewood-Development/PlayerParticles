@@ -29,9 +29,9 @@ public class ParticleStyleSwords implements ParticleStyle, Listener {
     }
 
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
-        List<PParticle> baseParticles = DefaultStyles.THICK.getParticles(particle, location);
+        List<PParticle> baseParticles = DefaultStyles.NORMAL.getParticles(particle, location);
 
-        int multiplyingFactor = 3; // Uses the same logic as ParticleStyleThick except multiplies the resulting particles by 3x
+        int multiplyingFactor = 15; // Uses the same logic as ParticleStyleNormal except multiplies the resulting particles by 3x
         List<PParticle> particles = new ArrayList<PParticle>();
         for (int i = 0; i < baseParticles.size() * multiplyingFactor; i++) {
             particles.add(baseParticles.get(i % baseParticles.size()));

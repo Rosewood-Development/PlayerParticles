@@ -311,7 +311,7 @@ public class EditCommandModule implements CommandModule {
     }
 
     public String getArguments() {
-        return "<id> <effect>|<style>|<data> <args>";
+        return "<ID> <effect>|<style>|<data> <args>";
     }
 
     public boolean requiresEffects() {

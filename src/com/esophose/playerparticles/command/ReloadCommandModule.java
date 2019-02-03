@@ -13,8 +13,9 @@ public class ReloadCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         if (PermissionManager.canReloadPlugin(pplayer.getPlayer())) {
-            ((PlayerParticles)PlayerParticles.getPlugin()).reload(false);
+            PlayerParticles.getPlugin().reload(false);
             LangManager.sendMessage(pplayer, Lang.RELOAD_SUCCESS);
+            PlayerParticles.getPlugin().getLogger().info("Reloaded configuration.");
         } else {
             LangManager.sendMessage(pplayer, Lang.RELOAD_NO_PERMISSION);
         }

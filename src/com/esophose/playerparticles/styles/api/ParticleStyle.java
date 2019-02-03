@@ -53,12 +53,13 @@ public interface ParticleStyle {
     /**
      * Gets the ParticleStyle with the name given, returns null if not found
      * 
-     * @param styleName The string of the style to search for
-     * @return The ParticleStyle with the name requested
+     * @param styleName The name of the style to search for
+     * @return The ParticleStyle with a matching name
      */
     public static ParticleStyle fromName(String styleName) {
         for (ParticleStyle style : ParticleStyleManager.getStyles())
-            if (style.getName().equals(styleName)) return style;
+            if (style.getName().equalsIgnoreCase(styleName)) 
+                return style;
         return null;
     }
 
