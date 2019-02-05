@@ -374,9 +374,11 @@ public class LangManager {
         langFileName = PSetting.LANG_FILE.getString();
         File targetLangFile = new File(pluginDataFolder.getAbsolutePath() + "/lang/" + langFileName);
         
+        // TODO: Move this somewhere else
         Set<String> defaultLangFileNames = new HashSet<String>();
         defaultLangFileNames.add("en_US.lang");
         defaultLangFileNames.add("fr_FR.lang");
+        defaultLangFileNames.add("vi_VN.lang");
         
         targetLangFile.getParentFile().mkdir(); // Make sure the directory always exists
         

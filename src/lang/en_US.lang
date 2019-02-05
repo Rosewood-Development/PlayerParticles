@@ -8,6 +8,7 @@
 # * PLEASE MAKE YOUR OWN .lang FILE IF YOU WANT CUSTOM MESSAGES!   #
 # * This file will be overridden almost every plugin update!       #
 # ================================================================ #
+# Translator: Esophose
 
 # Command Errors
 command-error-no-effects: "&cYou must have access to effects to use this command!"
