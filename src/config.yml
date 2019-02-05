@@ -13,7 +13,7 @@
 # This value is the version of the plugin that last modified the config file
 # Changing this value manually will likely result in data loss and errors!
 # Do not change this manually unless specifically told to by the plugin author
-version: 6.3
+version: 6.4
 
 # Check for new versions of the plugin
 # Default: true
@@ -45,6 +45,15 @@ message-prefix: '&7[&3PlayerParticles&7]'
 # Disable this if you have your own custom GUI through another plugin
 # Default: true
 gui-enabled: true
+
+# If true, only the preset groups will be available in the GUI
+# Permissions to open the GUI will change to only open if the user has any preset groups available
+# Default: false
+gui-presets-only: false
+
+# If true, the GUI will close after selecting a group (either saved or preset)
+# Default: true
+gui-close-after-group-selected: true
 
 # If clicking a GUI button should make a noise
 # Default: true

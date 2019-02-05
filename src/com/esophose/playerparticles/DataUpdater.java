@@ -39,7 +39,7 @@ public class DataUpdater {
             updateFrom_legacy_to_current();
         } else if (configVersion == 5.3) {
             updateFrom_5_3_to_current();
-        } else if (configVersion == 6.0) {
+        } else {
             PlayerParticles.getPlugin().getLogger().warning("Found nothing to update.");
         }
         

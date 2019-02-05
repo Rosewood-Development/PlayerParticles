@@ -112,10 +112,15 @@ public class GuiHandler extends BukkitRunnable implements Listener {
     public static void openDefault(PPlayer pplayer) {
         removeGuiInventory(pplayer);
         
-        GuiInventoryDefault defaultInventory = new GuiInventoryDefault(pplayer);
-        guiInventories.add(defaultInventory);
-
-        pplayer.getPlayer().openInventory(defaultInventory.getInventory());
+        GuiInventory inventoryToOpen;
+        if (!PSetting.GUI_PRESETS_ONLY.getBoolean()) {
+            inventoryToOpen = new GuiInventoryDefault(pplayer);
+        } else {
+            inventoryToOpen = new GuiInventoryLoadPresetGroups(pplayer, true);
+        }
+        
+        guiInventories.add(inventoryToOpen);
+        pplayer.getPlayer().openInventory(inventoryToOpen.getInventory());
     }
     
     /**

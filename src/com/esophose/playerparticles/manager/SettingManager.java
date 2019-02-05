@@ -32,7 +32,10 @@ public class SettingManager {
         TICKS_PER_PARTICLE(PSettingType.LONG),
         CHECK_UPDATES(PSettingType.BOOLEAN),
         SEND_METRICS(PSettingType.BOOLEAN),
+        
         GUI_ENABLED(PSettingType.BOOLEAN),
+        GUI_PRESETS_ONLY(PSettingType.BOOLEAN),
+        GUI_CLOSE_AFTER_GROUP_SELECTED(PSettingType.BOOLEAN),
         GUI_BUTTON_SOUND(PSettingType.BOOLEAN),
         
         TOGGLE_ON_MOVE(PSettingType.BOOLEAN),

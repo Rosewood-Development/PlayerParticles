@@ -101,7 +101,7 @@ public class GuiInventoryDefault extends GuiInventory {
                                                                    LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_LOAD_A_PRESET_GROUP), 
                                                                    new String[] { LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_LOAD_A_PRESET_GROUP_DESCRIPTION) }, 
                                                                    (button, isShiftClick) -> {
-                                                                       GuiHandler.transition(new GuiInventoryLoadPresetGroups(pplayer));
+                                                                       GuiHandler.transition(new GuiInventoryLoadPresetGroups(pplayer, false));
                                                                    });
             this.actionButtons.add(loadPresetGroups);
         }

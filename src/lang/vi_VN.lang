@@ -95,8 +95,8 @@ group-list-output: "&eBạn đã lưu các Group sau: &b{0}"
 group-list-presets: "&eCác preset group có sẵn: &b{0}"
 
 # Reload Command
-reload-success: "&aCác plugin đã được tải lại!"
-reload-no-permission: "&cBạn không có quyền tải lại các cài đặt plugin!"
+reload-success: "&aĐã tải lại plugins!"
+reload-no-permission: "&cBạn không có quyền để tải lại plugins!"
 
 # Remove Command
 remove-no-args: "&cBạn không chỉ định IDs để xóa! &b/pp remove <ID>"

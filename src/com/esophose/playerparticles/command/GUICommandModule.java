@@ -6,6 +6,8 @@ import java.util.List;
 import com.esophose.playerparticles.gui.GuiHandler;
 import com.esophose.playerparticles.manager.LangManager;
 import com.esophose.playerparticles.manager.LangManager.Lang;
+import com.esophose.playerparticles.manager.ParticleGroupPresetManager;
+import com.esophose.playerparticles.manager.SettingManager.PSetting;
 import com.esophose.playerparticles.manager.PermissionManager;
 import com.esophose.playerparticles.particles.PPlayer;
 
@@ -25,8 +27,10 @@ public class GUICommandModule implements CommandModule {
             }
             return;
         }
-
-        if (PermissionManager.getEffectNamesUserHasPermissionFor(pplayer.getPlayer()).isEmpty()) {
+        
+        if (PSetting.GUI_PRESETS_ONLY.getBoolean() && ParticleGroupPresetManager.getPresetGroupsForPlayer(pplayer.getPlayer()).isEmpty()) {
+            return;
+        } else if (PermissionManager.getEffectNamesUserHasPermissionFor(pplayer.getPlayer()).isEmpty()) {
             if (byDefault) {
                 LangManager.sendMessage(pplayer, Lang.COMMAND_ERROR_UNKNOWN);
             } else {

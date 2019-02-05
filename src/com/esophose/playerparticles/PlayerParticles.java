@@ -1,10 +1,14 @@
 /*
- * TODO: v6.4+
- * + Add new style(s) 'wings_<type>', multiple new wing types: fairy, demon
+ * TODO: v6.4
  * + Add ability to create/manage fixed effects from the GUI
  * * Convert fixed effect ids into names
  * + Add command '/pp fixed teleport <id>' that requires the permission playerparticles.fixed.teleport
  * + Add named colors to the color data
+ * * Clean up duplicated command parsing
+ */
+
+/*
+ * TODO: v6.5
  * + Add effect/style name customization through config files
  * + Add effect/style settings folder that lets you disable effects/style and edit style properties
  */

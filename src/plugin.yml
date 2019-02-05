@@ -1,6 +1,6 @@
 name: PlayerParticles
 main: com.esophose.playerparticles.PlayerParticles
-version: 6.3
+version: 6.4
 api-version: 1.13
 description: Display particles around your player using customized styles and data!
 author: Esophose

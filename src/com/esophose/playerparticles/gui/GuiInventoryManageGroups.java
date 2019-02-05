@@ -13,6 +13,7 @@ import com.esophose.playerparticles.manager.LangManager;
 import com.esophose.playerparticles.manager.PermissionManager;
 import com.esophose.playerparticles.manager.LangManager.Lang;
 import com.esophose.playerparticles.manager.SettingManager.GuiIcon;
+import com.esophose.playerparticles.manager.SettingManager.PSetting;
 import com.esophose.playerparticles.particles.PPlayer;
 import com.esophose.playerparticles.particles.ParticleGroup;
 import com.esophose.playerparticles.particles.ParticlePair;
@@ -60,7 +61,9 @@ public class GuiInventoryManageGroups extends GuiInventory {
                         activeGroup.getParticles().add(particle.clone());
                     DataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
                     
-                    pplayer.getPlayer().closeInventory();
+                    if (PSetting.GUI_CLOSE_AFTER_GROUP_SELECTED.getBoolean()) {
+                        pplayer.getPlayer().closeInventory();
+                    }
                 }
             });
             this.actionButtons.add(groupButton);

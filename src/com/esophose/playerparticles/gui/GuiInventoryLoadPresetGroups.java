@@ -10,6 +10,7 @@ import com.esophose.playerparticles.manager.LangManager;
 import com.esophose.playerparticles.manager.LangManager.Lang;
 import com.esophose.playerparticles.manager.ParticleGroupPresetManager;
 import com.esophose.playerparticles.manager.SettingManager.GuiIcon;
+import com.esophose.playerparticles.manager.SettingManager.PSetting;
 import com.esophose.playerparticles.particles.PPlayer;
 import com.esophose.playerparticles.particles.ParticleGroup;
 import com.esophose.playerparticles.particles.ParticleGroupPreset;
@@ -18,7 +19,7 @@ import com.esophose.playerparticles.util.ParticleUtils;
 
 public class GuiInventoryLoadPresetGroups extends GuiInventory {
 
-    public GuiInventoryLoadPresetGroups(PPlayer pplayer) {
+    public GuiInventoryLoadPresetGroups(PPlayer pplayer, boolean isEndPoint) {
         super(pplayer, Bukkit.createInventory(pplayer.getPlayer(), INVENTORY_SIZE, LangManager.getText(Lang.GUI_LOAD_A_PRESET_GROUP)));
         
         this.fillBorder(BorderColor.GREEN);
@@ -47,7 +48,9 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
                     activeGroup.getParticles().add(particle.clone());
                 DataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
                 
-                pplayer.getPlayer().closeInventory();
+                if (PSetting.GUI_CLOSE_AFTER_GROUP_SELECTED.getBoolean()) {
+                    pplayer.getPlayer().closeInventory();
+                }
             });
             this.actionButtons.add(groupButton);
             
@@ -59,11 +62,24 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
             if (index > maxIndex) break; // Overflowed the available space
         }
         
-        // Back Button
-        GuiActionButton backButton = new GuiActionButton(INVENTORY_SIZE - 1, GuiIcon.BACK.get(), LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_BACK_BUTTON), new String[] {}, (button, isShiftClick) -> {
-            GuiHandler.transition(new GuiInventoryDefault(pplayer));
-        });
-        this.actionButtons.add(backButton);
+        if (!isEndPoint) {
+            // Back Button
+            GuiActionButton backButton = new GuiActionButton(INVENTORY_SIZE - 1, GuiIcon.BACK.get(), LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_BACK_BUTTON), new String[] {}, (button, isShiftClick) -> {
+                GuiHandler.transition(new GuiInventoryDefault(pplayer));
+            });
+            this.actionButtons.add(backButton);
+        } else {
+            // Reset Particles Button
+            GuiActionButton resetParticles = new GuiActionButton(49,
+                                                                 GuiIcon.RESET.get(),
+                                                                 LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_RESET_PARTICLES),
+                                                                 new String[] { LangManager.getText(Lang.GUI_COLOR_UNAVAILABLE) + LangManager.getText(Lang.GUI_RESET_PARTICLES_DESCRIPTION) },
+                                                                 (button, isShiftClick) -> {
+                                                                     // Reset particles
+                                                                     DataManager.saveParticleGroup(pplayer.getUniqueId(), ParticleGroup.getDefaultGroup());
+                                                                 });
+            this.actionButtons.add(resetParticles);
+        }
         
         this.populate();
     }
