@@ -37,7 +37,7 @@ public class PermissionManager {
         
         private final String permissionString;
         
-        private PPermission(String permissionString) {
+        PPermission(String permissionString) {
             this.permissionString = permissionString;
         }
         
@@ -149,13 +149,13 @@ public class PermissionManager {
     }
 
     /**
-     * Checks if a world is disabled for particles to spawn in
+     * Checks if a world is enabled for particles to spawn in
      * 
      * @param world The world name to check
      * @return True if the world is disabled
      */
-    public static boolean isWorldDisabled(String world) {
-        return getDisabledWorlds().contains(world);
+    public static boolean isWorldEnabled(String world) {
+        return !getDisabledWorlds().contains(world);
     }
 
     /**
@@ -200,7 +200,7 @@ public class PermissionManager {
      * @return A String List of all effect names the given player has permission for
      */
     public static List<String> getEffectNamesUserHasPermissionFor(Player p) {
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         for (ParticleEffect pe : ParticleEffect.getSupportedEffects())
             if (hasEffectPermission(p, pe)) 
                 list.add(pe.getName());
@@ -214,7 +214,7 @@ public class PermissionManager {
      * @return A String List of all style names the given player has permission for
      */
     public static List<String> getStyleNamesUserHasPermissionFor(Player p) {
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         for (ParticleStyle ps : ParticleStyleManager.getStyles())
             if (hasStylePermission(p, ps)) 
                 list.add(ps.getName());
@@ -228,7 +228,7 @@ public class PermissionManager {
      * @return A String List of all fixable style names the given player has permission for
      */
     public static List<String> getFixableStyleNamesUserHasPermissionFor(Player p) {
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         for (ParticleStyle ps : ParticleStyleManager.getStyles())
             if (ps.canBeFixed() && hasStylePermission(p, ps)) 
                 list.add(ps.getName());
@@ -242,7 +242,7 @@ public class PermissionManager {
      * @return A List of all effects the given player has permission for
      */
     public static List<ParticleEffect> getEffectsUserHasPermissionFor(Player p) {
-        List<ParticleEffect> list = new ArrayList<ParticleEffect>();
+        List<ParticleEffect> list = new ArrayList<>();
         for (ParticleEffect pe : ParticleEffect.getSupportedEffects())
             if (hasEffectPermission(p, pe)) 
                 list.add(pe);
@@ -256,7 +256,7 @@ public class PermissionManager {
      * @return A List of all styles the given player has permission for
      */
     public static List<ParticleStyle> getStylesUserHasPermissionFor(Player p) {
-        List<ParticleStyle> list = new ArrayList<ParticleStyle>();
+        List<ParticleStyle> list = new ArrayList<>();
         for (ParticleStyle ps : ParticleStyleManager.getStyles())
             if (hasStylePermission(p, ps)) 
                 list.add(ps);

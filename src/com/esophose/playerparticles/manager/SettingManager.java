@@ -32,7 +32,10 @@ public class SettingManager {
         TICKS_PER_PARTICLE(PSettingType.LONG),
         CHECK_UPDATES(PSettingType.BOOLEAN),
         SEND_METRICS(PSettingType.BOOLEAN),
+        
         GUI_ENABLED(PSettingType.BOOLEAN),
+        GUI_PRESETS_ONLY(PSettingType.BOOLEAN),
+        GUI_CLOSE_AFTER_GROUP_SELECTED(PSettingType.BOOLEAN),
         GUI_BUTTON_SOUND(PSettingType.BOOLEAN),
         
         TOGGLE_ON_MOVE(PSettingType.BOOLEAN),
@@ -51,6 +54,7 @@ public class SettingManager {
         DATABASE_NAME(PSettingType.STRING),
         DATABASE_USER_NAME(PSettingType.STRING),
         DATABASE_USER_PASSWORD(PSettingType.STRING),
+        DATABASE_USE_SSL(PSettingType.BOOLEAN),
         
         MAX_FIXED_EFFECTS(PSettingType.INTEGER),
         MAX_FIXED_EFFECT_CREATION_DISTANCE(PSettingType.INTEGER),
@@ -68,7 +72,7 @@ public class SettingManager {
         private final PSettingType settingType;
         private Object value = null;
         
-        private PSetting(PSettingType settingType) {
+        PSetting(PSettingType settingType) {
             this.settingType = settingType;
         }
         
@@ -184,11 +188,12 @@ public class SettingManager {
         GROUPS,
         PRESET_GROUPS,
         BACK,
+        NEXT_PAGE,
+        PREVIOUS_PAGE,
         CREATE,
         EDIT_EFFECT,
         EDIT_STYLE,
         EDIT_DATA,
-        RANDOMIZE,
         RESET,
         
         EFFECT,
@@ -196,8 +201,8 @@ public class SettingManager {
         
         private Map<String, Material> materials;
         
-        private GuiIcon() {
-            this.materials = new HashMap<String, Material>();
+        GuiIcon() {
+            this.materials = new HashMap<>();
         }
         
         /**
@@ -261,7 +266,7 @@ public class SettingManager {
          * Resets the setting's value so it will be fetched from the config the next time it's needed
          */
         private void resetDefault() {
-            this.materials = new HashMap<String, Material>();
+            this.materials = new HashMap<>();
         }
     }
 

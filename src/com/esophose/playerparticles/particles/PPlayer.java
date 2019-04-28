@@ -168,7 +168,7 @@ public class PPlayer {
      * @return A List of ParticlePairs with a matching style
      */
     public List<ParticlePair> getActiveParticlesForStyle(ParticleStyle style) {
-        List<ParticlePair> matches = new ArrayList<ParticlePair>();
+        List<ParticlePair> matches = new ArrayList<>();
         for (ParticlePair pair : this.getActiveParticles())
             if (pair.getStyle().equals(style)) 
                 matches.add(pair);
@@ -216,7 +216,7 @@ public class PPlayer {
      * @return A List of Integer ids this player's fixed effects have
      */
     public List<Integer> getFixedEffectIds() {
-        List<Integer> ids = new ArrayList<Integer>();
+        List<Integer> ids = new ArrayList<>();
         for (FixedParticleEffect fixedEffect : this.fixedParticles)
             ids.add(fixedEffect.getId());
         return ids;

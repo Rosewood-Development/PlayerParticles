@@ -67,7 +67,7 @@ public class AddCommandModule implements CommandModule {
                     } else if (args[2].equalsIgnoreCase("random")) {
                         noteColorData = new NoteColor(98);
                     } else {
-                        int note = -1;
+                        int note;
                         try {
                             note = Integer.parseInt(args[2]);
                         } catch (Exception e) {
@@ -88,9 +88,7 @@ public class AddCommandModule implements CommandModule {
                     } else if (args[2].equalsIgnoreCase("random")) {
                         colorData = new OrdinaryColor(998, 998, 998);
                     } else {
-                        int r = -1;
-                        int g = -1;
-                        int b = -1;
+                        int r, g, b;
 
                         try {
                             r = Integer.parseInt(args[2]);
@@ -131,7 +129,7 @@ public class AddCommandModule implements CommandModule {
         }
         
         ParticleGroup group = pplayer.getActiveParticleGroup();
-        ParticlePair newParticle = new ParticlePair(pplayer.getUniqueId(), pplayer.getNextActiveParticleId(), effect, style, blockData, blockData, colorData, noteColorData);
+        ParticlePair newParticle = new ParticlePair(pplayer.getUniqueId(), pplayer.getNextActiveParticleId(), effect, style, itemData, blockData, colorData, noteColorData);
         group.getParticles().add(newParticle);
         DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
         
@@ -144,18 +142,18 @@ public class AddCommandModule implements CommandModule {
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
         Player p = pplayer.getPlayer();
-        List<String> matches = new ArrayList<String>();
+        List<String> matches = new ArrayList<>();
 
         if (args.length <= 1) { // Effect name
             if (args.length == 0) matches = PermissionManager.getEffectNamesUserHasPermissionFor(p);
             else StringUtil.copyPartialMatches(args[0], PermissionManager.getEffectNamesUserHasPermissionFor(p), matches);
         } else if (args.length == 2) { // Style name
             StringUtil.copyPartialMatches(args[1], PermissionManager.getStyleNamesUserHasPermissionFor(p), matches);
-        } else if (args.length >= 3) { // Data
+        } else { // Data
             ParticleEffect effect = ParticleEffect.fromName(args[0]);
             if (effect != null) {
                 if (effect.hasProperty(ParticleProperty.COLORABLE)) {
-                    List<String> possibleValues = new ArrayList<String>();
+                    List<String> possibleValues = new ArrayList<>();
                     if (effect == ParticleEffect.NOTE) { // Note data
                         if (args.length == 3) {
                             possibleValues.add("<0-24>");
@@ -178,9 +176,9 @@ public class AddCommandModule implements CommandModule {
                     StringUtil.copyPartialMatches(args[args.length - 1], possibleValues, matches);
                 } else if (args.length == 3 && effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
                     if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST) { // Block material
-                        matches = StringUtil.copyPartialMatches(args[2], ParticleUtils.getAllBlockMaterials(), matches);
+                        StringUtil.copyPartialMatches(args[2], ParticleUtils.getAllBlockMaterials(), matches);
                     } else if (effect == ParticleEffect.ITEM) { // Item material
-                        matches = StringUtil.copyPartialMatches(args[2], ParticleUtils.getAllItemMaterials(), matches);
+                        StringUtil.copyPartialMatches(args[2], ParticleUtils.getAllItemMaterials(), matches);
                     }
                 }
             }

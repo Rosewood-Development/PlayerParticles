@@ -280,7 +280,7 @@ public class ParticlePair {
                                 -1, 
                                 ParticleEffect.FLAME, 
                                 DefaultStyles.NORMAL, 
-                                ParticleUtils.closestMatchWithFallback("IRON_SHOVEL", "IRON_SPADE"), 
+                                ParticleUtils.closestMatchWithFallback(true, "IRON_SHOVEL", "IRON_SPADE"), 
                                 Material.STONE, 
                                 new OrdinaryColor(0, 0, 0), 
                                 new NoteColor(0)); // @formatter:on
@@ -297,7 +297,7 @@ public class ParticlePair {
                                 pplayer.getNextActiveParticleId(), 
     							ParticleEffect.FLAME, 
     							DefaultStyles.NORMAL, 
-    							ParticleUtils.closestMatchWithFallback("IRON_SHOVEL", "IRON_SPADE"), 
+    							ParticleUtils.closestMatchWithFallback(true, "IRON_SHOVEL", "IRON_SPADE"), 
     							Material.STONE, 
     							new OrdinaryColor(0, 0, 0), 
     							new NoteColor(0)); // @formatter:on

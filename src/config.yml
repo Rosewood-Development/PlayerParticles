@@ -13,7 +13,7 @@
 # This value is the version of the plugin that last modified the config file
 # Changing this value manually will likely result in data loss and errors!
 # Do not change this manually unless specifically told to by the plugin author
-version: 6.3
+version: 6.4
 
 # Check for new versions of the plugin
 # Default: true
@@ -45,6 +45,15 @@ message-prefix: '&7[&3PlayerParticles&7]'
 # Disable this if you have your own custom GUI through another plugin
 # Default: true
 gui-enabled: true
+
+# If true, only the preset groups will be available in the GUI
+# Permissions to open the GUI will change to only open if the user has any preset groups available
+# Default: false
+gui-presets-only: false
+
+# If true, the GUI will close after selecting a group (either saved or preset)
+# Default: true
+gui-close-after-group-selected: true
 
 # If clicking a GUI button should make a noise
 # Default: true
@@ -148,6 +157,11 @@ database-user-name: ''
 # Default: ''
 database-user-password: ''
 
+# If the database connection should use SSL
+# You should enable this if your database supports SSL
+# Default: false
+database-use-ssl: false
+
 # =================================================================== #
 #                        GUI ICON SETTINGS                            #
 # This configuration option allows you to change any of the GUI       #
@@ -173,6 +187,10 @@ gui-icon:
       - ENDER_CHEST
     back:
       - ARROW
+    next_page:
+      - PAPER
+    previous_page:
+      - PAPER
     create:
       - WRITABLE_BOOK
       - BOOK_AND_QUILL
@@ -183,8 +201,6 @@ gui-icon:
       - NETHER_STAR
     edit_data:
       - BOOK
-    randomize:
-      - HOPPER
     reset:
       - BARRIER
   effect:
@@ -203,9 +219,15 @@ gui-icon:
       - MAGMA_BLOCK
     bubble_pop:
       - BUBBLE_CORAL_FAN
+    campfire_cosy_smoke:
+      - CAMPFIRE
+    campfire_signal_smoke:
+      - REDSTONE_TORCH
     cloud:
       - WHITE_WOOL
       - WOOL
+    composter:
+      - COMPOSTER
     crit:
       - IRON_SWORD
     current_down:
@@ -239,6 +261,10 @@ gui-icon:
       - TNT
     falling_dust:
       - SAND
+    falling_lava:
+      - RED_DYE
+    falling_water:
+      - BLUE_DYE
     firework:
       - FIREWORK_ROCKET
       - FIREWORK
@@ -266,6 +292,8 @@ gui-icon:
     large_smoke:
       - COBWEB
       - WEB
+    landing_lava:
+      - ORANGE_DYE
     lava:
       - MAGMA_CREAM
     mycelium:
@@ -285,6 +313,8 @@ gui-icon:
       - LAPIS_BLOCK
     smoke:
       - TORCH
+    sneeze:
+      - BAMBOO
     spell:
       - POTION
       - GLASS_BOTTLE

@@ -16,20 +16,20 @@ public class StylesCommandModule implements CommandModule {
         Player p = pplayer.getPlayer();
 
         List<String> styleNames = PermissionManager.getStyleNamesUserHasPermissionFor(p);
-        String toSend = "";
+        StringBuilder toSend = new StringBuilder();
         for (String name : styleNames) {
-            toSend += name + ", ";
+            toSend.append(name).append(", ");
         }
         
-        if (toSend.endsWith(", ")) {
-            toSend = toSend.substring(0, toSend.length() - 2);
+        if (toSend.toString().endsWith(", ")) {
+            toSend = new StringBuilder(toSend.substring(0, toSend.length() - 2));
         }
 
-        LangManager.sendMessage(pplayer, Lang.STYLE_LIST, toSend);
+        LangManager.sendMessage(pplayer, Lang.STYLE_LIST, toSend.toString());
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
-        return new ArrayList<String>();
+        return new ArrayList<>();
     }
 
     public String getName() {

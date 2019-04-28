@@ -16,17 +16,17 @@ public class WorldsCommandModule implements CommandModule {
             return;
         }
 
-        String worlds = "";
+        StringBuilder worlds = new StringBuilder();
         for (String s : PermissionManager.getDisabledWorlds()) {
-            worlds += s + ", ";
+            worlds.append(s).append(", ");
         }
-        if (worlds.length() > 2) worlds = worlds.substring(0, worlds.length() - 2);
+        if (worlds.length() > 2) worlds = new StringBuilder(worlds.substring(0, worlds.length() - 2));
 
         LangManager.sendCustomMessage(pplayer, LangManager.getText(Lang.DISABLED_WORLDS) + " " + worlds);
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
-        return new ArrayList<String>();
+        return new ArrayList<>();
     }
 
     public String getName() {

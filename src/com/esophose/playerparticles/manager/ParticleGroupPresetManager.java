@@ -42,7 +42,7 @@ public class ParticleGroupPresetManager {
      * Loads the preset groups from the preset_groups.yml file
      */
     public static void reload() {
-        presetGroups = new ArrayList<ParticleGroupPreset>();
+        presetGroups = new ArrayList<>();
         
         File pluginDataFolder = PlayerParticles.getPlugin().getDataFolder();
         File groupsFile = new File(pluginDataFolder.getAbsolutePath() + File.separator + FILE_NAME);
@@ -61,7 +61,7 @@ public class ParticleGroupPresetManager {
         Set<String> groupNames = groupsYaml.getKeys(false);
         for (String groupName : groupNames) {
             try {
-                List<ParticlePair> particles = new ArrayList<ParticlePair>();
+                List<ParticlePair> particles = new ArrayList<>();
                 String displayName = "";
                 Material guiIcon = Material.ENDER_CHEST;
                 String permission = "";
@@ -120,7 +120,7 @@ public class ParticleGroupPresetManager {
                                 if (args[0].equalsIgnoreCase("rainbow")) {
                                     noteColorData = new NoteColor(99);
                                 } else {
-                                    int note = -1;
+                                    int note;
                                     try {
                                         note = Integer.parseInt(args[0]);
                                     } catch (Exception e) {
@@ -139,9 +139,7 @@ public class ParticleGroupPresetManager {
                                 if (args[0].equalsIgnoreCase("rainbow")) {
                                     colorData = new OrdinaryColor(999, 999, 999);
                                 } else {
-                                    int r = -1;
-                                    int g = -1;
-                                    int b = -1;
+                                    int r, g, b;
 
                                     try {
                                         r = Integer.parseInt(args[0]);
@@ -181,7 +179,7 @@ public class ParticleGroupPresetManager {
                         }
                     }
                     
-                    particles.add(new ParticlePair(null, id, effect, style, blockData, blockData, colorData, noteColorData));
+                    particles.add(new ParticlePair(null, id, effect, style, itemData, blockData, colorData, noteColorData));
                 }
                 
                 presetGroups.add(new ParticleGroupPreset(displayName, guiIcon, permission, allowPermissionOverride, new ParticleGroup(groupName, particles)));

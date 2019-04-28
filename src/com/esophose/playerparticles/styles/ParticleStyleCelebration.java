@@ -41,13 +41,13 @@ public class ParticleStyleCelebration implements ParticleStyle {
             Random random = new Random();
             for (PPlayer pplayer : ParticleManager.getPPlayers()) {
                 Player player = pplayer.getPlayer();
-                if (player != null && player.getGameMode() != GameMode.SPECTATOR && !PermissionManager.isWorldDisabled(player.getWorld().getName()))
+                if (player != null && player.getGameMode() != GameMode.SPECTATOR && PermissionManager.isWorldEnabled(player.getWorld().getName()))
                     for (ParticlePair particle : pplayer.getActiveParticles())
                         if (particle.getStyle() == this) 
                             spawnFirework(player.getLocation(), pplayer, particle, random);
                 
                 for (FixedParticleEffect fixedEffect : pplayer.getFixedParticles())
-                    if (fixedEffect.getParticlePair().getStyle() == this && !PermissionManager.isWorldDisabled(fixedEffect.getLocation().getWorld().getName()))
+                    if (fixedEffect.getParticlePair().getStyle() == this && PermissionManager.isWorldEnabled(fixedEffect.getLocation().getWorld().getName()))
                         spawnFirework(fixedEffect.getLocation(), pplayer, fixedEffect.getParticlePair(), random);
             }
         }

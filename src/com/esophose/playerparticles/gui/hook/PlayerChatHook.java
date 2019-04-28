@@ -3,6 +3,7 @@ package com.esophose.playerparticles.gui.hook;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.esophose.playerparticles.util.NMSUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,12 +28,11 @@ public class PlayerChatHook extends BukkitRunnable implements Listener {
      * Initializes all the static values for this class
      */
     public static void setup() {
-        hooks = new HashSet<PlayerChatHookData>();
+        hooks = new HashSet<>();
         if (hookTask != null)
             hookTask.cancel();
         hookTask = new PlayerChatHook().runTaskTimer(PlayerParticles.getPlugin(), 0, 20);
     }
-    
     
     /**
      * Called when a player sends a message in chat
@@ -44,8 +44,8 @@ public class PlayerChatHook extends BukkitRunnable implements Listener {
         for (PlayerChatHookData hook : hooks) {
             if (hook.getPlayerUUID().equals(event.getPlayer().getUniqueId())) {
                 event.setCancelled(true);
-                hook.triggerCallback(event.getMessage());
                 hooks.remove(hook);
+                Bukkit.getScheduler().scheduleSyncDelayedTask(PlayerParticles.getPlugin(), () -> hook.triggerCallback(event.getMessage()));
                 return;
             }
         }
@@ -55,7 +55,7 @@ public class PlayerChatHook extends BukkitRunnable implements Listener {
      * Ticked every second to decrease the seconds remaining on each hook
      */
     public void run() {
-        Set<PlayerChatHookData> hooksToRemove = new HashSet<PlayerChatHookData>();
+        Set<PlayerChatHookData> hooksToRemove = new HashSet<>();
         
         for (PlayerChatHookData hook : hooks) {
             hook.decrementHookLength();
@@ -69,7 +69,12 @@ public class PlayerChatHook extends BukkitRunnable implements Listener {
             if (player == null) {
                 hooksToRemove.remove(hook);
             } else {
-                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(LangManager.getText(Lang.GUI_SAVE_GROUP_HOTBAR_MESSAGE, hook.getTimeRemaining())));
+                if (NMSUtil.getVersionNumber() == 9) {
+                    if (hook.getMaxHookLength() == hook.getTimeRemaining())
+                        player.sendMessage(LangManager.getText(Lang.GUI_SAVE_GROUP_HOTBAR_MESSAGE, hook.getTimeRemaining()));
+                } else {
+                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(LangManager.getText(Lang.GUI_SAVE_GROUP_HOTBAR_MESSAGE, hook.getTimeRemaining())));
+                }
             }
         }
         
@@ -84,7 +89,7 @@ public class PlayerChatHook extends BukkitRunnable implements Listener {
      */
     public static void addHook(PlayerChatHookData newHook) {
         for (PlayerChatHookData hook : hooks) {
-            if (hook.getPlayerUUID().equals(hook.getPlayerUUID())) {
+            if (hook.getPlayerUUID().equals(newHook.getPlayerUUID())) {
                 hooks.remove(hook);
                 break;
             }

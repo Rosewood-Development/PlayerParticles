@@ -22,7 +22,7 @@ public class LangManager {
     /**
      * Contains the location in the .lang file of every chat message
      */
-    public static enum Lang { // @formatter:off
+    public enum Lang { // @formatter:off
         
         // Command Errors
         COMMAND_ERROR_NO_EFFECTS,
@@ -92,6 +92,7 @@ public class LangManager {
         
         // Group Command
         GROUP_INVALID,
+        GROUP_NO_PERMISSION,
         GROUP_PRESET_NO_PERMISSION,
         GROUP_RESERVED,
         GROUP_NO_NAME,
@@ -231,6 +232,8 @@ public class LangManager {
         GUI_COLOR_UNAVAILABLE,
         GUI_COMMANDS_INFO,
         GUI_BACK_BUTTON,
+        GUI_NEXT_PAGE_BUTTON,
+        GUI_PREVIOUS_PAGE_BUTTON,
         GUI_CLICK_TO_LOAD,
         GUI_SHIFT_CLICK_TO_DELETE,
         GUI_PARTICLE_INFO,
@@ -281,10 +284,6 @@ public class LangManager {
         GUI_SELECT_DATA,
         GUI_SELECT_DATA_DESCRIPTION,
         GUI_SELECT_DATA_NOTE,
-        GUI_SELECT_DATA_RANDOMIZE_ITEMS,
-        GUI_SELECT_DATA_RANDOMIZE_ITEMS_DESCRIPTION,
-        GUI_SELECT_DATA_RANDOMIZE_BLOCKS,
-        GUI_SELECT_DATA_RANDOMIZE_BLOCKS_DESCRIPTION,
         GUI_EDIT_DATA_COLOR_RED,
         GUI_EDIT_DATA_COLOR_ORANGE,
         GUI_EDIT_DATA_COLOR_YELLOW,
@@ -375,7 +374,7 @@ public class LangManager {
         File targetLangFile = new File(pluginDataFolder.getAbsolutePath() + "/lang/" + langFileName);
         
         // TODO: Move this somewhere else
-        Set<String> defaultLangFileNames = new HashSet<String>();
+        Set<String> defaultLangFileNames = new HashSet<>();
         defaultLangFileNames.add("en_US.lang");
         defaultLangFileNames.add("fr_FR.lang");
         defaultLangFileNames.add("vi_VN.lang");

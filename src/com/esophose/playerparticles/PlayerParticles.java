@@ -1,10 +1,14 @@
 /*
- * TODO: v6.4+
- * + Add new style(s) 'wings_<type>', multiple new wing types: fairy, demon
+ * TODO: v6.4
  * + Add ability to create/manage fixed effects from the GUI
  * * Convert fixed effect ids into names
  * + Add command '/pp fixed teleport <id>' that requires the permission playerparticles.fixed.teleport
  * + Add named colors to the color data
+ * * Clean up duplicated command parsing
+ */
+
+/*
+ * TODO: v6.5
  * + Add effect/style name customization through config files
  * + Add effect/style settings folder that lets you disable effects/style and edit style properties
  */
@@ -34,6 +38,7 @@ import com.esophose.playerparticles.manager.SettingManager;
 import com.esophose.playerparticles.manager.SettingManager.PSetting;
 import com.esophose.playerparticles.particles.PPlayerMovementListener;
 import com.esophose.playerparticles.styles.DefaultStyles;
+import com.esophose.playerparticles.updater.DataUpdater;
 import com.esophose.playerparticles.updater.PluginUpdateListener;
 import com.esophose.playerparticles.updater.Updater;
 import com.esophose.playerparticles.util.Metrics;
@@ -65,7 +70,7 @@ public class PlayerParticles extends JavaPlugin {
      * Executes essential tasks for starting up the plugin
      */
     public void onEnable() {
-        pluginInstance = (PlayerParticles)Bukkit.getServer().getPluginManager().getPlugin("PlayerParticles");
+        pluginInstance = (PlayerParticles) Bukkit.getServer().getPluginManager().getPlugin("PlayerParticles");
         
         this.registerCommands();
 
@@ -76,23 +81,23 @@ public class PlayerParticles extends JavaPlugin {
         pm.registerEvents(new PPlayerMovementListener(), this);
         pm.registerEvents(new PlayerChatHook(), this);
 
-        saveDefaultConfig();
+        this.saveDefaultConfig();
         double configVersion = PSetting.VERSION.getDouble();
-        double currentVersion = Double.parseDouble(getDescription().getVersion());
+        double currentVersion = Double.parseDouble(this.getDescription().getVersion());
         boolean updatePluginSettings = configVersion < currentVersion;
         if (updatePluginSettings) {
-            configureDatabase(PSetting.DATABASE_ENABLE.getBoolean());
+            this.configureDatabase(PSetting.DATABASE_ENABLE.getBoolean());
             DataUpdater.updateData(configVersion, currentVersion);
-            databaseConnector.closeConnection();
-            databaseConnector = null;
+            this.databaseConnector.closeConnection();
+            this.databaseConnector = null;
             
-            File configFile = new File(getDataFolder(), "config.yml");
+            File configFile = new File(this.getDataFolder(), "config.yml");
             if (configFile.exists()) {
                 configFile.delete();
             }
-            saveDefaultConfig();
-            reloadConfig();
-            getLogger().warning("The config.yml has been updated to v" + getDescription().getVersion() + "!");
+            this.saveDefaultConfig();
+            this.reloadConfig();
+            this.getLogger().warning("The config.yml has been updated to v" + this.getDescription().getVersion() + "!");
         }
 
         if (PSetting.CHECK_UPDATES.getBoolean()) {
@@ -123,7 +128,7 @@ public class PlayerParticles extends JavaPlugin {
      * Close all users with an open PlayerParticles GUI
      */
     public void onDisable() {
-        databaseConnector.closeConnection();
+        this.databaseConnector.closeConnection();
         GuiHandler.forceCloseAllOpenGUIs();
     }
     
@@ -150,18 +155,18 @@ public class PlayerParticles extends JavaPlugin {
         this.reloadConfig();
         
         // If not null, plugin is already loaded
-        if (particleTask != null) {
-            particleTask.cancel();
-            particleTask = null;
-            databaseConnector.closeConnection();
-            databaseConnector = null;
+        if (this.particleTask != null) {
+            this.particleTask.cancel();
+            this.particleTask = null;
+            this.databaseConnector.closeConnection();
+            this.databaseConnector = null;
             GuiHandler.forceCloseAllOpenGUIs();
         } else {
             DefaultStyles.registerStyles(); // Only ever load styles once
         }
         
         // This runs before the SettingManager is reloaded, the credentials will not be stored in memory for more than a few milliseconds
-        configureDatabase(PSetting.DATABASE_ENABLE.getBoolean());
+        this.configureDatabase(PSetting.DATABASE_ENABLE.getBoolean());
         DataUpdater.tryCreateTables();
         
         SettingManager.reload();
@@ -172,7 +177,7 @@ public class PlayerParticles extends JavaPlugin {
         PlayerChatHook.setup();
         
         ParticleManager.refreshData();
-        startParticleTask();
+        this.startParticleTask();
     }
 
     /**
@@ -190,7 +195,7 @@ public class PlayerParticles extends JavaPlugin {
      * @return The DatabaseConnector
      */
     public DatabaseConnector getDBConnector() {
-        return databaseConnector;
+        return this.databaseConnector;
     }
     
     /**
@@ -210,20 +215,19 @@ public class PlayerParticles extends JavaPlugin {
      */
     private void configureDatabase(boolean useMySql) {
         if (useMySql) {
-            databaseConnector = new MySqlDatabaseConnector();
+            this.databaseConnector = new MySqlDatabaseConnector();
         } else {
             try {
                 Class.forName("org.sqlite.JDBC"); // This is required to put here for Spigot 1.9 and 1.10 for some reason
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
-            databaseConnector = new SqliteDatabaseConnector(this.getDataFolder().getAbsolutePath());
+            this.databaseConnector = new SqliteDatabaseConnector(this.getDataFolder().getAbsolutePath());
         }
 
-        if (!databaseConnector.isInitialized()) {
-            getLogger().severe("Unable to connect to the MySQL database! Is your login information correct? Falling back to SQLite database instead.");
-            configureDatabase(false);
-            return;
+        if (!this.databaseConnector.isInitialized()) {
+            this.getLogger().severe("Unable to connect to the MySQL database! Is your login information correct? Falling back to SQLite database instead.");
+            this.configureDatabase(false);
         }
     }
 
@@ -232,13 +236,10 @@ public class PlayerParticles extends JavaPlugin {
      * Run in the synchronous task so it starts after all plugins have loaded, including extensions
      */
     private void startParticleTask() {
-        final Plugin playerParticles = this;
-        new BukkitRunnable() {
-            public void run() {
-                long ticks = PSetting.TICKS_PER_PARTICLE.getLong();
-                particleTask = new ParticleManager().runTaskTimer(playerParticles, 5, ticks);
-            }
-        }.runTaskLater(playerParticles, 1);
+        Bukkit.getScheduler().runTaskLater(pluginInstance, () -> {
+            long ticks = PSetting.TICKS_PER_PARTICLE.getLong();
+            this.particleTask = new ParticleManager().runTaskTimer(pluginInstance, 5, ticks);
+        }, 1);
     }
 
 }

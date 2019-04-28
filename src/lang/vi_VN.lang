@@ -78,6 +78,7 @@ edit-success-data: "&aHạt hiệu ứng của bạn với ID &b{0} &ađã thanh
 
 # Group Command
 group-invalid: "&cMột Group đã lưu hoặc Preset Group không được tìm thấy với tên &b{0}&c!"
+group-no-permission: "&cBạn không có quyền for 1 effect, style để sử dụng nhóm sẵn &b{0}&c!"
 group-preset-no-permission: "&cBạn không có quyền for 1 effect, style để sử dụng nhóm cài sẵn &b{0}&c!"
 group-reserved: "&cGroup tên &bactive &ckhông thể được sử dụng!"
 group-no-name: "&cBạn đã không cung cấp tên group! &b/pp {0} <groupName>"
@@ -95,8 +96,8 @@ group-list-output: "&eBạn đã lưu các Group sau: &b{0}"
 group-list-presets: "&eCác preset group có sẵn: &b{0}"
 
 # Reload Command
-reload-success: "&aCác plugin đã được tải lại!"
-reload-no-permission: "&cBạn không có quyền tải lại các cài đặt plugin!"
+reload-success: "&aĐã tải lại plugins!"
+reload-no-permission: "&cBạn không có quyền để tải lại plugins!"
 
 # Remove Command
 remove-no-args: "&cBạn không chỉ định IDs để xóa! &b/pp remove <ID>"
@@ -217,6 +218,8 @@ gui-color-subtext: "&b"
 gui-color-unavailable: "&c"
 gui-commands-info: "Hiển thị thêm các lệnh bằng cách gõ &b/pp help"
 gui-back-button: "Quay trở về"
+gui-next-page-button: "Trang tiếp theo ({0}/{1})"
+gui-previous-page-button: "Trang trước ({0}/{1})"
 gui-click-to-load: "Nhấn để tải {0} Hạt hiệu ứng sau:"
 gui-shift-click-to-delete: "Shift Click để xóa"
 gui-particle-info: "  - ID: &b{0} &eEffect: &b{1} &eStyle: &b{2} &eData: &b{3}"
@@ -267,10 +270,6 @@ gui-select-style-description: "Thiết lập Kiểu hiệu ứng của Hạt th�
 gui-select-data: "Chọn Dữ liệu của Hạt"
 gui-select-data-description: "Thiết lập DỮ liệu của Hạt thành &b{0}"
 gui-select-data-note: "note #{0}"
-gui-select-data-randomize-items: "Vật phẩm ngẫu nhiên"
-gui-select-data-randomize-items-description: "Đã hiển thị vật phẩm ngẫu nhiên"
-gui-select-data-randomize-blocks: "Khối ngẫu nhiên"
-gui-select-data-randomize-blocks-description: "Đã hiển thị khối ngẫu nhiên"
 gui-edit-data-color-red: "&cĐỏ mạnh mẽ"
 gui-edit-data-color-orange: "&6Cam dịu dàng"
 gui-edit-data-color-yellow: "&eVàng yêu thương"
