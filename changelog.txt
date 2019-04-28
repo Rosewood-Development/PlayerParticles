@@ -2,7 +2,7 @@
 * Create a backup of your config.yml if you wish to import all your old settings!
 === v6.4 ===
 + Added support for Minecraft 1.14
-+ Added effects: 'campfire_cosy_smoke', 'campfire_signal_smoke', 'composter', 'falling_lava', 'falling_water', 'landing_lava'
++ Added 1.14 effects: 'campfire_cosy_smoke', 'campfire_signal_smoke', 'composter', 'falling_lava', 'falling_water', 'landing_lava', 'sneeze'
 + Added pages for effects, styles, and data in the GUI
 + Added setting 'gui-close-after-group-selected' to the config.yml
 + Added setting 'gui-presets-only' to the config.yml
@@ -12,6 +12,7 @@
 * Fixed '/pp add' item data parameter being ignored
 * Fixed an error with the GUI chat hook for creating a new group in 1.9
 * Fixed players being able to load saved groups they no longer have permission for
+* Fixed support for newline characters in GUI messages in some cases
 === v6.3 ===
 + Added the ability to remove particles by id/effect/style using '/pp remove <id>|<effect>|<style>'
 + Added new styles 'popper', 'pulse', 'twins', 'whirl', and 'whirlwind'

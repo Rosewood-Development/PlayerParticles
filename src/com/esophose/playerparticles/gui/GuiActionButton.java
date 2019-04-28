@@ -167,7 +167,7 @@ public class GuiActionButton {
             }
             
             // Split the lore along \n onto a new line if any exist
-            String[] splitLines = NMSUtil.getVersionNumber() > 13 ? line.split("\n") : line.split("\\\\n");
+            String[] splitLines = line.split("\n");
             for (String parsedLine : splitLines) {
                 if (ChatColor.stripColor(parsedLine).isEmpty()) continue;
                 parsedLore.add(lineColor + parsedLine);
