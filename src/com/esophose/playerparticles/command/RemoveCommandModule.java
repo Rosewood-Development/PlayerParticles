@@ -26,7 +26,7 @@ public class RemoveCommandModule implements CommandModule {
         }
         
         if (StringUtils.isNumeric(args[0])) { // Removing by ID
-            int id = -1;
+            int id;
             try {
                 id = Integer.parseInt(args[0]);
             } catch (Exception ex) {
@@ -99,8 +99,8 @@ public class RemoveCommandModule implements CommandModule {
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
-        List<String> matches = new ArrayList<String>();
-        Set<String> removeBy = new HashSet<String>();
+        List<String> matches = new ArrayList<>();
+        Set<String> removeBy = new HashSet<>();
 
         for (ParticlePair particle : pplayer.getActiveParticles()) {
             removeBy.add(String.valueOf(particle.getId()));
@@ -108,7 +108,7 @@ public class RemoveCommandModule implements CommandModule {
             removeBy.add(particle.getStyle().getName());
         }
 
-        if (args.length == 0) return new ArrayList<String>(removeBy);
+        if (args.length == 0) return new ArrayList<>(removeBy);
 
         StringUtil.copyPartialMatches(args[0], removeBy, matches);
         return matches;

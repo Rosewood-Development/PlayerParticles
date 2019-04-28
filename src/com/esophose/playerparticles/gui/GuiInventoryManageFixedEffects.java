@@ -18,12 +18,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class GuiInventoryManageGroups extends GuiInventory {
+public class GuiInventoryManageFixedEffects extends GuiInventory {
 
-    public GuiInventoryManageGroups(PPlayer pplayer) {
+    public GuiInventoryManageFixedEffects(PPlayer pplayer) {
         super(pplayer, Bukkit.createInventory(pplayer.getPlayer(), INVENTORY_SIZE, LangManager.getText(Lang.GUI_MANAGE_YOUR_GROUPS)));
 
-        this.fillBorder(BorderColor.BROWN);
+        this.fillBorder(BorderColor.YELLOW);
 
         int index = 10;
         int nextWrap = 17;
@@ -48,8 +48,7 @@ public class GuiInventoryManageGroups extends GuiInventory {
 
             // Load Group Buttons
             GuiActionButton groupButton = new GuiActionButton(
-                    index,
-                    GuiIcon.GROUPS.get(),
+                    index, GuiIcon.GROUPS.get(),
                     LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + group.getName(),
                     lore,
                     (button, isShiftClick) -> {
@@ -104,7 +103,8 @@ public class GuiInventoryManageGroups extends GuiInventory {
                 LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_SAVE_GROUP),
                 lore,
                 (button, isShiftClick) -> {
-                    if (hasReachedMax || !hasParticles) return;
+                    if (hasReachedMax || !hasParticles)
+                        return;
 
                     PlayerChatHook.addHook(new PlayerChatHookData(pplayer.getUniqueId(), 15, (textEntered) -> {
                         if (textEntered == null || textEntered.equalsIgnoreCase("cancel")) {

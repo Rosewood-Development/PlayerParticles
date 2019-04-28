@@ -27,7 +27,7 @@ public class ParticleCommandHandler implements CommandExecutor, TabCompleter {
     private static CommandModuleSecondary ppoCommand;
 
     static {
-        commands = new ArrayList<CommandModule>();
+        commands = new ArrayList<>();
 
         commands.add(new AddCommandModule());
         commands.add(new DataCommandModule());
@@ -78,7 +78,7 @@ public class ParticleCommandHandler implements CommandExecutor, TabCompleter {
      * @return All available command names
      */
     public static List<String> getCommandNames() {
-        List<String> commandNames = new ArrayList<String>();
+        List<String> commandNames = new ArrayList<>();
         for (CommandModule cmd : commands)
             commandNames.add(cmd.getName());
         return commandNames;
@@ -137,15 +137,15 @@ public class ParticleCommandHandler implements CommandExecutor, TabCompleter {
      */
     public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
         if (cmd.getName().equalsIgnoreCase("pp")) {
-            if (!(sender instanceof Player)) return new ArrayList<String>();
+            if (!(sender instanceof Player)) return new ArrayList<>();
             
             PPlayer pplayer = DataManager.getPPlayer(((Player) sender).getUniqueId());
-            if (pplayer == null) return new ArrayList<String>();
+            if (pplayer == null) return new ArrayList<>();
             
             if (args.length <= 1) {
                 CommandModule commandModule = findMatchingCommand(""); // Get the default command module
                 return commandModule.onTabComplete(pplayer, args);
-            } else if (args.length >= 2) {
+            } else {
                 CommandModule commandModule = findMatchingCommand(args[0]);
                 if (commandModule != null) {
                     String[] cmdArgs = Arrays.copyOfRange(args, 1, args.length);
@@ -156,7 +156,7 @@ public class ParticleCommandHandler implements CommandExecutor, TabCompleter {
             return ppoCommand.onTabComplete(sender, args);
         }
         
-        return new ArrayList<String>();
+        return new ArrayList<>();
     }
 
 }

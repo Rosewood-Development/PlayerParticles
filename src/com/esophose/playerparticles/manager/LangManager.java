@@ -375,7 +375,7 @@ public class LangManager {
         File targetLangFile = new File(pluginDataFolder.getAbsolutePath() + "/lang/" + langFileName);
         
         // TODO: Move this somewhere else
-        Set<String> defaultLangFileNames = new HashSet<String>();
+        Set<String> defaultLangFileNames = new HashSet<>();
         defaultLangFileNames.add("en_US.lang");
         defaultLangFileNames.add("fr_FR.lang");
         defaultLangFileNames.add("vi_VN.lang");

@@ -29,7 +29,7 @@ public class EditCommandModule implements CommandModule {
             return;
         }
         
-        int id = -1;
+        int id;
         try {
             id = Integer.parseInt(args[0]);
         } catch (Exception e) {
@@ -48,19 +48,17 @@ public class EditCommandModule implements CommandModule {
         }
         
         String[] cmdArgs = new String[args.length - 2];
-        for (int i = 2; i < args.length; i++) {
-            cmdArgs[i - 2] = args[i];
-        }
+        System.arraycopy(args, 2, cmdArgs, 0, args.length - 2);
         
         switch (args[1].toLowerCase()) {
         case "effect":
-            editEffect(pplayer, id, cmdArgs);
+            this.editEffect(pplayer, id, cmdArgs);
             break;
         case "style":
-            editStyle(pplayer, id, cmdArgs);
+            this.editStyle(pplayer, id, cmdArgs);
             break;
         case "data":
-            editData(pplayer, id, cmdArgs);
+            this.editData(pplayer, id, cmdArgs);
             break;
         default:
             LangManager.sendMessage(pplayer, Lang.EDIT_INVALID_PROPERTY, args[1]);
@@ -148,7 +146,7 @@ public class EditCommandModule implements CommandModule {
                 } else if (args[0].equalsIgnoreCase("random")) {
                     noteColorData = new NoteColor(98);
                 } else {
-                    int note = -1;
+                    int note;
                     try {
                         note = Integer.parseInt(args[0]);
                     } catch (Exception e) {
@@ -169,9 +167,7 @@ public class EditCommandModule implements CommandModule {
                 } else if (args[0].equalsIgnoreCase("random")) {
                     colorData = new OrdinaryColor(998, 998, 998);
                 } else {
-                    int r = -1;
-                    int g = -1;
-                    int b = -1;
+                    int r, g, b;
 
                     try {
                         r = Integer.parseInt(args[0]);
@@ -229,8 +225,8 @@ public class EditCommandModule implements CommandModule {
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
         Player p = pplayer.getPlayer();
-        List<String> matches = new ArrayList<String>();
-        List<String> ids = new ArrayList<String>();
+        List<String> matches = new ArrayList<>();
+        List<String> ids = new ArrayList<>();
         
         for (ParticlePair particles : pplayer.getActiveParticles())
             ids.add(String.valueOf(particles.getId()));
@@ -244,11 +240,11 @@ public class EditCommandModule implements CommandModule {
         int id = -1;
         try {
             id = Integer.parseInt(args[0]);
-        } catch (Exception e) { }
+        } catch (Exception ignored) { }
         
         if (pplayer.getActiveParticle(id) != null) {
             if (args.length == 2) {
-                List<String> possibleValues = new ArrayList<String>();
+                List<String> possibleValues = new ArrayList<>();
                 possibleValues.add("effect");
                 possibleValues.add("style");
                 possibleValues.add("data");
@@ -266,7 +262,7 @@ public class EditCommandModule implements CommandModule {
                 case "data":
                     ParticleEffect effect = pplayer.getActiveParticle(id).getEffect();
                     if (effect.hasProperty(ParticleProperty.COLORABLE)) {
-                        List<String> possibleValues = new ArrayList<String>();
+                        List<String> possibleValues = new ArrayList<>();
                         if (effect == ParticleEffect.NOTE) { // Note data
                             if (args.length == 3) {
                                 possibleValues.add("<0-24>");
@@ -289,9 +285,9 @@ public class EditCommandModule implements CommandModule {
                         StringUtil.copyPartialMatches(args[args.length - 1], possibleValues, matches);
                     } else if (args.length == 3 && effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
                         if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST) { // Block material
-                            matches = StringUtil.copyPartialMatches(args[2], ParticleUtils.getAllBlockMaterials(), matches);
+                            StringUtil.copyPartialMatches(args[2], ParticleUtils.getAllBlockMaterials(), matches);
                         } else if (effect == ParticleEffect.ITEM) { // Item material
-                            matches = StringUtil.copyPartialMatches(args[2], ParticleUtils.getAllItemMaterials(), matches);
+                            StringUtil.copyPartialMatches(args[2], ParticleUtils.getAllItemMaterials(), matches);
                         }
                     }
                     break;

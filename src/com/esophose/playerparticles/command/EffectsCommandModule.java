@@ -21,20 +21,20 @@ public class EffectsCommandModule implements CommandModule {
             return;
         }
 
-        String toSend = "";
+        StringBuilder toSend = new StringBuilder();
         for (String name : effectList) {
-            toSend += name + ", ";
+            toSend.append(name).append(", ");
         }
         
-        if (toSend.endsWith(", ")) {
-            toSend = toSend.substring(0, toSend.length() - 2);
+        if (toSend.toString().endsWith(", ")) {
+            toSend = new StringBuilder(toSend.substring(0, toSend.length() - 2));
         }
 
-        LangManager.sendMessage(pplayer, Lang.EFFECT_LIST, toSend);
+        LangManager.sendMessage(pplayer, Lang.EFFECT_LIST, toSend.toString());
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
-        return new ArrayList<String>();
+        return new ArrayList<>();
     }
 
     public String getName() {

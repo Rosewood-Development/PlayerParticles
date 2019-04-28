@@ -157,6 +157,11 @@ database-user-name: ''
 # Default: ''
 database-user-password: ''
 
+# If the database connection should use SSL
+# You should enable this if your database supports SSL
+# Default: false
+database-use-ssl: false
+
 # =================================================================== #
 #                        GUI ICON SETTINGS                            #
 # This configuration option allows you to change any of the GUI       #
@@ -212,9 +217,15 @@ gui-icon:
       - MAGMA_BLOCK
     bubble_pop:
       - BUBBLE_CORAL_FAN
+    campfire_cosy_smoke:
+      - CAMPFIRE
+    campfire_signal_smoke:
+      - REDSTONE_TORCH
     cloud:
       - WHITE_WOOL
       - WOOL
+    composter:
+      - COMPOSTER
     crit:
       - IRON_SWORD
     current_down:
@@ -248,6 +259,10 @@ gui-icon:
       - TNT
     falling_dust:
       - SAND
+    falling_lava:
+      - RED_DYE
+    falling_water:
+      - BLUE_DYE
     firework:
       - FIREWORK_ROCKET
       - FIREWORK
@@ -275,6 +290,8 @@ gui-icon:
     large_smoke:
       - COBWEB
       - WEB
+    landing_lava:
+      - ORANGE_DYE
     lava:
       - MAGMA_CREAM
     mycelium:
@@ -294,6 +311,8 @@ gui-icon:
       - LAPIS_BLOCK
     smoke:
       - TORCH
+    sneeze:
+      - BAMBOO
     spell:
       - POTION
       - GLASS_BOTTLE

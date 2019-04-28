@@ -5,7 +5,7 @@
   <version>6.4</version>
   <name>PlayerParticles</name>
   <url>https://github.com/Esophose/PlayerParticles</url>
-  <description>Display particles around your player using customized styles and data!</description>
+  <description>Display particles around your player and blocks using customized styles and data!</description>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <resources>
@@ -31,7 +31,7 @@
         <version>3.1.0</version>
         <executions>
           <execution>
-          	<id>1.13</id>
+          	<id>shaded</id>
             <phase>package</phase>
             <goals>
               <goal>shade</goal>
@@ -42,6 +42,7 @@
                   <include>com.zaxxer:HikariCP</include>
                   <include>org.slf4j:slf4j-api</include>
                   <include>org.slf4j:slf4j-nop</include>
+                  <include>com.googlecode.json-simple:json-simple</include>
                 </includes>
               </artifactSet>
               <filters>
@@ -54,115 +55,7 @@
                   </excludes>
                 </filter>
               </filters>
-              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.13\plugins\update\PlayerParticles v${project.version}.jar</outputFile>
-            </configuration>
-          </execution>
-          <execution>
-          	<id>1.12</id>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <configuration>
-              <artifactSet>
-                <includes>
-                  <include>com.zaxxer:HikariCP</include>
-                  <include>org.slf4j:slf4j-api</include>
-                  <include>org.slf4j:slf4j-nop</include>
-                </includes>
-              </artifactSet>
-              <filters>
-                <filter>
-                  <artifact>*:*</artifact>
-                  <excludes>
-                    <exclude>META-INF/*.SF</exclude>
-                    <exclude>META-INF/*.DSA</exclude>
-                    <exclude>META-INF/*.RSA</exclude>
-                  </excludes>
-                </filter>
-              </filters>
-              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.12\plugins\update\PlayerParticles v${project.version}.jar</outputFile>
-            </configuration>
-          </execution>
-          <execution>
-          	<id>1.11</id>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <configuration>
-              <artifactSet>
-                <includes>
-                  <include>com.zaxxer:HikariCP</include>
-                  <include>org.slf4j:slf4j-api</include>
-                  <include>org.slf4j:slf4j-nop</include>
-                </includes>
-              </artifactSet>
-              <filters>
-                <filter>
-                  <artifact>*:*</artifact>
-                  <excludes>
-                    <exclude>META-INF/*.SF</exclude>
-                    <exclude>META-INF/*.DSA</exclude>
-                    <exclude>META-INF/*.RSA</exclude>
-                  </excludes>
-                </filter>
-              </filters>
-              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.11\plugins\update\PlayerParticles v${project.version}.jar</outputFile>
-            </configuration>
-          </execution>
-          <execution>
-          	<id>1.10</id>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <configuration>
-              <artifactSet>
-                <includes>
-                  <include>com.zaxxer:HikariCP</include>
-                  <include>org.slf4j:slf4j-api</include>
-                  <include>org.slf4j:slf4j-nop</include>
-                </includes>
-              </artifactSet>
-              <filters>
-                <filter>
-                  <artifact>*:*</artifact>
-                  <excludes>
-                    <exclude>META-INF/*.SF</exclude>
-                    <exclude>META-INF/*.DSA</exclude>
-                    <exclude>META-INF/*.RSA</exclude>
-                  </excludes>
-                </filter>
-              </filters>
-              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.10\plugins\update\PlayerParticles v${project.version}.jar</outputFile>
-            </configuration>
-          </execution>
-          <execution>
-          	<id>1.9</id>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <configuration>
-              <artifactSet>
-                <includes>
-                  <include>com.zaxxer:HikariCP</include>
-                  <include>org.slf4j:slf4j-api</include>
-                  <include>org.slf4j:slf4j-nop</include>
-                </includes>
-              </artifactSet>
-              <filters>
-                <filter>
-                  <artifact>*:*</artifact>
-                  <excludes>
-                    <exclude>META-INF/*.SF</exclude>
-                    <exclude>META-INF/*.DSA</exclude>
-                    <exclude>META-INF/*.RSA</exclude>
-                  </excludes>
-                </filter>
-              </filters>
-              <outputFile>C:\Users\Esophose\Desktop\Spigot Dev Servers\1.9\plugins\update\PlayerParticles v${project.version}.jar</outputFile>
+              <outputFile>./target/PlayerParticles_v${project.version}.jar</outputFile>
             </configuration>
           </execution>
         </executions>
@@ -201,9 +94,14 @@
       <version>3.23.1</version>
     </dependency>
     <dependency>
+      <groupId>com.googlecode.json-simple</groupId>
+      <artifactId>json-simple</artifactId>
+      <version>1.1.1</version>
+    </dependency>
+    <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
-      <version>1.13.2-R0.1-SNAPSHOT</version>
+      <version>1.14-R0.1-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>

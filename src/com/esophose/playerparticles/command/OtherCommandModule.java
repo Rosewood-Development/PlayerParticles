@@ -58,10 +58,10 @@ public class OtherCommandModule implements CommandModuleSecondary {
     }
 
     public List<String> onTabComplete(CommandSender sender, String[] args) {
-        List<String> completions = new ArrayList<String>();
+        List<String> completions = new ArrayList<>();
         
         if (args.length < 2) {
-            List<String> playerNames = new ArrayList<String>();
+            List<String> playerNames = new ArrayList<>();
             for (Player player : Bukkit.getOnlinePlayers()) 
                 playerNames.add(player.getName());
             

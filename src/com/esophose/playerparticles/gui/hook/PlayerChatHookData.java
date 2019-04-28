@@ -61,8 +61,8 @@ public class PlayerChatHookData {
      * Allows simple hooking into the player chat for a specific time interval
      */
     @FunctionalInterface
-    public static interface PlayerChatHookCallback {
-        public void onPlayerChat(String textEntered);
+    public interface PlayerChatHookCallback {
+        void onPlayerChat(String textEntered);
     }
 
 }

@@ -24,12 +24,13 @@ public abstract class GuiInventory implements InventoryHolder {
         ORANGE(1, "ORANGE_STAINED_GLASS_PANE"),
         RED(14, "RED_STAINED_GLASS_PANE"),
         BROWN(12, "BROWN_STAINED_GLASS_PANE"),
-        GREEN(13, "GREEN_STAINED_GLASS_PANE");
+        GREEN(13, "GREEN_STAINED_GLASS_PANE"),
+        YELLOW(4, "YELLOW_STAINED_GLASS_PANE");
         
         private short data;
         private Material material;
         
-        private BorderColor(int data, String materialName) {
+        BorderColor(int data, String materialName) {
             this.data = (short)data;
             this.material = ParticleUtils.closestMatch(materialName);
         }
@@ -44,9 +45,11 @@ public abstract class GuiInventory implements InventoryHolder {
             }
             
             ItemMeta meta = borderIcon.getItemMeta();
-            meta.setDisplayName(" ");
-            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_ENCHANTS);
-            borderIcon.setItemMeta(meta);
+            if (meta != null) {
+                meta.setDisplayName(" ");
+                meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_ENCHANTS);
+                borderIcon.setItemMeta(meta);
+            }
             
             return borderIcon;
         }
@@ -60,7 +63,7 @@ public abstract class GuiInventory implements InventoryHolder {
     public GuiInventory(PPlayer pplayer, Inventory inventory) {
         this.pplayer = pplayer;
         this.inventory = inventory;
-        this.actionButtons = new ArrayList<GuiActionButton>();
+        this.actionButtons = new ArrayList<>();
     }
     
     /**
@@ -110,7 +113,7 @@ public abstract class GuiInventory implements InventoryHolder {
      * Populates the Inventory with the contents of actionButtons
      */
     protected void populate() {
-        for (GuiActionButton button : actionButtons) {
+        for (GuiActionButton button : this.actionButtons) {
             this.inventory.setItem(button.getSlot(), button.getIcon());
         }
     }
@@ -140,12 +143,10 @@ public abstract class GuiInventory implements InventoryHolder {
         
         for (GuiActionButton button : this.actionButtons) {
             if (button.getSlot() == slot) {
-                button.handleClick(button, isShiftClick);
-                if (PSetting.GUI_BUTTON_SOUND.getBoolean()) {
-                    if (event.getWhoClicked() instanceof Player) {
-                        Player player = (Player) event.getWhoClicked();
-                        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1);
-                    }
+                button.handleClick(isShiftClick);
+                if (PSetting.GUI_BUTTON_SOUND.getBoolean() && event.getWhoClicked() instanceof Player) {
+                    Player player = (Player) event.getWhoClicked();
+                    player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1);
                 }
                 break;
             }
@@ -153,8 +154,8 @@ public abstract class GuiInventory implements InventoryHolder {
     }
     
     @FunctionalInterface
-    public static interface GuiInventoryEditFinishedCallback {
-        public void execute();
+    public interface GuiInventoryEditFinishedCallback {
+        void execute();
     }
 
 }

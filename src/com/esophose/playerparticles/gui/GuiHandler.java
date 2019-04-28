@@ -23,7 +23,7 @@ import com.esophose.playerparticles.particles.PPlayer;
  */
 public class GuiHandler extends BukkitRunnable implements Listener {
 
-    private static List<GuiInventory> guiInventories = new ArrayList<GuiInventory>();
+    private static List<GuiInventory> guiInventories = new ArrayList<>();
     private static BukkitTask guiTask = null;
 
     /**
@@ -40,7 +40,7 @@ public class GuiHandler extends BukkitRunnable implements Listener {
      * Removes entries from playerGuiInventories if the player no longer has the inventory open or is offline
      */
     public void run() {
-        List<GuiInventory> toRemoveList = new ArrayList<GuiInventory>();
+        List<GuiInventory> toRemoveList = new ArrayList<>();
 
         for (GuiInventory inventory : guiInventories) {
             PPlayer pplayer = DataManager.getPPlayer(inventory.getPPlayer().getUniqueId());

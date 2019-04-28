@@ -14,7 +14,7 @@ public interface CommandModule {
      * @param pplayer The PPlayer who executed this command
      * @param args The arguments to this command
      */
-    public void onCommandExecute(PPlayer pplayer, String[] args);
+    void onCommandExecute(PPlayer pplayer, String[] args);
 
     /**
      * Called when a player tries to tab complete this command
@@ -23,35 +23,35 @@ public interface CommandModule {
      * @param args Arguments typed so far
      * @return A list of possible argument values
      */
-    public List<String> onTabComplete(PPlayer pplayer, String[] args);
+    List<String> onTabComplete(PPlayer pplayer, String[] args);
 
     /**
      * Gets the name of this command
      * 
      * @return The name of this command
      */
-    public String getName();
+    String getName();
 
     /**
      * Gets the Lang description of this command
      * 
      * @return The description of this command
      */
-    public Lang getDescription();
+    Lang getDescription();
 
     /**
      * Gets any arguments this command has
      * 
      * @return The arguments this command has
      */
-    public String getArguments();
+    String getArguments();
 
     /**
      * True if this command requires the player to have any effects
      * 
      * @return If the player must have effects to use this command
      */
-    public boolean requiresEffects();
+    boolean requiresEffects();
     
     /**
      * Displays a command's usage to the player
@@ -59,7 +59,7 @@ public interface CommandModule {
      * @param pplayer The PPlayer to display the command usage to
      * @param command The command to display usage for
      */
-    public static void printUsage(PPlayer pplayer, CommandModule command) {
+    static void printUsage(PPlayer pplayer, CommandModule command) {
         LangManager.sendMessage(pplayer, Lang.COMMAND_DESCRIPTIONS_USAGE, command.getName(), command.getArguments());
     }
     
@@ -69,7 +69,7 @@ public interface CommandModule {
      * @param pplayer The PPlayer to display the command usage to
      * @param command The command to display usage for
      */
-    public static void printUsageWithDescription(PPlayer pplayer, CommandModule command) {
+    static void printUsageWithDescription(PPlayer pplayer, CommandModule command) {
         if (command.getArguments().length() == 0) {
             LangManager.sendSimpleMessage(pplayer, Lang.COMMAND_DESCRIPTIONS_HELP_1, command.getName(), LangManager.getText(command.getDescription()));
         } else {

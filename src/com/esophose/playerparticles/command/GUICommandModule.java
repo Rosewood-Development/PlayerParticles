@@ -43,7 +43,7 @@ public class GUICommandModule implements CommandModule {
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
-        return new ArrayList<String>();
+        return new ArrayList<>();
     }
 
     public String getName() {

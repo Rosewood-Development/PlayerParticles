@@ -2,7 +2,7 @@ name: PlayerParticles
 main: com.esophose.playerparticles.PlayerParticles
 version: 6.4
 api-version: 1.13
-description: Display particles around your player using customized styles and data!
+description: Display particles around your player and blocks using customized styles and data!
 author: Esophose
 website: https://www.spigotmc.org/resources/playerparticles.40261/
 commands:
@@ -10,3 +10,4 @@ commands:
         description: The main PlayerParticles command. By default, opens the GUI.
     ppo: 
         description: Allows executing a /pp command for another player.
+        permission: playerparticles.other

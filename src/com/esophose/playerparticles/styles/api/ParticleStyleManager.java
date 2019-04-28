@@ -10,8 +10,8 @@ public class ParticleStyleManager {
     /**
      * Arrays that contain all registered styles
      */
-    private static List<ParticleStyle> styles = new ArrayList<ParticleStyle>();
-    private static List<ParticleStyle> customHandledStyles = new ArrayList<ParticleStyle>();
+    private static List<ParticleStyle> styles = new ArrayList<>();
+    private static List<ParticleStyle> customHandledStyles = new ArrayList<>();
 
     /**
      * Registers a style that is put into the plugin's update loop

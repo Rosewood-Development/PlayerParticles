@@ -54,6 +54,7 @@ public class SettingManager {
         DATABASE_NAME(PSettingType.STRING),
         DATABASE_USER_NAME(PSettingType.STRING),
         DATABASE_USER_PASSWORD(PSettingType.STRING),
+        DATABASE_USE_SSL(PSettingType.BOOLEAN),
         
         MAX_FIXED_EFFECTS(PSettingType.INTEGER),
         MAX_FIXED_EFFECT_CREATION_DISTANCE(PSettingType.INTEGER),
@@ -71,7 +72,7 @@ public class SettingManager {
         private final PSettingType settingType;
         private Object value = null;
         
-        private PSetting(PSettingType settingType) {
+        PSetting(PSettingType settingType) {
             this.settingType = settingType;
         }
         
@@ -199,8 +200,8 @@ public class SettingManager {
         
         private Map<String, Material> materials;
         
-        private GuiIcon() {
-            this.materials = new HashMap<String, Material>();
+        GuiIcon() {
+            this.materials = new HashMap<>();
         }
         
         /**
@@ -264,7 +265,7 @@ public class SettingManager {
          * Resets the setting's value so it will be fetched from the config the next time it's needed
          */
         private void resetDefault() {
-            this.materials = new HashMap<String, Material>();
+            this.materials = new HashMap<>();
         }
     }
 

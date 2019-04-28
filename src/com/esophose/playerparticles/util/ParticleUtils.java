@@ -50,16 +50,19 @@ public class ParticleUtils {
      * Finds a block/item as a material from a list of possible strings
      * Contains a fallback to the barrier icon just in case
      * 
+     * @param barrierFallback If the material should fall back to barrier
      * @param input A list of material names
      * @return The first matching material
      */
-    public static Material closestMatchWithFallback(String... input) {
+    public static Material closestMatchWithFallback(boolean barrierFallback, String... input) {
         Material mat = null;
         for (String name : input) {
             mat = closestMatch(name);
-            if (mat != null) return mat;
+            if (mat != null)
+                return mat;
         }
-        if (mat == null) mat = Material.BARRIER;
+        if (barrierFallback)
+            mat = Material.BARRIER;
         return mat;
     }
 

@@ -32,7 +32,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
     /**
      * The list containing all the loaded PPlayer info
      */
-    private static List<PPlayer> particlePlayers = new ArrayList<PPlayer>();
+    private static List<PPlayer> particlePlayers = new ArrayList<>();
 
     /**
      * Rainbow particle effect hue and note color used for rainbow colorable effects
@@ -106,15 +106,15 @@ public class ParticleManager extends BukkitRunnable implements Listener {
 
             // Don't show their particles if they are in spectator mode
             // Don't spawn particles if the world doesn't allow it
-            if (player != null && player.getGameMode() != GameMode.SPECTATOR && !PermissionManager.isWorldDisabled(player.getWorld().getName()))
+            if (player != null && player.getGameMode() != GameMode.SPECTATOR && PermissionManager.isWorldEnabled(player.getWorld().getName()))
                 for (ParticlePair particles : pplayer.getActiveParticles())
-                    displayParticles(pplayer, particles, player.getLocation().clone().add(0, 1, 0));
+                    this.displayParticles(pplayer, particles, player.getLocation().clone().add(0, 1, 0));
             
             // Loop for FixedParticleEffects
             // Don't spawn particles if the world doesn't allow it
             for (FixedParticleEffect effect : pplayer.getFixedParticles())
-                if (!PermissionManager.isWorldDisabled(effect.getLocation().getWorld().getName())) 
-                    displayFixedParticleEffect(effect);
+                if (PermissionManager.isWorldEnabled(effect.getLocation().getWorld().getName()))
+                    this.displayFixedParticleEffect(effect);
         }
     }
 

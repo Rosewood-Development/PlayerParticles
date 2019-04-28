@@ -11,7 +11,7 @@ import com.zaxxer.hikari.HikariDataSource;
 public class MySqlDatabaseConnector implements DatabaseConnector {
 
     private HikariDataSource hikari;
-    private boolean initializedSuccessfully = false;
+    private boolean initializedSuccessfully;
 
     public MySqlDatabaseConnector() {
         String hostname = PSetting.DATABASE_HOSTNAME.getString();
@@ -19,12 +19,13 @@ public class MySqlDatabaseConnector implements DatabaseConnector {
         String database = PSetting.DATABASE_NAME.getString();
         String user = PSetting.DATABASE_USER_NAME.getString();
         String pass = PSetting.DATABASE_USER_PASSWORD.getString();
+        boolean useSSL = PSetting.DATABASE_USE_SSL.getBoolean();
 
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:mysql://" + hostname + ":" + port + "/" + database);
+        config.setJdbcUrl("jdbc:mysql://" + hostname + ":" + port + "/" + database + "?useSSL=" + useSSL);
         config.setUsername(user);
         config.setPassword(pass);
-        config.setMaximumPoolSize(5);
+        config.setMaximumPoolSize(3);
 
         try {
             this.hikari = new HikariDataSource(config);

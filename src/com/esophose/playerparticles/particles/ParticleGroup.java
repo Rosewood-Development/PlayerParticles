@@ -40,7 +40,7 @@ public class ParticleGroup {
      * @return The default empty active ParticleGroup
      */
     public static ParticleGroup getDefaultGroup() {
-        return new ParticleGroup(DEFAULT_NAME, new ArrayList<ParticlePair>());
+        return new ParticleGroup(DEFAULT_NAME, new ArrayList<>());
     }
 
 }

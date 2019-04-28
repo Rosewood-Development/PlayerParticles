@@ -98,7 +98,6 @@ public class GuiActionButton {
      * 
      * @return The icon ItemStack for the GUI
      */
-    @SuppressWarnings("deprecation")
     public ItemStack getIcon() {
         ItemStack itemStack;
         if (this.icons != null) {
@@ -112,12 +111,12 @@ public class GuiActionButton {
         }
         
         ItemMeta itemMeta = itemStack.getItemMeta();
-        
-        itemMeta.setDisplayName(this.name);
-        itemMeta.setLore(parseLore(this.lore));
-        itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_POTION_EFFECTS);
-        
-        itemStack.setItemMeta(itemMeta);
+        if (itemMeta != null) {
+            itemMeta.setDisplayName(this.name);
+            itemMeta.setLore(parseLore(this.lore));
+            itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_POTION_EFFECTS);
+            itemStack.setItemMeta(itemMeta);
+        }
         
         return itemStack;
     }
@@ -125,10 +124,9 @@ public class GuiActionButton {
     /**
      * Executes the onClick callback passed in the constructor
      * 
-     * @param button The button that was clicked
      * @param isShiftClick If the player was holding shift when they clicked
      */
-    public void handleClick(GuiActionButton button, boolean isShiftClick) {
+    public void handleClick(boolean isShiftClick) {
         if (this.onClick != null)
             this.onClick.execute(this, isShiftClick);
     }
@@ -158,7 +156,7 @@ public class GuiActionButton {
      * @return A parsed list of lore text
      */
     public static List<String> parseLore(String... lore) {
-        List<String> parsedLore = new ArrayList<String>();
+        List<String> parsedLore = new ArrayList<>();
         for (String line : lore) {
             // Try to maintain the color going to the next line if it's split
             // If there is no color, just ignore it
@@ -181,8 +179,8 @@ public class GuiActionButton {
      * Allows button click callbacks as parameters
      */
     @FunctionalInterface
-    public static interface GuiActionButtonClickCallback {
-        public void execute(GuiActionButton button, boolean isShiftClick);
+    public interface GuiActionButtonClickCallback {
+        void execute(GuiActionButton button, boolean isShiftClick);
     }
 
 }

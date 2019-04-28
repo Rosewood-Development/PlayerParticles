@@ -1,6 +1,8 @@
-package com.esophose.playerparticles;
+package com.esophose.playerparticles.updater;
 
 import java.sql.Statement;
+
+import com.esophose.playerparticles.PlayerParticles;
 
 /**
  * This class handles updating the SQLite or MySQL data from older versions to the current version
@@ -12,7 +14,7 @@ public class DataUpdater {
      * Checks to make sure all the correct database tables exist
      * If they don't, create them
      */
-    protected static void tryCreateTables() {
+    public static void tryCreateTables() {
         PlayerParticles.getPlugin().getDBConnector().connect((connection) -> {
             try (Statement createStatement = connection.createStatement()) {
                 createStatement.addBatch("CREATE TABLE IF NOT EXISTS pp_settings (player_uuid VARCHAR(36), particles_hidden TINYINT)");
@@ -30,7 +32,7 @@ public class DataUpdater {
      * @param configVersion The old version of the plugin 
      * @param currentVersion The current version of the plugin
      */
-    protected static void updateData(double configVersion, double currentVersion) {
+    public static void updateData(double configVersion, double currentVersion) {
         if (configVersion == currentVersion) return;
         
         PlayerParticles.getPlugin().getLogger().warning("Starting to update SQLite/MySQL data from " + (configVersion < 5.3 ? "a legacy version" : "v" + configVersion) + " to v" + PlayerParticles.getPlugin().getDescription().getVersion() + ", this may take a while...");
