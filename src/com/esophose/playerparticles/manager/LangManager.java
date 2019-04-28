@@ -92,6 +92,7 @@ public class LangManager {
         
         // Group Command
         GROUP_INVALID,
+        GROUP_NO_PERMISSION,
         GROUP_PRESET_NO_PERMISSION,
         GROUP_RESERVED,
         GROUP_NO_NAME,

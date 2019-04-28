@@ -78,6 +78,7 @@ edit-success-data: "&aVotre particule avec l'ID de &b{0} &aa ses paramètres cha
 
 # Group Command
 group-invalid: "&cUn groupe ou un preset de groupe sauvegardé n'existe pas avec le nom &b{0} &c!"
+group-no-permission: "&cVous oubliez une permission pour un style ou un effet afin d'utiliser les groupe &b{0} &c!"
 group-preset-no-permission: "&cVous oubliez une permission pour un style ou un effet afin d'utiliser les presets du groupe &b{0} &c!"
 group-reserved: "&cLe nom de groupe &bactive &cest réservé et ne peut pas être utiliser !"
 group-no-name: "&cVous n'avez pas rentré de nom de groupe ! &b/pp {0} <groupName>"

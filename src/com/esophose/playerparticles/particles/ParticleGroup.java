@@ -1,5 +1,8 @@
 package com.esophose.playerparticles.particles;
 
+import com.esophose.playerparticles.manager.PermissionManager;
+import org.bukkit.entity.Player;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +44,29 @@ public class ParticleGroup {
      */
     public static ParticleGroup getDefaultGroup() {
         return new ParticleGroup(DEFAULT_NAME, new ArrayList<>());
+    }
+
+    /**
+     * Checks if a player has permission to use this particle group
+     *
+     * @param player The player to check
+     * @return True if the player has permission
+     */
+    public boolean canPlayerUse(Player player) {
+        // Make sure the player has permission for the number of particles in this group
+        if (PermissionManager.getMaxParticlesAllowed(player) < this.particles.size())
+            return false;
+
+        // Make sure the player has permission for all effects/styles in the group
+        for (ParticlePair particle : this.particles) {
+            if (!PermissionManager.hasEffectPermission(player, particle.getEffect()))
+                return false;
+
+            if (!PermissionManager.hasStylePermission(player, particle.getStyle()))
+                return false;
+        }
+
+        return true;
     }
 
 }

@@ -78,6 +78,7 @@ edit-success-data: "&aYour particle with an ID of &b{0} &ahas had its data chang
 
 # Group Command
 group-invalid: "&cA saved group or preset group does not exist with the name &b{0}&c!"
+group-no-permission: "&cYou are missing permission for an effect or style to use the group &b{0}&c!"
 group-preset-no-permission: "&cYou are missing permission for an effect or style to use the preset group &b{0}&c!"
 group-reserved: "&cThe group name &bactive &cis reserved and cannot be used!"
 group-no-name: "&cYou did not provide a group name! &b/pp {0} <groupName>"

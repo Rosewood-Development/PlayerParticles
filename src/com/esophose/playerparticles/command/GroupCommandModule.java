@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
+import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import com.esophose.playerparticles.manager.DataManager;
@@ -144,6 +145,11 @@ public class GroupCommandModule implements CommandModule {
             group = presetGroup.getGroup();
             isPreset = true;
         }
+
+        if (!group.canPlayerUse(pplayer.getPlayer())) {
+            LangManager.sendMessage(pplayer, Lang.GROUP_NO_PERMISSION, groupName);
+            return;
+        }
         
         // Empty out the active group and fill it with clones from the target group
         ParticleGroup activeGroup = pplayer.getActiveParticleGroup();
@@ -237,7 +243,8 @@ public class GroupCommandModule implements CommandModule {
     private void onList(PPlayer pplayer) {
         List<ParticleGroup> groups = pplayer.getParticleGroups();
         groups.sort(Comparator.comparing(ParticleGroup::getName));
-        
+
+        Player player = pplayer.getPlayer();
         StringBuilder groupsList = new StringBuilder();
         for (ParticleGroup group : groups)
             if (!group.getName().equals(ParticleGroup.DEFAULT_NAME))

@@ -12,6 +12,7 @@ import com.esophose.playerparticles.particles.ParticleGroupPreset;
 import com.esophose.playerparticles.particles.ParticlePair;
 import com.esophose.playerparticles.util.ParticleUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.Comparator;
 import java.util.List;
@@ -23,11 +24,16 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
 
         this.fillBorder(BorderColor.GREEN);
 
+        Player player = pplayer.getPlayer();
+
         int index = 10;
         int nextWrap = 17;
         int maxIndex = 43;
         List<ParticleGroupPreset> groups = ParticleGroupPresetManager.getPresetGroupsForPlayer(pplayer.getPlayer());
         for (ParticleGroupPreset group : groups) {
+            if (!group.getGroup().canPlayerUse(player))
+                continue;
+
             List<ParticlePair> particles = group.getGroup().getParticles();
             particles.sort(Comparator.comparingInt(ParticlePair::getId));
 

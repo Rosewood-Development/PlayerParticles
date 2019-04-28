@@ -78,6 +78,7 @@ edit-success-data: "&aHạt hiệu ứng của bạn với ID &b{0} &ađã thanh
 
 # Group Command
 group-invalid: "&cMột Group đã lưu hoặc Preset Group không được tìm thấy với tên &b{0}&c!"
+group-no-permission: "&cBạn không có quyền for 1 effect, style để sử dụng nhóm sẵn &b{0}&c!"
 group-preset-no-permission: "&cBạn không có quyền for 1 effect, style để sử dụng nhóm cài sẵn &b{0}&c!"
 group-reserved: "&cGroup tên &bactive &ckhông thể được sử dụng!"
 group-no-name: "&cBạn đã không cung cấp tên group! &b/pp {0} <groupName>"
