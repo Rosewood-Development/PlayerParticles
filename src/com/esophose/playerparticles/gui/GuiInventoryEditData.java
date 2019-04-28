@@ -242,11 +242,11 @@ public class GuiInventoryEditData extends GuiInventory {
      */
     private void populateNoteData(ParticlePair editingParticle, int pageNumber, List<GuiInventoryEditFinishedCallback> callbackList, int callbackListPosition) {
         int numberOfItems = noteColorMapping.length;
-        int maxPages = (int) Math.ceil(numberOfItems / 28.0);
         int itemsPerPage = 14;
+        int maxPages = (int) Math.ceil((double) numberOfItems / itemsPerPage);
         int slot = 10;
         int nextWrap = 17;
-        int maxSlot = 43;
+        int maxSlot = 25;
 
         for (int i = (pageNumber - 1) * itemsPerPage; i < numberOfItems; i++) {
             ColorData colorData = NMSUtil.getVersionNumber() > 13 ? noteColorMapping[i] : noteColorMappingOld[i];
@@ -335,8 +335,8 @@ public class GuiInventoryEditData extends GuiInventory {
      */
     private void populateItemData(ParticlePair editingParticle, int pageNumber, List<GuiInventoryEditFinishedCallback> callbackList, int callbackListPosition) {
         int numberOfItems = ITEM_MATERIALS.size();
-        int maxPages = (int) Math.ceil(numberOfItems / 28.0);
         int itemsPerPage = 28;
+        int maxPages = (int) Math.ceil((double) numberOfItems / itemsPerPage);
         int slot = 10;
         int nextWrap = 17;
         int maxSlot = 43;
@@ -396,8 +396,8 @@ public class GuiInventoryEditData extends GuiInventory {
      */
     private void populateBlockData(ParticlePair editingParticle, int pageNumber, List<GuiInventoryEditFinishedCallback> callbackList, int callbackListPosition) {
         int numberOfItems = BLOCK_MATERIALS.size();
-        int maxPages = (int) Math.ceil(numberOfItems / 28.0);
         int itemsPerPage = 28;
+        int maxPages = (int) Math.ceil((double) numberOfItems / itemsPerPage);
         int slot = 10;
         int nextWrap = 17;
         int maxSlot = 43;

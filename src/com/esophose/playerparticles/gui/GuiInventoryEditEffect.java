@@ -22,8 +22,8 @@ public class GuiInventoryEditEffect extends GuiInventory {
         // Select Effect Buttons
         List<ParticleEffect> effectsUserHasPermissionFor = PermissionManager.getEffectsUserHasPermissionFor(pplayer.getPlayer());
         int numberOfItems = effectsUserHasPermissionFor.size();
-        int maxPages = (int) Math.ceil(numberOfItems / 28.0);
         int itemsPerPage = 28;
+        int maxPages = (int) Math.ceil((double) numberOfItems / itemsPerPage);
         int slot = 10;
         int nextWrap = 17;
         int maxSlot = 43;
