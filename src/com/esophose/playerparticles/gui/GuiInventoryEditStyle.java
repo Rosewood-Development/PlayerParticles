@@ -22,7 +22,7 @@ public class GuiInventoryEditStyle extends GuiInventory {
         // Select Style Buttons
         List<ParticleStyle> stylesUserHasPermissionFor = PermissionManager.getStylesUserHasPermissionFor(pplayer.getPlayer());
         int numberOfItems = stylesUserHasPermissionFor.size();
-        int maxPages = (int) Math.floor(numberOfItems / 28.0);
+        int maxPages = (int) Math.ceil(numberOfItems / 28.0);
         int itemsPerPage = 28;
         int slot = 10;
         int nextWrap = 17;

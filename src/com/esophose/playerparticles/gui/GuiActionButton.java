@@ -3,6 +3,7 @@ package com.esophose.playerparticles.gui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.esophose.playerparticles.util.NMSUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
@@ -166,7 +167,7 @@ public class GuiActionButton {
             }
             
             // Split the lore along \n onto a new line if any exist
-            String[] splitLines = line.split("\\\\n");
+            String[] splitLines = NMSUtil.getVersionNumber() > 13 ? line.split("\n") : line.split("\\\\n");
             for (String parsedLine : splitLines) {
                 if (ChatColor.stripColor(parsedLine).isEmpty()) continue;
                 parsedLore.add(lineColor + parsedLine);

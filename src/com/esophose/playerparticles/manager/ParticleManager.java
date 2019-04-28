@@ -129,10 +129,10 @@ public class ParticleManager extends BukkitRunnable implements Listener {
         if (!ParticleStyleManager.isCustomHandled(particle.getStyle())) {
             if (PSetting.TOGGLE_ON_MOVE.getBoolean() && particle.getStyle().canToggleWithMovement() && pplayer.isMoving()) {
                 for (PParticle pparticle : DefaultStyles.FEET.getParticles(particle, location))
-                    ParticleEffect.display(particle, pparticle, false);
+                    ParticleEffect.display(particle, pparticle, false, pplayer.getPlayer());
             } else {
                 for (PParticle pparticle : particle.getStyle().getParticles(particle, location))
-                    ParticleEffect.display(particle, pparticle, false);
+                    ParticleEffect.display(particle, pparticle, false, pplayer.getPlayer());
             }
         }  
     }
@@ -145,7 +145,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      */
     public static void displayParticles(ParticlePair particle, List<PParticle> particles) {
         for (PParticle pparticle : particles)
-            ParticleEffect.display(particle, pparticle, false);
+            ParticleEffect.display(particle, pparticle, false, Bukkit.getPlayer(particle.getOwnerUniqueId()));
     }
 
     /**
@@ -156,7 +156,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
     private void displayFixedParticleEffect(FixedParticleEffect fixedEffect) {
         ParticlePair particle = fixedEffect.getParticlePair();
         for (PParticle pparticle : particle.getStyle().getParticles(particle, fixedEffect.getLocation().clone().add(0, particle.getStyle().getFixedEffectOffset(), 0)))
-            ParticleEffect.display(particle, pparticle, true);
+            ParticleEffect.display(particle, pparticle, true, null);
     }
 
     /**

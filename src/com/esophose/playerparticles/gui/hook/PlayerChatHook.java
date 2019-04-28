@@ -3,6 +3,7 @@ package com.esophose.playerparticles.gui.hook;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.esophose.playerparticles.util.NMSUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -68,7 +69,12 @@ public class PlayerChatHook extends BukkitRunnable implements Listener {
             if (player == null) {
                 hooksToRemove.remove(hook);
             } else {
-                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(LangManager.getText(Lang.GUI_SAVE_GROUP_HOTBAR_MESSAGE, hook.getTimeRemaining())));
+                if (NMSUtil.getVersionNumber() == 9) {
+                    if (hook.getMaxHookLength() == hook.getTimeRemaining())
+                        player.sendMessage(LangManager.getText(Lang.GUI_SAVE_GROUP_HOTBAR_MESSAGE, hook.getTimeRemaining()));
+                } else {
+                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(LangManager.getText(Lang.GUI_SAVE_GROUP_HOTBAR_MESSAGE, hook.getTimeRemaining())));
+                }
             }
         }
         

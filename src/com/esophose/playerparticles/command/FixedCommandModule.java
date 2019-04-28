@@ -106,7 +106,7 @@ public class FixedCommandModule implements CommandModule {
         double xPos, yPos, zPos;
 
         if (args[0].equalsIgnoreCase("looking")) {
-            Block targetBlock = p.getTargetBlock(null, 8);
+            Block targetBlock = p.getTargetBlock((Set<Material>) null, 8);
             int maxDistanceSqrd = 6 * 6;
             if (targetBlock.getLocation().distanceSquared(p.getLocation()) > maxDistanceSqrd) {
                 LangManager.sendMessage(pplayer, Lang.FIXED_CREATE_LOOKING_TOO_FAR);
@@ -307,7 +307,7 @@ public class FixedCommandModule implements CommandModule {
                 double xPos, yPos, zPos;
 
                 if (args[2].equalsIgnoreCase("looking")) {
-                    Block targetBlock = p.getTargetBlock(null, 8);
+                    Block targetBlock = p.getTargetBlock((Set<Material>) null, 8);
                     int maxDistanceSqrd = 6 * 6;
                     if (targetBlock.getLocation().distanceSquared(p.getLocation()) > maxDistanceSqrd) {
                         LangManager.sendMessage(pplayer, Lang.FIXED_EDIT_LOOKING_TOO_FAR);

@@ -5,11 +5,13 @@ import java.util.UUID;
 public class PlayerChatHookData {
     
     private UUID playerUUID;
+    private int maxHookLength;
     private int hookLength;
     private PlayerChatHookCallback hookCallback;
     
     public PlayerChatHookData(UUID playerUUID, int hookLength, PlayerChatHookCallback hookCallback) {
         this.playerUUID = playerUUID;
+        this.maxHookLength = hookLength;
         this.hookLength = hookLength;
         this.hookCallback = hookCallback;
     }
@@ -37,6 +39,15 @@ public class PlayerChatHookData {
      */
     public boolean timedOut() {
         return this.hookLength <= 0;
+    }
+
+    /**
+     * Gets the max length of the hook
+     *
+     * @return The max length of the hook
+     */
+    public int getMaxHookLength() {
+        return this.maxHookLength;
     }
     
     /**

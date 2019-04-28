@@ -209,17 +209,18 @@ public enum ParticleEffect {
      * @param particle The ParticlePair, given the effect/style/data
      * @param pparticle The particle spawn information
      * @param isFixedEffect If the particle is spawned from a fixed effect
+     * @param owner The player that owns the particles
      */
-    public static void display(ParticlePair particle, PParticle pparticle, boolean isFixedEffect) {
+    public static void display(ParticlePair particle, PParticle pparticle, boolean isFixedEffect, Player owner) {
         ParticleEffect effect = particle.getEffect();
         int count = pparticle.isDirectional() ? 0 : 1;
         
         if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-            effect.display(particle.getSpawnMaterial(), pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), 1, pparticle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)), isFixedEffect);
+            effect.display(particle.getSpawnMaterial(), pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), 1, pparticle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)), isFixedEffect, owner);
         } else if (effect.hasProperty(ParticleProperty.COLORABLE)) {
-            effect.display(particle.getSpawnColor(), pparticle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)), isFixedEffect);
+            effect.display(particle.getSpawnColor(), pparticle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)), isFixedEffect, owner);
         } else {
-            effect.display(pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), count, pparticle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)), isFixedEffect);
+            effect.display(pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), count, pparticle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)), isFixedEffect, owner);
         }
     }
 
@@ -233,14 +234,15 @@ public enum ParticleEffect {
      * @param amount Amount of particles
      * @param center Center location of the effect
      * @param isFixedEffect If the particle is spawned from a fixed effect
+     * @param owner The player that owns the particles
      * @throws ParticleDataException If the particle effect requires additional data
      */
-    public void display(double offsetX, double offsetY, double offsetZ, double speed, int amount, Location center, boolean isFixedEffect) throws ParticleDataException {
+    public void display(double offsetX, double offsetY, double offsetZ, double speed, int amount, Location center, boolean isFixedEffect, Player owner) throws ParticleDataException {
         if (this.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
             throw new ParticleDataException("This particle effect requires additional data");
         }
 
-        for (Player player : this.getPlayersInRange(center, isFixedEffect)) {
+        for (Player player : this.getPlayersInRange(center, isFixedEffect, owner)) {
             player.spawnParticle(this.internalEnum, center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed);
         }
     }
@@ -251,9 +253,10 @@ public enum ParticleEffect {
      * @param color Color of the particle
      * @param center Center location of the effect
      * @param isFixedEffect If the particle is spawned from a fixed effect
+     * @param owner The player that owns the particles
      * @throws ParticleColorException If the particle effect is not colorable or the color type is incorrect
      */
-    public void display(ParticleColor color, Location center, boolean isFixedEffect) throws ParticleColorException {
+    public void display(ParticleColor color, Location center, boolean isFixedEffect, Player owner) throws ParticleColorException {
         if (!this.hasProperty(ParticleProperty.COLORABLE)) {
             throw new ParticleColorException("This particle effect is not colorable");
         }
@@ -265,11 +268,11 @@ public enum ParticleEffect {
                 dustData = DustOptions_CONSTRUCTOR.newInstance(Color.fromRGB(dustColor.getRed(), dustColor.getGreen(), dustColor.getBlue()), 1); // Wait, you can change the size of these now??? AWESOME! I might implement this in the future!
             } catch (Exception ignored) { }
 
-            for (Player player : this.getPlayersInRange(center, isFixedEffect)) {
+            for (Player player : this.getPlayersInRange(center, isFixedEffect, owner)) {
                 player.spawnParticle(this.internalEnum, center.getX(), center.getY(), center.getZ(), 1, 0, 0, 0, 0, dustData);
             }
         } else {
-            for (Player player : this.getPlayersInRange(center, isFixedEffect)) {
+            for (Player player : this.getPlayersInRange(center, isFixedEffect, owner)) {
                 // Minecraft clients require that you pass a non-zero value if the Red value should be zero
                 player.spawnParticle(this.internalEnum, center.getX(), center.getY(), center.getZ(), 0, this == ParticleEffect.DUST && color.getValueX() == 0 ? Float.MIN_VALUE : color.getValueX(), color.getValueY(), color.getValueZ(), 1);
             }
@@ -289,9 +292,10 @@ public enum ParticleEffect {
      * @param amount Amount of particles
      * @param center Center location of the effect
      * @param isFixedEffect If the particle is spawned from a fixed effect
+     * @param owner The player that owns the particles
      * @throws ParticleDataException If the particle effect does not require additional data or if the data type is incorrect
      */
-    public void display(Material spawnMaterial, double offsetX, double offsetY, double offsetZ, double speed, int amount, Location center, boolean isFixedEffect) throws ParticleDataException {
+    public void display(Material spawnMaterial, double offsetX, double offsetY, double offsetZ, double speed, int amount, Location center, boolean isFixedEffect, Player owner) throws ParticleDataException {
         if (!this.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
             throw new ParticleDataException("This particle effect does not require additional data");
         }
@@ -307,7 +311,7 @@ public enum ParticleEffect {
             extraData = new MaterialData(spawnMaterial); // Deprecated, only used in versions < 1.13
         }
 
-        for (Player player : this.getPlayersInRange(center, isFixedEffect))
+        for (Player player : this.getPlayersInRange(center, isFixedEffect, owner))
             player.spawnParticle(this.internalEnum, center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed, extraData);
     }
 
@@ -316,14 +320,18 @@ public enum ParticleEffect {
      * 
      * @param center The center of the radius to check around
      * @param isFixedEffect If the particle is spawned from a fixed effect
+     * @param owner The player that owns the particles
      * @return A List of Players within the particle display range
      */
-    private List<Player> getPlayersInRange(Location center, boolean isFixedEffect) {
+    private List<Player> getPlayersInRange(Location center, boolean isFixedEffect, Player owner) {
         List<Player> players = new ArrayList<>();
         int range = !isFixedEffect ? PSetting.PARTICLE_RENDER_RANGE_PLAYER.getInt() : PSetting.PARTICLE_RENDER_RANGE_FIXED_EFFECT.getInt();
 
         for (PPlayer pplayer : ParticleManager.getPPlayers()) {
             Player p = pplayer.getPlayer();
+            if (!isFixedEffect && !p.canSee(owner))
+                continue;
+
             if (p != null && pplayer.canSeeParticles() && p.getWorld().equals(center.getWorld()) && center.distanceSquared(p.getLocation()) <= range * range) {
                 players.add(p);
             }
