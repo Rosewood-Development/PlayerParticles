@@ -187,6 +187,10 @@ gui-icon:
       - ENDER_CHEST
     back:
       - ARROW
+    next_page:
+      - PAPER
+    previous_page:
+      - PAPER
     create:
       - WRITABLE_BOOK
       - BOOK_AND_QUILL
@@ -197,8 +201,6 @@ gui-icon:
       - NETHER_STAR
     edit_data:
       - BOOK
-    randomize:
-      - HOPPER
     reset:
       - BARRIER
   effect:

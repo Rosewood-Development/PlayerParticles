@@ -22,10 +22,20 @@ public abstract class GuiInventory implements InventoryHolder {
     protected enum BorderColor {
         WHITE(0, "WHITE_STAINED_GLASS_PANE"),
         ORANGE(1, "ORANGE_STAINED_GLASS_PANE"),
-        RED(14, "RED_STAINED_GLASS_PANE"),
+        MAGENTA(2, "MAGENTA_STAINED_GLASS_PANE"),
+        LIGHT_BLUE(3, "LIGHT_BLUE_STAINED_GLASS_PANE"),
+        YELLOW(4, "YELLOW_STAINED_GLASS_PANE"),
+        LIME(5, "LIME_STAINED_GLASS_PANE"),
+        PINK(6, "PINK_STAINED_GLASS_PANE"),
+        GRAY(7, "GRAY_STAINED_GLASS_PANE"),
+        LIGHT_GRAY(8, "LIGHT_GRAY_STAINED_GLASS_PANE"),
+        CYAN(9, "CYAN_STAINED_GLASS_PANE"),
+        PURPLE(10, "PURPLE_STAINED_GLASS_PANE"),
+        BLUE(11, "BLUE_STAINED_GLASS_PANE"),
         BROWN(12, "BROWN_STAINED_GLASS_PANE"),
         GREEN(13, "GREEN_STAINED_GLASS_PANE"),
-        YELLOW(4, "YELLOW_STAINED_GLASS_PANE");
+        RED(14, "RED_STAINED_GLASS_PANE"),
+        BLACK(15, "BLACK_STAINED_GLASS_PANE");
         
         private short data;
         private Material material;

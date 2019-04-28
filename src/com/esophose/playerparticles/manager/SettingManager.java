@@ -188,11 +188,12 @@ public class SettingManager {
         GROUPS,
         PRESET_GROUPS,
         BACK,
+        NEXT_PAGE,
+        PREVIOUS_PAGE,
         CREATE,
         EDIT_EFFECT,
         EDIT_STYLE,
         EDIT_DATA,
-        RANDOMIZE,
         RESET,
         
         EFFECT,

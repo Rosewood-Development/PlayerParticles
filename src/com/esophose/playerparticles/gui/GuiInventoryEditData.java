@@ -9,6 +9,7 @@ import com.esophose.playerparticles.particles.ParticleEffect.NoteColor;
 import com.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
 import com.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
 import com.esophose.playerparticles.particles.ParticlePair;
+import com.esophose.playerparticles.util.NMSUtil;
 import com.esophose.playerparticles.util.ParticleUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -26,11 +27,10 @@ import java.util.Random;
 @SuppressWarnings("deprecation")
 public class GuiInventoryEditData extends GuiInventory {
 
-    private static Random RANDOM = new Random();
     private static List<Material> BLOCK_MATERIALS, ITEM_MATERIALS;
     private static ColorData[] colorMapping;
     private static ColorData[] rainbowColorMapping;
-    private static ColorData[] noteColorMapping;
+    private static ColorData[] noteColorMapping, noteColorMappingOld;
 
     static {
         colorMapping = new ColorData[]{
@@ -58,37 +58,66 @@ public class GuiInventoryEditData extends GuiInventory {
                 colorMapping[2], // Yellow
                 colorMapping[3], // Lime
                 colorMapping[7], // Light Blue
+                colorMapping[6], // Cyan
                 colorMapping[5], // Blue
-                colorMapping[8]  // Purple
+                colorMapping[8], // Purple
+                colorMapping[9]  // Magenta
         };
 
-        // Note: This is supposed to be a rainbow but there's actually a bug in Minecraft since 1.8 that makes a bunch of them gray
         noteColorMapping = new ColorData[]{
-                colorMapping[7],  // Light Blue
-                colorMapping[7],  // Light Blue
-                colorMapping[13], // Gray
-                colorMapping[10], // Pink
-                colorMapping[9],  // Magenta
-                colorMapping[9],  // Magenta
-                colorMapping[0],  // Red
-                colorMapping[2],  // Yellow
-                colorMapping[2],  // Yellow
-                colorMapping[14], // Light Gray
-                colorMapping[13], // Gray
-                colorMapping[6],  // Cyan
-                colorMapping[6],  // Cyan
-                colorMapping[6],  // Cyan
-                colorMapping[5],  // Blue
-                colorMapping[8],  // Purple
-                colorMapping[8],  // Purple
-                colorMapping[8],  // Purple
-                colorMapping[13], // Gray
-                colorMapping[4],  // Green
-                colorMapping[3],  // Lime
-                colorMapping[2],  // Yellow
-                colorMapping[4],  // Green
-                colorMapping[7],  // Light Blue
-                colorMapping[7]   // Light Blue
+                rainbowColorMapping[3], // 0  Lime
+                rainbowColorMapping[3], // 1  Lime
+                rainbowColorMapping[2], // 2  Yellow
+                rainbowColorMapping[1], // 3  Orange
+                rainbowColorMapping[1], // 4  Orange
+                rainbowColorMapping[0], // 5  Red
+                rainbowColorMapping[0], // 6  Red
+                rainbowColorMapping[0], // 7  Red
+                rainbowColorMapping[8], // 8  Magenta
+                rainbowColorMapping[8], // 9  Magenta
+                rainbowColorMapping[7], // 10 Purple
+                rainbowColorMapping[7], // 11 Purple
+                rainbowColorMapping[7], // 12 Purple
+                rainbowColorMapping[6], // 13 Blue
+                rainbowColorMapping[6], // 14 Blue
+                rainbowColorMapping[6], // 15 Blue
+                rainbowColorMapping[6], // 16 Blue
+                rainbowColorMapping[5], // 17 Cyan
+                rainbowColorMapping[5], // 18 Cyan
+                rainbowColorMapping[5], // 20 Lime
+                rainbowColorMapping[5], // 21 Lime
+                rainbowColorMapping[5], // 22 Lime
+                rainbowColorMapping[5], // 23 Lime
+                rainbowColorMapping[5]  // 24 Lime
+        };
+
+        // Note: Minecraft 1.8 through 1.13 had screwed up note color values, they were thankfully fixed in 1.14
+        noteColorMappingOld = new ColorData[]{
+                colorMapping[7],  // 0  Light Blue
+                colorMapping[7],  // 1  Light Blue
+                colorMapping[13], // 2  Gray
+                colorMapping[10], // 3  Pink
+                colorMapping[9],  // 4  Magenta
+                colorMapping[9],  // 5  Magenta
+                colorMapping[0],  // 6  Red
+                colorMapping[2],  // 7  Yellow
+                colorMapping[2],  // 8  Yellow
+                colorMapping[14], // 9  Light Gray
+                colorMapping[13], // 10 Gray
+                colorMapping[6],  // 11 Cyan
+                colorMapping[6],  // 12 Cyan
+                colorMapping[6],  // 13 Cyan
+                colorMapping[5],  // 14 Blue
+                colorMapping[8],  // 15 Purple
+                colorMapping[8],  // 16 Purple
+                colorMapping[8],  // 17 Purple
+                colorMapping[13], // 18 Gray
+                colorMapping[4],  // 19 Green
+                colorMapping[3],  // 20 Lime
+                colorMapping[2],  // 21 Yellow
+                colorMapping[4],  // 22 Green
+                colorMapping[7],  // 23 Light Blue
+                colorMapping[7]   // 24 Light Blue
         };
 
         BLOCK_MATERIALS = new ArrayList<>();
@@ -110,21 +139,23 @@ public class GuiInventoryEditData extends GuiInventory {
         }
     }
 
-    public GuiInventoryEditData(PPlayer pplayer, ParticlePair editingParticle, List<GuiInventoryEditFinishedCallback> callbackList, int callbackListPosition) {
+    public GuiInventoryEditData(PPlayer pplayer, ParticlePair editingParticle, int pageNumber, List<GuiInventoryEditFinishedCallback> callbackList, int callbackListPosition) {
         super(pplayer, Bukkit.createInventory(pplayer.getPlayer(), INVENTORY_SIZE, LangManager.getText(Lang.GUI_SELECT_DATA)));
+
+        this.fillBorder(BorderColor.MAGENTA);
 
         ParticleEffect pe = editingParticle.getEffect();
         if (pe.hasProperty(ParticleProperty.COLORABLE)) {
             if (pe == ParticleEffect.NOTE) { // Note data
-                this.populateNoteData(editingParticle, callbackList, callbackListPosition);
+                this.populateNoteData(editingParticle, pageNumber, callbackList, callbackListPosition);
             } else { // Color data
-                this.populateColorData(editingParticle, callbackList, callbackListPosition);
+                this.populateColorData(editingParticle, pageNumber, callbackList, callbackListPosition);
             }
         } else if (pe.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
             if (pe == ParticleEffect.ITEM) { // Item data
-                this.populateItemData(editingParticle, callbackList, callbackListPosition);
+                this.populateItemData(editingParticle, pageNumber, callbackList, callbackListPosition);
             } else { // Block data
-                this.populateBlockData(editingParticle, callbackList, callbackListPosition);
+                this.populateBlockData(editingParticle, pageNumber, callbackList, callbackListPosition);
             }
         }
 
@@ -144,14 +175,14 @@ public class GuiInventoryEditData extends GuiInventory {
      * Populates the Inventory with available color data options
      *
      * @param editingParticle      The ParticlePair that's being edited
+     * @param pageNumber           The current page number
      * @param callbackList         The List of GuiInventoryEditFinishedCallbacks
      * @param callbackListPosition The index of the callbackList we're currently at
      */
-    private void populateColorData(ParticlePair editingParticle, List<GuiInventoryEditFinishedCallback> callbackList, int callbackListPosition) {
+    private void populateColorData(ParticlePair editingParticle, int pageNumber, List<GuiInventoryEditFinishedCallback> callbackList, int callbackListPosition) {
         int index = 10;
         int nextWrap = 17;
-        for (int i = 0; i < colorMapping.length; i++) {
-            ColorData colorData = colorMapping[i];
+        for (ColorData colorData : colorMapping) {
             String formattedDisplayColor = ChatColor.RED.toString() + colorData.getOrdinaryColor().getRed() + " " + ChatColor.GREEN + colorData.getOrdinaryColor().getGreen() + " " + ChatColor.AQUA + colorData.getOrdinaryColor().getBlue();
 
             // Color Data Buttons
@@ -206,18 +237,26 @@ public class GuiInventoryEditData extends GuiInventory {
      *
      * @param editingParticle      The ParticlePair that's being edited
      * @param callbackList         The List of GuiInventoryEditFinishedCallbacks
+     * @param pageNumber           The current page number
      * @param callbackListPosition The index of the callbackList we're currently at
      */
-    private void populateNoteData(ParticlePair editingParticle, List<GuiInventoryEditFinishedCallback> callbackList, int callbackListPosition) {
-        for (int i = 0; i < noteColorMapping.length; i++) {
-            ColorData colorData = noteColorMapping[i];
+    private void populateNoteData(ParticlePair editingParticle, int pageNumber, List<GuiInventoryEditFinishedCallback> callbackList, int callbackListPosition) {
+        int numberOfItems = noteColorMapping.length;
+        int maxPages = (int) Math.floor(numberOfItems / 28.0);
+        int itemsPerPage = 14;
+        int slot = 10;
+        int nextWrap = 17;
+        int maxSlot = 43;
+
+        for (int i = (pageNumber - 1) * itemsPerPage; i < numberOfItems; i++) {
+            ColorData colorData = NMSUtil.getVersionNumber() > 13 ? noteColorMapping[i] : noteColorMappingOld[i];
             String formattedDisplayName = LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_SELECT_DATA_NOTE, i) + " (" + colorData.getName() + LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + ")";
             String formattedDescription = LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SELECT_DATA_DESCRIPTION, LangManager.getText(Lang.GUI_SELECT_DATA_NOTE, i));
 
             // Note Color Buttons
             int noteIndex = i;
             GuiActionButton setColorButton = new GuiActionButton(
-                    i,
+                    slot,
                     colorData,
                     formattedDisplayName,
                     new String[]{formattedDescription},
@@ -226,6 +265,13 @@ public class GuiInventoryEditData extends GuiInventory {
                         callbackList.get(callbackListPosition + 1).execute();
                     });
             this.actionButtons.add(setColorButton);
+
+            slot++;
+            if (slot == nextWrap) { // Loop around border
+                nextWrap += 9;
+                slot += 2;
+            }
+            if (slot > maxSlot) break; // Overflowed the available space
         }
 
         // Rainbow Note Data Button
@@ -255,6 +301,28 @@ public class GuiInventoryEditData extends GuiInventory {
                     callbackList.get(callbackListPosition + 1).execute();
                 });
         this.actionButtons.add(setRandomColorButton);
+
+        // Previous page button
+        if (pageNumber != 1) {
+            GuiActionButton previousPageButton = new GuiActionButton(
+                    INVENTORY_SIZE - 6,
+                    GuiIcon.PREVIOUS_PAGE.get(),
+                    LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_PREVIOUS_PAGE_BUTTON, pageNumber - 1, maxPages),
+                    new String[]{},
+                    (button, isShiftClick) -> GuiHandler.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber - 1, callbackList, callbackListPosition)));
+            this.actionButtons.add(previousPageButton);
+        }
+
+        // Next page button
+        if (pageNumber != maxPages) {
+            GuiActionButton nextPageButton = new GuiActionButton(
+                    INVENTORY_SIZE - 4,
+                    GuiIcon.NEXT_PAGE.get(),
+                    LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_NEXT_PAGE_BUTTON, pageNumber + 1, maxPages),
+                    new String[]{},
+                    (button, isShiftClick) -> GuiHandler.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber + 1, callbackList, callbackListPosition)));
+            this.actionButtons.add(nextPageButton);
+        }
     }
 
     /**
@@ -262,20 +330,22 @@ public class GuiInventoryEditData extends GuiInventory {
      *
      * @param editingParticle      The ParticlePair that's being edited
      * @param callbackList         The List of GuiInventoryEditFinishedCallbacks
+     * @param pageNumber           The current page number
      * @param callbackListPosition The index of the callbackList we're currently at
      */
-    private void populateItemData(ParticlePair editingParticle, List<GuiInventoryEditFinishedCallback> callbackList, int callbackListPosition) {
-        List<Material> materialBag = new ArrayList<>();
-        while (materialBag.size() < 36) { // Grab 36 random materials that are an item
-            Material randomMaterial = ITEM_MATERIALS.get(RANDOM.nextInt(ITEM_MATERIALS.size()));
-            if (!materialBag.contains(randomMaterial)) materialBag.add(randomMaterial);
-        }
+    private void populateItemData(ParticlePair editingParticle, int pageNumber, List<GuiInventoryEditFinishedCallback> callbackList, int callbackListPosition) {
+        int numberOfItems = ITEM_MATERIALS.size();
+        int maxPages = (int) Math.floor(numberOfItems / 28.0);
+        int itemsPerPage = 28;
+        int slot = 10;
+        int nextWrap = 17;
+        int maxSlot = 43;
 
-        for (int i = 0; i < materialBag.size(); i++) {
+        for (int i = (pageNumber - 1) * itemsPerPage; i < numberOfItems; i++) {
             // Item Data Button
-            Material material = materialBag.get(i);
+            Material material = ITEM_MATERIALS.get(i);
             GuiActionButton setRainbowColorButton = new GuiActionButton(
-                    i,
+                    slot,
                     material,
                     LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + material.name().toLowerCase(),
                     new String[]{LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SELECT_DATA_DESCRIPTION, material.name().toLowerCase())},
@@ -284,18 +354,36 @@ public class GuiInventoryEditData extends GuiInventory {
                         callbackList.get(callbackListPosition + 1).execute();
                     });
             this.actionButtons.add(setRainbowColorButton);
+
+            slot++;
+            if (slot == nextWrap) { // Loop around border
+                nextWrap += 9;
+                slot += 2;
+            }
+            if (slot > maxSlot) break; // Overflowed the available space
         }
 
-        // Randomize Button, re-randomizes the icons
-        GuiActionButton randomizeButton = new GuiActionButton(
-                45,
-                GuiIcon.RANDOMIZE.get(),
-                LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_SELECT_DATA_RANDOMIZE_ITEMS),
-                new String[]{LangManager.getText(Lang.GUI_COLOR_SUBTEXT) + LangManager.getText(Lang.GUI_SELECT_DATA_RANDOMIZE_ITEMS_DESCRIPTION)},
-                (block, isShiftClick) -> {
-                    callbackList.get(callbackListPosition).execute(); // Just reopen the same inventory
-                });
-        this.actionButtons.add(randomizeButton);
+        // Previous page button
+        if (pageNumber != 1) {
+            GuiActionButton previousPageButton = new GuiActionButton(
+                    INVENTORY_SIZE - 6,
+                    GuiIcon.PREVIOUS_PAGE.get(),
+                    LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_PREVIOUS_PAGE_BUTTON, pageNumber - 1, maxPages),
+                    new String[]{},
+                    (button, isShiftClick) -> GuiHandler.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber - 1, callbackList, callbackListPosition)));
+            this.actionButtons.add(previousPageButton);
+        }
+
+        // Next page button
+        if (pageNumber != maxPages) {
+            GuiActionButton nextPageButton = new GuiActionButton(
+                    INVENTORY_SIZE - 4,
+                    GuiIcon.NEXT_PAGE.get(),
+                    LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_NEXT_PAGE_BUTTON, pageNumber + 1, maxPages),
+                    new String[]{},
+                    (button, isShiftClick) -> GuiHandler.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber + 1, callbackList, callbackListPosition)));
+            this.actionButtons.add(nextPageButton);
+        }
     }
 
     /**
@@ -303,20 +391,22 @@ public class GuiInventoryEditData extends GuiInventory {
      *
      * @param editingParticle      The ParticlePair that's being edited
      * @param callbackList         The List of GuiInventoryEditFinishedCallbacks
+     * @param pageNumber           The current page number
      * @param callbackListPosition The index of the callbackList we're currently at
      */
-    private void populateBlockData(ParticlePair editingParticle, List<GuiInventoryEditFinishedCallback> callbackList, int callbackListPosition) {
-        List<Material> materialBag = new ArrayList<>();
-        while (materialBag.size() < 36) { // Grab 36 random materials that are an item
-            Material randomMaterial = BLOCK_MATERIALS.get(RANDOM.nextInt(BLOCK_MATERIALS.size()));
-            if (!materialBag.contains(randomMaterial)) materialBag.add(randomMaterial);
-        }
+    private void populateBlockData(ParticlePair editingParticle, int pageNumber, List<GuiInventoryEditFinishedCallback> callbackList, int callbackListPosition) {
+        int numberOfItems = BLOCK_MATERIALS.size();
+        int maxPages = (int) Math.floor(numberOfItems / 28.0);
+        int itemsPerPage = 28;
+        int slot = 10;
+        int nextWrap = 17;
+        int maxSlot = 43;
 
-        for (int i = 0; i < materialBag.size(); i++) {
+        for (int i = (pageNumber - 1) * itemsPerPage; i < numberOfItems; i++) {
             // Item Data Button
-            Material material = materialBag.get(i);
+            Material material = BLOCK_MATERIALS.get(i);
             GuiActionButton setRainbowColorButton = new GuiActionButton(
-                    i,
+                    slot,
                     material,
                     LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + material.name().toLowerCase(),
                     new String[]{LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SELECT_DATA_DESCRIPTION, material.name().toLowerCase())},
@@ -325,18 +415,36 @@ public class GuiInventoryEditData extends GuiInventory {
                         callbackList.get(callbackListPosition + 1).execute();
                     });
             this.actionButtons.add(setRainbowColorButton);
+
+            slot++;
+            if (slot == nextWrap) { // Loop around border
+                nextWrap += 9;
+                slot += 2;
+            }
+            if (slot > maxSlot) break; // Overflowed the available space
         }
 
-        // Randomize Button, re-randomizes the icons
-        GuiActionButton randomizeButton = new GuiActionButton(
-                45,
-                GuiIcon.RANDOMIZE.get(),
-                LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_SELECT_DATA_RANDOMIZE_BLOCKS),
-                new String[]{LangManager.getText(Lang.GUI_COLOR_SUBTEXT) + LangManager.getText(Lang.GUI_SELECT_DATA_RANDOMIZE_BLOCKS_DESCRIPTION)},
-                (block, isShiftClick) -> {
-                    callbackList.get(callbackListPosition).execute(); // Just reopen the same inventory
-                });
-        this.actionButtons.add(randomizeButton);
+        // Previous page button
+        if (pageNumber != 1) {
+            GuiActionButton previousPageButton = new GuiActionButton(
+                    INVENTORY_SIZE - 6,
+                    GuiIcon.PREVIOUS_PAGE.get(),
+                    LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_PREVIOUS_PAGE_BUTTON, pageNumber - 1, maxPages),
+                    new String[]{},
+                    (button, isShiftClick) -> GuiHandler.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber - 1, callbackList, callbackListPosition)));
+            this.actionButtons.add(previousPageButton);
+        }
+
+        // Next page button
+        if (pageNumber != maxPages) {
+            GuiActionButton nextPageButton = new GuiActionButton(
+                    INVENTORY_SIZE - 4,
+                    GuiIcon.NEXT_PAGE.get(),
+                    LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_NEXT_PAGE_BUTTON, pageNumber + 1, maxPages),
+                    new String[]{},
+                    (button, isShiftClick) -> GuiHandler.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber + 1, callbackList, callbackListPosition)));
+            this.actionButtons.add(nextPageButton);
+        }
     }
 
     /**

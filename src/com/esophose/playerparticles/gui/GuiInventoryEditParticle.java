@@ -39,7 +39,7 @@ public class GuiInventoryEditParticle extends GuiInventory {
                 (button, isShiftClick) -> {
                     List<GuiInventoryEditFinishedCallback> callbacks = new ArrayList<>();
                     callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditParticle(pplayer, editingParticle)));
-                    callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditEffect(pplayer, editingParticle, callbacks, 1)));
+                    callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditEffect(pplayer, editingParticle, 1, callbacks, 1)));
                     callbacks.add(() -> {
                         ParticleGroup group = pplayer.getActiveParticleGroup();
                         for (ParticlePair particle : group.getParticles()) {
@@ -65,7 +65,7 @@ public class GuiInventoryEditParticle extends GuiInventory {
                 (button, isShiftClick) -> {
                     List<GuiInventoryEditFinishedCallback> callbacks = new ArrayList<>();
                     callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditParticle(pplayer, editingParticle)));
-                    callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditStyle(pplayer, editingParticle, callbacks, 1)));
+                    callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditStyle(pplayer, editingParticle, 1, callbacks, 1)));
                     callbacks.add(() -> {
                         ParticleGroup group = pplayer.getActiveParticleGroup();
                         for (ParticlePair particle : group.getParticles()) {
@@ -94,7 +94,7 @@ public class GuiInventoryEditParticle extends GuiInventory {
                     if (usesData) {
                         List<GuiInventoryEditFinishedCallback> callbacks = new ArrayList<>();
                         callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditParticle(pplayer, editingParticle)));
-                        callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditData(pplayer, editingParticle, callbacks, 1)));
+                        callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditData(pplayer, editingParticle, 1, callbacks, 1)));
                         callbacks.add(() -> {
                             ParticleGroup group = pplayer.getActiveParticleGroup();
                             for (ParticlePair particle : group.getParticles()) {

@@ -82,11 +82,11 @@ public class GuiInventoryManageParticles extends GuiInventory {
                     ParticlePair editingParticle = ParticlePair.getNextDefault(pplayer);
                     List<GuiInventoryEditFinishedCallback> callbacks = new ArrayList<>();
                     callbacks.add(() -> GuiHandler.transition(new GuiInventoryManageParticles(pplayer)));
-                    callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditEffect(pplayer, editingParticle, callbacks, 1)));
-                    callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditStyle(pplayer, editingParticle, callbacks, 2)));
+                    callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditEffect(pplayer, editingParticle, 1, callbacks, 1)));
+                    callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditStyle(pplayer, editingParticle, 1, callbacks, 2)));
                     callbacks.add(() -> {
                         if (editingParticle.getEffect().hasProperty(ParticleProperty.COLORABLE) || editingParticle.getEffect().hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-                            GuiHandler.transition(new GuiInventoryEditData(pplayer, editingParticle, callbacks, 3));
+                            GuiHandler.transition(new GuiInventoryEditData(pplayer, editingParticle, 1, callbacks, 3));
                         } else {
                             callbacks.get(4).execute();
                         }

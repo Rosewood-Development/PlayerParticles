@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.esophose.playerparticles.util.NMSUtil;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -99,12 +100,15 @@ public enum ParticleEffect {
             if (effect.isSupported())
                 NAME_MAP.put(effect.getName(), effect);
 
-        try {
-            Particle.valueOf("NAUTILUS");
+        if (NMSUtil.getVersionNumber() > 12) {
             VERSION_13 = true;
-            DustOptions_CONSTRUCTOR = Particle.REDSTONE.getDataType().getConstructor(Color.class, float.class);
-            createBlockData_METHOD = Material.class.getMethod("createBlockData");
-        } catch (Exception e) {
+            try {
+                DustOptions_CONSTRUCTOR = Particle.REDSTONE.getDataType().getConstructor(Color.class, float.class);
+                createBlockData_METHOD = Material.class.getMethod("createBlockData");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else {
             DustOptions_CONSTRUCTOR = null;
             createBlockData_METHOD = null;
             VERSION_13 = false;
