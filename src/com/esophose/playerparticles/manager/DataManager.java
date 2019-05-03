@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -40,8 +39,8 @@ public class DataManager {
      * @return The PPlayer from cache
      */
     public static PPlayer getPPlayer(UUID playerUUID) {
-        List<PPlayer> pplayers = ParticleManager.getPPlayers();
-        synchronized (pplayers) { // Under rare circumstances, the PPlayers list can be changed while it's looping
+        List<PPlayer> pplayers;
+        synchronized (pplayers = ParticleManager.getPPlayers()) { // Under rare circumstances, the PPlayers list can be changed while it's looping
             for (PPlayer pp : pplayers)
                 if (pp.getUniqueId().equals(playerUUID))
                     return pp;
@@ -64,8 +63,8 @@ public class DataManager {
         }
 
         async(() -> {
-            List<ParticleGroup> groups = new ArrayList<ParticleGroup>();
-            List<FixedParticleEffect> fixedParticles = new ArrayList<FixedParticleEffect>();
+            List<ParticleGroup> groups = new ArrayList<>();
+            List<FixedParticleEffect> fixedParticles = new ArrayList<>();
 
             PlayerParticles.getPlugin().getDBConnector().connect((connection) -> {
                 // Load settings

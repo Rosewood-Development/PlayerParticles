@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.esophose.playerparticles.util.NMSUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -21,6 +22,7 @@ import org.bukkit.material.MaterialData;
 import com.esophose.playerparticles.manager.ParticleManager;
 import com.esophose.playerparticles.manager.SettingManager.PSetting;
 import com.esophose.playerparticles.styles.api.PParticle;
+import org.bukkit.metadata.MetadataValue;
 
 @SuppressWarnings("deprecation")
 public enum ParticleEffect {
@@ -329,7 +331,7 @@ public enum ParticleEffect {
 
         for (PPlayer pplayer : ParticleManager.getPPlayers()) {
             Player p = pplayer.getPlayer();
-            if (!isFixedEffect && !p.canSee(owner))
+            if (!isFixedEffect && !this.canSee(p, owner))
                 continue;
 
             if (p != null && pplayer.canSeeParticles() && p.getWorld().equals(center.getWorld()) && center.distanceSquared(p.getLocation()) <= range * range) {
@@ -338,6 +340,24 @@ public enum ParticleEffect {
         }
 
         return players;
+    }
+
+    /**
+     * Checks if a player can see another player
+     *
+     * @param player The player
+     * @param target The target
+     * @return True if player can see target, otherwise false
+     */
+    private boolean canSee(Player player, Player target) {
+        if (player == null || target == null)
+            return true;
+
+        for (MetadataValue meta : target.getMetadata("vanished"))
+            if (meta.asBoolean())
+                return false;
+
+        return player.canSee(target);
     }
 
     /**
