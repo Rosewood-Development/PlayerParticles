@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Arrow;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,17 +19,17 @@ public class ParticleStyleArrows implements ParticleStyle, Listener {
 
     private static final String[] arrowEntityNames = new String[] { "ARROW", "SPECTRAL_ARROW", "TIPPED_ARROW" };
     private static final int MAX_ARROWS_PER_PLAYER = 10;
-    private List<Arrow> arrows = new ArrayList<Arrow>();
+    private List<AbstractArrow> arrows = new ArrayList();
 
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
-        List<PParticle> particles = new ArrayList<PParticle>();
+        List<PParticle> particles = new ArrayList();
 
         int count = 0;
-        for (int i = arrows.size() - 1; i >= 0; i--) { // Loop backwards so the last-fired arrows are the ones that have particles if they go over the max
-            Arrow arrow = arrows.get(i);
+        for (int i = arrows.size() - 1; i >= 0; --i) { // Loop backwards so the last-fired arrows are the ones that have particles if they go over the max
+            AbstractArrow arrow = arrows.get(i);
             if (((Player) arrow.getShooter()).getUniqueId() == particle.getOwnerUniqueId()) {
                 particles.add(new PParticle(arrow.getLocation(), 0.05F, 0.05F, 0.05F, 0.0F));
-                count++;
+                ++count;
             }
             
             if (count >= MAX_ARROWS_PER_PLAYER) break;
@@ -42,8 +42,8 @@ public class ParticleStyleArrows implements ParticleStyle, Listener {
      * Removes all arrows that are considered dead
      */
     public void updateTimers() {
-        for (int i = arrows.size() - 1; i >= 0; i--) {
-            Arrow arrow = arrows.get(i);
+        for (int i = arrows.size() - 1; i >= 0; --i) {
+            AbstractArrow arrow = arrows.get(i);
             if (arrow.getTicksLived() >= 1200 || arrow.isDead() || !arrow.isValid()) arrows.remove(i);
         }
     }
@@ -83,7 +83,7 @@ public class ParticleStyleArrows implements ParticleStyle, Listener {
             }
 
             if (match) 
-                arrows.add((Arrow) e.getProjectile());
+                arrows.add((AbstractArrow) e.getProjectile());
         }
     }
 
