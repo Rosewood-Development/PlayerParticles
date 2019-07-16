@@ -208,7 +208,7 @@ fixed-max-reached: "&cBạn đã đạt tới giới hạn số Hiệu ứng c�
 fixed-invalid-command: "&cLệnh phụ không hợp lệ, &b/pp fixed&c!"
 
 # Update Available
-update-available: "&eĐã có bản cập nhật (&b{0}&e)! bạn đang sử dụng &bv{1}&e. https://www.spigotmc.org/resources/playerparticles.40261/"
+update-available: "&eĐã có bản cập nhật (&b{0}&e)! bạn đang sử dụng &bv{1}&e. https://songoda.com/marketplace/product/32"
 
 # GUI
 gui-disabled: "&cAmdinistrator đã cấm GUI!"

@@ -208,7 +208,7 @@ fixed-max-reached: "&cYou have reached the maximum allowed fixed effects!"
 fixed-invalid-command: "&cInvalid sub-command for &b/pp fixed&c!"
 
 # Update Available
-update-available: "&eAn update (&b{0}&e) is available! You are running &bv{1}&e. https://www.spigotmc.org/resources/playerparticles.40261/"
+update-available: "&eAn update (&b{0}&e) is available! You are running &bv{1}&e. https://songoda.com/marketplace/product/32"
 
 # GUI
 gui-disabled: "&cThe server administrator has disabled the GUI!"

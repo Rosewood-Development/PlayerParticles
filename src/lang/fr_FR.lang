@@ -208,7 +208,7 @@ fixed-max-reached: "&cVous avez atteint le nombre maximum de particules fixes !"
 fixed-invalid-command: "&cArguments invalides pour la commande &b/pp fixed&c!"
 
 # Update Available
-update-available: "&eLa version (&b{0}&e) est disponible ! vous utilisez la version &bv{1}&d. https://www.spigotmc.org/resources/playerparticles.40261/"
+update-available: "&eLa version (&b{0}&e) est disponible ! vous utilisez la version &bv{1}&d. https://songoda.com/marketplace/product/32"
 
 # GUI
 gui-disabled: "&cL'interface du plugin à été désactivée !"
