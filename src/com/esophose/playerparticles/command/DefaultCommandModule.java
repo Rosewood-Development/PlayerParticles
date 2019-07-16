@@ -39,7 +39,7 @@ public class DefaultCommandModule implements CommandModule {
     }
 
     public boolean requiresEffects() {
-        return true;
+        return false;
     }
 
     public boolean canConsoleExecute() {

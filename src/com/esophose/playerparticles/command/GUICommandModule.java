@@ -27,14 +27,12 @@ public class GUICommandModule implements CommandModule {
             }
             return;
         }
-        
-        if (PSetting.GUI_PRESETS_ONLY.getBoolean() && ParticleGroupPresetManager.getPresetGroupsForPlayer(pplayer.getPlayer()).isEmpty()) {
-            return;
-        } else if (PermissionManager.getEffectNamesUserHasPermissionFor(pplayer.getPlayer()).isEmpty()) {
+
+        if (!PSetting.GUI_PRESETS_ONLY.getBoolean() && PermissionManager.getEffectNamesUserHasPermissionFor(pplayer.getPlayer()).isEmpty()) {
             if (byDefault) {
-                LangManager.sendMessage(pplayer, Lang.COMMAND_ERROR_UNKNOWN);
-            } else {
                 LangManager.sendMessage(pplayer, Lang.COMMAND_ERROR_NO_EFFECTS);
+            } else {
+                LangManager.sendMessage(pplayer, Lang.COMMAND_ERROR_UNKNOWN);
             }
             return;
         }
@@ -59,7 +57,7 @@ public class GUICommandModule implements CommandModule {
     }
 
     public boolean requiresEffects() {
-        return true;
+        return false;
     }
 
     public boolean canConsoleExecute() {
