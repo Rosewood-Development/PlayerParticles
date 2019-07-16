@@ -52,6 +52,11 @@ public interface CommandModule {
      * @return If the player must have effects to use this command
      */
     boolean requiresEffects();
+
+    /**
+     * @return true if this command can be executed from console, otherwise false
+     */
+    boolean canConsoleExecute();
     
     /**
      * Displays a command's usage to the player

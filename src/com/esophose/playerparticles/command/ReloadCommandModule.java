@@ -12,7 +12,7 @@ import com.esophose.playerparticles.particles.PPlayer;
 public class ReloadCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
-        if (PermissionManager.canReloadPlugin(pplayer.getPlayer())) {
+        if (PermissionManager.canReloadPlugin(pplayer.getMessageDestination())) {
             PlayerParticles.getPlugin().reload(false);
             LangManager.sendMessage(pplayer, Lang.RELOAD_SUCCESS);
             PlayerParticles.getPlugin().getLogger().info("Reloaded configuration.");
@@ -39,6 +39,10 @@ public class ReloadCommandModule implements CommandModule {
 
     public boolean requiresEffects() {
         return false;
+    }
+
+    public boolean canConsoleExecute() {
+        return true;
     }
 
 }

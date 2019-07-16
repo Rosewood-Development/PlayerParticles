@@ -48,4 +48,8 @@ public class StylesCommandModule implements CommandModule {
         return false;
     }
 
+    public boolean canConsoleExecute() {
+        return false;
+    }
+
 }

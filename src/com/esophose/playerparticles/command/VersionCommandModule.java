@@ -37,4 +37,8 @@ public class VersionCommandModule implements CommandModule {
         return false;
     }
 
+    public boolean canConsoleExecute() {
+        return false;
+    }
+
 }

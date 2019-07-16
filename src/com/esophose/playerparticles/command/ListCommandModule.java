@@ -50,4 +50,8 @@ public class ListCommandModule implements CommandModule {
         return true;
     }
 
+    public boolean canConsoleExecute() {
+        return false;
+    }
+
 }

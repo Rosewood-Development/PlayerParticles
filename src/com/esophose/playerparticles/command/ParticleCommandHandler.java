@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.esophose.playerparticles.particles.OtherPPlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -96,27 +97,32 @@ public class ParticleCommandHandler implements CommandExecutor, TabCompleter {
      */
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (cmd.getName().equalsIgnoreCase("pp")) {
-            if (!(sender instanceof Player)) {
-                sender.sendMessage(ChatColor.RED + "Error: This command can only be executed by a player.");
+            String commandName = args.length > 0 ? args[0] : "";
+            CommandModule commandModule = findMatchingCommand(commandName);
+            if (commandModule == null) {
+                sender.sendMessage(LangManager.getText(Lang.COMMAND_ERROR_UNKNOWN));
+                return true;
+            }
+
+            String[] cmdArgs = args.length > 1 ? Arrays.copyOfRange(args, 1, args.length) : new String[0];
+
+            if (!commandModule.canConsoleExecute()) {
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage(ChatColor.RED + "Error: This command can only be executed by a player.");
+                    return true;
+                }
+            } else {
+                commandModule.onCommandExecute(new OtherPPlayer(sender), cmdArgs);
                 return true;
             }
             
             Player p = (Player) sender;
 
             DataManager.getPPlayer(p.getUniqueId(), (pplayer) -> {
-                String commandName = args.length > 0 ? args[0] : "";
-                CommandModule commandModule = findMatchingCommand(commandName);
-
-                if (commandModule != null) {
-                    if (commandModule.requiresEffects() && PermissionManager.getEffectNamesUserHasPermissionFor(p).isEmpty()) {
-                        LangManager.sendMessage(pplayer, Lang.COMMAND_ERROR_NO_EFFECTS);
-                    } else {
-                        String[] cmdArgs = new String[0];
-                        if (args.length > 1) cmdArgs = Arrays.copyOfRange(args, 1, args.length);
-                        commandModule.onCommandExecute(pplayer, cmdArgs);
-                    }
+                if (commandModule.requiresEffects() && PermissionManager.getEffectNamesUserHasPermissionFor(p).isEmpty()) {
+                    LangManager.sendMessage(pplayer, Lang.COMMAND_ERROR_NO_EFFECTS);
                 } else {
-                    LangManager.sendMessage(pplayer, Lang.COMMAND_ERROR_UNKNOWN);
+                    commandModule.onCommandExecute(pplayer, cmdArgs);
                 }
             });
         } else if (cmd.getName().equalsIgnoreCase("ppo")) {

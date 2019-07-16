@@ -16,7 +16,7 @@ public class DefaultCommandModule implements CommandModule {
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
-        List<String> matches = new ArrayList<String>();
+        List<String> matches = new ArrayList<>();
         List<String> commandNames = ParticleCommandHandler.getCommandNames();
         
         if (args.length == 0) return commandNames;
@@ -40,6 +40,10 @@ public class DefaultCommandModule implements CommandModule {
 
     public boolean requiresEffects() {
         return true;
+    }
+
+    public boolean canConsoleExecute() {
+        return false;
     }
 
 }

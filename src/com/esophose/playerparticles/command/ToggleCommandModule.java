@@ -41,4 +41,8 @@ public class ToggleCommandModule implements CommandModule {
         return false;
     }
 
+    public boolean canConsoleExecute() {
+        return false;
+    }
+
 }

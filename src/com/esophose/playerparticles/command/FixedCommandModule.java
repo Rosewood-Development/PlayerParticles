@@ -793,4 +793,8 @@ public class FixedCommandModule implements CommandModule {
         return true;
     }
 
+    public boolean canConsoleExecute() {
+        return false;
+    }
+
 }

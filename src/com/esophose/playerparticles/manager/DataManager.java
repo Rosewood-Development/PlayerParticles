@@ -1,14 +1,5 @@
 package com.esophose.playerparticles.manager;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import org.bukkit.Material;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import com.esophose.playerparticles.PlayerParticles;
 import com.esophose.playerparticles.particles.FixedParticleEffect;
 import com.esophose.playerparticles.particles.PPlayer;
@@ -19,6 +10,14 @@ import com.esophose.playerparticles.particles.ParticleGroup;
 import com.esophose.playerparticles.particles.ParticlePair;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
 import com.esophose.playerparticles.util.ParticleUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * All data changes to PPlayers such as group or fixed effect changes must be done through here,
@@ -55,6 +54,7 @@ public class DataManager {
      * @param callback The callback to execute with the found pplayer, or a newly generated one
      */
     public static void getPPlayer(UUID playerUUID, ConfigurationCallback<PPlayer> callback) {
+
         // Try to get them from cache first
         PPlayer fromCache = getPPlayer(playerUUID);
         if (fromCache != null) {
@@ -471,12 +471,8 @@ public class DataManager {
      *
      * @param asyncCallback The callback to run on a separate thread
      */
-    private static void async(SyncInterface asyncCallback) {
-        new BukkitRunnable() {
-            public void run() {
-                asyncCallback.execute();
-            }
-        }.runTaskAsynchronously(PlayerParticles.getPlugin());
+    private static void async(Runnable asyncCallback) {
+        Bukkit.getScheduler().runTaskAsynchronously(PlayerParticles.getPlugin(), asyncCallback);
     }
 
     /**
@@ -484,20 +480,8 @@ public class DataManager {
      *
      * @param syncCallback The callback to run on the main thread
      */
-    private static void sync(SyncInterface syncCallback) {
-        new BukkitRunnable() {
-            public void run() {
-                syncCallback.execute();
-            }
-        }.runTask(PlayerParticles.getPlugin());
-    }
-
-    /**
-     * Provides an easy way to run a section of code either synchronously or asynchronously using a callback
-     */
-    @FunctionalInterface
-    private interface SyncInterface {
-        void execute();
+    private static void sync(Runnable syncCallback) {
+        Bukkit.getScheduler().runTask(PlayerParticles.getPlugin(), syncCallback);
     }
 
     /**

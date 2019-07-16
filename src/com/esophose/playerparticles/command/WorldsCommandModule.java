@@ -45,4 +45,8 @@ public class WorldsCommandModule implements CommandModule {
         return false;
     }
 
+    public boolean canConsoleExecute() {
+        return false;
+    }
+
 }

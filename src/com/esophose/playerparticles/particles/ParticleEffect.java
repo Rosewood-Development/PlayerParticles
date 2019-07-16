@@ -88,7 +88,7 @@ public enum ParticleEffect {
     UNDERWATER("SUSPENDED_DEPTH", "SUSPENDED_DEPTH"),
     WITCH("SPELL_WITCH", "SPELL_WTICH");
 
-    public static boolean VERSION_13; // This is a particle unique to Minecraft 1.13, this is a reliable way of telling what server version is running
+    public static boolean VERSION_13;
     private static final Map<String, ParticleEffect> NAME_MAP = new HashMap<>();
     private static Constructor<?> DustOptions_CONSTRUCTOR;
     private static Method createBlockData_METHOD;

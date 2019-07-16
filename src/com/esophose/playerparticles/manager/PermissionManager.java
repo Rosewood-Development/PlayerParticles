@@ -12,6 +12,7 @@ import com.esophose.playerparticles.particles.ParticleEffect;
 import com.esophose.playerparticles.styles.DefaultStyles;
 import com.esophose.playerparticles.styles.api.ParticleStyle;
 import com.esophose.playerparticles.styles.api.ParticleStyleManager;
+import org.bukkit.permissions.Permissible;
 
 public class PermissionManager {
     
@@ -42,24 +43,24 @@ public class PermissionManager {
         }
         
         /**
-         * Checks if a Player has a PlayerParticles permission
+         * Checks if a Permissible has a PlayerParticles permission
          * 
-         * @param p The Player
+         * @param p The Permissible
          * @return True if the Player has permission
          */
-        public boolean check(Player p) {
+        public boolean check(Permissible p) {
             String permission = PERMISSION_PREFIX + this.permissionString;
             return p.hasPermission(permission);
         }
         
         /**
-         * Checks if a Player has a PlayerParticles permission with a sub-permission
+         * Checks if a Permissible has a PlayerParticles permission with a sub-permission
          * 
-         * @param p The Player
+         * @param p The Permissibhle
          * @param subPermission The sub-permission
          * @return True if the Player has permission
          */
-        public boolean check(Player p, String subPermission) {
+        public boolean check(Permissible p, String subPermission) {
             String permission = PERMISSION_PREFIX + this.permissionString + '.' + subPermission;
             return p.hasPermission(permission);
         }
@@ -77,7 +78,7 @@ public class PermissionManager {
      */
     public static boolean canOverride(CommandSender sender) {
         if (!(sender instanceof Player)) return true;
-        return PPermission.ALL.check((Player)sender);
+        return PPermission.ALL.check(sender);
     }
     
     /**
@@ -286,11 +287,11 @@ public class PermissionManager {
     /**
      * Checks if a player has permission to use /pp reload
      * 
-     * @param player The player to check the permission for
-     * @return True if the player has permission to reload the plugin's settings
+     * @param sender The sender to check the permission for
+     * @return True if the sender has permission to reload the plugin's settings
      */
-    public static boolean canReloadPlugin(Player player) {
-        return PPermission.ALL.check(player) || PPermission.RELOAD.check(player);
+    public static boolean canReloadPlugin(CommandSender sender) {
+        return PPermission.ALL.check(sender) || PPermission.RELOAD.check(sender);
     }
 
 }
