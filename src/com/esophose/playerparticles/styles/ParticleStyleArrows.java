@@ -1,38 +1,39 @@
 package com.esophose.playerparticles.styles;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.esophose.playerparticles.particles.ParticlePair;
+import com.esophose.playerparticles.styles.api.PParticle;
+import com.esophose.playerparticles.styles.api.ParticleStyle;
 import org.bukkit.Location;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
 
-import com.esophose.playerparticles.particles.ParticlePair;
-import com.esophose.playerparticles.styles.api.PParticle;
-import com.esophose.playerparticles.styles.api.ParticleStyle;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ParticleStyleArrows implements ParticleStyle, Listener {
 
     private static final String[] arrowEntityNames = new String[] { "ARROW", "SPECTRAL_ARROW", "TIPPED_ARROW" };
     private static final int MAX_ARROWS_PER_PLAYER = 10;
-    private List<Arrow> arrows = new ArrayList<Arrow>();
+    private List<Projectile> arrows = new ArrayList<>();
 
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
-        List<PParticle> particles = new ArrayList<PParticle>();
+        List<PParticle> particles = new ArrayList<>();
 
         int count = 0;
-        for (int i = arrows.size() - 1; i >= 0; i--) { // Loop backwards so the last-fired arrows are the ones that have particles if they go over the max
-            Arrow arrow = arrows.get(i);
-            if (((Player) arrow.getShooter()).getUniqueId() == particle.getOwnerUniqueId()) {
+        for (int i = this.arrows.size() - 1; i >= 0; i--) { // Loop backwards so the last-fired arrows are the ones that have particles if they go over the max
+            Projectile arrow = this.arrows.get(i);
+            if (((Player) arrow.getShooter()).getUniqueId().equals(particle.getOwnerUniqueId())) {
                 particles.add(new PParticle(arrow.getLocation(), 0.05F, 0.05F, 0.05F, 0.0F));
                 count++;
             }
             
-            if (count >= MAX_ARROWS_PER_PLAYER) break;
+            if (count >= MAX_ARROWS_PER_PLAYER)
+                break;
         }
 
         return particles;
@@ -42,9 +43,10 @@ public class ParticleStyleArrows implements ParticleStyle, Listener {
      * Removes all arrows that are considered dead
      */
     public void updateTimers() {
-        for (int i = arrows.size() - 1; i >= 0; i--) {
-            Arrow arrow = arrows.get(i);
-            if (arrow.getTicksLived() >= 1200 || arrow.isDead() || !arrow.isValid()) arrows.remove(i);
+        for (int i = this.arrows.size() - 1; i >= 0; i--) {
+            Projectile arrow = this.arrows.get(i);
+            if (arrow.getTicksLived() >= 1200 || arrow.isDead() || !arrow.isValid())
+                this.arrows.remove(i);
         }
     }
 
@@ -72,19 +74,12 @@ public class ParticleStyleArrows implements ParticleStyle, Listener {
      */
     @EventHandler
     public void onArrowFired(EntityShootBowEvent e) {
-        if (e.getEntityType() == EntityType.PLAYER) {
-            String entityName = e.getProjectile().getType().toString();
-            boolean match = false;
-            for (String name : arrowEntityNames) {
-                if (entityName.equalsIgnoreCase(name)) {
-                    match = true;
-                    break;
-                }
-            }
+        if (e.getEntityType() != EntityType.PLAYER)
+            return;
 
-            if (match) 
-                arrows.add((Arrow) e.getProjectile());
-        }
+        String entityName = e.getProjectile().getType().toString();
+        if (Arrays.stream(arrowEntityNames).anyMatch(entityName::equalsIgnoreCase))
+            this.arrows.add((Projectile) e.getProjectile());
     }
 
 }
