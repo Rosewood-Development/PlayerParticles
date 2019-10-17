@@ -1,0 +1,288 @@
+# ================================================================ #
+#                  en_US.lang MESSAGE CONFIGURATION                #
+# Important Notes:                                                 #
+# * You can use the & symbol to color the messages                 #
+# * {#} Will be replaced with whatever that message requires       #
+# * \n Will split the lore line in the #GUI section                #
+# * Do NOT use a quotation mark character in any message! ( " )    #
+# * PLEASE MAKE YOUR OWN .lang FILE IF YOU WANT CUSTOM MESSAGES!   #
+# * This file will be overridden almost every plugin update!       #
+# ================================================================ #
+# Translator: DUYSONGLOI
+
+# Command Errors
+command-error-no-effects: "&cBạn phải có quyền sử dụng hiệu ứng để làm điều này!"
+command-error-unknown: "&cLệnh không đúng, &6/pp help &cđể xem danh sách các câu lệnh."
+
+# Command Descriptions
+command-descriptions: "&eCác lệnh có sẵn:"
+command-descriptions-usage: "&e/pp {0} {1}"
+command-descriptions-help-1: "&7> &b/pp {0} &e- {1}"
+command-descriptions-help-2: "&7> &b/pp {0} {1} &e- {2}"
+command-descriptions-help-other: "&7> &b/ppo <player> <command> &e- Chạy lệnh /pp bằng player"
+command-description-add: "Thêm một hiệu ứng mới"
+command-description-data: "Kiểm tra laoị dữ liệu mà hiệu ứng sử dụng"
+command-description-default: "Đã mở GUI hiệu ứng"
+command-description-edit: "Chỉnh sửa một hiệu ứng"
+command-description-effects: "Hiển thị danh sách hiệu ứng mà bạn có thể sử dụng"
+command-description-fixed: "Quản lí hiệu ứng cố định của bạn"
+command-description-group: "Quản lí Group của bạn"
+command-description-gui: "Hiển thị GUI để dễ dàng chỉnh sửa hiệu ứng hơn"
+command-description-help: "Đang hiển thị Help Menu..."
+command-description-info: "Nhận mô tả về hiệu ứng đang hoạt động của bạn"
+command-description-list: "Danh sách IDs các hiệu ứng đang hoạt động của bạn"
+command-description-reload: "Tải lại config và lang file"
+command-description-remove: "Xóa một vài hiệu ứng"
+command-description-reset: "Xóa tất cả hiệu ứng đang hoạt động của bạn"
+command-description-styles: "Hiển thị danh sách Style bạn có thể sử dụng"
+command-description-toggle: "Bật/Tắt tàng hình hiệu ứng"
+command-description-version: "Hiển thị phiên bản và tác giả của plugins"
+command-description-worlds: "Hiển thị danh sách thế giới bị cấm hiệu ứng"
+
+# Sub-Command Usage
+command-description-fixed-create: "&e/pp fixed create <<x> <y> <z>|<looking>> <effect> <style> [data] - Tạo mới một hiệu ứng cố định"
+command-description-fixed-edit: "&e/pp fixed edit <id> <effect|style|data> <args> - Chỉnh sửa hiệu ứng cố định bằng IDs của nó"
+command-description-fixed-remove: "&e/pp fixed remove <ID> - Xóa hiệu ứng cố định"
+command-description-fixed-list: "&e/pp fixed list - Danh sách các hiệu ứng cố định dưới dạng IDs"
+command-description-fixed-info: "&e/pp fixed info <ID> - Hiển thị thông tin về hiệu ứng cố định"
+command-description-fixed-clear: "&e/pp fixed clear <radius> - Xóa toàn bộ hiệu ứng trong khu vực bán kính"
+command-description-group-save: "&e/pp group save <name> - Lưu toàn bộ hiêu ứng hoạt động vào Group mới"
+command-description-group-load: "&e/pp group load <name> - Load toàn bộ hiệu ứng hoạt động trong group"
+command-description-group-remove: "&e/pp group remove <name> - Xóa một group bạn đã lưu"
+command-description-group-list: "&e/pp group list <name> - Hiển thị danh sách Group hiệu ứng bạn đã lưu"
+command-description-group-info: "&e/pp group info <name> - Hiển thị danh sách hiệu ứng bạn đang lưu trong group"
+
+# Command ID Lookup
+id-invalid: "&cID bạn nhập không tồn tại, nó phải là một số nguyên dương!"
+id-unknown: "&cBạn không có hiệu ứng nào được áp dụng với ID &b{0}&c!"
+
+# Other Command
+other-no-permission: "&cbạn không có quyền để thi hành lệnh của plugins cho người chơi khác!"
+other-missing-args: "&cBạn đã quên một vài đối số. &b/ppo <player> <command>"
+other-unknown-player: "&cKhông thể tìm thấy người chơi &b{0} &c. Người chơi được chỉ định phải Online."
+other-unknown-command: "&cLệnh &b/pp {0} &ckhông tồn tại."
+other-success: "&eThi hành lệnh /pp command cho &b{0}&e. Output:"
+
+# Add Command
+add-reached-max: "&Không thể áp dụng hiệu ứng, Bạn đã đạt tới số lượng giới hạn của&b{0} &cđược cho phép!"
+add-particle-applied: "&aHạt (Particle) mới đã được áp dụng với effect &b{0}&a, style &b{1}&a, và data &b{2}&a!"
+
+# Data Command
+data-no-args: "&cĐã quên một đối số cho effect! Lệnh đúng: &b/pp data <effect>"
+
+# Edit Command
+edit-invalid-property: "&cMột property không hợp lệ &b{0} &cwđã được cung cấp. properties hợp lệ: &beffect&c, &bstyle&c, &bdata"
+edit-success-effect: "&aHạt hiệu ứng của bạn với ID &b{0} &ađã thanh đổi Hiệu ứng thành &b{1}&a!"
+edit-success-style: "&aHạt hiệu ứng của bạn với ID &b{0} &ađã thanh đổi Kiểu hiệu ứng thành &b{1}&a!"
+edit-success-data: "&aHạt hiệu ứng của bạn với ID &b{0} &ađã thanh đổi Dữ liệu thành &b{1}&a!"
+
+# Group Command
+group-invalid: "&cMột Group đã lưu hoặc Preset Group không được tìm thấy với tên &b{0}&c!"
+group-no-permission: "&cBạn không có quyền for 1 effect, style để sử dụng nhóm sẵn &b{0}&c!"
+group-preset-no-permission: "&cBạn không có quyền for 1 effect, style để sử dụng nhóm cài sẵn &b{0}&c!"
+group-reserved: "&cGroup tên &bactive &ckhông thể được sử dụng!"
+group-no-name: "&cBạn đã không cung cấp tên group! &b/pp {0} <groupName>"
+group-save-reached-max: "&cKhông thể lưu Group , bạn đã đạt giới hạn số lượng group có thể tạo!"
+group-save-no-particles: "&cKhông thể lưu group, bạn không có bất kì *hạt được được áp dụng nào!"
+group-save-success: "&aHạt hiệu ứng của bạn đã được lưu dưới tên của group &b{0}&a!"
+group-save-success-overwrite: "&aGroup tên&b{0} &ađã được cập nhật với hạt hiệu ứng hiện tại của bạn!"
+group-load-success: "&aĐã áp dụng &b{0} &ahạt hiệu ứng từ group được lưu với tên &b{1}&a!"
+group-load-preset-success: "&aĐã áp dụng &b{0} &ahạt hiệu ứng tự presen group với tên &b{1}&a!"
+group-remove-preset: "&cBạn không thể xóa một preset group!"
+group-remove-success: "&aĐã xóa một Nhóm hạt hiệu ứng với tên &b{0}&a!"
+group-info-header: "&eGroup &b{0} &eđang có những hạt hiệu ứng sau:"
+group-list-none: "&eBạn không có bất kì nhóm hạt hiệuứng nào được lưu!"
+group-list-output: "&eBạn đã lưu các Group sau: &b{0}"
+group-list-presets: "&eCác preset group có sẵn: &b{0}"
+
+# Reload Command
+reload-success: "&aĐã tải lại plugins!"
+reload-no-permission: "&cBạn không có quyền để tải lại plugins!"
+
+# Remove Command
+remove-no-args: "&cBạn không chỉ định IDs để xóa! &b/pp remove <ID>"
+remove-id-success: "&aHạt hiệu ứng của bạ với IDs &b{0} &ađã bị xóa!"
+remove-effect-success: "&aĐã xóa &b{0} &ahạt hiệu ứng của bạn với hiệu ứng &b{1}&a!"
+remove-effect-none: "&cBạn không có bất kì Hạt hiệu ứng nào để áp dụng hiệu ứng &b{0}&c!"
+remove-style-success: "&aĐã xóa &b{0} &aHạt hiệu ứng của bạn với style &b{1}&a!"
+remove-style-none: "&cBạn không có bất kì Hạt hiệu ứng nào để áp dụng style &b{0}&c!"
+remove-unknown: "&cEffect hoặc Style với tên &b{0} &ckhông tồn tại!"
+
+# List Command
+list-none: "&eBạn không có bất kì Hạt hiệu ứng hoạt động nào!"
+list-you-have: "&eCác hạt hiệu ứng bạn đã áp dụng:"
+list-output: "&eID: &b{0} &eEffect: &b{1} &eStyle: &b{2} &eData: &b{3}"
+
+# Toggle Command
+toggle-on: "&eHạt hiệu ứng : &aON&e!"
+toggle-off: "&eHạt hiệu ứng : &cOFF&e!"
+
+# Rainbow
+rainbow: "&cR&6a&ei&an&bb&9o&dw"
+
+# Random
+random: "Ngẫu nhiên"
+
+# Effects
+effect-no-permission: "&cBạn không có quyền để sử dụng Hiệu ứng &b{0} &c!"
+effect-invalid: "&cHiệu ứng &b{0} &ckhông tồn tại! Sử dụng &b/pp effects &cđể hiển thị danh sách hiệu ứng bạn có thể dùng."
+effect-list: "&eBạn có thể sử dụng các hiệu ứng sau: &b{0}"
+effect-list-empty: "&cBạn không có quyền để sử dụng bất kì hiệu ứng nào!"
+
+# Styles
+style-no-permission: "&cbạn không có quyền để sử dụng Kiểu hiệu ứng &b{0} &c!"
+style-event-spawning-info: "&eNhắc nhở: Kiểu hiệu ứng &b{0} &esinh ra dựa trên sự kiện nhất định được xảy ra."
+style-invalid: "&cKiểu hiệu ứng &b{0} &ckhông tồn tại! Use &b/pp styles &cđể hiển thị danh sách Kiểu hiệu ứng bạn có thể dùng."
+style-list: "&eBạn có thể sử dụng các Kiểu hiệu ứng sau: &b{0}"
+
+# Data
+data-usage-none: "&eHiệu ứng &b{0} &ekhông sử dụng bất kì Dữ liệu nào!"
+data-usage-block: "&eHiệu ứng &b{0} &eyêu cầu dữ liệu &bblock ! &bĐịnh dạng: <blockName>"
+data-usage-item: "&eHiệu ứng &b{0} &eyêu cầu dữ liệu &bitem! &bĐịnh dạng: <itemName>"
+data-usage-color: "&eHiệu ứng &b{0} &eyêu cầu dữ liệu &bcolor! &bĐịnh dạng: <<0-255> <0-255> <0-255>>|<rainbow>|<random>"
+data-usage-note: "&eHiệu ứng &b{0} &eyêu cầu dữ liệu &bnote! &bĐịnh dạng: <0-24>|<rainbow>|<random>"
+data-invalid-block: "&cDữ liệu &bblock &cbạn đã nhập không hợp lệ! &bĐịnh dạng: <blockName>"
+data-invalid-item: "&cDữ liệu &bitem &cbạn đã nhập không hợp lệ! &bĐịnh dạng: <itemName>"
+data-invalid-color: "&cDữ liệu &bcolor &cbạn đã nhập không hợp lệ! &bĐịnh dạng: <<0-255> <0-255> <0-255>>|<rainbow>|<random>"
+data-invalid-note: "&cDữ liệu &bnote &cbạn đã nhập không hợp lệ! &bĐịnh dạng: <0-24>|<rainbow>|<random>"
+data-invalid-material-not-item: "&cDữ liệu &bitem &c: Vật phẩm &b{0} &cbạn đã nhập không phải là một vật phẩm!"
+data-invalid-material-not-block: "&cDữ liệu &bblock &c: Vật phẩm &b{0} &cbạn đã nhập không phải là một khối!"
+data-invalid-material-item: "&cDữ liệu &bitem &c: Vật phẩm &b{0} bạn đã nhập không tồn tại!"
+data-invalid-material-block: "&cDữ liệu &bblock &c: Vật phẩm &b{0} bạn đã nhập không tồn tại!"
+
+# Worlds
+disabled-worlds: "&eCác Hạt hiệu ứng bị cấm tại thế giới này: &b{0}"
+disabled-worlds-none: "&eKhông có thể giới nào cấm Hạt hiệu ứng."
+
+# Reset
+reset-success: "&aĐã xóa &b{0} &aHạt hiệu ứng hoạt động!"
+
+# Fixed Effects
+fixed-create-missing-args: "&cKhông thể tạo Hiệu ứng cố định, bạn đã quên &b{0} &cđối số yêu cầu!"
+fixed-create-invalid-coords: "&cKhông thể tạo Hiệu ứng cố định, một hoặc nhiều tọa độ bạn đã nhập không hợp lệ!"
+fixed-create-out-of-range: "&cKhông thể tạo Hiệu ứng cố định, bạn phải ở trong bán kính &b{0} &ckhối tại vị trí mong muốn của bạn!"
+fixed-create-looking-too-far: "&cKhông thể tạo Hiệu ứng cố định, bạn đang đứng quá xa khối bạn nhìn!"
+fixed-create-effect-invalid: "&cKhông thể tạo Hiệu ứng cố định, Hiệu ứng với tên &b{0} &ckhông tồn tại!"
+fixed-create-effect-no-permission: "&cKhông thể tạo Hiệu ứng cố định, bạn không có quyền để sử dụng Hiệu ứng &b{0}&c!"
+fixed-create-style-invalid: "&cKhông thể tạo Hiệu ứng cố định, Kiểu hiệu ứng với tên &b{0} &ckhông tồn tại!"
+fixed-create-style-no-permission: "&cKhông thể tạo Hiệu ứng cố định, bạn không có quyền để sử dụng Kiểu hiệu ứng &b{0}&c!"
+fixed-create-style-non-fixable: "&cKhông thể tạo Hiệu ứng cố định, Kiểu hiệu ứng &b{0} &ckhông thể được sử dụng trong Hiệu ứng cố định!"
+fixed-create-data-error: "&cKhông thể tạo Hiệu ứng cố định, Dữ liệu bạn đã cung cấp không đúng! Sử dụng &b/pp data <effect> &cđể xem định dạng dữ liệu đúng!"
+fixed-create-success: "&aHiệu ứng cố định của bạn đã được tạo!"
+
+fixed-edit-missing-args: "&cKhông thể điều chỉnh Hiệu ứng cố định, bạn chưa nhập một vài đối số!"
+fixed-edit-invalid-id: "&cKhông thể điều chỉnh Hiệu ứng cố định, IDs bạn chỉ định không hợp lệ hoặc không tồn tại!"
+fixed-edit-invalid-property: "&cKhông thể điều chỉnh Hiệu ứng cố định, một property không hợp lệ đã được chỉ định! Chỉ có &blocation&c, &beffect&c, &bstyle&c, và &bdata &là hợp lệ."
+fixed-edit-invalid-coords: "&cKhông thể điều chỉnh Hiệu ứng cố định, một hoặc nhiều tọa độ bạn đã nhập không hợp lệ!"
+fixed-edit-out-of-range: "&cKhông thể điều chỉnh Hiệu ứng cố định, Bạn phải ở trong bán kính &b{0} &ckhối tại vị trí mong muốn của bạn!"
+fixed-edit-looking-too-far: "&cKhông thể điều chỉnh Hiệu ứng cố định, Bạn đang đứng quá xa so với khối bạn nhìn!"
+fixed-edit-effect-invalid: "&cKhông thể điều chỉnh Hiệu ứng cố định, một Hiệu ứng với tên &b{0} &ckhông tồn tại!"
+fixed-edit-effect-no-permission: "&cKhông thể điều chỉnh Hiệu ứng cố định, bạn không có quyền để sử dụng hiệu ứng &b{0}&c!"
+fixed-edit-style-invalid: "&cKhông thể điều chỉnh Hiệu ứng cố định, Kiểu hiệu ứng &b{0} &ckhông tồn tại!"
+fixed-edit-style-no-permission: "&cKhông thể điều chỉnh Hiệu ứng cố định, bạn không có quyền để sử dụng kiểu hiệu ứng &b{0}&c!"
+fixed-edit-style-non-fixable: "&cKhông thể điều chỉnh Hiệu ứng cố định, Kiểu hiệu ứng &b{0} &ckhông thể được sử dụng trong Hiệu ứng cố định!"
+fixed-edit-data-error: "&cKhông thể điều chỉnh Hiệu ứng cố định, Dữ liệu bạn đã cung cấp không đúng! Sử dụng &b/pp data <effect> &cđể xem định dạng dữ liệu đúng!"
+fixed-edit-data-none: "&cKhông thể điều chỉnh Hiệu ứng cố định, Hiệu ứng không yêu cầu bất cứ Dữ liệu nào!"
+fixed-edit-success: "&aĐã cập nhật &b{0} &acủa Hiệu ứng cố định với một ID của &b{1}&a!"
+
+fixed-remove-invalid: "&cKhông thể xóa Hiệu ứng cố định, bạn không có hiệu ứng cố định nào với ID &b{0}&c!"
+fixed-remove-no-args: "&cbạn không chỉ định ID để xóa!"
+fixed-remove-args-invalid: "&cKhông thể xóa, ID được chỉ định phải là số"
+fixed-remove-success: "&aHiệu ứng cố định của bạn với ID &b{0} &ađã bị xóa!"
+
+fixed-list-none: "&eBạn không có bất kì Hiệu ứng cố định nào!"
+fixed-list-success: "&eBạn có các Hiệu ứng cố định với IDs: &b{0}"
+
+fixed-info-invalid: "&cKhông thể lấy thông tin, bạn không có bất kì Hiệu ứng cố định nào với ID &b{0}&c!"
+fixed-info-no-args: "&cBạn không chỉ định ID để hiển thị thông tin Hiệu ứng có định!"
+fixed-info-invalid-args: "&cKhông thể hiển thị Hiệu ứng cố định, ID được chỉ định phải là một con số!"
+fixed-info-success: "&eID: &b{0} &eWorld: &b{1} &eX: &b{2} &eY: &b{3} &eZ: &b{4} &eEffect: &b{5} &eStyle: &b{6} &eData: &b{7}"
+
+fixed-clear-no-permission: "&cBạn không có quyền để làm điều này!"
+fixed-clear-no-args: "&cBạn không cung cấp bán kính để xóa các Hiệu ứng cố định!"
+fixed-clear-invalid-args: "&cbán kính được cung cấp không hợp lệ, nó phải là một số nguyên dương!"
+fixed-clear-success: "&aĐã xóa &b{0} &aHiệu ứng cố định trong bán kính &b{1} &akhối từ vị trí của bạn!"
+
+fixed-no-permission: "&cBạn không có quyền để làm điều này!"
+fixed-max-reached: "&cBạn đã đạt tới giới hạn số Hiệu ứng cố định có thể sử dụng!"
+fixed-invalid-command: "&cLệnh phụ không hợp lệ, &b/pp fixed&c!"
+
+# Update Available
+update-available: "&eĐã có bản cập nhật (&b{0}&e)! bạn đang sử dụng &bv{1}&e. https://www.spigotmc.org/resources/playerparticles.40261/"
+
+# GUI
+gui-disabled: "&cAmdinistrator đã cấm GUI!"
+gui-color-icon-name: "&a"
+gui-color-info: "&e"
+gui-color-subtext: "&b"
+gui-color-unavailable: "&c"
+gui-commands-info: "Hiển thị thêm các lệnh bằng cách gõ &b/pp help"
+gui-back-button: "Quay trở về"
+gui-next-page-button: "Trang tiếp theo ({0}/{1})"
+gui-previous-page-button: "Trang trước ({0}/{1})"
+gui-click-to-load: "Nhấn để tải {0} Hạt hiệu ứng sau:"
+gui-shift-click-to-delete: "Shift Click để xóa"
+gui-particle-info: "  - ID: &b{0} &eEffect: &b{1} &eStyle: &b{2} &eData: &b{3}"
+gui-playerparticles: "HIỆU ỨNG"
+gui-active-particles: "Hạt hiệu ứng đang hoạt động: &b{0}"
+gui-saved-groups: "Groups đã lưu: &b{0}"
+gui-fixed-effects: "Hiệu ứng cố định: &b{0}"
+gui-edit-primary-effect: "Chỉnh sửa hiệu ứng chính (primary effect)"
+gui-edit-primary-effect-description: "Chỉnh sửa Hiệu ứng Hạt hiệu ứng chính của bạn"
+gui-edit-primary-style: "Chỉnh sửa Kiểu hiệu ứng chính"
+gui-edit-primary-style-missing-effect: "Bạn cần chọn Hiệu ứng trước"
+gui-edit-primary-style-description: "Chỉnh sửa Kiểu hiệu ứng trong Hạt hiệu ứng chính của bạn"
+gui-edit-primary-data: "Chỉnh sửa Dữ liệu chính"
+gui-edit-primary-data-missing-effect: "Bạn cần chọn Hiệu ứng trước"
+gui-edit-primary-data-unavailable: "Hiệu ứng chính của bạn không cần sử dụng bất kì Dữ liệu nào"
+gui-edit-primary-data-description: "Chỉnh sửa Dữ liệu trong Hạt hiệu ứng chính của bạn"
+gui-manage-your-particles: "Quản lí Hạt hiệu ứng của bạn"
+gui-manage-your-particles-description: "Tạo, chỉnh sửa, và xóa Hạt hiệu ứng của bạn"
+gui-manage-your-groups: "Quản lí Group của bạn"
+gui-manage-your-groups-description: "Tạo, xóa, và tải Group Hạt hiệu ứng của bạn"
+gui-load-a-preset-group: "Tải một Preset Group"
+gui-load-a-preset-group-description: "Tải Group Hạt hiệu ứng có sẵn"
+gui-save-group: "Lưu group mới"
+gui-save-group-description: "Nhấn để lưu Group mới. Bạn sẽ nhận được lời nhắc nhập tên Group ở chat."
+gui-save-group-full: "Bạn đã đạt đến giới hạn số lượng group có thể tạo"
+gui-save-group-no-particles: "Bạn không có bất kì Hhạt hiệu ứng nào được áp dụng"
+gui-save-group-hotbar-message: "&eNhập &b1 &etên group trong chat. Nhập &ccancel&e để hủy. (&b{0}&es left)"
+gui-reset-particles: "Làm mới Hạt hiệu ứng của bạn"
+gui-reset-particles-description: "Xóa tất cả Hạt hiệu ứng đang hoạt động của bạn"
+gui-particle-name: "Hạt hiệu ứng #{0}"
+gui-click-to-edit-particle: "Nhấn để chỉnh sửa Hiệu ứng, Kiểu hiệu ứng, hoặc Dữ liệu của Hạt hiệu ứng này"
+gui-editing-particle: "Đang chỉnh sửa Hạt hiệu ứng #{0}"
+gui-edit-effect: "Chỉnh sửa Hiệu ứng"
+gui-edit-effect-description: "Nhấn để chỉnh sửa Hiệu ứng của Hạt hiệu ứng này"
+gui-edit-style: "Chỉnh sửa Kiểu hiệu ứng"
+gui-edit-style-description: "Nhấn để chỉnh sửa Kiểu hiệu ứng của Kiểu hiệu ứng này"
+gui-edit-data: "Chỉnh sửa Dữ liệu"
+gui-edit-data-description: "Nhấn để chỉnh sửa Dữ liệu của Kiểu hiệu ứng này"
+gui-edit-data-unavailable: "Hiệu ứng của Hạt hiệu ứng này không cần sử dụng bất kì Dữ liệu nào"
+gui-data-none: "none"
+gui-create-particle: "Tạo mới một Hạt hiệu ứng"
+gui-create-particle-description: "Tạo mới một Hạt hiệu ứng với Hiệu ứng, Kiểu hiệu ứng, và Dữ liệu"
+gui-create-particle-unavailable: "bạn đã đạt giới hạn số lượng Hạt hiệu ứng có thể tạo"
+gui-select-effect: "Chọn Hạt hiệu ứng"
+gui-select-effect-description: "Thiết lập hiệu ứng của Hạt thành &b{0}"
+gui-select-style: "Chọn Kiểu hiệu ứng của Hạt"
+gui-select-style-description: "Thiết lập Kiểu hiệu ứng của Hạt thành &b{0}"
+gui-select-data: "Chọn Dữ liệu của Hạt"
+gui-select-data-description: "Thiết lập DỮ liệu của Hạt thành &b{0}"
+gui-select-data-note: "note #{0}"
+gui-edit-data-color-red: "&cĐỏ mạnh mẽ"
+gui-edit-data-color-orange: "&6Cam dịu dàng"
+gui-edit-data-color-yellow: "&eVàng yêu thương"
+gui-edit-data-color-lime-green: "&aXanh nhẹ nhàng"
+gui-edit-data-color-green: "&2Xanh đen tối"
+gui-edit-data-color-blue: "&1Xanh lam"
+gui-edit-data-color-cyan: "&3Lục lam"
+gui-edit-data-color-light-blue: "&bXanh Da trời"
+gui-edit-data-color-purple: "&5Tím cá tính"
+gui-edit-data-color-magenta: "&dĐỏ tươi"
+gui-edit-data-color-pink: "&dHồng nam tính"
+gui-edit-data-color-brown: "&6Nâu thâm thâm"
+gui-edit-data-color-black: "&8Đen như tâm hồn"
+gui-edit-data-color-gray: "&8Xám"
+gui-edit-data-color-light-gray: "&7Xám nhạt"
+gui-edit-data-color-white: "&fTrắng tinh khiết"

@@ -1,5 +1,14 @@
-== UPDATING WILL DELETE YOUR CONFIG.YML ==
-* Create a backup of your config.yml if you wish to import all your old settings!
+=== v7.0 ===
+* The config will no longer reset for each and every update
++ Added settings for each effect located in the /effects folder
++ Added settings for each style located in the /styles folder
++ All command and parameter names can now be edited in the new commands.yml file
++ Added support for what I'm calling language packs
+  - Language packs have the ability to overwrite any message in the plugin
++ Added language settings for all material names which can be changed in a languge pack
+* The command '/pp fixed clear <radius>' now accepts an optional location/world as '/pp fixed clear <radius> [<x> <y> <z> [world]]'
++ Added support for 1.15 particles, the future is now
++ Added support for 1.8.8 for those who refuse to accept the future (this is the only version of 1.8.x that will be supported, I will eventually drop support for it again in the future)
 === v6.4 ===
 + Added support for Minecraft 1.14
 + Added 1.14 effects: 'campfire_cosy_smoke', 'campfire_signal_smoke', 'composter', 'falling_lava', 'falling_water', 'landing_lava', 'sneeze'

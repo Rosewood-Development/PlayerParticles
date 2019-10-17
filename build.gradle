@@ -1,0 +1,41 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+plugins {
+    id 'com.github.johnrengelman.shadow' version '5.1.0'
+    id 'java'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+group = 'dev.esophose.playerparticles'
+version = '7.0'
+
+repositories {
+    mavenCentral()
+	jcenter()
+	
+    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    maven { url = 'https://repo.codemc.org/repository/maven-public' }
+}
+
+dependencies {
+    compile 'org.slf4j:slf4j-api:1.7.25'
+    compile 'org.slf4j:slf4j-nop:1.7.25'
+    compile 'com.zaxxer:HikariCP:3.2.0'
+    compile 'com.googlecode.json-simple:json-simple:1.1.1'
+	shadow 'org.xerial:sqlite-jdbc:3.23.1'
+    shadow 'org.spigotmc:spigot-api:1.14.3-R0.1-SNAPSHOT'
+}
+
+shadowJar {
+    archiveClassifier.set(null)
+}
+
+processResources {
+    from (sourceSets.main.resources.srcDirs) {
+        include '**/*.yml'
+        filter ReplaceTokens, tokens: ["version": project.property("version")]
+    }
+}
+
+build.dependsOn shadowJar
