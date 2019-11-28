@@ -29,3 +29,5 @@ build/
 target/
 *.iml
 /bin/
+/doc/
+/images/
