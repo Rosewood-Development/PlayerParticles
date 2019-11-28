@@ -27,7 +27,7 @@ public class ParticleStyleArrows implements ParticleStyle, Listener {
         int count = 0;
         for (int i = this.arrows.size() - 1; i >= 0; i--) { // Loop backwards so the last-fired arrows are the ones that have particles if they go over the max
             Projectile arrow = this.arrows.get(i);
-            if (((Player) arrow.getShooter()).getUniqueId().equals(particle.getOwnerUniqueId())) {
+            if (arrow.getShooter() != null && ((Player) arrow.getShooter()).getUniqueId().equals(particle.getOwnerUniqueId())) {
                 particles.add(new PParticle(arrow.getLocation(), 0.05F, 0.05F, 0.05F, 0.0F));
                 count++;
             }
@@ -45,7 +45,7 @@ public class ParticleStyleArrows implements ParticleStyle, Listener {
     public void updateTimers() {
         for (int i = this.arrows.size() - 1; i >= 0; i--) {
             Projectile arrow = this.arrows.get(i);
-            if (arrow.getTicksLived() >= 1200 || arrow.isDead() || !arrow.isValid())
+            if (arrow.getTicksLived() >= 1200 || arrow.isDead() || !arrow.isValid() || arrow.getShooter() == null)
                 this.arrows.remove(i);
         }
     }
