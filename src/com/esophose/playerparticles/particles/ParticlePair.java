@@ -45,6 +45,16 @@ public class ParticlePair {
     }
 
     /**
+     * Updates the particle's owner if it hasn't been set yet
+     *
+     * @param pplayer The new owner
+     */
+    public void setOwner(PPlayer pplayer) {
+        if (this.ownerUUID == null)
+            this.ownerUUID = pplayer.getUniqueId();
+    }
+
+    /**
      * Sets the player's particle effect
      * 
      * @param effect The player's new particle effect
