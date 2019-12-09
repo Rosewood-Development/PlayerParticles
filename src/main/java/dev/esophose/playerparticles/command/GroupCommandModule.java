@@ -1,22 +1,22 @@
 package dev.esophose.playerparticles.command;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-
-import org.bukkit.entity.Player;
-import org.bukkit.util.StringUtil;
-
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.LangManager;
-import dev.esophose.playerparticles.manager.ParticleGroupPresetManager;
 import dev.esophose.playerparticles.manager.LangManager.Lang;
+import dev.esophose.playerparticles.manager.ParticleGroupPresetManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.particles.ParticleGroupPreset;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 
 public class GroupCommandModule implements CommandModule {
 
@@ -87,7 +87,7 @@ public class GroupCommandModule implements CommandModule {
         }
         
         // Check if they are creating a new group, if they are, check that they haven't gone over their limit
-        if (pplayer.getParticleGroupByName(groupName) == null && PermissionManager.hasPlayerReachedMaxGroups(pplayer)) {
+        if (pplayer.getParticleGroupByName(groupName) == null && PlayerParticles.getInstance().getManager(PermissionManager.class).hasPlayerReachedMaxGroups(pplayer)) {
             LangManager.sendMessage(pplayer, Lang.GROUP_SAVE_REACHED_MAX);
             return;
         }
@@ -105,7 +105,7 @@ public class GroupCommandModule implements CommandModule {
         }
         
         // Apply changes and notify player
-        DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+        PlayerParticles.getInstance().getManager(DataManager.class).saveParticleGroup(pplayer.getUniqueId(), group);
         if (groupUpdated) {
             LangManager.sendMessage(pplayer, Lang.GROUP_SAVE_SUCCESS_OVERWRITE, groupName);
         } else {
@@ -131,7 +131,7 @@ public class GroupCommandModule implements CommandModule {
         ParticleGroup group = pplayer.getParticleGroupByName(groupName);
         if (group == null) {
             // Didn't find a saved group, look at the presets
-            ParticleGroupPreset presetGroup = ParticleGroupPresetManager.getPresetGroup(groupName);
+            ParticleGroupPreset presetGroup = PlayerParticles.getInstance().getManager(ParticleGroupPresetManager.class).getPresetGroup(groupName);
             if (presetGroup == null) {
                 LangManager.sendMessage(pplayer, Lang.GROUP_INVALID, groupName);
                 return;
@@ -158,7 +158,7 @@ public class GroupCommandModule implements CommandModule {
             activeGroup.getParticles().add(particle.clone());
         
         // Update group and notify player
-        DataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
+        PlayerParticles.getInstance().getManager(DataManager.class).saveParticleGroup(pplayer.getUniqueId(), activeGroup);
         
         if (!isPreset)
             LangManager.sendMessage(pplayer, Lang.GROUP_LOAD_SUCCESS, activeGroup.getParticles().size(), groupName);
@@ -182,7 +182,7 @@ public class GroupCommandModule implements CommandModule {
         ParticleGroup group = pplayer.getParticleGroupByName(groupName);
         if (group == null) {
             // Didn't find a saved group, look at the presets
-            ParticleGroupPreset presetGroup = ParticleGroupPresetManager.getPresetGroup(groupName);
+            ParticleGroupPreset presetGroup = PlayerParticles.getInstance().getManager(ParticleGroupPresetManager.class).getPresetGroup(groupName);
             
             if (presetGroup == null) {
                 LangManager.sendMessage(pplayer, Lang.GROUP_INVALID, groupName);
@@ -193,7 +193,7 @@ public class GroupCommandModule implements CommandModule {
         }
         
         // Delete the group and notify player
-        DataManager.removeParticleGroup(pplayer.getUniqueId(), group);
+        PlayerParticles.getInstance().getManager(DataManager.class).removeParticleGroup(pplayer.getUniqueId(), group);
         LangManager.sendMessage(pplayer, Lang.GROUP_REMOVE_SUCCESS, groupName);
     }
     
@@ -213,7 +213,7 @@ public class GroupCommandModule implements CommandModule {
         ParticleGroup group = pplayer.getParticleGroupByName(groupName);
         if (group == null) {
             // Didn't find a saved group, look at the presets
-            ParticleGroupPreset presetGroup = ParticleGroupPresetManager.getPresetGroup(groupName);
+            ParticleGroupPreset presetGroup = PlayerParticles.getInstance().getManager(ParticleGroupPresetManager.class).getPresetGroup(groupName);
             if (presetGroup == null) {
                 LangManager.sendMessage(pplayer, Lang.GROUP_INVALID, groupName);
                 return;
@@ -254,7 +254,7 @@ public class GroupCommandModule implements CommandModule {
             groupsList = new StringBuilder(groupsList.substring(0, groupsList.length() - 2));
         
         StringBuilder presetsList = new StringBuilder();
-        for (ParticleGroupPreset group : ParticleGroupPresetManager.getPresetGroupsForPlayer(pplayer.getPlayer()))
+        for (ParticleGroupPreset group : PlayerParticles.getInstance().getManager(ParticleGroupPresetManager.class).getPresetGroupsForPlayer(pplayer.getPlayer()))
             presetsList.append(group.getGroup().getName()).append(", ");
         
         if (presetsList.toString().endsWith(", "))
@@ -290,7 +290,7 @@ public class GroupCommandModule implements CommandModule {
                     if (!group.getName().equals(ParticleGroup.DEFAULT_NAME))
                         groupNames.add(group.getName());
                 if (!args[0].equals("remove"))
-                    for (ParticleGroupPreset group : ParticleGroupPresetManager.getPresetGroupsForPlayer(pplayer.getPlayer()))
+                    for (ParticleGroupPreset group : PlayerParticles.getInstance().getManager(ParticleGroupPresetManager.class).getPresetGroupsForPlayer(pplayer.getPlayer()))
                         groupNames.add(group.getGroup().getName());
                 StringUtil.copyPartialMatches(args[1], groupNames, matches);
             }
@@ -303,8 +303,8 @@ public class GroupCommandModule implements CommandModule {
         return "group";
     }
 
-    public Lang getDescription() {
-        return Lang.COMMAND_DESCRIPTION_GROUP;
+    public String getDescriptionKey() {
+        return "command-description-group";
     }
 
     public String getArguments() {

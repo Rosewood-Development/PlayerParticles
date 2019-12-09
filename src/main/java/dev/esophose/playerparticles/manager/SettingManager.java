@@ -27,7 +27,7 @@ public class SettingManager {
     /**
      * An enum containing all settings in the config.yml for the plugin
      */
-    public enum PSetting {
+    public enum Setting {
         VERSION(PSettingType.DOUBLE),
         TICKS_PER_PARTICLE(PSettingType.LONG),
         CHECK_UPDATES(PSettingType.BOOLEAN),
@@ -72,7 +72,7 @@ public class SettingManager {
         private final PSettingType settingType;
         private Object value = null;
         
-        PSetting(PSettingType settingType) {
+        Setting(PSettingType settingType) {
             this.settingType = settingType;
         }
         
@@ -93,22 +93,22 @@ public class SettingManager {
                 String configPath = this.name().toLowerCase().replaceAll("_", "-");
                 switch (this.settingType) {
                 case BOOLEAN:
-                    this.value = PlayerParticles.getPlugin().getConfig().getBoolean(configPath);
+                    this.value = PlayerParticles.getInstance().getConfig().getBoolean(configPath);
                     break;
                 case INTEGER:
-                    this.value = PlayerParticles.getPlugin().getConfig().getInt(configPath);
+                    this.value = PlayerParticles.getInstance().getConfig().getInt(configPath);
                     break;
                 case LONG:
-                    this.value = PlayerParticles.getPlugin().getConfig().getLong(configPath);
+                    this.value = PlayerParticles.getInstance().getConfig().getLong(configPath);
                     break;
                 case DOUBLE:
-                    this.value = PlayerParticles.getPlugin().getConfig().getDouble(configPath);
+                    this.value = PlayerParticles.getInstance().getConfig().getDouble(configPath);
                     break;
                 case STRING:
-                    this.value = PlayerParticles.getPlugin().getConfig().getString(configPath);
+                    this.value = PlayerParticles.getInstance().getConfig().getString(configPath);
                     break;
                 case STRING_LIST:
-                    this.value = PlayerParticles.getPlugin().getConfig().getStringList(configPath);
+                    this.value = PlayerParticles.getInstance().getConfig().getStringList(configPath);
                     break;
                 }
             }
@@ -238,7 +238,7 @@ public class SettingManager {
             if (material != null)
                 return material;
             
-            List<String> materials = PlayerParticles.getPlugin().getConfig().getStringList(configPath);
+            List<String> materials = PlayerParticles.getInstance().getConfig().getStringList(configPath);
             
             try {
                 if (materials.size() == 1) {
@@ -251,7 +251,7 @@ public class SettingManager {
                     }
                 }
             } catch (Exception e) {
-                PlayerParticles.getPlugin().getLogger().severe("Missing GUI icon for '" + this.name().toLowerCase() + "'");
+                PlayerParticles.getInstance().getLogger().severe("Missing GUI icon for '" + this.name().toLowerCase() + "'");
             }
             
             if (material == null)
@@ -278,7 +278,7 @@ public class SettingManager {
      * Resets the settings to their default values
      */
     public static void reload() {
-        for (PSetting setting : PSetting.values())
+        for (Setting setting : Setting.values())
             setting.resetDefault();
         
         for (GuiIcon icon : GuiIcon.values())

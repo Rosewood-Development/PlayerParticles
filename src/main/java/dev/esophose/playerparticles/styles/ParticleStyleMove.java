@@ -2,6 +2,7 @@ package dev.esophose.playerparticles.styles;
 
 import java.util.List;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -43,12 +44,14 @@ public class ParticleStyleMove implements ParticleStyle, Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerMove(PlayerMoveEvent e) {
-        PPlayer pplayer = DataManager.getPPlayer(e.getPlayer().getUniqueId());
+        ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
+
+        PPlayer pplayer = PlayerParticles.getInstance().getManager(DataManager.class).getPPlayer(e.getPlayer().getUniqueId());
         if (pplayer != null) {
             for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.MOVE)) {
                 Location loc = e.getPlayer().getLocation().clone();
                 loc.setY(loc.getY() + 0.05);
-                ParticleManager.displayParticles(particle, DefaultStyles.MOVE.getParticles(particle, loc));
+                particleManager.displayParticles(particle, DefaultStyles.MOVE.getParticles(particle, loc));
             }
         }
     }

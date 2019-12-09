@@ -1,4 +1,4 @@
-package dev.esophose.playerparticles.updater;
+package dev.esophose.playerparticles.util;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

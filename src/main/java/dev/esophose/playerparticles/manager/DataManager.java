@@ -1,6 +1,10 @@
 package dev.esophose.playerparticles.manager;
 
 import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.database.DatabaseConnector;
+import dev.esophose.playerparticles.database.MySQLConnector;
+import dev.esophose.playerparticles.database.SQLiteConnector;
+import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.particles.FixedParticleEffect;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
@@ -18,15 +22,49 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 /**
  * All data changes to PPlayers such as group or fixed effect changes must be done through here,
  * rather than directly on the PPlayer object
  */
-public class DataManager {
+public class DataManager extends Manager {
 
-    private DataManager() {
+    private DatabaseConnector databaseConnector;
 
+    public DataManager(PlayerParticles playerParticles) {
+        super(playerParticles);
+    }
+
+    @Override
+    public void reload() {
+        if (this.databaseConnector != null)
+            this.databaseConnector.closeConnection();
+
+        try {
+            if (Setting.MYSQL_ENABLED.getBoolean()) {
+                String hostname = Setting.MYSQL_HOSTNAME.getString();
+                int port = Setting.MYSQL_PORT.getInt();
+                String database = Setting.MYSQL_DATABASE_NAME.getString();
+                String username = Setting.MYSQL_USER_NAME.getString();
+                String password = Setting.MYSQL_USER_PASSWORD.getString();
+                boolean useSSL = Setting.MYSQL_USE_SSL.getBoolean();
+
+                this.databaseConnector = new MySQLConnector(this.playerParticles, hostname, port, database, username, password, useSSL);
+                this.playerParticles.getLogger().info("Data handler connected using MySQL.");
+            } else {
+                this.databaseConnector = new SQLiteConnector(this.playerParticles);
+                this.playerParticles.getLogger().info("Data handler connected using SQLite.");
+            }
+        } catch (Exception ex) {
+            this.playerParticles.getLogger().severe("Fatal error trying to connect to database. Please make sure all your connection settings are correct and try again. Plugin has been disabled.");
+            Bukkit.getPluginManager().disablePlugin(this.playerParticles);
+        }
+    }
+
+    @Override
+    public void disable() {
+        this.databaseConnector.closeConnection();
     }
 
     /**
@@ -37,9 +75,9 @@ public class DataManager {
      * @param playerUUID The PPlayer to get
      * @return The PPlayer from cache
      */
-    public static PPlayer getPPlayer(UUID playerUUID) {
+    public PPlayer getPPlayer(UUID playerUUID) {
         List<PPlayer> pplayers;
-        synchronized (pplayers = ParticleManager.getPPlayers()) { // Under rare circumstances, the PPlayers list can be changed while it's looping
+        synchronized (pplayers = this.playerParticles.getManager(ParticleManager.class).getPPlayers()) { // Under rare circumstances, the PPlayers list can be changed while it's looping
             for (PPlayer pp : pplayers)
                 if (pp.getUniqueId().equals(playerUUID))
                     return pp;
@@ -53,23 +91,23 @@ public class DataManager {
      * @param playerUUID The pplayer to get
      * @param callback The callback to execute with the found pplayer, or a newly generated one
      */
-    public static void getPPlayer(UUID playerUUID, ConfigurationCallback<PPlayer> callback) {
+    public void getPPlayer(UUID playerUUID, Consumer<PPlayer> callback) {
 
         // Try to get them from cache first
-        PPlayer fromCache = getPPlayer(playerUUID);
+        PPlayer fromCache = this.getPPlayer(playerUUID);
         if (fromCache != null) {
-            callback.execute(fromCache);
+            callback.accept(fromCache);
             return;
         }
 
-        async(() -> {
+        this.async(() -> {
             List<ParticleGroup> groups = new ArrayList<>();
             List<FixedParticleEffect> fixedParticles = new ArrayList<>();
 
-            PlayerParticles.getPlugin().getDBConnector().connect((connection) -> {
+            this.databaseConnector.connect((connection) -> {
                 // Load settings
                 boolean particlesHidden = false;
-                String settingsQuery = "SELECT particles_hidden FROM pp_settings WHERE player_uuid = ?";
+                String settingsQuery = "SELECT particles_hidden FROM " + this.getTablePrefix() + "settings WHERE player_uuid = ?";
                 try (PreparedStatement statement = connection.prepareStatement(settingsQuery)) {
                     statement.setString(1, playerUUID.toString());
 
@@ -79,7 +117,7 @@ public class DataManager {
                     } else {
                         statement.close();
 
-                        String updateQuery = "INSERT INTO pp_settings (player_uuid, particles_hidden) VALUES (?, ?)";
+                        String updateQuery = "INSERT INTO " + this.getTablePrefix() + "settings (player_uuid, particles_hidden) VALUES (?, ?)";
                         try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
                             updateStatement.setString(1, playerUUID.toString());
                             updateStatement.setBoolean(2, false);
@@ -90,8 +128,8 @@ public class DataManager {
                 }
 
                 // Load particle groups
-                String groupQuery = "SELECT * FROM pp_group g " + // @formatter:off
-        					   	    "JOIN pp_particle p ON g.uuid = p.group_uuid " +
+                String groupQuery = "SELECT * FROM " + this.getTablePrefix() + "group g " + // @formatter:off
+        					   	    "JOIN " + this.getTablePrefix() + "particle p ON g.uuid = p.group_uuid " +
         					   	    "WHERE g.owner_uuid = ?"; // @formatter:on
                 try (PreparedStatement statement = connection.prepareStatement(groupQuery)) {
                     statement.setString(1, playerUUID.toString());
@@ -132,8 +170,8 @@ public class DataManager {
                 }
 
                 // Load fixed effects
-                String fixedQuery = "SELECT f.id AS f_id, f.world, f.xPos, f.yPos, f.zPos, p.id AS p_id, p.effect, p.style, p.item_material, p.block_material, p.note, p.r, p.g, p.b FROM pp_fixed f " + // @formatter:off
-        						    "JOIN pp_particle p ON f.particle_uuid = p.uuid " +
+                String fixedQuery = "SELECT f.id AS f_id, f.world, f.xPos, f.yPos, f.zPos, p.id AS p_id, p.effect, p.style, p.item_material, p.block_material, p.note, p.r, p.g, p.b FROM " + this.getTablePrefix() + "fixed f " + // @formatter:off
+        						    "JOIN " + this.getTablePrefix() + "particle p ON f.particle_uuid = p.uuid " +
         						    "WHERE f.owner_uuid = ?"; // @formatter:on
                 try (PreparedStatement statement = connection.prepareStatement(fixedQuery)) {
                     statement.setString(1, playerUUID.toString());
@@ -172,17 +210,17 @@ public class DataManager {
 
                 if (!activeGroupExists) {
                     ParticleGroup activeGroup = new ParticleGroup(ParticleGroup.DEFAULT_NAME, new ArrayList<>());
-                    saveParticleGroup(playerUUID, activeGroup);
+                    this.saveParticleGroup(playerUUID, activeGroup);
                     groups.add(activeGroup);
                 }
 
                 PPlayer loadedPPlayer = new PPlayer(playerUUID, groups, fixedParticles, particlesHidden);
 
-                sync(() -> {
+                this.sync(() -> {
                     synchronized (loadedPPlayer) {
-                        if (getPPlayer(playerUUID) == null) { // Make sure the PPlayer still isn't added, since this is async it's possible it got ran twice
-                            ParticleManager.getPPlayers().add(loadedPPlayer); // This will be fine now since loadedPPlayer is synchronized
-                            callback.execute(loadedPPlayer);
+                        if (this.getPPlayer(playerUUID) == null) { // Make sure the PPlayer still isn't added, since this is async it's possible it got ran twice
+                            this.playerParticles.getManager(ParticleManager.class).getPPlayers().add(loadedPPlayer); // This will be fine now since loadedPPlayer is synchronized
+                            callback.accept(loadedPPlayer);
                         }
                     }
                 });
@@ -193,14 +231,14 @@ public class DataManager {
     /**
      * Loads all PPlayers from the database that own FixedParticleEffects
      */
-    public static void loadFixedEffects() {
-        async(() -> PlayerParticles.getPlugin().getDBConnector().connect((connection) -> {
-            String query = "SELECT DISTINCT owner_uuid FROM pp_fixed";
+    public void loadFixedEffects() {
+        this.async(() -> this.databaseConnector.connect((connection) -> {
+            String query = "SELECT DISTINCT owner_uuid FROM " + this.getTablePrefix() + "fixed";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 ResultSet result = statement.executeQuery();
                 while (result.next()) {
                     UUID playerUUID = UUID.fromString(result.getString("owner_uuid"));
-                    sync(() -> getPPlayer(playerUUID, (pplayer) -> { }));
+                    this.sync(() -> this.getPPlayer(playerUUID, (pplayer) -> { }));
                 }
             }
         }));
@@ -212,9 +250,9 @@ public class DataManager {
      * @param playerUUID The player to hide PlayerParticles from
      * @param particlesHidden True if the particles should be hidden, otherwise False
      */
-    public static void updateSettingParticlesHidden(UUID playerUUID, boolean particlesHidden) {
-        async(() -> PlayerParticles.getPlugin().getDBConnector().connect((connection) -> {
-            String updateQuery = "UPDATE pp_settings SET particles_hidden = ? WHERE player_uuid = ?";
+    public void updateSettingParticlesHidden(UUID playerUUID, boolean particlesHidden) {
+        this.async(() -> this.databaseConnector.connect((connection) -> {
+            String updateQuery = "UPDATE " + this.getTablePrefix() + "settings SET particles_hidden = ? WHERE player_uuid = ?";
             try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
                 updateStatement.setBoolean(1, particlesHidden);
                 updateStatement.setString(2, playerUUID.toString());
@@ -223,7 +261,7 @@ public class DataManager {
             }
         }));
 
-        getPPlayer(playerUUID, (pplayer) -> pplayer.setParticlesHidden(particlesHidden));
+        this.getPPlayer(playerUUID, (pplayer) -> pplayer.setParticlesHidden(particlesHidden));
     }
 
     /**
@@ -232,11 +270,11 @@ public class DataManager {
      * @param playerUUID The owner of the group
      * @param group The group to create/update
      */
-    public static void saveParticleGroup(UUID playerUUID, ParticleGroup group) {
-        async(() -> PlayerParticles.getPlugin().getDBConnector().connect((connection) -> {
+    public void saveParticleGroup(UUID playerUUID, ParticleGroup group) {
+        this.async(() -> this.databaseConnector.connect((connection) -> {
             String groupUUID;
 
-            String groupUUIDQuery = "SELECT uuid FROM pp_group WHERE owner_uuid = ? AND name = ?";
+            String groupUUIDQuery = "SELECT uuid FROM " + this.getTablePrefix() + "group WHERE owner_uuid = ? AND name = ?";
             try (PreparedStatement statement = connection.prepareStatement(groupUUIDQuery)) {
                 statement.setString(1, playerUUID.toString());
                 statement.setString(2, group.getName());
@@ -245,7 +283,7 @@ public class DataManager {
                 if (result.next()) { // Clear out particles from existing group
                     groupUUID = result.getString("uuid");
 
-                    String particlesDeleteQuery = "DELETE FROM pp_particle WHERE group_uuid = ?";
+                    String particlesDeleteQuery = "DELETE FROM " + this.getTablePrefix() + "particle WHERE group_uuid = ?";
                     PreparedStatement particlesDeleteStatement = connection.prepareStatement(particlesDeleteQuery);
                     particlesDeleteStatement.setString(1, result.getString("uuid"));
 
@@ -253,7 +291,7 @@ public class DataManager {
                 } else { // Create new group
                     groupUUID = UUID.randomUUID().toString();
 
-                    String groupCreateQuery = "INSERT INTO pp_group (uuid, owner_uuid, name) VALUES (?, ?, ?)";
+                    String groupCreateQuery = "INSERT INTO " + this.getTablePrefix() + "group (uuid, owner_uuid, name) VALUES (?, ?, ?)";
                     PreparedStatement groupCreateStatement = connection.prepareStatement(groupCreateQuery);
                     groupCreateStatement.setString(1, groupUUID);
                     groupCreateStatement.setString(2, playerUUID.toString());
@@ -264,7 +302,7 @@ public class DataManager {
             }
 
             // Fill group with new particles
-            String createParticlesQuery = "INSERT INTO pp_particle (uuid, group_uuid, id, effect, style, item_material, block_material, note, r, g, b) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String createParticlesQuery = "INSERT INTO " + this.getTablePrefix() + "particle (uuid, group_uuid, id, effect, style, item_material, block_material, note, r, g, b) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement particlesStatement = connection.prepareStatement(createParticlesQuery)) {
                 for (ParticlePair particle : group.getParticles()) {
                     particlesStatement.setString(1, UUID.randomUUID().toString());
@@ -285,7 +323,7 @@ public class DataManager {
             }
         }));
 
-        getPPlayer(playerUUID, (pplayer) -> {
+        this.getPPlayer(playerUUID, (pplayer) -> {
             for (ParticleGroup existing : pplayer.getParticleGroups()) {
                 if (group.getName().equalsIgnoreCase(existing.getName())) {
                     pplayer.getParticleGroups().remove(existing);
@@ -302,11 +340,11 @@ public class DataManager {
      * @param playerUUID The owner of the group
      * @param group The group to remove
      */
-    public static void removeParticleGroup(UUID playerUUID, ParticleGroup group) {
-        async(() -> PlayerParticles.getPlugin().getDBConnector().connect((connection) -> {
-            String groupQuery = "SELECT * FROM pp_group WHERE owner_uuid = ? AND name = ?";
-            String particleDeleteQuery = "DELETE FROM pp_particle WHERE group_uuid = ?";
-            String groupDeleteQuery = "DELETE FROM pp_group WHERE uuid = ?";
+    public void removeParticleGroup(UUID playerUUID, ParticleGroup group) {
+        this.async(() -> this.databaseConnector.connect((connection) -> {
+            String groupQuery = "SELECT * FROM " + this.getTablePrefix() + "group WHERE owner_uuid = ? AND name = ?";
+            String particleDeleteQuery = "DELETE FROM " + this.getTablePrefix() + "particle WHERE group_uuid = ?";
+            String groupDeleteQuery = "DELETE FROM " + this.getTablePrefix() + "group WHERE uuid = ?";
 
             // Execute group uuid query
             String groupUUID = null;
@@ -335,7 +373,7 @@ public class DataManager {
             }
         }));
 
-        getPPlayer(playerUUID, (pplayer) -> pplayer.getParticleGroups().remove(group));
+        this.getPPlayer(playerUUID, (pplayer) -> pplayer.getParticleGroups().remove(group));
     }
 
     /**
@@ -344,11 +382,11 @@ public class DataManager {
      *
      * @param fixedEffect The fixed effect to save
      */
-    public static void saveFixedEffect(FixedParticleEffect fixedEffect) {
-        async(() -> PlayerParticles.getPlugin().getDBConnector().connect((connection) -> {
+    public void saveFixedEffect(FixedParticleEffect fixedEffect) {
+        this.async(() -> this.databaseConnector.connect((connection) -> {
             String particleUUID = UUID.randomUUID().toString();
 
-            String particleQuery = "INSERT INTO pp_particle (uuid, group_uuid, id, effect, style, item_material, block_material, note, r, g, b) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String particleQuery = "INSERT INTO " + this.getTablePrefix() + "particle (uuid, group_uuid, id, effect, style, item_material, block_material, note, r, g, b) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement statement = connection.prepareStatement(particleQuery)) {
                 ParticlePair particle = fixedEffect.getParticlePair();
                 statement.setString(1, particleUUID);
@@ -365,7 +403,7 @@ public class DataManager {
                 statement.executeUpdate();
             }
 
-            String fixedEffectQuery = "INSERT INTO pp_fixed (owner_uuid, id, particle_uuid, world, xPos, yPos, zPos) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String fixedEffectQuery = "INSERT INTO " + this.getTablePrefix() + "fixed (owner_uuid, id, particle_uuid, world, xPos, yPos, zPos) VALUES (?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement statement = connection.prepareStatement(fixedEffectQuery)) {
                 statement.setString(1, fixedEffect.getOwnerUniqueId().toString());
                 statement.setInt(2, fixedEffect.getId());
@@ -378,7 +416,7 @@ public class DataManager {
             }
         }));
 
-        getPPlayer(fixedEffect.getOwnerUniqueId(), (pplayer) -> pplayer.addFixedEffect(fixedEffect));
+        this.getPPlayer(fixedEffect.getOwnerUniqueId(), (pplayer) -> pplayer.addFixedEffect(fixedEffect));
     }
 
     /**
@@ -386,10 +424,10 @@ public class DataManager {
      *
      * @param fixedEffect The fixed effect to update
      */
-    public static void updateFixedEffect(FixedParticleEffect fixedEffect) {
-        async(() -> PlayerParticles.getPlugin().getDBConnector().connect((connection) -> {
+    public void updateFixedEffect(FixedParticleEffect fixedEffect) {
+        this.async(() -> this.databaseConnector.connect((connection) -> {
             // Update fixed effect
-            String fixedEffectQuery = "UPDATE pp_fixed SET xPos = ?, yPos = ?, zPos = ? WHERE owner_uuid = ? AND id = ?";
+            String fixedEffectQuery = "UPDATE " + this.getTablePrefix() + "fixed SET xPos = ?, yPos = ?, zPos = ? WHERE owner_uuid = ? AND id = ?";
             try (PreparedStatement statement = connection.prepareStatement(fixedEffectQuery)) {
                 statement.setDouble(1, fixedEffect.getLocation().getX());
                 statement.setDouble(2, fixedEffect.getLocation().getY());
@@ -400,9 +438,9 @@ public class DataManager {
             }
 
             // Update particle
-            String particleUpdateQuery = "UPDATE pp_particle " +
+            String particleUpdateQuery = "UPDATE " + this.getTablePrefix() + "particle " +
                                          "SET effect = ?, style = ?, item_material = ?, block_material = ?, note = ?, r = ?, g = ?, b = ? " +
-                                         "WHERE uuid = (SELECT particle_uuid FROM pp_fixed WHERE owner_uuid = ? AND id = ?)";
+                                         "WHERE uuid = (SELECT particle_uuid FROM " + this.getTablePrefix() + "fixed WHERE owner_uuid = ? AND id = ?)";
             try (PreparedStatement statement = connection.prepareStatement(particleUpdateQuery)) {
                 ParticlePair particle = fixedEffect.getParticlePair();
                 statement.setString(1, particle.getEffect().getName());
@@ -419,7 +457,7 @@ public class DataManager {
             }
         }));
 
-        getPPlayer(fixedEffect.getOwnerUniqueId(), (pplayer) -> {
+        this.getPPlayer(fixedEffect.getOwnerUniqueId(), (pplayer) -> {
             pplayer.removeFixedEffect(fixedEffect.getId());
             pplayer.addFixedEffect(fixedEffect);
         });
@@ -432,11 +470,11 @@ public class DataManager {
      * @param playerUUID The player who owns the effect
      * @param id The id of the effect to remove
      */
-    public static void removeFixedEffect(UUID playerUUID, int id) {
-        async(() -> PlayerParticles.getPlugin().getDBConnector().connect((connection) -> {
+    public void removeFixedEffect(UUID playerUUID, int id) {
+        this.async(() -> this.databaseConnector.connect((connection) -> {
             String particleUUID = null;
 
-            String particleUUIDQuery = "SELECT particle_uuid FROM pp_fixed WHERE owner_uuid = ? AND id = ?";
+            String particleUUIDQuery = "SELECT particle_uuid FROM " + this.getTablePrefix() + "fixed WHERE owner_uuid = ? AND id = ?";
             try (PreparedStatement statement = connection.prepareStatement(particleUUIDQuery)) {
                 statement.setString(1, playerUUID.toString());
                 statement.setInt(2, id);
@@ -447,14 +485,14 @@ public class DataManager {
                 }
             }
 
-            String particleDeleteQuery = "DELETE FROM pp_particle WHERE uuid = ?";
+            String particleDeleteQuery = "DELETE FROM " + this.getTablePrefix() + "particle WHERE uuid = ?";
             try (PreparedStatement statement = connection.prepareStatement(particleDeleteQuery)) {
                 statement.setString(1, particleUUID);
 
                 statement.executeUpdate();
             }
 
-            String fixedEffectDeleteQuery = "DELETE FROM pp_fixed WHERE owner_uuid = ? AND id = ?";
+            String fixedEffectDeleteQuery = "DELETE FROM " + this.getTablePrefix() + "fixed WHERE owner_uuid = ? AND id = ?";
             try (PreparedStatement statement = connection.prepareStatement(fixedEffectDeleteQuery)) {
                 statement.setString(1, playerUUID.toString());
                 statement.setInt(2, id);
@@ -463,7 +501,7 @@ public class DataManager {
             }
         }));
 
-        getPPlayer(playerUUID, (pplayer) -> pplayer.removeFixedEffect(id));
+        this.getPPlayer(playerUUID, (pplayer) -> pplayer.removeFixedEffect(id));
     }
 
     /**
@@ -471,8 +509,8 @@ public class DataManager {
      *
      * @param asyncCallback The callback to run on a separate thread
      */
-    private static void async(Runnable asyncCallback) {
-        Bukkit.getScheduler().runTaskAsynchronously(PlayerParticles.getPlugin(), asyncCallback);
+    private void async(Runnable asyncCallback) {
+        Bukkit.getScheduler().runTaskAsynchronously(this.playerParticles, asyncCallback);
     }
 
     /**
@@ -480,16 +518,22 @@ public class DataManager {
      *
      * @param syncCallback The callback to run on the main thread
      */
-    private static void sync(Runnable syncCallback) {
-        Bukkit.getScheduler().runTask(PlayerParticles.getPlugin(), syncCallback);
+    private void sync(Runnable syncCallback) {
+        Bukkit.getScheduler().runTask(this.playerParticles, syncCallback);
     }
 
     /**
-     * Allows callbacks to be passed between configuration methods and executed for returning objects after database queries
+     * @return The connector to the database
      */
-    @FunctionalInterface
-    public interface ConfigurationCallback<T> {
-        void execute(T obj);
+    public DatabaseConnector getDatabaseConnector() {
+        return this.databaseConnector;
+    }
+
+    /**
+     * @return the prefix to be used by all table names
+     */
+    public String getTablePrefix() {
+        return this.playerParticles.getDescription().getName().toLowerCase() + '_';
     }
 
 }

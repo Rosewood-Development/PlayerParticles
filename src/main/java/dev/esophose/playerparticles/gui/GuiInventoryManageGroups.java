@@ -1,13 +1,15 @@
 package dev.esophose.playerparticles.gui;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.gui.hook.PlayerChatHook;
 import dev.esophose.playerparticles.gui.hook.PlayerChatHookData;
 import dev.esophose.playerparticles.manager.DataManager;
+import dev.esophose.playerparticles.manager.GuiManager;
 import dev.esophose.playerparticles.manager.LangManager;
 import dev.esophose.playerparticles.manager.LangManager.Lang;
 import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.manager.SettingManager.GuiIcon;
-import dev.esophose.playerparticles.manager.SettingManager.PSetting;
+import dev.esophose.playerparticles.manager.SettingManager.Setting;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.particles.ParticlePair;
@@ -22,6 +24,8 @@ public class GuiInventoryManageGroups extends GuiInventory {
 
     public GuiInventoryManageGroups(PPlayer pplayer) {
         super(pplayer, Bukkit.createInventory(pplayer.getPlayer(), INVENTORY_SIZE, LangManager.getText(Lang.GUI_MANAGE_YOUR_GROUPS)));
+
+        DataManager dataManager = PlayerParticles.getInstance().getManager(DataManager.class);
 
         this.fillBorder(BorderColor.BROWN);
 
@@ -54,7 +58,7 @@ public class GuiInventoryManageGroups extends GuiInventory {
                     lore,
                     (button, isShiftClick) -> {
                         if (isShiftClick) {
-                            DataManager.removeParticleGroup(pplayer.getUniqueId(), group);
+                            dataManager.removeParticleGroup(pplayer.getUniqueId(), group);
 
                             this.actionButtons.remove(button);
                             this.inventory.setItem(button.getSlot(), null);
@@ -63,9 +67,9 @@ public class GuiInventoryManageGroups extends GuiInventory {
                             activeGroup.getParticles().clear();
                             for (ParticlePair particle : particles)
                                 activeGroup.getParticles().add(particle.clone());
-                            DataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
+                            dataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
 
-                            if (PSetting.GUI_CLOSE_AFTER_GROUP_SELECTED.getBoolean()) {
+                            if (Setting.GUI_CLOSE_AFTER_GROUP_SELECTED.getBoolean()) {
                                 pplayer.getPlayer().closeInventory();
                             }
                         }
@@ -80,7 +84,7 @@ public class GuiInventoryManageGroups extends GuiInventory {
             if (index > maxIndex) break; // Overflowed the available space
         }
 
-        boolean hasReachedMax = PermissionManager.hasPlayerReachedMaxGroups(pplayer);
+        boolean hasReachedMax = PlayerParticles.getInstance().getManager(PermissionManager.class).hasPlayerReachedMaxGroups(pplayer);
         boolean hasParticles = !pplayer.getActiveParticles().isEmpty();
         String[] lore;
         if (hasReachedMax) {
@@ -108,7 +112,7 @@ public class GuiInventoryManageGroups extends GuiInventory {
 
                     PlayerChatHook.addHook(new PlayerChatHookData(pplayer.getUniqueId(), 15, (textEntered) -> {
                         if (textEntered == null || textEntered.equalsIgnoreCase("cancel")) {
-                            GuiHandler.transition(new GuiInventoryManageGroups(pplayer));
+                            GuiManager.transition(new GuiInventoryManageGroups(pplayer));
                         } else {
                             String groupName = textEntered.split(" ")[0];
 
@@ -136,14 +140,14 @@ public class GuiInventoryManageGroups extends GuiInventory {
                             }
 
                             // Apply changes and notify player
-                            DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+                            dataManager.saveParticleGroup(pplayer.getUniqueId(), group);
                             if (groupUpdated) {
                                 LangManager.sendMessage(pplayer, Lang.GROUP_SAVE_SUCCESS_OVERWRITE, groupName);
                             } else {
                                 LangManager.sendMessage(pplayer, Lang.GROUP_SAVE_SUCCESS, groupName);
                             }
 
-                            GuiHandler.transition(new GuiInventoryManageGroups(pplayer));
+                            GuiManager.transition(new GuiInventoryManageGroups(pplayer));
                         }
                     }));
                     pplayer.getPlayer().closeInventory();
@@ -156,7 +160,7 @@ public class GuiInventoryManageGroups extends GuiInventory {
                 GuiIcon.BACK.get(),
                 LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_BACK_BUTTON),
                 new String[]{},
-                (button, isShiftClick) -> GuiHandler.transition(new GuiInventoryDefault(pplayer)));
+                (button, isShiftClick) -> GuiManager.transition(new GuiInventoryDefault(pplayer)));
         this.actionButtons.add(backButton);
 
         this.populate();

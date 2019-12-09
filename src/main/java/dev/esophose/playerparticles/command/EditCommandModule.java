@@ -3,6 +3,7 @@ package dev.esophose.playerparticles.command;
 import java.util.ArrayList;
 import java.util.List;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.styles.api.ParticleStyle;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import org.bukkit.Material;
@@ -78,7 +79,7 @@ public class EditCommandModule implements CommandModule {
         if (effect == null) {
             LangManager.sendMessage(pplayer, Lang.EFFECT_INVALID, args[0]);
             return;
-        } else if (!PermissionManager.hasEffectPermission(pplayer.getPlayer(), effect)) {
+        } else if (!PlayerParticles.getInstance().getManager(PermissionManager.class).hasEffectPermission(pplayer.getPlayer(), effect)) {
             LangManager.sendMessage(pplayer, Lang.EFFECT_NO_PERMISSION, effect.getName());
             return;
         }
@@ -91,7 +92,7 @@ public class EditCommandModule implements CommandModule {
             }
         }
         
-        DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+        PlayerParticles.getInstance().getManager(DataManager.class).saveParticleGroup(pplayer.getUniqueId(), group);
         LangManager.sendMessage(pplayer, Lang.EDIT_SUCCESS_EFFECT, id, effect.getName());
     }
     
@@ -107,7 +108,7 @@ public class EditCommandModule implements CommandModule {
         if (style == null) {
             LangManager.sendMessage(pplayer, Lang.STYLE_INVALID, args[0]);
             return;
-        } else if (!PermissionManager.hasStylePermission(pplayer.getPlayer(), style)) {
+        } else if (!PlayerParticles.getInstance().getManager(PermissionManager.class).hasStylePermission(pplayer.getPlayer(), style)) {
             LangManager.sendMessage(pplayer, Lang.STYLE_NO_PERMISSION, style.getName());
             return;
         }
@@ -119,8 +120,8 @@ public class EditCommandModule implements CommandModule {
                 break;
             }
         }
-        
-        DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+
+        PlayerParticles.getInstance().getManager(DataManager.class).saveParticleGroup(pplayer.getUniqueId(), group);
         LangManager.sendMessage(pplayer, Lang.EDIT_SUCCESS_STYLE, id, style.getName());
     }
     
@@ -218,12 +219,13 @@ public class EditCommandModule implements CommandModule {
                 break;
             }
         }
-        
-        DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+
+        PlayerParticles.getInstance().getManager(DataManager.class).saveParticleGroup(pplayer.getUniqueId(), group);
         LangManager.sendMessage(pplayer, Lang.EDIT_SUCCESS_DATA, id, updatedDataString);
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
+        PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
         Player p = pplayer.getPlayer();
         List<String> matches = new ArrayList<>();
         List<String> ids = new ArrayList<>();
@@ -253,11 +255,11 @@ public class EditCommandModule implements CommandModule {
                 switch (args[1].toLowerCase()) {
                 case "effect":
                     if (args.length == 3)
-                        StringUtil.copyPartialMatches(args[2], PermissionManager.getEffectNamesUserHasPermissionFor(p), matches);
+                        StringUtil.copyPartialMatches(args[2], permissionManager.getEffectNamesUserHasPermissionFor(p), matches);
                     break;
                 case "style":
                     if (args.length == 3)
-                        StringUtil.copyPartialMatches(args[2], PermissionManager.getStyleNamesUserHasPermissionFor(p), matches);
+                        StringUtil.copyPartialMatches(args[2], permissionManager.getStyleNamesUserHasPermissionFor(p), matches);
                     break;
                 case "data":
                     ParticleEffect effect = pplayer.getActiveParticle(id).getEffect();
@@ -302,8 +304,8 @@ public class EditCommandModule implements CommandModule {
         return "edit";
     }
 
-    public Lang getDescription() {
-        return Lang.COMMAND_DESCRIPTION_EDIT;
+    public String getDescriptionKey() {
+        return "command-description-edit";
     }
 
     public String getArguments() {

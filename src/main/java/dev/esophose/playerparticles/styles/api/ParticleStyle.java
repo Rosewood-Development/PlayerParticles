@@ -1,5 +1,7 @@
 package dev.esophose.playerparticles.styles.api;
 
+import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.manager.ParticleStyleManager;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -57,7 +59,7 @@ public interface ParticleStyle {
      * @return The ParticleStyle with a matching name
      */
     static ParticleStyle fromName(String styleName) {
-        for (ParticleStyle style : ParticleStyleManager.getStyles())
+        for (ParticleStyle style : PlayerParticles.getInstance().getManager(ParticleStyleManager.class).getStyles())
             if (style.getName().equalsIgnoreCase(styleName)) 
                 return style;
         return null;

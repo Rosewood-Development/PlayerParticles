@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import dev.esophose.playerparticles.manager.SettingManager.PSetting;
+import dev.esophose.playerparticles.manager.SettingManager.Setting;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.util.ParticleUtils;
 
@@ -154,7 +154,7 @@ public abstract class GuiInventory implements InventoryHolder {
         for (GuiActionButton button : this.actionButtons) {
             if (button.getSlot() == slot) {
                 button.handleClick(isShiftClick);
-                if (PSetting.GUI_BUTTON_SOUND.getBoolean() && event.getWhoClicked() instanceof Player) {
+                if (Setting.GUI_BUTTON_SOUND.getBoolean() && event.getWhoClicked() instanceof Player) {
                     Player player = (Player) event.getWhoClicked();
                     player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1);
                 }

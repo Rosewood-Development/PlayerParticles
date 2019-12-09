@@ -2,7 +2,7 @@ package dev.esophose.playerparticles.util;
 
 import org.bukkit.Bukkit;
 
-public class NMSUtil {
+public final class NMSUtil {
 
     private static String cachedVersion = null;
     private static int cachedVersionNumber = -1;
@@ -28,7 +28,7 @@ public class NMSUtil {
     public static int getVersionNumber() {
         if (cachedVersionNumber == -1) {
             String name = getVersion().substring(3);
-            cachedVersionNumber = Integer.valueOf(name.substring(0, name.length() - 4));
+            cachedVersionNumber = Integer.parseInt(name.substring(0, name.length() - 4));
         }
         return cachedVersionNumber;
     }

@@ -1,5 +1,7 @@
 package dev.esophose.playerparticles.gui;
 
+import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.manager.GuiManager;
 import dev.esophose.playerparticles.manager.LangManager;
 import dev.esophose.playerparticles.manager.LangManager.Lang;
 import dev.esophose.playerparticles.manager.PermissionManager;
@@ -20,7 +22,7 @@ public class GuiInventoryEditEffect extends GuiInventory {
         this.fillBorder(BorderColor.LIGHT_BLUE);
 
         // Select Effect Buttons
-        List<ParticleEffect> effectsUserHasPermissionFor = PermissionManager.getEffectsUserHasPermissionFor(pplayer.getPlayer());
+        List<ParticleEffect> effectsUserHasPermissionFor = PlayerParticles.getInstance().getManager(PermissionManager.class).getEffectsUserHasPermissionFor(pplayer.getPlayer());
         int numberOfItems = effectsUserHasPermissionFor.size();
         int itemsPerPage = 28;
         int maxPages = (int) Math.ceil((double) numberOfItems / itemsPerPage);
@@ -65,7 +67,7 @@ public class GuiInventoryEditEffect extends GuiInventory {
                     GuiIcon.PREVIOUS_PAGE.get(),
                     LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_PREVIOUS_PAGE_BUTTON, pageNumber - 1, maxPages),
                     new String[]{},
-                    (button, isShiftClick) -> GuiHandler.transition(new GuiInventoryEditEffect(pplayer, editingParticle, pageNumber - 1, callbackList, callbackListPosition)));
+                    (button, isShiftClick) -> GuiManager.transition(new GuiInventoryEditEffect(pplayer, editingParticle, pageNumber - 1, callbackList, callbackListPosition)));
             this.actionButtons.add(previousPageButton);
         }
 
@@ -76,7 +78,7 @@ public class GuiInventoryEditEffect extends GuiInventory {
                     GuiIcon.NEXT_PAGE.get(),
                     LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_NEXT_PAGE_BUTTON, pageNumber + 1, maxPages),
                     new String[]{},
-                    (button, isShiftClick) -> GuiHandler.transition(new GuiInventoryEditEffect(pplayer, editingParticle, pageNumber + 1, callbackList, callbackListPosition)));
+                    (button, isShiftClick) -> GuiManager.transition(new GuiInventoryEditEffect(pplayer, editingParticle, pageNumber + 1, callbackList, callbackListPosition)));
             this.actionButtons.add(nextPageButton);
         }
 

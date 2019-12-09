@@ -1,6 +1,8 @@
 package dev.esophose.playerparticles.gui;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.DataManager;
+import dev.esophose.playerparticles.manager.GuiManager;
 import dev.esophose.playerparticles.manager.LangManager;
 import dev.esophose.playerparticles.manager.LangManager.Lang;
 import dev.esophose.playerparticles.manager.ParticleGroupPresetManager;
@@ -25,6 +27,8 @@ public class GuiInventoryDefault extends GuiInventory {
 
     public GuiInventoryDefault(PPlayer pplayer) {
         super(pplayer, Bukkit.createInventory(pplayer.getPlayer(), INVENTORY_SIZE, LangManager.getText(Lang.GUI_PLAYERPARTICLES)));
+
+        DataManager dataManager = PlayerParticles.getInstance().getManager(DataManager.class);
 
         this.fillBorder(BorderColor.WHITE);
 
@@ -55,8 +59,8 @@ public class GuiInventoryDefault extends GuiInventory {
         this.inventory.setItem(13, headIcon);
 
         // Define what slots to put the icons at based on what other slots are visible
-        boolean manageGroupsVisible = PermissionManager.canPlayerSaveGroups(pplayer);
-        boolean loadPresetGroupVisible = !ParticleGroupPresetManager.getPresetGroupsForPlayer(pplayer.getPlayer()).isEmpty();
+        boolean manageGroupsVisible = PlayerParticles.getInstance().getManager(PermissionManager.class).canPlayerSaveGroups(pplayer);
+        boolean loadPresetGroupVisible = !PlayerParticles.getInstance().getManager(ParticleGroupPresetManager.class).getPresetGroupsForPlayer(pplayer.getPlayer()).isEmpty();
         int manageParticlesSlot = -1, manageGroupsSlot = -1, loadPresetGroupSlot = -1;
 
         if (!manageGroupsVisible && !loadPresetGroupVisible) {
@@ -79,7 +83,7 @@ public class GuiInventoryDefault extends GuiInventory {
                 GuiIcon.PARTICLES.get(),
                 LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_MANAGE_YOUR_PARTICLES),
                 new String[]{LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_MANAGE_YOUR_PARTICLES_DESCRIPTION)},
-                (button, isShiftClick) -> GuiHandler.transition(new GuiInventoryManageParticles(pplayer)));
+                (button, isShiftClick) -> GuiManager.transition(new GuiInventoryManageParticles(pplayer)));
         this.actionButtons.add(manageYourParticlesButton);
 
         // Manage Your Groups button
@@ -89,7 +93,7 @@ public class GuiInventoryDefault extends GuiInventory {
                     GuiIcon.GROUPS.get(),
                     LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_MANAGE_YOUR_GROUPS),
                     new String[]{LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_MANAGE_YOUR_GROUPS_DESCRIPTION)},
-                    (button, isShiftClick) -> GuiHandler.transition(new GuiInventoryManageGroups(pplayer)));
+                    (button, isShiftClick) -> GuiManager.transition(new GuiInventoryManageGroups(pplayer)));
             this.actionButtons.add(manageYourGroupsButton);
         }
 
@@ -100,7 +104,7 @@ public class GuiInventoryDefault extends GuiInventory {
                     GuiIcon.PRESET_GROUPS.get(),
                     LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_LOAD_A_PRESET_GROUP),
                     new String[]{LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_LOAD_A_PRESET_GROUP_DESCRIPTION)},
-                    (button, isShiftClick) -> GuiHandler.transition(new GuiInventoryLoadPresetGroups(pplayer, false)));
+                    (button, isShiftClick) -> GuiManager.transition(new GuiInventoryLoadPresetGroups(pplayer, false)));
             this.actionButtons.add(loadPresetGroups);
         }
 
@@ -116,8 +120,8 @@ public class GuiInventoryDefault extends GuiInventory {
                 new String[]{LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_EDIT_PRIMARY_EFFECT_DESCRIPTION)},
                 (button, isShiftClick) -> {
                     List<GuiInventoryEditFinishedCallback> callbacks = new ArrayList<>();
-                    callbacks.add(() -> GuiHandler.transition(new GuiInventoryDefault(pplayer)));
-                    callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditEffect(pplayer, editingParticle, 1, callbacks, 1)));
+                    callbacks.add(() -> GuiManager.transition(new GuiInventoryDefault(pplayer)));
+                    callbacks.add(() -> GuiManager.transition(new GuiInventoryEditEffect(pplayer, editingParticle, 1, callbacks, 1)));
                     callbacks.add(() -> {
                         ParticleGroup group = pplayer.getActiveParticleGroup();
                         if (canEditPrimaryStyleAndData) {
@@ -130,9 +134,9 @@ public class GuiInventoryDefault extends GuiInventory {
                         } else {
                             group.getParticles().add(editingParticle);
                         }
-                        DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+                        dataManager.saveParticleGroup(pplayer.getUniqueId(), group);
 
-                        GuiHandler.transition(new GuiInventoryDefault(pplayer));
+                        GuiManager.transition(new GuiInventoryDefault(pplayer));
                     });
 
                     callbacks.get(1).execute();
@@ -158,8 +162,8 @@ public class GuiInventoryDefault extends GuiInventory {
                     if (!canEditPrimaryStyleAndData) return;
 
                     List<GuiInventoryEditFinishedCallback> callbacks = new ArrayList<>();
-                    callbacks.add(() -> GuiHandler.transition(new GuiInventoryDefault(pplayer)));
-                    callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditStyle(pplayer, editingParticle, 1, callbacks, 1)));
+                    callbacks.add(() -> GuiManager.transition(new GuiInventoryDefault(pplayer)));
+                    callbacks.add(() -> GuiManager.transition(new GuiInventoryEditStyle(pplayer, editingParticle, 1, callbacks, 1)));
                     callbacks.add(() -> {
                         ParticleGroup group = pplayer.getActiveParticleGroup();
                         for (ParticlePair particle : group.getParticles()) {
@@ -168,9 +172,9 @@ public class GuiInventoryDefault extends GuiInventory {
                                 break;
                             }
                         }
-                        DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+                        dataManager.saveParticleGroup(pplayer.getUniqueId(), group);
 
-                        GuiHandler.transition(new GuiInventoryDefault(pplayer));
+                        GuiManager.transition(new GuiInventoryDefault(pplayer));
                     });
 
                     callbacks.get(1).execute();
@@ -201,8 +205,8 @@ public class GuiInventoryDefault extends GuiInventory {
                     if (!canEditPrimaryStyleAndData || !doesEffectUseData) return;
 
                     List<GuiInventoryEditFinishedCallback> callbacks = new ArrayList<>();
-                    callbacks.add(() -> GuiHandler.transition(new GuiInventoryDefault(pplayer)));
-                    callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditData(pplayer, editingParticle, 1, callbacks, 1)));
+                    callbacks.add(() -> GuiManager.transition(new GuiInventoryDefault(pplayer)));
+                    callbacks.add(() -> GuiManager.transition(new GuiInventoryEditData(pplayer, editingParticle, 1, callbacks, 1)));
                     callbacks.add(() -> {
                         ParticleGroup group = pplayer.getActiveParticleGroup();
                         for (ParticlePair particle : group.getParticles()) {
@@ -214,9 +218,9 @@ public class GuiInventoryDefault extends GuiInventory {
                                 break;
                             }
                         }
-                        DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+                        dataManager.saveParticleGroup(pplayer.getUniqueId(), group);
 
-                        GuiHandler.transition(new GuiInventoryDefault(pplayer));
+                        GuiManager.transition(new GuiInventoryDefault(pplayer));
                     });
 
                     callbacks.get(1).execute();

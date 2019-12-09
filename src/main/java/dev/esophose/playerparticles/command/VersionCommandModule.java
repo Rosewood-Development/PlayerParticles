@@ -13,7 +13,7 @@ import dev.esophose.playerparticles.particles.PPlayer;
 public class VersionCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
-        LangManager.sendCustomMessage(pplayer, ChatColor.YELLOW + "Running PlayerParticles " + ChatColor.AQUA + "v" + PlayerParticles.getPlugin().getDescription().getVersion());
+        LangManager.sendCustomMessage(pplayer, ChatColor.YELLOW + "Running PlayerParticles " + ChatColor.AQUA + "v" + PlayerParticles.getInstance().getDescription().getVersion());
         LangManager.sendCustomMessage(pplayer, ChatColor.YELLOW + "Plugin created by: " + ChatColor.AQUA + "Esophose");
     }
 
@@ -25,8 +25,8 @@ public class VersionCommandModule implements CommandModule {
         return "version";
     }
 
-    public Lang getDescription() {
-        return Lang.COMMAND_DESCRIPTION_VERSION;
+    public String getDescriptionKey() {
+        return "command-description-version";
     }
 
     public String getArguments() {

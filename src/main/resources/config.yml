@@ -1,5 +1,5 @@
-#     __________ __                           __________                __   __        __                    _________
-#     \______   \  | _____  ___ __  __________\______   \_____ ________/  |_|__| ____ |  |   ____   ______   \______  \
+#     _________ __                           __________                __   __        __                    _________
+#     \______  \  | _____  ___ __  __________\______   \_____ ________/  |_|__| ____ |  |   ____   ______   \______  \
 #     |     ___/  | \__  \<   |  |/ __ \_  __ \     ___/\__  \\_  __ \   __\  |/ ___\|  | _/ __ \ /  ___/       /    /
 #     |    |   |  |__/ __ \\___  \  ___/|  | \/    |     / __ \|  | \/|  | |  \  \___|  |_\  ___/ \___ \       /    /
 #     |____|   |____(____  / ____|\___  >__|  |____|    (____  /__|   |__| |__|\___  >____/\___  >____  >     /____/
@@ -22,14 +22,9 @@ lang-file: 'en_US.lang'
 # Default: true
 messages-enabled: true
 
-# Whether or not to use the message-prefix field when displaying messages
+# Whether or not to display the plugin message prefix when displaying messages
 # Default: true
 use-message-prefix: true
-
-# The prefix to use for all PlayerParticles messages
-# This is useless if use-message-prefix is set to false
-# Default: '&7[&3PlayerParticles&7]'
-message-prefix: '&7[&3PlayerParticles&7]'
 
 # If the command /pp gui is enabled
 # Disable this if you have your own custom GUI through another plugin

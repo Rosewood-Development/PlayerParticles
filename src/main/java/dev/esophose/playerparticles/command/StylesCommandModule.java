@@ -3,6 +3,7 @@ package dev.esophose.playerparticles.command;
 import java.util.ArrayList;
 import java.util.List;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import org.bukkit.entity.Player;
 
 import dev.esophose.playerparticles.manager.LangManager;
@@ -15,7 +16,7 @@ public class StylesCommandModule implements CommandModule {
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         Player p = pplayer.getPlayer();
 
-        List<String> styleNames = PermissionManager.getStyleNamesUserHasPermissionFor(p);
+        List<String> styleNames = PlayerParticles.getInstance().getManager(PermissionManager.class).getStyleNamesUserHasPermissionFor(p);
         StringBuilder toSend = new StringBuilder();
         for (String name : styleNames) {
             toSend.append(name).append(", ");
@@ -36,8 +37,8 @@ public class StylesCommandModule implements CommandModule {
         return "styles";
     }
 
-    public Lang getDescription() {
-        return Lang.COMMAND_DESCRIPTION_STYLES;
+    public String getDescriptionKey() {
+        return "command-description-styles";
     }
 
     public String getArguments() {

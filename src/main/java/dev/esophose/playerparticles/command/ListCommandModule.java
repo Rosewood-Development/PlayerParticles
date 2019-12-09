@@ -38,8 +38,8 @@ public class ListCommandModule implements CommandModule {
         return "list";
     }
 
-    public Lang getDescription() {
-        return Lang.COMMAND_DESCRIPTION_LIST;
+    public String getDescriptionKey() {
+        return "command-description-list";
     }
 
     public String getArguments() {

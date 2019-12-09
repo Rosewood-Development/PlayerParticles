@@ -1,11 +1,13 @@
 package dev.esophose.playerparticles.gui;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.DataManager;
+import dev.esophose.playerparticles.manager.GuiManager;
 import dev.esophose.playerparticles.manager.LangManager;
 import dev.esophose.playerparticles.manager.LangManager.Lang;
 import dev.esophose.playerparticles.manager.ParticleGroupPresetManager;
 import dev.esophose.playerparticles.manager.SettingManager.GuiIcon;
-import dev.esophose.playerparticles.manager.SettingManager.PSetting;
+import dev.esophose.playerparticles.manager.SettingManager.Setting;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.particles.ParticleGroupPreset;
@@ -22,6 +24,8 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
     public GuiInventoryLoadPresetGroups(PPlayer pplayer, boolean isEndPoint) {
         super(pplayer, Bukkit.createInventory(pplayer.getPlayer(), INVENTORY_SIZE, LangManager.getText(Lang.GUI_LOAD_A_PRESET_GROUP)));
 
+        DataManager dataManager = PlayerParticles.getInstance().getManager(DataManager.class);
+
         this.fillBorder(BorderColor.GREEN);
 
         Player player = pplayer.getPlayer();
@@ -29,7 +33,7 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
         int index = 10;
         int nextWrap = 17;
         int maxIndex = 43;
-        List<ParticleGroupPreset> groups = ParticleGroupPresetManager.getPresetGroupsForPlayer(pplayer.getPlayer());
+        List<ParticleGroupPreset> groups = PlayerParticles.getInstance().getManager(ParticleGroupPresetManager.class).getPresetGroupsForPlayer(pplayer.getPlayer());
         for (ParticleGroupPreset group : groups) {
             if (!group.getGroup().canPlayerUse(player))
                 continue;
@@ -51,9 +55,9 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
                 activeGroup.getParticles().clear();
                 for (ParticlePair particle : particles)
                     activeGroup.getParticles().add(particle.clone());
-                DataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
+                dataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
 
-                if (PSetting.GUI_CLOSE_AFTER_GROUP_SELECTED.getBoolean()) {
+                if (Setting.GUI_CLOSE_AFTER_GROUP_SELECTED.getBoolean()) {
                     pplayer.getPlayer().closeInventory();
                 }
             });
@@ -73,7 +77,7 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
                     INVENTORY_SIZE - 1, GuiIcon.BACK.get(),
                     LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_BACK_BUTTON),
                     new String[]{},
-                    (button, isShiftClick) -> GuiHandler.transition(new GuiInventoryDefault(pplayer)));
+                    (button, isShiftClick) -> GuiManager.transition(new GuiInventoryDefault(pplayer)));
             this.actionButtons.add(backButton);
         } else {
             // Reset Particles Button
@@ -84,7 +88,7 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
                     new String[]{LangManager.getText(Lang.GUI_COLOR_UNAVAILABLE) + LangManager.getText(Lang.GUI_RESET_PARTICLES_DESCRIPTION)},
                     (button, isShiftClick) -> {
                         // Reset particles
-                        DataManager.saveParticleGroup(pplayer.getUniqueId(), ParticleGroup.getDefaultGroup());
+                        dataManager.saveParticleGroup(pplayer.getUniqueId(), ParticleGroup.getDefaultGroup());
                     });
             this.actionButtons.add(resetParticles);
         }

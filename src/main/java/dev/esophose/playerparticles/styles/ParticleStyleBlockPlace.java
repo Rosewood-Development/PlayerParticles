@@ -3,6 +3,7 @@ package dev.esophose.playerparticles.styles;
 import java.util.ArrayList;
 import java.util.List;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -52,12 +53,14 @@ public class ParticleStyleBlockPlace implements ParticleStyle, Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockPlace(BlockPlaceEvent event) {
+        ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
+
         Player player = event.getPlayer();
-        PPlayer pplayer = DataManager.getPPlayer(player.getUniqueId());
+        PPlayer pplayer = PlayerParticles.getInstance().getManager(DataManager.class).getPPlayer(player.getUniqueId());
         if (pplayer != null) {
             for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.BLOCKPLACE)) {
                 Location loc = event.getBlock().getLocation().clone();
-                ParticleManager.displayParticles(particle, DefaultStyles.BLOCKPLACE.getParticles(particle, loc));
+                particleManager.displayParticles(particle, DefaultStyles.BLOCKPLACE.getParticles(particle, loc));
             }
         }
     }

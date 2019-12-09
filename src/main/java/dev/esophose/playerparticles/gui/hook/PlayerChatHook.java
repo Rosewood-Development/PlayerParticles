@@ -31,7 +31,7 @@ public class PlayerChatHook extends BukkitRunnable implements Listener {
         hooks = new HashSet<>();
         if (hookTask != null)
             hookTask.cancel();
-        hookTask = new PlayerChatHook().runTaskTimer(PlayerParticles.getPlugin(), 0, 20);
+        hookTask = new PlayerChatHook().runTaskTimer(PlayerParticles.getInstance(), 0, 20);
     }
     
     /**
@@ -45,7 +45,7 @@ public class PlayerChatHook extends BukkitRunnable implements Listener {
             if (hook.getPlayerUUID().equals(event.getPlayer().getUniqueId())) {
                 event.setCancelled(true);
                 hooks.remove(hook);
-                Bukkit.getScheduler().scheduleSyncDelayedTask(PlayerParticles.getPlugin(), () -> hook.triggerCallback(event.getMessage()));
+                Bukkit.getScheduler().scheduleSyncDelayedTask(PlayerParticles.getInstance(), () -> hook.triggerCallback(event.getMessage()));
                 return;
             }
         }

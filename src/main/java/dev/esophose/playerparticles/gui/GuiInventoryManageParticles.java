@@ -1,6 +1,8 @@
 package dev.esophose.playerparticles.gui;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.DataManager;
+import dev.esophose.playerparticles.manager.GuiManager;
 import dev.esophose.playerparticles.manager.LangManager;
 import dev.esophose.playerparticles.manager.LangManager.Lang;
 import dev.esophose.playerparticles.manager.PermissionManager;
@@ -20,6 +22,8 @@ public class GuiInventoryManageParticles extends GuiInventory {
 
     public GuiInventoryManageParticles(PPlayer pplayer) {
         super(pplayer, Bukkit.createInventory(pplayer.getPlayer(), INVENTORY_SIZE, LangManager.getText(Lang.GUI_MANAGE_YOUR_PARTICLES)));
+
+        DataManager dataManager = PlayerParticles.getInstance().getManager(DataManager.class);
 
         this.fillBorder(BorderColor.ORANGE);
 
@@ -42,7 +46,7 @@ public class GuiInventoryManageParticles extends GuiInventory {
                     },
                     (button, isShiftClick) -> {
                         if (!isShiftClick) {
-                            GuiHandler.transition(new GuiInventoryEditParticle(pplayer, particle));
+                            GuiManager.transition(new GuiInventoryEditParticle(pplayer, particle));
                         } else {
                             // Delete particle
                             ParticleGroup activeGroup = pplayer.getActiveParticleGroup();
@@ -52,7 +56,7 @@ public class GuiInventoryManageParticles extends GuiInventory {
                                     break;
                                 }
                             }
-                            DataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
+                            dataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
 
                             // Update inventory to reflect deletion
                             this.actionButtons.remove(button);
@@ -70,7 +74,7 @@ public class GuiInventoryManageParticles extends GuiInventory {
         }
 
         // Create New Particle Button
-        boolean canCreate = pplayer.getActiveParticles().size() < PermissionManager.getMaxParticlesAllowed(pplayer.getPlayer());
+        boolean canCreate = pplayer.getActiveParticles().size() < PlayerParticles.getInstance().getManager(PermissionManager.class).getMaxParticlesAllowed(pplayer.getPlayer());
         String lore = LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_CREATE_PARTICLE_DESCRIPTION);
         GuiActionButton createNewParticle = new GuiActionButton(
                 38,
@@ -81,12 +85,12 @@ public class GuiInventoryManageParticles extends GuiInventory {
                     if (!canCreate) return;
                     ParticlePair editingParticle = ParticlePair.getNextDefault(pplayer);
                     List<GuiInventoryEditFinishedCallback> callbacks = new ArrayList<>();
-                    callbacks.add(() -> GuiHandler.transition(new GuiInventoryManageParticles(pplayer)));
-                    callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditEffect(pplayer, editingParticle, 1, callbacks, 1)));
-                    callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditStyle(pplayer, editingParticle, 1, callbacks, 2)));
+                    callbacks.add(() -> GuiManager.transition(new GuiInventoryManageParticles(pplayer)));
+                    callbacks.add(() -> GuiManager.transition(new GuiInventoryEditEffect(pplayer, editingParticle, 1, callbacks, 1)));
+                    callbacks.add(() -> GuiManager.transition(new GuiInventoryEditStyle(pplayer, editingParticle, 1, callbacks, 2)));
                     callbacks.add(() -> {
                         if (editingParticle.getEffect().hasProperty(ParticleProperty.COLORABLE) || editingParticle.getEffect().hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-                            GuiHandler.transition(new GuiInventoryEditData(pplayer, editingParticle, 1, callbacks, 3));
+                            GuiManager.transition(new GuiInventoryEditData(pplayer, editingParticle, 1, callbacks, 3));
                         } else {
                             callbacks.get(4).execute();
                         }
@@ -95,10 +99,10 @@ public class GuiInventoryManageParticles extends GuiInventory {
                         // Save new particle
                         ParticleGroup group = pplayer.getActiveParticleGroup();
                         group.getParticles().add(editingParticle);
-                        DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+                        dataManager.saveParticleGroup(pplayer.getUniqueId(), group);
 
                         // Reopen the manage particle inventory
-                        GuiHandler.transition(new GuiInventoryManageParticles(pplayer));
+                        GuiManager.transition(new GuiInventoryManageParticles(pplayer));
                     });
                     callbacks.get(1).execute();
                 });
@@ -111,10 +115,10 @@ public class GuiInventoryManageParticles extends GuiInventory {
                 new String[]{LangManager.getText(Lang.GUI_COLOR_UNAVAILABLE) + LangManager.getText(Lang.GUI_RESET_PARTICLES_DESCRIPTION)},
                 (button, isShiftClick) -> {
                     // Reset particles
-                    DataManager.saveParticleGroup(pplayer.getUniqueId(), ParticleGroup.getDefaultGroup());
+                    dataManager.saveParticleGroup(pplayer.getUniqueId(), ParticleGroup.getDefaultGroup());
 
                     // Reopen this same inventory to refresh it
-                    GuiHandler.transition(new GuiInventoryManageParticles(pplayer));
+                    GuiManager.transition(new GuiInventoryManageParticles(pplayer));
                 });
         this.actionButtons.add(resetParticles);
 
@@ -124,7 +128,7 @@ public class GuiInventoryManageParticles extends GuiInventory {
                 GuiIcon.BACK.get(),
                 LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_BACK_BUTTON),
                 new String[]{},
-                (button, isShiftClick) -> GuiHandler.transition(new GuiInventoryDefault(pplayer)));
+                (button, isShiftClick) -> GuiManager.transition(new GuiInventoryDefault(pplayer)));
         this.actionButtons.add(backButton);
 
         this.populate();

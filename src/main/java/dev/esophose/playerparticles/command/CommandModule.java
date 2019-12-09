@@ -33,11 +33,11 @@ public interface CommandModule {
     String getName();
 
     /**
-     * Gets the Lang description of this command
+     * Gets the locale description key of this command
      * 
-     * @return The description of this command
+     * @return The locale description key of this command
      */
-    Lang getDescription();
+    String getDescriptionKey();
 
     /**
      * Gets any arguments this command has

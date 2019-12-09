@@ -3,6 +3,7 @@ package dev.esophose.playerparticles.command;
 import java.util.ArrayList;
 import java.util.List;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import org.bukkit.entity.Player;
 
 import dev.esophose.playerparticles.manager.LangManager;
@@ -15,7 +16,7 @@ public class EffectsCommandModule implements CommandModule {
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         Player p = pplayer.getPlayer();
 
-        List<String> effectList = PermissionManager.getEffectNamesUserHasPermissionFor(p);
+        List<String> effectList = PlayerParticles.getInstance().getManager(PermissionManager.class).getEffectNamesUserHasPermissionFor(p);
         if (effectList.isEmpty()) {
             LangManager.sendMessage(pplayer, Lang.EFFECT_LIST_EMPTY);
             return;
@@ -41,8 +42,8 @@ public class EffectsCommandModule implements CommandModule {
         return "effects";
     }
 
-    public Lang getDescription() {
-        return Lang.COMMAND_DESCRIPTION_EFFECTS;
+    public String getDescriptionKey() {
+        return "command-description-effects";
     }
 
     public String getArguments() {

@@ -3,6 +3,7 @@ package dev.esophose.playerparticles.styles;
 import java.util.ArrayList;
 import java.util.List;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,7 +24,7 @@ public class ParticleStyleHurt implements ParticleStyle, Listener {
         List<PParticle> baseParticles = DefaultStyles.THICK.getParticles(particle, location);
 
         int multiplyingFactor = 3; // Uses the same logic as ParticleStyleThick except multiplies the resulting particles by 3x
-        List<PParticle> particles = new ArrayList<PParticle>();
+        List<PParticle> particles = new ArrayList<>();
         for (int i = 0; i < baseParticles.size() * multiplyingFactor; i++) {
             particles.add(baseParticles.get(i % baseParticles.size()));
         }
@@ -53,13 +54,15 @@ public class ParticleStyleHurt implements ParticleStyle, Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onEntityDamage(EntityDamageEvent event) {
+        ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
+
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            PPlayer pplayer = DataManager.getPPlayer(player.getUniqueId());
+            PPlayer pplayer = PlayerParticles.getInstance().getManager(DataManager.class).getPPlayer(player.getUniqueId());
             if (pplayer != null) {
                 for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.HURT)) {
                     Location loc = player.getLocation().clone().add(0, 1, 0);
-                    ParticleManager.displayParticles(particle, DefaultStyles.HURT.getParticles(particle, loc));
+                    particleManager.displayParticles(particle, DefaultStyles.HURT.getParticles(particle, loc));
                 }
             }
         }

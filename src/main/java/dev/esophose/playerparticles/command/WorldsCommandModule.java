@@ -3,6 +3,7 @@ package dev.esophose.playerparticles.command;
 import java.util.ArrayList;
 import java.util.List;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.LangManager;
 import dev.esophose.playerparticles.manager.LangManager.Lang;
 import dev.esophose.playerparticles.manager.PermissionManager;
@@ -11,13 +12,14 @@ import dev.esophose.playerparticles.particles.PPlayer;
 public class WorldsCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
-        if (PermissionManager.getDisabledWorlds() == null || PermissionManager.getDisabledWorlds().isEmpty()) {
+        PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
+        if (permissionManager.getDisabledWorlds() == null || permissionManager.getDisabledWorlds().isEmpty()) {
             LangManager.sendMessage(pplayer, Lang.DISABLED_WORLDS_NONE);
             return;
         }
 
         StringBuilder worlds = new StringBuilder();
-        for (String s : PermissionManager.getDisabledWorlds()) {
+        for (String s : permissionManager.getDisabledWorlds()) {
             worlds.append(s).append(", ");
         }
         if (worlds.length() > 2) worlds = new StringBuilder(worlds.substring(0, worlds.length() - 2));
@@ -33,8 +35,8 @@ public class WorldsCommandModule implements CommandModule {
         return "worlds";
     }
 
-    public Lang getDescription() {
-        return Lang.COMMAND_DESCRIPTION_WORLDS;
+    public String getDescriptionKey() {
+        return "command-description-worlds";
     }
 
     public String getArguments() {

@@ -27,29 +27,29 @@ import dev.esophose.playerparticles.particles.ParticleEffect.NoteColor;
 import dev.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
 import dev.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
 
-public class ParticleGroupPresetManager {
+public class ParticleGroupPresetManager extends Manager {
     
     private static final String FILE_NAME = "preset_groups.yml";
     
-    private static List<ParticleGroupPreset> presetGroups;
-    
-    /** Not instantiable */
-    private ParticleGroupPresetManager() {
-        
+    private List<ParticleGroupPreset> presetGroups;
+
+    public ParticleGroupPresetManager(PlayerParticles playerParticles) {
+        super(playerParticles);
     }
 
     /**
      * Loads the preset groups from the preset_groups.yml file
      */
-    public static void reload() {
-        presetGroups = new ArrayList<>();
+    @Override
+    public void reload() {
+        this.presetGroups = new ArrayList<>();
         
-        File pluginDataFolder = PlayerParticles.getPlugin().getDataFolder();
+        File pluginDataFolder = PlayerParticles.getInstance().getDataFolder();
         File groupsFile = new File(pluginDataFolder.getAbsolutePath() + File.separator + FILE_NAME);
         
         // Create the file if it doesn't exist
         if (!groupsFile.exists()) {
-            try (InputStream inStream = PlayerParticles.getPlugin().getResource(FILE_NAME)) {
+            try (InputStream inStream = PlayerParticles.getInstance().getResource(FILE_NAME)) {
                 Files.copy(inStream, Paths.get(groupsFile.getAbsolutePath()));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -97,12 +97,12 @@ public class ParticleGroupPresetManager {
                     ParticleStyle style = ParticleStyle.fromName(particleSection.getString("style"));
                     
                     if (effect == null) {
-                        PlayerParticles.getPlugin().getLogger().severe("Invalid effect name: '" + particleSection.getString("effect") + "'!");
+                        PlayerParticles.getInstance().getLogger().severe("Invalid effect name: '" + particleSection.getString("effect") + "'!");
                         throw new Exception();
                     }
                     
                     if (style == null) {
-                        PlayerParticles.getPlugin().getLogger().severe("Invalid style name: '" + particleSection.getString("style") + "'!");
+                        PlayerParticles.getInstance().getLogger().severe("Invalid style name: '" + particleSection.getString("style") + "'!");
                         throw new Exception();
                     }
                     
@@ -112,7 +112,7 @@ public class ParticleGroupPresetManager {
                     NoteColor noteColorData = null;
                     
                     String dataString = particleSection.getString("data");
-                    if (!dataString.isEmpty()) {
+                    if (dataString != null && !dataString.isEmpty()) {
                         String[] args = dataString.split(" ");
                         
                         if (effect.hasProperty(ParticleProperty.COLORABLE)) {
@@ -124,12 +124,12 @@ public class ParticleGroupPresetManager {
                                     try {
                                         note = Integer.parseInt(args[0]);
                                     } catch (Exception e) {
-                                        PlayerParticles.getPlugin().getLogger().severe("Invalid note: '" + args[0] + "'!");
+                                        PlayerParticles.getInstance().getLogger().severe("Invalid note: '" + args[0] + "'!");
                                         throw new Exception();
                                     }
 
                                     if (note < 0 || note > 23) {
-                                        PlayerParticles.getPlugin().getLogger().severe("Invalid note: '" + args[0] + "'!");
+                                        PlayerParticles.getInstance().getLogger().severe("Invalid note: '" + args[0] + "'!");
                                         throw new Exception();
                                     }
 
@@ -146,12 +146,12 @@ public class ParticleGroupPresetManager {
                                         g = Integer.parseInt(args[1]);
                                         b = Integer.parseInt(args[2]);
                                     } catch (Exception e) {
-                                        PlayerParticles.getPlugin().getLogger().severe("Invalid color: '" + args[0] + " " + args[1] + " " + args[2] + "'!");
+                                        PlayerParticles.getInstance().getLogger().severe("Invalid color: '" + args[0] + " " + args[1] + " " + args[2] + "'!");
                                         throw new Exception();
                                     }
 
                                     if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
-                                        PlayerParticles.getPlugin().getLogger().severe("Invalid color: '" + args[0] + " " + args[1] + " " + args[2] + "'!");
+                                        PlayerParticles.getInstance().getLogger().severe("Invalid color: '" + args[0] + " " + args[1] + " " + args[2] + "'!");
                                         throw new Exception();
                                     }
 
@@ -164,7 +164,7 @@ public class ParticleGroupPresetManager {
                                     blockData = ParticleUtils.closestMatch(args[0]);
                                     if (blockData == null || !blockData.isBlock()) throw new Exception();
                                 } catch (Exception e) {
-                                    PlayerParticles.getPlugin().getLogger().severe("Invalid block: '" + args[0] + "'!");
+                                    PlayerParticles.getInstance().getLogger().severe("Invalid block: '" + args[0] + "'!");
                                     throw new Exception();
                                 }
                             } else if (effect == ParticleEffect.ITEM) {
@@ -172,7 +172,7 @@ public class ParticleGroupPresetManager {
                                     itemData = ParticleUtils.closestMatch(args[0]);
                                     if (itemData == null || itemData.isBlock()) throw new Exception();
                                 } catch (Exception e) {
-                                    PlayerParticles.getPlugin().getLogger().severe("Invalid item: '" + args[0] + "'!");
+                                    PlayerParticles.getInstance().getLogger().severe("Invalid item: '" + args[0] + "'!");
                                     throw new Exception();
                                 }
                             }
@@ -181,12 +181,17 @@ public class ParticleGroupPresetManager {
                     
                     particles.add(new ParticlePair(null, id, effect, style, itemData, blockData, colorData, noteColorData));
                 }
-                
-                presetGroups.add(new ParticleGroupPreset(displayName, guiIcon, permission, allowPermissionOverride, new ParticleGroup(groupName, particles)));
+
+                this.presetGroups.add(new ParticleGroupPreset(displayName, guiIcon, permission, allowPermissionOverride, new ParticleGroup(groupName, particles)));
             } catch (Exception ex) {
-                PlayerParticles.getPlugin().getLogger().severe("An error occurred while parsing the groups.yml file!");
+                PlayerParticles.getInstance().getLogger().severe("An error occurred while parsing the groups.yml file!");
             }
         }
+    }
+
+    @Override
+    public void disable() {
+
     }
     
     /**
@@ -195,8 +200,8 @@ public class ParticleGroupPresetManager {
      * @param player The player
      * @return a List of preset ParticleGroups the player can use
      */
-    public static List<ParticleGroupPreset> getPresetGroupsForPlayer(Player player) {
-        return presetGroups.stream().filter(x -> x.canPlayerUse(player)).sorted(Comparator.comparing(ParticleGroupPreset::getDisplayName)).collect(Collectors.toList());
+    public List<ParticleGroupPreset> getPresetGroupsForPlayer(Player player) {
+        return this.presetGroups.stream().filter(x -> x.canPlayerUse(player)).sorted(Comparator.comparing(ParticleGroupPreset::getDisplayName)).collect(Collectors.toList());
     }
     
     /**
@@ -205,8 +210,8 @@ public class ParticleGroupPresetManager {
      * @param groupName The ParticleGroup name
      * @return The preset ParticleGroup if it exists, otherwise null 
      */
-    public static ParticleGroupPreset getPresetGroup(String groupName) {
-        for (ParticleGroupPreset group : presetGroups)
+    public ParticleGroupPreset getPresetGroup(String groupName) {
+        for (ParticleGroupPreset group : this.presetGroups)
             if (group.getGroup().getName().equalsIgnoreCase(groupName))
                 return group;
         return null;

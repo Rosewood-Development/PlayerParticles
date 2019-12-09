@@ -1,14 +1,15 @@
 package dev.esophose.playerparticles.command;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import dev.esophose.playerparticles.gui.GuiHandler;
+import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.manager.GuiManager;
 import dev.esophose.playerparticles.manager.LangManager;
 import dev.esophose.playerparticles.manager.LangManager.Lang;
-import dev.esophose.playerparticles.manager.SettingManager.PSetting;
 import dev.esophose.playerparticles.manager.PermissionManager;
+import dev.esophose.playerparticles.manager.SettingManager.Setting;
 import dev.esophose.playerparticles.particles.PPlayer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GUICommandModule implements CommandModule {
 
@@ -18,7 +19,7 @@ public class GUICommandModule implements CommandModule {
             byDefault = true;
         }
 
-        if (GuiHandler.isGuiDisabled()) {
+        if (GuiManager.isGuiDisabled()) {
             if (byDefault) {
                 LangManager.sendMessage(pplayer, Lang.COMMAND_ERROR_UNKNOWN);
             } else {
@@ -27,7 +28,7 @@ public class GUICommandModule implements CommandModule {
             return;
         }
 
-        if (!PSetting.GUI_PRESETS_ONLY.getBoolean() && PermissionManager.getEffectNamesUserHasPermissionFor(pplayer.getPlayer()).isEmpty()) {
+        if (!Setting.GUI_PRESETS_ONLY.getBoolean() && PlayerParticles.getInstance().getManager(PermissionManager.class).getEffectNamesUserHasPermissionFor(pplayer.getPlayer()).isEmpty()) {
             if (byDefault) {
                 LangManager.sendMessage(pplayer, Lang.COMMAND_ERROR_NO_EFFECTS);
             } else {
@@ -36,7 +37,7 @@ public class GUICommandModule implements CommandModule {
             return;
         }
 
-        GuiHandler.openDefault(pplayer);
+        GuiManager.openDefault(pplayer);
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
@@ -47,8 +48,8 @@ public class GUICommandModule implements CommandModule {
         return "gui";
     }
 
-    public Lang getDescription() {
-        return Lang.COMMAND_DESCRIPTION_GUI;
+    public String getDescriptionKey() {
+        return "command-description-gui";
     }
 
     public String getArguments() {

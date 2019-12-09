@@ -1,6 +1,8 @@
 package dev.esophose.playerparticles.gui;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.DataManager;
+import dev.esophose.playerparticles.manager.GuiManager;
 import dev.esophose.playerparticles.manager.LangManager;
 import dev.esophose.playerparticles.manager.LangManager.Lang;
 import dev.esophose.playerparticles.manager.SettingManager.GuiIcon;
@@ -17,6 +19,8 @@ public class GuiInventoryEditParticle extends GuiInventory {
 
     public GuiInventoryEditParticle(PPlayer pplayer, ParticlePair editingParticle) {
         super(pplayer, Bukkit.createInventory(pplayer.getPlayer(), INVENTORY_SIZE, LangManager.getText(Lang.GUI_EDITING_PARTICLE, editingParticle.getId())));
+
+        DataManager dataManager = PlayerParticles.getInstance().getManager(DataManager.class);
 
         this.fillBorder(BorderColor.RED);
 
@@ -38,8 +42,8 @@ public class GuiInventoryEditParticle extends GuiInventory {
                 new String[]{LangManager.getText(Lang.GUI_COLOR_SUBTEXT) + LangManager.getText(Lang.GUI_EDIT_EFFECT_DESCRIPTION)},
                 (button, isShiftClick) -> {
                     List<GuiInventoryEditFinishedCallback> callbacks = new ArrayList<>();
-                    callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditParticle(pplayer, editingParticle)));
-                    callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditEffect(pplayer, editingParticle, 1, callbacks, 1)));
+                    callbacks.add(() -> GuiManager.transition(new GuiInventoryEditParticle(pplayer, editingParticle)));
+                    callbacks.add(() -> GuiManager.transition(new GuiInventoryEditEffect(pplayer, editingParticle, 1, callbacks, 1)));
                     callbacks.add(() -> {
                         ParticleGroup group = pplayer.getActiveParticleGroup();
                         for (ParticlePair particle : group.getParticles()) {
@@ -48,9 +52,9 @@ public class GuiInventoryEditParticle extends GuiInventory {
                                 break;
                             }
                         }
-                        DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+                        dataManager.saveParticleGroup(pplayer.getUniqueId(), group);
 
-                        GuiHandler.transition(new GuiInventoryEditParticle(pplayer, editingParticle));
+                        GuiManager.transition(new GuiInventoryEditParticle(pplayer, editingParticle));
                     });
 
                     callbacks.get(1).execute();
@@ -64,8 +68,8 @@ public class GuiInventoryEditParticle extends GuiInventory {
                 new String[]{LangManager.getText(Lang.GUI_COLOR_SUBTEXT) + LangManager.getText(Lang.GUI_EDIT_STYLE_DESCRIPTION)},
                 (button, isShiftClick) -> {
                     List<GuiInventoryEditFinishedCallback> callbacks = new ArrayList<>();
-                    callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditParticle(pplayer, editingParticle)));
-                    callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditStyle(pplayer, editingParticle, 1, callbacks, 1)));
+                    callbacks.add(() -> GuiManager.transition(new GuiInventoryEditParticle(pplayer, editingParticle)));
+                    callbacks.add(() -> GuiManager.transition(new GuiInventoryEditStyle(pplayer, editingParticle, 1, callbacks, 1)));
                     callbacks.add(() -> {
                         ParticleGroup group = pplayer.getActiveParticleGroup();
                         for (ParticlePair particle : group.getParticles()) {
@@ -74,9 +78,9 @@ public class GuiInventoryEditParticle extends GuiInventory {
                                 break;
                             }
                         }
-                        DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+                        dataManager.saveParticleGroup(pplayer.getUniqueId(), group);
 
-                        GuiHandler.transition(new GuiInventoryEditParticle(pplayer, editingParticle));
+                        GuiManager.transition(new GuiInventoryEditParticle(pplayer, editingParticle));
                     });
 
                     callbacks.get(1).execute();
@@ -93,8 +97,8 @@ public class GuiInventoryEditParticle extends GuiInventory {
                 (button, isShiftClick) -> {
                     if (usesData) {
                         List<GuiInventoryEditFinishedCallback> callbacks = new ArrayList<>();
-                        callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditParticle(pplayer, editingParticle)));
-                        callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditData(pplayer, editingParticle, 1, callbacks, 1)));
+                        callbacks.add(() -> GuiManager.transition(new GuiInventoryEditParticle(pplayer, editingParticle)));
+                        callbacks.add(() -> GuiManager.transition(new GuiInventoryEditData(pplayer, editingParticle, 1, callbacks, 1)));
                         callbacks.add(() -> {
                             ParticleGroup group = pplayer.getActiveParticleGroup();
                             for (ParticlePair particle : group.getParticles()) {
@@ -106,9 +110,9 @@ public class GuiInventoryEditParticle extends GuiInventory {
                                     break;
                                 }
                             }
-                            DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+                            dataManager.saveParticleGroup(pplayer.getUniqueId(), group);
 
-                            GuiHandler.transition(new GuiInventoryEditParticle(pplayer, editingParticle));
+                            GuiManager.transition(new GuiInventoryEditParticle(pplayer, editingParticle));
                         });
 
                         callbacks.get(1).execute();
@@ -122,7 +126,7 @@ public class GuiInventoryEditParticle extends GuiInventory {
                 GuiIcon.BACK.get(),
                 LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_BACK_BUTTON),
                 new String[]{},
-                (button, isShiftClick) -> GuiHandler.transition(new GuiInventoryManageParticles(pplayer)));
+                (button, isShiftClick) -> GuiManager.transition(new GuiInventoryManageParticles(pplayer)));
         this.actionButtons.add(backButton);
 
         this.populate();

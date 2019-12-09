@@ -1,5 +1,6 @@
 package dev.esophose.playerparticles.gui;
 
+import dev.esophose.playerparticles.manager.GuiManager;
 import dev.esophose.playerparticles.manager.LangManager;
 import dev.esophose.playerparticles.manager.LangManager.Lang;
 import dev.esophose.playerparticles.manager.SettingManager.GuiIcon;
@@ -308,7 +309,7 @@ public class GuiInventoryEditData extends GuiInventory {
                     GuiIcon.PREVIOUS_PAGE.get(),
                     LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_PREVIOUS_PAGE_BUTTON, pageNumber - 1, maxPages),
                     new String[]{},
-                    (button, isShiftClick) -> GuiHandler.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber - 1, callbackList, callbackListPosition)));
+                    (button, isShiftClick) -> GuiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber - 1, callbackList, callbackListPosition)));
             this.actionButtons.add(previousPageButton);
         }
 
@@ -319,7 +320,7 @@ public class GuiInventoryEditData extends GuiInventory {
                     GuiIcon.NEXT_PAGE.get(),
                     LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_NEXT_PAGE_BUTTON, pageNumber + 1, maxPages),
                     new String[]{},
-                    (button, isShiftClick) -> GuiHandler.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber + 1, callbackList, callbackListPosition)));
+                    (button, isShiftClick) -> GuiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber + 1, callbackList, callbackListPosition)));
             this.actionButtons.add(nextPageButton);
         }
     }
@@ -369,7 +370,7 @@ public class GuiInventoryEditData extends GuiInventory {
                     GuiIcon.PREVIOUS_PAGE.get(),
                     LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_PREVIOUS_PAGE_BUTTON, pageNumber - 1, maxPages),
                     new String[]{},
-                    (button, isShiftClick) -> GuiHandler.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber - 1, callbackList, callbackListPosition)));
+                    (button, isShiftClick) -> GuiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber - 1, callbackList, callbackListPosition)));
             this.actionButtons.add(previousPageButton);
         }
 
@@ -380,7 +381,7 @@ public class GuiInventoryEditData extends GuiInventory {
                     GuiIcon.NEXT_PAGE.get(),
                     LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_NEXT_PAGE_BUTTON, pageNumber + 1, maxPages),
                     new String[]{},
-                    (button, isShiftClick) -> GuiHandler.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber + 1, callbackList, callbackListPosition)));
+                    (button, isShiftClick) -> GuiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber + 1, callbackList, callbackListPosition)));
             this.actionButtons.add(nextPageButton);
         }
     }
@@ -430,7 +431,7 @@ public class GuiInventoryEditData extends GuiInventory {
                     GuiIcon.PREVIOUS_PAGE.get(),
                     LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_PREVIOUS_PAGE_BUTTON, pageNumber - 1, maxPages),
                     new String[]{},
-                    (button, isShiftClick) -> GuiHandler.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber - 1, callbackList, callbackListPosition)));
+                    (button, isShiftClick) -> GuiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber - 1, callbackList, callbackListPosition)));
             this.actionButtons.add(previousPageButton);
         }
 
@@ -441,7 +442,7 @@ public class GuiInventoryEditData extends GuiInventory {
                     GuiIcon.NEXT_PAGE.get(),
                     LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_NEXT_PAGE_BUTTON, pageNumber + 1, maxPages),
                     new String[]{},
-                    (button, isShiftClick) -> GuiHandler.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber + 1, callbackList, callbackListPosition)));
+                    (button, isShiftClick) -> GuiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber + 1, callbackList, callbackListPosition)));
             this.actionButtons.add(nextPageButton);
         }
     }

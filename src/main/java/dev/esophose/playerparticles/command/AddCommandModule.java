@@ -3,8 +3,9 @@ package dev.esophose.playerparticles.command;
 import java.util.ArrayList;
 import java.util.List;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.styles.api.ParticleStyle;
-import dev.esophose.playerparticles.styles.api.ParticleStyleManager;
+import dev.esophose.playerparticles.manager.ParticleStyleManager;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -29,8 +30,10 @@ public class AddCommandModule implements CommandModule {
             CommandModule.printUsage(pplayer, this);
             return;
         }
+
+        PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
         
-        int maxParticlesAllowed = PermissionManager.getMaxParticlesAllowed(pplayer.getPlayer());
+        int maxParticlesAllowed = permissionManager.getMaxParticlesAllowed(pplayer.getPlayer());
         if (pplayer.getActiveParticles().size() >= maxParticlesAllowed) {
             LangManager.sendMessage(pplayer, Lang.ADD_REACHED_MAX, maxParticlesAllowed);
             return;
@@ -40,7 +43,7 @@ public class AddCommandModule implements CommandModule {
         if (effect == null) {
             LangManager.sendMessage(pplayer, Lang.EFFECT_INVALID, args[0]);
             return;
-        } else if (!PermissionManager.hasEffectPermission(pplayer.getPlayer(), effect)) {
+        } else if (!permissionManager.hasEffectPermission(pplayer.getPlayer(), effect)) {
             LangManager.sendMessage(pplayer, Lang.EFFECT_NO_PERMISSION, effect.getName());
             return;
         }
@@ -49,7 +52,7 @@ public class AddCommandModule implements CommandModule {
         if (style == null) {
             LangManager.sendMessage(pplayer, Lang.STYLE_INVALID, args[1]);
             return;
-        } else if (!PermissionManager.hasStylePermission(pplayer.getPlayer(), style)) {
+        } else if (!permissionManager.hasStylePermission(pplayer.getPlayer(), style)) {
             LangManager.sendMessage(pplayer, Lang.STYLE_NO_PERMISSION, args[1]);
             return;
         }
@@ -131,11 +134,11 @@ public class AddCommandModule implements CommandModule {
         ParticleGroup group = pplayer.getActiveParticleGroup();
         ParticlePair newParticle = new ParticlePair(pplayer.getUniqueId(), pplayer.getNextActiveParticleId(), effect, style, itemData, blockData, colorData, noteColorData);
         group.getParticles().add(newParticle);
-        DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+        PlayerParticles.getInstance().getManager(DataManager.class).saveParticleGroup(pplayer.getUniqueId(), group);
         
         LangManager.sendMessage(pplayer, Lang.ADD_PARTICLE_APPLIED, newParticle.getEffect().getName(), newParticle.getStyle().getName(), newParticle.getDataString());
         
-        if (ParticleStyleManager.isCustomHandled(newParticle.getStyle())) {
+        if (PlayerParticles.getInstance().getManager(ParticleStyleManager.class).isCustomHandled(newParticle.getStyle())) {
             LangManager.sendMessage(pplayer, Lang.STYLE_EVENT_SPAWNING_INFO, newParticle.getStyle().getName());
         }
     }
@@ -143,12 +146,13 @@ public class AddCommandModule implements CommandModule {
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
         Player p = pplayer.getPlayer();
         List<String> matches = new ArrayList<>();
+        PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
 
         if (args.length <= 1) { // Effect name
-            if (args.length == 0) matches = PermissionManager.getEffectNamesUserHasPermissionFor(p);
-            else StringUtil.copyPartialMatches(args[0], PermissionManager.getEffectNamesUserHasPermissionFor(p), matches);
+            if (args.length == 0) matches = permissionManager.getEffectNamesUserHasPermissionFor(p);
+            else StringUtil.copyPartialMatches(args[0], permissionManager.getEffectNamesUserHasPermissionFor(p), matches);
         } else if (args.length == 2) { // Style name
-            StringUtil.copyPartialMatches(args[1], PermissionManager.getStyleNamesUserHasPermissionFor(p), matches);
+            StringUtil.copyPartialMatches(args[1], permissionManager.getStyleNamesUserHasPermissionFor(p), matches);
         } else { // Data
             ParticleEffect effect = ParticleEffect.fromName(args[0]);
             if (effect != null) {
@@ -191,8 +195,8 @@ public class AddCommandModule implements CommandModule {
         return "add";
     }
 
-    public Lang getDescription() {
-        return Lang.COMMAND_DESCRIPTION_ADD;
+    public String getDescriptionKey() {
+        return "command-description-add";
     }
 
     public String getArguments() {

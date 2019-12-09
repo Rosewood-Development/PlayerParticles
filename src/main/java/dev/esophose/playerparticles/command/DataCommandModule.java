@@ -3,6 +3,7 @@ package dev.esophose.playerparticles.command;
 import java.util.ArrayList;
 import java.util.List;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import org.bukkit.util.StringUtil;
 
 import dev.esophose.playerparticles.manager.LangManager;
@@ -43,10 +44,14 @@ public class DataCommandModule implements CommandModule {
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
+        PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
         List<String> matches = new ArrayList<>();
         if (args.length <= 1) {
-            if (args.length == 0) matches = PermissionManager.getEffectNamesUserHasPermissionFor(pplayer.getPlayer());
-            else StringUtil.copyPartialMatches(args[0], PermissionManager.getEffectNamesUserHasPermissionFor(pplayer.getPlayer()), matches);
+            if (args.length == 0) {
+                matches = permissionManager.getEffectNamesUserHasPermissionFor(pplayer.getPlayer());
+            } else {
+                StringUtil.copyPartialMatches(args[0], permissionManager.getEffectNamesUserHasPermissionFor(pplayer.getPlayer()), matches);
+            }
         }
         return matches;
     }
@@ -55,8 +60,8 @@ public class DataCommandModule implements CommandModule {
         return "data";
     }
 
-    public Lang getDescription() {
-        return Lang.COMMAND_DESCRIPTION_DATA;
+    public String getDescriptionKey() {
+        return "command-description-data";
     }
 
     public String getArguments() {

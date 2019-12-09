@@ -1,21 +1,6 @@
 package dev.esophose.playerparticles.command;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import dev.esophose.playerparticles.styles.api.ParticleStyle;
-import dev.esophose.playerparticles.util.ParticleUtils;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
-import org.bukkit.util.StringUtil;
-
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.LangManager;
 import dev.esophose.playerparticles.manager.LangManager.Lang;
@@ -28,13 +13,28 @@ import dev.esophose.playerparticles.particles.ParticleEffect.NoteColor;
 import dev.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
 import dev.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.styles.api.ParticleStyle;
+import dev.esophose.playerparticles.util.ParticleUtils;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class FixedCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         Player p = pplayer.getPlayer();
 
-        if (!PermissionManager.canUseFixedEffects(p)) {
+        if (!PlayerParticles.getInstance().getManager(PermissionManager.class).canUseFixedEffects(p)) {
             LangManager.sendMessage(pplayer, Lang.FIXED_NO_PERMISSION);
             return;
         }
@@ -92,7 +92,8 @@ public class FixedCommandModule implements CommandModule {
      * @param args The command arguments
      */
     private void handleCreate(PPlayer pplayer, Player p, String[] args) {
-        boolean reachedMax = PermissionManager.hasPlayerReachedMaxFixedEffects(pplayer);
+        PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
+        boolean reachedMax = permissionManager.hasPlayerReachedMaxFixedEffects(pplayer);
         if (reachedMax) {
             LangManager.sendMessage(pplayer, Lang.FIXED_MAX_REACHED);
             return;
@@ -155,7 +156,7 @@ public class FixedCommandModule implements CommandModule {
         }
 
         double distanceFromEffect = p.getLocation().distance(new Location(p.getWorld(), xPos, yPos, zPos));
-        int maxCreationDistance = PermissionManager.getMaxFixedEffectCreationDistance();
+        int maxCreationDistance = permissionManager.getMaxFixedEffectCreationDistance();
         if (maxCreationDistance != 0 && distanceFromEffect > maxCreationDistance) {
             LangManager.sendMessage(pplayer, Lang.FIXED_CREATE_OUT_OF_RANGE, maxCreationDistance);
             return;
@@ -165,7 +166,7 @@ public class FixedCommandModule implements CommandModule {
         if (effect == null) {
             LangManager.sendMessage(pplayer, Lang.FIXED_CREATE_EFFECT_INVALID, args[3]);
             return;
-        } else if (!PermissionManager.hasEffectPermission(p, effect)) {
+        } else if (!permissionManager.hasEffectPermission(p, effect)) {
             LangManager.sendMessage(pplayer, Lang.FIXED_CREATE_EFFECT_NO_PERMISSION, effect.getName());
             return;
         }
@@ -174,7 +175,7 @@ public class FixedCommandModule implements CommandModule {
         if (style == null) {
             LangManager.sendMessage(pplayer, Lang.FIXED_CREATE_STYLE_INVALID, args[4]);
             return;
-        } else if (!PermissionManager.hasStylePermission(p, style)) {
+        } else if (!permissionManager.hasStylePermission(p, style)) {
             LangManager.sendMessage(pplayer, Lang.FIXED_CREATE_STYLE_NO_PERMISSION, args[4]);
             return;
         }
@@ -271,7 +272,7 @@ public class FixedCommandModule implements CommandModule {
         FixedParticleEffect fixedEffect = new FixedParticleEffect(p.getUniqueId(), nextFixedEffectId, p.getLocation().getWorld().getName(), xPos, yPos, zPos, particle);
 
         LangManager.sendMessage(pplayer, Lang.FIXED_CREATE_SUCCESS);
-        DataManager.saveFixedEffect(fixedEffect);
+        PlayerParticles.getInstance().getManager(DataManager.class).saveFixedEffect(fixedEffect);
     }
 
     /**
@@ -282,6 +283,8 @@ public class FixedCommandModule implements CommandModule {
      * @param args The command arguments
      */
     private void handleEdit(PPlayer pplayer, Player p, String[] args) {
+        PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
+
         if (args.length < 3) {
             LangManager.sendMessage(pplayer, Lang.FIXED_EDIT_MISSING_ARGS);
             return;
@@ -348,7 +351,7 @@ public class FixedCommandModule implements CommandModule {
                 }
 
                 double distanceFromEffect = p.getLocation().distance(new Location(p.getWorld(), xPos, yPos, zPos));
-                int maxCreationDistance = PermissionManager.getMaxFixedEffectCreationDistance();
+                int maxCreationDistance = permissionManager.getMaxFixedEffectCreationDistance();
                 if (maxCreationDistance != 0 && distanceFromEffect > maxCreationDistance) {
                     LangManager.sendMessage(pplayer, Lang.FIXED_EDIT_OUT_OF_RANGE, maxCreationDistance);
                     return;
@@ -361,7 +364,7 @@ public class FixedCommandModule implements CommandModule {
                 if (effect == null) {
                     LangManager.sendMessage(pplayer, Lang.FIXED_EDIT_EFFECT_INVALID, args[2]);
                     return;
-                } else if (!PermissionManager.hasEffectPermission(pplayer.getPlayer(), effect)) {
+                } else if (!permissionManager.hasEffectPermission(pplayer.getPlayer(), effect)) {
                     LangManager.sendMessage(pplayer, Lang.FIXED_EDIT_EFFECT_NO_PERMISSION, effect.getName());
                     return;
                 }
@@ -374,7 +377,7 @@ public class FixedCommandModule implements CommandModule {
                 if (style == null) {
                     LangManager.sendMessage(pplayer, Lang.FIXED_EDIT_STYLE_INVALID, args[2]);
                     return;
-                } else if (!PermissionManager.hasStylePermission(pplayer.getPlayer(), style)) {
+                } else if (!permissionManager.hasStylePermission(pplayer.getPlayer(), style)) {
                     LangManager.sendMessage(pplayer, Lang.FIXED_EDIT_STYLE_NO_PERMISSION, style.getName());
                     return;
                 } else if (!style.canBeFixed()) {
@@ -480,7 +483,7 @@ public class FixedCommandModule implements CommandModule {
                 return;
         }
 
-        DataManager.updateFixedEffect(fixedEffect);
+        PlayerParticles.getInstance().getManager(DataManager.class).updateFixedEffect(fixedEffect);
         LangManager.sendMessage(pplayer, Lang.FIXED_EDIT_SUCCESS, editType, id);
     }
 
@@ -506,7 +509,7 @@ public class FixedCommandModule implements CommandModule {
         }
 
         if (pplayer.getFixedEffectById(id) != null) {
-            DataManager.removeFixedEffect(pplayer.getUniqueId(), id);
+            PlayerParticles.getInstance().getManager(DataManager.class).removeFixedEffect(pplayer.getUniqueId(), id);
             LangManager.sendMessage(pplayer, Lang.FIXED_REMOVE_SUCCESS, id);
         } else {
             LangManager.sendMessage(pplayer, Lang.FIXED_REMOVE_INVALID, id);
@@ -591,7 +594,11 @@ public class FixedCommandModule implements CommandModule {
      * @param args The command arguments
      */
     private void handleClear(PPlayer pplayer, Player p, String[] args) {
-        if (!PermissionManager.canClearFixedEffects(p)) {
+        PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
+        ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
+        DataManager dataManager = PlayerParticles.getInstance().getManager(DataManager.class);
+
+        if (!permissionManager.canClearFixedEffects(p)) {
             LangManager.sendMessage(pplayer, Lang.FIXED_CLEAR_NO_PERMISSION);
             return;
         }
@@ -611,18 +618,19 @@ public class FixedCommandModule implements CommandModule {
 
         ArrayList<FixedParticleEffect> fixedEffectsToRemove = new ArrayList<>();
 
-        for (PPlayer ppl : ParticleManager.getPPlayers())
+        for (PPlayer ppl : particleManager.getPPlayers())
             for (FixedParticleEffect fixedEffect : ppl.getFixedParticles())
-                if (fixedEffect.getLocation().getWorld().equals(p.getLocation().getWorld()) && fixedEffect.getLocation().distance(p.getLocation()) <= radius)
+                if (fixedEffect.getLocation().getWorld() == p.getLocation().getWorld() && fixedEffect.getLocation().distance(p.getLocation()) <= radius)
                     fixedEffectsToRemove.add(fixedEffect);
 
         for (FixedParticleEffect fixedEffect : fixedEffectsToRemove)
-            DataManager.removeFixedEffect(fixedEffect.getOwnerUniqueId(), fixedEffect.getId());
+            dataManager.removeFixedEffect(fixedEffect.getOwnerUniqueId(), fixedEffect.getId());
 
         LangManager.sendMessage(pplayer, Lang.FIXED_CLEAR_SUCCESS, fixedEffectsToRemove.size(), radius);
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
+        PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
         Player p = pplayer.getPlayer();
         List<String> matches = new ArrayList<>();
 
@@ -657,9 +665,9 @@ public class FixedCommandModule implements CommandModule {
                     }
 
                     if (args.length == 5) {
-                        StringUtil.copyPartialMatches(args[4], PermissionManager.getEffectNamesUserHasPermissionFor(p), matches);
+                        StringUtil.copyPartialMatches(args[4], permissionManager.getEffectNamesUserHasPermissionFor(p), matches);
                     } else if (args.length == 6) {
-                        StringUtil.copyPartialMatches(args[5], PermissionManager.getFixableStyleNamesUserHasPermissionFor(p), matches);
+                        StringUtil.copyPartialMatches(args[5], permissionManager.getFixableStyleNamesUserHasPermissionFor(p), matches);
                     } else if (args.length >= 7) {
                         ParticleEffect effect = ParticleEffect.fromName(args[4]);
                         if (effect != null) {
@@ -717,9 +725,9 @@ public class FixedCommandModule implements CommandModule {
                             }
                             StringUtil.copyPartialMatches(args[args.length - 1], possibleValues, matches);
                         } else if (property.equals("effect") && args.length == 4) {
-                            StringUtil.copyPartialMatches(args[3], PermissionManager.getEffectNamesUserHasPermissionFor(p), matches);
+                            StringUtil.copyPartialMatches(args[3], permissionManager.getEffectNamesUserHasPermissionFor(p), matches);
                         } else if (property.equals("style") && args.length == 4) {
-                            StringUtil.copyPartialMatches(args[3], PermissionManager.getFixableStyleNamesUserHasPermissionFor(p), matches);
+                            StringUtil.copyPartialMatches(args[3], permissionManager.getFixableStyleNamesUserHasPermissionFor(p), matches);
                         } else if (property.equals("data")) {
                             int id = -1;
                             try {
@@ -781,8 +789,8 @@ public class FixedCommandModule implements CommandModule {
         return "fixed";
     }
 
-    public Lang getDescription() {
-        return Lang.COMMAND_DESCRIPTION_FIXED;
+    public String getDescriptionKey() {
+        return "command-description-fixed";
     }
 
     public String getArguments() {

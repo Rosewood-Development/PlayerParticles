@@ -2,6 +2,7 @@ package dev.esophose.playerparticles.particles;
 
 import java.util.UUID;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.LangManager;
 import dev.esophose.playerparticles.manager.LangManager.Lang;
 import dev.esophose.playerparticles.manager.ParticleManager;
@@ -194,19 +195,21 @@ public class ParticlePair {
      * @return Gets the ParticleColor the current particle effect will spawn with
      */
     public ParticleColor getSpawnColor() {
+        ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
+
         if (this.effect.hasProperty(ParticleProperty.COLORABLE)) {
             if (this.effect == ParticleEffect.NOTE) {
                 if (this.noteColor.getNote() == 99) {
-                    return ParticleManager.getRainbowNoteParticleColor();
+                    return particleManager.getRainbowNoteParticleColor();
                 } else if (this.noteColor.getNote() == 98) {
-                    return ParticleManager.getRandomNoteParticleColor();
+                    return particleManager.getRandomNoteParticleColor();
                 }
                 return this.noteColor;
             } else {
                 if (this.color.getRed() == 999 && this.color.getGreen() == 999 && this.color.getBlue() == 999) {
-                    return ParticleManager.getRainbowParticleColor();
+                    return particleManager.getRainbowParticleColor();
                 } else if (this.color.getRed() == 998 && this.color.getGreen() == 998 && this.color.getBlue() == 998) {
-                    return ParticleManager.getRandomParticleColor();
+                    return particleManager.getRandomParticleColor();
                 } else {
                     return this.color;
                 }

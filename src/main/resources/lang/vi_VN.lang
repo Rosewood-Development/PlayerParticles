@@ -259,7 +259,7 @@ gui-edit-style-description: "Nhấn để chỉnh sửa Kiểu hiệu ứng củ
 gui-edit-data: "Chỉnh sửa Dữ liệu"
 gui-edit-data-description: "Nhấn để chỉnh sửa Dữ liệu của Kiểu hiệu ứng này"
 gui-edit-data-unavailable: "Hiệu ứng của Hạt hiệu ứng này không cần sử dụng bất kì Dữ liệu nào"
-gui-data-none: "none"
+gui-data-none: "không ai"
 gui-create-particle: "Tạo mới một Hạt hiệu ứng"
 gui-create-particle-description: "Tạo mới một Hạt hiệu ứng với Hiệu ứng, Kiểu hiệu ứng, và Dữ liệu"
 gui-create-particle-unavailable: "bạn đã đạt giới hạn số lượng Hạt hiệu ứng có thể tạo"

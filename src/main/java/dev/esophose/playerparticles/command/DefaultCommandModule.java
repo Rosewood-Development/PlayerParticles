@@ -3,6 +3,8 @@ package dev.esophose.playerparticles.command;
 import java.util.ArrayList;
 import java.util.List;
 
+import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.manager.CommandManager;
 import org.bukkit.util.StringUtil;
 
 import dev.esophose.playerparticles.manager.LangManager.Lang;
@@ -12,12 +14,12 @@ public class DefaultCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         // The default command just opens the GUI, execute the GUICommandModule
-        ParticleCommandHandler.findMatchingCommand("gui").onCommandExecute(pplayer, new String[] { "_byDefault_" });
+        PlayerParticles.getInstance().getManager(CommandManager.class).findMatchingCommand("gui").onCommandExecute(pplayer, new String[] { "_byDefault_" });
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
         List<String> matches = new ArrayList<>();
-        List<String> commandNames = ParticleCommandHandler.getCommandNames();
+        List<String> commandNames = PlayerParticles.getInstance().getManager(CommandManager.class).getCommandNames();
         
         if (args.length == 0) return commandNames;
         
@@ -30,8 +32,8 @@ public class DefaultCommandModule implements CommandModule {
         return "";
     }
 
-    public Lang getDescription() {
-        return Lang.COMMAND_DESCRIPTION_DEFAULT;
+    public String getDescriptionKey() {
+        return "command-description-default";
     }
 
     public String getArguments() {

@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.styles.api.ParticleStyle;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.util.StringUtil;
@@ -20,6 +21,8 @@ import dev.esophose.playerparticles.particles.ParticlePair;
 public class RemoveCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
+        DataManager dataManager = PlayerParticles.getInstance().getManager(DataManager.class);
+
         if (args.length == 0) {
             LangManager.sendMessage(pplayer, Lang.REMOVE_NO_ARGS);
             return;
@@ -54,7 +57,7 @@ public class RemoveCommandModule implements CommandModule {
                 return;
             }
 
-            DataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
+            dataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
             LangManager.sendMessage(pplayer, Lang.REMOVE_ID_SUCCESS, id);
         } else { // Removing by effect/style name
             ParticleEffect effect = ParticleEffect.fromName(args[0]);
@@ -71,7 +74,7 @@ public class RemoveCommandModule implements CommandModule {
                 }
                 
                 if (removedCount > 0) {
-                    DataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
+                    dataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
                     LangManager.sendMessage(pplayer, Lang.REMOVE_EFFECT_SUCCESS, removedCount, effect.getName());
                 } else {
                     LangManager.sendMessage(pplayer, Lang.REMOVE_EFFECT_NONE, effect.getName());
@@ -87,7 +90,7 @@ public class RemoveCommandModule implements CommandModule {
                 }
                 
                 if (removedCount > 0) {
-                    DataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
+                    dataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
                     LangManager.sendMessage(pplayer, Lang.REMOVE_STYLE_SUCCESS, removedCount, style.getName());
                 } else {
                     LangManager.sendMessage(pplayer, Lang.REMOVE_STYLE_NONE, style.getName());
@@ -118,8 +121,8 @@ public class RemoveCommandModule implements CommandModule {
         return "remove";
     }
 
-    public Lang getDescription() {
-        return Lang.COMMAND_DESCRIPTION_REMOVE;
+    public String getDescriptionKey() {
+        return "command-description-remove";
     }
 
     public String getArguments() {

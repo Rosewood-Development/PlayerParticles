@@ -12,10 +12,10 @@ import dev.esophose.playerparticles.particles.PPlayer;
 public class ReloadCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
-        if (PermissionManager.canReloadPlugin(pplayer.getMessageDestination())) {
-            PlayerParticles.getPlugin().reload(false);
+        if (PlayerParticles.getInstance().getManager(PermissionManager.class).canReloadPlugin(pplayer.getMessageDestination())) {
+            PlayerParticles.getInstance().reload();
             LangManager.sendMessage(pplayer, Lang.RELOAD_SUCCESS);
-            PlayerParticles.getPlugin().getLogger().info("Reloaded configuration.");
+            PlayerParticles.getInstance().getLogger().info("Reloaded configuration.");
         } else {
             LangManager.sendMessage(pplayer, Lang.RELOAD_NO_PERMISSION);
         }
@@ -29,8 +29,8 @@ public class ReloadCommandModule implements CommandModule {
         return "reload";
     }
 
-    public Lang getDescription() {
-        return Lang.COMMAND_DESCRIPTION_RELOAD;
+    public String getDescriptionKey() {
+        return "command-description-reload";
     }
 
     public String getArguments() {
