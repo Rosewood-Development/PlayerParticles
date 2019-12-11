@@ -379,6 +379,7 @@ public class LangManager {
         defaultLangFileNames.add("fr_FR.lang");
         defaultLangFileNames.add("vi_VN.lang");
         defaultLangFileNames.add("ru_RU.lang");
+        defaultLangFileNames.add("de_DE.lang");
 
         targetLangFile.getParentFile().mkdir(); // Make sure the directory always exists
         

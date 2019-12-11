@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.esophose.playerparticles</groupId>
   <artifactId>PlayerParticles</artifactId>
-  <version>6.5</version>
+  <version>6.6</version>
   <name>PlayerParticles</name>
   <url>https://github.com/Esophose/PlayerParticles</url>
   <description>Display particles around your player and blocks using customized styles and data!</description>
@@ -110,7 +110,7 @@
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
-      <version>1.14.3-R0.1-SNAPSHOT</version>
+      <version>1.15-R0.1-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>

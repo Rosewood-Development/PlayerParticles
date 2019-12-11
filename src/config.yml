@@ -239,6 +239,8 @@ gui-icon:
     dragon_breath:
       - DRAGON_BREATH
       - DRAGONS_BREATH
+    dripping_honey:
+      - BEE_NEST
     dripping_lava:
       - LAVA_BUCKET
     dripping_water:
@@ -261,8 +263,12 @@ gui-icon:
       - TNT
     falling_dust:
       - SAND
+    falling_honey:
+      - HONEY_BOTTLE
     falling_lava:
       - RED_DYE
+    falling_nectar:
+      - HONEYCOMB
     falling_water:
       - BLUE_DYE
     firework:
@@ -292,6 +298,8 @@ gui-icon:
     large_smoke:
       - COBWEB
       - WEB
+    landing_honey:
+      - HONEY_BLOCK
     landing_lava:
       - ORANGE_DYE
     lava:

@@ -1,5 +1,9 @@
 package com.esophose.playerparticles.particles;
 
+import com.esophose.playerparticles.manager.ParticleManager;
+import com.esophose.playerparticles.manager.SettingManager.PSetting;
+import com.esophose.playerparticles.styles.api.PParticle;
+import com.esophose.playerparticles.util.NMSUtil;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -8,9 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import com.esophose.playerparticles.util.NMSUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,10 +19,6 @@ import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
-
-import com.esophose.playerparticles.manager.ParticleManager;
-import com.esophose.playerparticles.manager.SettingManager.PSetting;
-import com.esophose.playerparticles.styles.api.PParticle;
 import org.bukkit.metadata.MetadataValue;
 
 @SuppressWarnings("deprecation")
@@ -44,6 +41,7 @@ public enum ParticleEffect {
     DAMAGE_INDICATOR("DAMAGE_INDICATOR", "DAMAGE_INDICATOR"),
     DOLPHIN("DOLPHIN", null),
     DRAGON_BREATH("DRAGON_BREATH", "DRAGON_BREATH"),
+    DRIPPING_HONEY("DRIPPING_HONEY", null),
     DRIPPING_LAVA("DRIP_LAVA", "DRIP_LAVA"),
     DRIPPING_WATER("DRIP_WATER", "DRIP_WATER"),
     DUST("REDSTONE", "REDSTONE", ParticleProperty.COLORABLE),
@@ -55,7 +53,9 @@ public enum ParticleEffect {
     EXPLOSION("EXPLOSION_LARGE", "EXPLOSION_LARGE"),
     EXPLOSION_EMITTER("EXPLOSION_HUGE", "EXPLOSION_HUGE"),
     FALLING_DUST("FALLING_DUST", "FALLING_DUST", ParticleProperty.REQUIRES_MATERIAL_DATA),
+    FALLING_HONEY("FALLING_HONEY", null),
     FALLING_LAVA("FALLING_LAVA", null),
+    FALLING_NECTAR("FALLING_NECTAR", null),
     FALLING_WATER("FALLING_WATER", null),
     FIREWORK("FIREWORKS_SPARK", "FIREWORKS_SPARK"),
     FISHING("WATER_WAKE", "WATER_WAKE"),
@@ -68,6 +68,7 @@ public enum ParticleEffect {
     ITEM("ITEM_CRACK", "ITEM_CRACK", ParticleProperty.REQUIRES_MATERIAL_DATA),
     ITEM_SLIME("SLIME", "SLIME"),
     ITEM_SNOWBALL("SNOWBALL", "SNOWBALL"),
+    LANDING_HONEY("LANDING_HONEY", null),
     LANDING_LAVA("LANDING_LAVA", null),
     LARGE_SMOKE("SMOKE_LARGE", "SMOKE_LARGE"),
     LAVA("LAVA", "LAVA"),
