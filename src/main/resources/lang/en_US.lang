@@ -124,13 +124,13 @@ rainbow: "&cR&6a&ei&an&bb&9o&dw"
 random: "Random"
 
 # Effects
-effect-no-permission: "&cYou do not have permission to use the effect &b{0} &c!"
+effect-no-permission: "&cYou do not have permission to use the effect &b{0}&c!"
 effect-invalid: "&cThe effect &b{0} &cdoes not exist! Use &b/pp effects &cfor a list of effects you can use."
 effect-list: "&eYou can use the following effects: &b{0}"
 effect-list-empty: "&cYou do not have permission to use any effects!"
 
 # Styles
-style-no-permission: "&cYou do not have permission to use the style &b{0} &c!"
+style-no-permission: "&cYou do not have permission to use the style &b{0}&c!"
 style-event-spawning-info: "&eNote: The style &b{0} &espawns particles based on an event."
 style-invalid: "&cThe style &b{0} &cdoes not exist! Use &b/pp styles &cfor a list of styles you can use."
 style-list: "&eYou can use the following styles: &b{0}"

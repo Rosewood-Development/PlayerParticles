@@ -1,0 +1,288 @@
+# ================================================================ #
+#                   zh_CN简体中文语言文件                            #
+# 提醒:                                                            #
+# * 你可以使用 & 符号   给消息上色                                    #
+# * 插件会自动替换 {#} 为对应的消息，请勿翻译括号内的内容                #
+# * \n 可在 菜单部分分隔出新一行                                      #
+# * 请勿在消息内使用双引号!( " )                                      #
+# * 你可以在这里翻译插件相关消息                                      #
+# * 插件更新时该文件经常会被覆盖!                                     #
+# ================================================================ #
+# Translator: qsefthuopq
+
+# 指令出错
+command-error-no-effects: "&c你必须有权限使用特效才能使用这个指令!"
+command-error-unknown: "&c未知的指令， 请使用 &b/pp help &c查看指令列表。"
+
+# Command Descriptions
+command-descriptions: "&e你可以使用以下指令:"
+command-descriptions-usage: "&e/pp {0} {1}"
+command-descriptions-help-1: "&7> &b/pp {0} &e- {1}"
+command-descriptions-help-2: "&7> &b/pp {0} {1} &e- {2}"
+command-descriptions-help-other: "&7> &b/ppo <player> <command> &e- 以玩家身份输入 /pp "
+command-description-add: "添加新的粒子特效"
+command-description-data: "查看粒子特效使用的数据"
+command-description-default: "主指令，默认打开菜单"
+command-description-edit: "编辑粒子"
+command-description-effects: "显示你可以使用的粒子效果"
+command-description-fixed: "管理你的定点特效"
+command-description-group: "管理你的特效组"
+command-description-gui: "打开粒子特效编辑菜单"
+command-description-help: "显示帮助... 就是这里"
+command-description-info: "查看你使用的粒子特效的描述"
+command-description-list: "你使用的粒子特效的id"
+command-description-reload: "重载配置和语言文件"
+command-description-remove: "删除一些粒子特效"
+command-description-reset: "删除你身上所有特效"
+command-description-styles: "显示你可以使用的粒子风格"
+command-description-toggle: "开启或关闭粒子效果显示"
+command-description-version: "显示插件版本和作者"
+command-description-worlds: "查看禁用粒子特效的世界"
+
+# 子指令用法
+command-description-fixed-create: "&e/pp fixed create <<x> <y> <z>|<looking>> <特效名> <风格名> [数据名] - 创建新的定点特效"
+command-description-fixed-edit: "&e/pp fixed edit <id> <特效名|风格名|数据名> <参数> - 根据ID编辑定点特效"
+command-description-fixed-remove: "&e/pp fixed remove <ID> - 根据ID删除定点特效"
+command-description-fixed-list: "&e/pp fixed list - 列出所有定点特效的ID"
+command-description-fixed-info: "&e/pp fixed info <ID> - 获取定点特效的详细信息"
+command-description-fixed-clear: "&e/pp fixed clear <半径> - 清空指定范围内的所有定点特效"
+command-description-group-save: "&e/pp group save <组名> - 保存所有你使用的特效到新的组内"
+command-description-group-load: "&e/pp group load <组名> - 加载所有你保存组内的特效"
+command-description-group-remove: "&e/pp group remove <组名> - 删除一组你保存的特效"
+command-description-group-list: "&e/pp group list <组名> - 列出所有你保存的特效组"
+command-description-group-info: "&e/pp group info <组名> - 列出组内的特效信息"
+
+# 查询ID指令
+id-invalid: "&c你输入的ID无效， 必须是正整数!"
+id-unknown: "&c你没有ID为&b{0}&c的特效!"
+
+# 其他指令
+other-no-permission: "&c你没有权限对其他玩家使用PlayerParticles的指令!"
+other-missing-args: "&c缺少参数。 &b/ppo <player> <command>"
+other-unknown-player: "&c找不到玩家&b{0}&c。玩家必须在线。"
+other-unknown-command: "&c指令&b/pp {0} &c不存在。"
+other-success: "&e已为&b{0}&e执行指令 /pp 。 输出:"
+
+# 添加指令
+add-reached-max: "&c无法使用粒子效果，你已达到上限:&b{0}&c!"
+add-particle-applied: "&a成功添加新的粒子特效： &b{0}&a， 风格： &b{1}&a，数据： &b{2}&a!"
+
+# 数据指令
+data-no-args: "&c该特效缺失参数! 指令用法: &b/pp data <effect>"
+
+# 编辑指令
+edit-invalid-property: "&c您输入的参数&b{0}&c无效。 有效参数为: &beffect&c， &bstyle&c， &bdata"
+edit-success-effect: "&aID为&b{0}&a的粒子的特效已更改为&b{1}&a!"
+edit-success-style: "&aID为&b{0}&a的粒子的风格已更改为&b{1}&a!"
+edit-success-data: "&aID为&b{0}&a的粒子的数据已更改为&b{1}&a!"
+
+# 粒子组指令
+group-invalid: "&c名为&b{0}&c的粒子组不存在!"
+group-no-permission: "&c你没有使用&b{0}&c的权限!"
+group-preset-no-permission: "&c你没有使用预设粒子组&b{0}&c的权限!"
+group-reserved: "&c该组名&b&c无法使用!"
+group-no-name: "&c你没有输入组名! &b/pp {0} <组名>"
+group-save-reached-max: "&c无法保存粒子组，你已达到可使用粒子组的上限!"
+group-save-no-particles: "&c无法保存粒子组，你没有添加任何粒子!"
+group-save-success: "&a你当前使用的粒子特效已成功保存入粒子组&b{0}&a内!"
+group-save-success-overwrite: "&a已将你当前使用的粒子特效加入到粒子组&b{0}&a内!"
+group-load-success: "&a已将&b{0}&a个粒子特效加入你已保存的粒子组&b{1}&a内!"
+group-load-preset-success: "&a已使用&b{1}&a预设组内的&b{0}&a个粒子特效!"
+group-remove-preset: "&c你无法删除预设粒子组!"
+group-remove-success: "&a成功删除粒子组&b{0}&a!"
+group-info-header: "&e粒子组&b{0}&e拥有以下粒子特效:"
+group-list-none: "&e你没有保存任何粒子组!"
+group-list-output: "&e你已成功保存以下粒子组: &b{0}"
+group-list-presets: "&e可使用以下预设粒子组: &b{0}"
+
+# 重载指令
+reload-success: "&a插件已重载!"
+reload-no-permission: "&c你没有重载插件配置的指令!"
+
+# 删除指令
+remove-no-args: "&c你没有指定要删除的ID! &b/pp remove <ID>"
+remove-id-success: "&a你已成功删除ID为&b{0}&a的粒子特效!"
+remove-effect-success: "&a成功删除&b{0}&a个&b{1}&a特效的粒子!"
+remove-effect-none: "&c你没有使用特效&b{0}&c的粒子!"
+remove-style-success: "&已成功删除&b{0}&a个使用了风格&b{1}&a的粒子!"
+remove-style-none: "&c你没有已使用风格&b{0}&c的粒子!"
+remove-unknown: "&c名为&b{0}&c的特效或风格不存在!"
+
+# 列白指令
+list-none: "&e你没有任何激活的特效!"
+list-you-have: "&e你使用了以下粒子特效:"
+list-output: "&eID: &b{0} &e特效: &b{1} &e风格: &b{2} &e数据: &b{3}"
+
+# 开关指令
+toggle-on: "&e粒子特效已&a开启&e!"
+toggle-off: "&e粒子特效已&c关闭&e!"
+
+# 彩虹
+rainbow: "&c彩&6虹"
+
+# 随机
+random: "随机"
+
+# 特效
+effect-no-permission: "&c你没有使用特效&b{0}的权限&c!"
+effect-invalid: "&c特效&b{0} &c不存在! 请输入&b/pp effects &c查看你可以使用的特效。"
+effect-list: "&e你可以使用以下特效: &b{0}"
+effect-list-empty: "&c你没有使用任何特效的权限!"
+
+# 风格
+style-no-permission: "&c你没有权限使用&b{0}这一风格&c!"
+style-event-spawning-info: "&e提醒: 风格&b{0}&e基于事件生成。"
+style-invalid: "&c风格&b{0}&c不存在! 请输入&b/pp styles &c查看你可以使用的风格。"
+style-list: "&e你可以使用以下风格: &b{0}"
+
+# 数据
+data-usage-none: "&e粒子特效&b{0}&e不使用任何数据!"
+data-usage-block: "&e粒子特效&b{0}&e需要设置&b方块&e数据! &b格式: <方块ID>"
+data-usage-item: "&e粒子特效&b{0}&e需要设置&b物品&e数据! &b格式: <物品ID>"
+data-usage-color: "&e粒子特效&b{0}&e需要设置&b颜色&e数据! &b格式: <<0-255> <0-255> <0-255>>|<rainbow>|<random>"
+data-usage-note: "&e粒子特效&b{0}&e需要设置&b音符&e数据! &b格式: <0-24>|<rainbow>|<random>"
+data-invalid-block: "&c你输入的&b方块&c数据 无效! &b格式: <方块ID>"
+data-invalid-item: "&c你输入的&b物品&c数据 无效! &b格式: <物品ID>"
+data-invalid-color: "&c你输入的&b颜色&c数据 无效! &b格式: <<0-255> <0-255> <0-255>>|<rainbow>|<random>"
+data-invalid-note: "&c你输入的&b音符&c数据 无效! &b格式: <0-24>|<rainbow>|<random>"
+data-invalid-material-not-item: "&c你输入的&b物品&c材料名 &b{0}&c不是一件物品!"
+data-invalid-material-not-block: "&c你输入的&b方块&c材料名&b{0}&c不是一个方块!"
+data-invalid-material-item: "&c你输入的&b物品&c材料&b{0}不存在!"
+data-invalid-material-block: "&c你输入的&b方块&c材料&b{0}!"
+
+# 世界
+disabled-worlds: "&e这些世界禁用粒子特效: &b{0}"
+disabled-worlds-none: "&e所有世界都禁用粒子特效。"
+
+# 删除
+reset-success: "&a已删除&b{0}个&a激活的粒子特效!"
+
+# 定点特效
+fixed-create-missing-args: "&c无法创建定点特效， 缺少 &b{0} &c必要参数!"
+fixed-create-invalid-coords: "&c无法创建定点特效， 你输入的坐标无效!"
+fixed-create-out-of-range: "&c无法创建定点特效，你必须在目标地点&b{0}&c格内!"
+fixed-create-looking-too-far: "&c无法创建定点特效， 你离目标方块太远了!"
+fixed-create-effect-invalid: "&c无法创建定点特效，名为&b{0}&c的特效不存在!"
+fixed-create-effect-no-permission: "&c无法创建定点特效， 你没有权限使用特效&b{0}&c!"
+fixed-create-style-invalid: "&c无法创建定点特效， 名为&b{0}&c的风格不存在!"
+fixed-create-style-no-permission: "&c无法创建定点特效， 你没有权限使用风格&b{0}&c!"
+fixed-create-style-non-fixable: "&c无法创建定点特效， 风格&b{0}&c无法用于定点特效!"
+fixed-create-data-error: "&c无法创建定点特效， 你所给出的数据有误! 请输入 &b/pp data <effect> &c查看正确的数据格式!"
+fixed-create-success: "&a成功创建定点特效!"
+
+fixed-edit-missing-args: "&c无法编辑定点特效， 缺失参数!"
+fixed-edit-invalid-id: "&c无法编辑定点特效， ID无效或不存在!"
+fixed-edit-invalid-property: "&c无法编辑定点特效， 参数无效! 只有&blocation&c、&beffect&c、&bstyle&c和&bdata &c才有效。"
+fixed-edit-invalid-coords: "&c无法编辑定点特效， 你输入的一个或多个坐标无效!"
+fixed-edit-out-of-range: "&c无法编辑定点特效，你必须在目标地点&b{0}&c格内才能进行编辑!"
+fixed-edit-looking-too-far: "&c无法编辑定点特效， 你离目标地点太远了!"
+fixed-edit-effect-invalid: "&c无法编辑定点特效， 名为&b{0}&c的特效不存在!"
+fixed-edit-effect-no-permission: "&c无法编辑定点特效， 你没有权限使用特效&b{0}&c!"
+fixed-edit-style-invalid: "&c无法编辑定点特效， 名为&b{0}&c的风格不存在!"
+fixed-edit-style-no-permission: "&c无法编辑定点特效， 你没有权限使用风格&b{0}&c!"
+fixed-edit-style-non-fixable: "&c无法编辑定点特效， 风格 &b{0} &c无法用于定点特效!"
+fixed-edit-data-error: "&c无法编辑定点特效， 数据有误! 请输入 &b/pp data <effect> &cto 来获取正确的数据格式!"
+fixed-edit-data-none: "&c无法编辑定点特效， 该特效无需数据!"
+fixed-edit-success: "&a已更新&b{0}&a个ID为&b{1}&a的定点特效!"
+
+fixed-remove-invalid: "&c无法删除定点特效， 你没有ID为&b{0}&c的定点特效!"
+fixed-remove-no-args: "&c你没有指定要删除的ID!"
+fixed-remove-args-invalid: "&c无法删除，ID必须是数字!"
+fixed-remove-success: "&a已删除ID为&b{0}&a的定点特效!"
+
+fixed-list-none: "&e你没有定点特效!"
+fixed-list-success: "&e你的定点特效ID为: &b{0}"
+
+fixed-info-invalid: "&c无法获取信息， 你没有ID为&b{0}&c的定点特效!"
+fixed-info-no-args: "&c你未指定ID!"
+fixed-info-invalid-args: "&c无法获取信息， ID必须是数字!"
+fixed-info-success: "&eID: &b{0} &e世界: &b{1} &eX: &b{2} &eY: &b{3} &eZ: &b{4} &e特效: &b{5} &e风格: &b{6} &e数据: &b{7}"
+
+fixed-clear-no-permission: "&c你没有清空附近定点特效的权限!"
+fixed-clear-no-args: "&c你没有给出清空定点特效的范围!"
+fixed-clear-invalid-args: "&c你输入的范围无效，范围必须是正整数!"
+fixed-clear-success: "&a已清除&b{0}&a个&b{1}&a格内的定点特效!"
+
+fixed-no-permission: "&c你没有使用定点特效的权限!"
+fixed-max-reached: "&c你已达到可使用定点特效的数量上限!"
+fixed-invalid-command: "&c你输入了无效的子指令!"
+
+# 更新提醒
+update-available: "&e有新版本更新：(&b{0}&e)!你使用的版本为&bv{1}&e。 https://songoda.com/marketplace/product/32"
+
+# GUI
+gui-disabled: "&c服务器管理员已关闭菜单!"
+gui-color-icon-name: "&a"
+gui-color-info: "&e"
+gui-color-subtext: "&b"
+gui-color-unavailable: "&c"
+gui-commands-info: "商人 &b/pp help 查看指令帮助"
+gui-back-button: "返回"
+gui-next-page-button: "下一页 ({0}/{1})"
+gui-previous-page-button: "上一页 ({0}/{1})"
+gui-click-to-load: "点击加载{0} 个粒子特效:"
+gui-shift-click-to-delete: "Shift+点击 删除"
+gui-particle-info: "  - ID: &b{0} &e特效: &b{1} &e风格: &b{2} &e数据: &b{3}"
+gui-playerparticles: "粒子特效"
+gui-active-particles: "激活的粒子: &b{0}"
+gui-saved-groups: "已保存的粒子组: &b{0}"
+gui-fixed-effects: "定点特效: &b{0}"
+gui-edit-primary-effect: "编辑之前使用的粒子的特效"
+gui-edit-primary-effect-description: "编辑之前使用的粒子的特效"
+gui-edit-primary-style: "编辑之前使用粒子的风格"
+gui-edit-primary-style-missing-effect: "你必须先选择一个特效"
+gui-edit-primary-style-description: "编辑之前使用粒子的风格"
+gui-edit-primary-data: "编辑之前使用粒子的数据"
+gui-edit-primary-data-missing-effect: "你必须先选择一个特效"
+gui-edit-primary-data-unavailable: "你之前使用的特效没有使用任何数据"
+gui-edit-primary-data-description: "编辑之前使用的特效的数据"
+gui-manage-your-particles: "管理你的粒子特效"
+gui-manage-your-particles-description: "创建、编辑和删除你的粒子特效"
+gui-manage-your-groups: "管理你的特效组"
+gui-manage-your-groups-description: "创建、删除和加载你的粒子组"
+gui-load-a-preset-group: "加载预设粒子组"
+gui-load-a-preset-group-description: "加载预设粒子组"
+gui-save-group: "保存新的粒子组"
+gui-save-group-description: "点击保存为新的粒子组。你需要\n在聊天框内输入名称。"
+gui-save-group-full: "你已达到粒子组上限"
+gui-save-group-no-particles: "你没有使用粒子特效"
+gui-save-group-hotbar-message: "&e请在聊天框内输入&b1 &e新的粒子组名。 输入 &ccancel&e 取消。 (剩余&b{0}&e秒)"
+gui-reset-particles: "重置你的粒子特效"
+gui-reset-particles-description: "删除你激活的所有粒子特效"
+gui-particle-name: "粒子 #{0}"
+gui-click-to-edit-particle: "点击编辑粒子特效、风格或数据"
+gui-editing-particle: "编辑粒子#{0}中"
+gui-edit-effect: "编辑特效"
+gui-edit-effect-description: "点击编辑粒子特效"
+gui-edit-style: "编辑风格"
+gui-edit-style-description: "点击编辑粒子风格"
+gui-edit-data: "编辑数据"
+gui-edit-data-description: "点击编辑粒子数据"
+gui-edit-data-unavailable: "这个粒子特效不使用数据"
+gui-data-none: "无"
+gui-create-particle: "创建新的粒子特效"
+gui-create-particle-description: "创建新的粒子特效"
+gui-create-particle-unavailable: "你不能创建更多的粒子特效"
+gui-select-effect: "选择粒子特效"
+gui-select-effect-description: "将粒子特效设置为 &b{0}"
+gui-select-style: "选择粒子风格"
+gui-select-style-description: "将粒子风格设置为 &b{0}"
+gui-select-data: "选择粒子数据"
+gui-select-data-description: "将粒子数据设置为&b{0}"
+gui-select-data-note: "note #{0}"
+gui-edit-data-color-red: "&c红色"
+gui-edit-data-color-orange: "&6橙黄"
+gui-edit-data-color-yellow: "&e黄色"
+gui-edit-data-color-lime-green: "&a淡绿"
+gui-edit-data-color-green: "&2绿色"
+gui-edit-data-color-blue: "&1蓝色"
+gui-edit-data-color-cyan: "&3青色"
+gui-edit-data-color-light-blue: "&b淡蓝色"
+gui-edit-data-color-purple: "&5紫色"
+gui-edit-data-color-magenta: "&d洋红"
+gui-edit-data-color-pink: "&d粉色"
+gui-edit-data-color-brown: "&6棕色"
+gui-edit-data-color-black: "&8黑色"
+gui-edit-data-color-gray: "&8灰色"
+gui-edit-data-color-light-gray: "&7淡灰"
+gui-edit-data-color-white: "&f白色"
