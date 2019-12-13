@@ -18,14 +18,12 @@ public class FrenchLocale implements Locale {
     @Override
     public Map<String, String> getDefaultLocaleStrings() {
         return new LinkedHashMap<String, String>() {{
-            // Plugin Prefix
+            this.put("#0", "Plugin Message Prefix");
             this.put("prefix", "&7[&3PlayerParticles&7] ");
 
-            // Command Errors
+            this.put("#1", "Command Description Messages");
             this.put("command-error-no-effects", "&cVous n'avez pas la permission d'utiliser cette commande.");
             this.put("command-error-unknown", "&cCommande inconnue, utilisez &b/pp help &cpour afficher la liste des commandes disponibles pour ce plugin.");
-
-            // Command Descriptions
             this.put("command-descriptions", "&eLes commandes suivantes sont disponibles :");
             this.put("command-descriptions-usage", "&e/pp %cmd% %args%");
             this.put("command-descriptions-help-1", "&7> &b/pp %cmd% &e- %desc%");
@@ -50,7 +48,7 @@ public class FrenchLocale implements Locale {
             this.put("command-description-version", "Affichez la version du plugin et son créateur");
             this.put("command-description-worlds", "Voir les mondes où ce plugin n'est pas autorisé");
 
-            // Sub-Command Usage
+            this.put("#2", "Fixed Particle Command Description Messages");
             this.put("command-description-fixed-create", "&e/pp fixed create <<x> <y> <z>|<looking>> <effect> <style> [data] - Créez une particule fixe");
             this.put("command-description-fixed-edit", "&e/pp fixed edit <id> <effect|style|data> <args> - Modifiez une partie d'une particule fixe par son ID");
             this.put("command-description-fixed-remove", "&e/pp fixed remove <ID> - Supprimez une particule fixe par son ID");
@@ -63,31 +61,29 @@ public class FrenchLocale implements Locale {
             this.put("command-description-group-list", "&e/pp group list <name> - Voir toutes les particules sauvegardées d'un groupe que vous avez créé");
             this.put("command-description-group-info", "&e/pp group info <name> - Voir toutes les particules sauvegardées du groupe");
 
-            // Command ID Lookup
+            this.put("#3", "ID Messages");
             this.put("id-invalid", "&cL'ID rentrée n'est pas valide, il doit être un nombre entier positif");
             this.put("id-unknown", "&cVous n'avez pas de particules appliquées avec : &b%id% &c!");
 
-            // Other Command
+            this.put("#4", "Other Messages");
             this.put("other-no-permission", "&cVous n'avez pas la permission pour exécuter une commande /pp en tant qu'un autre joueur.");
             this.put("other-missing-args", "&cVous oubliez des arguments dans votre commande. &b/ppo <player> <command>");
             this.put("other-unknown-player", "&cLe joueur &b%player% &cn'a pas été trouvé. Il doit être en ligne.");
             this.put("other-unknown-command", "&cLa commande &b/pp %cmd% &cn existe pas.");
             this.put("other-success", "&Commande /pp exécutée. &b%player%&e. Retour de la commande :");
 
-            // Add Command
+            this.put("#5", "Add Messages");
             this.put("add-reached-max", "Impossible d'appliquer la particule, vous avez atteint la limite de particules qui est de &b%amount% &c!");
             this.put("add-particle-applied", "&aUne nouvelle particule est appliquée avec l'effet &b%effect%&a, le style &b%style%&a, et les paramètres &b%data% &a!");
-
-            // Data Command
             this.put("data-no-args", "&cVous oubliez des arguments dans l'effet. Utilisation de la commande: &b/pp data <effect>");
 
-            // Edit Command
+            this.put("#6", "Edit Messages");
             this.put("edit-invalid-property", "cLa propriété &b%prop% &cest interdite. Propriétés valides : &beffect&c, &bstyle&c, &bdata");
             this.put("edit-success-effect", "&aVotre particule avec l'ID de &b%id% &aa son effet changé à &b%effect% &a!");
             this.put("edit-success-style", "&aVotre particule avec l'ID de &b%id% &aa son style changé à &b%style% &a!");
             this.put("edit-success-data", "&aVotre particule avec l'ID de &b%id% &aa ses paramètres changés à &b%data% &a!");
 
-            // Group Command
+            this.put("#7", "Group Messages");
             this.put("group-invalid", "&cUn groupe ou un preset de groupe sauvegardé n'existe pas avec le nom &b%name% &c!");
             this.put("group-no-permission", "&cVous oubliez une permission pour un style ou un effet afin d'utiliser les groupe &b%group% &c!");
             this.put("group-preset-no-permission", "&cVous oubliez une permission pour un style ou un effet afin d'utiliser les presets du groupe &b%group% &c!");
@@ -106,11 +102,11 @@ public class FrenchLocale implements Locale {
             this.put("group-list-output", "&eVous avez ces groupes suivants sauvegardés : &b%info%");
             this.put("group-list-presets", "&eCes presets de groupes suivants sont disponibles : &b%info%");
 
-            // Reload Command
+            this.put("#8", "Reload Messages");
             this.put("reload-success", "&aLe plugin a été rechargé...");
             this.put("reload-no-permission", "&cVous n'avez pas la permission pour recharger la configuration de ce plugin !");
 
-            // Remove Command
+            this.put("#9", "Remove Messages");
             this.put("remove-no-args", "&cVous n'avez pas rentrer d'ID à supprimer ! &b/pp remove <ID>");
             this.put("remove-id-success", "&aVotre particule avec l'ID &b%id% &aa été supprimée !");
             this.put("remove-effect-success", "&aSuppression de &b%amount% &ade votre particule avec l'effet &b%effect% &a!");
@@ -119,34 +115,32 @@ public class FrenchLocale implements Locale {
             this.put("remove-style-none", "&cVous n'avez pas de particules appliquées avec le style &b%style% &c!");
             this.put("remove-unknown", "&cL'effect avec le nom ou le style &b%name% &cn'existe pas !");
 
-            // List Command
+            this.put("#10", "List Messages");
             this.put("list-none", "&eVous n'avez pas de particules actives.");
             this.put("list-you-have", "&eVous avez les particules suivantes appliquées :");
             this.put("list-output", "&eID: &b%id% &eEffet: &b%effect% &eStyle: &b%style% &eParamètre: &b%data%");
 
-            // Toggle Command
+            this.put("#11", "Toggle Messages");
             this.put("toggle-on", "&eLes particules sont maintenant en mode &aON &e!");
             this.put("toggle-off", "&eLes particules sont maintenant en mode &cOFF &e!");
 
-            // Rainbow
+            this.put("#12", "Color Messages");
             this.put("rainbow", "&cr&6a&ei&an&bb&9o&dw");
-
-            // Random
             this.put("random", "aléatoire");
 
-            // Effects
+            this.put("#13", "Effect Messages");
             this.put("effect-no-permission", "&cVous n'avez pas la permission pour utiliser la particule &b%effect% &c!");
             this.put("effect-invalid", "&cL'effet &b%effect% &cn existe pas ! Utilisez &b/pp effects &cpour afficher les effets disponibles.");
             this.put("effect-list", "&eVous pouvez utiliser les effets suivants : &b%effects%");
             this.put("effect-list-empty", "&cVous n'avez pas la permission pour utiliser des effets !");
 
-            // Styles
+            this.put("#14", "Style Messages");
             this.put("style-no-permission", "&cVous n'avez pas la permission pour utiliser le style &b%style% &c!");
             this.put("style-event-spawning-info", "&eNote: Le style &b%style% &efait apparaitre des particules seulement lors d'évènements spécifiques.");
             this.put("style-invalid", "&cLe style &b%style% &cn'existe pas ! Utilisez &b/pp styles &cpour afficher les styles disponibles.");
             this.put("style-list", "&eVous pouvez utiliser les styles suivants : &b%styles%");
 
-            // Data
+            this.put("#15", "Data Messages");
             this.put("data-usage-none", "&eL'effet &b%effect% &en'est pas paramétrable.");
             this.put("data-usage-block", "&eL'effet &b%effect% &erequière l'ID du bloc ! &bFormat: <blockName>");
             this.put("data-usage-item", "&eL'effet &b%effect% &erequière l'ID de l'item ! &bFormat: <itemName>");
@@ -161,14 +155,14 @@ public class FrenchLocale implements Locale {
             this.put("data-invalid-material-item", "&cL'ID &b%material% n'existe pas !");
             this.put("data-invalid-material-block", "&cL'ID&b%material% n'existe pas !");
 
-            // Worlds
+            this.put("#16", "World Messages");
             this.put("disabled-worlds", "&eLes particules sont désactivées dans ces mondes : &b%worlds%");
             this.put("disabled-worlds-none", "&Les particules sont désactivées dans aucuns mondes.");
 
-            // Reset
+            this.put("#17", "Reset Message");
             this.put("reset-success", "&b%amount% &aparticule(s) actives supprimées !");
 
-            // Fixed Effects
+            this.put("#18", "Fixed Create Messages");
             this.put("fixed-create-missing-args", "&cImpossible de créer un effet fixe, vous oubliez des arguments : &b%amount%");
             this.put("fixed-create-invalid-coords", "&cImpossible de créer un effet fixe, coordonnées invalides !");
             this.put("fixed-create-out-of-range", "&cImpossible de créer un effet fixe, Vous devez être à &b%range% &cblocs de la position rentrée !");
@@ -181,6 +175,7 @@ public class FrenchLocale implements Locale {
             this.put("fixed-create-data-error", "&cImpossible de créer un effet fixe, l'ID rentrée n'est pas valide ! Utilisez &b/pp data <effect> &cpour afficher les IDs valides.");
             this.put("fixed-create-success", "&aL'effet fixe à été créer.");
 
+            this.put("#19", "Fixed Edit Messages");
             this.put("fixed-edit-missing-args", "&cImpossible de modifier l'effet fixe, vous oubliez des arguments !");
             this.put("fixed-edit-invalid-id", "&cImpossible de modifier l'effet fixe, ID incorrecte !");
             this.put("fixed-edit-invalid-property", "&cImpossible de modifier l'effet fixe, argument incorrect ! Seuls localisation, effet, style, et paramètre sont valides.");
@@ -196,37 +191,46 @@ public class FrenchLocale implements Locale {
             this.put("fixed-edit-data-none", "&cImpossible de modifier l'effet fixe, l'effet ne requière pas de paramètres !");
             this.put("fixed-edit-success", "&aMise à jour de &b%prop% &ade l'effet fixe avec l'ID &b%id% &a!");
 
+            this.put("#20", "Fixed Remove Messages");
             this.put("fixed-remove-invalid", "&cImpossible de supprimer l'effet fixe, vous n'avez pas d effets fixes avec l'ID &b%id% &c!");
             this.put("fixed-remove-no-args", "&cVous n'avez pas rentrer d'ID à supprimer !");
             this.put("fixed-remove-args-invalid", "&cImpossible de supprimer, l'ID doit être un nombre !");
             this.put("fixed-remove-success", "&aTous vos effets fixes avec l'ID &b%id% &aont été supprimés !");
 
+            this.put("#21", "Fixed List Messages");
             this.put("fixed-list-none", "&eVous n'avez pas d'effets fixes !");
             this.put("fixed-list-success", "&eVous avez des effets fixes avec ces IDs :&b%ids%");
 
+            this.put("#22", "Fixed Info Messages");
             this.put("fixed-info-invalid", "&cImpossible d'obtenir l'information, vous n'avez pas de particules fixes avec l'ID &b%id%& c!");
             this.put("fixed-info-no-args", "&cVous n'avez pas rentrée d'ID pour obtenir d'infomations !");
             this.put("fixed-info-invalid-args", "&cImpossible d'obtenir l'information, vous n'avez pas de particules fixes avec l'ID, l'ID spécifiée doit être un nombre !");
             this.put("fixed-info-success", "&eID: &b%id% &eWorld: &b%world% &eX: &b%x% &eY: &b%y% &eZ: &b%z% &eEffect: &b%effect% &eStyle: &b%style% &eData: &b%data%");
 
+            this.put("#23", "Fixed Clear Messages");
             this.put("fixed-clear-no-permission", "&cVous n'avez la permission pour supprimer les effets proches !");
             this.put("fixed-clear-no-args", "&cVous n'avez pas rentré de rayon !");
             this.put("fixed-clear-invalid-args", "&cLe rayon rentré n'est pas valide, il doit être un nombre rond !");
             this.put("fixed-clear-success", "&b%amount% &aeffets ont été supprimés dans un rayon &b%range% &cblocs !");
 
+            this.put("#24", "Fixed Other Messages");
             this.put("fixed-no-permission", "&cVous n'avez pas la permission d'ajouter des effets fixes !");
             this.put("fixed-max-reached", "&cVous avez atteint le nombre maximum de particules fixes !");
             this.put("fixed-invalid-command", "&cArguments invalides pour la commande &b/pp fixed&c!");
 
-            // Update Available
+            this.put("#25", "Plugin Update Message");
             this.put("update-available", "&eLa version (&b%new%&e) est disponible ! vous utilisez la version &bv%current%&d. https://www.spigotmc.org/resources/playerparticles.40261/");
 
-            // GUI
+            this.put("#26", "GUI Messages");
             this.put("gui-disabled", "&cL'interface du plugin à été désactivée !");
+
+            this.put("#27", "GUI Color Messages");
             this.put("gui-color-icon-name", "&a");
             this.put("gui-color-info", "&e");
             this.put("gui-color-subtext", "&b");
             this.put("gui-color-unavailable", "&c");
+
+            this.put("#28", "GUI Info Messages");
             this.put("gui-commands-info", "Affichez des informations avec &b/pp help");
             this.put("gui-back-button", "Retour en arrière");
             this.put("gui-next-page-button", "Page Suivante (%start%/%end%)");
@@ -238,6 +242,8 @@ public class FrenchLocale implements Locale {
             this.put("gui-active-particles", "Particules actives: &b%amount%");
             this.put("gui-saved-groups", "Groupes sauvegardés: &b%amount%");
             this.put("gui-fixed-effects", "Effets fixes: &b%amount%");
+
+            this.put("#29", "GUI Edit Primary Messages");
             this.put("gui-edit-primary-effect", "Editez l'effet primaire");
             this.put("gui-edit-primary-effect-description", "Editez l effet d une de vos particules primaire");
             this.put("gui-edit-primary-style", "Editez le style primaire");
@@ -247,22 +253,34 @@ public class FrenchLocale implements Locale {
             this.put("gui-edit-primary-data-missing-effect", "Vous devez d'abord sélectionner un effet");
             this.put("gui-edit-primary-data-unavailable", "Votre effet primaire n'est pas paramétrable");
             this.put("gui-edit-primary-data-description", "Editer les paramères de votre effet primaire");
+
+            this.put("#30", "GUI Manage Particles Messages");
             this.put("gui-manage-your-particles", "Gérez vos particules");
             this.put("gui-manage-your-particles-description", "Créez, éditez, et supprimez vos particules");
             this.put("gui-manage-your-groups", "Gérez vos groupes");
             this.put("gui-manage-your-groups-description", "Créez, éditez, et supprimez vos groupes particules");
+
+            this.put("#31", "GUI Load Messages");
             this.put("gui-load-a-preset-group", "Chargez un groupe de presets");
             this.put("gui-load-a-preset-group-description", "Chargez un groupe de particules déjà fait");
+
+            this.put("#32", "GUI Save Messages");
             this.put("gui-save-group", "Sauvegardez un nouveau groupe");
             this.put("gui-save-group-description", "Cliquez pour sauvegardez un nouveau groupe. Vous allez être invité\nà écrire un nouveau nom dans le tchat.");
             this.put("gui-save-group-full", "Vous avez atteint le nombre maximal de groupe !");
             this.put("gui-save-group-no-particles", "Vous avez aucunes particules appliquées");
             this.put("gui-save-group-hotbar-message", "&eTapez &b1 &enom dans le tchat pour le nouveau nom du groupe. Tapez &ccancel&e pour annuler. (&b%seconds%&es restants)");
+
+            this.put("#33", "GUI Reset Messages");
             this.put("gui-reset-particles", "Réinitialisez vos particules");
             this.put("gui-reset-particles-description", "Supprimez vos particules actives");
+
+            this.put("#34", "GUI Misc Messages");
             this.put("gui-particle-name", "Particule #%id%");
             this.put("gui-click-to-edit-particle", "Cliquez pour éditer cette particule");
             this.put("gui-editing-particle", "Edition particule #%id%");
+
+            this.put("#35", "GUI Edit Messages");
             this.put("gui-edit-effect", "Editez l'effet");
             this.put("gui-edit-effect-description", "Cliquez pour éditer l'effet de cette particule");
             this.put("gui-edit-style", "Editez le style");
@@ -271,9 +289,13 @@ public class FrenchLocale implements Locale {
             this.put("gui-edit-data-description", "Cliquez pour éditer les paramètres de la particule");
             this.put("gui-edit-data-unavailable", "Cliquez pour éditer les paramères de cette particule");
             this.put("gui-data-none", "aucuns");
+
+            this.put("#36", "GUI Create Messages");
             this.put("gui-create-particle", "Créez une nouvelle particule");
             this.put("gui-create-particle-description", "Créez une nouvelle particule");
             this.put("gui-create-particle-unavailable", "Vous avez atteint le nombre maximum de particules que vous pouvez créer");
+
+            this.put("#37", "GUI Select Messages");
             this.put("gui-select-effect", "Sélectionnez les effets");
             this.put("gui-select-effect-description", "Mettez les effets de la particules à &b%effect%");
             this.put("gui-select-style", "Sélectionnez le style");
@@ -281,6 +303,8 @@ public class FrenchLocale implements Locale {
             this.put("gui-select-data", "Sélectionnez les paramètres");
             this.put("gui-select-data-description", "Mets les paramètres de la particule à &b%data%");
             this.put("gui-select-data-note", "note #%note%");
+
+
             this.put("gui-edit-data-color-red", "&crouge");
             this.put("gui-edit-data-color-orange", "&6orange");
             this.put("gui-edit-data-color-yellow", "&ejaune");

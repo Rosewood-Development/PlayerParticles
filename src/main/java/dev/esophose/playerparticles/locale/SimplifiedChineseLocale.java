@@ -18,14 +18,12 @@ public class SimplifiedChineseLocale implements Locale {
     @Override
     public Map<String, String> getDefaultLocaleStrings() {
         return new LinkedHashMap<String, String>() {{
-            // Plugin Prefix
+            this.put("#0", "Plugin Message Prefix");
             this.put("prefix", "&7[&3PlayerParticles&7] ");
 
-            // 指令出错
+            this.put("#1", "Command Description Messages");
             this.put("command-error-no-effects", "&c你必须有权限使用特效才能使用这个指令!");
             this.put("command-error-unknown", "&c未知的指令， 请使用 &b/pp help &c查看指令列表。");
-
-            // Command Descriptions
             this.put("command-descriptions", "&e你可以使用以下指令:");
             this.put("command-descriptions-usage", "&e/pp %cmd% %args%");
             this.put("command-descriptions-help-1", "&7> &b/pp %cmd% &e- %desc%");
@@ -50,7 +48,7 @@ public class SimplifiedChineseLocale implements Locale {
             this.put("command-description-version", "显示插件版本和作者");
             this.put("command-description-worlds", "查看禁用粒子特效的世界");
 
-            // 子指令用法
+            this.put("#2", "Fixed Particle Command Description Messages");
             this.put("command-description-fixed-create", "&e/pp fixed create <<x> <y> <z>|<looking>> <特效名> <风格名> [数据名] - 创建新的定点特效");
             this.put("command-description-fixed-edit", "&e/pp fixed edit <id> <特效名|风格名|数据名> <参数> - 根据ID编辑定点特效");
             this.put("command-description-fixed-remove", "&e/pp fixed remove <ID> - 根据ID删除定点特效");
@@ -63,31 +61,29 @@ public class SimplifiedChineseLocale implements Locale {
             this.put("command-description-group-list", "&e/pp group list <组名> - 列出所有你保存的特效组");
             this.put("command-description-group-info", "&e/pp group info <组名> - 列出组内的特效信息");
 
-            // 查询ID指令
+            this.put("#3", "ID Messages");
             this.put("id-invalid", "&c你输入的ID无效， 必须是正整数!");
             this.put("id-unknown", "&c你没有ID为&b%id%&c的特效!");
 
-            // 其他指令
+            this.put("#4", "Other Messages");
             this.put("other-no-permission", "&c你没有权限对其他玩家使用PlayerParticles的指令!");
             this.put("other-missing-args", "&c缺少参数。 &b/ppo <player> <command>");
             this.put("other-unknown-player", "&c找不到玩家&b%player%&c。玩家必须在线。");
             this.put("other-unknown-command", "&c指令&b/pp %cmd% &c不存在。");
             this.put("other-success", "&e已为&b%player%&e执行指令 /pp 。 输出:");
 
-            // 添加指令
+            this.put("#5", "Add Messages");
             this.put("add-reached-max", "&c无法使用粒子效果，你已达到上限:&b%amount%&c!");
             this.put("add-particle-applied", "&a成功添加新的粒子特效： &b%effect%&a， 风格： &b%style%&a，数据： &b%data%&a!");
-
-            // 数据指令
             this.put("data-no-args", "&c该特效缺失参数! 指令用法: &b/pp data <effect>");
 
-            // 编辑指令
+            this.put("#6", "Edit Messages");
             this.put("edit-invalid-property", "&c您输入的参数&b%prop%&c无效。 有效参数为: &beffect&c， &bstyle&c， &bdata");
             this.put("edit-success-effect", "&aID为&b%id%&a的粒子的特效已更改为&b%effect%&a!");
             this.put("edit-success-style", "&aID为&b%id%&a的粒子的风格已更改为&b%style%&a!");
             this.put("edit-success-data", "&aID为&b%id%&a的粒子的数据已更改为&b%data%&a!");
 
-            // 粒子组指令
+            this.put("#7", "Group Messages");
             this.put("group-invalid", "&c名为&b%name%&c的粒子组不存在!");
             this.put("group-no-permission", "&c你没有使用&b%group%&c的权限!");
             this.put("group-preset-no-permission", "&c你没有使用预设粒子组&b%group%&c的权限!");
@@ -106,11 +102,11 @@ public class SimplifiedChineseLocale implements Locale {
             this.put("group-list-output", "&e你已成功保存以下粒子组: &b%info%");
             this.put("group-list-presets", "&e可使用以下预设粒子组: &b%info%");
 
-            // 重载指令
+            this.put("#8", "Reload Messages");
             this.put("reload-success", "&a插件已重载!");
             this.put("reload-no-permission", "&c你没有重载插件配置的指令!");
 
-            // 删除指令
+            this.put("#9", "Remove Messages");
             this.put("remove-no-args", "&c你没有指定要删除的ID! &b/pp remove <ID>");
             this.put("remove-id-success", "&a你已成功删除ID为&b%id%&a的粒子特效!");
             this.put("remove-effect-success", "&a成功删除&b%amount%&a个&b%effect%&a特效的粒子!");
@@ -119,34 +115,32 @@ public class SimplifiedChineseLocale implements Locale {
             this.put("remove-style-none", "&c你没有已使用风格&b%style%&c的粒子!");
             this.put("remove-unknown", "&c名为&b%name%&c的特效或风格不存在!");
 
-            // 列白指令
+            this.put("#10", "List Messages");
             this.put("list-none", "&e你没有任何激活的特效!");
             this.put("list-you-have", "&e你使用了以下粒子特效:");
             this.put("list-output", "&eID: &b%id% &e特效: &b%effect% &e风格: &b%style% &e数据: &b%data%");
 
-            // 开关指令
+            this.put("#11", "Toggle Messages");
             this.put("toggle-on", "&e粒子特效已&a开启&e!");
             this.put("toggle-off", "&e粒子特效已&c关闭&e!");
 
-            // 彩虹
+            this.put("#12", "Color Messages");
             this.put("rainbow", "&c彩&6虹");
-
-            // 随机
             this.put("random", "随机");
 
-            // 特效
+            this.put("#13", "Effect Messages");
             this.put("effect-no-permission", "&c你没有使用特效&b%effect%的权限&c!");
             this.put("effect-invalid", "&c特效&b%effect% &c不存在! 请输入&b/pp effects &c查看你可以使用的特效。");
             this.put("effect-list", "&e你可以使用以下特效: &b%effects%");
             this.put("effect-list-empty", "&c你没有使用任何特效的权限!");
 
-            // 风格
+            this.put("#14", "Style Messages");
             this.put("style-no-permission", "&c你没有权限使用&b%style%这一风格&c!");
             this.put("style-event-spawning-info", "&e提醒: 风格&b%style%&e基于事件生成。");
             this.put("style-invalid", "&c风格&b%style%&c不存在! 请输入&b/pp styles &c查看你可以使用的风格。");
             this.put("style-list", "&e你可以使用以下风格: &b%styles%");
 
-            // 数据
+            this.put("#15", "Data Messages");
             this.put("data-usage-none", "&e粒子特效&b%effect%&e不使用任何数据!");
             this.put("data-usage-block", "&e粒子特效&b%effect%&e需要设置&b方块&e数据! &b格式: <方块ID>");
             this.put("data-usage-item", "&e粒子特效&b%effect%&e需要设置&b物品&e数据! &b格式: <物品ID>");
@@ -161,14 +155,14 @@ public class SimplifiedChineseLocale implements Locale {
             this.put("data-invalid-material-item", "&c你输入的&b物品&c材料&b%material%不存在!");
             this.put("data-invalid-material-block", "&c你输入的&b方块&c材料&b%material%!");
 
-            // 世界
+            this.put("#16", "World Messages");
             this.put("disabled-worlds", "&e这些世界禁用粒子特效: &b%worlds%");
             this.put("disabled-worlds-none", "&e所有世界都禁用粒子特效。");
 
-            // 删除
+            this.put("#17", "Reset Message");
             this.put("reset-success", "&a已删除&b%amount%个&a激活的粒子特效!");
 
-            // 定点特效
+            this.put("#18", "Fixed Create Messages");
             this.put("fixed-create-missing-args", "&c无法创建定点特效， 缺少 &b%amount% &c必要参数!");
             this.put("fixed-create-invalid-coords", "&c无法创建定点特效， 你输入的坐标无效!");
             this.put("fixed-create-out-of-range", "&c无法创建定点特效，你必须在目标地点&b%range%&c格内!");
@@ -181,6 +175,7 @@ public class SimplifiedChineseLocale implements Locale {
             this.put("fixed-create-data-error", "&c无法创建定点特效， 你所给出的数据有误! 请输入 &b/pp data <effect> &c查看正确的数据格式!");
             this.put("fixed-create-success", "&a成功创建定点特效!");
 
+            this.put("#19", "Fixed Edit Messages");
             this.put("fixed-edit-missing-args", "&c无法编辑定点特效， 缺失参数!");
             this.put("fixed-edit-invalid-id", "&c无法编辑定点特效， ID无效或不存在!");
             this.put("fixed-edit-invalid-property", "&c无法编辑定点特效， 参数无效! 只有&blocation&c、&beffect&c、&bstyle&c和&bdata &c才有效。");
@@ -196,37 +191,46 @@ public class SimplifiedChineseLocale implements Locale {
             this.put("fixed-edit-data-none", "&c无法编辑定点特效， 该特效无需数据!");
             this.put("fixed-edit-success", "&a已更新&b%prop%&a个ID为&b%id%&a的定点特效!");
 
+            this.put("#20", "Fixed Remove Messages");
             this.put("fixed-remove-invalid", "&c无法删除定点特效， 你没有ID为&b%id%&c的定点特效!");
             this.put("fixed-remove-no-args", "&c你没有指定要删除的ID!");
             this.put("fixed-remove-args-invalid", "&c无法删除，ID必须是数字!");
             this.put("fixed-remove-success", "&a已删除ID为&b%id%&a的定点特效!");
 
+            this.put("#21", "Fixed List Messages");
             this.put("fixed-list-none", "&e你没有定点特效!");
             this.put("fixed-list-success", "&e你的定点特效ID为: &b%ids%");
 
+            this.put("#22", "Fixed Info Messages");
             this.put("fixed-info-invalid", "&c无法获取信息， 你没有ID为&b%id%&c的定点特效!");
             this.put("fixed-info-no-args", "&c你未指定ID!");
             this.put("fixed-info-invalid-args", "&c无法获取信息， ID必须是数字!");
             this.put("fixed-info-success", "&eID: &b%id% &e世界: &b%world% &eX: &b%x% &eY: &b%y% &eZ: &b%z% &e特效: &b%effect% &e风格: &b%style% &e数据: &b%data%");
 
+            this.put("#23", "Fixed Clear Messages");
             this.put("fixed-clear-no-permission", "&c你没有清空附近定点特效的权限!");
             this.put("fixed-clear-no-args", "&c你没有给出清空定点特效的范围!");
             this.put("fixed-clear-invalid-args", "&c你输入的范围无效，范围必须是正整数!");
             this.put("fixed-clear-success", "&a已清除&b%amount%&a个&b%range%&a格内的定点特效!");
 
+            this.put("#24", "Fixed Other Messages");
             this.put("fixed-no-permission", "&c你没有使用定点特效的权限!");
             this.put("fixed-max-reached", "&c你已达到可使用定点特效的数量上限!");
             this.put("fixed-invalid-command", "&c你输入了无效的子指令!");
 
-            // 更新提醒
+            this.put("#25", "Plugin Update Message");
             this.put("update-available", "&e有新版本更新：(&b%new%&e)!你使用的版本为&bv%current%&e。 https://songoda.com/marketplace/product/32");
 
-            // GUI
+            this.put("#26", "GUI Messages");
             this.put("gui-disabled", "&c服务器管理员已关闭菜单!");
+
+            this.put("#27", "GUI Color Messages");
             this.put("gui-color-icon-name", "&a");
             this.put("gui-color-info", "&e");
             this.put("gui-color-subtext", "&b");
             this.put("gui-color-unavailable", "&c");
+
+            this.put("#28", "GUI Info Messages");
             this.put("gui-commands-info", "商人 &b/pp help 查看指令帮助");
             this.put("gui-back-button", "返回");
             this.put("gui-next-page-button", "下一页 (%start%/%end%)");
@@ -238,6 +242,8 @@ public class SimplifiedChineseLocale implements Locale {
             this.put("gui-active-particles", "激活的粒子: &b%amount%");
             this.put("gui-saved-groups", "已保存的粒子组: &b%amount%");
             this.put("gui-fixed-effects", "定点特效: &b%amount%");
+
+            this.put("#29", "GUI Edit Primary Messages");
             this.put("gui-edit-primary-effect", "编辑之前使用的粒子的特效");
             this.put("gui-edit-primary-effect-description", "编辑之前使用的粒子的特效");
             this.put("gui-edit-primary-style", "编辑之前使用粒子的风格");
@@ -247,22 +253,34 @@ public class SimplifiedChineseLocale implements Locale {
             this.put("gui-edit-primary-data-missing-effect", "你必须先选择一个特效");
             this.put("gui-edit-primary-data-unavailable", "你之前使用的特效没有使用任何数据");
             this.put("gui-edit-primary-data-description", "编辑之前使用的特效的数据");
+
+            this.put("#30", "GUI Manage Particles Messages");
             this.put("gui-manage-your-particles", "管理你的粒子特效");
             this.put("gui-manage-your-particles-description", "创建、编辑和删除你的粒子特效");
             this.put("gui-manage-your-groups", "管理你的特效组");
             this.put("gui-manage-your-groups-description", "创建、删除和加载你的粒子组");
+
+            this.put("#31", "GUI Load Messages");
             this.put("gui-load-a-preset-group", "加载预设粒子组");
             this.put("gui-load-a-preset-group-description", "加载预设粒子组");
+
+            this.put("#32", "GUI Save Messages");
             this.put("gui-save-group", "保存新的粒子组");
             this.put("gui-save-group-description", "点击保存为新的粒子组。你需要\n在聊天框内输入名称。");
             this.put("gui-save-group-full", "你已达到粒子组上限");
             this.put("gui-save-group-no-particles", "你没有使用粒子特效");
             this.put("gui-save-group-hotbar-message", "&e请在聊天框内输入&b1 &e新的粒子组名。 输入 &ccancel&e 取消。 (剩余&b%seconds%&e秒)");
+
+            this.put("#33", "GUI Reset Messages");
             this.put("gui-reset-particles", "重置你的粒子特效");
             this.put("gui-reset-particles-description", "删除你激活的所有粒子特效");
+
+            this.put("#34", "GUI Misc Messages");
             this.put("gui-particle-name", "粒子 #%id%");
             this.put("gui-click-to-edit-particle", "点击编辑粒子特效、风格或数据");
             this.put("gui-editing-particle", "编辑粒子#%id%中");
+
+            this.put("#35", "GUI Edit Messages");
             this.put("gui-edit-effect", "编辑特效");
             this.put("gui-edit-effect-description", "点击编辑粒子特效");
             this.put("gui-edit-style", "编辑风格");
@@ -271,9 +289,13 @@ public class SimplifiedChineseLocale implements Locale {
             this.put("gui-edit-data-description", "点击编辑粒子数据");
             this.put("gui-edit-data-unavailable", "这个粒子特效不使用数据");
             this.put("gui-data-none", "无");
+
+            this.put("#36", "GUI Create Messages");
             this.put("gui-create-particle", "创建新的粒子特效");
             this.put("gui-create-particle-description", "创建新的粒子特效");
             this.put("gui-create-particle-unavailable", "你不能创建更多的粒子特效");
+
+            this.put("#37", "GUI Select Messages");
             this.put("gui-select-effect", "选择粒子特效");
             this.put("gui-select-effect-description", "将粒子特效设置为 &b%effect%");
             this.put("gui-select-style", "选择粒子风格");
@@ -281,6 +303,8 @@ public class SimplifiedChineseLocale implements Locale {
             this.put("gui-select-data", "选择粒子数据");
             this.put("gui-select-data-description", "将粒子数据设置为&b%data%");
             this.put("gui-select-data-note", "note #%note%");
+
+            this.put("#38", "GUI Color Name Messages");
             this.put("gui-edit-data-color-red", "&c红色");
             this.put("gui-edit-data-color-orange", "&6橙黄");
             this.put("gui-edit-data-color-yellow", "&e黄色");

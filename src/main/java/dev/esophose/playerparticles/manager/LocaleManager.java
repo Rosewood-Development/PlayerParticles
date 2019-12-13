@@ -45,17 +45,27 @@ public class LocaleManager extends Manager {
         }
 
         CommentedFileConfiguration configuration = CommentedFileConfiguration.loadConfiguration(this.playerParticles, file);
-        if (newFile)
+        if (newFile) {
             configuration.addComments(locale.getLocaleName() + " translation by " + locale.getTranslatorName());
-
-        Map<String, String> defaultLocaleStrings = locale.getDefaultLocaleStrings();
-        for (String key : defaultLocaleStrings.keySet()) {
-            String value = defaultLocaleStrings.get(key);
-            if (!configuration.contains(key))
-                configuration.set(key, value);
+            Map<String, String> defaultLocaleStrings = locale.getDefaultLocaleStrings();
+            for (String key : defaultLocaleStrings.keySet()) {
+                String value = defaultLocaleStrings.get(key);
+                if (key.startsWith("#")) {
+                    configuration.addComments(value);
+                } else {
+                    configuration.set(key, value);
+                }
+            }
+        } else {
+            Map<String, String> defaultLocaleStrings = locale.getDefaultLocaleStrings();
+            for (String key : defaultLocaleStrings.keySet()) {
+                String value = defaultLocaleStrings.get(key);
+                if (!configuration.contains(key))
+                    configuration.set(key, value);
+            }
         }
 
-        configuration.save(true);
+        configuration.save();
     }
 
     @Override

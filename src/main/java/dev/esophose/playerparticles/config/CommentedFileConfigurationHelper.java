@@ -192,10 +192,12 @@ public class CommentedFileConfigurationHelper {
                         forceCompact = true;
                 }
 
-                if (!compactLines && !forceCompact && ((lastLineSpacing != -1 && lineSpacing != lastLineSpacing)
+                if (!compactLines && !forceCompact && (
+                           (lastLineSpacing != -1 && lineSpacing != lastLineSpacing)
                         || (commentSpacing != -1 && commentSpacing < lastCommentSpacing)
                         || (lastLineHadContent && lineHadContent)
-                        || (lineWasComment && lastLineHadContent))) {
+                        || (lineWasComment && lastLineHadContent))
+                        && !(lastLineHadContent && !lineWasComment)) {
                     stringBuilder.append('\n');
                 }
 

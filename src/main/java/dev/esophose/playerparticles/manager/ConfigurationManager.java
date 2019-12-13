@@ -2,7 +2,6 @@ package dev.esophose.playerparticles.manager;
 
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
-import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import java.io.File;
 import java.util.Arrays;
@@ -56,20 +55,20 @@ public class ConfigurationManager extends Manager {
         MYSQL_USER_PASSWORD("mysql-settings.user-password", "", "MySQL Database User Password"),
         MYSQL_USE_SSL("mysql-settings.use-ssl", false, "If the database connection should use SSL", "You should enable this if your database supports SSL"),
 
-        GUI_ICON("gui-icon", null, "# =================================================================== #",
-                "#                        GUI ICON SETTINGS                            #",
-                "# This configuration option allows you to change any of the GUI       #",
-                "# icons to whatever block/item you want.                              #",
-                "#                                                                     #",
-                "# Important Notes:                                                    #",
-                "# * If any of the block/item names are invalid the icon in the GUI    #",
-                "#   will be the barrier icon to show that it failed to load.          #",
-                "# * Do NOT change the particle/style name                             #",
-                "# * You MUST use the Spigot-given name for it to work. You can see    #",
-                "#   all the Spigot-given names at the link below:                     #",
-                "#   https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html #",
-                "# * If two icons are listed, the second one is used for below MC 1.13 #",
-                "# =================================================================== #"),
+        GUI_ICON("gui-icon", null, "=================================================================== #",
+                "                       GUI ICON SETTINGS                            #",
+                "This configuration option allows you to change any of the GUI       #",
+                "icons to whatever block/item you want.                              #",
+                "                                                                    #",
+                "Important Notes:                                                    #",
+                "* If any of the block/item names are invalid the icon in the GUI    #",
+                "  will be the barrier icon to show that it failed to load.          #",
+                "* Do NOT change the particle/style name                             #",
+                "* You MUST use the Spigot-given name for it to work. You can see    #",
+                "  all the Spigot-given names at the link below:                     #",
+                "  https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html #",
+                "* If two icons are listed, the second one is used for below MC 1.13 #",
+                "=================================================================== #"),
         GUI_ICON_MISC("gui-icon.misc", null),
         GUI_ICON_MISC_PARTICLES("gui-icon.misc.particles", Collections.singletonList("BLAZE_POWDER")),
         GUI_ICON_MISC_GROUPS("gui-icon.misc.groups", Collections.singletonList("CHEST")),
@@ -404,18 +403,10 @@ public class ConfigurationManager extends Manager {
 
             List<String> materials = configurationManager.getConfig().getStringList(configPath);
 
-            try {
-                if (materials.size() == 1) {
-                    material = ParticleUtils.closestMatch(materials.get(0));
-                } else {
-                    if (ParticleEffect.VERSION_13) {
-                        material = ParticleUtils.closestMatch(materials.get(0));
-                    } else {
-                        material = ParticleUtils.closestMatch(materials.get(1));
-                    }
-                }
-            } catch (Exception e) {
-                PlayerParticles.getInstance().getLogger().severe("Missing GUI icon for '" + this.name().toLowerCase() + "'");
+            for (String name : materials) {
+                material = ParticleUtils.closestMatch(name);
+                if (material != null)
+                    break;
             }
 
             if (material == null)
