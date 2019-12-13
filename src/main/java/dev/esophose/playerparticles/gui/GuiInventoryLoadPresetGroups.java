@@ -43,7 +43,7 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
             particles.sort(Comparator.comparingInt(ParticlePair::getId));
 
             String[] lore = new String[particles.size() + 1];
-            lore[0] = localeManager.getLocaleMessage("gui-color-subtext") + localeManager.getLocaleMessage("gui-click-to-load", StringPlaceholders.single("id", particles.size()));
+            lore[0] = localeManager.getLocaleMessage("gui-color-subtext") + localeManager.getLocaleMessage("gui-click-to-load", StringPlaceholders.single("amount", particles.size()));
             int i = 1;
             for (ParticlePair particle : particles) {
                 StringPlaceholders stringPlaceholders = StringPlaceholders.builder("id", particle.getId())

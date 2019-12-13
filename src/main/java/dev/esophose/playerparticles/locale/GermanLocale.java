@@ -303,7 +303,7 @@ public class GermanLocale implements Locale {
             this.put("gui-select-data-description", "Setzt die Partikeldaten auf &b%data%");
             this.put("gui-select-data-note", "Hinweis #%note%");
 
-
+            this.put("#38", "GUI Color Name Messages");
             this.put("gui-edit-data-color-red", "Rot");
             this.put("gui-edit-data-color-orange", "Orange");
             this.put("gui-edit-data-color-yellow", "Gelb");

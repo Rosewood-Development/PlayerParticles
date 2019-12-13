@@ -61,6 +61,9 @@ public class LocaleManager extends Manager {
         } else {
             Map<String, String> defaultLocaleStrings = locale.getDefaultLocaleStrings();
             for (String key : defaultLocaleStrings.keySet()) {
+                if (key.startsWith("#"))
+                    continue;
+
                 String value = defaultLocaleStrings.get(key);
                 if (!configuration.contains(key))
                     configuration.set(key, value);
@@ -103,7 +106,6 @@ public class LocaleManager extends Manager {
 
     public String getLocaleMessage(String messageKey, StringPlaceholders stringPlaceholders) {
         String message = this.locale.getString(messageKey);
-        System.out.println("Message: " + messageKey + " = " + message);
         if (message == null)
             return "null";
         return ChatColor.translateAlternateColorCodes('&', stringPlaceholders.apply(message));
@@ -138,7 +140,7 @@ public class LocaleManager extends Manager {
      * @param messageKey The message key of the Locale to send
      */
     public void sendMessage(CommandSender sender, String messageKey) {
-        this.sendMessage(sender, messageKey, new StringPlaceholders());
+        this.sendMessage(sender, messageKey, StringPlaceholders.empty());
     }
 
     /**
@@ -148,7 +150,7 @@ public class LocaleManager extends Manager {
      * @param messageKey The message key of the Locale to send
      */
     public void sendMessage(PPlayer pplayer, String messageKey) {
-        this.sendMessage(pplayer, messageKey);
+        this.sendMessage(pplayer, messageKey, StringPlaceholders.empty());
     }
 
     /**

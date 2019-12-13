@@ -304,7 +304,7 @@ public class FrenchLocale implements Locale {
             this.put("gui-select-data-description", "Mets les paramètres de la particule à &b%data%");
             this.put("gui-select-data-note", "note #%note%");
 
-
+            this.put("#38", "GUI Color Name Messages");
             this.put("gui-edit-data-color-red", "&crouge");
             this.put("gui-edit-data-color-orange", "&6orange");
             this.put("gui-edit-data-color-yellow", "&ejaune");

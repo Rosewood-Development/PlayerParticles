@@ -1,15 +1,16 @@
 package dev.esophose.playerparticles.config;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.nio.charset.Charset;
+import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -66,7 +67,7 @@ public class CommentedFileConfigurationHelper {
             String pluginName = this.getPluginName();
 
             StringBuilder whole = new StringBuilder();
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+            BufferedReader reader = Files.newBufferedReader(Paths.get(file.getAbsolutePath()), StandardCharsets.UTF_8);
 
             String currentLine;
             while ((currentLine = reader.readLine()) != null) {
@@ -81,7 +82,7 @@ public class CommentedFileConfigurationHelper {
             }
 
             String config = whole.toString();
-            Reader configStream = new InputStreamReader(new ByteArrayInputStream(config.getBytes(StandardCharsets.UTF_8)));
+            Reader configStream = new StringReader(config);
 
             reader.close();
             return configStream;
@@ -105,7 +106,7 @@ public class CommentedFileConfigurationHelper {
             int comments = 0;
             String currentLine;
 
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+            BufferedReader reader = Files.newBufferedReader(Paths.get(file.getAbsolutePath()), StandardCharsets.UTF_8);
 
             while ((currentLine = reader.readLine()) != null)
                 if (currentLine.trim().startsWith("#"))
@@ -210,7 +211,7 @@ public class CommentedFileConfigurationHelper {
             }
         }
 
-        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(file.getAbsolutePath()))) {
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(file.getAbsolutePath()), StandardCharsets.UTF_8)) {
             writer.write(stringBuilder.toString());
             writer.flush();
         } catch (IOException e) {

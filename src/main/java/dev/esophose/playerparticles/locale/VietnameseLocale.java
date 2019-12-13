@@ -304,7 +304,7 @@ public class VietnameseLocale implements Locale {
             this.put("gui-select-data-description", "Thiết lập DỮ liệu của Hạt thành &b%data%");
             this.put("gui-select-data-note", "note #%note%");
 
-
+            this.put("#38", "GUI Color Name Messages");
             this.put("gui-edit-data-color-red", "&cĐỏ mạnh mẽ");
             this.put("gui-edit-data-color-orange", "&6Cam dịu dàng");
             this.put("gui-edit-data-color-yellow", "&eVàng yêu thương");
