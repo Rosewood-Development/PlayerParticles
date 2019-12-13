@@ -1,11 +1,10 @@
 package dev.esophose.playerparticles.manager;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.styles.DefaultStyles;
-import dev.esophose.playerparticles.styles.api.ParticleStyle;
+import dev.esophose.playerparticles.styles.ParticleStyle;
 import java.util.ArrayList;
 import java.util.List;
-
-import dev.esophose.playerparticles.PlayerParticles;
 
 public class ParticleStyleManager extends Manager {
 

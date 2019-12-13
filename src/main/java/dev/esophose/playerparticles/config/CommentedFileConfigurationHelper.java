@@ -1,7 +1,5 @@
 package dev.esophose.playerparticles.config;
 
-import org.bukkit.plugin.java.JavaPlugin;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
@@ -11,10 +9,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class CommentedFileConfigurationHelper {
 
@@ -206,11 +208,9 @@ public class CommentedFileConfigurationHelper {
             }
         }
 
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(file.getAbsolutePath()))) {
             writer.write(stringBuilder.toString());
             writer.flush();
-            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

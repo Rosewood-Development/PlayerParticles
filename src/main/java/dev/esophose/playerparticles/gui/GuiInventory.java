@@ -1,8 +1,10 @@
 package dev.esophose.playerparticles.gui;
 
+import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import dev.esophose.playerparticles.particles.PPlayer;
+import dev.esophose.playerparticles.util.ParticleUtils;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -13,12 +15,8 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import dev.esophose.playerparticles.manager.SettingManager.Setting;
-import dev.esophose.playerparticles.particles.PPlayer;
-import dev.esophose.playerparticles.util.ParticleUtils;
-
 public abstract class GuiInventory implements InventoryHolder {
-    
+
     protected enum BorderColor {
         WHITE(0, "WHITE_STAINED_GLASS_PANE"),
         ORANGE(1, "ORANGE_STAINED_GLASS_PANE"),

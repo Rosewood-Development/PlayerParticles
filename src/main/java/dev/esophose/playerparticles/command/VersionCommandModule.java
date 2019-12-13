@@ -1,20 +1,18 @@
 package dev.esophose.playerparticles.command;
 
+import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.manager.LocaleManager;
+import dev.esophose.playerparticles.particles.PPlayer;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.bukkit.ChatColor;
-
-import dev.esophose.playerparticles.PlayerParticles;
-import dev.esophose.playerparticles.manager.LangManager;
-import dev.esophose.playerparticles.manager.LangManager.Lang;
-import dev.esophose.playerparticles.particles.PPlayer;
 
 public class VersionCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
-        LangManager.sendCustomMessage(pplayer, ChatColor.YELLOW + "Running PlayerParticles " + ChatColor.AQUA + "v" + PlayerParticles.getInstance().getDescription().getVersion());
-        LangManager.sendCustomMessage(pplayer, ChatColor.YELLOW + "Plugin created by: " + ChatColor.AQUA + "Esophose");
+        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
+        localeManager.sendCustomMessage(pplayer, ChatColor.YELLOW + "Running PlayerParticles " + ChatColor.AQUA + "v" + PlayerParticles.getInstance().getDescription().getVersion());
+        localeManager.sendCustomMessage(pplayer, ChatColor.YELLOW + "Plugin created by: " + ChatColor.AQUA + "Esophose");
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {

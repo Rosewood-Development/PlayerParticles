@@ -1,5 +1,9 @@
 package dev.esophose.playerparticles.particles;
 
+import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import dev.esophose.playerparticles.manager.ParticleManager;
+import dev.esophose.playerparticles.util.NMSUtil;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -8,12 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import dev.esophose.playerparticles.PlayerParticles;
-import dev.esophose.playerparticles.util.NMSUtil;
-import dev.esophose.playerparticles.manager.ParticleManager;
-import dev.esophose.playerparticles.manager.SettingManager.Setting;
-import dev.esophose.playerparticles.styles.api.PParticle;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -21,7 +19,6 @@ import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
-
 import org.bukkit.metadata.MetadataValue;
 
 @SuppressWarnings("deprecation")

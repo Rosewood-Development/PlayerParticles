@@ -1,17 +1,15 @@
 package dev.esophose.playerparticles.manager;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import dev.esophose.playerparticles.PlayerParticles;
-import dev.esophose.playerparticles.styles.DefaultStyles;
-import dev.esophose.playerparticles.styles.api.ParticleStyle;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
-import dev.esophose.playerparticles.manager.SettingManager.Setting;
+import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
+import dev.esophose.playerparticles.styles.DefaultStyles;
+import dev.esophose.playerparticles.styles.ParticleStyle;
+import java.util.ArrayList;
+import java.util.List;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
 
 public class PermissionManager extends Manager {

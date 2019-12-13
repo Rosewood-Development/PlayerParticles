@@ -1,13 +1,10 @@
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.particles.PParticle;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.bukkit.Location;
-
-import dev.esophose.playerparticles.particles.ParticlePair;
-import dev.esophose.playerparticles.styles.api.PParticle;
-import dev.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class ParticleStyleBeam implements ParticleStyle {
 
@@ -30,7 +27,7 @@ public class ParticleStyleBeam implements ParticleStyle {
 
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         double radius = 1;
-        List<PParticle> particles = new ArrayList<PParticle>();
+        List<PParticle> particles = new ArrayList<>();
         for (int i = 0; i < points; i++) {
             double newX = location.getX() + radius * cos[i];
             double newY = location.getY() + (step / 10D) - 1;

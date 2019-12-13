@@ -1,5 +1,15 @@
 package dev.esophose.playerparticles.manager;
 
+import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.particles.ParticleEffect;
+import dev.esophose.playerparticles.particles.ParticleEffect.NoteColor;
+import dev.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
+import dev.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
+import dev.esophose.playerparticles.particles.ParticleGroup;
+import dev.esophose.playerparticles.particles.ParticleGroupPreset;
+import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.styles.ParticleStyle;
+import dev.esophose.playerparticles.util.ParticleUtils;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,22 +20,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import dev.esophose.playerparticles.styles.api.ParticleStyle;
-import dev.esophose.playerparticles.util.ParticleUtils;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-
-import dev.esophose.playerparticles.PlayerParticles;
-import dev.esophose.playerparticles.particles.ParticleEffect;
-import dev.esophose.playerparticles.particles.ParticleGroup;
-import dev.esophose.playerparticles.particles.ParticleGroupPreset;
-import dev.esophose.playerparticles.particles.ParticlePair;
-import dev.esophose.playerparticles.particles.ParticleEffect.NoteColor;
-import dev.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
-import dev.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
 
 public class ParticleGroupPresetManager extends Manager {
     
@@ -45,7 +43,10 @@ public class ParticleGroupPresetManager extends Manager {
         this.presetGroups = new ArrayList<>();
         
         File pluginDataFolder = PlayerParticles.getInstance().getDataFolder();
-        File groupsFile = new File(pluginDataFolder.getAbsolutePath() + File.separator + FILE_NAME);
+        if (!pluginDataFolder.exists())
+            pluginDataFolder.mkdir();
+
+        File groupsFile = new File(pluginDataFolder, FILE_NAME);
         
         // Create the file if it doesn't exist
         if (!groupsFile.exists()) {

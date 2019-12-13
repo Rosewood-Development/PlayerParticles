@@ -1,24 +1,23 @@
 package dev.esophose.playerparticles.command;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.DataManager;
-import dev.esophose.playerparticles.manager.LangManager;
-import dev.esophose.playerparticles.manager.LangManager.Lang;
+import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.particles.PPlayer;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ToggleCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
+        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         boolean canSee = pplayer.canSeeParticles();
         PlayerParticles.getInstance().getManager(DataManager.class).updateSettingParticlesHidden(pplayer.getUniqueId(), canSee);
         
         if (canSee) {
-            LangManager.sendMessage(pplayer, Lang.TOGGLE_OFF);
+            localeManager.sendMessage(pplayer, "toggle-off");
         } else {
-            LangManager.sendMessage(pplayer, Lang.TOGGLE_ON);
+            localeManager.sendMessage(pplayer, "toggle-on");
         }
     }
 

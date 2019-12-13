@@ -1,16 +1,16 @@
 package dev.esophose.playerparticles.config;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class CommentedConfigurationSection implements ConfigurationSection {
 
@@ -349,6 +349,21 @@ public class CommentedConfigurationSection implements ConfigurationSection {
     @Override
     public boolean isColor(String s) {
         return this.config.isColor(s);
+    }
+
+    @Override
+    public Location getLocation(String path) {
+        return this.getSerializable(path, Location.class);
+    }
+
+    @Override
+    public Location getLocation(String path, Location def) {
+        return this.getSerializable(path, Location.class, def);
+    }
+
+    @Override
+    public boolean isLocation(String path) {
+        return this.getSerializable(path, Location.class) != null;
     }
 
     @Override

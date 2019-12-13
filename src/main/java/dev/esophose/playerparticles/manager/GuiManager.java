@@ -4,8 +4,10 @@ import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.gui.GuiInventory;
 import dev.esophose.playerparticles.gui.GuiInventoryDefault;
 import dev.esophose.playerparticles.gui.GuiInventoryLoadPresetGroups;
-import dev.esophose.playerparticles.manager.SettingManager.Setting;
+import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.particles.PPlayer;
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,13 +16,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.ArrayList;
-import java.util.List;
-
-// TODO: Remove static guiInventories and subsequent methods
 public class GuiManager extends Manager implements Listener, Runnable {
 
-    private static List<GuiInventory> guiInventories = new ArrayList<>();
+    private List<GuiInventory> guiInventories = new ArrayList<>();
     private BukkitTask guiTask = null;
 
     public GuiManager(PlayerParticles playerParticles) {
@@ -48,7 +46,7 @@ public class GuiManager extends Manager implements Listener, Runnable {
     public void run() {
         List<GuiInventory> toRemoveList = new ArrayList<>();
 
-        for (GuiInventory inventory : guiInventories) {
+        for (GuiInventory inventory : this.guiInventories) {
             PPlayer pplayer = PlayerParticles.getInstance().getManager(DataManager.class).getPPlayer(inventory.getPPlayer().getUniqueId());
             if (pplayer == null) {
                 toRemoveList.add(inventory);
@@ -70,7 +68,7 @@ public class GuiManager extends Manager implements Listener, Runnable {
         }
 
         for (GuiInventory inventory : toRemoveList)
-            guiInventories.remove(inventory);
+            this.guiInventories.remove(inventory);
     }
     
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -78,7 +76,7 @@ public class GuiManager extends Manager implements Listener, Runnable {
         if (!(event.getWhoClicked() instanceof Player)) return;
         Player player = (Player)event.getWhoClicked();
         
-        GuiInventory inventory = getGuiInventory(player);
+        GuiInventory inventory = this.getGuiInventory(player);
         if (inventory == null) return;
         
         event.setCancelled(true);
@@ -90,7 +88,7 @@ public class GuiManager extends Manager implements Listener, Runnable {
      * 
      * @return True if the GUI is disabled
      */
-    public static boolean isGuiDisabled() {
+    public boolean isGuiDisabled() {
         return !Setting.GUI_ENABLED.getBoolean();
     }
 
@@ -100,14 +98,14 @@ public class GuiManager extends Manager implements Listener, Runnable {
      */
     public void forceCloseAllOpenGUIs() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            for (GuiInventory inventory : guiInventories) {
+            for (GuiInventory inventory : this.guiInventories) {
                 if (inventory.getPPlayer().getUniqueId().equals(player.getUniqueId()) && inventory.getInventory().equals(player.getOpenInventory().getTopInventory())) {
                     player.closeInventory();
                     break;
                 }
             }
         }
-        guiInventories.clear();
+        this.guiInventories.clear();
     }
     
     /**
@@ -115,8 +113,8 @@ public class GuiManager extends Manager implements Listener, Runnable {
      * 
      * @param pplayer The PPlayer to open the GUI screen for
      */
-    public static void openDefault(PPlayer pplayer) {
-        removeGuiInventory(pplayer);
+    public void openDefault(PPlayer pplayer) {
+        this.removeGuiInventory(pplayer);
         
         GuiInventory inventoryToOpen;
         if (!Setting.GUI_PRESETS_ONLY.getBoolean()) {
@@ -124,8 +122,8 @@ public class GuiManager extends Manager implements Listener, Runnable {
         } else {
             inventoryToOpen = new GuiInventoryLoadPresetGroups(pplayer, true);
         }
-        
-        guiInventories.add(inventoryToOpen);
+
+        this.guiInventories.add(inventoryToOpen);
         pplayer.getPlayer().openInventory(inventoryToOpen.getInventory());
     }
     
@@ -134,9 +132,9 @@ public class GuiManager extends Manager implements Listener, Runnable {
      * 
      * @param nextInventory The GuiInventory to transition to
      */
-    public static void transition(GuiInventory nextInventory) {
-        removeGuiInventory(nextInventory.getPPlayer());
-        guiInventories.add(nextInventory);
+    public void transition(GuiInventory nextInventory) {
+        this.removeGuiInventory(nextInventory.getPPlayer());
+        this.guiInventories.add(nextInventory);
         nextInventory.getPPlayer().getPlayer().openInventory(nextInventory.getInventory());
     }
     
@@ -146,8 +144,8 @@ public class GuiManager extends Manager implements Listener, Runnable {
      * @param player The Player
      * @return The GuiInventory belonging to the Player, if any
      */
-    private static GuiInventory getGuiInventory(Player player) {
-        for (GuiInventory inventory : guiInventories)
+    private GuiInventory getGuiInventory(Player player) {
+        for (GuiInventory inventory : this.guiInventories)
             if (inventory.getPPlayer().getUniqueId().equals(player.getUniqueId()))
                 return inventory;
         return null;
@@ -158,10 +156,10 @@ public class GuiManager extends Manager implements Listener, Runnable {
      * 
      * @param pplayer The PPlayer who owns the GuiInventory
      */
-    private static void removeGuiInventory(PPlayer pplayer) {
-        for (GuiInventory inventory : guiInventories) {
+    private void removeGuiInventory(PPlayer pplayer) {
+        for (GuiInventory inventory : this.guiInventories) {
             if (inventory.getPPlayer().getUniqueId().equals(pplayer.getUniqueId())) {
-                guiInventories.remove(inventory);
+                this.guiInventories.remove(inventory);
                 break;
             }
         }

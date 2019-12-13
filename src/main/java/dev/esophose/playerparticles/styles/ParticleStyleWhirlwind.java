@@ -1,14 +1,11 @@
 package dev.esophose.playerparticles.styles;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.Location;
-
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticlePair;
-import dev.esophose.playerparticles.styles.api.PParticle;
-import dev.esophose.playerparticles.styles.api.ParticleStyle;
+import dev.esophose.playerparticles.particles.PParticle;
+import java.util.ArrayList;
+import java.util.List;
+import org.bukkit.Location;
 
 public class ParticleStyleWhirlwind implements ParticleStyle {
     
@@ -17,7 +14,7 @@ public class ParticleStyleWhirlwind implements ParticleStyle {
     private int numSteps = 40;
 
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
-        List<PParticle> particles = new ArrayList<PParticle>();
+        List<PParticle> particles = new ArrayList<>();
         double speed = getSpeedByEffect(particle.getEffect()) * 2.5;
         
         // Orbit going clockwise

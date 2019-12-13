@@ -23,15 +23,12 @@
  */
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.particles.PParticle;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
-
-import dev.esophose.playerparticles.particles.ParticlePair;
-import dev.esophose.playerparticles.styles.api.PParticle;
-import dev.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class ParticleStyleCompanion implements ParticleStyle {
 
@@ -43,7 +40,7 @@ public class ParticleStyleCompanion implements ParticleStyle {
     private int step = 0;
 
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
-        List<PParticle> particles = new ArrayList<PParticle>();
+        List<PParticle> particles = new ArrayList<>();
 
         Vector vector = new Vector();
         

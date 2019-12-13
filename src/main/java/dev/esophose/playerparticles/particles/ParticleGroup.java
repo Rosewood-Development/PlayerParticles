@@ -2,10 +2,9 @@ package dev.esophose.playerparticles.particles;
 
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.PermissionManager;
-import org.bukkit.entity.Player;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.entity.Player;
 
 public class ParticleGroup {
     

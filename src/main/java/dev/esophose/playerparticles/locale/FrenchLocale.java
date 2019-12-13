@@ -194,7 +194,7 @@ public class FrenchLocale implements Locale {
             this.put("fixed-edit-style-non-fixable", "&cImpossible de modifier l'effet fixe, the style &b%style% &cne peut pas être utilisé dans des effets fixes !");
             this.put("fixed-edit-data-error", "&cImpossible de modifier l'effet fixe, paramètre incorrect ! Utilisez &b/pp data <effect> pour afficher les paramètres valides.");
             this.put("fixed-edit-data-none", "&cImpossible de modifier l'effet fixe, l'effet ne requière pas de paramètres !");
-            this.put("fixed-edit-success", "&aMise à jour de &b%property% &ade l'effet fixe avec l'ID &b%id% &a!");
+            this.put("fixed-edit-success", "&aMise à jour de &b%prop% &ade l'effet fixe avec l'ID &b%id% &a!");
 
             this.put("fixed-remove-invalid", "&cImpossible de supprimer l'effet fixe, vous n'avez pas d effets fixes avec l'ID &b%id% &c!");
             this.put("fixed-remove-no-args", "&cVous n'avez pas rentrer d'ID à supprimer !");

@@ -1,9 +1,8 @@
 package dev.esophose.playerparticles.manager;
 
 import dev.esophose.playerparticles.PlayerParticles;
-import dev.esophose.playerparticles.manager.LangManager;
-import dev.esophose.playerparticles.manager.LangManager.Lang;
-import dev.esophose.playerparticles.manager.SettingManager.Setting;
+import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import dev.esophose.playerparticles.util.StringPlaceholders;
 import dev.esophose.playerparticles.util.Updater;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -50,11 +49,10 @@ public class PluginUpdateManager extends Manager implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         if (e.getPlayer().isOp() && this.updateVersion != null) {
-            LangManager.sendCommandSenderMessage(
+            PlayerParticles.getInstance().getManager(LocaleManager.class).sendMessage(
                     e.getPlayer(),
-                    Lang.UPDATE_AVAILABLE,
-                    this.updateVersion,
-                    this.playerParticles.getDescription().getVersion());
+                    "update-available",
+                    StringPlaceholders.builder("new", this.updateVersion).addPlaceholder("current", this.playerParticles.getDescription().getVersion()).build());
         }
     }
 

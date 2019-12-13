@@ -194,7 +194,7 @@ public class GermanLocale implements Locale {
             this.put("fixed-edit-style-non-fixable", "&cFixer Effekt kann nicht bearbeitet werden. Der Stil &b%style% &ckann nicht für fixe Effekte verwendet werden!");
             this.put("fixed-edit-data-error", "&cFixeffekt kann nicht bearbeitet werden, die angegebenen Daten sind nicht korrekt! Verwenden Sie &b/pp data <effect> &c, um das richtige Datenformat zu finden!");
             this.put("fixed-edit-data-none", "&cFixierter Effekt kann nicht bearbeitet werden, für den Effekt sind keine Daten erforderlich!");
-            this.put("fixed-edit-success", "&aAktualisiert die &b%property% &ades festen Effekts mit einer ID von &b%id%&a!");
+            this.put("fixed-edit-success", "&aAktualisiert die &b%prop% &ades festen Effekts mit einer ID von &b%id%&a!");
 
             this.put("fixed-remove-invalid", "&cFixierter Effekt kann nicht entfernt werden, Sie haben keinen Fixierten Effekt mit der ID &b%id%&c!");
             this.put("fixed-remove-no-args", "&cSie haben keine ID zum Entfernen angegeben!");

@@ -12,17 +12,16 @@ import dev.esophose.playerparticles.particles.ParticleEffect.NoteColor;
 import dev.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
 import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.particles.ParticlePair;
-import dev.esophose.playerparticles.styles.api.ParticleStyle;
+import dev.esophose.playerparticles.styles.ParticleStyle;
 import dev.esophose.playerparticles.util.ParticleUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 
 /**
  * All data changes to PPlayers such as group or fixed effect changes must be done through here,

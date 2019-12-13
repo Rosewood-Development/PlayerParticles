@@ -1,7 +1,7 @@
 package dev.esophose.playerparticles.manager;
 
 import dev.esophose.playerparticles.PlayerParticles;
-import dev.esophose.playerparticles.manager.SettingManager.Setting;
+import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.particles.FixedParticleEffect;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
@@ -9,7 +9,7 @@ import dev.esophose.playerparticles.particles.ParticleEffect.NoteColor;
 import dev.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.styles.DefaultStyles;
-import dev.esophose.playerparticles.styles.api.PParticle;
+import dev.esophose.playerparticles.particles.PParticle;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;

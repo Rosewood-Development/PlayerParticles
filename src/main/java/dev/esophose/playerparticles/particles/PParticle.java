@@ -1,4 +1,4 @@
-package dev.esophose.playerparticles.styles.api;
+package dev.esophose.playerparticles.particles;
 
 import org.bukkit.Location;
 

@@ -21,9 +21,11 @@ import dev.esophose.playerparticles.command.StylesCommandModule;
 import dev.esophose.playerparticles.command.ToggleCommandModule;
 import dev.esophose.playerparticles.command.VersionCommandModule;
 import dev.esophose.playerparticles.command.WorldsCommandModule;
-import dev.esophose.playerparticles.manager.LangManager.Lang;
 import dev.esophose.playerparticles.particles.OtherPPlayer;
 import dev.esophose.playerparticles.particles.PPlayer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -32,10 +34,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class CommandManager extends Manager implements CommandExecutor, TabCompleter {
 
@@ -137,11 +135,13 @@ public class CommandManager extends Manager implements CommandExecutor, TabCompl
      * @return true
      */
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
+
         if (cmd.getName().equalsIgnoreCase("pp")) {
             String commandName = args.length > 0 ? args[0] : "";
             CommandModule commandModule = this.findMatchingCommand(commandName);
             if (commandModule == null) {
-                sender.sendMessage(LangManager.getText(Lang.COMMAND_ERROR_UNKNOWN));
+                sender.sendMessage(localeManager.getLocaleMessage("command-error-unknown"));
                 return true;
             }
 
@@ -161,7 +161,7 @@ public class CommandManager extends Manager implements CommandExecutor, TabCompl
 
             this.playerParticles.getManager(DataManager.class).getPPlayer(p.getUniqueId(), (pplayer) -> {
                 if (commandModule.requiresEffects() && PlayerParticles.getInstance().getManager(PermissionManager.class).getEffectNamesUserHasPermissionFor(p).isEmpty()) {
-                    LangManager.sendMessage(pplayer, Lang.COMMAND_ERROR_NO_EFFECTS);
+                    localeManager.sendMessage(pplayer, "command-error-no-effects");
                 } else {
                     commandModule.onCommandExecute(pplayer, cmdArgs);
                 }

@@ -1,9 +1,9 @@
 package dev.esophose.playerparticles.gui;
 
+import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.manager.ConfigurationManager.GuiIcon;
 import dev.esophose.playerparticles.manager.GuiManager;
-import dev.esophose.playerparticles.manager.LangManager;
-import dev.esophose.playerparticles.manager.LangManager.Lang;
-import dev.esophose.playerparticles.manager.SettingManager.GuiIcon;
+import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticleEffect.NoteColor;
@@ -12,17 +12,17 @@ import dev.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.util.NMSUtil;
 import dev.esophose.playerparticles.util.ParticleUtils;
+import dev.esophose.playerparticles.util.StringPlaceholders;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 @SuppressWarnings("deprecation")
 public class GuiInventoryEditData extends GuiInventory {
@@ -34,22 +34,22 @@ public class GuiInventoryEditData extends GuiInventory {
 
     static {
         colorMapping = new ColorData[]{
-                new ColorData(DyeColor.RED, ParticleUtils.closestMatchWithFallback(false, "RED_DYE", "ROSE_RED"), new OrdinaryColor(255, 0, 0), Lang.GUI_EDIT_DATA_COLOR_RED),
-                new ColorData(DyeColor.ORANGE, ParticleUtils.closestMatchWithFallback(false, "ORANGE_DYE"), new OrdinaryColor(255, 140, 0), Lang.GUI_EDIT_DATA_COLOR_ORANGE),
-                new ColorData(DyeColor.YELLOW, ParticleUtils.closestMatchWithFallback(false, "YELLOW_DYE", "DANDELION_YELLOW"), new OrdinaryColor(255, 255, 0), Lang.GUI_EDIT_DATA_COLOR_YELLOW),
-                new ColorData(DyeColor.LIME, ParticleUtils.closestMatchWithFallback(false, "LIME_DYE"), new OrdinaryColor(50, 205, 50), Lang.GUI_EDIT_DATA_COLOR_LIME_GREEN),
-                new ColorData(DyeColor.GREEN, ParticleUtils.closestMatchWithFallback(false, "GREEN_DYE", "CACTUS_GREEN"), new OrdinaryColor(0, 128, 0), Lang.GUI_EDIT_DATA_COLOR_GREEN),
-                new ColorData(DyeColor.BLUE, ParticleUtils.closestMatchWithFallback(false, "BLUE_DYE", "LAPIS_LAZULI"), new OrdinaryColor(0, 0, 255), Lang.GUI_EDIT_DATA_COLOR_BLUE),
-                new ColorData(DyeColor.CYAN, ParticleUtils.closestMatchWithFallback(false, "CYAN_DYE"), new OrdinaryColor(0, 139, 139), Lang.GUI_EDIT_DATA_COLOR_CYAN),
-                new ColorData(DyeColor.LIGHT_BLUE, ParticleUtils.closestMatchWithFallback(false, "LIGHT_BLUE_DYE"), new OrdinaryColor(173, 216, 230), Lang.GUI_EDIT_DATA_COLOR_LIGHT_BLUE),
-                new ColorData(DyeColor.PURPLE, ParticleUtils.closestMatchWithFallback(false, "PURPLE_DYE"), new OrdinaryColor(138, 43, 226), Lang.GUI_EDIT_DATA_COLOR_PURPLE),
-                new ColorData(DyeColor.MAGENTA, ParticleUtils.closestMatchWithFallback(false, "MAGENTA_DYE"), new OrdinaryColor(202, 31, 123), Lang.GUI_EDIT_DATA_COLOR_MAGENTA),
-                new ColorData(DyeColor.PINK, ParticleUtils.closestMatchWithFallback(false, "PINK_DYE"), new OrdinaryColor(255, 182, 193), Lang.GUI_EDIT_DATA_COLOR_PINK),
-                new ColorData(DyeColor.BROWN, ParticleUtils.closestMatchWithFallback(false, "BROWN_DYE", "COCOA_BEANS"), new OrdinaryColor(139, 69, 19), Lang.GUI_EDIT_DATA_COLOR_BROWN),
-                new ColorData(DyeColor.BLACK, ParticleUtils.closestMatchWithFallback(false, "BLACK_DYE", "INK_SAC"), new OrdinaryColor(0, 0, 0), Lang.GUI_EDIT_DATA_COLOR_BLACK),
-                new ColorData(DyeColor.GRAY, ParticleUtils.closestMatchWithFallback(false, "GRAY_DYE"), new OrdinaryColor(128, 128, 128), Lang.GUI_EDIT_DATA_COLOR_GRAY),
-                new ColorData(DyeColor.getByDyeData((byte) 7), ParticleUtils.closestMatchWithFallback(false, "LIGHT_GRAY_DYE"), new OrdinaryColor(192, 192, 192), Lang.GUI_EDIT_DATA_COLOR_LIGHT_GRAY),
-                new ColorData(DyeColor.WHITE, ParticleUtils.closestMatchWithFallback(false, "WHITE_DYE", "BONE_MEAL"), new OrdinaryColor(255, 255, 255), Lang.GUI_EDIT_DATA_COLOR_WHITE),
+                new ColorData(DyeColor.RED, ParticleUtils.closestMatchWithFallback(false, "RED_DYE", "ROSE_RED"), new OrdinaryColor(255, 0, 0), "gui-edit-data-color-red"),
+                new ColorData(DyeColor.ORANGE, ParticleUtils.closestMatchWithFallback(false, "ORANGE_DYE"), new OrdinaryColor(255, 140, 0), "gui-edit-data-color-orange"),
+                new ColorData(DyeColor.YELLOW, ParticleUtils.closestMatchWithFallback(false, "YELLOW_DYE", "DANDELION_YELLOW"), new OrdinaryColor(255, 255, 0), "gui-edit-data-color-yellow"),
+                new ColorData(DyeColor.LIME, ParticleUtils.closestMatchWithFallback(false, "LIME_DYE"), new OrdinaryColor(50, 205, 50), "gui-edit-data-color-lime-green"),
+                new ColorData(DyeColor.GREEN, ParticleUtils.closestMatchWithFallback(false, "GREEN_DYE", "CACTUS_GREEN"), new OrdinaryColor(0, 128, 0), "gui-edit-data-color-green"),
+                new ColorData(DyeColor.BLUE, ParticleUtils.closestMatchWithFallback(false, "BLUE_DYE", "LAPIS_LAZULI"), new OrdinaryColor(0, 0, 255), "gui-edit-data-color-blue"),
+                new ColorData(DyeColor.CYAN, ParticleUtils.closestMatchWithFallback(false, "CYAN_DYE"), new OrdinaryColor(0, 139, 139), "gui-edit-data-color-cyan"),
+                new ColorData(DyeColor.LIGHT_BLUE, ParticleUtils.closestMatchWithFallback(false, "LIGHT_BLUE_DYE"), new OrdinaryColor(173, 216, 230), "gui-edit-data-color-light-blue"),
+                new ColorData(DyeColor.PURPLE, ParticleUtils.closestMatchWithFallback(false, "PURPLE_DYE"), new OrdinaryColor(138, 43, 226), "gui-edit-data-color-purple"),
+                new ColorData(DyeColor.MAGENTA, ParticleUtils.closestMatchWithFallback(false, "MAGENTA_DYE"), new OrdinaryColor(202, 31, 123), "gui-edit-data-color-magenta"),
+                new ColorData(DyeColor.PINK, ParticleUtils.closestMatchWithFallback(false, "PINK_DYE"), new OrdinaryColor(255, 182, 193), "gui-edit-data-color-pink"),
+                new ColorData(DyeColor.BROWN, ParticleUtils.closestMatchWithFallback(false, "BROWN_DYE", "COCOA_BEANS"), new OrdinaryColor(139, 69, 19), "gui-edit-data-color-brown"),
+                new ColorData(DyeColor.BLACK, ParticleUtils.closestMatchWithFallback(false, "BLACK_DYE", "INK_SAC"), new OrdinaryColor(0, 0, 0), "gui-edit-data-color-black"),
+                new ColorData(DyeColor.GRAY, ParticleUtils.closestMatchWithFallback(false, "GRAY_DYE"), new OrdinaryColor(128, 128, 128), "gui-edit-data-color-gray"),
+                new ColorData(DyeColor.getByDyeData((byte) 7), ParticleUtils.closestMatchWithFallback(false, "LIGHT_GRAY_DYE"), new OrdinaryColor(192, 192, 192), "gui-edit-data-color-light-gray"),
+                new ColorData(DyeColor.WHITE, ParticleUtils.closestMatchWithFallback(false, "WHITE_DYE", "BONE_MEAL"), new OrdinaryColor(255, 255, 255), "gui-edit-data-color-white"),
         };
 
         rainbowColorMapping = new ColorData[]{
@@ -140,7 +140,9 @@ public class GuiInventoryEditData extends GuiInventory {
     }
 
     public GuiInventoryEditData(PPlayer pplayer, ParticlePair editingParticle, int pageNumber, List<GuiInventoryEditFinishedCallback> callbackList, int callbackListPosition) {
-        super(pplayer, Bukkit.createInventory(pplayer.getPlayer(), INVENTORY_SIZE, LangManager.getText(Lang.GUI_SELECT_DATA)));
+        super(pplayer, Bukkit.createInventory(pplayer.getPlayer(), INVENTORY_SIZE, PlayerParticles.getInstance().getManager(LocaleManager.class).getLocaleMessage("gui-select-data")));
+
+        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
 
         this.fillBorder(BorderColor.MAGENTA);
 
@@ -163,7 +165,7 @@ public class GuiInventoryEditData extends GuiInventory {
         GuiActionButton backButton = new GuiActionButton(
                 INVENTORY_SIZE - 1,
                 GuiIcon.BACK.get(),
-                LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_BACK_BUTTON),
+                localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-back-button"),
                 new String[]{},
                 (button, isShiftClick) -> callbackList.get(callbackListPosition - 1).execute());
         this.actionButtons.add(backButton);
@@ -180,6 +182,8 @@ public class GuiInventoryEditData extends GuiInventory {
      * @param callbackListPosition The index of the callbackList we're currently at
      */
     private void populateColorData(ParticlePair editingParticle, int pageNumber, List<GuiInventoryEditFinishedCallback> callbackList, int callbackListPosition) {
+        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
+
         int index = 10;
         int nextWrap = 17;
         for (ColorData colorData : colorMapping) {
@@ -190,7 +194,7 @@ public class GuiInventoryEditData extends GuiInventory {
                     index,
                     colorData,
                     colorData.getName(),
-                    new String[]{LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SELECT_DATA_DESCRIPTION, formattedDisplayColor)},
+                    new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", formattedDisplayColor))},
                     (button, isShiftClick) -> {
                         editingParticle.setColor(colorData.getOrdinaryColor());
                         callbackList.get(callbackListPosition + 1).execute();
@@ -208,8 +212,8 @@ public class GuiInventoryEditData extends GuiInventory {
         GuiActionButton setRainbowColorButton = new GuiActionButton(
                 39,
                 rainbowColorMapping,
-                LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.RAINBOW),
-                new String[]{LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SELECT_DATA_DESCRIPTION, LangManager.getText(Lang.RAINBOW))},
+                localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("rainbow"),
+                new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", localeManager.getLocaleMessage("rainbow")))},
                 (button, isShiftClick) -> {
                     editingParticle.setColor(new OrdinaryColor(999, 999, 999));
                     callbackList.get(callbackListPosition + 1).execute();
@@ -223,8 +227,8 @@ public class GuiInventoryEditData extends GuiInventory {
         randomizedColors = randomizedColorsList.toArray(randomizedColors);
         GuiActionButton setRandomColorButton = new GuiActionButton(41,
                 randomizedColors,
-                LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.RANDOM),
-                new String[]{LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SELECT_DATA_DESCRIPTION, LangManager.getText(Lang.RANDOM))},
+                localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("random"),
+                new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", localeManager.getLocaleMessage("random")))},
                 (button, isShiftClick) -> {
                     editingParticle.setColor(new OrdinaryColor(998, 998, 998));
                     callbackList.get(callbackListPosition + 1).execute();
@@ -241,6 +245,9 @@ public class GuiInventoryEditData extends GuiInventory {
      * @param callbackListPosition The index of the callbackList we're currently at
      */
     private void populateNoteData(ParticlePair editingParticle, int pageNumber, List<GuiInventoryEditFinishedCallback> callbackList, int callbackListPosition) {
+        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
+        GuiManager guiManager = PlayerParticles.getInstance().getManager(GuiManager.class);
+
         int numberOfItems = noteColorMapping.length;
         int itemsPerPage = 14;
         int maxPages = (int) Math.ceil((double) numberOfItems / itemsPerPage);
@@ -250,8 +257,8 @@ public class GuiInventoryEditData extends GuiInventory {
 
         for (int i = (pageNumber - 1) * itemsPerPage; i < numberOfItems; i++) {
             ColorData colorData = NMSUtil.getVersionNumber() > 13 ? noteColorMapping[i] : noteColorMappingOld[i];
-            String formattedDisplayName = LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_SELECT_DATA_NOTE, i) + " (" + colorData.getName() + LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + ")";
-            String formattedDescription = LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SELECT_DATA_DESCRIPTION, LangManager.getText(Lang.GUI_SELECT_DATA_NOTE, i));
+            String formattedDisplayName = localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("gui-select-data-note", StringPlaceholders.single("note", i)) + " (" + colorData.getName() + localeManager.getLocaleMessage("gui-color-icon-name") + ")";
+            String formattedDescription = localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", localeManager.getLocaleMessage("gui-select-data-note", StringPlaceholders.single("note", i))));
 
             // Note Color Buttons
             int noteIndex = i;
@@ -278,8 +285,8 @@ public class GuiInventoryEditData extends GuiInventory {
         GuiActionButton setRainbowColorButton = new GuiActionButton(
                 39,
                 rainbowColorMapping,
-                LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.RAINBOW),
-                new String[]{LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SELECT_DATA_DESCRIPTION, LangManager.getText(Lang.RAINBOW))},
+                localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("rainbow"),
+                new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", localeManager.getLocaleMessage("rainbow")))},
                 (button, isShiftClick) -> {
                     editingParticle.setNoteColor(new NoteColor(99));
                     callbackList.get(callbackListPosition + 1).execute();
@@ -294,8 +301,8 @@ public class GuiInventoryEditData extends GuiInventory {
         GuiActionButton setRandomColorButton = new GuiActionButton(
                 41,
                 randomizedColors,
-                LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.RANDOM),
-                new String[]{LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SELECT_DATA_DESCRIPTION, LangManager.getText(Lang.RANDOM))},
+                localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("random"),
+                new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", localeManager.getLocaleMessage("random")))},
                 (button, isShiftClick) -> {
                     editingParticle.setNoteColor(new NoteColor(98));
                     callbackList.get(callbackListPosition + 1).execute();
@@ -307,9 +314,9 @@ public class GuiInventoryEditData extends GuiInventory {
             GuiActionButton previousPageButton = new GuiActionButton(
                     INVENTORY_SIZE - 6,
                     GuiIcon.PREVIOUS_PAGE.get(),
-                    LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_PREVIOUS_PAGE_BUTTON, pageNumber - 1, maxPages),
+                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-previous-page-button", StringPlaceholders.builder("start", pageNumber - 1).addPlaceholder("end", maxPages).build()),
                     new String[]{},
-                    (button, isShiftClick) -> GuiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber - 1, callbackList, callbackListPosition)));
+                    (button, isShiftClick) -> guiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber - 1, callbackList, callbackListPosition)));
             this.actionButtons.add(previousPageButton);
         }
 
@@ -318,9 +325,9 @@ public class GuiInventoryEditData extends GuiInventory {
             GuiActionButton nextPageButton = new GuiActionButton(
                     INVENTORY_SIZE - 4,
                     GuiIcon.NEXT_PAGE.get(),
-                    LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_NEXT_PAGE_BUTTON, pageNumber + 1, maxPages),
+                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-next-page-button", StringPlaceholders.builder("start", pageNumber + 1).addPlaceholder("end", maxPages).build()),
                     new String[]{},
-                    (button, isShiftClick) -> GuiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber + 1, callbackList, callbackListPosition)));
+                    (button, isShiftClick) -> guiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber + 1, callbackList, callbackListPosition)));
             this.actionButtons.add(nextPageButton);
         }
     }
@@ -334,6 +341,9 @@ public class GuiInventoryEditData extends GuiInventory {
      * @param callbackListPosition The index of the callbackList we're currently at
      */
     private void populateItemData(ParticlePair editingParticle, int pageNumber, List<GuiInventoryEditFinishedCallback> callbackList, int callbackListPosition) {
+        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
+        GuiManager guiManager = PlayerParticles.getInstance().getManager(GuiManager.class);
+
         int numberOfItems = ITEM_MATERIALS.size();
         int itemsPerPage = 28;
         int maxPages = (int) Math.ceil((double) numberOfItems / itemsPerPage);
@@ -347,8 +357,8 @@ public class GuiInventoryEditData extends GuiInventory {
             GuiActionButton setRainbowColorButton = new GuiActionButton(
                     slot,
                     material,
-                    LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + material.name().toLowerCase(),
-                    new String[]{LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SELECT_DATA_DESCRIPTION, material.name().toLowerCase())},
+                    localeManager.getLocaleMessage("gui-color-icon-name") + material.name().toLowerCase(),
+                    new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", material.name().toLowerCase()))},
                     (button, isShiftClick) -> {
                         editingParticle.setItemMaterial(material);
                         callbackList.get(callbackListPosition + 1).execute();
@@ -368,9 +378,9 @@ public class GuiInventoryEditData extends GuiInventory {
             GuiActionButton previousPageButton = new GuiActionButton(
                     INVENTORY_SIZE - 6,
                     GuiIcon.PREVIOUS_PAGE.get(),
-                    LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_PREVIOUS_PAGE_BUTTON, pageNumber - 1, maxPages),
+                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-previous-page-button", StringPlaceholders.builder("start", pageNumber - 1).addPlaceholder("end", maxPages).build()),
                     new String[]{},
-                    (button, isShiftClick) -> GuiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber - 1, callbackList, callbackListPosition)));
+                    (button, isShiftClick) -> guiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber - 1, callbackList, callbackListPosition)));
             this.actionButtons.add(previousPageButton);
         }
 
@@ -379,9 +389,9 @@ public class GuiInventoryEditData extends GuiInventory {
             GuiActionButton nextPageButton = new GuiActionButton(
                     INVENTORY_SIZE - 4,
                     GuiIcon.NEXT_PAGE.get(),
-                    LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_NEXT_PAGE_BUTTON, pageNumber + 1, maxPages),
+                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-next-page-button", StringPlaceholders.builder("start", pageNumber + 1).addPlaceholder("end", maxPages).build()),
                     new String[]{},
-                    (button, isShiftClick) -> GuiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber + 1, callbackList, callbackListPosition)));
+                    (button, isShiftClick) -> guiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber + 1, callbackList, callbackListPosition)));
             this.actionButtons.add(nextPageButton);
         }
     }
@@ -395,6 +405,9 @@ public class GuiInventoryEditData extends GuiInventory {
      * @param callbackListPosition The index of the callbackList we're currently at
      */
     private void populateBlockData(ParticlePair editingParticle, int pageNumber, List<GuiInventoryEditFinishedCallback> callbackList, int callbackListPosition) {
+        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
+        GuiManager guiManager = PlayerParticles.getInstance().getManager(GuiManager.class);
+
         int numberOfItems = BLOCK_MATERIALS.size();
         int itemsPerPage = 28;
         int maxPages = (int) Math.ceil((double) numberOfItems / itemsPerPage);
@@ -408,8 +421,8 @@ public class GuiInventoryEditData extends GuiInventory {
             GuiActionButton setRainbowColorButton = new GuiActionButton(
                     slot,
                     material,
-                    LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + material.name().toLowerCase(),
-                    new String[]{LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SELECT_DATA_DESCRIPTION, material.name().toLowerCase())},
+                    localeManager.getLocaleMessage("gui-color-icon-name") + material.name().toLowerCase(),
+                    new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", material.name().toLowerCase()))},
                     (button, isShiftClick) -> {
                         editingParticle.setBlockMaterial(material);
                         callbackList.get(callbackListPosition + 1).execute();
@@ -429,9 +442,9 @@ public class GuiInventoryEditData extends GuiInventory {
             GuiActionButton previousPageButton = new GuiActionButton(
                     INVENTORY_SIZE - 6,
                     GuiIcon.PREVIOUS_PAGE.get(),
-                    LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_PREVIOUS_PAGE_BUTTON, pageNumber - 1, maxPages),
+                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-previous-page-button", StringPlaceholders.builder("start", pageNumber - 1).addPlaceholder("end", maxPages).build()),
                     new String[]{},
-                    (button, isShiftClick) -> GuiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber - 1, callbackList, callbackListPosition)));
+                    (button, isShiftClick) -> guiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber - 1, callbackList, callbackListPosition)));
             this.actionButtons.add(previousPageButton);
         }
 
@@ -440,9 +453,9 @@ public class GuiInventoryEditData extends GuiInventory {
             GuiActionButton nextPageButton = new GuiActionButton(
                     INVENTORY_SIZE - 4,
                     GuiIcon.NEXT_PAGE.get(),
-                    LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_NEXT_PAGE_BUTTON, pageNumber + 1, maxPages),
+                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-next-page-button", StringPlaceholders.builder("start", pageNumber + 1).addPlaceholder("end", maxPages).build()),
                     new String[]{},
-                    (button, isShiftClick) -> GuiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber + 1, callbackList, callbackListPosition)));
+                    (button, isShiftClick) -> guiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber + 1, callbackList, callbackListPosition)));
             this.actionButtons.add(nextPageButton);
         }
     }
@@ -454,13 +467,13 @@ public class GuiInventoryEditData extends GuiInventory {
         private DyeColor dyeColor;
         private Material material;
         private OrdinaryColor ordinaryColor;
-        private Lang name;
+        private String nameKey;
 
-        public ColorData(DyeColor dyeColor, Material material, OrdinaryColor ordinaryColor, Lang name) {
+        public ColorData(DyeColor dyeColor, Material material, OrdinaryColor ordinaryColor, String nameKey) {
             this.dyeColor = dyeColor;
             this.material = material;
             this.ordinaryColor = ordinaryColor;
-            this.name = name;
+            this.nameKey = nameKey;
         }
 
         /**
@@ -496,7 +509,7 @@ public class GuiInventoryEditData extends GuiInventory {
          * @return The name of this color
          */
         public String getName() {
-            return LangManager.getText(this.name);
+            return PlayerParticles.getInstance().getManager(LocaleManager.class).getLocaleMessage(this.nameKey);
         }
     }
 

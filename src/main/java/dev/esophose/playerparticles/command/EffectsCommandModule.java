@@ -1,24 +1,24 @@
 package dev.esophose.playerparticles.command;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import dev.esophose.playerparticles.PlayerParticles;
-import org.bukkit.entity.Player;
-
-import dev.esophose.playerparticles.manager.LangManager;
-import dev.esophose.playerparticles.manager.LangManager.Lang;
+import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.particles.PPlayer;
+import dev.esophose.playerparticles.util.StringPlaceholders;
+import java.util.ArrayList;
+import java.util.List;
+import org.bukkit.entity.Player;
 
 public class EffectsCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
+        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
+
         Player p = pplayer.getPlayer();
 
         List<String> effectList = PlayerParticles.getInstance().getManager(PermissionManager.class).getEffectNamesUserHasPermissionFor(p);
         if (effectList.isEmpty()) {
-            LangManager.sendMessage(pplayer, Lang.EFFECT_LIST_EMPTY);
+            localeManager.sendMessage(pplayer, "effect-list-empty");
             return;
         }
 
@@ -31,7 +31,7 @@ public class EffectsCommandModule implements CommandModule {
             toSend = new StringBuilder(toSend.substring(0, toSend.length() - 2));
         }
 
-        LangManager.sendMessage(pplayer, Lang.EFFECT_LIST, toSend.toString());
+        localeManager.sendMessage(pplayer, "effect-list", StringPlaceholders.single("effects", toSend.toString()));
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {

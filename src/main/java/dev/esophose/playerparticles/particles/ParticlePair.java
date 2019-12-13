@@ -1,21 +1,19 @@
 package dev.esophose.playerparticles.particles;
 
-import java.util.UUID;
-
 import dev.esophose.playerparticles.PlayerParticles;
-import dev.esophose.playerparticles.manager.LangManager;
-import dev.esophose.playerparticles.manager.LangManager.Lang;
+import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.ParticleManager;
-import dev.esophose.playerparticles.styles.DefaultStyles;
-import dev.esophose.playerparticles.styles.api.ParticleStyle;
-import dev.esophose.playerparticles.util.ParticleUtils;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-
 import dev.esophose.playerparticles.particles.ParticleEffect.NoteColor;
 import dev.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
 import dev.esophose.playerparticles.particles.ParticleEffect.ParticleColor;
 import dev.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
+import dev.esophose.playerparticles.styles.DefaultStyles;
+import dev.esophose.playerparticles.styles.ParticleStyle;
+import dev.esophose.playerparticles.util.ParticleUtils;
+import dev.esophose.playerparticles.util.StringPlaceholders;
+import java.util.UUID;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 
 public class ParticlePair {
 
@@ -250,6 +248,7 @@ public class ParticlePair {
      * @return The particle data in a human-readable string
      */
     public String getDataString() {
+        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         if (this.effect == ParticleEffect.BLOCK || this.effect == ParticleEffect.FALLING_DUST) {
             return this.blockMaterial.toString().toLowerCase();
         } else if (this.effect == ParticleEffect.ITEM) {
@@ -257,22 +256,22 @@ public class ParticlePair {
         } else if (this.effect.hasProperty(ParticleProperty.COLORABLE)) {
             if (this.effect == ParticleEffect.NOTE) {
                 if (this.noteColor.getNote()  == 99) {
-                    return LangManager.getText(Lang.RAINBOW);
+                    return localeManager.getLocaleMessage("rainbow");
                 } else if (this.noteColor.getNote() == 98) {
-                    return LangManager.getText(Lang.RANDOM);
+                    return localeManager.getLocaleMessage("random");
                 }
-                return LangManager.getText(Lang.GUI_SELECT_DATA_NOTE, this.noteColor.getNote());
+                return localeManager.getLocaleMessage("gui-select-data-note", StringPlaceholders.single("note", this.noteColor.getNote()));
             } else {
                 if (this.color.getRed() == 999 && this.color.getGreen() == 999 && this.color.getBlue() == 999) {
-                    return LangManager.getText(Lang.RAINBOW);
+                    return localeManager.getLocaleMessage("rainbow");
                 } else if (this.color.getRed() == 998 && this.color.getGreen() == 998 && this.color.getBlue() == 998) {
-                    return LangManager.getText(Lang.RANDOM);
+                    return localeManager.getLocaleMessage("random");
                 } else {
                     return ChatColor.RED + "" + this.color.getRed() + " " + ChatColor.GREEN + this.color.getGreen() + " " + ChatColor.AQUA + this.color.getBlue();
                 }
             }
         }
-        return LangManager.getText(Lang.GUI_DATA_NONE);
+        return localeManager.getLocaleMessage("gui-data-none");
     }
     
     /**

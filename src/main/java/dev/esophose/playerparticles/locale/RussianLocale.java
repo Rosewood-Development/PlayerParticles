@@ -195,7 +195,7 @@ public class RussianLocale implements Locale {
             this.put("fixed-edit-style-non-fixable", "&cНевозможно изменить эффект, стиль &b%style% &cне может быть использован!");
             this.put("fixed-edit-data-error", "&cНевозможно создать эффект, введённые данные неверны! Введите &b/pp data <Эффект>&c, чтобы найти правильный формат данных!");
             this.put("fixed-edit-data-none", "&cНевозможно изменить эффект, эффект не запрашивает какие-либо данные!");
-            this.put("fixed-edit-success", "&aОбновлено эффектов под ID &b%id%&a - &b%property%&a!");
+            this.put("fixed-edit-success", "&aОбновлено эффектов под ID &b%id%&a - &b%prop%&a!");
 
             this.put("fixed-remove-invalid", "&cНевозможно удалить эффект, у Вас нет эффекта под ID &b%id%&c!");
             this.put("fixed-remove-no-args", "&cYou did not specify an ID to remove!");

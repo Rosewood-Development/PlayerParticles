@@ -1,12 +1,11 @@
 package dev.esophose.playerparticles.config;
 
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.yaml.snakeyaml.DumperOptions;
-
 import java.io.File;
 import java.io.Reader;
 import java.lang.reflect.Field;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.yaml.snakeyaml.DumperOptions;
 
 public class CommentedFileConfiguration extends CommentedConfigurationSection {
 

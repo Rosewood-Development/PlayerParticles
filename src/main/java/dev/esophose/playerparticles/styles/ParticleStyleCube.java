@@ -23,16 +23,13 @@
  */
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.particles.PParticle;
+import dev.esophose.playerparticles.util.VectorUtils;
 import java.util.ArrayList;
 import java.util.List;
-
-import dev.esophose.playerparticles.util.VectorUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
-
-import dev.esophose.playerparticles.particles.ParticlePair;
-import dev.esophose.playerparticles.styles.api.PParticle;
-import dev.esophose.playerparticles.styles.api.ParticleStyle;
 
 /**
  * Credit goes to Slikey who made all this logic for drawing a cube out of particles
@@ -50,7 +47,7 @@ public class ParticleStyleCube implements ParticleStyle {
     private boolean skipNextStep = false; // Only spawn every 2 ticks
 
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
-        List<PParticle> pparticles = new ArrayList<PParticle>();
+        List<PParticle> pparticles = new ArrayList<>();
 
         if (!skipNextStep) {
             double xRotation = 0, yRotation = 0, zRotation = 0;

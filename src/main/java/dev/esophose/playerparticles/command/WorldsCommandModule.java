@@ -1,20 +1,19 @@
 package dev.esophose.playerparticles.command;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import dev.esophose.playerparticles.PlayerParticles;
-import dev.esophose.playerparticles.manager.LangManager;
-import dev.esophose.playerparticles.manager.LangManager.Lang;
+import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.particles.PPlayer;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WorldsCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
+        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
         if (permissionManager.getDisabledWorlds() == null || permissionManager.getDisabledWorlds().isEmpty()) {
-            LangManager.sendMessage(pplayer, Lang.DISABLED_WORLDS_NONE);
+            localeManager.sendMessage(pplayer, "disabled-worlds-none");
             return;
         }
 
@@ -24,7 +23,7 @@ public class WorldsCommandModule implements CommandModule {
         }
         if (worlds.length() > 2) worlds = new StringBuilder(worlds.substring(0, worlds.length() - 2));
 
-        LangManager.sendCustomMessage(pplayer, LangManager.getText(Lang.DISABLED_WORLDS) + " " + worlds);
+        localeManager.sendCustomMessage(pplayer, localeManager.getLocaleMessage("disabled-worlds") + " " + worlds);
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {

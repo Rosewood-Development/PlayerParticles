@@ -7,8 +7,10 @@ import dev.esophose.playerparticles.locale.FrenchLocale;
 import dev.esophose.playerparticles.locale.GermanLocale;
 import dev.esophose.playerparticles.locale.Locale;
 import dev.esophose.playerparticles.locale.RussianLocale;
+import dev.esophose.playerparticles.locale.SimplifiedChineseLocale;
 import dev.esophose.playerparticles.locale.VietnameseLocale;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.util.StringPlaceholders;
 import java.io.File;
 import java.io.IOException;
@@ -58,18 +60,20 @@ public class LocaleManager extends Manager {
 
     @Override
     public void reload() {
-        if (!this.playerParticles.getDataFolder().exists())
-            this.playerParticles.getDataFolder().mkdirs();
+        File localeDirectory = new File(this.playerParticles.getDataFolder(), "locale");
+        if (!localeDirectory.exists())
+            localeDirectory.mkdirs();
 
         this.registerLocale(new EnglishLocale());
         this.registerLocale(new FrenchLocale());
         this.registerLocale(new GermanLocale());
         this.registerLocale(new RussianLocale());
+        this.registerLocale(new SimplifiedChineseLocale());
         this.registerLocale(new VietnameseLocale());
 
-        File targetLocaleFile = new File(Setting.LOCALE.getString() + ".lang");
+        File targetLocaleFile = new File(this.playerParticles.getDataFolder() + "/locale", Setting.LOCALE.getString() + ".lang");
         if (!targetLocaleFile.exists()) {
-            targetLocaleFile = new File("en_US.lang");
+            targetLocaleFile = new File(this.playerParticles.getDataFolder() + "/locale", "en_US.lang");
             this.playerParticles.getLogger().severe("File " + targetLocaleFile.getName() + " does not exist. Defaulting to en_US.lang");
         }
 
@@ -87,6 +91,7 @@ public class LocaleManager extends Manager {
 
     public String getLocaleMessage(String messageKey, StringPlaceholders stringPlaceholders) {
         String message = this.locale.getString(messageKey);
+        System.out.println("Message: " + messageKey + " = " + message);
         if (message == null)
             return "null";
         return ChatColor.translateAlternateColorCodes('&', stringPlaceholders.apply(message));
@@ -99,8 +104,19 @@ public class LocaleManager extends Manager {
      * @param messageKey The message key of the Locale to send
      * @param stringPlaceholders The placeholders to apply
      */
-    public void sendPrefixedMessage(CommandSender sender, String messageKey, StringPlaceholders stringPlaceholders) {
+    public void sendMessage(CommandSender sender, String messageKey, StringPlaceholders stringPlaceholders) {
         sender.sendMessage(this.getLocaleMessage("prefix") + this.getLocaleMessage(messageKey, stringPlaceholders));
+    }
+
+    /**
+     * Sends a message to a PPlayer with the prefix with placeholders applied
+     *
+     * @param pplayer The PPlayer to send to
+     * @param messageKey The message key of the Locale to send
+     * @param stringPlaceholders The placeholders to apply
+     */
+    public void sendMessage(PPlayer pplayer, String messageKey, StringPlaceholders stringPlaceholders) {
+        this.sendMessage(pplayer.getMessageDestination(), messageKey, stringPlaceholders);
     }
 
     /**
@@ -109,8 +125,18 @@ public class LocaleManager extends Manager {
      * @param sender The CommandSender to send to
      * @param messageKey The message key of the Locale to send
      */
-    public void sendPrefixedMessage(CommandSender sender, String messageKey) {
-        this.sendPrefixedMessage(sender, messageKey, new StringPlaceholders());
+    public void sendMessage(CommandSender sender, String messageKey) {
+        this.sendMessage(sender, messageKey, new StringPlaceholders());
+    }
+
+    /**
+     * Sends a message to a PPlayer with the prefix
+     *
+     * @param pplayer The PPlayer to send to
+     * @param messageKey The message key of the Locale to send
+     */
+    public void sendMessage(PPlayer pplayer, String messageKey) {
+        this.sendMessage(pplayer.getMessageDestination(), messageKey);
     }
 
     /**
@@ -120,8 +146,19 @@ public class LocaleManager extends Manager {
      * @param messageKey The message key of the Locale to send
      * @param stringPlaceholders The placeholders to apply
      */
-    public void sendMessage(CommandSender sender, String messageKey, StringPlaceholders stringPlaceholders) {
+    public void sendSimpleMessage(CommandSender sender, String messageKey, StringPlaceholders stringPlaceholders) {
         sender.sendMessage(this.getLocaleMessage(messageKey, stringPlaceholders));
+    }
+
+    /**
+     * Sends a message to a PPlayer with placeholders applied
+     *
+     * @param pplayer The PPlayer to send to
+     * @param messageKey The message key of the Locale to send
+     * @param stringPlaceholders The placeholders to apply
+     */
+    public void sendSimpleMessage(PPlayer pplayer, String messageKey, StringPlaceholders stringPlaceholders) {
+        this.sendSimpleMessage(pplayer.getMessageDestination(), messageKey, stringPlaceholders);
     }
 
     /**
@@ -130,8 +167,38 @@ public class LocaleManager extends Manager {
      * @param sender The CommandSender to send to
      * @param messageKey The message key of the Locale to send
      */
-    public void sendMessage(CommandSender sender, String messageKey) {
+    public void sendSimpleMessage(CommandSender sender, String messageKey) {
         this.sendMessage(sender, messageKey, StringPlaceholders.empty());
+    }
+
+    /**
+     * Sends a message to a PPlayer
+     *
+     * @param pplayer The PPlayer to send to
+     * @param messageKey The message key of the Locale to send
+     */
+    public void sendSimpleMessage(PPlayer pplayer, String messageKey) {
+        this.sendSimpleMessage(pplayer.getMessageDestination(), messageKey);
+    }
+
+    /**
+     * Sends a custom message to a CommandSender
+     *
+     * @param sender The CommandSender to send to
+     * @param message The message to send
+     */
+    public void sendCustomMessage(CommandSender sender, String message) {
+        sender.sendMessage(message);
+    }
+
+    /**
+     * Sends a custom message to a PPlayer
+     *
+     * @param pplayer The PPlayer to send to
+     * @param message The message to send
+     */
+    public void sendCustomMessage(PPlayer pplayer, String message) {
+        this.sendCustomMessage(pplayer.getMessageDestination(), message);
     }
 
 }

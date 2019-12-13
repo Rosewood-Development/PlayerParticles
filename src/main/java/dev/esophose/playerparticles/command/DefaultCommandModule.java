@@ -1,14 +1,11 @@
 package dev.esophose.playerparticles.command;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.CommandManager;
-import org.bukkit.util.StringUtil;
-
-import dev.esophose.playerparticles.manager.LangManager.Lang;
 import dev.esophose.playerparticles.particles.PPlayer;
+import java.util.ArrayList;
+import java.util.List;
+import org.bukkit.util.StringUtil;
 
 public class DefaultCommandModule implements CommandModule {
 

@@ -1,9 +1,8 @@
 package dev.esophose.playerparticles.particles;
 
-import org.bukkit.command.CommandSender;
-
 import java.util.ArrayList;
 import java.util.UUID;
+import org.bukkit.command.CommandSender;
 
 public class OtherPPlayer extends PPlayer {
     

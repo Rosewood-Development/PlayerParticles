@@ -1,22 +1,19 @@
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.manager.DataManager;
+import dev.esophose.playerparticles.manager.ParticleManager;
+import dev.esophose.playerparticles.particles.PPlayer;
+import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.particles.PParticle;
 import java.util.ArrayList;
 import java.util.List;
-
-import dev.esophose.playerparticles.PlayerParticles;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-
-import dev.esophose.playerparticles.manager.DataManager;
-import dev.esophose.playerparticles.manager.ParticleManager;
-import dev.esophose.playerparticles.particles.PPlayer;
-import dev.esophose.playerparticles.particles.ParticlePair;
-import dev.esophose.playerparticles.styles.api.PParticle;
-import dev.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class ParticleStyleHurt implements ParticleStyle, Listener {
 

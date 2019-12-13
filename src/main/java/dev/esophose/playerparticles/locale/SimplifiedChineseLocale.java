@@ -194,7 +194,7 @@ public class SimplifiedChineseLocale implements Locale {
             this.put("fixed-edit-style-non-fixable", "&c无法编辑定点特效， 风格 &b%style% &c无法用于定点特效!");
             this.put("fixed-edit-data-error", "&c无法编辑定点特效， 数据有误! 请输入 &b/pp data <effect> &cto 来获取正确的数据格式!");
             this.put("fixed-edit-data-none", "&c无法编辑定点特效， 该特效无需数据!");
-            this.put("fixed-edit-success", "&a已更新&b%property%&a个ID为&b%id%&a的定点特效!");
+            this.put("fixed-edit-success", "&a已更新&b%prop%&a个ID为&b%id%&a的定点特效!");
 
             this.put("fixed-remove-invalid", "&c无法删除定点特效， 你没有ID为&b%id%&c的定点特效!");
             this.put("fixed-remove-no-args", "&c你没有指定要删除的ID!");

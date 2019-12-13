@@ -1,20 +1,17 @@
 package dev.esophose.playerparticles.styles;
 
-import java.util.List;
-
 import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.manager.DataManager;
+import dev.esophose.playerparticles.manager.ParticleManager;
+import dev.esophose.playerparticles.particles.PPlayer;
+import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.particles.PParticle;
+import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
-
-import dev.esophose.playerparticles.manager.DataManager;
-import dev.esophose.playerparticles.manager.ParticleManager;
-import dev.esophose.playerparticles.particles.PPlayer;
-import dev.esophose.playerparticles.particles.ParticlePair;
-import dev.esophose.playerparticles.styles.api.PParticle;
-import dev.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class ParticleStyleMove implements ParticleStyle, Listener {
 

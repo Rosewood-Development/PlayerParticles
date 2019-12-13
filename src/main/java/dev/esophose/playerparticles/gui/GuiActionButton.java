@@ -1,16 +1,14 @@
 package dev.esophose.playerparticles.gui;
 
+import dev.esophose.playerparticles.gui.GuiInventoryEditData.ColorData;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Dye;
-
-import dev.esophose.playerparticles.gui.GuiInventoryEditData.ColorData;
 
 public class GuiActionButton {
 

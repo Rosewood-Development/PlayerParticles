@@ -2,10 +2,9 @@ package dev.esophose.playerparticles.database;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.bukkit.plugin.Plugin;
-
 import java.sql.Connection;
 import java.sql.SQLException;
+import org.bukkit.plugin.Plugin;
 
 public class MySQLConnector implements DatabaseConnector {
 

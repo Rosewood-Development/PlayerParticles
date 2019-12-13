@@ -194,7 +194,7 @@ public class VietnameseLocale implements Locale {
             this.put("fixed-edit-style-non-fixable", "&cKhông thể điều chỉnh Hiệu ứng cố định, Kiểu hiệu ứng &b%style% &ckhông thể được sử dụng trong Hiệu ứng cố định!");
             this.put("fixed-edit-data-error", "&cKhông thể điều chỉnh Hiệu ứng cố định, Dữ liệu bạn đã cung cấp không đúng! Sử dụng &b/pp data <effect> &cđể xem định dạng dữ liệu đúng!");
             this.put("fixed-edit-data-none", "&cKhông thể điều chỉnh Hiệu ứng cố định, Hiệu ứng không yêu cầu bất cứ Dữ liệu nào!");
-            this.put("fixed-edit-success", "&aĐã cập nhật &b%property% &acủa Hiệu ứng cố định với một ID của &b%id%&a!");
+            this.put("fixed-edit-success", "&aĐã cập nhật &b%prop% &acủa Hiệu ứng cố định với một ID của &b%id%&a!");
 
             this.put("fixed-remove-invalid", "&cKhông thể xóa Hiệu ứng cố định, bạn không có hiệu ứng cố định nào với ID &b%id%&c!");
             this.put("fixed-remove-no-args", "&cbạn không chỉ định ID để xóa!");

@@ -1,20 +1,18 @@
 package dev.esophose.playerparticles.particles;
 
+import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import dev.esophose.playerparticles.manager.DataManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import dev.esophose.playerparticles.manager.DataManager;
-import dev.esophose.playerparticles.manager.SettingManager.Setting;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
-
-import dev.esophose.playerparticles.PlayerParticles;
 
 public class PPlayerMovementListener implements Listener {
     

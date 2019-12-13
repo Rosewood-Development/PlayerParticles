@@ -2,7 +2,6 @@ package dev.esophose.playerparticles.util;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.bukkit.Material;
 
 public final class ParticleUtils {

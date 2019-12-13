@@ -1,43 +1,44 @@
 package dev.esophose.playerparticles.command;
 
 import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.manager.GuiManager;
-import dev.esophose.playerparticles.manager.LangManager;
-import dev.esophose.playerparticles.manager.LangManager.Lang;
+import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
-import dev.esophose.playerparticles.manager.SettingManager.Setting;
 import dev.esophose.playerparticles.particles.PPlayer;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class GUICommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
+        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
+        GuiManager guiManager = PlayerParticles.getInstance().getManager(GuiManager.class);
+
         boolean byDefault = false;
         if (args.length > 0 && args[0].equals("_byDefault_")) {
             byDefault = true;
         }
 
-        if (GuiManager.isGuiDisabled()) {
+        if (guiManager.isGuiDisabled()) {
             if (byDefault) {
-                LangManager.sendMessage(pplayer, Lang.COMMAND_ERROR_UNKNOWN);
+                localeManager.sendMessage(pplayer, "command-error-unknown");
             } else {
-                LangManager.sendMessage(pplayer, Lang.GUI_DISABLED);
+                localeManager.sendMessage(pplayer, "gui-disabled");
             }
             return;
         }
 
         if (!Setting.GUI_PRESETS_ONLY.getBoolean() && PlayerParticles.getInstance().getManager(PermissionManager.class).getEffectNamesUserHasPermissionFor(pplayer.getPlayer()).isEmpty()) {
             if (byDefault) {
-                LangManager.sendMessage(pplayer, Lang.COMMAND_ERROR_NO_EFFECTS);
+                localeManager.sendMessage(pplayer, "command-error-no-effects");
             } else {
-                LangManager.sendMessage(pplayer, Lang.COMMAND_ERROR_UNKNOWN);
+                localeManager.sendMessage(pplayer, "command-error-unknown");
             }
             return;
         }
 
-        GuiManager.openDefault(pplayer);
+        guiManager.openDefault(pplayer);
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {

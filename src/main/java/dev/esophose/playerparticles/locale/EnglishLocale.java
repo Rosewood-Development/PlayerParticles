@@ -194,7 +194,7 @@ public class EnglishLocale implements Locale {
             this.put("fixed-edit-style-non-fixable", "&cUnable to edit fixed effect, the style &b%style% &ccan not be used in fixed effects!");
             this.put("fixed-edit-data-error", "&cUnable to edit fixed effect, the data provided is not correct! Use &b/pp data <effect> &cto find the correct data format!");
             this.put("fixed-edit-data-none", "&cUnable to edit fixed effect, the effect does not require any data!");
-            this.put("fixed-edit-success", "&aUpdated the &b%property% &aof the fixed effect with an ID of &b%id%&a!");
+            this.put("fixed-edit-success", "&aUpdated the &b%prop% &aof the fixed effect with an ID of &b%id%&a!");
 
             this.put("fixed-remove-invalid", "&cUnable to remove fixed effect, you do not have a fixed effect with the ID of &b%id%&c!");
             this.put("fixed-remove-no-args", "&cYou did not specify an ID to remove!");

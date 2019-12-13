@@ -1,8 +1,10 @@
 package dev.esophose.playerparticles.styles;
 
 import dev.esophose.playerparticles.particles.ParticlePair;
-import dev.esophose.playerparticles.styles.api.PParticle;
-import dev.esophose.playerparticles.styles.api.ParticleStyle;
+import dev.esophose.playerparticles.particles.PParticle;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -10,10 +12,6 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class ParticleStyleArrows implements ParticleStyle, Listener {
 
