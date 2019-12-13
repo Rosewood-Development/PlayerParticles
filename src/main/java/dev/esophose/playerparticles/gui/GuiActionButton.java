@@ -1,6 +1,8 @@
 package dev.esophose.playerparticles.gui;
 
 import dev.esophose.playerparticles.gui.GuiInventoryEditData.ColorData;
+import dev.esophose.playerparticles.hook.PlaceholderAPIHook;
+import dev.esophose.playerparticles.particles.PPlayer;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.ChatColor;
@@ -93,10 +95,11 @@ public class GuiActionButton {
     
     /**
      * Gets the ItemStack icon that goes into the GUI
-     * 
+     *
+     * @param pplayer The PPlayer that is viewing the icon
      * @return The icon ItemStack for the GUI
      */
-    public ItemStack getIcon() {
+    public ItemStack getIcon(PPlayer pplayer) {
         ItemStack itemStack;
         if (this.icons != null) {
             itemStack = new ItemStack(this.icons[this.iconIndex]);
@@ -110,8 +113,8 @@ public class GuiActionButton {
         
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta != null) {
-            itemMeta.setDisplayName(this.name);
-            itemMeta.setLore(parseLore(this.lore));
+            itemMeta.setDisplayName(PlaceholderAPIHook.applyPlaceholders(pplayer.getPlayer(), this.name));
+            itemMeta.setLore(parseLore(pplayer, this.lore));
             itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_POTION_EFFECTS);
             itemStack.setItemMeta(itemMeta);
         }
@@ -149,11 +152,12 @@ public class GuiActionButton {
      * Builds lore from a list of Strings
      * Parses \n as a new lore line
      * Ignores empty lore lines
-     * 
+     *
+     * @param pplayer The PPlayer viewing the lore
      * @param lore The lines of lore
      * @return A parsed list of lore text
      */
-    public static List<String> parseLore(String... lore) {
+    public static List<String> parseLore(PPlayer pplayer, String... lore) {
         List<String> parsedLore = new ArrayList<>();
         for (String line : lore) {
             // Try to maintain the color going to the next line if it's split
@@ -167,7 +171,7 @@ public class GuiActionButton {
             String[] splitLines = line.split("\n");
             for (String parsedLine : splitLines) {
                 if (ChatColor.stripColor(parsedLine).isEmpty()) continue;
-                parsedLore.add(lineColor + parsedLine);
+                parsedLore.add(PlaceholderAPIHook.applyPlaceholders(pplayer.getPlayer(), lineColor + parsedLine));
             }
         }
         return parsedLore;

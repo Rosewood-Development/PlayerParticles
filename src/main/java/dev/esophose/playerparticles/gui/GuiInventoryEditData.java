@@ -139,7 +139,7 @@ public class GuiInventoryEditData extends GuiInventory {
         }
     }
 
-    public GuiInventoryEditData(PPlayer pplayer, ParticlePair editingParticle, int pageNumber, List<GuiInventoryEditFinishedCallback> callbackList, int callbackListPosition) {
+    public GuiInventoryEditData(PPlayer pplayer, ParticlePair editingParticle, int pageNumber, List<Runnable> callbackList, int callbackListPosition) {
         super(pplayer, Bukkit.createInventory(pplayer.getPlayer(), INVENTORY_SIZE, PlayerParticles.getInstance().getManager(LocaleManager.class).getLocaleMessage("gui-select-data")));
 
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
@@ -167,7 +167,7 @@ public class GuiInventoryEditData extends GuiInventory {
                 GuiIcon.BACK.get(),
                 localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-back-button"),
                 new String[]{},
-                (button, isShiftClick) -> callbackList.get(callbackListPosition - 1).execute());
+                (button, isShiftClick) -> callbackList.get(callbackListPosition - 1).run());
         this.actionButtons.add(backButton);
 
         this.populate();
@@ -181,7 +181,7 @@ public class GuiInventoryEditData extends GuiInventory {
      * @param callbackList         The List of GuiInventoryEditFinishedCallbacks
      * @param callbackListPosition The index of the callbackList we're currently at
      */
-    private void populateColorData(ParticlePair editingParticle, int pageNumber, List<GuiInventoryEditFinishedCallback> callbackList, int callbackListPosition) {
+    private void populateColorData(ParticlePair editingParticle, int pageNumber, List<Runnable> callbackList, int callbackListPosition) {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
 
         int index = 10;
@@ -197,7 +197,7 @@ public class GuiInventoryEditData extends GuiInventory {
                     new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", formattedDisplayColor))},
                     (button, isShiftClick) -> {
                         editingParticle.setColor(colorData.getOrdinaryColor());
-                        callbackList.get(callbackListPosition + 1).execute();
+                        callbackList.get(callbackListPosition + 1).run();
                     });
             this.actionButtons.add(setColorButton);
 
@@ -216,7 +216,7 @@ public class GuiInventoryEditData extends GuiInventory {
                 new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", localeManager.getLocaleMessage("rainbow")))},
                 (button, isShiftClick) -> {
                     editingParticle.setColor(new OrdinaryColor(999, 999, 999));
-                    callbackList.get(callbackListPosition + 1).execute();
+                    callbackList.get(callbackListPosition + 1).run();
                 });
         this.actionButtons.add(setRainbowColorButton);
 
@@ -231,7 +231,7 @@ public class GuiInventoryEditData extends GuiInventory {
                 new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", localeManager.getLocaleMessage("random")))},
                 (button, isShiftClick) -> {
                     editingParticle.setColor(new OrdinaryColor(998, 998, 998));
-                    callbackList.get(callbackListPosition + 1).execute();
+                    callbackList.get(callbackListPosition + 1).run();
                 });
         this.actionButtons.add(setRandomColorButton);
     }
@@ -244,7 +244,7 @@ public class GuiInventoryEditData extends GuiInventory {
      * @param pageNumber           The current page number
      * @param callbackListPosition The index of the callbackList we're currently at
      */
-    private void populateNoteData(ParticlePair editingParticle, int pageNumber, List<GuiInventoryEditFinishedCallback> callbackList, int callbackListPosition) {
+    private void populateNoteData(ParticlePair editingParticle, int pageNumber, List<Runnable> callbackList, int callbackListPosition) {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         GuiManager guiManager = PlayerParticles.getInstance().getManager(GuiManager.class);
 
@@ -269,7 +269,7 @@ public class GuiInventoryEditData extends GuiInventory {
                     new String[]{formattedDescription},
                     (button, isShiftClick) -> {
                         editingParticle.setNoteColor(new NoteColor(noteIndex));
-                        callbackList.get(callbackListPosition + 1).execute();
+                        callbackList.get(callbackListPosition + 1).run();
                     });
             this.actionButtons.add(setColorButton);
 
@@ -289,7 +289,7 @@ public class GuiInventoryEditData extends GuiInventory {
                 new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", localeManager.getLocaleMessage("rainbow")))},
                 (button, isShiftClick) -> {
                     editingParticle.setNoteColor(new NoteColor(99));
-                    callbackList.get(callbackListPosition + 1).execute();
+                    callbackList.get(callbackListPosition + 1).run();
                 });
         this.actionButtons.add(setRainbowColorButton);
 
@@ -305,7 +305,7 @@ public class GuiInventoryEditData extends GuiInventory {
                 new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", localeManager.getLocaleMessage("random")))},
                 (button, isShiftClick) -> {
                     editingParticle.setNoteColor(new NoteColor(98));
-                    callbackList.get(callbackListPosition + 1).execute();
+                    callbackList.get(callbackListPosition + 1).run();
                 });
         this.actionButtons.add(setRandomColorButton);
 
@@ -340,7 +340,7 @@ public class GuiInventoryEditData extends GuiInventory {
      * @param pageNumber           The current page number
      * @param callbackListPosition The index of the callbackList we're currently at
      */
-    private void populateItemData(ParticlePair editingParticle, int pageNumber, List<GuiInventoryEditFinishedCallback> callbackList, int callbackListPosition) {
+    private void populateItemData(ParticlePair editingParticle, int pageNumber, List<Runnable> callbackList, int callbackListPosition) {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         GuiManager guiManager = PlayerParticles.getInstance().getManager(GuiManager.class);
 
@@ -361,7 +361,7 @@ public class GuiInventoryEditData extends GuiInventory {
                     new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", material.name().toLowerCase()))},
                     (button, isShiftClick) -> {
                         editingParticle.setItemMaterial(material);
-                        callbackList.get(callbackListPosition + 1).execute();
+                        callbackList.get(callbackListPosition + 1).run();
                     });
             this.actionButtons.add(setRainbowColorButton);
 
@@ -404,7 +404,7 @@ public class GuiInventoryEditData extends GuiInventory {
      * @param pageNumber           The current page number
      * @param callbackListPosition The index of the callbackList we're currently at
      */
-    private void populateBlockData(ParticlePair editingParticle, int pageNumber, List<GuiInventoryEditFinishedCallback> callbackList, int callbackListPosition) {
+    private void populateBlockData(ParticlePair editingParticle, int pageNumber, List<Runnable> callbackList, int callbackListPosition) {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         GuiManager guiManager = PlayerParticles.getInstance().getManager(GuiManager.class);
 
@@ -425,7 +425,7 @@ public class GuiInventoryEditData extends GuiInventory {
                     new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", material.name().toLowerCase()))},
                     (button, isShiftClick) -> {
                         editingParticle.setBlockMaterial(material);
-                        callbackList.get(callbackListPosition + 1).execute();
+                        callbackList.get(callbackListPosition + 1).run();
                     });
             this.actionButtons.add(setRainbowColorButton);
 

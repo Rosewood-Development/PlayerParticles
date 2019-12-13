@@ -17,6 +17,7 @@ repositories {
 	
     maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
     maven { url = 'https://repo.codemc.org/repository/maven-public' }
+    maven { url = 'http://repo.extendedclip.com/content/repositories/placeholderapi/' }
 }
 
 dependencies {
@@ -24,7 +25,8 @@ dependencies {
     compile 'org.slf4j:slf4j-nop:1.7.25'
     compile 'com.zaxxer:HikariCP:3.2.0'
     compile 'com.googlecode.json-simple:json-simple:1.1.1'
-	shadow 'org.xerial:sqlite-jdbc:3.23.1'
+    compile 'me.clip:placeholderapi:2.10.4'
+    shadow 'org.xerial:sqlite-jdbc:3.23.1'
     shadow 'org.spigotmc:spigot-api:1.15-R0.1-SNAPSHOT'
 }
 

@@ -2,6 +2,7 @@ package dev.esophose.playerparticles.manager;
 
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
+import dev.esophose.playerparticles.hook.PlaceholderAPIHook;
 import dev.esophose.playerparticles.locale.EnglishLocale;
 import dev.esophose.playerparticles.locale.FrenchLocale;
 import dev.esophose.playerparticles.locale.GermanLocale;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class LocaleManager extends Manager {
 
@@ -126,7 +128,7 @@ public class LocaleManager extends Manager {
      * @param stringPlaceholders The placeholders to apply
      */
     public void sendMessage(PPlayer pplayer, String messageKey, StringPlaceholders stringPlaceholders) {
-        this.sendMessage(pplayer.getMessageDestination(), messageKey, stringPlaceholders);
+        pplayer.getMessageDestination().sendMessage(this.parsePlaceholders(pplayer.getPlayer(), this.getLocaleMessage("prefix") + this.getLocaleMessage(messageKey, stringPlaceholders)));
     }
 
     /**
@@ -146,7 +148,7 @@ public class LocaleManager extends Manager {
      * @param messageKey The message key of the Locale to send
      */
     public void sendMessage(PPlayer pplayer, String messageKey) {
-        this.sendMessage(pplayer.getMessageDestination(), messageKey);
+        this.sendMessage(pplayer, messageKey);
     }
 
     /**
@@ -168,7 +170,7 @@ public class LocaleManager extends Manager {
      * @param stringPlaceholders The placeholders to apply
      */
     public void sendSimpleMessage(PPlayer pplayer, String messageKey, StringPlaceholders stringPlaceholders) {
-        this.sendSimpleMessage(pplayer.getMessageDestination(), messageKey, stringPlaceholders);
+        pplayer.getMessageDestination().sendMessage(this.parsePlaceholders(pplayer.getPlayer(), this.getLocaleMessage(messageKey, stringPlaceholders)));
     }
 
     /**
@@ -188,7 +190,7 @@ public class LocaleManager extends Manager {
      * @param messageKey The message key of the Locale to send
      */
     public void sendSimpleMessage(PPlayer pplayer, String messageKey) {
-        this.sendSimpleMessage(pplayer.getMessageDestination(), messageKey);
+        this.sendMessage(pplayer, messageKey, StringPlaceholders.empty());
     }
 
     /**
@@ -208,7 +210,18 @@ public class LocaleManager extends Manager {
      * @param message The message to send
      */
     public void sendCustomMessage(PPlayer pplayer, String message) {
-        this.sendCustomMessage(pplayer.getMessageDestination(), message);
+        this.sendCustomMessage(pplayer.getMessageDestination(), this.parsePlaceholders(pplayer.getPlayer(), message));
+    }
+
+    /**
+     * Replaces PlaceholderAPI placeholders if PlaceholderAPI is enabled
+     *
+     * @param player The Player to replace with
+     * @param message The message
+     * @return A placeholder-replaced message
+     */
+    private String parsePlaceholders(Player player, String message) {
+        return PlaceholderAPIHook.applyPlaceholders(player, message);
     }
 
 }

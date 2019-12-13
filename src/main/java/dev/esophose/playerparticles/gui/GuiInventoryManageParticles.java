@@ -90,7 +90,7 @@ public class GuiInventoryManageParticles extends GuiInventory {
                 (button, isShiftClick) -> {
                     if (!canCreate) return;
                     ParticlePair editingParticle = ParticlePair.getNextDefault(pplayer);
-                    List<GuiInventoryEditFinishedCallback> callbacks = new ArrayList<>();
+                    List<Runnable> callbacks = new ArrayList<>();
                     callbacks.add(() -> guiManager.transition(new GuiInventoryManageParticles(pplayer)));
                     callbacks.add(() -> guiManager.transition(new GuiInventoryEditEffect(pplayer, editingParticle, 1, callbacks, 1)));
                     callbacks.add(() -> guiManager.transition(new GuiInventoryEditStyle(pplayer, editingParticle, 1, callbacks, 2)));
@@ -98,7 +98,7 @@ public class GuiInventoryManageParticles extends GuiInventory {
                         if (editingParticle.getEffect().hasProperty(ParticleProperty.COLORABLE) || editingParticle.getEffect().hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
                             guiManager.transition(new GuiInventoryEditData(pplayer, editingParticle, 1, callbacks, 3));
                         } else {
-                            callbacks.get(4).execute();
+                            callbacks.get(4).run();
                         }
                     });
                     callbacks.add(() -> {
@@ -110,7 +110,7 @@ public class GuiInventoryManageParticles extends GuiInventory {
                         // Reopen the manage particle inventory
                         guiManager.transition(new GuiInventoryManageParticles(pplayer));
                     });
-                    callbacks.get(1).execute();
+                    callbacks.get(1).run();
                 });
         this.actionButtons.add(createNewParticle);
 

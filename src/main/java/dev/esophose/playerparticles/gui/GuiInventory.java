@@ -5,6 +5,8 @@ import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -122,7 +124,7 @@ public abstract class GuiInventory implements InventoryHolder {
      */
     protected void populate() {
         for (GuiActionButton button : this.actionButtons) {
-            this.inventory.setItem(button.getSlot(), button.getIcon());
+            this.inventory.setItem(button.getSlot(), button.getIcon(this.pplayer));
         }
     }
     
@@ -133,7 +135,7 @@ public abstract class GuiInventory implements InventoryHolder {
         for (GuiActionButton button : this.actionButtons) {
             if (button.isTickable()) {
                 button.onTick();
-                this.inventory.setItem(button.getSlot(), button.getIcon());
+                this.inventory.setItem(button.getSlot(), button.getIcon(this.pplayer));
             }
         }
     }
@@ -159,11 +161,6 @@ public abstract class GuiInventory implements InventoryHolder {
                 break;
             }
         }
-    }
-    
-    @FunctionalInterface
-    public interface GuiInventoryEditFinishedCallback {
-        void execute();
     }
 
 }

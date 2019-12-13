@@ -1,7 +1,5 @@
 /*
  * TODO: v7.0
- * * Refactored and cleaned up code to remove static abuse
- * * Changed the plugin's package name
  * * Added an API, accessible through the dev.esophose.playerparticles.api.PlayerParticlesAPI class
  * + Add ability to create/manage fixed effects from the GUI
  * * Convert fixed effect ids into names
@@ -12,6 +10,13 @@
  * + Add effect/style settings folder that lets you disable effects/style and edit style properties
  * + Added PlaceholderAPI support for message strings
  * + Added setting to disable particles while in combat
+ */
+
+ /*
+ * * Refactored and cleaned up code to remove static abuse
+ * * Changed the package names
+ * + Config and lang files will no longer reset every update
+ * + Added PlaceholderAPI support (no placeholders, just placeholder replacing in messages)
  */
 
 package dev.esophose.playerparticles;

@@ -129,7 +129,7 @@ public class RemoveCommandModule implements CommandModule {
     }
 
     public boolean requiresEffects() {
-        return true;
+        return false;
     }
 
     public boolean canConsoleExecute() {

@@ -1,14 +1,5 @@
 === v7.0 ===
-* The config will no longer reset for each and every update
-+ Added settings for each effect located in the /effects folder
-+ Added settings for each style located in the /styles folder
-+ All command and parameter names can now be edited in the new commands.yml file
-+ Added support for what I'm calling language packs
-  - Language packs have the ability to overwrite any message in the plugin
-+ Added language settings for all material names which can be changed in a languge pack
-* The command '/pp fixed clear <radius>' now accepts an optional location/world as '/pp fixed clear <radius> [<x> <y> <z> [world]]'
-+ Added support for 1.15 particles, the future is now
-+ Added support for 1.8.8 for those who refuse to accept the future (this is the only version of 1.8.x that will be supported, I will eventually drop support for it again in the future)
+* Coming soon
 === v6.6 ===
 + Added support for Minecraft 1.15
 + Added 1.15 effects: 'dripping_honey', 'falling_honey', 'falling_nectar', and 'landing_honey'

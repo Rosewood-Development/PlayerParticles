@@ -15,7 +15,7 @@ import org.bukkit.Bukkit;
 
 public class GuiInventoryEditStyle extends GuiInventory {
 
-    public GuiInventoryEditStyle(PPlayer pplayer, ParticlePair editingParticle, int pageNumber, List<GuiInventoryEditFinishedCallback> callbackList, int callbackListPosition) {
+    public GuiInventoryEditStyle(PPlayer pplayer, ParticlePair editingParticle, int pageNumber, List<Runnable> callbackList, int callbackListPosition) {
         super(pplayer, Bukkit.createInventory(pplayer.getPlayer(), INVENTORY_SIZE, PlayerParticles.getInstance().getManager(LocaleManager.class).getLocaleMessage("gui-select-style")));
 
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
@@ -41,7 +41,7 @@ public class GuiInventoryEditStyle extends GuiInventory {
                     new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-style-description", StringPlaceholders.single("style", ParticleUtils.formatName(style.getName())))},
                     (button, isShiftClick) -> {
                         editingParticle.setStyle(style);
-                        callbackList.get(callbackListPosition + 1).execute();
+                        callbackList.get(callbackListPosition + 1).run();
                     });
             this.actionButtons.add(selectButton);
 
@@ -59,7 +59,7 @@ public class GuiInventoryEditStyle extends GuiInventory {
                 GuiIcon.BACK.get(),
                 localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-back-button"),
                 new String[]{},
-                (button, isShiftClick) -> callbackList.get(callbackListPosition - 1).execute());
+                (button, isShiftClick) -> callbackList.get(callbackListPosition - 1).run());
         this.actionButtons.add(backButton);
 
         // Previous page button

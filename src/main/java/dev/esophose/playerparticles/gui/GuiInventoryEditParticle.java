@@ -47,7 +47,7 @@ public class GuiInventoryEditParticle extends GuiInventory {
                 localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("gui-edit-effect"),
                 new String[]{localeManager.getLocaleMessage("gui-color-subtext") + localeManager.getLocaleMessage("gui-edit-effect-description")},
                 (button, isShiftClick) -> {
-                    List<GuiInventoryEditFinishedCallback> callbacks = new ArrayList<>();
+                    List<Runnable> callbacks = new ArrayList<>();
                     callbacks.add(() -> guiManager.transition(new GuiInventoryEditParticle(pplayer, editingParticle)));
                     callbacks.add(() -> guiManager.transition(new GuiInventoryEditEffect(pplayer, editingParticle, 1, callbacks, 1)));
                     callbacks.add(() -> {
@@ -63,7 +63,7 @@ public class GuiInventoryEditParticle extends GuiInventory {
                         guiManager.transition(new GuiInventoryEditParticle(pplayer, editingParticle));
                     });
 
-                    callbacks.get(1).execute();
+                    callbacks.get(1).run();
                 });
         this.actionButtons.add(editEffectButton);
 
@@ -73,7 +73,7 @@ public class GuiInventoryEditParticle extends GuiInventory {
                 localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("gui-edit-style"),
                 new String[]{localeManager.getLocaleMessage("gui-color-subtext") + localeManager.getLocaleMessage("gui-edit-style-description")},
                 (button, isShiftClick) -> {
-                    List<GuiInventoryEditFinishedCallback> callbacks = new ArrayList<>();
+                    List<Runnable> callbacks = new ArrayList<>();
                     callbacks.add(() -> guiManager.transition(new GuiInventoryEditParticle(pplayer, editingParticle)));
                     callbacks.add(() -> guiManager.transition(new GuiInventoryEditStyle(pplayer, editingParticle, 1, callbacks, 1)));
                     callbacks.add(() -> {
@@ -89,7 +89,7 @@ public class GuiInventoryEditParticle extends GuiInventory {
                         guiManager.transition(new GuiInventoryEditParticle(pplayer, editingParticle));
                     });
 
-                    callbacks.get(1).execute();
+                    callbacks.get(1).run();
                 });
         this.actionButtons.add(editStyleButton);
 
@@ -102,7 +102,7 @@ public class GuiInventoryEditParticle extends GuiInventory {
                         new String[]{localeManager.getLocaleMessage("gui-color-unavailable") + localeManager.getLocaleMessage("gui-edit-data-unavailable")},
                 (button, isShiftClick) -> {
                     if (usesData) {
-                        List<GuiInventoryEditFinishedCallback> callbacks = new ArrayList<>();
+                        List<Runnable> callbacks = new ArrayList<>();
                         callbacks.add(() -> guiManager.transition(new GuiInventoryEditParticle(pplayer, editingParticle)));
                         callbacks.add(() -> guiManager.transition(new GuiInventoryEditData(pplayer, editingParticle, 1, callbacks, 1)));
                         callbacks.add(() -> {
@@ -121,7 +121,7 @@ public class GuiInventoryEditParticle extends GuiInventory {
                             guiManager.transition(new GuiInventoryEditParticle(pplayer, editingParticle));
                         });
 
-                        callbacks.get(1).execute();
+                        callbacks.get(1).run();
                     }
                 });
         this.actionButtons.add(editDataButton);
