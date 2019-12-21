@@ -69,7 +69,8 @@ public class ParticleManager extends Manager implements Listener, Runnable {
 
     @Override
     public void disable() {
-
+        if (this.particleTask != null)
+            this.particleTask.cancel();
     }
 
     /**
