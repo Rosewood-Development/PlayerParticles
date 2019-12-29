@@ -1,7 +1,6 @@
 package dev.esophose.playerparticles.particles;
 
 import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;

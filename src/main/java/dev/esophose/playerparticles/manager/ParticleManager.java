@@ -1,14 +1,19 @@
 package dev.esophose.playerparticles.manager;
 
+import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import dev.esophose.playerparticles.particles.FixedParticleEffect;
+import dev.esophose.playerparticles.particles.PPlayer;
+import dev.esophose.playerparticles.particles.ParticleEffect;
+import dev.esophose.playerparticles.particles.ParticleEffect.NoteColor;
+import dev.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
+import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.styles.DefaultStyles;
+import dev.esophose.playerparticles.particles.PParticle;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import dev.esophose.playerparticles.manager.SettingManager.PSetting;
-import dev.esophose.playerparticles.styles.DefaultStyles;
-import dev.esophose.playerparticles.styles.api.PParticle;
-import dev.esophose.playerparticles.styles.api.ParticleStyleManager;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -18,29 +23,55 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
-import dev.esophose.playerparticles.particles.FixedParticleEffect;
-import dev.esophose.playerparticles.particles.PPlayer;
-import dev.esophose.playerparticles.particles.ParticleEffect;
-import dev.esophose.playerparticles.particles.ParticleEffect.NoteColor;
-import dev.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
-import dev.esophose.playerparticles.particles.ParticlePair;
-
-public class ParticleManager extends BukkitRunnable implements Listener {
+public class ParticleManager extends Manager implements Listener, Runnable {
 
     /**
      * The list containing all the loaded PPlayer info
      */
-    private static List<PPlayer> particlePlayers = new ArrayList<>();
+    private List<PPlayer> particlePlayers = new ArrayList<>();
+
+    /**
+     * The task that spawns the particles
+     */
+    private BukkitTask particleTask = null;
 
     /**
      * Rainbow particle effect hue and note color used for rainbow colorable effects
-     * These should be moved to a more appropriate place later
      */
-    private static int hue = 0;
-    private static int note = 0;
-    private static final Random RANDOM = new Random();
+    private int hue = 0;
+    private int note = 0;
+    private final Random RANDOM = new Random();
+
+    public ParticleManager(PlayerParticles playerParticles) {
+        super(playerParticles);
+
+        Bukkit.getPluginManager().registerEvents(this, this.playerParticles);
+    }
+
+    @Override
+    public void reload() {
+        if (this.particleTask != null)
+            this.particleTask.cancel();
+
+        Bukkit.getScheduler().runTaskLater(this.playerParticles, () -> {
+            long ticks = Setting.TICKS_PER_PARTICLE.getLong();
+            this.particleTask = Bukkit.getScheduler().runTaskTimer(this.playerParticles, this, 5, ticks);
+        }, 1);
+
+        this.particlePlayers.clear();
+        DataManager dataManager = this.playerParticles.getManager(DataManager.class);
+        dataManager.loadFixedEffects();
+        for (Player player : Bukkit.getOnlinePlayers())
+            dataManager.getPPlayer(player.getUniqueId(), (pplayer) -> { }); // Loads the PPlayer from the database
+    }
+
+    @Override
+    public void disable() {
+        if (this.particleTask != null)
+            this.particleTask.cancel();
+    }
 
     /**
      * Adds the player to the array when they join
@@ -49,7 +80,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent e) {
-        DataManager.getPPlayer(e.getPlayer().getUniqueId(), (pplayer) -> { }); // Loads the PPlayer from the database
+        this.playerParticles.getManager(DataManager.class).getPPlayer(e.getPlayer().getUniqueId(), (pplayer) -> { }); // Loads the PPlayer from the database
     }
 
     /**
@@ -59,8 +90,9 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent e) {
-        PPlayer pplayer = DataManager.getPPlayer(e.getPlayer().getUniqueId());
-        if (pplayer != null && pplayer.getFixedEffectIds().isEmpty()) particlePlayers.remove(pplayer); // Unload the PPlayer if they don't have any fixed effects
+        PPlayer pplayer = this.playerParticles.getManager(DataManager.class).getPPlayer(e.getPlayer().getUniqueId());
+        if (pplayer != null && pplayer.getFixedEffectIds().isEmpty())
+            this.particlePlayers.remove(pplayer); // Unload the PPlayer if they don't have any fixed effects
     }
 
     /**
@@ -68,20 +100,8 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      * 
      * @return The loaded PPlayers
      */
-    public static List<PPlayer> getPPlayers() {
-        return particlePlayers;
-    }
-
-    /**
-     * Loads all FixedParticleEffects from the database
-     * Loads all online PPlayers from the database
-     */
-    public static void refreshData() {
-        particlePlayers.clear();
-        DataManager.loadFixedEffects();
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            DataManager.getPPlayer(player.getUniqueId(), (pplayer) -> { }); // Loads the PPlayer from the database
-        }
+    public List<PPlayer> getPPlayers() {
+        return this.particlePlayers;
     }
 
     /**
@@ -89,31 +109,33 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      * Does not display particles if the world is disabled or if the player is in spectator mode
      */
     public void run() {
-        ParticleStyleManager.updateTimers();
+        this.playerParticles.getManager(ParticleStyleManager.class).updateTimers();
 
-        hue += PSetting.RAINBOW_CYCLE_SPEED.getInt();
-        hue %= 360;
+        this.hue += Setting.RAINBOW_CYCLE_SPEED.getInt();
+        this.hue %= 360;
 
-        if (hue % 4 == 0) { // Only increment note by 5 notes per second
-            note++;
-            note %= 25;
+        if (this.hue % 4 == 0) { // Only increment note by 5 notes per second
+            this.note++;
+            this.note %= 25;
         }
 
+        PermissionManager permissionManager = this.playerParticles.getManager(PermissionManager.class);
+
         // Loop over backwards so we can remove pplayers if need be
-        for (int i = particlePlayers.size() - 1; i >= 0; i--) {
-            PPlayer pplayer = particlePlayers.get(i);
+        for (int i = this.particlePlayers.size() - 1; i >= 0; i--) {
+            PPlayer pplayer = this.particlePlayers.get(i);
             Player player = pplayer.getPlayer();
 
             // Don't show their particles if they are in spectator mode
             // Don't spawn particles if the world doesn't allow it
-            if (player != null && player.getGameMode() != GameMode.SPECTATOR && PermissionManager.isWorldEnabled(player.getWorld().getName()))
+            if (player != null && player.getGameMode() != GameMode.SPECTATOR && permissionManager.isWorldEnabled(player.getWorld().getName()))
                 for (ParticlePair particles : pplayer.getActiveParticles())
                     this.displayParticles(pplayer, particles, player.getLocation().clone().add(0, 1, 0));
             
             // Loop for FixedParticleEffects
             // Don't spawn particles if the world doesn't allow it
             for (FixedParticleEffect effect : pplayer.getFixedParticles())
-                if (PermissionManager.isWorldEnabled(effect.getLocation().getWorld().getName()))
+                if (effect.getLocation().getWorld() != null && permissionManager.isWorldEnabled(effect.getLocation().getWorld().getName()))
                     this.displayFixedParticleEffect(effect);
         }
     }
@@ -126,8 +148,8 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      * @param location The location to display at
      */
     private void displayParticles(PPlayer pplayer, ParticlePair particle, Location location) {
-        if (!ParticleStyleManager.isCustomHandled(particle.getStyle())) {
-            if (PSetting.TOGGLE_ON_MOVE.getBoolean() && particle.getStyle().canToggleWithMovement() && pplayer.isMoving()) {
+        if (!this.playerParticles.getManager(ParticleStyleManager.class).isCustomHandled(particle.getStyle())) {
+            if (Setting.TOGGLE_ON_MOVE.getBoolean() && particle.getStyle().canToggleWithMovement() && pplayer.isMoving()) {
                 for (PParticle pparticle : DefaultStyles.FEET.getParticles(particle, location))
                     ParticleEffect.display(particle, pparticle, false, pplayer.getPlayer());
             } else {
@@ -143,7 +165,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      * @param particle The ParticlePair to use for getting particle settings
      * @param particles The particles to display
      */
-    public static void displayParticles(ParticlePair particle, List<PParticle> particles) {
+    public void displayParticles(ParticlePair particle, List<PParticle> particles) {
         for (PParticle pparticle : particles)
             ParticleEffect.display(particle, pparticle, false, Bukkit.getPlayer(particle.getOwnerUniqueId()));
     }
@@ -164,8 +186,8 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      * 
      * @return The rainbow OrdinaryColor for particle spawning with data 'rainbow'
      */
-    public static OrdinaryColor getRainbowParticleColor() {
-        Color rgb = Color.getHSBColor(hue / 360F, 1.0F, 1.0F);
+    public OrdinaryColor getRainbowParticleColor() {
+        Color rgb = Color.getHSBColor(this.hue / 360F, 1.0F, 1.0F);
         return new OrdinaryColor(rgb.getRed(), rgb.getGreen(), rgb.getBlue());
     }
 
@@ -174,8 +196,8 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      * 
      * @return The rainbow NoteColor for particle spawning with data 'rainbow'
      */
-    public static NoteColor getRainbowNoteParticleColor() {
-        return new NoteColor(note);
+    public NoteColor getRainbowNoteParticleColor() {
+        return new NoteColor(this.note);
     }
     
     /**
@@ -183,8 +205,8 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      * 
      * @return A randomized OrdinaryColor for particle spawning with data 'random'
      */
-    public static OrdinaryColor getRandomParticleColor() {
-        Color rgb = new Color(RANDOM.nextInt(256), RANDOM.nextInt(256), RANDOM.nextInt(256));
+    public OrdinaryColor getRandomParticleColor() {
+        Color rgb = new Color(this.RANDOM.nextInt(256), this.RANDOM.nextInt(256), this.RANDOM.nextInt(256));
         return new OrdinaryColor(rgb.getRed(), rgb.getGreen(), rgb.getBlue());
     }
     
@@ -193,8 +215,7 @@ public class ParticleManager extends BukkitRunnable implements Listener {
      * 
      * @return A randomized NoteColor for particle spawning with data 'random'
      */
-    public static NoteColor getRandomNoteParticleColor() {
-        return new NoteColor(RANDOM.nextInt(25));
+    public NoteColor getRandomNoteParticleColor() {
+        return new NoteColor(this.RANDOM.nextInt(25));
     }
-
 }

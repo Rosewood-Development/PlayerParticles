@@ -1,32 +1,35 @@
 package dev.esophose.playerparticles.command;
 
+import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.manager.LocaleManager;
+import dev.esophose.playerparticles.particles.PPlayer;
+import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.util.StringPlaceholders;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import dev.esophose.playerparticles.manager.LangManager;
-import dev.esophose.playerparticles.manager.LangManager.Lang;
-import dev.esophose.playerparticles.particles.PPlayer;
-import dev.esophose.playerparticles.particles.ParticlePair;
-
 public class ListCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
+        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
+
         List<ParticlePair> particles = pplayer.getActiveParticles();
         particles.sort(Comparator.comparingInt(ParticlePair::getId));
         
         if (particles.isEmpty()) {
-            LangManager.sendMessage(pplayer, Lang.LIST_NONE);
+            localeManager.sendMessage(pplayer, "list-none");
             return;
         }
-        
-        LangManager.sendMessage(pplayer, Lang.LIST_YOU_HAVE);
+
+        localeManager.sendMessage(pplayer, "list-you-have");
         for (ParticlePair particle : particles) {
-            int id = particle.getId();
-            String effect = particle.getEffect().getName();
-            String style = particle.getStyle().getName();
-            String data = particle.getDataString();
-            LangManager.sendMessage(pplayer, Lang.LIST_OUTPUT, id, effect, style, data);
+            StringPlaceholders stringPlaceholders = StringPlaceholders.builder("id", particle.getId())
+                    .addPlaceholder("effect", particle.getEffect())
+                    .addPlaceholder("style", particle.getStyle())
+                    .addPlaceholder("data", particle.getDataString())
+                    .build();
+            localeManager.sendMessage(pplayer, "list-output", stringPlaceholders);
         }
     }
 
@@ -38,8 +41,8 @@ public class ListCommandModule implements CommandModule {
         return "list";
     }
 
-    public Lang getDescription() {
-        return Lang.COMMAND_DESCRIPTION_LIST;
+    public String getDescriptionKey() {
+        return "command-description-list";
     }
 
     public String getArguments() {

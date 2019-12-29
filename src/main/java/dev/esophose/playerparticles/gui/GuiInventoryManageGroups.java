@@ -1,27 +1,32 @@
 package dev.esophose.playerparticles.gui;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.gui.hook.PlayerChatHook;
 import dev.esophose.playerparticles.gui.hook.PlayerChatHookData;
+import dev.esophose.playerparticles.manager.ConfigurationManager.GuiIcon;
+import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.manager.DataManager;
-import dev.esophose.playerparticles.manager.LangManager;
-import dev.esophose.playerparticles.manager.LangManager.Lang;
+import dev.esophose.playerparticles.manager.GuiManager;
+import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
-import dev.esophose.playerparticles.manager.SettingManager.GuiIcon;
-import dev.esophose.playerparticles.manager.SettingManager.PSetting;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.util.ParticleUtils;
-import org.bukkit.Bukkit;
-
+import dev.esophose.playerparticles.util.StringPlaceholders;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import org.bukkit.Bukkit;
 
 public class GuiInventoryManageGroups extends GuiInventory {
 
     public GuiInventoryManageGroups(PPlayer pplayer) {
-        super(pplayer, Bukkit.createInventory(pplayer.getPlayer(), INVENTORY_SIZE, LangManager.getText(Lang.GUI_MANAGE_YOUR_GROUPS)));
+        super(pplayer, Bukkit.createInventory(pplayer.getPlayer(), INVENTORY_SIZE, PlayerParticles.getInstance().getManager(LocaleManager.class).getLocaleMessage("gui-manage-your-groups")));
+
+        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
+        DataManager dataManager = PlayerParticles.getInstance().getManager(DataManager.class);
+        GuiManager guiManager = PlayerParticles.getInstance().getManager(GuiManager.class);
 
         this.fillBorder(BorderColor.BROWN);
 
@@ -38,23 +43,28 @@ public class GuiInventoryManageGroups extends GuiInventory {
             particles.sort(Comparator.comparingInt(ParticlePair::getId));
 
             String[] lore = new String[particles.size() + 2];
-            lore[0] = LangManager.getText(Lang.GUI_COLOR_SUBTEXT) + LangManager.getText(Lang.GUI_CLICK_TO_LOAD, particles.size());
+            lore[0] = localeManager.getLocaleMessage("gui-color-subtext") + localeManager.getLocaleMessage("gui-click-to-load", StringPlaceholders.single("amount", particles.size()));
             int i = 1;
             for (ParticlePair particle : particles) {
-                lore[i] = LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_PARTICLE_INFO, particle.getId(), ParticleUtils.formatName(particle.getEffect().getName()), ParticleUtils.formatName(particle.getStyle().getName()), particle.getDataString());
+                StringPlaceholders stringPlaceholders = StringPlaceholders.builder("id", particle.getId())
+                        .addPlaceholder("effect", ParticleUtils.formatName(particle.getEffect().getName()))
+                        .addPlaceholder("style", ParticleUtils.formatName(particle.getStyle().getName()))
+                        .addPlaceholder("data", particle.getDataString())
+                        .build();
+                lore[i] = localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-particle-info", stringPlaceholders);
                 i++;
             }
-            lore[i] = LangManager.getText(Lang.GUI_COLOR_UNAVAILABLE) + LangManager.getText(Lang.GUI_SHIFT_CLICK_TO_DELETE);
+            lore[i] = localeManager.getLocaleMessage("gui-color-unavailable") + localeManager.getLocaleMessage("gui-shift-click-to-delete");
 
             // Load Group Buttons
             GuiActionButton groupButton = new GuiActionButton(
                     index,
                     GuiIcon.GROUPS.get(),
-                    LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + group.getName(),
+                    localeManager.getLocaleMessage("gui-color-icon-name") + group.getName(),
                     lore,
                     (button, isShiftClick) -> {
                         if (isShiftClick) {
-                            DataManager.removeParticleGroup(pplayer.getUniqueId(), group);
+                            dataManager.removeParticleGroup(pplayer.getUniqueId(), group);
 
                             this.actionButtons.remove(button);
                             this.inventory.setItem(button.getSlot(), null);
@@ -63,9 +73,9 @@ public class GuiInventoryManageGroups extends GuiInventory {
                             activeGroup.getParticles().clear();
                             for (ParticlePair particle : particles)
                                 activeGroup.getParticles().add(particle.clone());
-                            DataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
+                            dataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
 
-                            if (PSetting.GUI_CLOSE_AFTER_GROUP_SELECTED.getBoolean()) {
+                            if (Setting.GUI_CLOSE_AFTER_GROUP_SELECTED.getBoolean()) {
                                 pplayer.getPlayer().closeInventory();
                             }
                         }
@@ -80,41 +90,41 @@ public class GuiInventoryManageGroups extends GuiInventory {
             if (index > maxIndex) break; // Overflowed the available space
         }
 
-        boolean hasReachedMax = PermissionManager.hasPlayerReachedMaxGroups(pplayer);
+        boolean hasReachedMax = PlayerParticles.getInstance().getManager(PermissionManager.class).hasPlayerReachedMaxGroups(pplayer);
         boolean hasParticles = !pplayer.getActiveParticles().isEmpty();
         String[] lore;
         if (hasReachedMax) {
             lore = new String[]{
-                    LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SAVE_GROUP_DESCRIPTION),
-                    LangManager.getText(Lang.GUI_COLOR_UNAVAILABLE) + LangManager.getText(Lang.GUI_SAVE_GROUP_FULL)
+                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-save-group-description"),
+                    localeManager.getLocaleMessage("gui-color-unavailable") + localeManager.getLocaleMessage("gui-save-group-full")
             };
         } else if (!hasParticles) {
             lore = new String[]{
-                    LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SAVE_GROUP_DESCRIPTION),
-                    LangManager.getText(Lang.GUI_COLOR_UNAVAILABLE) + LangManager.getText(Lang.GUI_SAVE_GROUP_NO_PARTICLES)
+                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-save-group-description"),
+                    localeManager.getLocaleMessage("gui-color-unavailable") + localeManager.getLocaleMessage("gui-save-group-no-particles")
             };
         } else {
-            lore = new String[]{LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_SAVE_GROUP_DESCRIPTION)};
+            lore = new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-save-group-description")};
         }
 
         // Save Group Button
         GuiActionButton saveGroupButton = new GuiActionButton(
                 40,
                 GuiIcon.CREATE.get(),
-                LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_SAVE_GROUP),
+                localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("gui-save-group"),
                 lore,
                 (button, isShiftClick) -> {
                     if (hasReachedMax || !hasParticles) return;
 
                     PlayerChatHook.addHook(new PlayerChatHookData(pplayer.getUniqueId(), 15, (textEntered) -> {
                         if (textEntered == null || textEntered.equalsIgnoreCase("cancel")) {
-                            GuiHandler.transition(new GuiInventoryManageGroups(pplayer));
+                            guiManager.transition(new GuiInventoryManageGroups(pplayer));
                         } else {
                             String groupName = textEntered.split(" ")[0];
 
                             // Check that the groupName isn't the reserved name
                             if (groupName.equalsIgnoreCase(ParticleGroup.DEFAULT_NAME)) {
-                                LangManager.sendMessage(pplayer, Lang.GROUP_RESERVED);
+                                localeManager.sendMessage(pplayer, "group-reserved");
                                 return;
                             }
 
@@ -136,14 +146,14 @@ public class GuiInventoryManageGroups extends GuiInventory {
                             }
 
                             // Apply changes and notify player
-                            DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+                            dataManager.saveParticleGroup(pplayer.getUniqueId(), group);
                             if (groupUpdated) {
-                                LangManager.sendMessage(pplayer, Lang.GROUP_SAVE_SUCCESS_OVERWRITE, groupName);
+                                localeManager.sendMessage(pplayer, "group-save-success-overwrite", StringPlaceholders.single("name", groupName));
                             } else {
-                                LangManager.sendMessage(pplayer, Lang.GROUP_SAVE_SUCCESS, groupName);
+                                localeManager.sendMessage(pplayer, "group-save-success", StringPlaceholders.single("name", groupName));
                             }
 
-                            GuiHandler.transition(new GuiInventoryManageGroups(pplayer));
+                            guiManager.transition(new GuiInventoryManageGroups(pplayer));
                         }
                     }));
                     pplayer.getPlayer().closeInventory();
@@ -154,9 +164,9 @@ public class GuiInventoryManageGroups extends GuiInventory {
         GuiActionButton backButton = new GuiActionButton(
                 INVENTORY_SIZE - 1,
                 GuiIcon.BACK.get(),
-                LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_BACK_BUTTON),
+                localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-back-button"),
                 new String[]{},
-                (button, isShiftClick) -> GuiHandler.transition(new GuiInventoryDefault(pplayer)));
+                (button, isShiftClick) -> guiManager.transition(new GuiInventoryDefault(pplayer)));
         this.actionButtons.add(backButton);
 
         this.populate();

@@ -1,5 +1,9 @@
 package dev.esophose.playerparticles.particles;
 
+import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import dev.esophose.playerparticles.manager.ParticleManager;
+import dev.esophose.playerparticles.util.NMSUtil;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -8,11 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import dev.esophose.playerparticles.util.NMSUtil;
-import dev.esophose.playerparticles.manager.ParticleManager;
-import dev.esophose.playerparticles.manager.SettingManager.PSetting;
-import dev.esophose.playerparticles.styles.api.PParticle;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -20,7 +19,6 @@ import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
-
 import org.bukkit.metadata.MetadataValue;
 
 @SuppressWarnings("deprecation")
@@ -43,6 +41,7 @@ public enum ParticleEffect {
     DAMAGE_INDICATOR("DAMAGE_INDICATOR", "DAMAGE_INDICATOR"),
     DOLPHIN("DOLPHIN", null),
     DRAGON_BREATH("DRAGON_BREATH", "DRAGON_BREATH"),
+    DRIPPING_HONEY("DRIPPING_HONEY", null),
     DRIPPING_LAVA("DRIP_LAVA", "DRIP_LAVA"),
     DRIPPING_WATER("DRIP_WATER", "DRIP_WATER"),
     DUST("REDSTONE", "REDSTONE", ParticleProperty.COLORABLE),
@@ -329,9 +328,9 @@ public enum ParticleEffect {
      */
     private List<Player> getPlayersInRange(Location center, boolean isFixedEffect, Player owner) {
         List<Player> players = new ArrayList<>();
-        int range = !isFixedEffect ? PSetting.PARTICLE_RENDER_RANGE_PLAYER.getInt() : PSetting.PARTICLE_RENDER_RANGE_FIXED_EFFECT.getInt();
+        int range = !isFixedEffect ? Setting.PARTICLE_RENDER_RANGE_PLAYER.getInt() : Setting.PARTICLE_RENDER_RANGE_FIXED_EFFECT.getInt();
 
-        for (PPlayer pplayer : ParticleManager.getPPlayers()) {
+        for (PPlayer pplayer : PlayerParticles.getInstance().getManager(ParticleManager.class).getPPlayers()) {
             Player p = pplayer.getPlayer();
             if (!isFixedEffect && !this.canSee(p, owner))
                 continue;

@@ -1,13 +1,10 @@
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.particles.PParticle;
 import java.util.ArrayList;
 import java.util.List;
-
-import dev.esophose.playerparticles.styles.api.PParticle;
 import org.bukkit.Location;
-
-import dev.esophose.playerparticles.particles.ParticlePair;
-import dev.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class ParticleStyleQuadhelix implements ParticleStyle {
 
@@ -32,7 +29,7 @@ public class ParticleStyleQuadhelix implements ParticleStyle {
     }
 
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
-        List<PParticle> particles = new ArrayList<PParticle>();
+        List<PParticle> particles = new ArrayList<>();
         for (int i = 0; i < orbs; i++) {
             int step = (stepX + (maxStepX / orbs) * i) % maxStepX;
             double dx = cos[step] * ((60 - Math.abs(stepY)) / (double)maxStepY);

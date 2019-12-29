@@ -1,52 +1,57 @@
 package dev.esophose.playerparticles.command;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.util.StringUtil;
-
-import dev.esophose.playerparticles.manager.LangManager;
-import dev.esophose.playerparticles.manager.LangManager.Lang;
+import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
+import dev.esophose.playerparticles.util.StringPlaceholders;
+import java.util.ArrayList;
+import java.util.List;
+import org.bukkit.util.StringUtil;
 
 public class DataCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
+        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
+
         if (args.length > 0) {
             ParticleEffect effect = ParticleEffect.fromName(args[0]);
             if (effect == null) {
-                LangManager.sendMessage(pplayer, Lang.EFFECT_INVALID, args[0]);
+                localeManager.sendMessage(pplayer, "effect-invalid", StringPlaceholders.single("effect", args[0]));
                 return;
             }
 
             if (effect.hasProperty(ParticleProperty.COLORABLE)) {
                 if (effect == ParticleEffect.NOTE) {
-                    LangManager.sendMessage(pplayer, Lang.DATA_USAGE_NOTE, effect.getName());
+                    localeManager.sendMessage(pplayer, "data-usage-note", StringPlaceholders.single("effect", effect.getName()));
                 } else {
-                    LangManager.sendMessage(pplayer, Lang.DATA_USAGE_COLOR, effect.getName());
+                    localeManager.sendMessage(pplayer, "data-usage-color", StringPlaceholders.single("effect", effect.getName()));
                 }
             } else if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
                 if (effect == ParticleEffect.ITEM) {
-                    LangManager.sendMessage(pplayer, Lang.DATA_USAGE_ITEM, effect.getName());
+                    localeManager.sendMessage(pplayer, "data-usage-item", StringPlaceholders.single("effect", effect.getName()));
                 } else {
-                    LangManager.sendMessage(pplayer, Lang.DATA_USAGE_BLOCK, effect.getName());
+                    localeManager.sendMessage(pplayer, "data-usage-block", StringPlaceholders.single("effect", effect.getName()));
                 }
             } else {
-                LangManager.sendMessage(pplayer, Lang.DATA_USAGE_NONE, effect.getName());
+                localeManager.sendMessage(pplayer, "data-usage-none", StringPlaceholders.single("effect", effect.getName()));
             }
         } else {
-            LangManager.sendMessage(pplayer, Lang.DATA_NO_ARGS);
+            localeManager.sendMessage(pplayer, "data-no-args");
         }
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
+        PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
         List<String> matches = new ArrayList<>();
         if (args.length <= 1) {
-            if (args.length == 0) matches = PermissionManager.getEffectNamesUserHasPermissionFor(pplayer.getPlayer());
-            else StringUtil.copyPartialMatches(args[0], PermissionManager.getEffectNamesUserHasPermissionFor(pplayer.getPlayer()), matches);
+            if (args.length == 0) {
+                matches = permissionManager.getEffectNamesUserHasPermissionFor(pplayer.getPlayer());
+            } else {
+                StringUtil.copyPartialMatches(args[0], permissionManager.getEffectNamesUserHasPermissionFor(pplayer.getPlayer()), matches);
+            }
         }
         return matches;
     }
@@ -55,8 +60,8 @@ public class DataCommandModule implements CommandModule {
         return "data";
     }
 
-    public Lang getDescription() {
-        return Lang.COMMAND_DESCRIPTION_DATA;
+    public String getDescriptionKey() {
+        return "command-description-data";
     }
 
     public String getArguments() {

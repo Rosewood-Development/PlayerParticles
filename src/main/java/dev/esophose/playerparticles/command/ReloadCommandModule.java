@@ -1,23 +1,22 @@
 package dev.esophose.playerparticles.command;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import dev.esophose.playerparticles.PlayerParticles;
-import dev.esophose.playerparticles.manager.LangManager;
-import dev.esophose.playerparticles.manager.LangManager.Lang;
+import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.particles.PPlayer;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReloadCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
-        if (PermissionManager.canReloadPlugin(pplayer.getMessageDestination())) {
-            PlayerParticles.getPlugin().reload(false);
-            LangManager.sendMessage(pplayer, Lang.RELOAD_SUCCESS);
-            PlayerParticles.getPlugin().getLogger().info("Reloaded configuration.");
+        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
+        if (PlayerParticles.getInstance().getManager(PermissionManager.class).canReloadPlugin(pplayer.getMessageDestination())) {
+            PlayerParticles.getInstance().reload();
+            localeManager.sendMessage(pplayer, "reload-success");
+            PlayerParticles.getInstance().getLogger().info("Reloaded configuration.");
         } else {
-            LangManager.sendMessage(pplayer, Lang.RELOAD_NO_PERMISSION);
+            localeManager.sendMessage(pplayer, "reload-no-permission");
         }
     }
 
@@ -29,8 +28,8 @@ public class ReloadCommandModule implements CommandModule {
         return "reload";
     }
 
-    public Lang getDescription() {
-        return Lang.COMMAND_DESCRIPTION_RELOAD;
+    public String getDescriptionKey() {
+        return "command-description-reload";
     }
 
     public String getArguments() {

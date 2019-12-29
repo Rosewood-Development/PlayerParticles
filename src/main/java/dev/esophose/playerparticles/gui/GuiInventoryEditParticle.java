@@ -1,32 +1,42 @@
 package dev.esophose.playerparticles.gui;
 
+import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.manager.ConfigurationManager.GuiIcon;
 import dev.esophose.playerparticles.manager.DataManager;
-import dev.esophose.playerparticles.manager.LangManager;
-import dev.esophose.playerparticles.manager.LangManager.Lang;
-import dev.esophose.playerparticles.manager.SettingManager.GuiIcon;
+import dev.esophose.playerparticles.manager.GuiManager;
+import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
 import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.particles.ParticlePair;
-import org.bukkit.Bukkit;
-
+import dev.esophose.playerparticles.util.StringPlaceholders;
 import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.Bukkit;
 
 public class GuiInventoryEditParticle extends GuiInventory {
 
     public GuiInventoryEditParticle(PPlayer pplayer, ParticlePair editingParticle) {
-        super(pplayer, Bukkit.createInventory(pplayer.getPlayer(), INVENTORY_SIZE, LangManager.getText(Lang.GUI_EDITING_PARTICLE, editingParticle.getId())));
+        super(pplayer, Bukkit.createInventory(pplayer.getPlayer(), INVENTORY_SIZE, PlayerParticles.getInstance().getManager(LocaleManager.class).getLocaleMessage("gui-editing-particle", StringPlaceholders.single("id", editingParticle.getId()))));
+
+        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
+        DataManager dataManager = PlayerParticles.getInstance().getManager(DataManager.class);
+        GuiManager guiManager = PlayerParticles.getInstance().getManager(GuiManager.class);
 
         this.fillBorder(BorderColor.RED);
 
         // Particle Info Icon
-        String particleInfo = LangManager.getText(Lang.GUI_PARTICLE_INFO, editingParticle.getId(), editingParticle.getEffect().getName(), editingParticle.getStyle().getName(), editingParticle.getDataString());
+        StringPlaceholders stringPlaceholders = StringPlaceholders.builder("id", editingParticle.getId())
+                .addPlaceholder("effect", editingParticle.getEffect().getName())
+                .addPlaceholder("style", editingParticle.getStyle().getName())
+                .addPlaceholder("data", editingParticle.getDataString())
+                .build();
+        String particleInfo = localeManager.getLocaleMessage("gui-particle-info", stringPlaceholders);
         GuiActionButton particleInfoIcon = new GuiActionButton(
                 13,
                 GuiIcon.PARTICLES.get(),
-                LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_PARTICLE_NAME, editingParticle.getId()),
-                new String[]{LangManager.getText(Lang.GUI_COLOR_INFO) + particleInfo},
+                localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("gui-particle-name", StringPlaceholders.single("id", editingParticle.getId())),
+                new String[]{localeManager.getLocaleMessage("gui-color-info") + particleInfo},
                 (button, isShiftClick) -> { });
         this.actionButtons.add(particleInfoIcon);
 
@@ -34,12 +44,12 @@ public class GuiInventoryEditParticle extends GuiInventory {
         GuiActionButton editEffectButton = new GuiActionButton(
                 38,
                 GuiIcon.EDIT_EFFECT.get(),
-                LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_EDIT_EFFECT),
-                new String[]{LangManager.getText(Lang.GUI_COLOR_SUBTEXT) + LangManager.getText(Lang.GUI_EDIT_EFFECT_DESCRIPTION)},
+                localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("gui-edit-effect"),
+                new String[]{localeManager.getLocaleMessage("gui-color-subtext") + localeManager.getLocaleMessage("gui-edit-effect-description")},
                 (button, isShiftClick) -> {
-                    List<GuiInventoryEditFinishedCallback> callbacks = new ArrayList<>();
-                    callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditParticle(pplayer, editingParticle)));
-                    callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditEffect(pplayer, editingParticle, 1, callbacks, 1)));
+                    List<Runnable> callbacks = new ArrayList<>();
+                    callbacks.add(() -> guiManager.transition(new GuiInventoryEditParticle(pplayer, editingParticle)));
+                    callbacks.add(() -> guiManager.transition(new GuiInventoryEditEffect(pplayer, editingParticle, 1, callbacks, 1)));
                     callbacks.add(() -> {
                         ParticleGroup group = pplayer.getActiveParticleGroup();
                         for (ParticlePair particle : group.getParticles()) {
@@ -48,24 +58,24 @@ public class GuiInventoryEditParticle extends GuiInventory {
                                 break;
                             }
                         }
-                        DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+                        dataManager.saveParticleGroup(pplayer.getUniqueId(), group);
 
-                        GuiHandler.transition(new GuiInventoryEditParticle(pplayer, editingParticle));
+                        guiManager.transition(new GuiInventoryEditParticle(pplayer, editingParticle));
                     });
 
-                    callbacks.get(1).execute();
+                    callbacks.get(1).run();
                 });
         this.actionButtons.add(editEffectButton);
 
         // Edit Style Button
         GuiActionButton editStyleButton = new GuiActionButton(40,
                 GuiIcon.EDIT_STYLE.get(),
-                LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_EDIT_STYLE),
-                new String[]{LangManager.getText(Lang.GUI_COLOR_SUBTEXT) + LangManager.getText(Lang.GUI_EDIT_STYLE_DESCRIPTION)},
+                localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("gui-edit-style"),
+                new String[]{localeManager.getLocaleMessage("gui-color-subtext") + localeManager.getLocaleMessage("gui-edit-style-description")},
                 (button, isShiftClick) -> {
-                    List<GuiInventoryEditFinishedCallback> callbacks = new ArrayList<>();
-                    callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditParticle(pplayer, editingParticle)));
-                    callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditStyle(pplayer, editingParticle, 1, callbacks, 1)));
+                    List<Runnable> callbacks = new ArrayList<>();
+                    callbacks.add(() -> guiManager.transition(new GuiInventoryEditParticle(pplayer, editingParticle)));
+                    callbacks.add(() -> guiManager.transition(new GuiInventoryEditStyle(pplayer, editingParticle, 1, callbacks, 1)));
                     callbacks.add(() -> {
                         ParticleGroup group = pplayer.getActiveParticleGroup();
                         for (ParticlePair particle : group.getParticles()) {
@@ -74,12 +84,12 @@ public class GuiInventoryEditParticle extends GuiInventory {
                                 break;
                             }
                         }
-                        DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+                        dataManager.saveParticleGroup(pplayer.getUniqueId(), group);
 
-                        GuiHandler.transition(new GuiInventoryEditParticle(pplayer, editingParticle));
+                        guiManager.transition(new GuiInventoryEditParticle(pplayer, editingParticle));
                     });
 
-                    callbacks.get(1).execute();
+                    callbacks.get(1).run();
                 });
         this.actionButtons.add(editStyleButton);
 
@@ -87,14 +97,14 @@ public class GuiInventoryEditParticle extends GuiInventory {
         boolean usesData = editingParticle.getEffect().hasProperty(ParticleProperty.COLORABLE) || editingParticle.getEffect().hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA);
         GuiActionButton editDataButton = new GuiActionButton(42,
                 GuiIcon.EDIT_DATA.get(),
-                LangManager.getText(Lang.GUI_COLOR_ICON_NAME) + LangManager.getText(Lang.GUI_EDIT_DATA),
-                usesData ? new String[]{LangManager.getText(Lang.GUI_COLOR_SUBTEXT) + LangManager.getText(Lang.GUI_EDIT_DATA_DESCRIPTION)} :
-                        new String[]{LangManager.getText(Lang.GUI_COLOR_UNAVAILABLE) + LangManager.getText(Lang.GUI_EDIT_DATA_UNAVAILABLE)},
+                localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("gui-edit-data"),
+                usesData ? new String[]{localeManager.getLocaleMessage("gui-color-subtext") + localeManager.getLocaleMessage("gui-edit-data-description")} :
+                        new String[]{localeManager.getLocaleMessage("gui-color-unavailable") + localeManager.getLocaleMessage("gui-edit-data-unavailable")},
                 (button, isShiftClick) -> {
                     if (usesData) {
-                        List<GuiInventoryEditFinishedCallback> callbacks = new ArrayList<>();
-                        callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditParticle(pplayer, editingParticle)));
-                        callbacks.add(() -> GuiHandler.transition(new GuiInventoryEditData(pplayer, editingParticle, 1, callbacks, 1)));
+                        List<Runnable> callbacks = new ArrayList<>();
+                        callbacks.add(() -> guiManager.transition(new GuiInventoryEditParticle(pplayer, editingParticle)));
+                        callbacks.add(() -> guiManager.transition(new GuiInventoryEditData(pplayer, editingParticle, 1, callbacks, 1)));
                         callbacks.add(() -> {
                             ParticleGroup group = pplayer.getActiveParticleGroup();
                             for (ParticlePair particle : group.getParticles()) {
@@ -106,12 +116,12 @@ public class GuiInventoryEditParticle extends GuiInventory {
                                     break;
                                 }
                             }
-                            DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+                            dataManager.saveParticleGroup(pplayer.getUniqueId(), group);
 
-                            GuiHandler.transition(new GuiInventoryEditParticle(pplayer, editingParticle));
+                            guiManager.transition(new GuiInventoryEditParticle(pplayer, editingParticle));
                         });
 
-                        callbacks.get(1).execute();
+                        callbacks.get(1).run();
                     }
                 });
         this.actionButtons.add(editDataButton);
@@ -120,9 +130,9 @@ public class GuiInventoryEditParticle extends GuiInventory {
         GuiActionButton backButton = new GuiActionButton(
                 INVENTORY_SIZE - 1,
                 GuiIcon.BACK.get(),
-                LangManager.getText(Lang.GUI_COLOR_INFO) + LangManager.getText(Lang.GUI_BACK_BUTTON),
+                localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-back-button"),
                 new String[]{},
-                (button, isShiftClick) -> GuiHandler.transition(new GuiInventoryManageParticles(pplayer)));
+                (button, isShiftClick) -> guiManager.transition(new GuiInventoryManageParticles(pplayer)));
         this.actionButtons.add(backButton);
 
         this.populate();

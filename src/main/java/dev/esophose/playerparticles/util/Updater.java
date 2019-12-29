@@ -1,5 +1,8 @@
-package dev.esophose.playerparticles.updater;
+package dev.esophose.playerparticles.util;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -14,13 +17,9 @@ import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 
 /**
  * Check for updates on BukkitDev for a given plugin, and download the updates
@@ -690,19 +689,21 @@ public class Updater {
             final BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             final String response = reader.readLine();
 
-            final JSONArray array = (JSONArray) JSONValue.parse(response);
+            JsonParser parser = new JsonParser();
 
-            if (array.isEmpty()) {
+            final JsonArray array = parser.parse(response).getAsJsonArray();
+
+            if (array.size() == 0) {
                 this.plugin.getLogger().warning("The updater could not find any files for the project id " + this.id);
                 this.result = UpdateResult.FAIL_BADID;
                 return false;
             }
 
-            JSONObject latestUpdate = (JSONObject) array.get(array.size() - 1);
-            this.versionName = (String) latestUpdate.get(Updater.TITLE_VALUE);
-            this.versionLink = (String) latestUpdate.get(Updater.LINK_VALUE);
-            this.versionType = (String) latestUpdate.get(Updater.TYPE_VALUE);
-            this.versionGameVersion = (String) latestUpdate.get(Updater.VERSION_VALUE);
+            JsonObject latestUpdate = array.get(array.size() - 1).getAsJsonObject();
+            this.versionName = latestUpdate.get(Updater.TITLE_VALUE).getAsString();
+            this.versionLink = latestUpdate.get(Updater.LINK_VALUE).getAsString();
+            this.versionType = latestUpdate.get(Updater.TYPE_VALUE).getAsString();
+            this.versionGameVersion = latestUpdate.get(Updater.VERSION_VALUE).getAsString();
 
             return true;
         } catch (final IOException e) {

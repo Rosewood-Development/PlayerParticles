@@ -1,21 +1,20 @@
 package dev.esophose.playerparticles.command;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.entity.Player;
-
-import dev.esophose.playerparticles.manager.LangManager;
-import dev.esophose.playerparticles.manager.LangManager.Lang;
+import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.particles.PPlayer;
+import dev.esophose.playerparticles.util.StringPlaceholders;
+import java.util.ArrayList;
+import java.util.List;
+import org.bukkit.entity.Player;
 
 public class StylesCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         Player p = pplayer.getPlayer();
 
-        List<String> styleNames = PermissionManager.getStyleNamesUserHasPermissionFor(p);
+        List<String> styleNames = PlayerParticles.getInstance().getManager(PermissionManager.class).getStyleNamesUserHasPermissionFor(p);
         StringBuilder toSend = new StringBuilder();
         for (String name : styleNames) {
             toSend.append(name).append(", ");
@@ -25,7 +24,7 @@ public class StylesCommandModule implements CommandModule {
             toSend = new StringBuilder(toSend.substring(0, toSend.length() - 2));
         }
 
-        LangManager.sendMessage(pplayer, Lang.STYLE_LIST, toSend.toString());
+        PlayerParticles.getInstance().getManager(LocaleManager.class).sendMessage(pplayer, "style-list", StringPlaceholders.single("styles", toSend.toString()));
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
@@ -36,8 +35,8 @@ public class StylesCommandModule implements CommandModule {
         return "styles";
     }
 
-    public Lang getDescription() {
-        return Lang.COMMAND_DESCRIPTION_STYLES;
+    public String getDescriptionKey() {
+        return "command-description-styles";
     }
 
     public String getArguments() {

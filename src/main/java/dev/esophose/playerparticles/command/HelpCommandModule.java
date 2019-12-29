@@ -1,21 +1,23 @@
 package dev.esophose.playerparticles.command;
 
+import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.manager.CommandManager;
+import dev.esophose.playerparticles.manager.LocaleManager;
+import dev.esophose.playerparticles.particles.PPlayer;
 import java.util.ArrayList;
 import java.util.List;
-
-import dev.esophose.playerparticles.manager.LangManager;
-import dev.esophose.playerparticles.manager.LangManager.Lang;
-import dev.esophose.playerparticles.particles.PPlayer;
 
 public class HelpCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
-        LangManager.sendMessage(pplayer, Lang.COMMAND_DESCRIPTIONS);
-        List<CommandModule> cmds = ParticleCommandHandler.getCommands();
+        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
+
+        localeManager.sendMessage(pplayer, "command-descriptions");
+        List<CommandModule> cmds = PlayerParticles.getInstance().getManager(CommandManager.class).getCommands();
         for (CommandModule cmd : cmds)
             if (!(cmd instanceof DefaultCommandModule))
                 CommandModule.printUsageWithDescription(pplayer, cmd);
-        LangManager.sendSimpleMessage(pplayer, Lang.COMMAND_DESCRIPTIONS_HELP_OTHER);
+        localeManager.sendSimpleMessage(pplayer, "command-descriptions-help-other");
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
@@ -26,8 +28,8 @@ public class HelpCommandModule implements CommandModule {
         return "help";
     }
 
-    public Lang getDescription() {
-        return Lang.COMMAND_DESCRIPTION_HELP;
+    public String getDescriptionKey() {
+        return "command-description-help";
     }
 
     public String getArguments() {

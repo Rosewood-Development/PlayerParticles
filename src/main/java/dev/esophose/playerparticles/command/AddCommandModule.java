@@ -1,18 +1,9 @@
 package dev.esophose.playerparticles.command;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import dev.esophose.playerparticles.styles.api.ParticleStyle;
-import dev.esophose.playerparticles.styles.api.ParticleStyleManager;
-import dev.esophose.playerparticles.util.ParticleUtils;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.util.StringUtil;
-
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.DataManager;
-import dev.esophose.playerparticles.manager.LangManager;
-import dev.esophose.playerparticles.manager.LangManager.Lang;
+import dev.esophose.playerparticles.manager.LocaleManager;
+import dev.esophose.playerparticles.manager.ParticleStyleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
@@ -21,6 +12,14 @@ import dev.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
 import dev.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
 import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.styles.ParticleStyle;
+import dev.esophose.playerparticles.util.ParticleUtils;
+import dev.esophose.playerparticles.util.StringPlaceholders;
+import java.util.ArrayList;
+import java.util.List;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 
 public class AddCommandModule implements CommandModule {
 
@@ -29,28 +28,31 @@ public class AddCommandModule implements CommandModule {
             CommandModule.printUsage(pplayer, this);
             return;
         }
+
+        PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
+        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         
-        int maxParticlesAllowed = PermissionManager.getMaxParticlesAllowed(pplayer.getPlayer());
+        int maxParticlesAllowed = permissionManager.getMaxParticlesAllowed(pplayer.getPlayer());
         if (pplayer.getActiveParticles().size() >= maxParticlesAllowed) {
-            LangManager.sendMessage(pplayer, Lang.ADD_REACHED_MAX, maxParticlesAllowed);
+            localeManager.sendMessage(pplayer, "add-reached-max", StringPlaceholders.single("amount", maxParticlesAllowed));
             return;
         }
         
         ParticleEffect effect = ParticleEffect.fromName(args[0]);
         if (effect == null) {
-            LangManager.sendMessage(pplayer, Lang.EFFECT_INVALID, args[0]);
+            localeManager.sendMessage(pplayer, "effect-invalid", StringPlaceholders.single("effect", args[0]));
             return;
-        } else if (!PermissionManager.hasEffectPermission(pplayer.getPlayer(), effect)) {
-            LangManager.sendMessage(pplayer, Lang.EFFECT_NO_PERMISSION, effect.getName());
+        } else if (!permissionManager.hasEffectPermission(pplayer.getPlayer(), effect)) {
+            localeManager.sendMessage(pplayer, "effect-no-permission", StringPlaceholders.single("effect", effect.getName()));
             return;
         }
 
         ParticleStyle style = ParticleStyle.fromName(args[1]);
         if (style == null) {
-            LangManager.sendMessage(pplayer, Lang.STYLE_INVALID, args[1]);
+            localeManager.sendMessage(pplayer, "style-invalid", StringPlaceholders.single("style", args[1]));
             return;
-        } else if (!PermissionManager.hasStylePermission(pplayer.getPlayer(), style)) {
-            LangManager.sendMessage(pplayer, Lang.STYLE_NO_PERMISSION, args[1]);
+        } else if (!permissionManager.hasStylePermission(pplayer.getPlayer(), style)) {
+            localeManager.sendMessage(pplayer, "style-no-permission", StringPlaceholders.single("style", args[1]));
             return;
         }
 
@@ -71,12 +73,12 @@ public class AddCommandModule implements CommandModule {
                         try {
                             note = Integer.parseInt(args[2]);
                         } catch (Exception e) {
-                            LangManager.sendMessage(pplayer, Lang.DATA_INVALID_NOTE);
+                            localeManager.sendMessage(pplayer, "data-invalid-note");
                             return;
                         }
 
                         if (note < 0 || note > 24) {
-                            LangManager.sendMessage(pplayer, Lang.DATA_INVALID_NOTE);
+                            localeManager.sendMessage(pplayer, "data-invalid-note");
                             return;
                         }
 
@@ -95,12 +97,12 @@ public class AddCommandModule implements CommandModule {
                             g = Integer.parseInt(args[3]);
                             b = Integer.parseInt(args[4]);
                         } catch (Exception e) {
-                            LangManager.sendMessage(pplayer, Lang.DATA_INVALID_COLOR);
+                            localeManager.sendMessage(pplayer, "data-invalid-color");
                             return;
                         }
 
                         if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
-                            LangManager.sendMessage(pplayer, Lang.DATA_INVALID_COLOR);
+                            localeManager.sendMessage(pplayer, "data-invalid-color");
                             return;
                         }
 
@@ -113,7 +115,7 @@ public class AddCommandModule implements CommandModule {
                         blockData = ParticleUtils.closestMatch(args[2]);
                         if (blockData == null || !blockData.isBlock()) throw new Exception();
                     } catch (Exception e) {
-                        LangManager.sendMessage(pplayer, Lang.DATA_INVALID_BLOCK);
+                        localeManager.sendMessage(pplayer, "data-invalid-block");
                         return;
                     }
                 } else if (effect == ParticleEffect.ITEM) {
@@ -121,7 +123,7 @@ public class AddCommandModule implements CommandModule {
                         itemData = ParticleUtils.closestMatch(args[2]);
                         if (itemData == null || itemData.isBlock()) throw new Exception();
                     } catch (Exception e) {
-                        LangManager.sendMessage(pplayer, Lang.DATA_INVALID_ITEM);
+                        localeManager.sendMessage(pplayer, "data-invalid-item");
                         return;
                     }
                 }
@@ -131,24 +133,28 @@ public class AddCommandModule implements CommandModule {
         ParticleGroup group = pplayer.getActiveParticleGroup();
         ParticlePair newParticle = new ParticlePair(pplayer.getUniqueId(), pplayer.getNextActiveParticleId(), effect, style, itemData, blockData, colorData, noteColorData);
         group.getParticles().add(newParticle);
-        DataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+        PlayerParticles.getInstance().getManager(DataManager.class).saveParticleGroup(pplayer.getUniqueId(), group);
+
+        StringPlaceholders addParticlePlaceholders = StringPlaceholders.builder("effect", newParticle.getEffect().getName())
+                .addPlaceholder("style", newParticle.getStyle().getName())
+                .addPlaceholder("data", newParticle.getDataString()).build();
+        localeManager.sendMessage(pplayer, "add-particle-applied", addParticlePlaceholders);
         
-        LangManager.sendMessage(pplayer, Lang.ADD_PARTICLE_APPLIED, newParticle.getEffect().getName(), newParticle.getStyle().getName(), newParticle.getDataString());
-        
-        if (ParticleStyleManager.isCustomHandled(newParticle.getStyle())) {
-            LangManager.sendMessage(pplayer, Lang.STYLE_EVENT_SPAWNING_INFO, newParticle.getStyle().getName());
+        if (PlayerParticles.getInstance().getManager(ParticleStyleManager.class).isCustomHandled(newParticle.getStyle())) {
+            localeManager.sendMessage(pplayer, "style-event-spawning-info", StringPlaceholders.single("style", newParticle.getStyle().getName()));
         }
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
         Player p = pplayer.getPlayer();
         List<String> matches = new ArrayList<>();
+        PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
 
         if (args.length <= 1) { // Effect name
-            if (args.length == 0) matches = PermissionManager.getEffectNamesUserHasPermissionFor(p);
-            else StringUtil.copyPartialMatches(args[0], PermissionManager.getEffectNamesUserHasPermissionFor(p), matches);
+            if (args.length == 0) matches = permissionManager.getEffectNamesUserHasPermissionFor(p);
+            else StringUtil.copyPartialMatches(args[0], permissionManager.getEffectNamesUserHasPermissionFor(p), matches);
         } else if (args.length == 2) { // Style name
-            StringUtil.copyPartialMatches(args[1], PermissionManager.getStyleNamesUserHasPermissionFor(p), matches);
+            StringUtil.copyPartialMatches(args[1], permissionManager.getStyleNamesUserHasPermissionFor(p), matches);
         } else { // Data
             ParticleEffect effect = ParticleEffect.fromName(args[0]);
             if (effect != null) {
@@ -191,8 +197,8 @@ public class AddCommandModule implements CommandModule {
         return "add";
     }
 
-    public Lang getDescription() {
-        return Lang.COMMAND_DESCRIPTION_ADD;
+    public String getDescriptionKey() {
+        return "command-description-add";
     }
 
     public String getArguments() {

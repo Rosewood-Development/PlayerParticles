@@ -1,8 +1,12 @@
 package dev.esophose.playerparticles.gui;
 
+import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import dev.esophose.playerparticles.particles.PPlayer;
+import dev.esophose.playerparticles.util.ParticleUtils;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.UUID;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -13,12 +17,8 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import dev.esophose.playerparticles.manager.SettingManager.PSetting;
-import dev.esophose.playerparticles.particles.PPlayer;
-import dev.esophose.playerparticles.util.ParticleUtils;
-
 public abstract class GuiInventory implements InventoryHolder {
-    
+
     protected enum BorderColor {
         WHITE(0, "WHITE_STAINED_GLASS_PANE"),
         ORANGE(1, "ORANGE_STAINED_GLASS_PANE"),
@@ -124,7 +124,7 @@ public abstract class GuiInventory implements InventoryHolder {
      */
     protected void populate() {
         for (GuiActionButton button : this.actionButtons) {
-            this.inventory.setItem(button.getSlot(), button.getIcon());
+            this.inventory.setItem(button.getSlot(), button.getIcon(this.pplayer));
         }
     }
     
@@ -135,7 +135,7 @@ public abstract class GuiInventory implements InventoryHolder {
         for (GuiActionButton button : this.actionButtons) {
             if (button.isTickable()) {
                 button.onTick();
-                this.inventory.setItem(button.getSlot(), button.getIcon());
+                this.inventory.setItem(button.getSlot(), button.getIcon(this.pplayer));
             }
         }
     }
@@ -154,18 +154,13 @@ public abstract class GuiInventory implements InventoryHolder {
         for (GuiActionButton button : this.actionButtons) {
             if (button.getSlot() == slot) {
                 button.handleClick(isShiftClick);
-                if (PSetting.GUI_BUTTON_SOUND.getBoolean() && event.getWhoClicked() instanceof Player) {
+                if (Setting.GUI_BUTTON_SOUND.getBoolean() && event.getWhoClicked() instanceof Player) {
                     Player player = (Player) event.getWhoClicked();
                     player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1);
                 }
                 break;
             }
         }
-    }
-    
-    @FunctionalInterface
-    public interface GuiInventoryEditFinishedCallback {
-        void execute();
     }
 
 }

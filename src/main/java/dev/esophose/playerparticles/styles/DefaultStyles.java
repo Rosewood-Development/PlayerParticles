@@ -1,13 +1,10 @@
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.manager.ParticleStyleManager;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
-
-import dev.esophose.playerparticles.PlayerParticles;
-import dev.esophose.playerparticles.styles.api.ParticleStyle;
-import dev.esophose.playerparticles.styles.api.ParticleStyleManager;
 
 public class DefaultStyles {
 
@@ -51,49 +48,49 @@ public class DefaultStyles {
      * Registers all the default styles to the ParticleStyleManager
      * Registered in alphabetical order
      */
-    public static void registerStyles() {
-        ParticleStyleManager.registerStyle(ARROWS);
-        ParticleStyleManager.registerStyle(BATMAN);
-        ParticleStyleManager.registerStyle(BEAM);
-        ParticleStyleManager.registerCustomHandledStyle(BLOCKBREAK);
-        ParticleStyleManager.registerCustomHandledStyle(BLOCKPLACE);
-        ParticleStyleManager.registerStyle(CELEBRATION);
-        ParticleStyleManager.registerStyle(CHAINS);
-        ParticleStyleManager.registerStyle(COMPANION);
-        ParticleStyleManager.registerStyle(CUBE);
-        ParticleStyleManager.registerStyle(FEET);
-        ParticleStyleManager.registerStyle(HALO);
-        ParticleStyleManager.registerCustomHandledStyle(HURT);
-        ParticleStyleManager.registerStyle(INVOCATION);
-        ParticleStyleManager.registerCustomHandledStyle(MOVE);
-        ParticleStyleManager.registerStyle(NORMAL);
-        ParticleStyleManager.registerStyle(ORBIT);
-        ParticleStyleManager.registerStyle(OVERHEAD);
-        ParticleStyleManager.registerStyle(POINT);
-        ParticleStyleManager.registerStyle(POPPER);
-        ParticleStyleManager.registerStyle(PULSE);
-        ParticleStyleManager.registerStyle(QUADHELIX);
-        ParticleStyleManager.registerStyle(RINGS);
-        ParticleStyleManager.registerStyle(SPHERE);
-        ParticleStyleManager.registerStyle(SPIN);
-        ParticleStyleManager.registerStyle(SPIRAL);
-        ParticleStyleManager.registerCustomHandledStyle(SWORDS);
-        ParticleStyleManager.registerStyle(THICK);
-        ParticleStyleManager.registerStyle(TWINS);
-        ParticleStyleManager.registerStyle(VORTEX);
-        ParticleStyleManager.registerStyle(WHIRL);
-        ParticleStyleManager.registerStyle(WHIRLWIND);
-        ParticleStyleManager.registerStyle(WINGS);
+    public static void registerStyles(ParticleStyleManager particleStyleManager) {
+        particleStyleManager.registerStyle(ARROWS);
+        particleStyleManager.registerStyle(BATMAN);
+        particleStyleManager.registerStyle(BEAM);
+        particleStyleManager.registerCustomHandledStyle(BLOCKBREAK);
+        particleStyleManager.registerCustomHandledStyle(BLOCKPLACE);
+        particleStyleManager.registerStyle(CELEBRATION);
+        particleStyleManager.registerStyle(CHAINS);
+        particleStyleManager.registerStyle(COMPANION);
+        particleStyleManager.registerStyle(CUBE);
+        particleStyleManager.registerStyle(FEET);
+        particleStyleManager.registerStyle(HALO);
+        particleStyleManager.registerCustomHandledStyle(HURT);
+        particleStyleManager.registerStyle(INVOCATION);
+        particleStyleManager.registerCustomHandledStyle(MOVE);
+        particleStyleManager.registerStyle(NORMAL);
+        particleStyleManager.registerStyle(ORBIT);
+        particleStyleManager.registerStyle(OVERHEAD);
+        particleStyleManager.registerStyle(POINT);
+        particleStyleManager.registerStyle(POPPER);
+        particleStyleManager.registerStyle(PULSE);
+        particleStyleManager.registerStyle(QUADHELIX);
+        particleStyleManager.registerStyle(RINGS);
+        particleStyleManager.registerStyle(SPHERE);
+        particleStyleManager.registerStyle(SPIN);
+        particleStyleManager.registerStyle(SPIRAL);
+        particleStyleManager.registerCustomHandledStyle(SWORDS);
+        particleStyleManager.registerStyle(THICK);
+        particleStyleManager.registerStyle(TWINS);
+        particleStyleManager.registerStyle(VORTEX);
+        particleStyleManager.registerStyle(WHIRL);
+        particleStyleManager.registerStyle(WHIRLWIND);
+        particleStyleManager.registerStyle(WINGS);
 
         // Register their events
-        PluginManager manager = Bukkit.getPluginManager();
-        Plugin playerParticles = PlayerParticles.getPlugin();
-        manager.registerEvents((Listener) ARROWS, playerParticles);
-        manager.registerEvents((Listener) BLOCKBREAK, playerParticles);
-        manager.registerEvents((Listener) BLOCKPLACE, playerParticles);
-        manager.registerEvents((Listener) HURT, playerParticles);
-        manager.registerEvents((Listener) MOVE, playerParticles);
-        manager.registerEvents((Listener) SWORDS, playerParticles);
+        PluginManager pluginManager = Bukkit.getPluginManager();
+        PlayerParticles playerParticles = PlayerParticles.getInstance();
+        pluginManager.registerEvents((Listener) ARROWS, playerParticles);
+        pluginManager.registerEvents((Listener) BLOCKBREAK, playerParticles);
+        pluginManager.registerEvents((Listener) BLOCKPLACE, playerParticles);
+        pluginManager.registerEvents((Listener) HURT, playerParticles);
+        pluginManager.registerEvents((Listener) MOVE, playerParticles);
+        pluginManager.registerEvents((Listener) SWORDS, playerParticles);
     }
 
 }

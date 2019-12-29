@@ -1,10 +1,10 @@
 package dev.esophose.playerparticles.command;
 
-import java.util.List;
-
-import dev.esophose.playerparticles.manager.LangManager;
-import dev.esophose.playerparticles.manager.LangManager.Lang;
+import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.particles.PPlayer;
+import dev.esophose.playerparticles.util.StringPlaceholders;
+import java.util.List;
 
 public interface CommandModule {
 
@@ -33,11 +33,11 @@ public interface CommandModule {
     String getName();
 
     /**
-     * Gets the Lang description of this command
+     * Gets the locale description key of this command
      * 
-     * @return The description of this command
+     * @return The locale description key of this command
      */
-    Lang getDescription();
+    String getDescriptionKey();
 
     /**
      * Gets any arguments this command has
@@ -65,7 +65,8 @@ public interface CommandModule {
      * @param command The command to display usage for
      */
     static void printUsage(PPlayer pplayer, CommandModule command) {
-        LangManager.sendMessage(pplayer, Lang.COMMAND_DESCRIPTIONS_USAGE, command.getName(), command.getArguments());
+        StringPlaceholders placeholders = StringPlaceholders.builder("cmd", command.getName()).addPlaceholder("args", command.getArguments()).build();
+        PlayerParticles.getInstance().getManager(LocaleManager.class).sendMessage(pplayer, "command-descriptions-usage", placeholders);
     }
     
     /**
@@ -75,10 +76,18 @@ public interface CommandModule {
      * @param command The command to display usage for
      */
     static void printUsageWithDescription(PPlayer pplayer, CommandModule command) {
+        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         if (command.getArguments().length() == 0) {
-            LangManager.sendSimpleMessage(pplayer, Lang.COMMAND_DESCRIPTIONS_HELP_1, command.getName(), LangManager.getText(command.getDescription()));
+            StringPlaceholders placeholders = StringPlaceholders.builder("cmd", command.getName())
+                    .addPlaceholder("desc", localeManager.getLocaleMessage(command.getDescriptionKey()))
+                    .build();
+            localeManager.sendSimpleMessage(pplayer, "command-descriptions-help-1", placeholders);
         } else {
-            LangManager.sendSimpleMessage(pplayer, Lang.COMMAND_DESCRIPTIONS_HELP_2, command.getName(), command.getArguments(), LangManager.getText(command.getDescription()));
+            StringPlaceholders placeholders = StringPlaceholders.builder("cmd", command.getName())
+                    .addPlaceholder("args", command.getArguments())
+                    .addPlaceholder("desc", localeManager.getLocaleMessage(command.getDescriptionKey()))
+                    .build();
+            localeManager.sendSimpleMessage(pplayer, "command-descriptions-help-2", placeholders);
         }
     }
 

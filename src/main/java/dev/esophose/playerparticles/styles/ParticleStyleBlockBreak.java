@@ -1,8 +1,13 @@
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.manager.DataManager;
+import dev.esophose.playerparticles.manager.ParticleManager;
+import dev.esophose.playerparticles.particles.PPlayer;
+import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.particles.PParticle;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,17 +15,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
-import dev.esophose.playerparticles.manager.DataManager;
-import dev.esophose.playerparticles.manager.ParticleManager;
-import dev.esophose.playerparticles.particles.PPlayer;
-import dev.esophose.playerparticles.particles.ParticlePair;
-import dev.esophose.playerparticles.styles.api.PParticle;
-import dev.esophose.playerparticles.styles.api.ParticleStyle;
-
 public class ParticleStyleBlockBreak implements ParticleStyle, Listener {
 
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
-        List<PParticle> particles = new ArrayList<PParticle>();
+        List<PParticle> particles = new ArrayList<>();
         
         location.add(0.5, 0.5, 0.5); // Center around the block
 
@@ -52,12 +50,14 @@ public class ParticleStyleBlockBreak implements ParticleStyle, Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockBreak(BlockBreakEvent event) {
+        ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
+
         Player player = event.getPlayer();
-        PPlayer pplayer = DataManager.getPPlayer(player.getUniqueId());
+        PPlayer pplayer = PlayerParticles.getInstance().getManager(DataManager.class).getPPlayer(player.getUniqueId());
         if (pplayer != null) {
             for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.BLOCKBREAK)) {
                 Location loc = event.getBlock().getLocation().clone();
-                ParticleManager.displayParticles(particle, DefaultStyles.BLOCKBREAK.getParticles(particle, loc));
+                particleManager.displayParticles(particle, DefaultStyles.BLOCKBREAK.getParticles(particle, loc));
             }
         }
     }

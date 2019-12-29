@@ -1,13 +1,10 @@
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.particles.PParticle;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.bukkit.Location;
-
-import dev.esophose.playerparticles.particles.ParticlePair;
-import dev.esophose.playerparticles.styles.api.PParticle;
-import dev.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class ParticleStyleHalo implements ParticleStyle {
 
@@ -28,11 +25,11 @@ public class ParticleStyleHalo implements ParticleStyle {
     }
 
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
-        if (step % 2 == 0) return new ArrayList<PParticle>();
+        if (step % 2 == 0) return new ArrayList<>();
 
         int points = 16;
         double radius = .65;
-        List<PParticle> particles = new ArrayList<PParticle>();
+        List<PParticle> particles = new ArrayList<>();
         for (int i = 0; i < points; i++) {
             double dx = radius * cos[i];
             double dy = 1.5;

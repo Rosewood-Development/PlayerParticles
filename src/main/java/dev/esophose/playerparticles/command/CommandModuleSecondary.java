@@ -1,7 +1,6 @@
 package dev.esophose.playerparticles.command;
 
 import java.util.List;
-
 import org.bukkit.command.CommandSender;
 
 public interface CommandModuleSecondary {

@@ -1,8 +1,10 @@
 package dev.esophose.playerparticles.styles;
 
 import dev.esophose.playerparticles.particles.ParticlePair;
-import dev.esophose.playerparticles.styles.api.PParticle;
-import dev.esophose.playerparticles.styles.api.ParticleStyle;
+import dev.esophose.playerparticles.particles.PParticle;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -10,10 +12,6 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class ParticleStyleArrows implements ParticleStyle, Listener {
 
@@ -27,7 +25,7 @@ public class ParticleStyleArrows implements ParticleStyle, Listener {
         int count = 0;
         for (int i = this.arrows.size() - 1; i >= 0; i--) { // Loop backwards so the last-fired arrows are the ones that have particles if they go over the max
             Projectile arrow = this.arrows.get(i);
-            if (((Player) arrow.getShooter()).getUniqueId().equals(particle.getOwnerUniqueId())) {
+            if (arrow.getShooter() != null && ((Player) arrow.getShooter()).getUniqueId().equals(particle.getOwnerUniqueId())) {
                 particles.add(new PParticle(arrow.getLocation(), 0.05F, 0.05F, 0.05F, 0.0F));
                 count++;
             }
@@ -45,7 +43,7 @@ public class ParticleStyleArrows implements ParticleStyle, Listener {
     public void updateTimers() {
         for (int i = this.arrows.size() - 1; i >= 0; i--) {
             Projectile arrow = this.arrows.get(i);
-            if (arrow.getTicksLived() >= 1200 || arrow.isDead() || !arrow.isValid())
+            if (arrow.getTicksLived() >= 1200 || arrow.isDead() || !arrow.isValid() || arrow.getShooter() == null)
                 this.arrows.remove(i);
         }
     }

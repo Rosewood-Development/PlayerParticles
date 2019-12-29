@@ -1,22 +1,19 @@
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.particles.PParticle;
+import dev.esophose.playerparticles.util.VectorUtils;
 import java.util.ArrayList;
 import java.util.List;
-
-import dev.esophose.playerparticles.util.VectorUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
-
-import dev.esophose.playerparticles.particles.ParticlePair;
-import dev.esophose.playerparticles.styles.api.PParticle;
-import dev.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class ParticleStyleWings implements ParticleStyle {
 
     private int spawnTimer = 0; // Spawn particles every 3 ticks
 
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
-        List<PParticle> particles = new ArrayList<PParticle>();
+        List<PParticle> particles = new ArrayList<>();
         if (spawnTimer == 0) {
             for (double t = 0; t < Math.PI * 2; t += Math.PI / 48) {
                 double x = Math.sin(t) * (Math.pow(Math.E, Math.cos(t)) - 2 * Math.cos(t * 4) - Math.pow(Math.sin(t / 12), 5)) / 2;

@@ -1,22 +1,19 @@
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.particles.PParticle;
+import dev.esophose.playerparticles.util.VectorUtils;
 import java.util.ArrayList;
 import java.util.List;
-
-import dev.esophose.playerparticles.util.VectorUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
-
-import dev.esophose.playerparticles.particles.ParticlePair;
-import dev.esophose.playerparticles.styles.api.PParticle;
-import dev.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class ParticleStyleBatman implements ParticleStyle {
     
     private int step = 0;
 
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
-        List<PParticle> particles = new ArrayList<PParticle>();
+        List<PParticle> particles = new ArrayList<>();
         
         if (step != 0) return particles;
         

@@ -1,56 +1,59 @@
 package dev.esophose.playerparticles.command;
 
+import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.manager.CommandManager;
+import dev.esophose.playerparticles.manager.DataManager;
+import dev.esophose.playerparticles.manager.LocaleManager;
+import dev.esophose.playerparticles.manager.PermissionManager;
+import dev.esophose.playerparticles.particles.OtherPPlayer;
+import dev.esophose.playerparticles.particles.PPlayer;
+import dev.esophose.playerparticles.util.StringPlaceholders;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
-import dev.esophose.playerparticles.manager.DataManager;
-import dev.esophose.playerparticles.manager.LangManager;
-import dev.esophose.playerparticles.manager.LangManager.Lang;
-import dev.esophose.playerparticles.manager.PermissionManager;
-import dev.esophose.playerparticles.particles.OtherPPlayer;
-import dev.esophose.playerparticles.particles.PPlayer;
-
 public class OtherCommandModule implements CommandModuleSecondary {
 
     public void onCommandExecute(CommandSender sender, String[] args) {
-        if (!PermissionManager.canOverride(sender)) {
-            LangManager.sendCommandSenderMessage(sender, Lang.OTHER_NO_PERMISSION);
+        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
+        PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
+
+        if (!permissionManager.canOverride(sender)) {
+            localeManager.sendMessage(sender, "other-no-permission");
             return;
         }
         
         if (args.length < 2) {
-            LangManager.sendCommandSenderMessage(sender, Lang.OTHER_MISSING_ARGS);
+            localeManager.sendMessage(sender, "other-missing-args");
             return;
         }
         
         Player other = Bukkit.getPlayer(args[0]);
         if (other == null) {
-            LangManager.sendCommandSenderMessage(sender, Lang.OTHER_UNKNOWN_PLAYER, args[0]);
+            localeManager.sendMessage(sender, "other-unknown-player", StringPlaceholders.single("player", args[0]));
             return;
         }
         
-        CommandModule commandModule = ParticleCommandHandler.findMatchingCommand(args[1]);
+        CommandModule commandModule = PlayerParticles.getInstance().getManager(CommandManager.class).findMatchingCommand(args[1]);
         if (commandModule == null) {
-            LangManager.sendCommandSenderMessage(sender, Lang.OTHER_UNKNOWN_COMMAND, args[1]);
+            localeManager.sendMessage(sender, "other-unknown-command", StringPlaceholders.single("cmd", args[1]));
             return;
         }
         
-        if (commandModule.requiresEffects() && PermissionManager.getEffectNamesUserHasPermissionFor(other).isEmpty()) {
-            LangManager.sendCommandSenderMessage(sender, Lang.OTHER_SUCCESS, other.getName());
-            LangManager.sendCommandSenderMessage(sender, Lang.COMMAND_ERROR_NO_EFFECTS);
+        if (commandModule.requiresEffects() && permissionManager.getEffectNamesUserHasPermissionFor(other).isEmpty()) {
+            localeManager.sendMessage(sender, "other-success", StringPlaceholders.single("player", other.getName()));
+            localeManager.sendMessage(sender, "command-error-no-effects");
             return;
         }
         
-        DataManager.getPPlayer(other.getUniqueId(), (pplayer) -> {
+        PlayerParticles.getInstance().getManager(DataManager.class).getPPlayer(other.getUniqueId(), (pplayer) -> {
             OtherPPlayer otherPPlayer = new OtherPPlayer(sender, pplayer);
-            
-            LangManager.sendCommandSenderMessage(sender, Lang.OTHER_SUCCESS, other.getName());
+
+            localeManager.sendMessage(sender, "other-success", StringPlaceholders.single("player", other.getName()));
             
             String[] cmdArgs = Arrays.copyOfRange(args, 2, args.length);
             commandModule.onCommandExecute(otherPPlayer, cmdArgs);
@@ -68,14 +71,14 @@ public class OtherCommandModule implements CommandModuleSecondary {
             if (args.length == 0) completions = playerNames;
             else StringUtil.copyPartialMatches(args[0], playerNames, completions);
         } else if (args.length == 2) {
-            List<String> commandNames = ParticleCommandHandler.getCommandNames();
+            List<String> commandNames = PlayerParticles.getInstance().getManager(CommandManager.class).getCommandNames();
             StringUtil.copyPartialMatches(args[1], commandNames, completions);
         } else {
             Player otherPlayer = Bukkit.getPlayer(args[0]);
             if (otherPlayer != null) {
-                PPlayer other = DataManager.getPPlayer(otherPlayer.getUniqueId());
+                PPlayer other = PlayerParticles.getInstance().getManager(DataManager.class).getPPlayer(otherPlayer.getUniqueId());
                 if (other != null) {
-                    CommandModule commandModule = ParticleCommandHandler.findMatchingCommand(args[1]);
+                    CommandModule commandModule = PlayerParticles.getInstance().getManager(CommandManager.class).findMatchingCommand(args[1]);
                     if (commandModule != null) {
                         String[] cmdArgs = Arrays.copyOfRange(args, 2, args.length);
                         completions = commandModule.onTabComplete(other, cmdArgs);

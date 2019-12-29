@@ -1,15 +1,16 @@
 package dev.esophose.playerparticles.gui.hook;
 
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class PlayerChatHookData {
     
     private UUID playerUUID;
     private int maxHookLength;
     private int hookLength;
-    private PlayerChatHookCallback hookCallback;
+    private Consumer<String> hookCallback;
     
-    public PlayerChatHookData(UUID playerUUID, int hookLength, PlayerChatHookCallback hookCallback) {
+    public PlayerChatHookData(UUID playerUUID, int hookLength, Consumer<String> hookCallback) {
         this.playerUUID = playerUUID;
         this.maxHookLength = hookLength;
         this.hookLength = hookLength;
@@ -65,15 +66,7 @@ public class PlayerChatHookData {
      * @param textEntered The text that was entered by the player
      */
     public void triggerCallback(String textEntered) {
-        this.hookCallback.onPlayerChat(textEntered);
-    }
-
-    /**
-     * Allows simple hooking into the player chat for a specific time interval
-     */
-    @FunctionalInterface
-    public interface PlayerChatHookCallback {
-        void onPlayerChat(String textEntered);
+        this.hookCallback.accept(textEntered);
     }
 
 }

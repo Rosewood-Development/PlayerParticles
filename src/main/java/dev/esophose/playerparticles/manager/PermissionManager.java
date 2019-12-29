@@ -1,20 +1,18 @@
 package dev.esophose.playerparticles.manager;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import dev.esophose.playerparticles.styles.DefaultStyles;
-import dev.esophose.playerparticles.styles.api.ParticleStyle;
-import dev.esophose.playerparticles.styles.api.ParticleStyleManager;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
-import dev.esophose.playerparticles.manager.SettingManager.PSetting;
+import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
+import dev.esophose.playerparticles.styles.DefaultStyles;
+import dev.esophose.playerparticles.styles.ParticleStyle;
+import java.util.ArrayList;
+import java.util.List;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
 
-public class PermissionManager {
+public class PermissionManager extends Manager {
     
     private static final String PERMISSION_PREFIX = "playerparticles.";
     
@@ -66,18 +64,30 @@ public class PermissionManager {
         }
     }
     
-    private PermissionManager() {
-        
+    public PermissionManager(PlayerParticles playerParticles) {
+        super(playerParticles);
     }
-    
+
+    @Override
+    public void reload() {
+
+    }
+
+    @Override
+    public void disable() {
+
+    }
+
     /**
      * Checks if a player can use /ppo
      * 
      * @param sender The CommandSender to check
      * @return If the player can use /ppo
      */
-    public static boolean canOverride(CommandSender sender) {
-        if (!(sender instanceof Player)) return true;
+    public boolean canOverride(CommandSender sender) {
+        if (!(sender instanceof Player))
+            return true;
+
         return PPermission.ALL.check(sender);
     }
     
@@ -87,10 +97,14 @@ public class PermissionManager {
      * @param pplayer The player to check
      * @return If the player has reached the max number of particles in their active group
      */
-    public static boolean hasPlayerReachedMaxParticles(PPlayer pplayer) {
-        if (PPermission.ALL.check(pplayer.getPlayer())) return false;
-        if (PPermission.PARTICLES_UNLIMITED.check(pplayer.getPlayer())) return false;
-        return pplayer.getActiveParticles().size() >= PSetting.MAX_PARTICLES.getInt();
+    public boolean hasPlayerReachedMaxParticles(PPlayer pplayer) {
+        if (PPermission.ALL.check(pplayer.getPlayer()))
+            return false;
+
+        if (PPermission.PARTICLES_UNLIMITED.check(pplayer.getPlayer()))
+            return false;
+
+        return pplayer.getActiveParticles().size() >= Setting.MAX_PARTICLES.getInt();
     }
     
     /**
@@ -99,10 +113,14 @@ public class PermissionManager {
      * @param pplayer The player to check
      * @return If the player has reached the max number of saved particle groups
      */
-    public static boolean hasPlayerReachedMaxGroups(PPlayer pplayer) {
-        if (PPermission.ALL.check(pplayer.getPlayer())) return false;
-        if (PPermission.GROUPS_UNLIMITED.check(pplayer.getPlayer())) return false;
-        return pplayer.getParticleGroups().size() - 1 >= PSetting.MAX_GROUPS.getInt();
+    public boolean hasPlayerReachedMaxGroups(PPlayer pplayer) {
+        if (PPermission.ALL.check(pplayer.getPlayer()))
+            return false;
+
+        if (PPermission.GROUPS_UNLIMITED.check(pplayer.getPlayer()))
+            return false;
+
+        return pplayer.getParticleGroups().size() - 1 >= Setting.MAX_GROUPS.getInt();
     }
     
     /**
@@ -111,10 +129,14 @@ public class PermissionManager {
      * @param pplayer The player to check
      * @return If the player has permission to save groups
      */
-    public static boolean canPlayerSaveGroups(PPlayer pplayer) {
-        if (PPermission.ALL.check(pplayer.getPlayer())) return true;
-        if (PPermission.GROUPS_UNLIMITED.check(pplayer.getPlayer())) return true;
-        return PSetting.MAX_GROUPS.getInt() != 0;
+    public boolean canPlayerSaveGroups(PPlayer pplayer) {
+        if (PPermission.ALL.check(pplayer.getPlayer()))
+            return true;
+
+        if (PPermission.GROUPS_UNLIMITED.check(pplayer.getPlayer()))
+            return true;
+
+        return Setting.MAX_GROUPS.getInt() != 0;
     }
     
     /**
@@ -123,10 +145,14 @@ public class PermissionManager {
      * @param pplayer The player to check
      * @return If the player has reached the max number of fixed effects
      */
-    public static boolean hasPlayerReachedMaxFixedEffects(PPlayer pplayer) {
-        if (PPermission.ALL.check(pplayer.getPlayer())) return false;
-        if (PPermission.FIXED_UNLIMITED.check(pplayer.getPlayer())) return false;
-        return pplayer.getFixedEffectIds().size() >= PSetting.MAX_FIXED_EFFECTS.getInt();
+    public boolean hasPlayerReachedMaxFixedEffects(PPlayer pplayer) {
+        if (PPermission.ALL.check(pplayer.getPlayer()))
+            return false;
+
+        if (PPermission.FIXED_UNLIMITED.check(pplayer.getPlayer()))
+            return false;
+
+        return pplayer.getFixedEffectIds().size() >= Setting.MAX_FIXED_EFFECTS.getInt();
     }
 
     /**
@@ -134,8 +160,8 @@ public class PermissionManager {
      * 
      * @return The max distance a fixed effect can be created from the player
      */
-    public static int getMaxFixedEffectCreationDistance() {
-        return PSetting.MAX_FIXED_EFFECT_CREATION_DISTANCE.getInt();
+    public int getMaxFixedEffectCreationDistance() {
+        return Setting.MAX_FIXED_EFFECT_CREATION_DISTANCE.getInt();
     }
     
     /**
@@ -144,9 +170,11 @@ public class PermissionManager {
      * @param player The player to check
      * @return The maximum number of particles based on the config.yml value, or unlimited
      */
-    public static int getMaxParticlesAllowed(Player player) {
-        if (PPermission.ALL.check(player) || PPermission.PARTICLES_UNLIMITED.check(player)) return Integer.MAX_VALUE;
-        return PSetting.MAX_PARTICLES.getInt();
+    public int getMaxParticlesAllowed(Player player) {
+        if (PPermission.ALL.check(player) || PPermission.PARTICLES_UNLIMITED.check(player))
+            return Integer.MAX_VALUE;
+
+        return Setting.MAX_PARTICLES.getInt();
     }
 
     /**
@@ -155,8 +183,8 @@ public class PermissionManager {
      * @param world The world name to check
      * @return True if the world is disabled
      */
-    public static boolean isWorldEnabled(String world) {
-        return !getDisabledWorlds().contains(world);
+    public boolean isWorldEnabled(String world) {
+        return !this.getDisabledWorlds().contains(world);
     }
 
     /**
@@ -164,8 +192,8 @@ public class PermissionManager {
      * 
      * @return All world names that are disabled
      */
-    public static List<String> getDisabledWorlds() {
-        return PSetting.DISABLED_WORLDS.getStringList();
+    public List<String> getDisabledWorlds() {
+        return Setting.DISABLED_WORLDS.getStringList();
     }
 
     /**
@@ -175,7 +203,7 @@ public class PermissionManager {
      * @param effect The effect to check
      * @return True if the player has permission to use the effect
      */
-    public static boolean hasEffectPermission(Player player, ParticleEffect effect) {
+    public boolean hasEffectPermission(Player player, ParticleEffect effect) {
         if (PPermission.ALL.check(player) || PPermission.EFFECT_ALL.check(player)) return true;
         return PPermission.EFFECT.check(player, effect.getName());
     }
@@ -188,7 +216,7 @@ public class PermissionManager {
      * @param style The style to check
      * @return If the player has permission to use the style
      */
-    public static boolean hasStylePermission(Player player, ParticleStyle style) {
+    public boolean hasStylePermission(Player player, ParticleStyle style) {
         if (style == DefaultStyles.NORMAL) return true;
         if (PPermission.ALL.check(player) || PPermission.STYLE_ALL.check(player)) return true;
         return PPermission.STYLE.check(player, style.getName());
@@ -200,10 +228,10 @@ public class PermissionManager {
      * @param p The player to get effect names for
      * @return A String List of all effect names the given player has permission for
      */
-    public static List<String> getEffectNamesUserHasPermissionFor(Player p) {
+    public List<String> getEffectNamesUserHasPermissionFor(Player p) {
         List<String> list = new ArrayList<>();
         for (ParticleEffect pe : ParticleEffect.getSupportedEffects())
-            if (hasEffectPermission(p, pe)) 
+            if (this.hasEffectPermission(p, pe))
                 list.add(pe.getName());
         return list;
     }
@@ -214,10 +242,10 @@ public class PermissionManager {
      * @param p The player to get style names for
      * @return A String List of all style names the given player has permission for
      */
-    public static List<String> getStyleNamesUserHasPermissionFor(Player p) {
+    public List<String> getStyleNamesUserHasPermissionFor(Player p) {
         List<String> list = new ArrayList<>();
-        for (ParticleStyle ps : ParticleStyleManager.getStyles())
-            if (hasStylePermission(p, ps)) 
+        for (ParticleStyle ps : this.playerParticles.getManager(ParticleStyleManager.class).getStyles())
+            if (this.hasStylePermission(p, ps))
                 list.add(ps.getName());
         return list;
     }
@@ -228,10 +256,10 @@ public class PermissionManager {
      * @param p The player to get style names for
      * @return A String List of all fixable style names the given player has permission for
      */
-    public static List<String> getFixableStyleNamesUserHasPermissionFor(Player p) {
+    public List<String> getFixableStyleNamesUserHasPermissionFor(Player p) {
         List<String> list = new ArrayList<>();
-        for (ParticleStyle ps : ParticleStyleManager.getStyles())
-            if (ps.canBeFixed() && hasStylePermission(p, ps)) 
+        for (ParticleStyle ps : this.playerParticles.getManager(ParticleStyleManager.class).getStyles())
+            if (ps.canBeFixed() && this.hasStylePermission(p, ps))
                 list.add(ps.getName());
         return list;
     }
@@ -242,10 +270,10 @@ public class PermissionManager {
      * @param p The player to get effects for
      * @return A List of all effects the given player has permission for
      */
-    public static List<ParticleEffect> getEffectsUserHasPermissionFor(Player p) {
+    public List<ParticleEffect> getEffectsUserHasPermissionFor(Player p) {
         List<ParticleEffect> list = new ArrayList<>();
         for (ParticleEffect pe : ParticleEffect.getSupportedEffects())
-            if (hasEffectPermission(p, pe)) 
+            if (this.hasEffectPermission(p, pe))
                 list.add(pe);
         return list;
     }
@@ -256,10 +284,10 @@ public class PermissionManager {
      * @param p The player to get styles for
      * @return A List of all styles the given player has permission for
      */
-    public static List<ParticleStyle> getStylesUserHasPermissionFor(Player p) {
+    public List<ParticleStyle> getStylesUserHasPermissionFor(Player p) {
         List<ParticleStyle> list = new ArrayList<>();
-        for (ParticleStyle ps : ParticleStyleManager.getStyles())
-            if (hasStylePermission(p, ps)) 
+        for (ParticleStyle ps : this.playerParticles.getManager(ParticleStyleManager.class).getStyles())
+            if (this.hasStylePermission(p, ps))
                 list.add(ps);
         return list;
     }
@@ -270,7 +298,7 @@ public class PermissionManager {
      * @param player The player to check the permission for
      * @return True if the player has permission
      */
-    public static boolean canUseFixedEffects(Player player) {
+    public boolean canUseFixedEffects(Player player) {
         return PPermission.ALL.check(player) || PPermission.FIXED.check(player);
     }
     
@@ -280,7 +308,7 @@ public class PermissionManager {
      * @param player The player to check the permission for
      * @return True if the player has permission to use /pp fixed clear
      */
-    public static boolean canClearFixedEffects(Player player) {
+    public boolean canClearFixedEffects(Player player) {
         return PPermission.ALL.check(player) || PPermission.FIXED_CLEAR.check(player);
     }
     
@@ -290,7 +318,7 @@ public class PermissionManager {
      * @param sender The sender to check the permission for
      * @return True if the sender has permission to reload the plugin's settings
      */
-    public static boolean canReloadPlugin(CommandSender sender) {
+    public boolean canReloadPlugin(CommandSender sender) {
         return PPermission.ALL.check(sender) || PPermission.RELOAD.check(sender);
     }
 

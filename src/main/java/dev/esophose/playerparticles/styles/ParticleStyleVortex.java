@@ -23,15 +23,12 @@
  */
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.particles.PParticle;
 import java.util.ArrayList;
 import java.util.List;
-
-import dev.esophose.playerparticles.styles.api.PParticle;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
-
-import dev.esophose.playerparticles.particles.ParticlePair;
-import dev.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class ParticleStyleVortex implements ParticleStyle {
     
@@ -42,7 +39,7 @@ public class ParticleStyleVortex implements ParticleStyle {
     private int maxStep = 70;
 
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
-        List<PParticle> particles = new ArrayList<PParticle>();
+        List<PParticle> particles = new ArrayList<>();
 
         double radius = 2 * (1 - (double)step / maxStep);
         for (int i = 0; i < helices; i++) {

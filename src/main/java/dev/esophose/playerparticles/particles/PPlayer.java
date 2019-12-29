@@ -1,11 +1,10 @@
 package dev.esophose.playerparticles.particles;
 
+import dev.esophose.playerparticles.styles.ParticleStyle;
+import dev.esophose.playerparticles.util.ParticleUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import dev.esophose.playerparticles.styles.api.ParticleStyle;
-import dev.esophose.playerparticles.util.ParticleUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

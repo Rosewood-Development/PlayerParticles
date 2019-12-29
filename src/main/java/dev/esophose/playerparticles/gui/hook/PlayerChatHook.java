@@ -1,9 +1,13 @@
 package dev.esophose.playerparticles.gui.hook;
 
+import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.manager.LocaleManager;
+import dev.esophose.playerparticles.util.NMSUtil;
+import dev.esophose.playerparticles.util.StringPlaceholders;
 import java.util.HashSet;
 import java.util.Set;
-
-import dev.esophose.playerparticles.util.NMSUtil;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,13 +15,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-
-import dev.esophose.playerparticles.PlayerParticles;
-import dev.esophose.playerparticles.manager.LangManager;
-import dev.esophose.playerparticles.manager.LangManager.Lang;
-
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 
 public class PlayerChatHook extends BukkitRunnable implements Listener {
 
@@ -31,7 +28,7 @@ public class PlayerChatHook extends BukkitRunnable implements Listener {
         hooks = new HashSet<>();
         if (hookTask != null)
             hookTask.cancel();
-        hookTask = new PlayerChatHook().runTaskTimer(PlayerParticles.getPlugin(), 0, 20);
+        hookTask = new PlayerChatHook().runTaskTimer(PlayerParticles.getInstance(), 0, 20);
     }
     
     /**
@@ -45,7 +42,7 @@ public class PlayerChatHook extends BukkitRunnable implements Listener {
             if (hook.getPlayerUUID().equals(event.getPlayer().getUniqueId())) {
                 event.setCancelled(true);
                 hooks.remove(hook);
-                Bukkit.getScheduler().scheduleSyncDelayedTask(PlayerParticles.getPlugin(), () -> hook.triggerCallback(event.getMessage()));
+                Bukkit.getScheduler().scheduleSyncDelayedTask(PlayerParticles.getInstance(), () -> hook.triggerCallback(event.getMessage()));
                 return;
             }
         }
@@ -69,11 +66,12 @@ public class PlayerChatHook extends BukkitRunnable implements Listener {
             if (player == null) {
                 hooksToRemove.remove(hook);
             } else {
+                LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
                 if (NMSUtil.getVersionNumber() == 9) {
                     if (hook.getMaxHookLength() == hook.getTimeRemaining())
-                        player.sendMessage(LangManager.getText(Lang.GUI_SAVE_GROUP_HOTBAR_MESSAGE, hook.getTimeRemaining()));
+                        player.sendMessage(localeManager.getLocaleMessage("gui-save-group-hotbar-message", StringPlaceholders.single("seconds", hook.getTimeRemaining())));
                 } else {
-                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(LangManager.getText(Lang.GUI_SAVE_GROUP_HOTBAR_MESSAGE, hook.getTimeRemaining())));
+                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(localeManager.getLocaleMessage("gui-save-group-hotbar-message", StringPlaceholders.single("seconds", hook.getTimeRemaining()))));
                 }
             }
         }

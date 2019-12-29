@@ -2,16 +2,15 @@ package dev.esophose.playerparticles.util;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.bukkit.Material;
 
-public class ParticleUtils {
+public final class ParticleUtils {
     
     private static List<String> blockMaterials, itemMaterials;
     
     static {
-        blockMaterials = new ArrayList<String>();
-        itemMaterials = new ArrayList<String>();
+        blockMaterials = new ArrayList<>();
+        itemMaterials = new ArrayList<>();
         
         for (Material mat : Material.values()) {
             if (mat.isBlock()) {
@@ -92,10 +91,10 @@ public class ParticleUtils {
      */
     public static String formatName(String string) {
         String[] words = string.split("_");
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (String word : words) 
-            result += Character.toUpperCase(word.charAt(0)) + word.substring(1).toLowerCase() + " ";
-        return result;
+            result.append(Character.toUpperCase(word.charAt(0))).append(word.substring(1).toLowerCase()).append(" ");
+        return result.toString();
     }
 
     /**

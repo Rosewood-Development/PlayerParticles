@@ -1,13 +1,10 @@
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.particles.PParticle;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.bukkit.Location;
-
-import dev.esophose.playerparticles.particles.ParticlePair;
-import dev.esophose.playerparticles.styles.api.PParticle;
-import dev.esophose.playerparticles.styles.api.ParticleStyle;
 
 public class ParticleStyleThick implements ParticleStyle {
 
@@ -15,7 +12,7 @@ public class ParticleStyleThick implements ParticleStyle {
         List<PParticle> baseParticles = DefaultStyles.NORMAL.getParticles(particle, location);
 
         int multiplyingFactor = 10; // Uses the same logic as ParticleStyleNormal except multiplies the resulting particles by 10x
-        List<PParticle> particles = new ArrayList<PParticle>();
+        List<PParticle> particles = new ArrayList<>();
         for (int i = 0; i < baseParticles.size() * multiplyingFactor; i++) {
             particles.add(baseParticles.get(i % baseParticles.size()));
         }

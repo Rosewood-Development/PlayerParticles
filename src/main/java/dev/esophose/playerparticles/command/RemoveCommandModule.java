@@ -1,27 +1,29 @@
 package dev.esophose.playerparticles.command;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import dev.esophose.playerparticles.styles.api.ParticleStyle;
-import org.apache.commons.lang.StringUtils;
-import org.bukkit.util.StringUtil;
-
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.DataManager;
-import dev.esophose.playerparticles.manager.LangManager;
-import dev.esophose.playerparticles.manager.LangManager.Lang;
+import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.styles.ParticleStyle;
+import dev.esophose.playerparticles.util.StringPlaceholders;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import org.apache.commons.lang.StringUtils;
+import org.bukkit.util.StringUtil;
 
 public class RemoveCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
+        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
+        DataManager dataManager = PlayerParticles.getInstance().getManager(DataManager.class);
+
         if (args.length == 0) {
-            LangManager.sendMessage(pplayer, Lang.REMOVE_NO_ARGS);
+            localeManager.sendMessage(pplayer, "remove-no-args");
             return;
         }
         
@@ -30,12 +32,12 @@ public class RemoveCommandModule implements CommandModule {
             try {
                 id = Integer.parseInt(args[0]);
             } catch (Exception ex) {
-                LangManager.sendMessage(pplayer, Lang.ID_INVALID);
+                localeManager.sendMessage(pplayer, "id-invalid");
                 return;
             }
 
             if (id <= 0) {
-                LangManager.sendMessage(pplayer, Lang.ID_INVALID);
+                localeManager.sendMessage(pplayer, "id-invalid");
                 return;
             }
 
@@ -50,12 +52,12 @@ public class RemoveCommandModule implements CommandModule {
             }
 
             if (!removed) {
-                LangManager.sendMessage(pplayer, Lang.ID_UNKNOWN, id);
+                localeManager.sendMessage(pplayer, "id-unknown", StringPlaceholders.single("id", id));
                 return;
             }
 
-            DataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
-            LangManager.sendMessage(pplayer, Lang.REMOVE_ID_SUCCESS, id);
+            dataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
+            localeManager.sendMessage(pplayer, "remove-id-success", StringPlaceholders.single("id", id));
         } else { // Removing by effect/style name
             ParticleEffect effect = ParticleEffect.fromName(args[0]);
             ParticleStyle style = ParticleStyle.fromName(args[0]);
@@ -71,10 +73,10 @@ public class RemoveCommandModule implements CommandModule {
                 }
                 
                 if (removedCount > 0) {
-                    DataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
-                    LangManager.sendMessage(pplayer, Lang.REMOVE_EFFECT_SUCCESS, removedCount, effect.getName());
+                    dataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
+                    localeManager.sendMessage(pplayer, "remove-effect-success", StringPlaceholders.builder("amount", removedCount).addPlaceholder("effect", effect.getName()).build());
                 } else {
-                    LangManager.sendMessage(pplayer, Lang.REMOVE_EFFECT_NONE, effect.getName());
+                    localeManager.sendMessage(pplayer, "remove-effect-none", StringPlaceholders.single("effect", effect.getName()));
                 }
             } else if (style != null) {
                 int removedCount = 0;
@@ -87,13 +89,13 @@ public class RemoveCommandModule implements CommandModule {
                 }
                 
                 if (removedCount > 0) {
-                    DataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
-                    LangManager.sendMessage(pplayer, Lang.REMOVE_STYLE_SUCCESS, removedCount, style.getName());
+                    dataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
+                    localeManager.sendMessage(pplayer, "remove-style-success", StringPlaceholders.builder("amount", removedCount).addPlaceholder("style", style.getName()).build());
                 } else {
-                    LangManager.sendMessage(pplayer, Lang.REMOVE_STYLE_NONE, style.getName());
+                    localeManager.sendMessage(pplayer, "remove-style-none", StringPlaceholders.single("style", style.getName()));
                 }
             } else {
-                LangManager.sendMessage(pplayer, Lang.REMOVE_UNKNOWN, args[0]);
+                localeManager.sendMessage(pplayer, "remove-unknown", StringPlaceholders.single("name", args[0]));
             }
         }
     }
@@ -118,8 +120,8 @@ public class RemoveCommandModule implements CommandModule {
         return "remove";
     }
 
-    public Lang getDescription() {
-        return Lang.COMMAND_DESCRIPTION_REMOVE;
+    public String getDescriptionKey() {
+        return "command-description-remove";
     }
 
     public String getArguments() {
@@ -127,7 +129,7 @@ public class RemoveCommandModule implements CommandModule {
     }
 
     public boolean requiresEffects() {
-        return true;
+        return false;
     }
 
     public boolean canConsoleExecute() {

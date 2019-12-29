@@ -1,15 +1,5 @@
 package dev.esophose.playerparticles.styles;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.ParticleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
@@ -17,8 +7,15 @@ import dev.esophose.playerparticles.particles.FixedParticleEffect;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticlePair;
-import dev.esophose.playerparticles.styles.api.PParticle;
-import dev.esophose.playerparticles.styles.api.ParticleStyle;
+import dev.esophose.playerparticles.particles.PParticle;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class ParticleStyleCelebration implements ParticleStyle {
 
@@ -26,7 +23,7 @@ public class ParticleStyleCelebration implements ParticleStyle {
     private final int spawnTime = 15;
 
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
-        return new ArrayList<PParticle>();
+        return new ArrayList<>();
     }
 
     /**
@@ -34,21 +31,24 @@ public class ParticleStyleCelebration implements ParticleStyle {
      * This style uses two different effects, one is always 'firework'
      */
     public void updateTimers() {
-        step++;
-        if (step == spawnTime) {
-            step = 0;
+        PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
+        ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
+
+        this.step++;
+        if (this.step == this.spawnTime) {
+            this.step = 0;
             
             Random random = new Random();
-            for (PPlayer pplayer : ParticleManager.getPPlayers()) {
+            for (PPlayer pplayer : particleManager.getPPlayers()) {
                 Player player = pplayer.getPlayer();
-                if (player != null && player.getGameMode() != GameMode.SPECTATOR && PermissionManager.isWorldEnabled(player.getWorld().getName()))
+                if (player != null && player.getGameMode() != GameMode.SPECTATOR && permissionManager.isWorldEnabled(player.getWorld().getName()))
                     for (ParticlePair particle : pplayer.getActiveParticles())
-                        if (particle.getStyle() == this) 
-                            spawnFirework(player.getLocation(), pplayer, particle, random);
+                        if (particle.getStyle() == this)
+                            this.spawnFirework(player.getLocation(), pplayer, particle, random);
                 
                 for (FixedParticleEffect fixedEffect : pplayer.getFixedParticles())
-                    if (fixedEffect.getParticlePair().getStyle() == this && PermissionManager.isWorldEnabled(fixedEffect.getLocation().getWorld().getName()))
-                        spawnFirework(fixedEffect.getLocation(), pplayer, fixedEffect.getParticlePair(), random);
+                    if (fixedEffect.getParticlePair().getStyle() == this && permissionManager.isWorldEnabled(fixedEffect.getLocation().getWorld().getName()))
+                        this.spawnFirework(fixedEffect.getLocation(), pplayer, fixedEffect.getParticlePair(), random);
             }
         }
     }
@@ -60,6 +60,7 @@ public class ParticleStyleCelebration implements ParticleStyle {
         double dz = Math.cos(angle) * distanceFrom;
         final Location loc = location.clone().add(dx, 1, dz);
         final int fuse = 3 + random.nextInt(3);
+        ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
 
         new BukkitRunnable() {
             private Location location = loc;
@@ -71,12 +72,12 @@ public class ParticleStyleCelebration implements ParticleStyle {
                     ParticlePair trail = ParticlePair.getNextDefault(pplayer);
                     trail.setEffect(ParticleEffect.FIREWORK);
                     trail.setStyle(DefaultStyles.CELEBRATION);
-                    
-                    ParticleManager.displayParticles(trail, Collections.singletonList(new PParticle(this.location)));
+
+                    particleManager.displayParticles(trail, Collections.singletonList(new PParticle(this.location)));
                     
                     this.location.add(0, 0.25, 0);
                 } else {
-                    List<PParticle> particles = new ArrayList<PParticle>();
+                    List<PParticle> particles = new ArrayList<>();
                     for (int i = 0; i < 40; i++) {
                         double radius = 0.6 + random.nextDouble() * 0.2;
                         double u = random.nextDouble();
@@ -89,13 +90,13 @@ public class ParticleStyleCelebration implements ParticleStyle {
                         
                         particles.add(new PParticle(this.location.clone().add(dx, dy, dz)));
                     }
-                    ParticleManager.displayParticles(particle, particles);
+                    particleManager.displayParticles(particle, particles);
                     
                     this.cancel();
                 }
                 this.fuseTimer++;
             }
-        }.runTaskTimer(PlayerParticles.getPlugin(), 0, 1);
+        }.runTaskTimer(PlayerParticles.getInstance(), 0, 1);
     }
 
     public String getName() {
