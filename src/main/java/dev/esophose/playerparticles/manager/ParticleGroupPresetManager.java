@@ -120,6 +120,8 @@ public class ParticleGroupPresetManager extends Manager {
                             if (effect == ParticleEffect.NOTE) {
                                 if (args[0].equalsIgnoreCase("rainbow")) {
                                     noteColorData = new NoteColor(99);
+                                } else if (args[0].equalsIgnoreCase("random")) {
+                                    noteColorData = new NoteColor(98);
                                 } else {
                                     int note;
                                     try {
@@ -139,6 +141,8 @@ public class ParticleGroupPresetManager extends Manager {
                             } else {
                                 if (args[0].equalsIgnoreCase("rainbow")) {
                                     colorData = new OrdinaryColor(999, 999, 999);
+                                } else if (args[0].equalsIgnoreCase("random")) {
+                                    colorData = new OrdinaryColor(998, 998, 998);
                                 } else {
                                     int r, g, b;
 
