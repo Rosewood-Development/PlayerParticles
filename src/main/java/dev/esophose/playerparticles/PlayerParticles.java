@@ -1,5 +1,6 @@
 /*
  * TODO: v7.0
+ * * Refactor the DataManager to not update the PPlayer objects, it should only handle saving/loading data, not applying it
  * * Added an API, accessible through the dev.esophose.playerparticles.api.PlayerParticlesAPI class
  * + Add ability to create/manage fixed effects from the GUI
  * * Convert fixed effect ids into names
@@ -8,7 +9,6 @@
  * * Clean up duplicated command parsing
  * + Add effect/style name customization through config files
  * + Add effect/style settings folder that lets you disable effects/style and edit style properties
- * + Added PlaceholderAPI support for message strings
  * + Added setting to disable particles while in combat
  */
 
@@ -17,6 +17,8 @@
  * * Changed the package names
  * + Config and lang files will no longer reset every update
  * + Added PlaceholderAPI support (no placeholders, just placeholder replacing in messages)
+ * * Fixed an issue where 'random' data would not parse properly in preset_groups.yml
+ * * Fixed an issue where preset groups would not display in the GUI even if the player has permission for them
  */
 
 package dev.esophose.playerparticles;
