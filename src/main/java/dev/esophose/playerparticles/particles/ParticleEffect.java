@@ -4,8 +4,6 @@ import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.manager.ParticleManager;
 import dev.esophose.playerparticles.util.NMSUtil;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -16,6 +14,7 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.Particle.DustOptions;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
@@ -89,33 +88,15 @@ public enum ParticleEffect {
     UNDERWATER("SUSPENDED_DEPTH", "SUSPENDED_DEPTH"),
     WITCH("SPELL_WITCH", "SPELL_WTICH");
 
-    public static boolean VERSION_13;
     private static final Map<String, ParticleEffect> NAME_MAP = new HashMap<>();
-    private static Constructor<?> DustOptions_CONSTRUCTOR;
-    private static Method createBlockData_METHOD;
     private final Particle internalEnum;
     private final List<ParticleProperty> properties;
 
     // Initialize map for quick name and id lookup
-    // Initialize Minecraft 1.13 related variables
     static {
         for (ParticleEffect effect : values())
             if (effect.isSupported())
                 NAME_MAP.put(effect.getName(), effect);
-
-        if (NMSUtil.getVersionNumber() > 12) {
-            VERSION_13 = true;
-            try {
-                DustOptions_CONSTRUCTOR = Particle.REDSTONE.getDataType().getConstructor(Color.class, float.class);
-                createBlockData_METHOD = Material.class.getMethod("createBlockData");
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        } else {
-            DustOptions_CONSTRUCTOR = null;
-            createBlockData_METHOD = null;
-            VERSION_13 = false;
-        }
     }
 
     /**
@@ -264,15 +245,11 @@ public enum ParticleEffect {
             throw new ParticleColorException("This particle effect is not colorable");
         }
 
-        if (this == DUST && VERSION_13) { // DUST uses a special data object for spawning in 1.13
+        if (this == DUST && NMSUtil.getVersionNumber() >= 13) { // DUST uses a special data object for spawning in 1.13
             OrdinaryColor dustColor = (OrdinaryColor) color;
-            Object dustData = null;
-            try { // The DustData class doesn't exist in Minecraft versions less than 1.13... so this is disgusting... but it works great
-                dustData = DustOptions_CONSTRUCTOR.newInstance(Color.fromRGB(dustColor.getRed(), dustColor.getGreen(), dustColor.getBlue()), 1); // Wait, you can change the size of these now??? AWESOME! I might implement this in the future!
-            } catch (Exception ignored) { }
-
+            DustOptions dustOptions = new DustOptions(Color.fromRGB(dustColor.getRed(), dustColor.getGreen(), dustColor.getBlue()), 1);
             for (Player player : this.getPlayersInRange(center, isFixedEffect, owner)) {
-                player.spawnParticle(this.internalEnum, center.getX(), center.getY(), center.getZ(), 1, 0, 0, 0, 0, dustData);
+                player.spawnParticle(this.internalEnum, center.getX(), center.getY(), center.getZ(), 1, 0, 0, 0, 0, dustOptions);
             }
         } else {
             for (Player player : this.getPlayersInRange(center, isFixedEffect, owner)) {
@@ -305,9 +282,7 @@ public enum ParticleEffect {
 
         Object extraData = null;
         if (this.internalEnum.getDataType().getTypeName().equals("org.bukkit.block.data.BlockData")) {
-            try { // The Material.createBlockData() method doesn't exist in Minecraft versions less than 1.13... so this is disgusting... but it works great
-                extraData = createBlockData_METHOD.invoke(spawnMaterial);
-            } catch (Exception ignored) { }
+            extraData = spawnMaterial.createBlockData();
         } else if (this.internalEnum.getDataType() == ItemStack.class) {
             extraData = new ItemStack(spawnMaterial);
         } else if (this.internalEnum.getDataType() == MaterialData.class) {
