@@ -16,7 +16,7 @@
  * * Refactored and cleaned up code to remove static abuse
  * * Changed the package names
  * + Config and lang files will no longer reset every update
- * + Added PlaceholderAPI support (no placeholders, just placeholder replacing in messages)
+ * + Added PlaceholderAPI support
  * * Fixed an issue where 'random' data would not parse properly in preset_groups.yml
  * * Fixed an issue where preset groups would not display in the GUI even if the player has permission for them
  */
@@ -24,6 +24,8 @@
 package dev.esophose.playerparticles;
 
 import dev.esophose.playerparticles.gui.hook.PlayerChatHook;
+import dev.esophose.playerparticles.hook.ParticlePlaceholderExpansion;
+import dev.esophose.playerparticles.hook.PlaceholderAPIHook;
 import dev.esophose.playerparticles.manager.CommandManager;
 import dev.esophose.playerparticles.manager.ConfigurationManager;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
@@ -76,6 +78,9 @@ public class PlayerParticles extends JavaPlugin {
 
         if (Setting.SEND_METRICS.getBoolean())
             new Metrics(this);
+
+        if (PlaceholderAPIHook.enabled())
+            new ParticlePlaceholderExpansion(this).register();
     }
 
     @Override
