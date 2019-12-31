@@ -2,6 +2,7 @@ package dev.esophose.playerparticles.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.Material;
 
 public final class ParticleUtils {
@@ -21,8 +22,8 @@ public final class ParticleUtils {
         }
     }
     
-    private ParticleUtils() { 
-                
+    private ParticleUtils() {
+
     }
 
     /**
@@ -31,19 +32,12 @@ public final class ParticleUtils {
      * @param input The material name as a string
      * @return The material from the string
      */
-    public static Material closestMatch(String input) { // @formatter:off
-        if (input == null) return null;
-        for (Material material : Material.values()) // First check for exact matches
-            if (material.name().equalsIgnoreCase(input) ||
-                material.toString().equalsIgnoreCase(input)) return material;
-        for (Material material : Material.values()) // Then check for partial matches
-            if (material.name().toLowerCase().contains(input.toLowerCase()) || 
-                material.toString().toLowerCase().contains(input.toLowerCase()) ||
-                material.name().replaceAll("_", "").toLowerCase().contains(input.toLowerCase()) || 
-                material.toString().replaceAll("_", "").toLowerCase().contains(input.toLowerCase())) 
-                return material; 
-        return null;
-    } // @formatter:on
+    public static Material closestMatch(String input) {
+        if (input == null || input.trim().isEmpty())
+            return null;
+
+        return Material.matchMaterial(input);
+    }
 
     /**
      * Finds a block/item as a material from a list of possible strings
@@ -54,15 +48,16 @@ public final class ParticleUtils {
      * @return The first matching material
      */
     public static Material closestMatchWithFallback(boolean barrierFallback, String... input) {
-        Material mat = null;
         for (String name : input) {
-            mat = closestMatch(name);
+            Material mat = closestMatch(name);
             if (mat != null)
                 return mat;
         }
+
         if (barrierFallback)
-            mat = Material.BARRIER;
-        return mat;
+            return Material.BARRIER;
+
+        return null;
     }
 
     /**
@@ -90,11 +85,7 @@ public final class ParticleUtils {
      * @return The input string but formatted with each word capitalized
      */
     public static String formatName(String string) {
-        String[] words = string.split("_");
-        StringBuilder result = new StringBuilder();
-        for (String word : words) 
-            result.append(Character.toUpperCase(word.charAt(0))).append(word.substring(1).toLowerCase()).append(" ");
-        return result.toString();
+        return WordUtils.capitalizeFully(string.replaceAll("_", " "));
     }
 
     /**

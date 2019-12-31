@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.stream.Stream;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -23,70 +23,70 @@ import org.bukkit.metadata.MetadataValue;
 @SuppressWarnings("deprecation")
 public enum ParticleEffect {
 
-    // Ordered and named by their Minecraft 1.13 internal names
-    AMBIENT_ENTITY_EFFECT("SPELL_MOB_AMBIENT", "SPELL_MOB_AMBIENT", ParticleProperty.COLORABLE),
-    ANGRY_VILLAGER("VILLAGER_ANGRY", "VILLAGER_ANGRY"),
-    BARRIER("BARRIER", "BARRIER"),
-    BLOCK("BLOCK_CRACK", "BLOCK_CRACK", ParticleProperty.REQUIRES_MATERIAL_DATA),
-    BUBBLE("WATER_BUBBLE", "WATER_BUBBLE"),
-    BUBBLE_COLUMN_UP("BUBBLE_COLUMN_UP", null),
-    BUBBLE_POP("BUBBLE_POP", null),
-    CAMPFIRE_COSY_SMOKE("CAMPFIRE_COSY_SMOKE", null),
-    CAMPFIRE_SIGNAL_SMOKE("CAMPFIRE_SIGNAL_SMOKE", null),
-    CLOUD("CLOUD", "CLOUD"),
-    COMPOSTER("COMPOSTER", null),
-    CRIT("CRIT", "CRIT"),
-    CURRENT_DOWN("CURRENT_DOWN", null),
-    DAMAGE_INDICATOR("DAMAGE_INDICATOR", "DAMAGE_INDICATOR"),
-    DOLPHIN("DOLPHIN", null),
-    DRAGON_BREATH("DRAGON_BREATH", "DRAGON_BREATH"),
-    DRIPPING_HONEY("DRIPPING_HONEY", null),
-    DRIPPING_LAVA("DRIP_LAVA", "DRIP_LAVA"),
-    DRIPPING_WATER("DRIP_WATER", "DRIP_WATER"),
-    DUST("REDSTONE", "REDSTONE", ParticleProperty.COLORABLE),
-    // ELDER_GUARDIAN("MOB_APPEARANCE", "MOB_APPEARANCE"), // No thank you
-    ENCHANT("ENCHANTMENT_TABLE", "ENCHANTMENT_TABLE"),
-    ENCHANTED_HIT("CRIT_MAGIC", "CRIT_MAGIC"),
-    END_ROD("END_ROD", "END_ROD"),
-    ENTITY_EFFECT("SPELL_MOB", "SPELL_MOB", ParticleProperty.COLORABLE),
-    EXPLOSION("EXPLOSION_LARGE", "EXPLOSION_LARGE"),
-    EXPLOSION_EMITTER("EXPLOSION_HUGE", "EXPLOSION_HUGE"),
-    FALLING_DUST("FALLING_DUST", "FALLING_DUST", ParticleProperty.REQUIRES_MATERIAL_DATA),
-    FALLING_HONEY("FALLING_HONEY", null),
-    FALLING_LAVA("FALLING_LAVA", null),
-    FALLING_NECTAR("FALLING_NECTAR", null),
-    FALLING_WATER("FALLING_WATER", null),
-    FIREWORK("FIREWORKS_SPARK", "FIREWORKS_SPARK"),
-    FISHING("WATER_WAKE", "WATER_WAKE"),
-    FLAME("FLAME", "FLAME"),
-    // FLASH("FLASH", null), // Also no thank you
-    FOOTSTEP(null, "FOOTSTEP"), // Removed in Minecraft 1.13 :(
-    HAPPY_VILLAGER("VILLAGER_HAPPY", "VILLAGER_HAPPY"),
-    HEART("HEART", "HEART"),
-    INSTANT_EFFECT("SPELL_INSTANT", "SPELL_INSTANT"),
-    ITEM("ITEM_CRACK", "ITEM_CRACK", ParticleProperty.REQUIRES_MATERIAL_DATA),
-    ITEM_SLIME("SLIME", "SLIME"),
-    ITEM_SNOWBALL("SNOWBALL", "SNOWBALL"),
-    LANDING_HONEY("LANDING_HONEY", null),
-    LANDING_LAVA("LANDING_LAVA", null),
-    LARGE_SMOKE("SMOKE_LARGE", "SMOKE_LARGE"),
-    LAVA("LAVA", "LAVA"),
-    MYCELIUM("TOWN_AURA", "TOWN_AURA"),
-    NAUTILUS("NAUTILUS", null),
-    NOTE("NOTE", "NOTE", ParticleProperty.COLORABLE),
-    POOF("EXPLOSION_NORMAL", "EXPLOSION_NORMAL"), // The 1.13 combination of explode and showshovel
-    PORTAL("PORTAL", "PORTAL"),
-    RAIN("WATER_DROP", "WATER_DROP"),
-    SMOKE("SMOKE_NORMAL", "SMOKE_NORMAL"),
-    SNEEZE("SNEEZE", null),
-    SPELL("SPELL", "SPELL"), // The Minecraft internal name for this is actually "effect", but that's the command name, so it's SPELL for the plugin instead
-    SPIT("SPIT", "SPIT"),
-    SPLASH("WATER_SPLASH", "WATER_SPLASH"),
-    SQUID_INK("SQUID_INK", null),
-    SWEEP_ATTACK("SWEEP_ATTACK", "SWEEP_ATTACK"),
-    TOTEM_OF_UNDYING("TOTEM", "TOTEM"),
-    UNDERWATER("SUSPENDED_DEPTH", "SUSPENDED_DEPTH"),
-    WITCH("SPELL_WITCH", "SPELL_WTICH");
+    // Ordered and named by their Minecraft 1.13+ internal names
+    AMBIENT_ENTITY_EFFECT("SPELL_MOB_AMBIENT", ParticleProperty.COLORABLE),
+    ANGRY_VILLAGER("VILLAGER_ANGRY"),
+    BARRIER("BARRIER"),
+    BLOCK("BLOCK_CRACK", ParticleProperty.REQUIRES_MATERIAL_DATA),
+    BUBBLE("WATER_BUBBLE"),
+    BUBBLE_COLUMN_UP("BUBBLE_COLUMN_UP"),
+    BUBBLE_POP("BUBBLE_POP"),
+    CAMPFIRE_COSY_SMOKE("CAMPFIRE_COSY_SMOKE"),
+    CAMPFIRE_SIGNAL_SMOKE("CAMPFIRE_SIGNAL_SMOKE"),
+    CLOUD("CLOUD"),
+    COMPOSTER("COMPOSTER"),
+    CRIT("CRIT"),
+    CURRENT_DOWN("CURRENT_DOWN"),
+    DAMAGE_INDICATOR("DAMAGE_INDICATOR"),
+    DOLPHIN("DOLPHIN"),
+    DRAGON_BREATH("DRAGON_BREATH"),
+    DRIPPING_HONEY("DRIPPING_HONEY"),
+    DRIPPING_LAVA("DRIP_LAVA"),
+    DRIPPING_WATER("DRIP_WATER"),
+    DUST("REDSTONE", ParticleProperty.COLORABLE),
+    // ELDER_GUARDIAN("MOB_APPEARANCE"), // No thank you
+    ENCHANT("ENCHANTMENT_TABLE"),
+    ENCHANTED_HIT("CRIT_MAGIC"),
+    END_ROD("END_ROD"),
+    ENTITY_EFFECT("SPELL_MOB", ParticleProperty.COLORABLE),
+    EXPLOSION("EXPLOSION_LARGE"),
+    EXPLOSION_EMITTER("EXPLOSION_HUGE"),
+    FALLING_DUST("FALLING_DUST", ParticleProperty.REQUIRES_MATERIAL_DATA),
+    FALLING_HONEY("FALLING_HONEY"),
+    FALLING_LAVA("FALLING_LAVA"),
+    FALLING_NECTAR("FALLING_NECTAR"),
+    FALLING_WATER("FALLING_WATER"),
+    FIREWORK("FIREWORKS_SPARK"),
+    FISHING("WATER_WAKE"),
+    FLAME("FLAME"),
+    // FLASH("FLASH"), // Also no thank you
+    FOOTSTEP("FOOTSTEP"), // Removed in Minecraft 1.13 :(
+    HAPPY_VILLAGER("VILLAGER_HAPPY"),
+    HEART("HEART"),
+    INSTANT_EFFECT("SPELL_INSTANT"),
+    ITEM("ITEM_CRACK", ParticleProperty.REQUIRES_MATERIAL_DATA),
+    ITEM_SLIME("SLIME"),
+    ITEM_SNOWBALL("SNOWBALL"),
+    LANDING_HONEY("LANDING_HONEY"),
+    LANDING_LAVA("LANDING_LAVA"),
+    LARGE_SMOKE("SMOKE_LARGE"),
+    LAVA("LAVA"),
+    MYCELIUM("TOWN_AURA"),
+    NAUTILUS("NAUTILUS"),
+    NOTE("NOTE", ParticleProperty.COLORABLE),
+    POOF("EXPLOSION_NORMAL"), // The 1.13 combination of explode and showshovel
+    PORTAL("PORTAL"),
+    RAIN("WATER_DROP"),
+    SMOKE("SMOKE_NORMAL"),
+    SNEEZE("SNEEZE"),
+    SPELL("SPELL"), // The Minecraft internal name for this is actually "effect", but that's the command name, so it's SPELL for the plugin instead
+    SPIT("SPIT"),
+    SPLASH("WATER_SPLASH"),
+    SQUID_INK("SQUID_INK"),
+    SWEEP_ATTACK("SWEEP_ATTACK"),
+    TOTEM_OF_UNDYING("TOTEM"),
+    UNDERWATER("SUSPENDED_DEPTH"),
+    WITCH("SPELL_WITCH");
 
     private static final Map<String, ParticleEffect> NAME_MAP = new HashMap<>();
     private final Particle internalEnum;
@@ -103,21 +103,13 @@ public enum ParticleEffect {
      * Construct a new particle effect
      * 
      * @param enumName Name of the Particle Enum when the server version is greater than or equal to 1.13
-     * @param enumNameLegacy Name of the Particle Enum when the server version is less than 1.13
      * @param properties Properties of this particle effect
      */
-    ParticleEffect(String enumName, String enumNameLegacy, ParticleProperty... properties) {
+    ParticleEffect(String enumName, ParticleProperty... properties) {
         this.properties = Arrays.asList(properties);
 
-        Particle matchingEnum = null;
-        for (Particle particle : Particle.values()) {
-            if (particle.name().equals(enumName) || particle.name().equals(enumNameLegacy)) {
-                matchingEnum = particle;
-                break;
-            }
-        }
-
-        this.internalEnum = matchingEnum; // Will be null if this server's version doesn't support this particle type
+        // Will be null if this server's version doesn't support this particle type
+        this.internalEnum = Stream.of(Particle.values()).filter(x -> x.name().equals(enumName)).findFirst().orElse(null);
     }
 
     /**
@@ -127,15 +119,6 @@ public enum ParticleEffect {
      */
     public String getName() {
         return this.name().toLowerCase();
-    }
-
-    /**
-     * Gets the Spigot Particle Enum version of this ParticleEffect
-     * 
-     * @return The Spigot Particle Enum this ParticleEffect represents
-     */
-    public Particle getSpigotEnum() {
-        return this.internalEnum;
     }
 
     /**
@@ -149,8 +132,7 @@ public enum ParticleEffect {
     }
 
     /**
-     * Determine if this particle effect is supported by your current server
-     * version
+     * Determine if this particle effect is supported by the current server version
      * 
      * @return Whether the particle effect is supported or not
      */
@@ -178,13 +160,7 @@ public enum ParticleEffect {
      * @return The particle effect
      */
     public static ParticleEffect fromName(String name) {
-        for (Entry<String, ParticleEffect> entry : NAME_MAP.entrySet()) {
-            if (!entry.getKey().equalsIgnoreCase(name)) {
-                continue;
-            }
-            return entry.getValue();
-        }
-        return null;
+        return NAME_MAP.get(name.toLowerCase());
     }
     
     /**

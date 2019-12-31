@@ -22,6 +22,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.World;
 
 /**
  * All data changes to PPlayers such as group or fixed effect changes must be done through here,
@@ -179,10 +180,15 @@ public class DataManager extends Manager {
                     while (result.next()) {
                         // Fixed effect properties
                         int fixedEffectId = result.getInt("f_id");
-                        String worldName = result.getString("world");
                         double xPos = result.getDouble("xPos");
                         double yPos = result.getDouble("yPos");
                         double zPos = result.getDouble("zPos");
+                        World world = Bukkit.getWorld(result.getString("world"));
+                        if (world == null) {
+                            // World was deleted, remove the fixed effect as it is no longer valid
+                            this.removeFixedEffect(playerUUID, fixedEffectId);
+                            continue;
+                        }
 
                         // Particle properties
                         int particleId = result.getInt("p_id");
@@ -194,7 +200,7 @@ public class DataManager extends Manager {
                         OrdinaryColor color = new OrdinaryColor(result.getInt("r"), result.getInt("g"), result.getInt("b"));
                         ParticlePair particle = new ParticlePair(playerUUID, particleId, effect, style, itemMaterial, blockMaterial, color, noteColor);
 
-                        fixedParticles.add(new FixedParticleEffect(playerUUID, fixedEffectId, worldName, xPos, yPos, zPos, particle));
+                        fixedParticles.add(new FixedParticleEffect(playerUUID, fixedEffectId, world, xPos, yPos, zPos, particle));
                     }
                 }
 
@@ -385,20 +391,19 @@ public class DataManager extends Manager {
         this.async(() -> this.databaseConnector.connect((connection) -> {
             String particleUUID = UUID.randomUUID().toString();
 
-            String particleQuery = "INSERT INTO " + this.getTablePrefix() + "particle (uuid, group_uuid, id, effect, style, item_material, block_material, note, r, g, b) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String particleQuery = "INSERT INTO " + this.getTablePrefix() + "particle (uuid, id, effect, style, item_material, block_material, note, r, g, b) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement statement = connection.prepareStatement(particleQuery)) {
                 ParticlePair particle = fixedEffect.getParticlePair();
                 statement.setString(1, particleUUID);
-                statement.setNull(2, java.sql.Types.VARCHAR);
-                statement.setInt(3, fixedEffect.getId());
-                statement.setString(4, particle.getEffect().getName());
-                statement.setString(5, particle.getStyle().getName());
-                statement.setString(6, particle.getItemMaterial().name());
-                statement.setString(7, particle.getBlockMaterial().name());
-                statement.setInt(8, particle.getNoteColor().getNote());
-                statement.setInt(9, particle.getColor().getRed());
-                statement.setInt(10, particle.getColor().getGreen());
-                statement.setInt(11, particle.getColor().getBlue());
+                statement.setInt(2, fixedEffect.getId());
+                statement.setString(3, particle.getEffect().getName());
+                statement.setString(4, particle.getStyle().getName());
+                statement.setString(5, particle.getItemMaterial().name());
+                statement.setString(6, particle.getBlockMaterial().name());
+                statement.setInt(7, particle.getNoteColor().getNote());
+                statement.setInt(8, particle.getColor().getRed());
+                statement.setInt(9, particle.getColor().getGreen());
+                statement.setInt(10, particle.getColor().getBlue());
                 statement.executeUpdate();
             }
 

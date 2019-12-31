@@ -271,7 +271,7 @@ public class FixedCommandModule implements CommandModule {
 
         int nextFixedEffectId = pplayer.getNextFixedEffectId();
         ParticlePair particle = new ParticlePair(pplayer.getUniqueId(), nextFixedEffectId, effect, style, itemData, blockData, colorData, noteColorData);
-        FixedParticleEffect fixedEffect = new FixedParticleEffect(p.getUniqueId(), nextFixedEffectId, p.getLocation().getWorld().getName(), xPos, yPos, zPos, particle);
+        FixedParticleEffect fixedEffect = new FixedParticleEffect(p.getUniqueId(), nextFixedEffectId, p.getLocation().getWorld(), xPos, yPos, zPos, particle);
 
         localeManager.sendMessage(pplayer, "fixed-create-success");
         PlayerParticles.getInstance().getManager(DataManager.class).saveFixedEffect(fixedEffect);

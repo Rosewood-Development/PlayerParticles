@@ -23,7 +23,8 @@ public class PPlayerMovementListener implements Listener {
         DataManager dataManager = PlayerParticles.getInstance().getManager(DataManager.class);
 
         Bukkit.getScheduler().runTaskTimer(PlayerParticles.getInstance(), () -> {
-            if (!Setting.TOGGLE_ON_MOVE.getBoolean()) return;
+            if (!Setting.TOGGLE_ON_MOVE.getBoolean())
+                return;
 
             List<UUID> toRemove = new ArrayList<>();
 
@@ -51,8 +52,11 @@ public class PPlayerMovementListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (!Setting.TOGGLE_ON_MOVE.getBoolean()) return;
-        if (event.getTo() != null && event.getTo().getBlock() == event.getFrom().getBlock()) return;
+        if (!Setting.TOGGLE_ON_MOVE.getBoolean())
+            return;
+
+        if (event.getTo() != null && event.getTo().getBlock() == event.getFrom().getBlock())
+            return;
         
         UUID playerUUID = event.getPlayer().getUniqueId();
         if (!this.timeSinceLastMovement.containsKey(playerUUID)) {

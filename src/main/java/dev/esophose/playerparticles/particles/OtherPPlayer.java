@@ -19,7 +19,10 @@ public class OtherPPlayer extends PPlayer {
         
         this.sender = sender;
     }
-    
+
+    /**
+     * @return The CommandSender where messages should be sent to
+     */
     public CommandSender getMessageDestination() {
         return this.sender;
     }

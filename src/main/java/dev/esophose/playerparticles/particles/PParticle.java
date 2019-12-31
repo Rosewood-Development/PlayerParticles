@@ -63,19 +63,18 @@ public class PParticle {
      * @return The location, either as normal or modified with the offsets
      */
     public Location getLocation(boolean colorable) {
-        if (!colorable) {
+        if (!colorable)
             return this.location;
-        } else {
-            double x = this.location.getX();
-            double y = this.location.getY();
-            double z = this.location.getZ();
 
-            x += this.xOff * 1.75D * (Math.random() > 0.5 ? Math.random() : -Math.random());
-            y += this.yOff * 1.75D * (Math.random() > 0.5 ? Math.random() : -Math.random());
-            z += this.zOff * 1.75D * (Math.random() > 0.5 ? Math.random() : -Math.random());
+        double x = this.location.getX();
+        double y = this.location.getY();
+        double z = this.location.getZ();
 
-            return new Location(this.location.getWorld(), x, y, z);
-        }
+        x += this.xOff * 1.75D * (Math.random() > 0.5 ? Math.random() : -Math.random());
+        y += this.yOff * 1.75D * (Math.random() > 0.5 ? Math.random() : -Math.random());
+        z += this.zOff * 1.75D * (Math.random() > 0.5 ? Math.random() : -Math.random());
+
+        return new Location(this.location.getWorld(), x, y, z);
     }
 
     /**

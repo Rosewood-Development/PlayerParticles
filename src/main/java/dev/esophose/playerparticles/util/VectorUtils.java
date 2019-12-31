@@ -42,7 +42,7 @@ public final class VectorUtils {
      * @param angle How much to rotate
      * @return The starting vector rotated
      */
-    public static final Vector rotateAroundAxisX(Vector v, double angle) {
+    public static Vector rotateAroundAxisX(Vector v, double angle) {
         double y, z, cos, sin;
         cos = Math.cos(angle);
         sin = Math.sin(angle);
@@ -58,7 +58,7 @@ public final class VectorUtils {
      * @param angle How much to rotate
      * @return The starting vector rotated
      */
-    public static final Vector rotateAroundAxisY(Vector v, double angle) {
+    public static Vector rotateAroundAxisY(Vector v, double angle) {
         double x, z, cos, sin;
         cos = Math.cos(angle);
         sin = Math.sin(angle);
@@ -74,7 +74,7 @@ public final class VectorUtils {
      * @param angle How much to rotate
      * @return The starting vector rotated
      */
-    public static final Vector rotateAroundAxisZ(Vector v, double angle) {
+    public static Vector rotateAroundAxisZ(Vector v, double angle) {
         double x, y, cos, sin;
         cos = Math.cos(angle);
         sin = Math.sin(angle);
@@ -92,7 +92,7 @@ public final class VectorUtils {
      * @param angleZ The change angle on Z
      * @return The starting vector rotated
      */
-    public static final Vector rotateVector(Vector v, double angleX, double angleY, double angleZ) {
+    public static Vector rotateVector(Vector v, double angleX, double angleY, double angleZ) {
         rotateAroundAxisX(v, angleX);
         rotateAroundAxisY(v, angleY);
         rotateAroundAxisZ(v, angleZ);
@@ -106,7 +106,7 @@ public final class VectorUtils {
      * @param location The location to rotate around
      * @return The starting vector rotated
      */
-    public static final Vector rotateVector(Vector v, Location location) {
+    public static Vector rotateVector(Vector v, Location location) {
         return rotateVector(v, location.getYaw(), location.getPitch());
     }
 
@@ -120,7 +120,7 @@ public final class VectorUtils {
      * @param pitchDegrees The pitch offset in degrees
      * @return The starting vector rotated
      */
-    public static final Vector rotateVector(Vector v, float yawDegrees, float pitchDegrees) {
+    public static Vector rotateVector(Vector v, float yawDegrees, float pitchDegrees) {
         double yaw = Math.toRadians(-1 * (yawDegrees + 90));
         double pitch = Math.toRadians(-pitchDegrees);
 
@@ -153,7 +153,7 @@ public final class VectorUtils {
      * @param vector The vector to check
      * @return The angle toward the X axis
      */
-    public static final double angleToXAxis(Vector vector) {
+    public static double angleToXAxis(Vector vector) {
         return Math.atan2(vector.getX(), vector.getY());
     }
 }

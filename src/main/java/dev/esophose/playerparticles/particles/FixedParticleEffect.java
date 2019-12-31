@@ -1,7 +1,6 @@
 package dev.esophose.playerparticles.particles;
 
 import java.util.UUID;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -33,22 +32,16 @@ public class FixedParticleEffect {
      * 
      * @param pplayerUUID The UUID of the player who owns the effect
      * @param id The id this effect has, unique to the owner pplayer
-     * @param worldName The world name this effect will be displayed in
+     * @param world The world this effect will be displayed in
      * @param xPos The X position in the world
      * @param yPos The Y position in the world
      * @param zPos The Z position in the world
      * @param particlePair The ParticlePair that represents this FixedParticleEffect's appearance
      */
-    public FixedParticleEffect(UUID pplayerUUID, int id, String worldName, double xPos, double yPos, double zPos, ParticlePair particlePair) {
+    public FixedParticleEffect(UUID pplayerUUID, int id, World world, double xPos, double yPos, double zPos, ParticlePair particlePair) {
         this.pplayerUUID = pplayerUUID;
         this.id = id;
         this.particlePair = particlePair;
-
-        World world = Bukkit.getWorld(worldName);
-        if (world == null) { // Default to the first world in case it doesn't exist
-            world = Bukkit.getWorlds().get(0); // All servers will have at least one world
-        }
-
         this.location = new Location(world, xPos, yPos, zPos);
     }
 
