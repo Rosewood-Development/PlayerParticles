@@ -318,7 +318,7 @@ public class EditCommandModule implements CommandModule {
         return "<ID> <effect>|<style>|<data> <args>";
     }
 
-    public boolean requiresEffects() {
+    public boolean requiresEffectsAndStyles() {
         return true;
     }
 

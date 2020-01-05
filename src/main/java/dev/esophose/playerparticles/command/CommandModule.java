@@ -47,11 +47,11 @@ public interface CommandModule {
     String getArguments();
 
     /**
-     * True if this command requires the player to have any effects
+     * True if this command requires the player to have any effects and styles
      * 
-     * @return If the player must have effects to use this command
+     * @return If the player must have effects and styles to use this command
      */
-    boolean requiresEffects();
+    boolean requiresEffectsAndStyles();
 
     /**
      * @return true if this command can be executed from console, otherwise false

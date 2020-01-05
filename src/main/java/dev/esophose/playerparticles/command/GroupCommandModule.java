@@ -328,7 +328,7 @@ public class GroupCommandModule implements CommandModule {
         return "<sub-command>";
     }
 
-    public boolean requiresEffects() {
+    public boolean requiresEffectsAndStyles() {
         return false;
     }
 

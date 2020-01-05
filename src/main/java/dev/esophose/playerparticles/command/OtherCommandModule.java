@@ -44,7 +44,7 @@ public class OtherCommandModule implements CommandModuleSecondary {
             return;
         }
         
-        if (commandModule.requiresEffects() && permissionManager.getEffectNamesUserHasPermissionFor(other).isEmpty()) {
+        if (commandModule.requiresEffectsAndStyles() && (permissionManager.getEffectNamesUserHasPermissionFor(other).isEmpty() || permissionManager.getStyleNamesUserHasPermissionFor(other).isEmpty())) {
             localeManager.sendMessage(sender, "other-success", StringPlaceholders.single("player", other.getName()));
             localeManager.sendMessage(sender, "command-error-no-effects");
             return;

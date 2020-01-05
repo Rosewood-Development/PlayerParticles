@@ -4,7 +4,6 @@ import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
-import dev.esophose.playerparticles.styles.DefaultStyles;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import java.util.ArrayList;
 import java.util.List;
@@ -217,7 +216,6 @@ public class PermissionManager extends Manager {
      * @return If the player has permission to use the style
      */
     public boolean hasStylePermission(Player player, ParticleStyle style) {
-        if (style == DefaultStyles.NORMAL) return true;
         if (PPermission.ALL.check(player) || PPermission.STYLE_ALL.check(player)) return true;
         return PPermission.STYLE.check(player, style.getName());
     }

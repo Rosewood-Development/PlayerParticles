@@ -68,7 +68,7 @@ public class DataCommandModule implements CommandModule {
         return "<effect>";
     }
 
-    public boolean requiresEffects() {
+    public boolean requiresEffectsAndStyles() {
         return true;
     }
 

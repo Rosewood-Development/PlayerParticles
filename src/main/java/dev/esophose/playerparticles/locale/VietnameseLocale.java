@@ -22,7 +22,7 @@ public class VietnameseLocale implements Locale {
             this.put("prefix", "&7[&3PlayerParticles&7] ");
 
             this.put("#1", "Command Description Messages");
-            this.put("command-error-no-effects", "&cBạn phải có quyền sử dụng hiệu ứng để làm điều này!");
+            this.put("command-error-missing-effects-or-styles", "&cBạn phải có quyền sử dụng hiệu ứng để làm điều này!");
             this.put("command-error-unknown", "&cLệnh không đúng, &6/pp help &cđể xem danh sách các câu lệnh.");
             this.put("command-descriptions", "&eCác lệnh có sẵn:");
             this.put("command-descriptions-usage", "&e/pp %cmd% %args%");

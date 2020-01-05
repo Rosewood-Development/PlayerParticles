@@ -49,7 +49,7 @@ public class ListCommandModule implements CommandModule {
         return "";
     }
 
-    public boolean requiresEffects() {
+    public boolean requiresEffectsAndStyles() {
         return true;
     }
 

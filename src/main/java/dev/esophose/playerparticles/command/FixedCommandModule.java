@@ -807,7 +807,7 @@ public class FixedCommandModule implements CommandModule {
         return "<sub-command>";
     }
 
-    public boolean requiresEffects() {
+    public boolean requiresEffectsAndStyles() {
         return true;
     }
 

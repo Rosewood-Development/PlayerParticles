@@ -22,7 +22,7 @@ public class SimplifiedChineseLocale implements Locale {
             this.put("prefix", "&7[&3PlayerParticles&7] ");
 
             this.put("#1", "Command Description Messages");
-            this.put("command-error-no-effects", "&c你必须有权限使用特效才能使用这个指令!");
+            this.put("command-error-missing-effects-or-styles", "&c你必须有权限使用特效才能使用这个指令!");
             this.put("command-error-unknown", "&c未知的指令， 请使用 &b/pp help &c查看指令列表。");
             this.put("command-descriptions", "&e你可以使用以下指令:");
             this.put("command-descriptions-usage", "&e/pp %cmd% %args%");

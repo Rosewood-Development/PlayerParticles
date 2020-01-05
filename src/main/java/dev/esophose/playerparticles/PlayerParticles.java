@@ -17,8 +17,15 @@
  * * Changed the package names
  * + Config and lang files will no longer reset every update
  * + Added PlaceholderAPI support
+ * * The style 'normal' is no longer granted permission by default
  * * Fixed an issue where 'random' data would not parse properly in preset_groups.yml
  * * Fixed an issue where preset groups would not display in the GUI even if the player has permission for them
+ */
+
+ /*
+  * Changed messages (NEEDS UPDATING IN OTHER LANGUAGES):
+  * Renamed command-error-no-effects to command-error-missing-effects-or-styles
+  * Changed message for command-error-missing-effects-or-styles
  */
 
 package dev.esophose.playerparticles;

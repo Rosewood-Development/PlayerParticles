@@ -37,7 +37,7 @@ public class ToggleCommandModule implements CommandModule {
         return "";
     }
 
-    public boolean requiresEffects() {
+    public boolean requiresEffectsAndStyles() {
         return false;
     }
 

@@ -33,7 +33,7 @@ public class ResetCommandModule implements CommandModule {
         return "";
     }
 
-    public boolean requiresEffects() {
+    public boolean requiresEffectsAndStyles() {
         return false;
     }
 

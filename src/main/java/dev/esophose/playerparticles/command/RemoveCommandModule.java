@@ -128,7 +128,7 @@ public class RemoveCommandModule implements CommandModule {
         return "<ID>|<effect>|<style>";
     }
 
-    public boolean requiresEffects() {
+    public boolean requiresEffectsAndStyles() {
         return false;
     }
 

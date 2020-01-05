@@ -205,7 +205,7 @@ public class AddCommandModule implements CommandModule {
         return "<effect> <style> [data]";
     }
 
-    public boolean requiresEffects() {
+    public boolean requiresEffectsAndStyles() {
         return true;
     }
 

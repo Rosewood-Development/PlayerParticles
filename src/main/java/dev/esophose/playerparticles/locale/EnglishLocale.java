@@ -22,7 +22,7 @@ public class EnglishLocale implements Locale {
             this.put("prefix", "&7[&3PlayerParticles&7] ");
 
             this.put("#1", "Command Description Messages");
-            this.put("command-error-no-effects", "&cYou must have access to effects to use this command!");
+            this.put("command-error-missing-effects-or-styles", "&cYou must have access to effects and styles to use this command!");
             this.put("command-error-unknown", "&cUnknown command, use &b/pp help &cfor a list of commands.");
             this.put("command-descriptions", "&eThe following commands are available:");
             this.put("command-descriptions-usage", "&e/pp %cmd% %args%");

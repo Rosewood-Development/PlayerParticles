@@ -22,7 +22,7 @@ public class RussianLocale implements Locale {
             this.put("prefix", "&7[&3PlayerParticles&7] ");
 
             this.put("#1", "Command Description Messages");
-            this.put("command-error-no-effects", "&cВы должны иметь доступ к эффектам чтобы использовать эту команду!");
+            this.put("command-error-missing-effects-or-styles", "&cВы должны иметь доступ к эффектам чтобы использовать эту команду!");
             this.put("command-error-unknown", "&cНеизвестная команда, напишите &b/pp help &c, чтобы узнать команды.");
             this.put("command-descriptions", "&eВам доступны команды ниже:");
             this.put("command-descriptions-usage", "&e/pp %cmd% %args%");

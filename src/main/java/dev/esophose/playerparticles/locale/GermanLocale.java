@@ -22,7 +22,7 @@ public class GermanLocale implements Locale {
             this.put("prefix", "&7[&3PlayerParticles&7] ");
 
             this.put("#1", "Command Description Messages");
-            this.put("command-error-no-effects", "&cSie müssen Zugriff auf Effekte haben, um diesen Befehl verwenden zu können!");
+            this.put("command-error-missing-effects-or-styles", "&cSie müssen Zugriff auf Effekte haben, um diesen Befehl verwenden zu können!");
             this.put("command-error-unknown", "&cUnbekannter Befehl. Verwenden Sie &b/pp help &c, um eine Liste der Befehle anzuzeigen.");
             this.put("command-descriptions", "Die folgenden Befehle stehen zur Auswahl:");
             this.put("command-descriptions-usage", "&e/pp %cmd% %args%");
