@@ -17,7 +17,10 @@ import dev.esophose.playerparticles.util.ParticleUtils;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
 import org.bukkit.Bukkit;
@@ -76,7 +79,7 @@ public class DataManager extends Manager {
      * @return The PPlayer from cache
      */
     public PPlayer getPPlayer(UUID playerUUID) {
-        List<PPlayer> pplayers;
+        Collection<PPlayer> pplayers;
         synchronized (pplayers = this.playerParticles.getManager(ParticleManager.class).getPPlayers()) { // Under rare circumstances, the PPlayers list can be changed while it's looping
             for (PPlayer pp : pplayers)
                 if (pp.getUniqueId().equals(playerUUID))
@@ -101,8 +104,8 @@ public class DataManager extends Manager {
         }
 
         this.async(() -> {
-            List<ParticleGroup> groups = new ArrayList<>();
-            List<FixedParticleEffect> fixedParticles = new ArrayList<>();
+            Map<String, ParticleGroup> groups = new HashMap<>();
+            Map<Integer, FixedParticleEffect> fixedParticles = new HashMap<>();
 
             this.databaseConnector.connect((connection) -> {
                 // Load settings
@@ -151,9 +154,9 @@ public class DataManager extends Manager {
 
                         // Try to add particle to an existing group
                         boolean groupAlreadyExists = false;
-                        for (ParticleGroup group : groups) {
+                        for (ParticleGroup group : groups.values()) {
                             if (group.getName().equalsIgnoreCase(groupName)) {
-                                group.getParticles().add(particle);
+                                group.getParticles().put(particle.getId(), particle);
                                 groupAlreadyExists = true;
                                 break;
                             }
@@ -161,10 +164,10 @@ public class DataManager extends Manager {
 
                         // Add the particle to a new group if one didn't already exist
                         if (!groupAlreadyExists) {
-                            List<ParticlePair> particles = new ArrayList<>();
-                            particles.add(particle);
+                            HashMap<Integer, ParticlePair> particles = new HashMap<>();
+                            particles.put(particle.getId(), particle);
                             ParticleGroup newGroup = new ParticleGroup(groupName, particles);
-                            groups.add(newGroup);
+                            groups.put(newGroup.getName().toLowerCase(), newGroup);
                         }
                     }
                 }
@@ -200,13 +203,13 @@ public class DataManager extends Manager {
                         OrdinaryColor color = new OrdinaryColor(result.getInt("r"), result.getInt("g"), result.getInt("b"));
                         ParticlePair particle = new ParticlePair(playerUUID, particleId, effect, style, itemMaterial, blockMaterial, color, noteColor);
 
-                        fixedParticles.add(new FixedParticleEffect(playerUUID, fixedEffectId, world, xPos, yPos, zPos, particle));
+                        fixedParticles.put(fixedEffectId, new FixedParticleEffect(playerUUID, fixedEffectId, world, xPos, yPos, zPos, particle));
                     }
                 }
 
                 // If there aren't any groups then this is a brand new PPlayer and we need to save a new active group for them
                 boolean activeGroupExists = false;
-                for (ParticleGroup group : groups) {
+                for (ParticleGroup group : groups.values()) {
                     if (group.getName().equals(ParticleGroup.DEFAULT_NAME)) {
                         activeGroupExists = true;
                         break;
@@ -214,9 +217,9 @@ public class DataManager extends Manager {
                 }
 
                 if (!activeGroupExists) {
-                    ParticleGroup activeGroup = new ParticleGroup(ParticleGroup.DEFAULT_NAME, new ArrayList<>());
+                    ParticleGroup activeGroup = new ParticleGroup(ParticleGroup.DEFAULT_NAME, new HashMap<>());
                     this.saveParticleGroup(playerUUID, activeGroup);
-                    groups.add(activeGroup);
+                    groups.put(activeGroup.getName(), activeGroup);
                 }
 
                 PPlayer loadedPPlayer = new PPlayer(playerUUID, groups, fixedParticles, particlesHidden);
@@ -309,7 +312,7 @@ public class DataManager extends Manager {
             // Fill group with new particles
             String createParticlesQuery = "INSERT INTO " + this.getTablePrefix() + "particle (uuid, group_uuid, id, effect, style, item_material, block_material, note, r, g, b) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement particlesStatement = connection.prepareStatement(createParticlesQuery)) {
-                for (ParticlePair particle : group.getParticles()) {
+                for (ParticlePair particle : group.getParticles().values()) {
                     particlesStatement.setString(1, UUID.randomUUID().toString());
                     particlesStatement.setString(2, groupUUID);
                     particlesStatement.setInt(3, particle.getId());
@@ -329,13 +332,13 @@ public class DataManager extends Manager {
         }));
 
         this.getPPlayer(playerUUID, (pplayer) -> {
-            for (ParticleGroup existing : pplayer.getParticleGroups()) {
+            for (ParticleGroup existing : pplayer.getParticleGroups().values()) {
                 if (group.getName().equalsIgnoreCase(existing.getName())) {
-                    pplayer.getParticleGroups().remove(existing);
+                    pplayer.getParticleGroups().remove(existing.getName());
                     break;
                 }
             }
-            pplayer.getParticleGroups().add(group);
+            pplayer.getParticleGroups().put(group.getName(), group);
         });
     }
 

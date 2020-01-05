@@ -14,7 +14,7 @@ public class ListCommandModule implements CommandModule {
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
 
-        List<ParticlePair> particles = pplayer.getActiveParticles();
+        List<ParticlePair> particles = new ArrayList<>(pplayer.getActiveParticles());
         particles.sort(Comparator.comparingInt(ParticlePair::getId));
         
         if (particles.isEmpty()) {

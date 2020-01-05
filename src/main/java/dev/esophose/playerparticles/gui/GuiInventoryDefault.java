@@ -126,14 +126,14 @@ public class GuiInventoryDefault extends GuiInventory {
                     callbacks.add(() -> {
                         ParticleGroup group = pplayer.getActiveParticleGroup();
                         if (canEditPrimaryStyleAndData) {
-                            for (ParticlePair particle : group.getParticles()) {
+                            for (ParticlePair particle : group.getParticles().values()) {
                                 if (particle.getId() == editingParticle.getId()) {
                                     particle.setEffect(editingParticle.getEffect());
                                     break;
                                 }
                             }
                         } else {
-                            group.getParticles().add(editingParticle);
+                            group.getParticles().put(editingParticle.getId(), editingParticle);
                         }
                         dataManager.saveParticleGroup(pplayer.getUniqueId(), group);
 
@@ -167,7 +167,7 @@ public class GuiInventoryDefault extends GuiInventory {
                     callbacks.add(() -> guiManager.transition(new GuiInventoryEditStyle(pplayer, editingParticle, 1, callbacks, 1)));
                     callbacks.add(() -> {
                         ParticleGroup group = pplayer.getActiveParticleGroup();
-                        for (ParticlePair particle : group.getParticles()) {
+                        for (ParticlePair particle : group.getParticles().values()) {
                             if (particle.getId() == editingParticle.getId()) {
                                 particle.setStyle(editingParticle.getStyle());
                                 break;
@@ -210,7 +210,7 @@ public class GuiInventoryDefault extends GuiInventory {
                     callbacks.add(() -> guiManager.transition(new GuiInventoryEditData(pplayer, editingParticle, 1, callbacks, 1)));
                     callbacks.add(() -> {
                         ParticleGroup group = pplayer.getActiveParticleGroup();
-                        for (ParticlePair particle : group.getParticles()) {
+                        for (ParticlePair particle : group.getParticles().values()) {
                             if (particle.getId() == editingParticle.getId()) {
                                 particle.setColor(editingParticle.getColor());
                                 particle.setNoteColor(editingParticle.getNoteColor());

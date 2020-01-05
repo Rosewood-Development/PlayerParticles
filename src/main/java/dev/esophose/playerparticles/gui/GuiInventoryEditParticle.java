@@ -52,7 +52,7 @@ public class GuiInventoryEditParticle extends GuiInventory {
                     callbacks.add(() -> guiManager.transition(new GuiInventoryEditEffect(pplayer, editingParticle, 1, callbacks, 1)));
                     callbacks.add(() -> {
                         ParticleGroup group = pplayer.getActiveParticleGroup();
-                        for (ParticlePair particle : group.getParticles()) {
+                        for (ParticlePair particle : group.getParticles().values()) {
                             if (particle.getId() == editingParticle.getId()) {
                                 particle.setEffect(editingParticle.getEffect());
                                 break;
@@ -78,7 +78,7 @@ public class GuiInventoryEditParticle extends GuiInventory {
                     callbacks.add(() -> guiManager.transition(new GuiInventoryEditStyle(pplayer, editingParticle, 1, callbacks, 1)));
                     callbacks.add(() -> {
                         ParticleGroup group = pplayer.getActiveParticleGroup();
-                        for (ParticlePair particle : group.getParticles()) {
+                        for (ParticlePair particle : group.getParticles().values()) {
                             if (particle.getId() == editingParticle.getId()) {
                                 particle.setStyle(editingParticle.getStyle());
                                 break;
@@ -107,7 +107,7 @@ public class GuiInventoryEditParticle extends GuiInventory {
                         callbacks.add(() -> guiManager.transition(new GuiInventoryEditData(pplayer, editingParticle, 1, callbacks, 1)));
                         callbacks.add(() -> {
                             ParticleGroup group = pplayer.getActiveParticleGroup();
-                            for (ParticlePair particle : group.getParticles()) {
+                            for (ParticlePair particle : group.getParticles().values()) {
                                 if (particle.getId() == editingParticle.getId()) {
                                     particle.setColor(editingParticle.getColor());
                                     particle.setNoteColor(editingParticle.getNoteColor());

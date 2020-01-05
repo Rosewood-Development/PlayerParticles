@@ -2,8 +2,8 @@ package dev.esophose.playerparticles.particles;
 
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.PermissionManager;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import org.bukkit.entity.Player;
 
 public class ParticleGroup {
@@ -11,9 +11,9 @@ public class ParticleGroup {
     public static final String DEFAULT_NAME = "active";
 
     private String name;
-    private List<ParticlePair> particles;
+    private Map<Integer, ParticlePair> particles;
 
-    public ParticleGroup(String name, List<ParticlePair> particles) {
+    public ParticleGroup(String name, Map<Integer, ParticlePair> particles) {
         this.name = name;
         this.particles = particles;
     }
@@ -29,11 +29,11 @@ public class ParticleGroup {
     }
 
     /**
-     * Get the List of ParticlePairs in this group
+     * Get the map of ParticlePairs in this group
      * 
      * @return The particles in this group
      */
-    public List<ParticlePair> getParticles() {
+    public Map<Integer, ParticlePair> getParticles() {
         return this.particles;
     }
 
@@ -43,7 +43,7 @@ public class ParticleGroup {
      * @return The default empty active ParticleGroup
      */
     public static ParticleGroup getDefaultGroup() {
-        return new ParticleGroup(DEFAULT_NAME, new ArrayList<>());
+        return new ParticleGroup(DEFAULT_NAME, new HashMap<>());
     }
 
     /**
@@ -60,7 +60,7 @@ public class ParticleGroup {
             return false;
 
         // Make sure the player has permission for all effects/styles in the group
-        for (ParticlePair particle : this.particles) {
+        for (ParticlePair particle : this.particles.values()) {
             if (!permissionManager.hasEffectPermission(player, particle.getEffect()))
                 return false;
 

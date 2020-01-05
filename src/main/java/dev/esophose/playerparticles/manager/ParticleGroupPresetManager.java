@@ -17,7 +17,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.bukkit.Material;
@@ -62,7 +64,7 @@ public class ParticleGroupPresetManager extends Manager {
         Set<String> groupNames = groupsYaml.getKeys(false);
         for (String groupName : groupNames) {
             try {
-                List<ParticlePair> particles = new ArrayList<>();
+                Map<Integer, ParticlePair> particles = new HashMap<>();
                 String displayName = "";
                 Material guiIcon = Material.ENDER_CHEST;
                 String permission = "";
@@ -184,7 +186,7 @@ public class ParticleGroupPresetManager extends Manager {
                         }
                     }
                     
-                    particles.add(new ParticlePair(null, id, effect, style, itemData, blockData, colorData, noteColorData));
+                    particles.put(id, new ParticlePair(null, id, effect, style, itemData, blockData, colorData, noteColorData));
                 }
 
                 this.presetGroups.add(new ParticleGroupPreset(displayName, guiIcon, permission, allowPermissionOverride, new ParticleGroup(groupName, particles)));

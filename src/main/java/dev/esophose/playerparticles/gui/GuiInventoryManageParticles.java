@@ -29,7 +29,7 @@ public class GuiInventoryManageParticles extends GuiInventory {
         this.fillBorder(BorderColor.ORANGE);
 
         // Manage/Delete Particle Buttons
-        List<ParticlePair> particles = pplayer.getActiveParticles();
+        List<ParticlePair> particles = new ArrayList<>(pplayer.getActiveParticles());
         particles.sort(Comparator.comparingInt(ParticlePair::getId));
 
         int index = 10;
@@ -56,12 +56,7 @@ public class GuiInventoryManageParticles extends GuiInventory {
                         } else {
                             // Delete particle
                             ParticleGroup activeGroup = pplayer.getActiveParticleGroup();
-                            for (ParticlePair pp : activeGroup.getParticles()) {
-                                if (pp.getId() == particle.getId()) {
-                                    activeGroup.getParticles().remove(pp);
-                                    break;
-                                }
-                            }
+                            activeGroup.getParticles().remove(particle.getId());
                             dataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
 
                             // Update inventory to reflect deletion
@@ -104,7 +99,7 @@ public class GuiInventoryManageParticles extends GuiInventory {
                     callbacks.add(() -> {
                         // Save new particle
                         ParticleGroup group = pplayer.getActiveParticleGroup();
-                        group.getParticles().add(editingParticle);
+                        group.getParticles().put(editingParticle.getId(), editingParticle);
                         dataManager.saveParticleGroup(pplayer.getUniqueId(), group);
 
                         // Reopen the manage particle inventory

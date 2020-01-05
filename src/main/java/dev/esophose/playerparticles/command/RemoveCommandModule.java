@@ -41,15 +41,8 @@ public class RemoveCommandModule implements CommandModule {
                 return;
             }
 
-            boolean removed = false;
             ParticleGroup activeGroup = pplayer.getActiveParticleGroup();
-            for (ParticlePair particle : activeGroup.getParticles()) {
-                if (particle.getId() == id) {
-                    activeGroup.getParticles().remove(particle);
-                    removed = true;
-                    break;
-                }
-            }
+            boolean removed = activeGroup.getParticles().remove(id) != null;
 
             if (!removed) {
                 localeManager.sendMessage(pplayer, "id-unknown", StringPlaceholders.single("id", id));

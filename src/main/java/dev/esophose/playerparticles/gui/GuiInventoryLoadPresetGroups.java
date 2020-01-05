@@ -13,6 +13,7 @@ import dev.esophose.playerparticles.particles.ParticleGroupPreset;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import dev.esophose.playerparticles.util.StringPlaceholders;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import org.bukkit.Bukkit;
@@ -39,7 +40,7 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
             if (!group.canPlayerUse(player))
                 continue;
 
-            List<ParticlePair> particles = group.getGroup().getParticles();
+            List<ParticlePair> particles = new ArrayList<>(group.getGroup().getParticles().values());
             particles.sort(Comparator.comparingInt(ParticlePair::getId));
 
             String[] lore = new String[particles.size() + 1];
@@ -62,7 +63,7 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
                 for (ParticlePair particle : particles) {
                     ParticlePair clonedParticle = particle.clone();
                     clonedParticle.setOwner(pplayer);
-                    activeGroup.getParticles().add(clonedParticle);
+                    activeGroup.getParticles().put(clonedParticle.getId(), clonedParticle);
                 }
                 dataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
 

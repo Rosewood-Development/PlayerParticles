@@ -3,17 +3,20 @@ package dev.esophose.playerparticles.manager;
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.particles.FixedParticleEffect;
+import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticleEffect.NoteColor;
 import dev.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.styles.DefaultStyles;
-import dev.esophose.playerparticles.particles.PParticle;
 import java.awt.Color;
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -28,9 +31,9 @@ import org.bukkit.scheduler.BukkitTask;
 public class ParticleManager extends Manager implements Listener, Runnable {
 
     /**
-     * The list containing all the loaded PPlayer info
+     * The map containing all the loaded PPlayer info
      */
-    private List<PPlayer> particlePlayers = new ArrayList<>();
+    private Map<UUID, PPlayer> particlePlayers = new HashMap<>();
 
     /**
      * The task that spawns the particles
@@ -92,7 +95,7 @@ public class ParticleManager extends Manager implements Listener, Runnable {
     public void onPlayerQuit(PlayerQuitEvent e) {
         PPlayer pplayer = this.playerParticles.getManager(DataManager.class).getPPlayer(e.getPlayer().getUniqueId());
         if (pplayer != null && pplayer.getFixedEffectIds().isEmpty())
-            this.particlePlayers.remove(pplayer); // Unload the PPlayer if they don't have any fixed effects
+            this.particlePlayers.remove(pplayer.getUniqueId()); // Unload the PPlayer if they don't have any fixed effects
     }
 
     /**
@@ -100,8 +103,8 @@ public class ParticleManager extends Manager implements Listener, Runnable {
      * 
      * @return The loaded PPlayers
      */
-    public List<PPlayer> getPPlayers() {
-        return this.particlePlayers;
+    public Collection<PPlayer> getPPlayers() {
+        return this.particlePlayers.values();
     }
 
     /**
@@ -121,9 +124,8 @@ public class ParticleManager extends Manager implements Listener, Runnable {
 
         PermissionManager permissionManager = this.playerParticles.getManager(PermissionManager.class);
 
-        // Loop over backwards so we can remove pplayers if need be
-        for (int i = this.particlePlayers.size() - 1; i >= 0; i--) {
-            PPlayer pplayer = this.particlePlayers.get(i);
+        // Spawn particles for each player
+        for (PPlayer pplayer : this.particlePlayers.values()) {
             Player player = pplayer.getPlayer();
 
             // Don't show their particles if they are in spectator mode

@@ -531,7 +531,7 @@ public class FixedCommandModule implements CommandModule {
     private void handleList(PPlayer pplayer, Player p, String[] args) {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
 
-        List<Integer> ids = pplayer.getFixedEffectIds();
+        List<Integer> ids = new ArrayList<>(pplayer.getFixedEffectIds());
         Collections.sort(ids);
 
         if (ids.isEmpty()) {

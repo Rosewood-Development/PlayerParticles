@@ -132,7 +132,7 @@ public class AddCommandModule implements CommandModule {
         
         ParticleGroup group = pplayer.getActiveParticleGroup();
         ParticlePair newParticle = new ParticlePair(pplayer.getUniqueId(), pplayer.getNextActiveParticleId(), effect, style, itemData, blockData, colorData, noteColorData);
-        group.getParticles().add(newParticle);
+        group.getParticles().put(newParticle.getId(), newParticle);
         PlayerParticles.getInstance().getManager(DataManager.class).saveParticleGroup(pplayer.getUniqueId(), group);
 
         StringPlaceholders addParticlePlaceholders = StringPlaceholders.builder("effect", newParticle.getEffect().getName())

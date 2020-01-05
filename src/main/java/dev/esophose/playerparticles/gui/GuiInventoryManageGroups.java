@@ -16,7 +16,9 @@ import dev.esophose.playerparticles.util.ParticleUtils;
 import dev.esophose.playerparticles.util.StringPlaceholders;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.bukkit.Bukkit;
 
 public class GuiInventoryManageGroups extends GuiInventory {
@@ -33,13 +35,13 @@ public class GuiInventoryManageGroups extends GuiInventory {
         int index = 10;
         int nextWrap = 17;
         int maxIndex = 35;
-        List<ParticleGroup> groups = pplayer.getParticleGroups();
+        List<ParticleGroup> groups = new ArrayList<>(pplayer.getParticleGroups().values());
         groups.sort(Comparator.comparing(ParticleGroup::getName));
 
         for (ParticleGroup group : groups) {
             if (group.getName().equals(ParticleGroup.DEFAULT_NAME)) continue;
 
-            List<ParticlePair> particles = group.getParticles();
+            List<ParticlePair> particles = new ArrayList<>(group.getParticles().values());
             particles.sort(Comparator.comparingInt(ParticlePair::getId));
 
             String[] lore = new String[particles.size() + 2];
@@ -72,7 +74,7 @@ public class GuiInventoryManageGroups extends GuiInventory {
                             ParticleGroup activeGroup = pplayer.getActiveParticleGroup();
                             activeGroup.getParticles().clear();
                             for (ParticlePair particle : particles)
-                                activeGroup.getParticles().add(particle.clone());
+                                activeGroup.getParticles().put(particle.getId(), particle.clone());
                             dataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
 
                             if (Setting.GUI_CLOSE_AFTER_GROUP_SELECTED.getBoolean()) {
@@ -137,9 +139,9 @@ public class GuiInventoryManageGroups extends GuiInventory {
                             ParticleGroup group = pplayer.getParticleGroupByName(groupName);
                             boolean groupUpdated = false;
                             if (group == null) {
-                                List<ParticlePair> particles = new ArrayList<ParticlePair>();
+                                Map<Integer, ParticlePair> particles = new HashMap<>();
                                 for (ParticlePair particle : pplayer.getActiveParticles())
-                                    particles.add(particle.clone()); // Make sure the ParticlePairs aren't the same references in both the active and saved group
+                                    particles.put(particle.getId(), particle.clone()); // Make sure the ParticlePairs aren't the same references in both the active and saved group
                                 group = new ParticleGroup(groupName, particles);
                             } else {
                                 groupUpdated = true;

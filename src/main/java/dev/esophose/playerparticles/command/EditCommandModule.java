@@ -87,7 +87,7 @@ public class EditCommandModule implements CommandModule {
         }
         
         ParticleGroup group = pplayer.getActiveParticleGroup();
-        for (ParticlePair particle : group.getParticles()) {
+        for (ParticlePair particle : group.getParticles().values()) {
             if (particle.getId() == id) {
                 particle.setEffect(effect);
                 break;
@@ -118,7 +118,7 @@ public class EditCommandModule implements CommandModule {
         }
         
         ParticleGroup group = pplayer.getActiveParticleGroup();
-        for (ParticlePair particle : group.getParticles()) {
+        for (ParticlePair particle : group.getParticles().values()) {
             if (particle.getId() == id) {
                 particle.setStyle(style);
                 break;
@@ -215,7 +215,7 @@ public class EditCommandModule implements CommandModule {
         
         String updatedDataString = null;
         ParticleGroup group = pplayer.getActiveParticleGroup();
-        for (ParticlePair particle : group.getParticles()) {
+        for (ParticlePair particle : group.getParticles().values()) {
             if (particle.getId() == id) {
                 if (itemData != null) particle.setItemMaterial(itemData);
                 if (blockData != null) particle.setBlockMaterial(blockData);

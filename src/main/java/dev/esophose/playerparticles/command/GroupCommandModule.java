@@ -13,7 +13,9 @@ import dev.esophose.playerparticles.util.StringPlaceholders;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
@@ -99,9 +101,9 @@ public class GroupCommandModule implements CommandModule {
         ParticleGroup group = pplayer.getParticleGroupByName(groupName);
         boolean groupUpdated = false;
         if (group == null) {
-            List<ParticlePair> particles = new ArrayList<>();
+            Map<Integer, ParticlePair> particles = new HashMap<>();
             for (ParticlePair particle : pplayer.getActiveParticles())
-                particles.add(particle.clone()); // Make sure the ParticlePairs aren't the same references in both the active and saved group
+                particles.put(particle.getId(), particle.clone()); // Make sure the ParticlePairs aren't the same references in both the active and saved group
             group = new ParticleGroup(groupName, particles);
         } else {
             groupUpdated = true;
@@ -159,8 +161,8 @@ public class GroupCommandModule implements CommandModule {
         // Empty out the active group and fill it with clones from the target group
         ParticleGroup activeGroup = pplayer.getActiveParticleGroup();
         activeGroup.getParticles().clear();
-        for (ParticlePair particle : group.getParticles())
-            activeGroup.getParticles().add(particle.clone());
+        for (ParticlePair particle : group.getParticles().values())
+            activeGroup.getParticles().put(particle.getId(), particle.clone());
         
         // Update group and notify player
         PlayerParticles.getInstance().getManager(DataManager.class).saveParticleGroup(pplayer.getUniqueId(), activeGroup);
@@ -236,7 +238,7 @@ public class GroupCommandModule implements CommandModule {
             group = presetGroup.getGroup();
         }
         
-        List<ParticlePair> particles = group.getParticles();
+        List<ParticlePair> particles = new ArrayList<>(group.getParticles().values());
         particles.sort(Comparator.comparingInt(ParticlePair::getId));
         
         localeManager.sendMessage(pplayer, "group-info-header", StringPlaceholders.single("group", groupName));
@@ -258,7 +260,7 @@ public class GroupCommandModule implements CommandModule {
     private void onList(PPlayer pplayer) {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         
-        List<ParticleGroup> groups = pplayer.getParticleGroups();
+        List<ParticleGroup> groups = new ArrayList<>(pplayer.getParticleGroups().values());
         groups.sort(Comparator.comparing(ParticleGroup::getName));
 
         Player player = pplayer.getPlayer();
@@ -303,7 +305,7 @@ public class GroupCommandModule implements CommandModule {
                 matches.add("<groupName>");
             } else {
                 List<String> groupNames = new ArrayList<>();
-                for (ParticleGroup group : pplayer.getParticleGroups())
+                for (ParticleGroup group : pplayer.getParticleGroups().values())
                     if (!group.getName().equals(ParticleGroup.DEFAULT_NAME))
                         groupNames.add(group.getName());
                 if (!args[0].equals("remove"))

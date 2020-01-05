@@ -2,7 +2,9 @@ package dev.esophose.playerparticles.particles;
 
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import dev.esophose.playerparticles.util.ParticleUtils;
-import java.util.List;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
@@ -17,14 +19,14 @@ public class PPlayer {
     private final UUID playerUUID;
 
     /**
-     * A List of ParticleGroups this player has, the active particle group has an id of null
+     * A map of ParticleGroups this player has, the active particle group has an id of null
      */
-    private List<ParticleGroup> particleGroups;
+    private Map<String, ParticleGroup> particleGroups;
 
     /**
-     * A List of FixedParticleEffects this user has applied
+     * A map of FixedParticleEffects this user has applied
      */
-    private List<FixedParticleEffect> fixedParticles;
+    private Map<Integer, FixedParticleEffect> fixedParticles;
     
     /**
      * If True, the player will not see any particles spawned by the plugin
@@ -44,7 +46,7 @@ public class PPlayer {
      * @param fixedParticles The FixedParticleEffects this PPlayer has
      * @param particlesHidden If this player has all particles hidden from view
      */
-    public PPlayer(UUID uuid, List<ParticleGroup> particleGroups, List<FixedParticleEffect> fixedParticles, boolean particlesHidden) {
+    public PPlayer(UUID uuid, Map<String, ParticleGroup> particleGroups, Map<Integer, FixedParticleEffect> fixedParticles, boolean particlesHidden) {
         this.playerUUID = uuid;
         this.particleGroups = particleGroups;
         this.fixedParticles = fixedParticles;
@@ -99,11 +101,11 @@ public class PPlayer {
     }
 
     /**
-     * Get a List of ParticleGroups this user has saved
+     * Get a map of ParticleGroups this user has saved
      * 
      * @return A List of ParticleGroups this player has
      */
-    public List<ParticleGroup> getParticleGroups() {
+    public Map<String, ParticleGroup> getParticleGroups() {
         return this.particleGroups;
     }
     
@@ -132,7 +134,7 @@ public class PPlayer {
      * @return The target named ParticleGroup
      */
     public ParticleGroup getParticleGroupByName(String name) {
-        return this.particleGroups.stream().filter(x -> x.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+        return this.particleGroups.get(name.toLowerCase());
     }
 
     /**
@@ -140,8 +142,8 @@ public class PPlayer {
      * 
      * @return A List of ParticlePairs this player has set
      */
-    public List<ParticlePair> getActiveParticles() {
-        return this.getActiveParticleGroup().getParticles();
+    public Collection<ParticlePair> getActiveParticles() {
+        return this.getActiveParticleGroup().getParticles().values();
     }
 
     /**
@@ -150,10 +152,7 @@ public class PPlayer {
      * @return A ParticleGroup of this player's active particles
      */
     public ParticleGroup getActiveParticleGroup() {
-        return this.particleGroups.stream()
-                .filter(x -> x.getName().equals(ParticleGroup.DEFAULT_NAME))
-                .findFirst()
-                .orElseThrow(IllegalStateException::new);
+        return this.particleGroups.get(ParticleGroup.DEFAULT_NAME);
     }
 
     /**
@@ -162,8 +161,8 @@ public class PPlayer {
      * @param style The style to match
      * @return A List of ParticlePairs with a matching style
      */
-    public List<ParticlePair> getActiveParticlesForStyle(ParticleStyle style) {
-        return this.getActiveParticles().stream().filter(x -> x.getStyle().equals(style)).collect(Collectors.toList());
+    public Set<ParticlePair> getActiveParticlesForStyle(ParticleStyle style) {
+        return this.getActiveParticles().stream().filter(x -> x.getStyle().equals(style)).collect(Collectors.toSet());
     }
 
     /**
@@ -173,15 +172,24 @@ public class PPlayer {
      * @return A ParticlePair with the given id, otherwise null
      */
     public ParticlePair getActiveParticle(int id) {
-        return this.getActiveParticles().stream().filter(x -> x.getId() == id).findFirst().orElse(null);
+        return this.getActiveParticleGroup().getParticles().get(id);
     }
 
     /**
      * Get the effect/style/data for all fixed particles this has has set
      * 
-     * @return A List of FixedParticleEffects this player has set
+     * @return A collection of FixedParticleEffects this player has set
      */
-    public List<FixedParticleEffect> getFixedParticles() {
+    public Collection<FixedParticleEffect> getFixedParticles() {
+        return this.fixedParticles.values();
+    }
+
+    /**
+     * Get a map of the effect/style/data for all fixed particles this has has set
+     *
+     * @return A map of FixedParticleEffects this player has set
+     */
+    public Map<Integer, FixedParticleEffect> getFixedParticlesMap() {
         return this.fixedParticles;
     }
 
@@ -192,16 +200,16 @@ public class PPlayer {
      * @return The FixedParticleEffect the player owns
      */
     public FixedParticleEffect getFixedEffectById(int id) {
-        return this.fixedParticles.stream().filter(x -> x.getId() == id).findFirst().orElse(null);
+        return this.fixedParticles.get(id);
     }
 
     /**
-     * Gets a list of ids of all fixed effect this player has
+     * Gets a set of ids of all fixed effect this player has
      * 
-     * @return A List of Integer ids this player's fixed effects have
+     * @return A set of Integer ids this player's fixed effects have
      */
-    public List<Integer> getFixedEffectIds() {
-        return this.fixedParticles.stream().map(FixedParticleEffect::getId).collect(Collectors.toList());
+    public Set<Integer> getFixedEffectIds() {
+        return this.fixedParticles.keySet();
     }
 
     /**
@@ -210,7 +218,7 @@ public class PPlayer {
      * @param fixedEffect The fixed effect to add
      */
     public void addFixedEffect(FixedParticleEffect fixedEffect) {
-        this.fixedParticles.add(fixedEffect);
+        this.fixedParticles.put(fixedEffect.getId(), fixedEffect);
     }
 
     /**
@@ -219,7 +227,7 @@ public class PPlayer {
      * @param id The id of the fixed effect to remove
      */
     public void removeFixedEffect(int id) {
-        this.fixedParticles.removeIf(x -> x.getId() == id);
+        this.fixedParticles.remove(id);
     }
 
     /**
@@ -228,7 +236,7 @@ public class PPlayer {
      * @return The next available fixed effect id
      */
     public int getNextFixedEffectId() {
-        return ParticleUtils.getSmallestPositiveInt(this.fixedParticles.stream().mapToInt(FixedParticleEffect::getId).toArray());
+        return ParticleUtils.getSmallestPositiveInt(this.fixedParticles.keySet().stream().mapToInt(Integer::intValue).toArray());
     }
 
     /**
