@@ -13,7 +13,6 @@ import dev.esophose.playerparticles.styles.ParticleStyle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -22,6 +21,13 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * The API for the PlayerParticles plugin.
+ * Used to manipulate a player's particles and data.
+ *
+ * Note: This API will bypass all permissions and does not send any messages.
+ *       Any changes made through the API will be saved to the database automatically.
+ */
 public final class PlayerParticlesAPI {
 
     private static PlayerParticlesAPI INSTANCE;
@@ -173,12 +179,22 @@ public final class PlayerParticlesAPI {
         dataManager.saveParticleGroup(pplayer.getUniqueId(), pplayer.getActiveParticleGroup());
     }
 
+    @NotNull
     public Collection<ParticlePair> getActivePlayerParticles(@NotNull Player player) {
         PPlayer pplayer = this.getPPlayer(player);
         if (pplayer == null)
             return new ArrayList<>();
 
         return pplayer.getActiveParticles();
+    }
+
+    @Nullable
+    public ParticlePair getActivePlayerParticle(@NotNull Player player, int id) {
+        PPlayer pplayer = this.getPPlayer(player);
+        if (pplayer == null)
+            return null;
+
+        return pplayer.getActiveParticle(id);
     }
 
     private ParticleGroup validateActivePlayerParticle(Player player, int id) {
@@ -236,6 +252,7 @@ public final class PlayerParticlesAPI {
         this.removePlayerParticleGroup(player, particleGroup.getName());
     }
 
+    @NotNull
     public Collection<ParticleGroup> getPlayerParticleGroups(@NotNull Player player) {
         PPlayer pplayer = this.getPPlayer(player);
         if (pplayer == null)
@@ -243,6 +260,13 @@ public final class PlayerParticlesAPI {
 
         return pplayer.getParticleGroups().values();
     }
+    //endregion
+
+    //region Fixed Effect Management
+    // TODO - Create fixed effect
+    // TODO - Edit fixed effect
+    // TODO - Remove fixed effect
+    // TODO - Get fixed effect(s)
     //endregion
 
     //region GUI Management
@@ -265,6 +289,12 @@ public final class PlayerParticlesAPI {
         pplayer.setParticlesHidden(particlesHidden);
         dataManager.updateSettingParticlesHidden(player.getUniqueId(), particlesHidden);
     }
+    //endregion
+
+    //region Registering Custom Styles
+    // TODO: Register custom styles
+    // TODO: Register custom handled styles
+    // TODO Note: This is currently accessible through ParticleStyleManager
     //endregion
 
 }

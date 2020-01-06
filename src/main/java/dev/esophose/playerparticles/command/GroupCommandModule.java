@@ -202,7 +202,7 @@ public class GroupCommandModule implements CommandModule {
         }
         
         // Delete the group and notify player
-        PlayerParticles.getInstance().getManager(DataManager.class).removeParticleGroup(pplayer.getUniqueId(), group);
+        PlayerParticles.getInstance().getManager(DataManager.class).removeParticleGroup(pplayer.getUniqueId(), group.getName());
         localeManager.sendMessage(pplayer, "group-remove-success", StringPlaceholders.single("name", groupName));
     }
     

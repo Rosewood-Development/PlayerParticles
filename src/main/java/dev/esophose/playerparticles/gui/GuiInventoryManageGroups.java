@@ -66,7 +66,7 @@ public class GuiInventoryManageGroups extends GuiInventory {
                     lore,
                     (button, isShiftClick) -> {
                         if (isShiftClick) {
-                            dataManager.removeParticleGroup(pplayer.getUniqueId(), group);
+                            dataManager.removeParticleGroup(pplayer.getUniqueId(), group.getName());
 
                             this.actionButtons.remove(button);
                             this.inventory.setItem(button.getSlot(), null);
