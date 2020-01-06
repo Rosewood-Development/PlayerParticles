@@ -344,9 +344,9 @@ public class DataManager extends Manager {
      * Removes a ParticleGroup
      *
      * @param playerUUID The owner of the group
-     * @param group The group to remove
+     * @param groupName The group to remove
      */
-    public void removeParticleGroup(UUID playerUUID, ParticleGroup group) {
+    public void removeParticleGroup(UUID playerUUID, String groupName) {
         this.async(() -> this.databaseConnector.connect((connection) -> {
             String groupQuery = "SELECT * FROM " + this.getTablePrefix() + "group WHERE owner_uuid = ? AND name = ?";
             String particleDeleteQuery = "DELETE FROM " + this.getTablePrefix() + "particle WHERE group_uuid = ?";
@@ -356,7 +356,7 @@ public class DataManager extends Manager {
             String groupUUID = null;
             try (PreparedStatement statement = connection.prepareStatement(groupQuery)) {
                 statement.setString(1, playerUUID.toString());
-                statement.setString(2, group.getName());
+                statement.setString(2, groupName);
 
                 ResultSet result = statement.executeQuery();
                 if (result.next()) {
@@ -379,7 +379,7 @@ public class DataManager extends Manager {
             }
         }));
 
-        this.getPPlayer(playerUUID, (pplayer) -> pplayer.getParticleGroups().remove(group));
+        this.getPPlayer(playerUUID, (pplayer) -> pplayer.getParticleGroups().remove(groupName));
     }
 
     /**

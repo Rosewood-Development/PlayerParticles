@@ -2,6 +2,7 @@ package dev.esophose.playerparticles.api;
 
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.DataManager;
+import dev.esophose.playerparticles.manager.GuiManager;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticleEffect.NoteColor;
@@ -9,6 +10,11 @@ import dev.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
 import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.styles.ParticleStyle;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import org.bukkit.Material;
@@ -32,6 +38,7 @@ public final class PlayerParticlesAPI {
         return INSTANCE;
     }
 
+    //region Get PPlayer
     @Nullable
     public PPlayer getPPlayer(@NotNull UUID uuid) {
         Objects.requireNonNull(uuid);
@@ -43,6 +50,7 @@ public final class PlayerParticlesAPI {
     public PPlayer getPPlayer(@NotNull Player player) {
         return this.getPPlayer(player.getUniqueId());
     }
+    //endregion
 
     //region Manage Active Player Particles
     public void addActivePlayerParticle(@NotNull Player player, @NotNull ParticlePair particle) {
@@ -155,6 +163,24 @@ public final class PlayerParticlesAPI {
         dataManager.saveParticleGroup(player.getUniqueId(), group);
     }
 
+    public void resetActivePlayerParticles(@NotNull Player player) {
+        DataManager dataManager = this.playerParticles.getManager(DataManager.class);
+        PPlayer pplayer = this.getPPlayer(player);
+        if (pplayer == null)
+            return;
+
+        pplayer.getActiveParticleGroup().getParticles().clear();
+        dataManager.saveParticleGroup(pplayer.getUniqueId(), pplayer.getActiveParticleGroup());
+    }
+
+    public Collection<ParticlePair> getActivePlayerParticles(@NotNull Player player) {
+        PPlayer pplayer = this.getPPlayer(player);
+        if (pplayer == null)
+            return new ArrayList<>();
+
+        return pplayer.getActiveParticles();
+    }
+
     private ParticleGroup validateActivePlayerParticle(Player player, int id) {
         PPlayer pplayer = this.getPPlayer(player);
         if (pplayer == null)
@@ -165,6 +191,79 @@ public final class PlayerParticlesAPI {
             throw new IllegalArgumentException("No particle exists with the id " + id);
 
         return particleGroup;
+    }
+    //endregion
+
+    //region Manage Player Particle Groups
+    public void savePlayerParticleGroup(@NotNull Player player, @NotNull ParticleGroup particleGroup) {
+        Objects.requireNonNull(particleGroup);
+
+        if (particleGroup.getParticles().isEmpty())
+            throw new IllegalArgumentException("Cannot save an empty ParticleGroup");
+
+        DataManager dataManager = this.playerParticles.getManager(DataManager.class);
+        PPlayer pplayer = this.getPPlayer(player);
+        if (pplayer == null)
+            return;
+
+        pplayer.getParticleGroups().put(particleGroup.getName().toLowerCase(), particleGroup);
+        dataManager.saveParticleGroup(player.getUniqueId(), particleGroup);
+    }
+
+    public void savePlayerParticleGroup(@NotNull Player player, @NotNull String groupName, @NotNull Collection<ParticlePair> particles) {
+        Objects.requireNonNull(groupName);
+        Objects.requireNonNull(particles);
+
+        Map<Integer, ParticlePair> mappedParticles = new HashMap<>();
+        particles.forEach(x -> mappedParticles.put(x.getId(), x));
+        ParticleGroup particleGroup = new ParticleGroup(groupName.toLowerCase(), mappedParticles);
+        this.savePlayerParticleGroup(player, particleGroup);
+    }
+
+    public void removePlayerParticleGroup(@NotNull Player player, @NotNull String groupName) {
+        DataManager dataManager = this.playerParticles.getManager(DataManager.class);
+        PPlayer pplayer = this.getPPlayer(player);
+        if (pplayer == null)
+            return;
+
+        pplayer.getParticleGroups().remove(groupName.toLowerCase());
+        dataManager.removeParticleGroup(player.getUniqueId(), groupName);
+    }
+
+    public void removePlayerParticleGroup(@NotNull Player player, @NotNull ParticleGroup particleGroup) {
+        Objects.requireNonNull(particleGroup);
+
+        this.removePlayerParticleGroup(player, particleGroup.getName());
+    }
+
+    public Collection<ParticleGroup> getPlayerParticleGroups(@NotNull Player player) {
+        PPlayer pplayer = this.getPPlayer(player);
+        if (pplayer == null)
+            return new ArrayList<>();
+
+        return pplayer.getParticleGroups().values();
+    }
+    //endregion
+
+    //region GUI Management
+    public void openParticlesGui(@NotNull Player player) {
+        PPlayer pplayer = this.getPPlayer(player);
+        if (pplayer == null)
+            return;
+
+        this.playerParticles.getManager(GuiManager.class).openDefault(pplayer);
+    }
+    //endregion
+
+    //region Player Settings
+    public void togglePlayerParticleVisibility(@NotNull Player player, boolean particlesHidden) {
+        DataManager dataManager = this.playerParticles.getManager(DataManager.class);
+        PPlayer pplayer = this.getPPlayer(player);
+        if (pplayer == null)
+            return;
+
+        pplayer.setParticlesHidden(particlesHidden);
+        dataManager.updateSettingParticlesHidden(player.getUniqueId(), particlesHidden);
     }
     //endregion
 
