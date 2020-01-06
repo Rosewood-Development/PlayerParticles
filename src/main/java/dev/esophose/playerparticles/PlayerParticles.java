@@ -1,7 +1,7 @@
 /*
  * TODO: v7.0
  * * Refactor the DataManager to not update the PPlayer objects, it should only handle saving/loading data, not applying it
- * * Added an API, accessible through the dev.esophose.playerparticles.api.PlayerParticlesAPI class
+ * * Add an API, accessible through the dev.esophose.playerparticles.api.PlayerParticlesAPI class
  * + Add ability to create/manage fixed effects from the GUI
  * * Convert fixed effect ids into names
  * + Add command '/pp fixed teleport <id>' that requires the permission playerparticles.fixed.teleport
@@ -9,7 +9,8 @@
  * * Clean up duplicated command parsing
  * + Add effect/style name customization through config files
  * + Add effect/style settings folder that lets you disable effects/style and edit style properties
- * + Added setting to disable particles while in combat
+ * + Add setting to disable particles while in combat
+ * + Add a command aliases section to the config
  */
 
  /*

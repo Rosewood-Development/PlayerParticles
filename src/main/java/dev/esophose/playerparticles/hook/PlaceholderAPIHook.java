@@ -1,8 +1,8 @@
 package dev.esophose.playerparticles.hook;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import me.clip.placeholderapi.PlaceholderAPI;
 
 public final class PlaceholderAPIHook {
 

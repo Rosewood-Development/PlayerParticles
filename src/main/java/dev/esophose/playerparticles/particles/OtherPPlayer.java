@@ -1,6 +1,5 @@
 package dev.esophose.playerparticles.particles;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 import org.bukkit.command.CommandSender;

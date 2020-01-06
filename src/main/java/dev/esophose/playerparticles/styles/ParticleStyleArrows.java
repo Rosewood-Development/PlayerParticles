@@ -1,7 +1,7 @@
 package dev.esophose.playerparticles.styles;
 
-import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.particles.PParticle;
+import dev.esophose.playerparticles.particles.ParticlePair;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
