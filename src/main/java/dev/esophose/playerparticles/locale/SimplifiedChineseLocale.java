@@ -22,7 +22,7 @@ public class SimplifiedChineseLocale implements Locale {
             this.put("prefix", "&7[&3PlayerParticles&7] ");
 
             this.put("#1", "Command Description Messages");
-            this.put("command-error-missing-effects-or-styles", "&c你必须有权限使用特效才能使用这个指令!");
+            this.put("command-error-missing-effects-or-styles", "&c您必须有权使用效果和样式才能使用此命令!");
             this.put("command-error-unknown", "&c未知的指令， 请使用 &b/pp help &c查看指令列表。");
             this.put("command-descriptions", "&e你可以使用以下指令:");
             this.put("command-descriptions-usage", "&e/pp %cmd% %args%");
@@ -223,6 +223,7 @@ public class SimplifiedChineseLocale implements Locale {
 
             this.put("#26", "GUI Messages");
             this.put("gui-disabled", "&c服务器管理员已关闭菜单!");
+            this.put("gui-no-permission", "&c您无权打开菜单!");
 
             this.put("#27", "GUI Color Messages");
             this.put("gui-color-icon-name", "&a");

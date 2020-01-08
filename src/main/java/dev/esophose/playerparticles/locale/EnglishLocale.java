@@ -223,6 +223,7 @@ public class EnglishLocale implements Locale {
 
             this.put("#26", "GUI Messages");
             this.put("gui-disabled", "&cThe server administrator has disabled the GUI!");
+            this.put("gui-no-permission", "&cYou do not have permission to open the GUI!");
 
             this.put("#27", "GUI Color Messages");
             this.put("gui-color-icon-name", "&a");

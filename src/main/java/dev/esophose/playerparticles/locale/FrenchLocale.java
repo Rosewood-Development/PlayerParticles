@@ -22,7 +22,7 @@ public class FrenchLocale implements Locale {
             this.put("prefix", "&7[&3PlayerParticles&7] ");
 
             this.put("#1", "Command Description Messages");
-            this.put("command-error-missing-effects-or-styles", "&cVous n'avez pas la permission d'utiliser cette commande.");
+            this.put("command-error-missing-effects-or-styles", "&cVous devez avoir accès aux effets et aux styles pour utiliser cette commande !");
             this.put("command-error-unknown", "&cCommande inconnue, utilisez &b/pp help &cpour afficher la liste des commandes disponibles pour ce plugin.");
             this.put("command-descriptions", "&eLes commandes suivantes sont disponibles :");
             this.put("command-descriptions-usage", "&e/pp %cmd% %args%");
@@ -223,6 +223,7 @@ public class FrenchLocale implements Locale {
 
             this.put("#26", "GUI Messages");
             this.put("gui-disabled", "&cL'interface du plugin à été désactivée !");
+            this.put("gui-no-permission", "&cVous n'avez pas la permission d'ouvrir l'interface graphique !");
 
             this.put("#27", "GUI Color Messages");
             this.put("gui-color-icon-name", "&a");

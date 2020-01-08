@@ -16,19 +16,17 @@ public class PermissionManager extends Manager {
     private static final String PERMISSION_PREFIX = "playerparticles.";
     
     private enum PPermission {
-        ALL("*"),
-        
-        EFFECT_ALL("effect.*"),
         EFFECT("effect"),
-        
-        STYLE_ALL("style.*"),
         STYLE("style"),
         
         FIXED("fixed"),
         FIXED_UNLIMITED("fixed.unlimited"),
         FIXED_CLEAR("fixed.clear"),
-        
+
         RELOAD("reload"),
+        OVERRIDE("override"),
+
+        GUI("gui"),
         
         PARTICLES_UNLIMITED("particles.unlimited"),
         GROUPS_UNLIMITED("groups.unlimited");
@@ -78,28 +76,12 @@ public class PermissionManager extends Manager {
     }
 
     /**
-     * Checks if a player can use /ppo
-     * 
-     * @param sender The CommandSender to check
-     * @return If the player can use /ppo
-     */
-    public boolean canOverride(CommandSender sender) {
-        if (!(sender instanceof Player))
-            return true;
-
-        return PPermission.ALL.check(sender);
-    }
-    
-    /**
      * Checks if the given player has reached the max number of particles in their active group
      * 
      * @param pplayer The player to check
      * @return If the player has reached the max number of particles in their active group
      */
     public boolean hasPlayerReachedMaxParticles(PPlayer pplayer) {
-        if (PPermission.ALL.check(pplayer.getPlayer()))
-            return false;
-
         if (PPermission.PARTICLES_UNLIMITED.check(pplayer.getPlayer()))
             return false;
 
@@ -113,9 +95,6 @@ public class PermissionManager extends Manager {
      * @return If the player has reached the max number of saved particle groups
      */
     public boolean hasPlayerReachedMaxGroups(PPlayer pplayer) {
-        if (PPermission.ALL.check(pplayer.getPlayer()))
-            return false;
-
         if (PPermission.GROUPS_UNLIMITED.check(pplayer.getPlayer()))
             return false;
 
@@ -129,9 +108,6 @@ public class PermissionManager extends Manager {
      * @return If the player has permission to save groups
      */
     public boolean canPlayerSaveGroups(PPlayer pplayer) {
-        if (PPermission.ALL.check(pplayer.getPlayer()))
-            return true;
-
         if (PPermission.GROUPS_UNLIMITED.check(pplayer.getPlayer()))
             return true;
 
@@ -145,9 +121,6 @@ public class PermissionManager extends Manager {
      * @return If the player has reached the max number of fixed effects
      */
     public boolean hasPlayerReachedMaxFixedEffects(PPlayer pplayer) {
-        if (PPermission.ALL.check(pplayer.getPlayer()))
-            return false;
-
         if (PPermission.FIXED_UNLIMITED.check(pplayer.getPlayer()))
             return false;
 
@@ -170,7 +143,7 @@ public class PermissionManager extends Manager {
      * @return The maximum number of particles based on the config.yml value, or unlimited
      */
     public int getMaxParticlesAllowed(Player player) {
-        if (PPermission.ALL.check(player) || PPermission.PARTICLES_UNLIMITED.check(player))
+        if (PPermission.PARTICLES_UNLIMITED.check(player))
             return Integer.MAX_VALUE;
 
         return Setting.MAX_PARTICLES.getInt();
@@ -203,7 +176,6 @@ public class PermissionManager extends Manager {
      * @return True if the player has permission to use the effect
      */
     public boolean hasEffectPermission(Player player, ParticleEffect effect) {
-        if (PPermission.ALL.check(player) || PPermission.EFFECT_ALL.check(player)) return true;
         return PPermission.EFFECT.check(player, effect.getName());
     }
 
@@ -216,7 +188,6 @@ public class PermissionManager extends Manager {
      * @return If the player has permission to use the style
      */
     public boolean hasStylePermission(Player player, ParticleStyle style) {
-        if (PPermission.ALL.check(player) || PPermission.STYLE_ALL.check(player)) return true;
         return PPermission.STYLE.check(player, style.getName());
     }
 
@@ -297,7 +268,7 @@ public class PermissionManager extends Manager {
      * @return True if the player has permission
      */
     public boolean canUseFixedEffects(Player player) {
-        return PPermission.ALL.check(player) || PPermission.FIXED.check(player);
+        return PPermission.FIXED.check(player);
     }
     
     /**
@@ -307,7 +278,17 @@ public class PermissionManager extends Manager {
      * @return True if the player has permission to use /pp fixed clear
      */
     public boolean canClearFixedEffects(Player player) {
-        return PPermission.ALL.check(player) || PPermission.FIXED_CLEAR.check(player);
+        return PPermission.FIXED_CLEAR.check(player);
+    }
+
+    /**
+     * Checks if a player has permission to open the GUI
+     *
+     * @param player The player to check the permission for
+     * @return True if the player has permission to open the GUI
+     */
+    public boolean canOpenGui(Player player) {
+        return PPermission.GUI.check(player);
     }
     
     /**
@@ -317,7 +298,20 @@ public class PermissionManager extends Manager {
      * @return True if the sender has permission to reload the plugin's settings
      */
     public boolean canReloadPlugin(CommandSender sender) {
-        return PPermission.ALL.check(sender) || PPermission.RELOAD.check(sender);
+        return PPermission.RELOAD.check(sender);
+    }
+
+    /**
+     * Checks if a player can use /ppo
+     *
+     * @param sender The CommandSender to check
+     * @return If the player can use /ppo
+     */
+    public boolean canOverride(CommandSender sender) {
+        if (!(sender instanceof Player))
+            return true;
+
+        return PPermission.OVERRIDE.check(sender);
     }
 
 }

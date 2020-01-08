@@ -140,7 +140,7 @@ public class AddCommandModule implements CommandModule {
                 .addPlaceholder("data", newParticle.getDataString()).build();
         localeManager.sendMessage(pplayer, "add-particle-applied", addParticlePlaceholders);
         
-        if (PlayerParticles.getInstance().getManager(ParticleStyleManager.class).isCustomHandled(newParticle.getStyle())) {
+        if (PlayerParticles.getInstance().getManager(ParticleStyleManager.class).isEventHandled(newParticle.getStyle())) {
             localeManager.sendMessage(pplayer, "style-event-spawning-info", StringPlaceholders.single("style", newParticle.getStyle().getName()));
         }
     }

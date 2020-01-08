@@ -21,12 +21,14 @@
  * * The style 'normal' is no longer granted permission by default
  * * Fixed an issue where 'random' data would not parse properly in preset_groups.yml
  * * Fixed an issue where preset groups would not display in the GUI even if the player has permission for them
+ * + Added permission playerparticles.override for /ppo
  */
 
  /*
-  * Changed messages (NEEDS UPDATING IN OTHER LANGUAGES):
+  * UPDATED LOCALE MESSAGES:
   * Renamed command-error-no-effects to command-error-missing-effects-or-styles
   * Changed message for command-error-missing-effects-or-styles
+  * Added message gui-no-permission
  */
 
 package dev.esophose.playerparticles;

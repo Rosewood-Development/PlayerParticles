@@ -28,7 +28,7 @@ public class FixedParticleEffect {
 
     /**
      * Constructs a new FixedParticleEffect
-     * FixedParticleEffects can NOT use custom handled styles
+     * FixedParticleEffects can NOT use event styles
      * 
      * @param pplayerUUID The UUID of the player who owns the effect
      * @param id The id this effect has, unique to the owner pplayer

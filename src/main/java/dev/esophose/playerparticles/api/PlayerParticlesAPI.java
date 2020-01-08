@@ -3,6 +3,7 @@ package dev.esophose.playerparticles.api;
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.GuiManager;
+import dev.esophose.playerparticles.manager.ParticleStyleManager;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticleEffect.NoteColor;
@@ -292,9 +293,17 @@ public final class PlayerParticlesAPI {
     //endregion
 
     //region Registering Custom Styles
-    // TODO: Register custom styles
-    // TODO: Register custom handled styles
-    // TODO Note: This is currently accessible through ParticleStyleManager
+    public void registerParticleStyle(@NotNull ParticleStyle particleStyle) {
+        Objects.requireNonNull(particleStyle);
+
+        this.playerParticles.getManager(ParticleStyleManager.class).registerStyle(particleStyle);
+    }
+
+    public void registerEventParticleStyle(@NotNull ParticleStyle particleStyle) {
+        Objects.requireNonNull(particleStyle);
+
+        this.playerParticles.getManager(ParticleStyleManager.class).registerEventStyle(particleStyle);
+    }
     //endregion
 
 }

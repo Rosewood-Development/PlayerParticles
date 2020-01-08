@@ -22,7 +22,7 @@ public class VietnameseLocale implements Locale {
             this.put("prefix", "&7[&3PlayerParticles&7] ");
 
             this.put("#1", "Command Description Messages");
-            this.put("command-error-missing-effects-or-styles", "&cBạn phải có quyền sử dụng hiệu ứng để làm điều này!");
+            this.put("command-error-missing-effects-or-styles", "&cBạn phải có quyền truy cập vào các hiệu ứng và phong cách để sử dụng lệnh này!");
             this.put("command-error-unknown", "&cLệnh không đúng, &6/pp help &cđể xem danh sách các câu lệnh.");
             this.put("command-descriptions", "&eCác lệnh có sẵn:");
             this.put("command-descriptions-usage", "&e/pp %cmd% %args%");
@@ -223,6 +223,7 @@ public class VietnameseLocale implements Locale {
 
             this.put("#26", "GUI Messages");
             this.put("gui-disabled", "&cAmdinistrator đã cấm GUI!");
+            this.put("gui-no-permission", "&cBạn không có quyền mở GUI!");
 
             this.put("#27", "GUI Color Messages");
             this.put("gui-color-icon-name", "&a");

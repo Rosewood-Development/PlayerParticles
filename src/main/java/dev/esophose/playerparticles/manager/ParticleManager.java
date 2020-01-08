@@ -45,7 +45,7 @@ public class ParticleManager extends Manager implements Listener, Runnable {
      */
     private int hue = 0;
     private int note = 0;
-    private final Random RANDOM = new Random();
+    private final Random random = new Random();
 
     public ParticleManager(PlayerParticles playerParticles) {
         super(playerParticles);
@@ -150,7 +150,7 @@ public class ParticleManager extends Manager implements Listener, Runnable {
      * @param location The location to display at
      */
     private void displayParticles(PPlayer pplayer, ParticlePair particle, Location location) {
-        if (!this.playerParticles.getManager(ParticleStyleManager.class).isCustomHandled(particle.getStyle())) {
+        if (!this.playerParticles.getManager(ParticleStyleManager.class).isEventHandled(particle.getStyle())) {
             if (Setting.TOGGLE_ON_MOVE.getBoolean() && particle.getStyle().canToggleWithMovement() && pplayer.isMoving()) {
                 for (PParticle pparticle : DefaultStyles.FEET.getParticles(particle, location))
                     ParticleEffect.display(particle, pparticle, false, pplayer.getPlayer());
@@ -162,7 +162,7 @@ public class ParticleManager extends Manager implements Listener, Runnable {
     }
 
     /**
-     * An alternative method used for custom handled styles
+     * An alternative method used for event styles
      * 
      * @param particle The ParticlePair to use for getting particle settings
      * @param particles The particles to display
@@ -208,7 +208,7 @@ public class ParticleManager extends Manager implements Listener, Runnable {
      * @return A randomized OrdinaryColor for particle spawning with data 'random'
      */
     public OrdinaryColor getRandomParticleColor() {
-        Color rgb = new Color(this.RANDOM.nextInt(256), this.RANDOM.nextInt(256), this.RANDOM.nextInt(256));
+        Color rgb = new Color(this.random.nextInt(256), this.random.nextInt(256), this.random.nextInt(256));
         return new OrdinaryColor(rgb.getRed(), rgb.getGreen(), rgb.getBlue());
     }
     
@@ -218,6 +218,6 @@ public class ParticleManager extends Manager implements Listener, Runnable {
      * @return A randomized NoteColor for particle spawning with data 'random'
      */
     public NoteColor getRandomNoteParticleColor() {
-        return new NoteColor(this.RANDOM.nextInt(25));
+        return new NoteColor(this.random.nextInt(25));
     }
 }

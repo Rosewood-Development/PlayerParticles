@@ -12,8 +12,14 @@ import java.util.List;
 public class GUICommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
+        PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         GuiManager guiManager = PlayerParticles.getInstance().getManager(GuiManager.class);
+
+        if (!permissionManager.canOpenGui(pplayer.getPlayer())) {
+            localeManager.sendMessage(pplayer, "command-no-permission");
+            return;
+        }
 
         boolean byDefault = false;
         if (args.length > 0 && args[0].equals("_byDefault_")) {
@@ -29,7 +35,7 @@ public class GUICommandModule implements CommandModule {
             return;
         }
 
-        if (!Setting.GUI_PRESETS_ONLY.getBoolean() && PlayerParticles.getInstance().getManager(PermissionManager.class).getEffectNamesUserHasPermissionFor(pplayer.getPlayer()).isEmpty()) {
+        if (!Setting.GUI_PRESETS_ONLY.getBoolean() && permissionManager.getEffectNamesUserHasPermissionFor(pplayer.getPlayer()).isEmpty()) {
             if (byDefault) {
                 localeManager.sendMessage(pplayer, "command-error-no-effects");
             } else {

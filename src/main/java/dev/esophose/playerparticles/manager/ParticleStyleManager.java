@@ -11,12 +11,14 @@ public class ParticleStyleManager extends Manager {
     /**
      * Arrays that contain all registered styles
      */
-    private List<ParticleStyle> styles = new ArrayList<>();
-    private List<ParticleStyle> customHandledStyles = new ArrayList<>();
+    private List<ParticleStyle> styles;
+    private List<ParticleStyle> eventStyles;
 
     public ParticleStyleManager(PlayerParticles playerParticles) {
         super(playerParticles);
 
+        this.styles = new ArrayList<>();
+        this.eventStyles = new ArrayList<>();
         DefaultStyles.registerStyles(this);
     }
 
@@ -47,11 +49,11 @@ public class ParticleStyleManager extends Manager {
         }
         
         for (ParticleStyle testAgainst : this.styles) {
-            if (testAgainst.getName().equalsIgnoreCase(style.getName())) {
-                PlayerParticles.getInstance().getLogger().severe("Tried to register two styles with the same name spelling: '" + style.getName() + "'");
-                return;
-            } else if (testAgainst.equals(style)) {
+            if (testAgainst.equals(style)) {
                 PlayerParticles.getInstance().getLogger().severe("Tried to register the same style twice: '" + style.getName() + "'");
+                return;
+            } else if (testAgainst.getName().equalsIgnoreCase(style.getName())) {
+                PlayerParticles.getInstance().getLogger().severe("Tried to register two styles with the same name spelling: '" + style.getName() + "'");
                 return;
             }
         }
@@ -64,9 +66,9 @@ public class ParticleStyleManager extends Manager {
      * 
      * @param style The style to register
      */
-    public void registerCustomHandledStyle(ParticleStyle style) {
+    public void registerEventStyle(ParticleStyle style) {
         this.registerStyle(style);
-        this.customHandledStyles.add(style);
+        this.eventStyles.add(style);
     }
 
     /**
@@ -75,8 +77,8 @@ public class ParticleStyleManager extends Manager {
      * @param style The style to check
      * @return If the style is handled in a custom manner
      */
-    public boolean isCustomHandled(ParticleStyle style) {
-        return this.customHandledStyles.contains(style);
+    public boolean isEventHandled(ParticleStyle style) {
+        return this.eventStyles.contains(style);
     }
 
     /**
