@@ -3,7 +3,9 @@ package dev.esophose.playerparticles.api;
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.GuiManager;
+import dev.esophose.playerparticles.manager.ParticleManager;
 import dev.esophose.playerparticles.manager.ParticleStyleManager;
+import dev.esophose.playerparticles.particles.FixedParticleEffect;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticleEffect.NoteColor;
@@ -17,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -29,6 +32,7 @@ import org.jetbrains.annotations.Nullable;
  * Note: This API will bypass all permissions and does not send any messages.
  *       Any changes made through the API will be saved to the database automatically.
  */
+@SuppressWarnings("unused")
 public final class PlayerParticlesAPI {
 
     private static PlayerParticlesAPI INSTANCE;
@@ -55,6 +59,8 @@ public final class PlayerParticlesAPI {
 
     @Nullable
     public PPlayer getPPlayer(@NotNull Player player) {
+        Objects.requireNonNull(player);
+
         return this.getPPlayer(player.getUniqueId());
     }
     //endregion
@@ -74,6 +80,44 @@ public final class PlayerParticlesAPI {
 
         pplayer.getActiveParticleGroup().getParticles().put(particle.getId(), particle);
         dataManager.saveParticleGroup(player.getUniqueId(), pplayer.getActiveParticleGroup());
+    }
+
+    public void addActivePlayerParticle(@NotNull Player player, @NotNull ParticleEffect effect, @NotNull ParticleStyle style) {
+        this.addActivePlayerParticle(player, effect, style, null, null, null);
+    }
+
+    public void addActivePlayerParticle(@NotNull Player player, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @NotNull OrdinaryColor colorData) {
+        this.addActivePlayerParticle(player, effect, style, colorData, null, null);
+    }
+
+    public void addActivePlayerParticle(@NotNull Player player, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @NotNull NoteColor noteColorData) {
+        this.addActivePlayerParticle(player, effect, style, null, noteColorData, null);
+    }
+
+    public void addActivePlayerParticle(@NotNull Player player, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @NotNull Material materialData) {
+        this.addActivePlayerParticle(player, effect, style, null, null, materialData);
+    }
+
+    private void addActivePlayerParticle(@NotNull Player player, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @Nullable OrdinaryColor colorData, @Nullable NoteColor noteColorData, @Nullable Material materialData) {
+        Objects.requireNonNull(effect);
+        Objects.requireNonNull(style);
+
+        PPlayer pplayer = this.getPPlayer(player);
+        if (pplayer == null)
+            return;
+
+        Material itemMaterialData = null;
+        Material blockMaterialData = null;
+        if (materialData != null) {
+            if (materialData.isBlock()) {
+                blockMaterialData = materialData;
+            } else {
+                itemMaterialData = materialData;
+            }
+        }
+
+        ParticlePair particle = new ParticlePair(player.getUniqueId(), pplayer.getNextActiveParticleId(), effect, style, itemMaterialData, blockMaterialData, colorData, noteColorData);
+        this.addActivePlayerParticle(player, particle);
     }
 
     public void editActivePlayerParticle(@NotNull Player player, int id, @NotNull ParticleEffect effect) {
@@ -98,38 +142,38 @@ public final class PlayerParticlesAPI {
         }
     }
 
-    public void editActivePlayerParticle(@NotNull Player player, int id, @NotNull OrdinaryColor color) {
-        Objects.requireNonNull(color);
+    public void editActivePlayerParticle(@NotNull Player player, int id, @NotNull OrdinaryColor colorData) {
+        Objects.requireNonNull(colorData);
 
         DataManager dataManager = this.playerParticles.getManager(DataManager.class);
         ParticleGroup group = this.validateActivePlayerParticle(player, id);
         if (group != null) {
-            group.getParticles().get(id).setColor(color);
+            group.getParticles().get(id).setColor(colorData);
             dataManager.saveParticleGroup(player.getUniqueId(), group);
         }
     }
 
-    public void editActivePlayerParticle(@NotNull Player player, int id, @NotNull NoteColor noteColor) {
-        Objects.requireNonNull(noteColor);
+    public void editActivePlayerParticle(@NotNull Player player, int id, @NotNull NoteColor noteColorData) {
+        Objects.requireNonNull(noteColorData);
 
         DataManager dataManager = this.playerParticles.getManager(DataManager.class);
         ParticleGroup group = this.validateActivePlayerParticle(player, id);
         if (group != null) {
-            group.getParticles().get(id).setNoteColor(noteColor);
+            group.getParticles().get(id).setNoteColor(noteColorData);
             dataManager.saveParticleGroup(player.getUniqueId(), group);
         }
     }
 
-    public void editActivePlayerParticle(@NotNull Player player, int id, @NotNull Material material) {
-        Objects.requireNonNull(material);
+    public void editActivePlayerParticle(@NotNull Player player, int id, @NotNull Material materialData) {
+        Objects.requireNonNull(materialData);
 
         DataManager dataManager = this.playerParticles.getManager(DataManager.class);
         ParticleGroup group = this.validateActivePlayerParticle(player, id);
         if (group != null) {
-            if (material.isBlock()) {
-                group.getParticles().get(id).setBlockMaterial(material);
+            if (materialData.isBlock()) {
+                group.getParticles().get(id).setBlockMaterial(materialData);
             } else {
-                group.getParticles().get(id).setItemMaterial(material);
+                group.getParticles().get(id).setItemMaterial(materialData);
             }
             dataManager.saveParticleGroup(player.getUniqueId(), group);
         }
@@ -170,6 +214,19 @@ public final class PlayerParticlesAPI {
         dataManager.saveParticleGroup(player.getUniqueId(), group);
     }
 
+    @Nullable
+    private ParticleGroup validateActivePlayerParticle(@NotNull Player player, int id) {
+        PPlayer pplayer = this.getPPlayer(player);
+        if (pplayer == null)
+            return null;
+
+        ParticleGroup particleGroup = pplayer.getActiveParticleGroup();
+        if (!particleGroup.getParticles().containsKey(id))
+            throw new IllegalArgumentException("No particle exists with the id " + id);
+
+        return particleGroup;
+    }
+
     public void resetActivePlayerParticles(@NotNull Player player) {
         DataManager dataManager = this.playerParticles.getManager(DataManager.class);
         PPlayer pplayer = this.getPPlayer(player);
@@ -196,18 +253,6 @@ public final class PlayerParticlesAPI {
             return null;
 
         return pplayer.getActiveParticle(id);
-    }
-
-    private ParticleGroup validateActivePlayerParticle(Player player, int id) {
-        PPlayer pplayer = this.getPPlayer(player);
-        if (pplayer == null)
-            return null;
-
-        ParticleGroup particleGroup = pplayer.getActiveParticleGroup();
-        if (!particleGroup.getParticles().containsKey(id))
-            throw new IllegalArgumentException("No particle exists with the id " + id);
-
-        return particleGroup;
     }
     //endregion
 
@@ -264,10 +309,192 @@ public final class PlayerParticlesAPI {
     //endregion
 
     //region Fixed Effect Management
-    // TODO - Create fixed effect
-    // TODO - Edit fixed effect
-    // TODO - Remove fixed effect
-    // TODO - Get fixed effect(s)
+    public void createFixedParticleEffect(@NotNull Player player, @NotNull Location location, @NotNull ParticlePair particle) {
+        Objects.requireNonNull(location);
+        Objects.requireNonNull(location.getWorld());
+        Objects.requireNonNull(particle);
+
+        DataManager dataManager = this.playerParticles.getManager(DataManager.class);
+        PPlayer pplayer = this.getPPlayer(player);
+        if (pplayer == null)
+            return;
+
+        FixedParticleEffect fixedEffect = new FixedParticleEffect(player.getUniqueId(), pplayer.getNextFixedEffectId(), location, particle);
+        pplayer.addFixedEffect(fixedEffect);
+        dataManager.saveFixedEffect(fixedEffect);
+    }
+
+    public void createFixedParticleEffect(@NotNull Player player, @NotNull Location location, @NotNull ParticleEffect effect, @NotNull ParticleStyle style) {
+        this.createFixedParticleEffect(player, location, effect, style, null, null, null);
+    }
+
+    public void createFixedParticleEffect(@NotNull Player player, @NotNull Location location, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @NotNull OrdinaryColor colorData) {
+        this.createFixedParticleEffect(player, location, effect, style, colorData, null, null);
+    }
+
+    public void createFixedParticleEffect(@NotNull Player player, @NotNull Location location, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @NotNull NoteColor noteColorData) {
+        this.createFixedParticleEffect(player, location, effect, style, null, noteColorData, null);
+    }
+
+    public void createFixedParticleEffect(@NotNull Player player, @NotNull Location location, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @NotNull Material materialData) {
+        this.createFixedParticleEffect(player, location, effect, style, null, null, materialData);
+    }
+
+    private void createFixedParticleEffect(@NotNull Player player, @NotNull Location location, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @Nullable OrdinaryColor colorData, @Nullable NoteColor noteColorData, @Nullable Material materialData) {
+        Objects.requireNonNull(location);
+        Objects.requireNonNull(location.getWorld());
+        Objects.requireNonNull(effect);
+        Objects.requireNonNull(style);
+
+        PPlayer pplayer = this.getPPlayer(player);
+        if (pplayer == null)
+            return;
+
+        Material itemMaterialData = null;
+        Material blockMaterialData = null;
+        if (materialData != null) {
+            if (materialData.isBlock()) {
+                blockMaterialData = materialData;
+            } else {
+                itemMaterialData = materialData;
+            }
+        }
+
+        ParticlePair particle = new ParticlePair(player.getUniqueId(), 1, effect, style, itemMaterialData, blockMaterialData, colorData, noteColorData);
+        this.createFixedParticleEffect(player, location, particle);
+    }
+
+    public void editFixedParticleEffect(@NotNull Player player, int id, @NotNull Location location) {
+        Objects.requireNonNull(location);
+        Objects.requireNonNull(location.getWorld());
+
+        DataManager dataManager = this.playerParticles.getManager(DataManager.class);
+        FixedParticleEffect fixedEffect = this.validateFixedParticleEffect(player, id);
+        if (fixedEffect != null) {
+            fixedEffect.setCoordinates(location.getX(), location.getY(), location.getZ());
+            dataManager.saveFixedEffect(fixedEffect);
+        }
+    }
+
+    public void editFixedParticleEffect(@NotNull Player player, int id, @NotNull ParticleEffect effect) {
+        Objects.requireNonNull(effect);
+
+        DataManager dataManager = this.playerParticles.getManager(DataManager.class);
+        FixedParticleEffect fixedEffect = this.validateFixedParticleEffect(player, id);
+        if (fixedEffect != null) {
+            fixedEffect.getParticlePair().setEffect(effect);
+            dataManager.saveFixedEffect(fixedEffect);
+        }
+    }
+
+    public void editFixedParticleEffect(@NotNull Player player, int id, @NotNull ParticleStyle style) {
+        Objects.requireNonNull(style);
+
+        DataManager dataManager = this.playerParticles.getManager(DataManager.class);
+        FixedParticleEffect fixedEffect = this.validateFixedParticleEffect(player, id);
+        if (fixedEffect != null) {
+            fixedEffect.getParticlePair().setStyle(style);
+            dataManager.saveFixedEffect(fixedEffect);
+        }
+    }
+
+    public void editFixedParticleEffect(@NotNull Player player, int id, @NotNull OrdinaryColor colorData) {
+        Objects.requireNonNull(colorData);
+
+        DataManager dataManager = this.playerParticles.getManager(DataManager.class);
+        FixedParticleEffect fixedEffect = this.validateFixedParticleEffect(player, id);
+        if (fixedEffect != null) {
+            fixedEffect.getParticlePair().setColor(colorData);
+            dataManager.saveFixedEffect(fixedEffect);
+        }
+    }
+
+    public void editFixedParticleEffect(@NotNull Player player, int id, @NotNull NoteColor noteColorData) {
+        Objects.requireNonNull(noteColorData);
+
+        DataManager dataManager = this.playerParticles.getManager(DataManager.class);
+        FixedParticleEffect fixedEffect = this.validateFixedParticleEffect(player, id);
+        if (fixedEffect != null) {
+            fixedEffect.getParticlePair().setNoteColor(noteColorData);
+            dataManager.saveFixedEffect(fixedEffect);
+        }
+    }
+
+    public void editFixedParticleEffect(@NotNull Player player, int id, @NotNull Material materialData) {
+        Objects.requireNonNull(materialData);
+
+        DataManager dataManager = this.playerParticles.getManager(DataManager.class);
+        FixedParticleEffect fixedEffect = this.validateFixedParticleEffect(player, id);
+        if (fixedEffect != null) {
+            if (materialData.isBlock()) {
+                fixedEffect.getParticlePair().setBlockMaterial(materialData);
+            } else {
+                fixedEffect.getParticlePair().setItemMaterial(materialData);
+            }
+            dataManager.saveFixedEffect(fixedEffect);
+        }
+    }
+
+    public void removeFixedEffect(@NotNull Player player, int id) {
+        DataManager dataManager = this.playerParticles.getManager(DataManager.class);
+        FixedParticleEffect fixedEffect = this.validateFixedParticleEffect(player, id);
+        if (fixedEffect != null) {
+            PPlayer pplayer = this.getPPlayer(player);
+            if (pplayer == null)
+                return;
+
+            pplayer.removeFixedEffect(id);
+            dataManager.removeFixedEffect(player.getUniqueId(), fixedEffect.getId());
+        }
+    }
+
+    public void removeFixedEffectsInRange(@NotNull Location location, double radius) {
+        Objects.requireNonNull(location);
+        Objects.requireNonNull(location.getWorld());
+
+        DataManager dataManager = this.playerParticles.getManager(DataManager.class);
+        ParticleManager particleManager = this.playerParticles.getManager(ParticleManager.class);
+
+        for (PPlayer pplayer : particleManager.getPPlayers()) {
+            for (FixedParticleEffect fixedEffect : pplayer.getFixedParticles()) {
+                if (fixedEffect.getLocation().getWorld() == location.getWorld() && fixedEffect.getLocation().distance(location) <= radius) {
+                    pplayer.removeFixedEffect(fixedEffect.getId());
+                    dataManager.removeFixedEffect(pplayer.getUniqueId(), fixedEffect.getId());
+                }
+            }
+        }
+    }
+
+    @Nullable
+    private FixedParticleEffect validateFixedParticleEffect(@NotNull Player player, int id) {
+        PPlayer pplayer = this.getPPlayer(player);
+        if (pplayer == null)
+            return null;
+
+        FixedParticleEffect fixedEffect = pplayer.getFixedEffectById(id);
+        if (fixedEffect == null)
+            throw new IllegalArgumentException("No fixed effect exists with the id " + id);
+
+        return fixedEffect;
+    }
+
+    @Nullable
+    public FixedParticleEffect getFixedParticleEffect(@NotNull Player player, int id) {
+        PPlayer pplayer = this.getPPlayer(player);
+        if (pplayer == null)
+            return null;
+
+        return pplayer.getFixedEffectById(id);
+    }
+
+    @NotNull
+    public Collection<FixedParticleEffect> getFixedParticleEffects(@NotNull Player player) {
+        PPlayer pplayer = this.getPPlayer(player);
+        if (pplayer == null)
+            return new ArrayList<>();
+
+        return pplayer.getFixedParticlesMap().values();
+    }
     //endregion
 
     //region GUI Management

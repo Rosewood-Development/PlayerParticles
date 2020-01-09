@@ -108,6 +108,15 @@ public class ParticleManager extends Manager implements Listener, Runnable {
     }
 
     /**
+     * Adds a PPlayer to the loaded map
+     *
+     * @param pplayer The PPlayer to add
+     */
+    public void addPPlayer(PPlayer pplayer) {
+        this.particlePlayers.put(pplayer.getUniqueId(), pplayer);
+    }
+
+    /**
      * The main loop to display all the particles
      * Does not display particles if the world is disabled or if the player is in spectator mode
      */

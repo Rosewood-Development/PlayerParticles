@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 
@@ -201,7 +202,7 @@ public class DataManager extends Manager {
                         OrdinaryColor color = new OrdinaryColor(result.getInt("r"), result.getInt("g"), result.getInt("b"));
                         ParticlePair particle = new ParticlePair(playerUUID, particleId, effect, style, itemMaterial, blockMaterial, color, noteColor);
 
-                        fixedParticles.put(fixedEffectId, new FixedParticleEffect(playerUUID, fixedEffectId, world, xPos, yPos, zPos, particle));
+                        fixedParticles.put(fixedEffectId, new FixedParticleEffect(playerUUID, fixedEffectId, new Location(world, xPos, yPos, zPos), particle));
                     }
                 }
 
@@ -225,7 +226,7 @@ public class DataManager extends Manager {
                 this.sync(() -> {
                     synchronized (loadedPPlayer) {
                         if (this.getPPlayer(playerUUID) == null) { // Make sure the PPlayer still isn't added, since this is async it's possible it got ran twice
-                            this.playerParticles.getManager(ParticleManager.class).getPPlayers().add(loadedPPlayer); // This will be fine now since loadedPPlayer is synchronized
+                            this.playerParticles.getManager(ParticleManager.class).addPPlayer(loadedPPlayer); // This will be fine now since loadedPPlayer is synchronized
                             callback.accept(loadedPPlayer);
                         }
                     }

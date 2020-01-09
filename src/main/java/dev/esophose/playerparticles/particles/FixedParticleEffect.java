@@ -2,7 +2,6 @@ package dev.esophose.playerparticles.particles;
 
 import java.util.UUID;
 import org.bukkit.Location;
-import org.bukkit.World;
 
 public class FixedParticleEffect {
 
@@ -32,17 +31,14 @@ public class FixedParticleEffect {
      * 
      * @param pplayerUUID The UUID of the player who owns the effect
      * @param id The id this effect has, unique to the owner pplayer
-     * @param world The world this effect will be displayed in
-     * @param xPos The X position in the world
-     * @param yPos The Y position in the world
-     * @param zPos The Z position in the world
+     * @param location The location to display the effect at
      * @param particlePair The ParticlePair that represents this FixedParticleEffect's appearance
      */
-    public FixedParticleEffect(UUID pplayerUUID, int id, World world, double xPos, double yPos, double zPos, ParticlePair particlePair) {
+    public FixedParticleEffect(UUID pplayerUUID, int id, Location location, ParticlePair particlePair) {
         this.pplayerUUID = pplayerUUID;
         this.id = id;
         this.particlePair = particlePair;
-        this.location = new Location(world, xPos, yPos, zPos);
+        this.location = location.clone();
     }
 
     /**
