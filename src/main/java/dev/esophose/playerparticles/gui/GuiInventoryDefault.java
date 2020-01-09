@@ -1,6 +1,7 @@
 package dev.esophose.playerparticles.gui;
 
 import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.api.PlayerParticlesAPI;
 import dev.esophose.playerparticles.manager.ConfigurationManager.GuiIcon;
 import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.GuiManager;
@@ -135,7 +136,7 @@ public class GuiInventoryDefault extends GuiInventory {
                         } else {
                             group.getParticles().put(editingParticle.getId(), editingParticle);
                         }
-                        dataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+                        PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), group);
 
                         guiManager.transition(new GuiInventoryDefault(pplayer));
                     });
@@ -173,7 +174,7 @@ public class GuiInventoryDefault extends GuiInventory {
                                 break;
                             }
                         }
-                        dataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+                        PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), group);
 
                         guiManager.transition(new GuiInventoryDefault(pplayer));
                     });
@@ -219,7 +220,7 @@ public class GuiInventoryDefault extends GuiInventory {
                                 break;
                             }
                         }
-                        dataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+                        PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), group);
 
                         guiManager.transition(new GuiInventoryDefault(pplayer));
                     });

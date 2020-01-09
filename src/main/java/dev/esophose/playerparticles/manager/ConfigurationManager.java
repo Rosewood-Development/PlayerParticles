@@ -24,6 +24,11 @@ public class ConfigurationManager extends Manager {
             "                        \\/\\/         \\/                     \\/                    \\/          \\/     \\/"
     };
 
+    private static final String[] FOOTER = new String[] {
+            "That's everything! You reached the end of the configuration.",
+            "Enjoy the plugin!"
+    };
+
     public enum Setting {
         CHECK_UPDATES("check-updates", true, "Check for new versions of the plugin"),
         SEND_METRICS("send-metrics", true, "If metrics should be sent to bStats", "I would appreciate it if you left this enabled, it helps me get statistics on how the plugin is used"),
@@ -261,7 +266,11 @@ public class ConfigurationManager extends Manager {
                 if (!(this.defaultValue instanceof List) && this.defaultValue != null) {
                     String defaultComment = "Default: ";
                     if (this.defaultValue instanceof String) {
-                        defaultComment += "'" + this.defaultValue + "'";
+                        if (ParticleUtils.containsConfigSpecialCharacters((String) this.defaultValue)) {
+                            defaultComment += "'" + this.defaultValue + "'";
+                        } else {
+                            defaultComment += this.defaultValue;
+                        }
                     } else {
                         defaultComment += this.defaultValue;
                     }
@@ -310,11 +319,11 @@ public class ConfigurationManager extends Manager {
     @Override
     public void reload() {
         File configFile = new File(this.playerParticles.getDataFolder(), "config.yml");
-        boolean setHeader = !configFile.exists();
+        boolean setHeaderFooter = !configFile.exists();
 
         this.configuration = CommentedFileConfiguration.loadConfiguration(this.playerParticles, configFile);
 
-        if (setHeader)
+        if (setHeaderFooter)
             this.configuration.addComments(HEADER);
 
         for (Setting setting : Setting.values()) {
@@ -324,6 +333,9 @@ public class ConfigurationManager extends Manager {
 
         for (GuiIcon icon : GuiIcon.values())
             icon.resetDefault();
+
+        if (setHeaderFooter)
+            this.configuration.addComments(FOOTER);
 
         this.configuration.save();
     }

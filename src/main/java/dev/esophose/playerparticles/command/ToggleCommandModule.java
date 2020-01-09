@@ -1,6 +1,7 @@
 package dev.esophose.playerparticles.command;
 
 import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.api.PlayerParticlesAPI;
 import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.particles.PPlayer;
@@ -12,7 +13,7 @@ public class ToggleCommandModule implements CommandModule {
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         boolean canSee = pplayer.canSeeParticles();
-        PlayerParticles.getInstance().getManager(DataManager.class).updateSettingParticlesHidden(pplayer.getUniqueId(), canSee);
+        PlayerParticlesAPI.getInstance().togglePlayerParticleVisibility(pplayer.getPlayer(), canSee);
         
         if (canSee) {
             localeManager.sendMessage(pplayer, "toggle-off");

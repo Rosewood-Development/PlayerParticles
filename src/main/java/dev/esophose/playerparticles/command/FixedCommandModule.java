@@ -1,6 +1,7 @@
 package dev.esophose.playerparticles.command;
 
 import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.api.PlayerParticlesAPI;
 import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.ParticleManager;
@@ -269,12 +270,9 @@ public class FixedCommandModule implements CommandModule {
             }
         }
 
-        int nextFixedEffectId = pplayer.getNextFixedEffectId();
-        ParticlePair particle = new ParticlePair(pplayer.getUniqueId(), nextFixedEffectId, effect, style, itemData, blockData, colorData, noteColorData);
-        FixedParticleEffect fixedEffect = new FixedParticleEffect(p.getUniqueId(), nextFixedEffectId, new Location(p.getLocation().getWorld(), xPos, yPos, zPos), particle);
-
+        ParticlePair particle = new ParticlePair(pplayer.getUniqueId(), pplayer.getNextFixedEffectId(), effect, style, itemData, blockData, colorData, noteColorData);
+        PlayerParticlesAPI.getInstance().createFixedParticleEffect(pplayer.getPlayer(), new Location(p.getLocation().getWorld(), xPos, yPos, zPos), particle);
         localeManager.sendMessage(pplayer, "fixed-create-success");
-        PlayerParticles.getInstance().getManager(DataManager.class).saveFixedEffect(fixedEffect);
     }
 
     /**
@@ -486,7 +484,7 @@ public class FixedCommandModule implements CommandModule {
                 return;
         }
 
-        PlayerParticles.getInstance().getManager(DataManager.class).updateFixedEffect(fixedEffect);
+        PlayerParticlesAPI.getInstance().editFixedParticleEffect(pplayer.getPlayer(), fixedEffect);
         localeManager.sendMessage(pplayer, "fixed-edit-success", StringPlaceholders.builder("prop", editType).addPlaceholder("id", id).build());
     }
 
@@ -514,7 +512,7 @@ public class FixedCommandModule implements CommandModule {
         }
 
         if (pplayer.getFixedEffectById(id) != null) {
-            PlayerParticles.getInstance().getManager(DataManager.class).removeFixedEffect(pplayer.getUniqueId(), id);
+            PlayerParticlesAPI.getInstance().removeFixedEffect(pplayer.getPlayer(), id);
             localeManager.sendMessage(pplayer, "fixed-remove-success", StringPlaceholders.single("id", id));
         } else {
             localeManager.sendMessage(pplayer, "fixed-remove-invalid", StringPlaceholders.single("id", id));
@@ -625,21 +623,11 @@ public class FixedCommandModule implements CommandModule {
             return;
         }
 
-        ArrayList<FixedParticleEffect> fixedEffectsToRemove = new ArrayList<>();
-
-        for (PPlayer ppl : particleManager.getPPlayers())
-            for (FixedParticleEffect fixedEffect : ppl.getFixedParticles())
-                if (fixedEffect.getLocation().getWorld() == p.getLocation().getWorld() && fixedEffect.getLocation().distance(p.getLocation()) <= radius)
-                    fixedEffectsToRemove.add(fixedEffect);
-
-        for (FixedParticleEffect fixedEffect : fixedEffectsToRemove)
-            dataManager.removeFixedEffect(fixedEffect.getOwnerUniqueId(), fixedEffect.getId());
-
-        localeManager.sendMessage(pplayer, "fixed-clear-success", StringPlaceholders.builder("amount", fixedEffectsToRemove.size()).addPlaceholder("range", radius).build());
+        int amountRemoved = PlayerParticlesAPI.getInstance().removeFixedEffectsInRange(p.getLocation(), radius);
+        localeManager.sendMessage(pplayer, "fixed-clear-success", StringPlaceholders.builder("amount", amountRemoved).addPlaceholder("range", radius).build());
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
-        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
         Player p = pplayer.getPlayer();
         List<String> matches = new ArrayList<>();

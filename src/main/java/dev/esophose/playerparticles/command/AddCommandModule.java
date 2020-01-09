@@ -1,6 +1,7 @@
 package dev.esophose.playerparticles.command;
 
 import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.api.PlayerParticlesAPI;
 import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.ParticleStyleManager;
@@ -133,7 +134,7 @@ public class AddCommandModule implements CommandModule {
         ParticleGroup group = pplayer.getActiveParticleGroup();
         ParticlePair newParticle = new ParticlePair(pplayer.getUniqueId(), pplayer.getNextActiveParticleId(), effect, style, itemData, blockData, colorData, noteColorData);
         group.getParticles().put(newParticle.getId(), newParticle);
-        PlayerParticles.getInstance().getManager(DataManager.class).saveParticleGroup(pplayer.getUniqueId(), group);
+        PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), group);
 
         StringPlaceholders addParticlePlaceholders = StringPlaceholders.builder("effect", newParticle.getEffect().getName())
                 .addPlaceholder("style", newParticle.getStyle().getName())

@@ -1,6 +1,7 @@
 package dev.esophose.playerparticles.gui;
 
 import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.api.PlayerParticlesAPI;
 import dev.esophose.playerparticles.gui.hook.PlayerChatHook;
 import dev.esophose.playerparticles.gui.hook.PlayerChatHookData;
 import dev.esophose.playerparticles.manager.ConfigurationManager.GuiIcon;
@@ -66,7 +67,7 @@ public class GuiInventoryManageGroups extends GuiInventory {
                     lore,
                     (button, isShiftClick) -> {
                         if (isShiftClick) {
-                            dataManager.removeParticleGroup(pplayer.getUniqueId(), group.getName());
+                            PlayerParticlesAPI.getInstance().removePlayerParticleGroup(pplayer.getPlayer(), group.getName());
 
                             this.actionButtons.remove(button);
                             this.inventory.setItem(button.getSlot(), null);
@@ -75,7 +76,7 @@ public class GuiInventoryManageGroups extends GuiInventory {
                             activeGroup.getParticles().clear();
                             for (ParticlePair particle : particles)
                                 activeGroup.getParticles().put(particle.getId(), particle.clone());
-                            dataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
+                            PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), activeGroup);
 
                             if (Setting.GUI_CLOSE_AFTER_GROUP_SELECTED.getBoolean()) {
                                 pplayer.getPlayer().closeInventory();
@@ -148,7 +149,7 @@ public class GuiInventoryManageGroups extends GuiInventory {
                             }
 
                             // Apply changes and notify player
-                            dataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+                            PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), group);
                             if (groupUpdated) {
                                 localeManager.sendMessage(pplayer, "group-save-success-overwrite", StringPlaceholders.single("name", groupName));
                             } else {

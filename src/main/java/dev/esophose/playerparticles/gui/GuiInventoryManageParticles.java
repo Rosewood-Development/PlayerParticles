@@ -1,6 +1,7 @@
 package dev.esophose.playerparticles.gui;
 
 import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.api.PlayerParticlesAPI;
 import dev.esophose.playerparticles.manager.ConfigurationManager.GuiIcon;
 import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.GuiManager;
@@ -57,7 +58,7 @@ public class GuiInventoryManageParticles extends GuiInventory {
                             // Delete particle
                             ParticleGroup activeGroup = pplayer.getActiveParticleGroup();
                             activeGroup.getParticles().remove(particle.getId());
-                            dataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
+                            PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), activeGroup);
 
                             // Update inventory to reflect deletion
                             this.actionButtons.remove(button);
@@ -100,7 +101,7 @@ public class GuiInventoryManageParticles extends GuiInventory {
                         // Save new particle
                         ParticleGroup group = pplayer.getActiveParticleGroup();
                         group.getParticles().put(editingParticle.getId(), editingParticle);
-                        dataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+                        PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), group);
 
                         // Reopen the manage particle inventory
                         guiManager.transition(new GuiInventoryManageParticles(pplayer));
@@ -116,7 +117,7 @@ public class GuiInventoryManageParticles extends GuiInventory {
                 new String[]{localeManager.getLocaleMessage("gui-color-unavailable") + localeManager.getLocaleMessage("gui-reset-particles-description")},
                 (button, isShiftClick) -> {
                     // Reset particles
-                    dataManager.saveParticleGroup(pplayer.getUniqueId(), ParticleGroup.getDefaultGroup());
+                    PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), ParticleGroup.getDefaultGroup());
 
                     // Reopen this same inventory to refresh it
                     guiManager.transition(new GuiInventoryManageParticles(pplayer));

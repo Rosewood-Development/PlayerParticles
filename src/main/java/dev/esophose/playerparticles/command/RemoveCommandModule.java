@@ -1,6 +1,7 @@
 package dev.esophose.playerparticles.command;
 
 import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.api.PlayerParticlesAPI;
 import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.particles.PPlayer;
@@ -49,7 +50,7 @@ public class RemoveCommandModule implements CommandModule {
                 return;
             }
 
-            dataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
+            PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), activeGroup);
             localeManager.sendMessage(pplayer, "remove-id-success", StringPlaceholders.single("id", id));
         } else { // Removing by effect/style name
             ParticleEffect effect = ParticleEffect.fromName(args[0]);
@@ -66,7 +67,7 @@ public class RemoveCommandModule implements CommandModule {
                 }
                 
                 if (removedCount > 0) {
-                    dataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
+                    PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), activeGroup);
                     localeManager.sendMessage(pplayer, "remove-effect-success", StringPlaceholders.builder("amount", removedCount).addPlaceholder("effect", effect.getName()).build());
                 } else {
                     localeManager.sendMessage(pplayer, "remove-effect-none", StringPlaceholders.single("effect", effect.getName()));
@@ -82,7 +83,7 @@ public class RemoveCommandModule implements CommandModule {
                 }
                 
                 if (removedCount > 0) {
-                    dataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
+                    PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), activeGroup);
                     localeManager.sendMessage(pplayer, "remove-style-success", StringPlaceholders.builder("amount", removedCount).addPlaceholder("style", style.getName()).build());
                 } else {
                     localeManager.sendMessage(pplayer, "remove-style-none", StringPlaceholders.single("style", style.getName()));

@@ -1,6 +1,7 @@
 package dev.esophose.playerparticles.command;
 
 import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.api.PlayerParticlesAPI;
 import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
@@ -94,7 +95,7 @@ public class EditCommandModule implements CommandModule {
             }
         }
         
-        PlayerParticles.getInstance().getManager(DataManager.class).saveParticleGroup(pplayer.getUniqueId(), group);
+        PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), group);
         localeManager.sendMessage(pplayer, "edit-success-effect", StringPlaceholders.builder("id", id).addPlaceholder("effect", effect.getName()).build());
     }
     
@@ -125,7 +126,7 @@ public class EditCommandModule implements CommandModule {
             }
         }
 
-        PlayerParticles.getInstance().getManager(DataManager.class).saveParticleGroup(pplayer.getUniqueId(), group);
+        PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), group);
         localeManager.sendMessage(pplayer, "edit-success-style", StringPlaceholders.builder("id", id).addPlaceholder("style", style.getName()).build());
     }
     
@@ -226,7 +227,7 @@ public class EditCommandModule implements CommandModule {
             }
         }
 
-        PlayerParticles.getInstance().getManager(DataManager.class).saveParticleGroup(pplayer.getUniqueId(), group);
+        PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), group);
         localeManager.sendMessage(pplayer, "edit-success-data", StringPlaceholders.builder("id", id).addPlaceholder("data", updatedDataString).build());
     }
 

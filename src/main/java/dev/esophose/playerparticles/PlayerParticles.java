@@ -1,7 +1,5 @@
 /*
  * TODO: v7.0
- * * Refactor the DataManager to not update the PPlayer objects, it should only handle saving/loading data, not applying it
- * * Add an API, accessible through the dev.esophose.playerparticles.api.PlayerParticlesAPI class
  * + Add ability to create/manage fixed effects from the GUI
  * * Convert fixed effect ids into names
  * + Add command '/pp fixed teleport <id>' that requires the permission playerparticles.fixed.teleport
@@ -14,6 +12,8 @@
  */
 
  /*
+ * + Added an API, accessible through the dev.esophose.playerparticles.api.PlayerParticlesAPI class
+ * * Refactored the DataManager to only handle saving/loading data
  * * Refactored and cleaned up code to remove static abuse
  * * Changed the package names
  * + Config and lang files will no longer reset every update

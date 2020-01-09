@@ -1,6 +1,7 @@
 package dev.esophose.playerparticles.command;
 
 import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.api.PlayerParticlesAPI;
 import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.ParticleGroupPresetManager;
@@ -110,7 +111,7 @@ public class GroupCommandModule implements CommandModule {
         }
         
         // Apply changes and notify player
-        PlayerParticles.getInstance().getManager(DataManager.class).saveParticleGroup(pplayer.getUniqueId(), group);
+        PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), group);
         if (groupUpdated) {
             localeManager.sendMessage(pplayer, "group-save-success-overwrite", StringPlaceholders.single("name", groupName));
         } else {
@@ -165,7 +166,7 @@ public class GroupCommandModule implements CommandModule {
             activeGroup.getParticles().put(particle.getId(), particle.clone());
         
         // Update group and notify player
-        PlayerParticles.getInstance().getManager(DataManager.class).saveParticleGroup(pplayer.getUniqueId(), activeGroup);
+        PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), group);
         
         if (!isPreset)
             localeManager.sendMessage(pplayer, "group-load-success", StringPlaceholders.builder("amount", activeGroup.getParticles().size()).addPlaceholder("name", groupName).build());
@@ -202,7 +203,7 @@ public class GroupCommandModule implements CommandModule {
         }
         
         // Delete the group and notify player
-        PlayerParticles.getInstance().getManager(DataManager.class).removeParticleGroup(pplayer.getUniqueId(), group.getName());
+        PlayerParticlesAPI.getInstance().removePlayerParticleGroup(pplayer.getPlayer(), group.getName());
         localeManager.sendMessage(pplayer, "group-remove-success", StringPlaceholders.single("name", groupName));
     }
     

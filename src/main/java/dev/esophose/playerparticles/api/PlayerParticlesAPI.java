@@ -32,7 +32,6 @@ import org.jetbrains.annotations.Nullable;
  * Note: This API will bypass all permissions and does not send any messages.
  *       Any changes made through the API will be saved to the database automatically.
  */
-@SuppressWarnings("unused")
 public final class PlayerParticlesAPI {
 
     private static PlayerParticlesAPI INSTANCE;
@@ -260,7 +259,7 @@ public final class PlayerParticlesAPI {
     public void savePlayerParticleGroup(@NotNull Player player, @NotNull ParticleGroup particleGroup) {
         Objects.requireNonNull(particleGroup);
 
-        if (particleGroup.getParticles().isEmpty())
+        if (particleGroup.getParticles().isEmpty() && !particleGroup.getName().equals(ParticleGroup.DEFAULT_NAME))
             throw new IllegalArgumentException("Cannot save an empty ParticleGroup");
 
         DataManager dataManager = this.playerParticles.getManager(DataManager.class);
@@ -364,6 +363,21 @@ public final class PlayerParticlesAPI {
         this.createFixedParticleEffect(player, location, particle);
     }
 
+    public void editFixedParticleEffect(@NotNull Player player, @NotNull FixedParticleEffect fixedEffect) {
+        Objects.requireNonNull(fixedEffect);
+
+        PPlayer pplayer = this.getPPlayer(player);
+        if (pplayer == null)
+            return;
+
+        DataManager dataManager = this.playerParticles.getManager(DataManager.class);
+        if (this.validateFixedParticleEffect(player, fixedEffect.getId()) != null) {
+            pplayer.removeFixedEffect(fixedEffect.getId());
+            pplayer.addFixedEffect(fixedEffect);
+            dataManager.updateFixedEffect(fixedEffect);
+        }
+    }
+
     public void editFixedParticleEffect(@NotNull Player player, int id, @NotNull Location location) {
         Objects.requireNonNull(location);
         Objects.requireNonNull(location.getWorld());
@@ -448,21 +462,32 @@ public final class PlayerParticlesAPI {
         }
     }
 
-    public void removeFixedEffectsInRange(@NotNull Location location, double radius) {
+    /**
+     * Removes fixed effects within a given radius of a location
+     *
+     * @param location The location to search around
+     * @param radius The radius to remove
+     * @return The number of fixed effects that were removed
+     */
+    public int removeFixedEffectsInRange(@NotNull Location location, double radius) {
         Objects.requireNonNull(location);
         Objects.requireNonNull(location.getWorld());
 
         DataManager dataManager = this.playerParticles.getManager(DataManager.class);
         ParticleManager particleManager = this.playerParticles.getManager(ParticleManager.class);
 
+        int removed = 0;
         for (PPlayer pplayer : particleManager.getPPlayers()) {
             for (FixedParticleEffect fixedEffect : pplayer.getFixedParticles()) {
                 if (fixedEffect.getLocation().getWorld() == location.getWorld() && fixedEffect.getLocation().distance(location) <= radius) {
                     pplayer.removeFixedEffect(fixedEffect.getId());
                     dataManager.removeFixedEffect(pplayer.getUniqueId(), fixedEffect.getId());
+                    removed++;
                 }
             }
         }
+
+        return removed;
     }
 
     @Nullable

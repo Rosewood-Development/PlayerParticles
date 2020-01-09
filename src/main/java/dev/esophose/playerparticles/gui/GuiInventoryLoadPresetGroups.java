@@ -1,6 +1,7 @@
 package dev.esophose.playerparticles.gui;
 
 import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.api.PlayerParticlesAPI;
 import dev.esophose.playerparticles.manager.ConfigurationManager.GuiIcon;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.manager.DataManager;
@@ -65,7 +66,7 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
                     clonedParticle.setOwner(pplayer);
                     activeGroup.getParticles().put(clonedParticle.getId(), clonedParticle);
                 }
-                dataManager.saveParticleGroup(pplayer.getUniqueId(), activeGroup);
+                PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), activeGroup);
 
                 if (Setting.GUI_CLOSE_AFTER_GROUP_SELECTED.getBoolean()) {
                     pplayer.getPlayer().closeInventory();
@@ -98,7 +99,7 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
                     new String[]{localeManager.getLocaleMessage("gui-color-unavailable") + localeManager.getLocaleMessage("gui-reset-particles-description")},
                     (button, isShiftClick) -> {
                         // Reset particles
-                        dataManager.saveParticleGroup(pplayer.getUniqueId(), ParticleGroup.getDefaultGroup());
+                        PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), ParticleGroup.getDefaultGroup());
                     });
             this.actionButtons.add(resetParticles);
         }

@@ -109,4 +109,17 @@ public final class ParticleUtils {
         return n.length + 1;
     }
 
+    public static boolean containsConfigSpecialCharacters(String string) {
+        for (char c : string.toCharArray()) {
+            // Range taken from SnakeYAML's Emitter.java
+            if (!(c == '\n' || (0x20 <= c && c <= 0x7E)) &&
+                    (c == 0x85 || (c >= 0xA0 && c <= 0xD7FF)
+                    || (c >= 0xE000 && c <= 0xFFFD)
+                    || (c >= 0x10000 && c <= 0x10FFFF))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

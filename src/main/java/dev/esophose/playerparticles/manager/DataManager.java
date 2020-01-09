@@ -267,8 +267,6 @@ public class DataManager extends Manager {
                 updateStatement.executeUpdate();
             }
         }));
-
-        this.getPPlayer(playerUUID, (pplayer) -> pplayer.setParticlesHidden(particlesHidden));
     }
 
     /**
@@ -329,16 +327,6 @@ public class DataManager extends Manager {
                 particlesStatement.executeBatch();
             }
         }));
-
-        this.getPPlayer(playerUUID, (pplayer) -> {
-            for (ParticleGroup existing : pplayer.getParticleGroups().values()) {
-                if (group.getName().equalsIgnoreCase(existing.getName())) {
-                    pplayer.getParticleGroups().remove(existing.getName());
-                    break;
-                }
-            }
-            pplayer.getParticleGroups().put(group.getName(), group);
-        });
     }
 
     /**
@@ -379,8 +367,6 @@ public class DataManager extends Manager {
                 statement.executeUpdate();
             }
         }));
-
-        this.getPPlayer(playerUUID, (pplayer) -> pplayer.getParticleGroups().remove(groupName));
     }
 
     /**
@@ -421,8 +407,6 @@ public class DataManager extends Manager {
                 statement.executeUpdate();
             }
         }));
-
-        this.getPPlayer(fixedEffect.getOwnerUniqueId(), (pplayer) -> pplayer.addFixedEffect(fixedEffect));
     }
 
     /**
@@ -462,11 +446,6 @@ public class DataManager extends Manager {
                 statement.executeUpdate();
             }
         }));
-
-        this.getPPlayer(fixedEffect.getOwnerUniqueId(), (pplayer) -> {
-            pplayer.removeFixedEffect(fixedEffect.getId());
-            pplayer.addFixedEffect(fixedEffect);
-        });
     }
 
     /**
@@ -506,8 +485,6 @@ public class DataManager extends Manager {
                 statement.executeUpdate();
             }
         }));
-
-        this.getPPlayer(playerUUID, (pplayer) -> pplayer.removeFixedEffect(id));
     }
 
     /**
