@@ -2,7 +2,6 @@ package dev.esophose.playerparticles.command;
 
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.api.PlayerParticlesAPI;
-import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.particles.PPlayer;
 import java.util.ArrayList;

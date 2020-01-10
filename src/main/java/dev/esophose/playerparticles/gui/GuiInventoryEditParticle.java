@@ -3,7 +3,6 @@ package dev.esophose.playerparticles.gui;
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.api.PlayerParticlesAPI;
 import dev.esophose.playerparticles.manager.ConfigurationManager.GuiIcon;
-import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.GuiManager;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.particles.PPlayer;
@@ -21,7 +20,6 @@ public class GuiInventoryEditParticle extends GuiInventory {
         super(pplayer, Bukkit.createInventory(pplayer.getPlayer(), INVENTORY_SIZE, PlayerParticles.getInstance().getManager(LocaleManager.class).getLocaleMessage("gui-editing-particle", StringPlaceholders.single("id", editingParticle.getId()))));
 
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
-        DataManager dataManager = PlayerParticles.getInstance().getManager(DataManager.class);
         GuiManager guiManager = PlayerParticles.getInstance().getManager(GuiManager.class);
 
         this.fillBorder(BorderColor.RED);

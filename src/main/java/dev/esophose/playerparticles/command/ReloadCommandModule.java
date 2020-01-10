@@ -5,6 +5,7 @@ import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.ParticleStyleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.particles.PPlayer;
+import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.styles.DefaultStyles;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ public class ReloadCommandModule implements CommandModule {
         LocaleManager localeManager = playerParticles.getManager(LocaleManager.class);
         if (playerParticles.getManager(PermissionManager.class).canReloadPlugin(pplayer.getMessageDestination())) {
             playerParticles.reload();
+            ParticleEffect.reloadSettings();
             DefaultStyles.reloadSettings(playerParticles.getManager(ParticleStyleManager.class));
             localeManager.sendMessage(pplayer, "reload-success");
             playerParticles.getLogger().info("Reloaded configuration.");

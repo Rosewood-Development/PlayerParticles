@@ -2,7 +2,6 @@ package dev.esophose.playerparticles.command;
 
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.api.PlayerParticlesAPI;
-import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
@@ -21,7 +20,6 @@ public class RemoveCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
-        DataManager dataManager = PlayerParticles.getInstance().getManager(DataManager.class);
 
         if (args.length == 0) {
             localeManager.sendMessage(pplayer, "remove-no-args");
@@ -57,34 +55,32 @@ public class RemoveCommandModule implements CommandModule {
             ParticleStyle style = ParticleStyle.fromName(args[0]);
             
             if (effect != null) {
-                int removedCount = 0;
+                Set<Integer> toRemove = new HashSet<>();
                 ParticleGroup activeGroup = pplayer.getActiveParticleGroup();
-                for (int i = activeGroup.getParticles().size() - 1; i >= 0; i--) {
-                    if (activeGroup.getParticles().get(i).getEffect() == effect) {
-                        activeGroup.getParticles().remove(i);
-                        removedCount++;
-                    }
-                }
+                for (int id : activeGroup.getParticles().keySet())
+                    if (activeGroup.getParticles().get(id).getEffect() == effect)
+                        toRemove.add(id);
+                for (int id : toRemove)
+                    activeGroup.getParticles().remove(id);
                 
-                if (removedCount > 0) {
+                if (toRemove.size() > 0) {
                     PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), activeGroup);
-                    localeManager.sendMessage(pplayer, "remove-effect-success", StringPlaceholders.builder("amount", removedCount).addPlaceholder("effect", effect.getName()).build());
+                    localeManager.sendMessage(pplayer, "remove-effect-success", StringPlaceholders.builder("amount", toRemove.size()).addPlaceholder("effect", effect.getName()).build());
                 } else {
                     localeManager.sendMessage(pplayer, "remove-effect-none", StringPlaceholders.single("effect", effect.getName()));
                 }
             } else if (style != null) {
-                int removedCount = 0;
+                Set<Integer> toRemove = new HashSet<>();
                 ParticleGroup activeGroup = pplayer.getActiveParticleGroup();
-                for (int i = activeGroup.getParticles().size() - 1; i >= 0; i--) {
-                    if (activeGroup.getParticles().get(i).getStyle() == style) {
-                        activeGroup.getParticles().remove(i);
-                        removedCount++;
-                    }
-                }
+                for (int id : activeGroup.getParticles().keySet())
+                    if (activeGroup.getParticles().get(id).getStyle() == style)
+                        toRemove.add(id);
+                for (int id : toRemove)
+                    activeGroup.getParticles().remove(id);
                 
-                if (removedCount > 0) {
+                if (toRemove.size() > 0) {
                     PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), activeGroup);
-                    localeManager.sendMessage(pplayer, "remove-style-success", StringPlaceholders.builder("amount", removedCount).addPlaceholder("style", style.getName()).build());
+                    localeManager.sendMessage(pplayer, "remove-style-success", StringPlaceholders.builder("amount", toRemove.size()).addPlaceholder("style", style.getName()).build());
                 } else {
                     localeManager.sendMessage(pplayer, "remove-style-none", StringPlaceholders.single("style", style.getName()));
                 }

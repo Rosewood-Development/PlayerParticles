@@ -1,14 +1,16 @@
 package dev.esophose.playerparticles.particles;
 
+import com.google.common.collect.ObjectArrays;
 import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.manager.ParticleManager;
 import dev.esophose.playerparticles.util.NMSUtil;
+import dev.esophose.playerparticles.util.ParticleUtils;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -44,7 +46,7 @@ public enum ParticleEffect {
     DRIPPING_LAVA("DRIP_LAVA"),
     DRIPPING_WATER("DRIP_WATER"),
     DUST("REDSTONE", ParticleProperty.COLORABLE),
-    // ELDER_GUARDIAN("MOB_APPEARANCE"), // No thank you
+    ELDER_GUARDIAN("MOB_APPEARANCE", false), // No thank you
     ENCHANT("ENCHANTMENT_TABLE"),
     ENCHANTED_HIT("CRIT_MAGIC"),
     END_ROD("END_ROD"),
@@ -59,7 +61,7 @@ public enum ParticleEffect {
     FIREWORK("FIREWORKS_SPARK"),
     FISHING("WATER_WAKE"),
     FLAME("FLAME"),
-    // FLASH("FLASH"), // Also no thank you
+    FLASH("FLASH", false), // Also no thank you
     FOOTSTEP("FOOTSTEP"), // Removed in Minecraft 1.13 :(
     HAPPY_VILLAGER("VILLAGER_HAPPY"),
     HEART("HEART"),
@@ -88,16 +90,12 @@ public enum ParticleEffect {
     UNDERWATER("SUSPENDED_DEPTH"),
     WITCH("SPELL_WITCH");
 
-    private static final Map<String, ParticleEffect> NAME_MAP = new HashMap<>();
-    private final Particle internalEnum;
-    private final List<ParticleProperty> properties;
+    private Particle internalEnum;
+    private List<ParticleProperty> properties;
 
-    // Initialize map for quick name and id lookup
-    static {
-        for (ParticleEffect effect : values())
-            if (effect.isSupported())
-                NAME_MAP.put(effect.getName(), effect);
-    }
+    private CommentedFileConfiguration config;
+    private boolean enabledByDefault;
+    private boolean enabled;
 
     /**
      * Construct a new particle effect
@@ -106,10 +104,84 @@ public enum ParticleEffect {
      * @param properties Properties of this particle effect
      */
     ParticleEffect(String enumName, ParticleProperty... properties) {
+        this(enumName, true, properties);
+    }
+
+    /**
+     * Construct a new particle effect
+     *
+     * @param enumName Name of the Particle Enum when the server version is greater than or equal to 1.13
+*    * @param enabledByDefault If the particle type is enabled by default
+     * @param properties Properties of this particle effect
+     */
+    ParticleEffect(String enumName, boolean enabledByDefault, ParticleProperty... properties) {
+        this.enabledByDefault = enabledByDefault;
         this.properties = Arrays.asList(properties);
 
         // Will be null if this server's version doesn't support this particle type
         this.internalEnum = Stream.of(Particle.values()).filter(x -> x.name().equals(enumName)).findFirst().orElse(null);
+
+        this.setDefaultSettings();
+        this.loadSettings(false);
+    }
+
+    /**
+     * Sets the default settings for the particle type
+     */
+    private void setDefaultSettings() {
+        if (!this.isSupported())
+            return;
+
+        File directory = new File(PlayerParticles.getInstance().getDataFolder(), "effects");
+        directory.mkdirs();
+
+        File file = new File(directory, this.getName() + ".yml");
+        this.config = CommentedFileConfiguration.loadConfiguration(PlayerParticles.getInstance(), file);
+
+        this.setIfNotExists("enabled", this.enabledByDefault, "If the effect is enabled or not");
+
+        this.config.save();
+    }
+
+    /**
+     * Loads the settings shared for each style then calls loadSettings(CommentedFileConfiguration)
+     */
+    public void loadSettings(boolean reloadConfig) {
+        if (!this.isSupported())
+            return;
+
+        if (reloadConfig)
+            this.config.reloadConfig();
+
+        this.enabled = this.config.getBoolean("enabled");
+    }
+
+    /**
+     * Sets a value to the config if it doesn't already exist
+     *
+     * @param setting The setting name
+     * @param value The setting value
+     */
+    private void setIfNotExists(String setting, Object value, String... comments) {
+        if (this.config.get(setting) != null)
+            return;
+
+        String defaultMessage = "Default: ";
+        if (value instanceof String && ParticleUtils.containsConfigSpecialCharacters((String) value)) {
+            defaultMessage += "'" + value + "'";
+        } else {
+            defaultMessage += value;
+        }
+
+        this.config.set(setting, value, ObjectArrays.concat(comments, new String[] { defaultMessage }, String.class));
+    }
+
+    /**
+     * Reloads the settings for all ParticleEffects
+     */
+    public static void reloadSettings() {
+        for (ParticleEffect effect : values())
+            effect.loadSettings(true);
     }
 
     /**
@@ -141,6 +213,13 @@ public enum ParticleEffect {
     }
 
     /**
+     * @return true if this effect is enabled, otherwise false
+     */
+    public boolean isEnabled() {
+        return this.enabled;
+    }
+
+    /**
      * Returns a ParticleEffect List of all enabled effects for the server version
      * 
      * @return Enabled effects
@@ -148,7 +227,7 @@ public enum ParticleEffect {
     public static List<ParticleEffect> getEnabledEffects() {
         List<ParticleEffect> effects = new ArrayList<>();
         for (ParticleEffect pe : values())
-            if (pe.isSupported()) 
+            if (pe.isSupported() && pe.isEnabled())
                 effects.add(pe);
         return effects;
     }
@@ -160,7 +239,7 @@ public enum ParticleEffect {
      * @return The particle effect
      */
     public static ParticleEffect fromName(String name) {
-        return NAME_MAP.get(name.toLowerCase());
+        return Stream.of(values()).filter(x -> x.name().equalsIgnoreCase(name) && x.isSupported() && x.isEnabled()).findFirst().orElse(null);
     }
     
     /**
@@ -552,10 +631,6 @@ public enum ParticleEffect {
         public float getValueZ() {
             return 0;
         }
-
-    }
-
-    public interface ParticleData {
 
     }
 

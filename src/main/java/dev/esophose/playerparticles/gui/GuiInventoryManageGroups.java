@@ -6,7 +6,6 @@ import dev.esophose.playerparticles.gui.hook.PlayerChatHook;
 import dev.esophose.playerparticles.gui.hook.PlayerChatHookData;
 import dev.esophose.playerparticles.manager.ConfigurationManager.GuiIcon;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
-import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.GuiManager;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
@@ -28,7 +27,6 @@ public class GuiInventoryManageGroups extends GuiInventory {
         super(pplayer, Bukkit.createInventory(pplayer.getPlayer(), INVENTORY_SIZE, PlayerParticles.getInstance().getManager(LocaleManager.class).getLocaleMessage("gui-manage-your-groups")));
 
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
-        DataManager dataManager = PlayerParticles.getInstance().getManager(DataManager.class);
         GuiManager guiManager = PlayerParticles.getInstance().getManager(GuiManager.class);
 
         this.fillBorder(BorderColor.BROWN);
