@@ -51,10 +51,13 @@ public class SimplifiedChineseLocale implements Locale {
             this.put("#2", "Fixed Particle Command Description Messages");
             this.put("command-description-fixed-create", "&e/pp fixed create <<x> <y> <z>|<looking>> <特效名> <风格名> [数据名] - 创建新的定点特效");
             this.put("command-description-fixed-edit", "&e/pp fixed edit <id> <特效名|风格名|数据名> <参数> - 根据ID编辑定点特效");
-            this.put("command-description-fixed-remove", "&e/pp fixed remove <ID> - 根据ID删除定点特效");
+            this.put("command-description-fixed-remove", "&e/pp fixed remove <id> - 根据ID删除定点特效");
             this.put("command-description-fixed-list", "&e/pp fixed list - 列出所有定点特效的ID");
-            this.put("command-description-fixed-info", "&e/pp fixed info <ID> - 获取定点特效的详细信息");
+            this.put("command-description-fixed-info", "&e/pp fixed info <id> - 获取定点特效的详细信息");
             this.put("command-description-fixed-clear", "&e/pp fixed clear <半径> - 清空指定范围内的所有定点特效");
+            this.put("command-description-fixed-teleport", "&e/pp fixed teleport <id> - 传送你到固定效果之一");
+
+            this.put("#2.5", "Group Command Description Messages");
             this.put("command-description-group-save", "&e/pp group save <组名> - 保存所有你使用的特效到新的组内");
             this.put("command-description-group-load", "&e/pp group load <组名> - 加载所有你保存组内的特效");
             this.put("command-description-group-remove", "&e/pp group remove <组名> - 删除一组你保存的特效");
@@ -212,6 +215,12 @@ public class SimplifiedChineseLocale implements Locale {
             this.put("fixed-clear-no-args", "&c你没有给出清空定点特效的范围!");
             this.put("fixed-clear-invalid-args", "&c你输入的范围无效，范围必须是正整数!");
             this.put("fixed-clear-success", "&a已清除&b%amount%&a个&b%range%&a格内的定点特效!");
+
+            this.put("#23.5", "Fixed Teleport Message");
+            this.put("fixed-teleport-no-permission", "&c您无权传送到固定效果!");
+            this.put("fixed-teleport-no-args", "&c您没有指定要传送到的ID!");
+            this.put("fixed-teleport-invalid-args", "&c无法传送，指定的ID无效!");
+            this.put("fixed-teleport-success", "&e传送到ID&b%id%&e的固定效果!");
 
             this.put("#24", "Fixed Other Messages");
             this.put("fixed-no-permission", "&c你没有使用定点特效的权限!");

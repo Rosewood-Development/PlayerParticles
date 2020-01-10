@@ -22,6 +22,7 @@ public class PermissionManager extends Manager {
         FIXED("fixed"),
         FIXED_UNLIMITED("fixed.unlimited"),
         FIXED_CLEAR("fixed.clear"),
+        FIXED_TELEPORT("fixed.teleport"),
 
         RELOAD("reload"),
         OVERRIDE("override"),
@@ -279,6 +280,16 @@ public class PermissionManager extends Manager {
      */
     public boolean canClearFixedEffects(Player player) {
         return PPermission.FIXED_CLEAR.check(player);
+    }
+
+    /**
+     * Checks if a player has permission to teleport to fixed effects
+     *
+     * @param player The player to check the permission for
+     * @return True if the player has permission to use /pp fixed teleport
+     */
+    public boolean canTeleportToFixedEffects(Player player) {
+        return PPermission.FIXED_TELEPORT.check(player);
     }
 
     /**

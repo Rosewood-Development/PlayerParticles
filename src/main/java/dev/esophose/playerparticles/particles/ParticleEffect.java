@@ -223,7 +223,7 @@ public enum ParticleEffect {
 
         if (this == DUST && NMSUtil.getVersionNumber() >= 13) { // DUST uses a special data object for spawning in 1.13
             OrdinaryColor dustColor = (OrdinaryColor) color;
-            DustOptions dustOptions = new DustOptions(Color.fromRGB(dustColor.getRed(), dustColor.getGreen(), dustColor.getBlue()), 1);
+            DustOptions dustOptions = new DustOptions(Color.fromRGB(dustColor.getRed(), dustColor.getGreen(), dustColor.getBlue()), Setting.DUST_SIZE.getFloat());
             for (Player player : this.getPlayersInRange(center, isFixedEffect, owner)) {
                 player.spawnParticle(this.internalEnum, center.getX(), center.getY(), center.getZ(), 1, 0, 0, 0, 0, dustOptions);
             }
@@ -552,6 +552,10 @@ public enum ParticleEffect {
         public float getValueZ() {
             return 0;
         }
+
+    }
+
+    public interface ParticleData {
 
     }
 

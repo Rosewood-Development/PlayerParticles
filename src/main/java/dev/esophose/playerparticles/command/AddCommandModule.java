@@ -2,7 +2,6 @@ package dev.esophose.playerparticles.command;
 
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.api.PlayerParticlesAPI;
-import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.ParticleStyleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
@@ -16,6 +15,8 @@ import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import dev.esophose.playerparticles.util.StringPlaceholders;
+import dev.esophose.playerparticles.util.inputparser.InputParser;
+import dev.esophose.playerparticles.util.inputparser.parsable.ParsableOrdinaryColor;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Material;
@@ -38,8 +39,10 @@ public class AddCommandModule implements CommandModule {
             localeManager.sendMessage(pplayer, "add-reached-max", StringPlaceholders.single("amount", maxParticlesAllowed));
             return;
         }
+
+        InputParser inputParser = new InputParser(pplayer, args);
         
-        ParticleEffect effect = ParticleEffect.fromName(args[0]);
+        ParticleEffect effect = inputParser.next(ParticleEffect.class);
         if (effect == null) {
             localeManager.sendMessage(pplayer, "effect-invalid", StringPlaceholders.single("effect", args[0]));
             return;
@@ -48,7 +51,7 @@ public class AddCommandModule implements CommandModule {
             return;
         }
 
-        ParticleStyle style = ParticleStyle.fromName(args[1]);
+        ParticleStyle style = inputParser.next(ParticleStyle.class);
         if (style == null) {
             localeManager.sendMessage(pplayer, "style-invalid", StringPlaceholders.single("style", args[1]));
             return;
@@ -65,65 +68,28 @@ public class AddCommandModule implements CommandModule {
         if (args.length > 2) {
             if (effect.hasProperty(ParticleProperty.COLORABLE)) {
                 if (effect == ParticleEffect.NOTE) {
-                    if (args[2].equalsIgnoreCase("rainbow")) {
-                        noteColorData = new NoteColor(99);
-                    } else if (args[2].equalsIgnoreCase("random")) {
-                        noteColorData = new NoteColor(98);
-                    } else {
-                        int note;
-                        try {
-                            note = Integer.parseInt(args[2]);
-                        } catch (Exception e) {
-                            localeManager.sendMessage(pplayer, "data-invalid-note");
-                            return;
-                        }
-
-                        if (note < 0 || note > 24) {
-                            localeManager.sendMessage(pplayer, "data-invalid-note");
-                            return;
-                        }
-
-                        noteColorData = new NoteColor(note);
+                    noteColorData = inputParser.next(NoteColor.class);
+                    if (noteColorData == null) {
+                        localeManager.sendMessage(pplayer, "data-invalid-note");
+                        return;
                     }
                 } else {
-                    if (args[2].equalsIgnoreCase("rainbow")) {
-                        colorData = new OrdinaryColor(999, 999, 999);
-                    } else if (args[2].equalsIgnoreCase("random")) {
-                        colorData = new OrdinaryColor(998, 998, 998);
-                    } else {
-                        int r, g, b;
-
-                        try {
-                            r = Integer.parseInt(args[2]);
-                            g = Integer.parseInt(args[3]);
-                            b = Integer.parseInt(args[4]);
-                        } catch (Exception e) {
-                            localeManager.sendMessage(pplayer, "data-invalid-color");
-                            return;
-                        }
-
-                        if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
-                            localeManager.sendMessage(pplayer, "data-invalid-color");
-                            return;
-                        }
-
-                        colorData = new OrdinaryColor(r, g, b);
+                    colorData = inputParser.next(OrdinaryColor.class);
+                    if (colorData == null) {
+                        localeManager.sendMessage(pplayer, "data-invalid-color");
+                        return;
                     }
                 }
             } else if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
                 if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST) {
-                    try {
-                        blockData = ParticleUtils.closestMatch(args[2]);
-                        if (blockData == null || !blockData.isBlock()) throw new Exception();
-                    } catch (Exception e) {
+                    blockData = inputParser.next(Material.class);
+                    if (blockData == null || !blockData.isBlock()) {
                         localeManager.sendMessage(pplayer, "data-invalid-block");
                         return;
                     }
                 } else if (effect == ParticleEffect.ITEM) {
-                    try {
-                        itemData = ParticleUtils.closestMatch(args[2]);
-                        if (itemData == null || itemData.isBlock()) throw new Exception();
-                    } catch (Exception e) {
+                    itemData = inputParser.next(Material.class);
+                    if (itemData == null || itemData.isBlock()) {
                         localeManager.sendMessage(pplayer, "data-invalid-item");
                         return;
                     }
@@ -168,16 +134,14 @@ public class AddCommandModule implements CommandModule {
                             possibleValues.add("random");
                         }
                     } else { // Color data
-                        if (args.length <= 5 && !args[2].equalsIgnoreCase("rainbow") && !args[2].equalsIgnoreCase("random")) {
-                            possibleValues.add("<0-255>");
-                        }
-                        if (args.length <= 4 && !args[2].equalsIgnoreCase("rainbow") && !args[2].equalsIgnoreCase("random")) {
-                            possibleValues.add("<0-255> <0-255>");
-                        }
                         if (args.length <= 3) {
                             possibleValues.add("<0-255> <0-255> <0-255>");
-                            possibleValues.add("rainbow");
-                            possibleValues.add("random");
+                            possibleValues.addAll(ParsableOrdinaryColor.getColorNameMap().keySet());
+                            possibleValues.add("<#hexCode>");
+                        } else if (args.length <= 4 && !ParsableOrdinaryColor.getColorNameMap().containsKey(args[2].toLowerCase())) {
+                            possibleValues.add("<0-255> <0-255>");
+                        } else if (args.length <= 5 && !ParsableOrdinaryColor.getColorNameMap().containsKey(args[2].toLowerCase())) {
+                            possibleValues.add("<0-255>");
                         }
                     }
                     StringUtil.copyPartialMatches(args[args.length - 1], possibleValues, matches);

@@ -51,10 +51,13 @@ public class GermanLocale implements Locale {
             this.put("#2", "Fixed Particle Command Description Messages");
             this.put("command-description-fixed-create", "&e/pp fixed create <<x> <y> <z>|<looking>> <effect> <style> [data] - Erstellt einen neun fixen Effekt");
             this.put("command-description-fixed-edit", "&e/pp fixed edit <id> <effect|style|data> <args> - Bearbeiten Sie einen Teil eines festen Effekts anhand seiner ID");
-            this.put("command-description-fixed-remove", "&e/pp fixed remove <ID> - Entfernt einen festen Effekt anhand seiner ID");
+            this.put("command-description-fixed-remove", "&e/pp fixed remove <id> - Entfernt einen festen Effekt anhand seiner ID");
             this.put("command-description-fixed-list", "&e/pp fixed list - Listet alle IDs Ihrer festen Effekte auf");
-            this.put("command-description-fixed-info", "&e/pp fixed info <ID> - Ruft Informationen zu einem Ihrer Fixen Effekte ab");
+            this.put("command-description-fixed-info", "&e/pp fixed info <id> - Ruft Informationen zu einem Ihrer Fixen Effekte ab");
             this.put("command-description-fixed-clear", "&e/pp fixed clear <radius> - Löscht alle festen Effekte aller Spieler innerhalb des angegebenen Radius");
+            this.put("command-description-fixed-teleport", "&e/pp fixed teleport <id> - Teleportiert Sie zu einem Ihrer festen Effekte");
+
+            this.put("#2.5", "Group Command Description Messages");
             this.put("command-description-group-save", "&e/pp group save <name> - Speichert alle aktiven Partikel in einer neuen Gruppe");
             this.put("command-description-group-load", "&e/pp group load <name> - Lädt alle in einer Gruppe gespeicherten Partikel");
             this.put("command-description-group-remove", "&e/pp group remove <name> - Entfernt eine gespeicherte Gruppe");
@@ -212,6 +215,12 @@ public class GermanLocale implements Locale {
             this.put("fixed-clear-no-args", "&cSie haben keinen Radius zum Löschen fester Effekte für angegeben!");
             this.put("fixed-clear-invalid-args", "&cDer von Ihnen angegebene Radius ist ungültig. Es muss sich um eine positive ganze Zahl handeln.");
             this.put("fixed-clear-success", "&aEntfernte &b%amount% &aEffekte in &b%range% &aBlöcken von Ihrem Standort entfernt!");
+
+            this.put("#23.5", "Fixed Teleport Message");
+            this.put("fixed-teleport-no-permission", "&cSie haben nicht die Erlaubnis, sich zu festen Effekten zu teleportieren!");
+            this.put("fixed-teleport-no-args", "&cSie haben keine ID zum Teleportieren angegeben!");
+            this.put("fixed-teleport-invalid-args", "&cEs kann nicht teleportiert werden, die angegebene ID ist ungültig!");
+            this.put("fixed-teleport-success", "&eTeleportiert zu Ihrem festen Effekt mit einer ID von &b%id%&e!");
 
             this.put("#24", "Fixed Other Messages");
             this.put("fixed-no-permission", "&cSie haben keine Berechtigung, Fixeffekte zu verwenden!");

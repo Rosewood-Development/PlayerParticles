@@ -51,10 +51,13 @@ public class VietnameseLocale implements Locale {
             this.put("#2", "Fixed Particle Command Description Messages");
             this.put("command-description-fixed-create", "&e/pp fixed create <<x> <y> <z>|<looking>> <effect> <style> [data] - Tạo mới một hiệu ứng cố định");
             this.put("command-description-fixed-edit", "&e/pp fixed edit <id> <effect|style|data> <args> - Chỉnh sửa hiệu ứng cố định bằng IDs của nó");
-            this.put("command-description-fixed-remove", "&e/pp fixed remove <ID> - Xóa hiệu ứng cố định");
+            this.put("command-description-fixed-remove", "&e/pp fixed remove <id> - Xóa hiệu ứng cố định");
             this.put("command-description-fixed-list", "&e/pp fixed list - Danh sách các hiệu ứng cố định dưới dạng IDs");
-            this.put("command-description-fixed-info", "&e/pp fixed info <ID> - Hiển thị thông tin về hiệu ứng cố định");
+            this.put("command-description-fixed-info", "&e/pp fixed info <id> - Hiển thị thông tin về hiệu ứng cố định");
             this.put("command-description-fixed-clear", "&e/pp fixed clear <radius> - Xóa toàn bộ hiệu ứng trong khu vực bán kính");
+            this.put("command-description-fixed-teleport", "&e/pp fixed teleport <id> - Dịch chuyển bạn đến một trong những hiệu ứng cố định của bạn");
+
+            this.put("#2.5", "Group Command Description Messages");
             this.put("command-description-group-save", "&e/pp group save <name> - Lưu toàn bộ hiêu ứng hoạt động vào Group mới");
             this.put("command-description-group-load", "&e/pp group load <name> - Load toàn bộ hiệu ứng hoạt động trong group");
             this.put("command-description-group-remove", "&e/pp group remove <name> - Xóa một group bạn đã lưu");
@@ -212,6 +215,12 @@ public class VietnameseLocale implements Locale {
             this.put("fixed-clear-no-args", "&cBạn không cung cấp bán kính để xóa các Hiệu ứng cố định!");
             this.put("fixed-clear-invalid-args", "&cbán kính được cung cấp không hợp lệ, nó phải là một số nguyên dương!");
             this.put("fixed-clear-success", "&aĐã xóa &b%amount% &aHiệu ứng cố định trong bán kính &b%range% &akhối từ vị trí của bạn!");
+
+            this.put("#23.5", "Fixed Teleport Message");
+            this.put("fixed-teleport-no-permission", "&cBạn không có quyền dịch chuyển tức thời đến các hiệu ứng cố định!");
+            this.put("fixed-teleport-no-args", "&cBạn đã không chỉ định một ID để dịch chuyển đến!");
+            this.put("fixed-teleport-invalid-args", "&cKhông thể dịch chuyển tức thời, ID được chỉ định không hợp lệ!");
+            this.put("fixed-teleport-success", "&eĐược dịch chuyển đến hiệu ứng cố định của bạn với ID &b%id%&e!");
 
             this.put("#24", "Fixed Other Messages");
             this.put("fixed-no-permission", "&cBạn không có quyền để làm điều này!");

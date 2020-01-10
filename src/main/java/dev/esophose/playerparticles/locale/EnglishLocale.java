@@ -55,6 +55,9 @@ public class EnglishLocale implements Locale {
             this.put("command-description-fixed-list", "&e/pp fixed list - Lists all IDs of your fixed effects");
             this.put("command-description-fixed-info", "&e/pp fixed info <ID> - Gets info on one of your fixed effects");
             this.put("command-description-fixed-clear", "&e/pp fixed clear <radius> - Clears all fixed effects of all players within the given radius");
+            this.put("command-description-fixed-teleport", "&e/pp fixed teleport <id> - Teleports you to one of your fixed effects");
+
+            this.put("#2.5", "Group Command Description Messages");
             this.put("command-description-group-save", "&e/pp group save <name> - Saves all active particles in a new group");
             this.put("command-description-group-load", "&e/pp group load <name> - Loads all particles saved in a group");
             this.put("command-description-group-remove", "&e/pp group remove <name> - Removes a group you have saved");
@@ -212,6 +215,12 @@ public class EnglishLocale implements Locale {
             this.put("fixed-clear-no-args", "&cYou did not provide a radius to clear fixed effects for!");
             this.put("fixed-clear-invalid-args", "&cThe radius you provided is invalid, it must be a positive whole number!");
             this.put("fixed-clear-success", "&aCleared &b%amount% &afixed effects within &b%range% &ablocks of your location!");
+
+            this.put("#23.5", "Fixed Teleport Message");
+            this.put("fixed-teleport-no-permission", "&cYou do not have permission to teleport to fixed effects!");
+            this.put("fixed-teleport-no-args", "&cYou did not specify an ID to teleport to!");
+            this.put("fixed-teleport-invalid-args", "&cUnable to teleport, the ID specified is invalid!");
+            this.put("fixed-teleport-success", "&eTeleported to your fixed effect with an ID of &b%id%&e!");
 
             this.put("#24", "Fixed Other Messages");
             this.put("fixed-no-permission", "&cYou do not have permission to use fixed effects!");

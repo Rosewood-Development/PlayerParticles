@@ -9,6 +9,7 @@
  * + Add effect/style settings folder that lets you disable effects/style and edit style properties
  * + Add setting to disable particles while in combat
  * + Add a command aliases section to the config
+ * * /ppo now uses your permissions instead of the player you are targetting
  */
 
  /*
@@ -29,6 +30,9 @@
   * Renamed command-error-no-effects to command-error-missing-effects-or-styles
   * Changed message for command-error-missing-effects-or-styles
   * Added message gui-no-permission
+  *
+  * NEEDS TRANSLATING:
+  * SECTION TITLED this.put("#23.5", "Fixed Teleport Message");
  */
 
 package dev.esophose.playerparticles;

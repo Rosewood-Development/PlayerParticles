@@ -2,9 +2,7 @@ package dev.esophose.playerparticles.command;
 
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.api.PlayerParticlesAPI;
-import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.LocaleManager;
-import dev.esophose.playerparticles.manager.ParticleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.particles.FixedParticleEffect;
 import dev.esophose.playerparticles.particles.PPlayer;
@@ -16,16 +14,16 @@ import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import dev.esophose.playerparticles.util.StringPlaceholders;
+import dev.esophose.playerparticles.util.inputparser.InputParser;
+import dev.esophose.playerparticles.util.inputparser.parsable.ParsableOrdinaryColor;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
@@ -48,6 +46,7 @@ public class FixedCommandModule implements CommandModule {
             localeManager.sendMessage(pplayer, "command-description-fixed-list");
             localeManager.sendMessage(pplayer, "command-description-fixed-info");
             localeManager.sendMessage(pplayer, "command-description-fixed-clear");
+            localeManager.sendMessage(pplayer, "command-description-fixed-teleport");
             return;
         }
 
@@ -75,6 +74,9 @@ public class FixedCommandModule implements CommandModule {
         case "clear":
             this.handleClear(pplayer, p, cmdArgs);
             return;
+        case "teleport":
+            this.handleTeleport(pplayer, p, cmdArgs);
+            return;
         default:
             localeManager.sendMessage(pplayer, "fixed-invalid-command");
             localeManager.sendMessage(pplayer, "command-description-fixed-create");
@@ -83,6 +85,7 @@ public class FixedCommandModule implements CommandModule {
             localeManager.sendMessage(pplayer, "command-description-fixed-list");
             localeManager.sendMessage(pplayer, "command-description-fixed-info");
             localeManager.sendMessage(pplayer, "command-description-fixed-clear");
+            localeManager.sendMessage(pplayer, "command-description-fixed-teleport");
         }
     }
 
@@ -107,65 +110,25 @@ public class FixedCommandModule implements CommandModule {
             return;
         }
 
-        double xPos, yPos, zPos;
-
-        if (args[0].equalsIgnoreCase("looking")) {
-            Block targetBlock = p.getTargetBlock((Set<Material>) null, 8); // Need the Set<Material> cast for 1.9 support
-            int maxDistanceSqrd = 6 * 6;
-            if (targetBlock.getLocation().distanceSquared(p.getLocation()) > maxDistanceSqrd) {
+        InputParser inputParser = new InputParser(pplayer, args);
+        Location location = inputParser.next(Location.class);
+        if (location == null) {
+            if (args[0].equalsIgnoreCase("looking")) {
                 localeManager.sendMessage(pplayer, "fixed-create-looking-too-far");
-                return;
-            }
-
-            Location blockLocation = targetBlock.getLocation().clone().add(0.5, 0.5, 0.5); // Center of block
-
-            xPos = blockLocation.getX();
-            yPos = blockLocation.getY();
-            zPos = blockLocation.getZ();
-
-            // Pad the args with the coordinates so we don't have to adjust all the indices
-            String[] paddedArgs = new String[args.length + 2];
-            paddedArgs[0] = String.valueOf(xPos);
-            paddedArgs[1] = String.valueOf(yPos);
-            paddedArgs[2] = String.valueOf(zPos);
-            System.arraycopy(args, 1, paddedArgs, 3, args.length - 1);
-            args = paddedArgs;
-        } else {
-            try {
-                if (args[0].startsWith("~")) {
-                    if (args[0].equals("~")) xPos = p.getLocation().getX();
-                    else xPos = p.getLocation().getX() + Double.parseDouble(args[0].substring(1));
-                } else {
-                    xPos = Double.parseDouble(args[0]);
-                }
-
-                if (args[1].startsWith("~")) {
-                    if (args[1].equals("~")) yPos = p.getLocation().getY() + 1;
-                    else yPos = p.getLocation().getY() + 1 + Double.parseDouble(args[1].substring(1));
-                } else {
-                    yPos = Double.parseDouble(args[1]);
-                }
-
-                if (args[2].startsWith("~")) {
-                    if (args[2].equals("~")) zPos = p.getLocation().getZ();
-                    else zPos = p.getLocation().getZ() + Double.parseDouble(args[2].substring(1));
-                } else {
-                    zPos = Double.parseDouble(args[2]);
-                }
-            } catch (Exception e) {
+            } else {
                 localeManager.sendMessage(pplayer, "fixed-create-invalid-coords");
-                return;
             }
+            return;
         }
 
-        double distanceFromEffect = p.getLocation().distance(new Location(p.getWorld(), xPos, yPos, zPos));
+        double distanceFromEffect = p.getLocation().distance(location);
         int maxCreationDistance = permissionManager.getMaxFixedEffectCreationDistance();
         if (maxCreationDistance != 0 && distanceFromEffect > maxCreationDistance) {
             localeManager.sendMessage(pplayer, "fixed-create-out-of-range", StringPlaceholders.single("range", maxCreationDistance));
             return;
         }
 
-        ParticleEffect effect = ParticleEffect.fromName(args[3]);
+        ParticleEffect effect = inputParser.next(ParticleEffect.class);
         if (effect == null) {
             localeManager.sendMessage(pplayer, "fixed-create-effect-invalid", StringPlaceholders.single("effect", args[3]));
             return;
@@ -174,7 +137,7 @@ public class FixedCommandModule implements CommandModule {
             return;
         }
 
-        ParticleStyle style = ParticleStyle.fromName(args[4]);
+        ParticleStyle style = inputParser.next(ParticleStyle.class);
         if (style == null) {
             localeManager.sendMessage(pplayer, "fixed-create-style-invalid", StringPlaceholders.single("style", args[4]));
             return;
@@ -193,85 +156,40 @@ public class FixedCommandModule implements CommandModule {
         OrdinaryColor colorData = null;
         NoteColor noteColorData = null;
 
-        if (args.length > 5) {
+        if (inputParser.hasNext() && (effect.hasProperty(ParticleProperty.COLORABLE) || effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA))) {
             if (effect.hasProperty(ParticleProperty.COLORABLE)) {
                 if (effect == ParticleEffect.NOTE) {
-                    if (args[5].equalsIgnoreCase("rainbow")) {
-                        noteColorData = new NoteColor(99);
-                    } else if (args[5].equalsIgnoreCase("random")) {
-                        noteColorData = new NoteColor(98);
-                    } else {
-                        int note;
-                        try {
-                            note = Integer.parseInt(args[5]);
-                        } catch (Exception e) {
-                            localeManager.sendMessage(pplayer, "fixed-create-data-error");
-                            return;
-                        }
-
-                        if (note < 0 || note > 24) {
-                            localeManager.sendMessage(pplayer, "fixed-create-data-error");
-                            return;
-                        }
-
-                        noteColorData = new NoteColor(note);
+                    noteColorData = inputParser.next(NoteColor.class);
+                    if (noteColorData == null) {
+                        localeManager.sendMessage(pplayer, "fixed-create-data-error");
+                        return;
                     }
                 } else {
-                    if (args[5].equalsIgnoreCase("rainbow")) {
-                        colorData = new OrdinaryColor(999, 999, 999);
-                    } else if (args[5].equalsIgnoreCase("random")) {
-                        colorData = new OrdinaryColor(998, 998, 998);
-                    } else {
-                        int r, g, b;
-
-                        try {
-                            r = Integer.parseInt(args[5]);
-                            g = Integer.parseInt(args[6]);
-                            b = Integer.parseInt(args[7]);
-                        } catch (Exception e) {
-                            localeManager.sendMessage(pplayer, "fixed-create-data-error");
-                            return;
-                        }
-
-                        if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
-                            localeManager.sendMessage(pplayer, "fixed-create-data-error");
-                            return;
-                        }
-
-                        colorData = new OrdinaryColor(r, g, b);
+                    colorData = inputParser.next(OrdinaryColor.class);
+                    if (colorData == null) {
+                        localeManager.sendMessage(pplayer, "fixed-create-data-error");
+                        return;
                     }
                 }
             } else if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
                 if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST) {
-                    Material material;
-                    try {
-                        material = ParticleUtils.closestMatch(args[5]);
-                        if (material == null) material = Material.matchMaterial(args[5]);
-                        if (material == null || !material.isBlock()) throw new Exception();
-                    } catch (Exception e) {
+                    blockData = inputParser.next(Material.class);
+                    if (blockData == null || !blockData.isBlock()) {
                         localeManager.sendMessage(pplayer, "fixed-create-data-error");
                         return;
                     }
-
-                    blockData = material;
                 } else if (effect == ParticleEffect.ITEM) {
-                    Material material;
-                    try {
-                        material = ParticleUtils.closestMatch(args[5]);
-                        if (material == null) material = Material.matchMaterial(args[5]);
-                        if (material == null || material.isBlock()) throw new Exception();
-                    } catch (Exception e) {
+                    itemData = inputParser.next(Material.class);
+                    if (itemData == null || itemData.isBlock()) {
                         localeManager.sendMessage(pplayer, "fixed-create-data-error");
                         return;
                     }
-
-                    itemData = material;
                 }
             }
         }
 
         ParticlePair particle = new ParticlePair(pplayer.getUniqueId(), pplayer.getNextFixedEffectId(), effect, style, itemData, blockData, colorData, noteColorData);
-        PlayerParticlesAPI.getInstance().createFixedParticleEffect(pplayer.getPlayer(), new Location(p.getLocation().getWorld(), xPos, yPos, zPos), particle);
+        PlayerParticlesAPI.getInstance().createFixedParticleEffect(pplayer.getPlayer(), location, particle);
         localeManager.sendMessage(pplayer, "fixed-create-success");
     }
 
@@ -291,10 +209,10 @@ public class FixedCommandModule implements CommandModule {
             return;
         }
 
-        int id;
-        try {
-            id = Integer.parseInt(args[0]);
-        } catch (Exception ex) {
+        InputParser inputParser = new InputParser(pplayer, args);
+
+        Integer id = inputParser.next(Integer.class);
+        if (id == null) {
             localeManager.sendMessage(pplayer, "fixed-edit-invalid-id");
             return;
         }
@@ -305,63 +223,30 @@ public class FixedCommandModule implements CommandModule {
             return;
         }
 
-        String editType = args[1].toLowerCase();
+        String editType = inputParser.next(String.class);
         switch (editType) {
             case "location":
-                double xPos, yPos, zPos;
-
-                if (args[2].equalsIgnoreCase("looking")) {
-                    Block targetBlock = p.getTargetBlock((Set<Material>) null, 8); // Need the Set<Material> cast for 1.9 support
-                    int maxDistanceSqrd = 6 * 6;
-                    if (targetBlock.getLocation().distanceSquared(p.getLocation()) > maxDistanceSqrd) {
+                Location location = inputParser.next(Location.class);
+                if (location == null) {
+                    if (args[2].equalsIgnoreCase("looking")) {
                         localeManager.sendMessage(pplayer, "fixed-edit-looking-too-far");
-                        return;
-                    }
-
-                    Location blockLocation = targetBlock.getLocation().clone().add(0.5, 0.5, 0.5); // Center of block
-
-                    xPos = blockLocation.getX();
-                    yPos = blockLocation.getY();
-                    zPos = blockLocation.getZ();
-                } else {
-                    try {
-                        if (args[2].startsWith("~")) {
-                            if (args[2].equals("~")) xPos = p.getLocation().getX();
-                            else xPos = p.getLocation().getX() + Double.parseDouble(args[2].substring(1));
-                        } else {
-                            xPos = Double.parseDouble(args[2]);
-                        }
-
-                        if (args[3].startsWith("~")) {
-                            if (args[3].equals("~")) yPos = p.getLocation().getY() + 1;
-                            else yPos = p.getLocation().getY() + 1 + Double.parseDouble(args[3].substring(1));
-                        } else {
-                            yPos = Double.parseDouble(args[3]);
-                        }
-
-                        if (args[4].startsWith("~")) {
-                            if (args[4].equals("~")) zPos = p.getLocation().getZ();
-                            else zPos = p.getLocation().getZ() + Double.parseDouble(args[4].substring(1));
-                        } else {
-                            zPos = Double.parseDouble(args[4]);
-                        }
-                    } catch (Exception e) {
+                    } else {
                         localeManager.sendMessage(pplayer, "fixed-edit-invalid-coords");
-                        return;
                     }
+                    return;
                 }
 
-                double distanceFromEffect = p.getLocation().distance(new Location(p.getWorld(), xPos, yPos, zPos));
+                double distanceFromEffect = p.getLocation().distance(location);
                 int maxCreationDistance = permissionManager.getMaxFixedEffectCreationDistance();
                 if (maxCreationDistance != 0 && distanceFromEffect > maxCreationDistance) {
                     localeManager.sendMessage(pplayer, "fixed-edit-out-of-range", StringPlaceholders.single("range", maxCreationDistance));
                     return;
                 }
 
-                fixedEffect.setCoordinates(xPos, yPos, zPos);
+                fixedEffect.setCoordinates(location.getX(), location.getY(), location.getZ());
                 break;
             case "effect": {
-                ParticleEffect effect = ParticleEffect.fromName(args[2]);
+                ParticleEffect effect = inputParser.next(ParticleEffect.class);
                 if (effect == null) {
                     localeManager.sendMessage(pplayer, "fixed-edit-effect-invalid", StringPlaceholders.single("effect", args[2]));
                     return;
@@ -374,7 +259,7 @@ public class FixedCommandModule implements CommandModule {
                 break;
             }
             case "style":
-                ParticleStyle style = ParticleStyle.fromName(args[2]);
+                ParticleStyle style = inputParser.next(ParticleStyle.class);
                 if (style == null) {
                     localeManager.sendMessage(pplayer, "fixed-edit-style-invalid", StringPlaceholders.single("style", args[2]));
                     return;
@@ -397,76 +282,31 @@ public class FixedCommandModule implements CommandModule {
                 ParticleEffect effect = fixedEffect.getParticlePair().getEffect();
                 if (effect.hasProperty(ParticleProperty.COLORABLE)) {
                     if (effect == ParticleEffect.NOTE) {
-                        if (args[2].equalsIgnoreCase("rainbow")) {
-                            noteColorData = new NoteColor(99);
-                        } else if (args[2].equalsIgnoreCase("random")) {
-                            noteColorData = new NoteColor(98);
-                        } else {
-                            int note;
-                            try {
-                                note = Integer.parseInt(args[2]);
-                            } catch (Exception e) {
-                                localeManager.sendMessage(pplayer, "fixed-edit-data-error");
-                                return;
-                            }
-
-                            if (note < 0 || note > 24) {
-                                localeManager.sendMessage(pplayer, "fixed-edit-data-error");
-                                return;
-                            }
-
-                            noteColorData = new NoteColor(note);
+                        noteColorData = inputParser.next(NoteColor.class);
+                        if (noteColorData == null) {
+                            localeManager.sendMessage(pplayer, "fixed-edit-data-error");
+                            return;
                         }
                     } else {
-                        if (args[2].equalsIgnoreCase("rainbow")) {
-                            colorData = new OrdinaryColor(999, 999, 999);
-                        } else if (args[2].equalsIgnoreCase("random")) {
-                            colorData = new OrdinaryColor(998, 998, 998);
-                        } else {
-                            int r, g, b;
-
-                            try {
-                                r = Integer.parseInt(args[2]);
-                                g = Integer.parseInt(args[3]);
-                                b = Integer.parseInt(args[4]);
-                            } catch (Exception e) {
-                                localeManager.sendMessage(pplayer, "fixed-edit-data-error");
-                                return;
-                            }
-
-                            if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
-                                localeManager.sendMessage(pplayer, "fixed-edit-data-error");
-                                return;
-                            }
-
-                            colorData = new OrdinaryColor(r, g, b);
+                        colorData = inputParser.next(OrdinaryColor.class);
+                        if (colorData == null) {
+                            localeManager.sendMessage(pplayer, "fixed-edit-data-error");
+                            return;
                         }
                     }
                 } else if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
                     if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST) {
-                        Material material;
-                        try {
-                            material = ParticleUtils.closestMatch(args[2]);
-                            if (material == null) material = Material.matchMaterial(args[2]);
-                            if (material == null || !material.isBlock()) throw new Exception();
-                        } catch (Exception e) {
+                        blockData = inputParser.next(Material.class);
+                        if (blockData == null || !blockData.isBlock()) {
                             localeManager.sendMessage(pplayer, "fixed-edit-data-error");
                             return;
                         }
-
-                        blockData = material;
                     } else if (effect == ParticleEffect.ITEM) {
-                        Material material;
-                        try {
-                            material = ParticleUtils.closestMatch(args[2]);
-                            if (material == null) material = Material.matchMaterial(args[2]);
-                            if (material == null || material.isBlock()) throw new Exception();
-                        } catch (Exception e) {
+                        itemData = inputParser.next(Material.class);
+                        if (itemData == null || itemData.isBlock()) {
                             localeManager.sendMessage(pplayer, "fixed-edit-data-error");
                             return;
                         }
-
-                        itemData = material;
                     }
                 } else {
                     localeManager.sendMessage(pplayer, "fixed-edit-data-none");
@@ -503,10 +343,10 @@ public class FixedCommandModule implements CommandModule {
             return;
         }
 
-        int id;
-        try {
-            id = Integer.parseInt(args[0]);
-        } catch (Exception e) {
+        InputParser inputParser = new InputParser(pplayer, args);
+
+        Integer id = inputParser.next(Integer.class);
+        if (id == null) {
             localeManager.sendMessage(pplayer, "fixed-remove-args-invalid");
             return;
         }
@@ -563,10 +403,10 @@ public class FixedCommandModule implements CommandModule {
             return;
         }
 
-        int id;
-        try {
-            id = Integer.parseInt(args[0]);
-        } catch (Exception e) {
+        InputParser inputParser = new InputParser(pplayer, args);
+
+        Integer id = inputParser.next(Integer.class);
+        if (id == null) {
             localeManager.sendMessage(pplayer, "fixed-info-invalid-args");
             return;
         }
@@ -602,8 +442,6 @@ public class FixedCommandModule implements CommandModule {
     private void handleClear(PPlayer pplayer, Player p, String[] args) {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
-        ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
-        DataManager dataManager = PlayerParticles.getInstance().getManager(DataManager.class);
 
         if (!permissionManager.canClearFixedEffects(p)) {
             localeManager.sendMessage(pplayer, "fixed-clear-no-permission");
@@ -615,16 +453,56 @@ public class FixedCommandModule implements CommandModule {
             return;
         }
 
-        int radius;
-        try {
-            radius = Math.abs(Integer.parseInt(args[0]));
-        } catch (Exception e) {
+        InputParser inputParser = new InputParser(pplayer, args);
+
+        Integer radius = inputParser.next(Integer.class);
+        if (radius == null) {
             localeManager.sendMessage(pplayer, "fixed-clear-invalid-args");
             return;
         }
+        radius = Math.abs(radius);
 
         int amountRemoved = PlayerParticlesAPI.getInstance().removeFixedEffectsInRange(p.getLocation(), radius);
         localeManager.sendMessage(pplayer, "fixed-clear-success", StringPlaceholders.builder("amount", amountRemoved).addPlaceholder("range", radius).build());
+    }
+
+    /**
+     * Handles the command /pp fixed teleport
+     *
+     * @param pplayer The PPlayer
+     * @param p The Player
+     * @param args The command arguments
+     */
+    private void handleTeleport(PPlayer pplayer, Player p, String[] args) {
+        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
+        PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
+
+        if (!permissionManager.canTeleportToFixedEffects(p)) {
+            localeManager.sendMessage(pplayer, "fixed-teleport-no-permission");
+            return;
+        }
+
+        if (args.length < 1) {
+            localeManager.sendMessage(pplayer, "fixed-teleport-no-args");
+            return;
+        }
+
+        InputParser inputParser = new InputParser(pplayer, args);
+
+        Integer id = inputParser.next(Integer.class);
+        if (id == null) {
+            localeManager.sendMessage(pplayer, "fixed-teleport-invalid-args");
+            return;
+        }
+
+        FixedParticleEffect fixedEffect = pplayer.getFixedEffectById(id);
+        if (fixedEffect == null) {
+            localeManager.sendMessage(pplayer, "fixed-teleport-invalid-args");
+            return;
+        }
+
+        p.teleport(fixedEffect.getLocation());
+        localeManager.sendMessage(pplayer, "fixed-teleport-success", StringPlaceholders.single("id", id));
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
@@ -633,7 +511,7 @@ public class FixedCommandModule implements CommandModule {
         List<String> matches = new ArrayList<>();
 
         if (args.length <= 1) {
-            List<String> possibleCmds = new ArrayList<>(Arrays.asList("create", "edit", "remove", "list", "info", "clear"));
+            List<String> possibleCmds = new ArrayList<>(Arrays.asList("create", "edit", "remove", "list", "info", "clear", "teleport"));
             if (args.length == 0) matches = possibleCmds;
             else StringUtil.copyPartialMatches(args[0], possibleCmds, matches);
         } else {
@@ -678,16 +556,14 @@ public class FixedCommandModule implements CommandModule {
                                         possibleValues.add("random");
                                     }
                                 } else { // Color data
-                                    if (args.length <= 9 && !args[2].equalsIgnoreCase("rainbow") && !args[2].equalsIgnoreCase("random")) {
-                                        possibleValues.add("<0-255>");
-                                    }
-                                    if (args.length <= 8 && !args[2].equalsIgnoreCase("rainbow") && !args[2].equalsIgnoreCase("random")) {
-                                        possibleValues.add("<0-255> <0-255>");
-                                    }
                                     if (args.length <= 7) {
                                         possibleValues.add("<0-255> <0-255> <0-255>");
-                                        possibleValues.add("rainbow");
-                                        possibleValues.add("random");
+                                        possibleValues.addAll(ParsableOrdinaryColor.getColorNameMap().keySet());
+                                        possibleValues.add("<#hexCode>");
+                                    } else if (args.length <= 8 && !ParsableOrdinaryColor.getColorNameMap().containsKey(args[2].toLowerCase())) {
+                                        possibleValues.add("<0-255> <0-255>");
+                                    } else if (args.length <= 9 && !ParsableOrdinaryColor.getColorNameMap().containsKey(args[2].toLowerCase())) {
+                                        possibleValues.add("<0-255>");
                                     }
                                 }
                                 StringUtil.copyPartialMatches(args[args.length - 1], possibleValues, matches);
@@ -710,7 +586,7 @@ public class FixedCommandModule implements CommandModule {
                     } else {
                         String property = args[2].toLowerCase();
                         if (property.equals("location")) {
-                            List<String> possibleValues = new ArrayList<String>();
+                            List<String> possibleValues = new ArrayList<>();
                             if (args.length == 6 && !args[3].equalsIgnoreCase("looking")) {
                                 possibleValues.add("~");
                             }
@@ -744,16 +620,14 @@ public class FixedCommandModule implements CommandModule {
                                             possibleValues.add("random");
                                         }
                                     } else { // Color data
-                                        if (args.length == 6 && !args[3].equalsIgnoreCase("rainbow") && !args[3].equalsIgnoreCase("random")) {
-                                            possibleValues.add("<0-255>");
-                                        }
-                                        if (args.length == 5 && !args[3].equalsIgnoreCase("rainbow") && !args[3].equalsIgnoreCase("random")) {
-                                            possibleValues.add("<0-255> <0-255>");
-                                        }
-                                        if (args.length == 4) {
+                                        if (args.length <= 4) {
                                             possibleValues.add("<0-255> <0-255> <0-255>");
-                                            possibleValues.add("rainbow");
-                                            possibleValues.add("random");
+                                            possibleValues.addAll(ParsableOrdinaryColor.getColorNameMap().keySet());
+                                            possibleValues.add("<#hexCode>");
+                                        } else if (args.length <= 5 && !ParsableOrdinaryColor.getColorNameMap().containsKey(args[3].toLowerCase())) {
+                                            possibleValues.add("<0-255> <0-255>");
+                                        } else if (args.length <= 6 && !ParsableOrdinaryColor.getColorNameMap().containsKey(args[3].toLowerCase())) {
+                                            possibleValues.add("<0-255>");
                                         }
                                     }
                                     StringUtil.copyPartialMatches(args[args.length - 1], possibleValues, matches);
@@ -770,6 +644,7 @@ public class FixedCommandModule implements CommandModule {
                     break;
                 case "remove":
                 case "info":
+                case "teleport":
                     StringUtil.copyPartialMatches(args[1], pplayer.getFixedEffectIds().stream().map(String::valueOf).collect(Collectors.toList()), matches);
                     break;
                 case "clear":

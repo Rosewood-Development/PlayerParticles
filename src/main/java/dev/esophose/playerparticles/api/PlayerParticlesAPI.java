@@ -16,8 +16,10 @@ import dev.esophose.playerparticles.styles.ParticleStyle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -476,18 +478,20 @@ public final class PlayerParticlesAPI {
         DataManager dataManager = this.playerParticles.getManager(DataManager.class);
         ParticleManager particleManager = this.playerParticles.getManager(ParticleManager.class);
 
-        int removed = 0;
+        int removedAmount = 0;
         for (PPlayer pplayer : particleManager.getPPlayers()) {
-            for (FixedParticleEffect fixedEffect : pplayer.getFixedParticles()) {
-                if (fixedEffect.getLocation().getWorld() == location.getWorld() && fixedEffect.getLocation().distance(location) <= radius) {
-                    pplayer.removeFixedEffect(fixedEffect.getId());
-                    dataManager.removeFixedEffect(pplayer.getUniqueId(), fixedEffect.getId());
-                    removed++;
-                }
+            Set<Integer> removedIds = new HashSet<>();
+            for (FixedParticleEffect fixedEffect : pplayer.getFixedParticles())
+                if (fixedEffect.getLocation().getWorld() == location.getWorld() && fixedEffect.getLocation().distance(location) <= radius)
+                    removedIds.add(fixedEffect.getId());
+            for (int id : removedIds) {
+                dataManager.removeFixedEffect(pplayer.getUniqueId(), id);
+                pplayer.removeFixedEffect(id);
             }
+            removedAmount += removedIds.size();
         }
 
-        return removed;
+        return removedAmount;
     }
 
     @Nullable

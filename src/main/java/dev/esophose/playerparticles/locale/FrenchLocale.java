@@ -51,10 +51,13 @@ public class FrenchLocale implements Locale {
             this.put("#2", "Fixed Particle Command Description Messages");
             this.put("command-description-fixed-create", "&e/pp fixed create <<x> <y> <z>|<looking>> <effect> <style> [data] - Créez une particule fixe");
             this.put("command-description-fixed-edit", "&e/pp fixed edit <id> <effect|style|data> <args> - Modifiez une partie d'une particule fixe par son ID");
-            this.put("command-description-fixed-remove", "&e/pp fixed remove <ID> - Supprimez une particule fixe par son ID");
+            this.put("command-description-fixed-remove", "&e/pp fixed remove <id> - Supprimez une particule fixe par son ID");
             this.put("command-description-fixed-list", "&e/pp fixed list - Affiche l'ID de tous vos effets fixes");
-            this.put("command-description-fixed-info", "&e/pp fixed info <ID> - Voir des informations sur l'une de vos particules fixe");
+            this.put("command-description-fixed-info", "&e/pp fixed info <id> - Voir des informations sur l'une de vos particules fixe");
             this.put("command-description-fixed-clear", "&e/pp fixed clear <radius> - Supprimez tous les effets fixe de tous les joueurs d'un rayon");
+            this.put("command-description-fixed-teleport", "&e/pp fixed teleport <id> - Vous téléporte vers un de vos effets fixes");
+
+            this.put("#2.5", "Group Command Description Messages");
             this.put("command-description-group-save", "&e/pp group save <name> - Sauvegardez toutes les particules actives dans un nouveau groupe");
             this.put("command-description-group-load", "&e/pp group load <name> - Chargez toutes les particules sauvegardées dans un groupe");
             this.put("command-description-group-remove", "&e/pp group remove <name> - Supprimez un groupe que vous avez créé");
@@ -212,6 +215,12 @@ public class FrenchLocale implements Locale {
             this.put("fixed-clear-no-args", "&cVous n'avez pas rentré de rayon !");
             this.put("fixed-clear-invalid-args", "&cLe rayon rentré n'est pas valide, il doit être un nombre rond !");
             this.put("fixed-clear-success", "&b%amount% &aeffets ont été supprimés dans un rayon &b%range% &cblocs !");
+
+            this.put("#23.5", "Fixed Teleport Message");
+            this.put("fixed-teleport-no-permission", "&cVous n'avez pas l'autorisation de vous téléporter dans les effets fixes !");
+            this.put("fixed-teleport-no-args", "&cVous n'avez pas spécifié d'identifiant pour la téléportation !");
+            this.put("fixed-teleport-invalid-args", "&cImpossible de se téléporter, l'ID spécifié n'est pas valide !");
+            this.put("fixed-teleport-success", "&eTéléporté à votre effet fixe avec un ID de &b%id%&e !");
 
             this.put("#24", "Fixed Other Messages");
             this.put("fixed-no-permission", "&cVous n'avez pas la permission d'ajouter des effets fixes !");

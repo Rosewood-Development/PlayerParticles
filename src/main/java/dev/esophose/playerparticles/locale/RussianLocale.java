@@ -51,10 +51,13 @@ public class RussianLocale implements Locale {
             this.put("#2", "Fixed Particle Command Description Messages");
             this.put("command-description-fixed-create", "&e/pp fixed create «x> <y> <z>|<looking» <Эффект> <Стиль> [данные] - Создаёт новый эффект.");
             this.put("command-description-fixed-edit", "&e/pp fixed edit <id> <Эффект|Стиль|Данные> <аргумент> - Изменяет чать эффекта по его ID.");
-            this.put("command-description-fixed-remove", "&e/pp fixed remove <ID> - Удаляет эффект по его ID.");
+            this.put("command-description-fixed-remove", "&e/pp fixed remove <id> - Удаляет эффект по его ID.");
             this.put("command-description-fixed-list", "&e/pp fixed list - Показывает список ID всех Ваших эффектов.");
-            this.put("command-description-fixed-info", "&e/pp fixed info <ID> - Показывает информацию об одном из Ваших эффектов.");
+            this.put("command-description-fixed-info", "&e/pp fixed info <id> - Показывает информацию об одном из Ваших эффектов.");
             this.put("command-description-fixed-clear", "&e/pp fixed clear <Радиус> - Удаляет все эффекты игроков, находящихся в заданном радиусе.");
+            this.put("command-description-fixed-teleport", "&e/pp fixed teleport <id> - Телепортирует вас к одному из ваших фиксированных эффектов");
+
+            this.put("#2.5", "Group Command Description Messages");
             this.put("command-description-group-save", "&e/pp group save <Имя> - Сохраняет все активные частицы в новой группе.");
             this.put("command-description-group-load", "&e/pp group load <name> - Загружает все частицы, сохранённые в группе.");
             this.put("command-description-group-remove", "&e/pp group remove <name> - Удаляет сохранённую Вами группу.");
@@ -212,6 +215,12 @@ public class RussianLocale implements Locale {
             this.put("fixed-clear-no-args", "&cВы не ввели радиус, на котором необходимо убрать эффекты!");
             this.put("fixed-clear-invalid-args", "&cВведённый радиус недействителен, это должно быть целое число!");
             this.put("fixed-clear-success", "&aУбрано эффектов  - &b%amount%&a!");
+
+            this.put("#23.5", "Fixed Teleport Message");
+            this.put("fixed-teleport-no-permission", "&cВы не имеете права телепортироваться на фиксированные эффекты!");
+            this.put("fixed-teleport-no-args", "&cВы не указали ID для телепортации!");
+            this.put("fixed-teleport-invalid-args", "&cНевозможно телепортироваться, указанный идентификатор недействителен!");
+            this.put("fixed-teleport-success", "&eТелепортироваться на ваш фиксированный эффект с ID &b%id%&e!");
 
             this.put("#24", "Fixed Other Messages");
             this.put("fixed-no-permission", "&cУ Вас нет права, чтобы использовать этот эффект!");
