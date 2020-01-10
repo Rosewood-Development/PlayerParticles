@@ -25,16 +25,17 @@ public class ParticlePlaceholderExpansion extends PlaceholderExpansion {
         if (pplayer == null)
             return null;
 
-        if (placeholder.equals("active_amount")) {
-            return String.valueOf(pplayer.getActiveParticles().size());
-        } else if (placeholder.equals("group_amount")) {
-            return String.valueOf(pplayer.getParticleGroups().size());
-        } else if (placeholder.equals("fixed_amount")) {
-            return String.valueOf(pplayer.getFixedParticles().size());
-        } else if (placeholder.equals("is_moving")) {
-            return String.valueOf(pplayer.isMoving());
-        } else if (placeholder.equals("can_see_particles")) {
-            return String.valueOf(pplayer.canSeeParticles());
+        switch (placeholder) {
+            case "active_amount":
+                return String.valueOf(pplayer.getActiveParticles().size());
+            case "group_amount":
+                return String.valueOf(pplayer.getParticleGroups().size() - 1);
+            case "fixed_amount":
+                return String.valueOf(pplayer.getFixedParticles().size());
+            case "is_moving":
+                return String.valueOf(pplayer.isMoving());
+            case "can_see_particles":
+                return String.valueOf(pplayer.canSeeParticles());
         }
 
         if (placeholder.startsWith("particle_")) {

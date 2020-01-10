@@ -9,7 +9,7 @@ import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.particles.ParticleGroupPreset;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.styles.ParticleStyle;
-import dev.esophose.playerparticles.util.ParticleUtils;
+import dev.esophose.playerparticles.util.inputparser.InputParser;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -96,8 +96,8 @@ public class ParticleGroupPresetManager extends Manager {
                     ConfigurationSection particleSection = groupSection.getConfigurationSection(stringId);
                     
                     int id = Integer.parseInt(stringId);
-                    ParticleEffect effect = ParticleEffect.fromName(particleSection.getString("effect"));
-                    ParticleStyle style = ParticleStyle.fromName(particleSection.getString("style"));
+                    ParticleEffect effect = new InputParser(null, new String[] { particleSection.getString("effect") }).next(ParticleEffect.class);
+                    ParticleStyle style = new InputParser(null, new String[] { particleSection.getString("style") }).next(ParticleStyle.class);
                     
                     if (effect == null) {
                         PlayerParticles.getInstance().getLogger().severe("Invalid effect name: '" + particleSection.getString("effect") + "'!");
@@ -117,69 +117,33 @@ public class ParticleGroupPresetManager extends Manager {
                     String dataString = particleSection.getString("data");
                     if (dataString != null && !dataString.isEmpty()) {
                         String[] args = dataString.split(" ");
+                        InputParser inputParser = new InputParser(null, args);
                         
                         if (effect.hasProperty(ParticleProperty.COLORABLE)) {
                             if (effect == ParticleEffect.NOTE) {
-                                if (args[0].equalsIgnoreCase("rainbow")) {
-                                    noteColorData = new NoteColor(99);
-                                } else if (args[0].equalsIgnoreCase("random")) {
-                                    noteColorData = new NoteColor(98);
-                                } else {
-                                    int note;
-                                    try {
-                                        note = Integer.parseInt(args[0]);
-                                    } catch (Exception e) {
-                                        PlayerParticles.getInstance().getLogger().severe("Invalid note: '" + args[0] + "'!");
-                                        throw new Exception();
-                                    }
-
-                                    if (note < 0 || note > 23) {
-                                        PlayerParticles.getInstance().getLogger().severe("Invalid note: '" + args[0] + "'!");
-                                        throw new Exception();
-                                    }
-
-                                    noteColorData = new NoteColor(note);
+                                noteColorData = inputParser.next(NoteColor.class);
+                                if (noteColorData == null) {
+                                    PlayerParticles.getInstance().getLogger().severe("Invalid note: '" + dataString + "'!");
+                                    throw new Exception();
                                 }
                             } else {
-                                if (args[0].equalsIgnoreCase("rainbow")) {
-                                    colorData = new OrdinaryColor(999, 999, 999);
-                                } else if (args[0].equalsIgnoreCase("random")) {
-                                    colorData = new OrdinaryColor(998, 998, 998);
-                                } else {
-                                    int r, g, b;
-
-                                    try {
-                                        r = Integer.parseInt(args[0]);
-                                        g = Integer.parseInt(args[1]);
-                                        b = Integer.parseInt(args[2]);
-                                    } catch (Exception e) {
-                                        PlayerParticles.getInstance().getLogger().severe("Invalid color: '" + args[0] + " " + args[1] + " " + args[2] + "'!");
-                                        throw new Exception();
-                                    }
-
-                                    if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
-                                        PlayerParticles.getInstance().getLogger().severe("Invalid color: '" + args[0] + " " + args[1] + " " + args[2] + "'!");
-                                        throw new Exception();
-                                    }
-
-                                    colorData = new OrdinaryColor(r, g, b);
+                                colorData = inputParser.next(OrdinaryColor.class);
+                                if (colorData == null) {
+                                    PlayerParticles.getInstance().getLogger().severe("Invalid color: '" + dataString + "'!");
+                                    throw new Exception();
                                 }
                             }
                         } else if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
                             if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST) {
-                                try {
-                                    blockData = ParticleUtils.closestMatch(args[0]);
-                                    if (blockData == null || !blockData.isBlock()) throw new Exception();
-                                } catch (Exception e) {
-                                    PlayerParticles.getInstance().getLogger().severe("Invalid block: '" + args[0] + "'!");
+                                blockData = inputParser.next(Material.class);
+                                if (blockData == null || !blockData.isBlock()) {
+                                    PlayerParticles.getInstance().getLogger().severe("Invalid block: '" + dataString + "'!");
                                     throw new Exception();
                                 }
                             } else if (effect == ParticleEffect.ITEM) {
-                                try {
-                                    itemData = ParticleUtils.closestMatch(args[0]);
-                                    if (itemData == null || itemData.isBlock()) throw new Exception();
-                                } catch (Exception e) {
-                                    PlayerParticles.getInstance().getLogger().severe("Invalid item: '" + args[0] + "'!");
+                                itemData = inputParser.next(Material.class);
+                                if (itemData == null || itemData.isBlock()) {
+                                    PlayerParticles.getInstance().getLogger().severe("Invalid item: '" + dataString + "'!");
                                     throw new Exception();
                                 }
                             }
