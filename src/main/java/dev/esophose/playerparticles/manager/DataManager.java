@@ -18,7 +18,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 import org.bukkit.Bukkit;
@@ -136,6 +138,7 @@ public class DataManager extends Manager {
                 try (PreparedStatement statement = connection.prepareStatement(groupQuery)) {
                     statement.setString(1, playerUUID.toString());
 
+                    Set<String> modifiedGroups = new HashSet<>();
                     ResultSet result = statement.executeQuery();
                     while (result.next()) {
                         // Group properties
@@ -151,11 +154,16 @@ public class DataManager extends Manager {
                         OrdinaryColor color = new OrdinaryColor(result.getInt("r"), result.getInt("g"), result.getInt("b"));
                         ParticlePair particle = new ParticlePair(playerUUID, id, effect, style, itemMaterial, blockMaterial, color, noteColor);
 
+                        boolean invalid = effect == null || style == null;
+                        if (invalid) // Effect or style is now missing or disabled, remove the particle
+                            modifiedGroups.add(groupName);
+
                         // Try to add particle to an existing group
                         boolean groupAlreadyExists = false;
                         for (ParticleGroup group : groups.values()) {
                             if (group.getName().equalsIgnoreCase(groupName)) {
-                                group.getParticles().put(particle.getId(), particle);
+                                if (!invalid)
+                                    group.getParticles().put(particle.getId(), particle);
                                 groupAlreadyExists = true;
                                 break;
                             }
@@ -164,10 +172,19 @@ public class DataManager extends Manager {
                         // Add the particle to a new group if one didn't already exist
                         if (!groupAlreadyExists) {
                             HashMap<Integer, ParticlePair> particles = new HashMap<>();
-                            particles.put(particle.getId(), particle);
+                            if (!invalid)
+                                particles.put(particle.getId(), particle);
                             ParticleGroup newGroup = new ParticleGroup(groupName, particles);
                             groups.put(newGroup.getName().toLowerCase(), newGroup);
                         }
+                    }
+
+                    // Update modified groups
+                    for (String modifiedGroup : modifiedGroups) {
+                        ParticleGroup group = groups.get(modifiedGroup.toLowerCase());
+                        this.saveParticleGroup(playerUUID, group);
+                        if (group.getParticles().isEmpty() && !group.getName().equals(ParticleGroup.DEFAULT_NAME))
+                            groups.remove(modifiedGroup);
                     }
                 }
 
@@ -201,6 +218,12 @@ public class DataManager extends Manager {
                         NoteColor noteColor = new NoteColor(result.getInt("note"));
                         OrdinaryColor color = new OrdinaryColor(result.getInt("r"), result.getInt("g"), result.getInt("b"));
                         ParticlePair particle = new ParticlePair(playerUUID, particleId, effect, style, itemMaterial, blockMaterial, color, noteColor);
+
+                        // Effect or style is now missing or disabled, remove the fixed effect
+                        if (effect == null || style == null) {
+                            this.removeFixedEffect(playerUUID, fixedEffectId);
+                            continue;
+                        }
 
                         fixedParticles.put(fixedEffectId, new FixedParticleEffect(playerUUID, fixedEffectId, new Location(world, xPos, yPos, zPos), particle));
                     }
@@ -270,12 +293,17 @@ public class DataManager extends Manager {
     }
 
     /**
-     * Saves a ParticleGroup. If it already exists, update it.
+     * Saves a ParticleGroup. If it already exists, update it. If it's empty, delete it.
      *
      * @param playerUUID The owner of the group
      * @param group The group to create/update
      */
     public void saveParticleGroup(UUID playerUUID, ParticleGroup group) {
+        if (group.getParticles().isEmpty() && !group.getName().equals(ParticleGroup.DEFAULT_NAME)) {
+            this.removeParticleGroup(playerUUID, group.getName());
+            return;
+        }
+
         this.async(() -> this.databaseConnector.connect((connection) -> {
             String groupUUID;
 

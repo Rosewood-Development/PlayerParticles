@@ -141,11 +141,11 @@ public enum ParticleEffect {
     }
 
     /**
-     * Returns a ParticleEffect List of all supported effects for the server version
+     * Returns a ParticleEffect List of all enabled effects for the server version
      * 
-     * @return Supported effects
+     * @return Enabled effects
      */
-    public static List<ParticleEffect> getSupportedEffects() {
+    public static List<ParticleEffect> getEnabledEffects() {
         List<ParticleEffect> effects = new ArrayList<>();
         for (ParticleEffect pe : values())
             if (pe.isSupported()) 

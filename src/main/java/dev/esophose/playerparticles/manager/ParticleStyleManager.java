@@ -5,6 +5,7 @@ import dev.esophose.playerparticles.styles.DefaultStyles;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ParticleStyleManager extends Manager {
 
@@ -82,11 +83,16 @@ public class ParticleStyleManager extends Manager {
     }
 
     /**
-     * Gets all registered styles
-     * 
-     * @return A List of ParticleStyles that are registered
+     * @return A List of styles that are registered and enabled
      */
     public List<ParticleStyle> getStyles() {
+        return this.styles.stream().filter(ParticleStyle::isEnabled).collect(Collectors.toList());
+    }
+
+    /**
+     * @return all registered styles, regardless if they are enabled or not
+     */
+    public List<ParticleStyle> getStylesWithDisabled() {
         return this.styles;
     }
 

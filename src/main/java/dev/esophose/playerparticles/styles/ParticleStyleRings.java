@@ -1,12 +1,13 @@
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Location;
 
-public class ParticleStyleRings implements ParticleStyle {
+public class ParticleStyleRings extends DefaultParticleStyle {
     
     private static double[] cos, sin;
     private int index = 0;
@@ -23,6 +24,11 @@ public class ParticleStyleRings implements ParticleStyle {
         }
     }
 
+    public ParticleStyleRings() {
+        super("rings", true, true, 0);
+    }
+
+    @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
         
@@ -44,24 +50,19 @@ public class ParticleStyleRings implements ParticleStyle {
         return index % cos.length;
     }
 
+    @Override
     public void updateTimers() {
         index = (index + 1) % cos.length;
     }
 
-    public String getName() {
-        return "rings";
+    @Override
+    protected void setDefaultSettings(CommentedFileConfiguration config) {
+
     }
 
-    public boolean canBeFixed() {
-        return true;
-    }
-    
-    public boolean canToggleWithMovement() {
-        return true;
-    }
-    
-    public double getFixedEffectOffset() {
-        return 0;
+    @Override
+    protected void loadSettings(CommentedFileConfiguration config) {
+
     }
 
 }

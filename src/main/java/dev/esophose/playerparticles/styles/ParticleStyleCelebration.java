@@ -1,6 +1,7 @@
 package dev.esophose.playerparticles.styles;
 
 import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.manager.ParticleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.particles.FixedParticleEffect;
@@ -17,11 +18,16 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class ParticleStyleCelebration implements ParticleStyle {
+public class ParticleStyleCelebration extends DefaultParticleStyle {
 
     private int step = 0;
     private final int spawnTime = 15;
 
+    public ParticleStyleCelebration() {
+        super("celebration", true, true, 0);
+    }
+
+    @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         return new ArrayList<>();
     }
@@ -30,6 +36,7 @@ public class ParticleStyleCelebration implements ParticleStyle {
      * Spawns fireworks every spawnTime number of ticks
      * This style uses two different effects, one is always 'firework'
      */
+    @Override
     public void updateTimers() {
         PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
         ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
@@ -51,6 +58,16 @@ public class ParticleStyleCelebration implements ParticleStyle {
                         this.spawnFirework(fixedEffect.getLocation(), pplayer, fixedEffect.getParticlePair(), random);
             }
         }
+    }
+
+    @Override
+    protected void setDefaultSettings(CommentedFileConfiguration config) {
+
+    }
+
+    @Override
+    protected void loadSettings(CommentedFileConfiguration config) {
+
     }
     
     private void spawnFirework(final Location location, final PPlayer pplayer, final ParticlePair particle, final Random random) {
@@ -97,22 +114,6 @@ public class ParticleStyleCelebration implements ParticleStyle {
                 this.fuseTimer++;
             }
         }.runTaskTimer(PlayerParticles.getInstance(), 0, 1);
-    }
-
-    public String getName() {
-        return "celebration";
-    }
-
-    public boolean canBeFixed() {
-        return true;
-    }
-
-    public boolean canToggleWithMovement() {
-        return true;
-    }
-    
-    public double getFixedEffectOffset() {
-        return 0;
     }
 
 }

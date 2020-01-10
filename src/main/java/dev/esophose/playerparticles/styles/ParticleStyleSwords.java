@@ -1,6 +1,7 @@
 package dev.esophose.playerparticles.styles;
 
 import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.ParticleManager;
 import dev.esophose.playerparticles.particles.PParticle;
@@ -17,7 +18,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class ParticleStyleSwords implements ParticleStyle, Listener {
+public class ParticleStyleSwords extends DefaultParticleStyle implements Listener {
 
     private static final List<String> SWORD_NAMES;
 
@@ -26,6 +27,11 @@ public class ParticleStyleSwords implements ParticleStyle, Listener {
         SWORD_NAMES.addAll(Arrays.asList("WOOD_SWORD", "STONE_SWORD", "IRON_SWORD", "GOLD_SWORD", "GOLDEN_SWORD", "DIAMOND_SWORD", "TRIDENT"));
     }
 
+    public ParticleStyleSwords() {
+        super("swords", false, false, 0);
+    }
+
+    @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> baseParticles = DefaultStyles.NORMAL.getParticles(particle, location);
 
@@ -38,24 +44,19 @@ public class ParticleStyleSwords implements ParticleStyle, Listener {
         return particles;
     }
 
+    @Override
     public void updateTimers() {
 
     }
 
-    public String getName() {
-        return "swords";
+    @Override
+    protected void setDefaultSettings(CommentedFileConfiguration config) {
+
     }
 
-    public boolean canBeFixed() {
-        return false;
-    }
-    
-    public boolean canToggleWithMovement() {
-        return false;
-    }
-    
-    public double getFixedEffectOffset() {
-        return 0;
+    @Override
+    protected void loadSettings(CommentedFileConfiguration config) {
+
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

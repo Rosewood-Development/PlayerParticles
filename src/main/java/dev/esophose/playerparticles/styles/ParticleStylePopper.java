@@ -1,5 +1,6 @@
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import java.util.ArrayList;
@@ -7,7 +8,7 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-public class ParticleStylePopper implements ParticleStyle {
+public class ParticleStylePopper extends DefaultParticleStyle {
 
     private double grow = 0.08f;
     private double radials = Math.PI / 16;
@@ -15,6 +16,11 @@ public class ParticleStylePopper implements ParticleStyle {
     private int step = 0;
     private int maxStep = 35;
 
+    public ParticleStylePopper() {
+        super("popper", true, true, 0.5);
+    }
+
+    @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
 
@@ -35,24 +41,19 @@ public class ParticleStylePopper implements ParticleStyle {
         return particles;
     }
 
+    @Override
     public void updateTimers() {
         step = (step + 1) % maxStep;
     }
 
-    public String getName() {
-        return "popper";
+    @Override
+    protected void setDefaultSettings(CommentedFileConfiguration config) {
+
     }
 
-    public boolean canBeFixed() {
-        return true;
-    }
-    
-    public boolean canToggleWithMovement() {
-        return true;
-    }
-    
-    public double getFixedEffectOffset() {
-        return 0.5;
+    @Override
+    protected void loadSettings(CommentedFileConfiguration config) {
+
     }
 
 }

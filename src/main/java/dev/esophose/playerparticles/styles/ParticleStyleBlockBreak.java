@@ -1,6 +1,7 @@
 package dev.esophose.playerparticles.styles;
 
 import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.ParticleManager;
 import dev.esophose.playerparticles.particles.PParticle;
@@ -15,8 +16,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
-public class ParticleStyleBlockBreak implements ParticleStyle, Listener {
+public class ParticleStyleBlockBreak extends DefaultParticleStyle implements Listener {
 
+    public ParticleStyleBlockBreak() {
+        super("blockbreak", false, false, 0);
+    }
+
+    @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
         
@@ -28,24 +34,19 @@ public class ParticleStyleBlockBreak implements ParticleStyle, Listener {
         return particles;
     }
 
+    @Override
     public void updateTimers() {
 
     }
 
-    public String getName() {
-        return "blockbreak";
+    @Override
+    protected void setDefaultSettings(CommentedFileConfiguration config) {
+
     }
 
-    public boolean canBeFixed() {
-        return false;
-    }
-    
-    public boolean canToggleWithMovement() {
-        return false;
-    }
-    
-    public double getFixedEffectOffset() {
-        return 0;
+    @Override
+    protected void loadSettings(CommentedFileConfiguration config) {
+
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

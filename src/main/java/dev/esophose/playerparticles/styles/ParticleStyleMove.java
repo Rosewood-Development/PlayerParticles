@@ -1,6 +1,7 @@
 package dev.esophose.playerparticles.styles;
 
 import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.ParticleManager;
 import dev.esophose.playerparticles.particles.PParticle;
@@ -13,30 +14,30 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-public class ParticleStyleMove implements ParticleStyle, Listener {
+public class ParticleStyleMove extends DefaultParticleStyle implements Listener {
 
+    public ParticleStyleMove() {
+        super("move", false, false, 0);
+    }
+
+    @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         return DefaultStyles.NORMAL.getParticles(particle, location);
     }
 
+    @Override
     public void updateTimers() {
 
     }
 
-    public String getName() {
-        return "move";
+    @Override
+    protected void setDefaultSettings(CommentedFileConfiguration config) {
+
     }
 
-    public boolean canBeFixed() {
-        return false;
-    }
-    
-    public boolean canToggleWithMovement() {
-        return false;
-    }
-    
-    public double getFixedEffectOffset() {
-        return 0;
+    @Override
+    protected void loadSettings(CommentedFileConfiguration config) {
+
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

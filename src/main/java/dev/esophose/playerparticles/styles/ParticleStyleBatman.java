@@ -1,5 +1,6 @@
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.util.VectorUtils;
@@ -8,10 +9,15 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-public class ParticleStyleBatman implements ParticleStyle {
+public class ParticleStyleBatman extends DefaultParticleStyle {
     
     private int step = 0;
 
+    public ParticleStyleBatman() {
+        super("batman", true, true, -1);
+    }
+
+    @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
         
@@ -106,24 +112,19 @@ public class ParticleStyleBatman implements ParticleStyle {
         return particles;
     }
 
+    @Override
     public void updateTimers() {
         step = (step + 1) % 20; // Only spawn once per second
     }
 
-    public String getName() {
-        return "batman";
+    @Override
+    protected void setDefaultSettings(CommentedFileConfiguration config) {
+
     }
 
-    public boolean canBeFixed() {
-        return true;
-    }
-    
-    public boolean canToggleWithMovement() {
-        return true;
-    }
-    
-    public double getFixedEffectOffset() {
-        return -1;
+    @Override
+    protected void loadSettings(CommentedFileConfiguration config) {
+
     }
 
 }

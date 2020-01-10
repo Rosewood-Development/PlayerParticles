@@ -1,5 +1,6 @@
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticlePair;
@@ -7,13 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Location;
 
-public class ParticleStylePulse implements ParticleStyle {
+public class ParticleStylePulse extends DefaultParticleStyle {
 
     private int points = 50;
     private double radius = 0.5;
     private double step = 0;
     private int numSteps = 15;
 
+    public ParticleStylePulse() {
+        super("pulse", true, true, 0.5);
+    }
+
+    @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
         double speed = getSpeedByEffect(particle.getEffect());
@@ -62,24 +68,19 @@ public class ParticleStylePulse implements ParticleStyle {
         }
     }
 
+    @Override
     public void updateTimers() {
         step = (step + 1) % numSteps;
     }
 
-    public String getName() {
-        return "pulse";
+    @Override
+    protected void setDefaultSettings(CommentedFileConfiguration config) {
+
     }
 
-    public boolean canBeFixed() {
-        return true;
-    }
+    @Override
+    protected void loadSettings(CommentedFileConfiguration config) {
 
-    public boolean canToggleWithMovement() {
-        return true;
-    }
-
-    public double getFixedEffectOffset() {
-        return 0.5;
     }
 
 }

@@ -24,6 +24,11 @@ public interface ParticleStyle {
     void updateTimers();
 
     /**
+     * @return true if the style is enabled, false otherwise
+     */
+    boolean isEnabled();
+
+    /**
      * The name of the style
      * 
      * @return The style's name

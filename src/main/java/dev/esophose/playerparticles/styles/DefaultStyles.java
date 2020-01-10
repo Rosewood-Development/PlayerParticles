@@ -93,4 +93,13 @@ public class DefaultStyles {
         pluginManager.registerEvents((Listener) SWORDS, playerParticles);
     }
 
+    /**
+     * Reloads the settings for all default styles
+     */
+    public static void reloadSettings(ParticleStyleManager particleStyleManager) {
+        for (ParticleStyle style : particleStyleManager.getStylesWithDisabled())
+            if (style instanceof DefaultParticleStyle)
+                ((DefaultParticleStyle) style).loadSettings(true);
+    }
+
 }

@@ -1,6 +1,7 @@
 package dev.esophose.playerparticles.styles;
 
 import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.ParticleManager;
 import dev.esophose.playerparticles.particles.PParticle;
@@ -15,8 +16,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 
-public class ParticleStyleHurt implements ParticleStyle, Listener {
+public class ParticleStyleHurt extends DefaultParticleStyle implements Listener {
 
+    public ParticleStyleHurt() {
+        super("hurt", false, false, 0);
+    }
+
+    @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> baseParticles = DefaultStyles.THICK.getParticles(particle, location);
 
@@ -29,24 +35,9 @@ public class ParticleStyleHurt implements ParticleStyle, Listener {
         return particles;
     }
 
+    @Override
     public void updateTimers() {
 
-    }
-
-    public String getName() {
-        return "hurt";
-    }
-
-    public boolean canBeFixed() {
-        return false;
-    }
-    
-    public boolean canToggleWithMovement() {
-        return false;
-    }
-    
-    public double getFixedEffectOffset() {
-        return 0;
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -63,6 +54,16 @@ public class ParticleStyleHurt implements ParticleStyle, Listener {
                 }
             }
         }
+    }
+
+    @Override
+    protected void setDefaultSettings(CommentedFileConfiguration config) {
+
+    }
+
+    @Override
+    protected void loadSettings(CommentedFileConfiguration config) {
+
     }
 
 }

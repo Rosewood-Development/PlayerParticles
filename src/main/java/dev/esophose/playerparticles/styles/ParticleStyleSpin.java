@@ -1,12 +1,13 @@
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import java.util.Collections;
 import java.util.List;
 import org.bukkit.Location;
 
-public class ParticleStyleSpin implements ParticleStyle {
+public class ParticleStyleSpin extends DefaultParticleStyle {
 
     private static double[] cos, sin;
     private static final int maxSteps = 30;
@@ -24,6 +25,11 @@ public class ParticleStyleSpin implements ParticleStyle {
         }
     }
 
+    public ParticleStyleSpin() {
+        super("spin", true, true, -0.5);
+    }
+
+    @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         double radius = .5;
         double newX = location.getX() + radius * cos[step];
@@ -32,24 +38,19 @@ public class ParticleStyleSpin implements ParticleStyle {
         return Collections.singletonList(new PParticle(new Location(location.getWorld(), newX, newY, newZ)));
     }
 
+    @Override
     public void updateTimers() {
         step = (step + 1) % maxSteps;
     }
 
-    public String getName() {
-        return "spin";
+    @Override
+    protected void setDefaultSettings(CommentedFileConfiguration config) {
+
     }
 
-    public boolean canBeFixed() {
-        return true;
-    }
-    
-    public boolean canToggleWithMovement() {
-        return true;
-    }
-    
-    public double getFixedEffectOffset() {
-        return -0.5;
+    @Override
+    protected void loadSettings(CommentedFileConfiguration config) {
+
     }
 
 }

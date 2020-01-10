@@ -1,5 +1,6 @@
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import java.util.ArrayList;
@@ -13,12 +14,17 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
 
-public class ParticleStyleArrows implements ParticleStyle, Listener {
+public class ParticleStyleArrows extends DefaultParticleStyle implements Listener {
 
     private static final String[] arrowEntityNames = new String[] { "ARROW", "SPECTRAL_ARROW", "TIPPED_ARROW" };
     private static final int MAX_ARROWS_PER_PLAYER = 10;
     private List<Projectile> arrows = new ArrayList<>();
 
+    public ParticleStyleArrows() {
+        super("arrows", false, false, 0);
+    }
+
+    @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
 
@@ -40,28 +46,13 @@ public class ParticleStyleArrows implements ParticleStyle, Listener {
     /**
      * Removes all arrows that are considered dead
      */
+    @Override
     public void updateTimers() {
         for (int i = this.arrows.size() - 1; i >= 0; i--) {
             Projectile arrow = this.arrows.get(i);
             if (arrow.getTicksLived() >= 1200 || arrow.isDead() || !arrow.isValid() || arrow.getShooter() == null)
                 this.arrows.remove(i);
         }
-    }
-
-    public String getName() {
-        return "arrows";
-    }
-
-    public boolean canBeFixed() {
-        return false;
-    }
-    
-    public boolean canToggleWithMovement() {
-        return false;
-    }
-    
-    public double getFixedEffectOffset() {
-        return 0;
     }
 
     /**
@@ -78,6 +69,16 @@ public class ParticleStyleArrows implements ParticleStyle, Listener {
         String entityName = e.getProjectile().getType().toString();
         if (Arrays.stream(arrowEntityNames).anyMatch(entityName::equalsIgnoreCase))
             this.arrows.add((Projectile) e.getProjectile());
+    }
+
+    @Override
+    protected void setDefaultSettings(CommentedFileConfiguration config) {
+
+    }
+
+    @Override
+    protected void loadSettings(CommentedFileConfiguration config) {
+
     }
 
 }

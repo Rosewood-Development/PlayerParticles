@@ -1,5 +1,6 @@
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.util.VectorUtils;
@@ -8,10 +9,15 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-public class ParticleStyleWings implements ParticleStyle {
+public class ParticleStyleWings extends DefaultParticleStyle {
 
     private int spawnTimer = 0; // Spawn particles every 3 ticks
 
+    public ParticleStyleWings() {
+        super("wings", false, true, 0);
+    }
+
+    @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
         if (spawnTimer == 0) {
@@ -26,25 +32,20 @@ public class ParticleStyleWings implements ParticleStyle {
         return particles;
     }
 
+    @Override
     public void updateTimers() {
         spawnTimer++;
         spawnTimer %= 3;
     }
 
-    public String getName() {
-        return "wings";
+    @Override
+    protected void setDefaultSettings(CommentedFileConfiguration config) {
+
     }
 
-    public boolean canBeFixed() {
-        return false;
-    }
-    
-    public boolean canToggleWithMovement() {
-        return true;
-    }
-    
-    public double getFixedEffectOffset() {
-        return 0;
+    @Override
+    protected void loadSettings(CommentedFileConfiguration config) {
+
     }
 
 }

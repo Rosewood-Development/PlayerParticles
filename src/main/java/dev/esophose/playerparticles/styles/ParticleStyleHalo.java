@@ -1,12 +1,13 @@
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Location;
 
-public class ParticleStyleHalo implements ParticleStyle {
+public class ParticleStyleHalo extends DefaultParticleStyle {
 
     private static double[] cos, sin;
     private static final int points = 16;
@@ -24,6 +25,11 @@ public class ParticleStyleHalo implements ParticleStyle {
         }
     }
 
+    public ParticleStyleHalo() {
+        super("halo", true, false, -0.5);
+    }
+
+    @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         if (step % 2 == 0) return new ArrayList<>();
 
@@ -39,6 +45,7 @@ public class ParticleStyleHalo implements ParticleStyle {
         return particles;
     }
 
+    @Override
     public void updateTimers() {
         step++;
         if (step > 30) {
@@ -46,20 +53,14 @@ public class ParticleStyleHalo implements ParticleStyle {
         }
     }
 
-    public String getName() {
-        return "halo";
+    @Override
+    protected void setDefaultSettings(CommentedFileConfiguration config) {
+
     }
 
-    public boolean canBeFixed() {
-        return true;
-    }
-    
-    public boolean canToggleWithMovement() {
-        return false;
-    }
-    
-    public double getFixedEffectOffset() {
-        return -0.5;
+    @Override
+    protected void loadSettings(CommentedFileConfiguration config) {
+
     }
 
 }

@@ -23,6 +23,7 @@
  */
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.util.VectorUtils;
@@ -36,7 +37,7 @@ import org.bukkit.util.Vector;
  * The project this is from is called EffectLib and can be found here:
  * https://github.com/Slikey/EffectLib
  */
-public class ParticleStyleCube implements ParticleStyle {
+public class ParticleStyleCube extends DefaultParticleStyle {
 
     private double edgeLength = 2;
     private double angularVelocityX = (Math.PI / 200) / 5;
@@ -46,6 +47,11 @@ public class ParticleStyleCube implements ParticleStyle {
     private int step = 0;
     private boolean skipNextStep = false; // Only spawn every 2 ticks
 
+    public ParticleStyleCube() {
+        super("cube", true, true, 0);
+    }
+
+    @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> pparticles = new ArrayList<>();
 
@@ -83,25 +89,20 @@ public class ParticleStyleCube implements ParticleStyle {
         return pparticles;
     }
 
+    @Override
     public void updateTimers() {
         skipNextStep = !skipNextStep;
         step++;
     }
 
-    public String getName() {
-        return "cube";
+    @Override
+    protected void setDefaultSettings(CommentedFileConfiguration config) {
+
     }
 
-    public boolean canBeFixed() {
-        return true;
-    }
-    
-    public boolean canToggleWithMovement() {
-        return true;
-    }
-    
-    public double getFixedEffectOffset() {
-        return 0;
+    @Override
+    protected void loadSettings(CommentedFileConfiguration config) {
+
     }
 
 }

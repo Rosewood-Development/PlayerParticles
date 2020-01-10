@@ -2,19 +2,23 @@ package dev.esophose.playerparticles.command;
 
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.LocaleManager;
+import dev.esophose.playerparticles.manager.ParticleStyleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.particles.PPlayer;
+import dev.esophose.playerparticles.styles.DefaultStyles;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ReloadCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
-        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
-        if (PlayerParticles.getInstance().getManager(PermissionManager.class).canReloadPlugin(pplayer.getMessageDestination())) {
-            PlayerParticles.getInstance().reload();
+        PlayerParticles playerParticles = PlayerParticles.getInstance();
+        LocaleManager localeManager = playerParticles.getManager(LocaleManager.class);
+        if (playerParticles.getManager(PermissionManager.class).canReloadPlugin(pplayer.getMessageDestination())) {
+            playerParticles.reload();
+            DefaultStyles.reloadSettings(playerParticles.getManager(ParticleStyleManager.class));
             localeManager.sendMessage(pplayer, "reload-success");
-            PlayerParticles.getInstance().getLogger().info("Reloaded configuration.");
+            playerParticles.getLogger().info("Reloaded configuration.");
         } else {
             localeManager.sendMessage(pplayer, "reload-no-permission");
         }

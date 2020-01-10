@@ -200,7 +200,7 @@ public class PermissionManager extends Manager {
      */
     public List<String> getEffectNamesUserHasPermissionFor(Player p) {
         List<String> list = new ArrayList<>();
-        for (ParticleEffect pe : ParticleEffect.getSupportedEffects())
+        for (ParticleEffect pe : ParticleEffect.getEnabledEffects())
             if (this.hasEffectPermission(p, pe))
                 list.add(pe.getName());
         return list;
@@ -242,7 +242,7 @@ public class PermissionManager extends Manager {
      */
     public List<ParticleEffect> getEffectsUserHasPermissionFor(Player p) {
         List<ParticleEffect> list = new ArrayList<>();
-        for (ParticleEffect pe : ParticleEffect.getSupportedEffects())
+        for (ParticleEffect pe : ParticleEffect.getEnabledEffects())
             if (this.hasEffectPermission(p, pe))
                 list.add(pe);
         return list;

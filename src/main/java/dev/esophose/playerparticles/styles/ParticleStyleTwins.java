@@ -1,12 +1,13 @@
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Location;
 
-public class ParticleStyleTwins implements ParticleStyle {
+public class ParticleStyleTwins extends DefaultParticleStyle {
 
     private static double[] cos, sin;
     private static final int orbs = 2;
@@ -28,6 +29,11 @@ public class ParticleStyleTwins implements ParticleStyle {
         }
     }
 
+    public ParticleStyleTwins() {
+        super("twins", true, true, 0);
+    }
+
+    @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
         for (int i = 0; i < orbs; i++) {
@@ -39,6 +45,7 @@ public class ParticleStyleTwins implements ParticleStyle {
         return particles;
     }
 
+    @Override
     public void updateTimers() {
         stepX++;
         if (stepX > numSteps) {
@@ -54,20 +61,14 @@ public class ParticleStyleTwins implements ParticleStyle {
         }
     }
 
-    public String getName() {
-        return "twins";
+    @Override
+    protected void setDefaultSettings(CommentedFileConfiguration config) {
+
     }
 
-    public boolean canBeFixed() {
-        return true;
-    }
-    
-    public boolean canToggleWithMovement() {
-        return true;
-    }
-    
-    public double getFixedEffectOffset() {
-        return 0;
+    @Override
+    protected void loadSettings(CommentedFileConfiguration config) {
+
     }
 
 }

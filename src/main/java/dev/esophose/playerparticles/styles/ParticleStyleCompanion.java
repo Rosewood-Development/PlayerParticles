@@ -23,6 +23,7 @@
  */
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-public class ParticleStyleCompanion implements ParticleStyle {
+public class ParticleStyleCompanion extends DefaultParticleStyle {
 
     private int numParticles = 150;
     private int particlesPerIteration = 5;
@@ -39,6 +40,11 @@ public class ParticleStyleCompanion implements ParticleStyle {
     private double xOffset = 0.0, yOffset = -0.75, zOffset = 0.0;
     private int step = 0;
 
+    public ParticleStyleCompanion() {
+        super("companion", true, false, 1);
+    }
+
+    @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
 
@@ -59,24 +65,19 @@ public class ParticleStyleCompanion implements ParticleStyle {
         return particles;
     }
 
+    @Override
     public void updateTimers() {
         step++;
     }
 
-    public String getName() {
-        return "companion";
+    @Override
+    protected void setDefaultSettings(CommentedFileConfiguration config) {
+
     }
 
-    public boolean canBeFixed() {
-        return true;
-    }
-    
-    public boolean canToggleWithMovement() {
-        return false;
-    }
-    
-    public double getFixedEffectOffset() {
-        return 1;
+    @Override
+    protected void loadSettings(CommentedFileConfiguration config) {
+
     }
 
 }
