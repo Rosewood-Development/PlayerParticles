@@ -95,6 +95,8 @@ public enum ParticleEffect {
 
     private CommentedFileConfiguration config;
     private boolean enabledByDefault;
+
+    private String effectName;
     private boolean enabled;
 
     /**
@@ -135,9 +137,10 @@ public enum ParticleEffect {
         File directory = new File(PlayerParticles.getInstance().getDataFolder(), "effects");
         directory.mkdirs();
 
-        File file = new File(directory, this.getName() + ".yml");
+        File file = new File(directory, this.getInternalName() + ".yml");
         this.config = CommentedFileConfiguration.loadConfiguration(PlayerParticles.getInstance(), file);
 
+        this.setIfNotExists("effect-name", this.getInternalName(), "The name the effect will display as");
         this.setIfNotExists("enabled", this.enabledByDefault, "If the effect is enabled or not");
 
         this.config.save();
@@ -153,6 +156,7 @@ public enum ParticleEffect {
         if (reloadConfig)
             this.config.reloadConfig();
 
+        this.effectName = this.config.getString("effect-name");
         this.enabled = this.config.getBoolean("enabled");
     }
 
@@ -185,12 +189,17 @@ public enum ParticleEffect {
     }
 
     /**
-     * Returns the name of this particle effect
-     * 
-     * @return The name
+     * @return the internal name of this particle effect that will never change
+     */
+    public String getInternalName() {
+        return this.name().toLowerCase();
+    }
+
+    /**
+     * @return the name that the style will display to the users as
      */
     public String getName() {
-        return this.name().toLowerCase();
+        return this.effectName;
     }
 
     /**
@@ -239,7 +248,17 @@ public enum ParticleEffect {
      * @return The particle effect
      */
     public static ParticleEffect fromName(String name) {
-        return Stream.of(values()).filter(x -> x.name().equalsIgnoreCase(name) && x.isSupported() && x.isEnabled()).findFirst().orElse(null);
+        return Stream.of(values()).filter(x -> x.isSupported() && x.isEnabled() && x.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+    }
+
+    /**
+     * Returns the particle effect with the given name
+     *
+     * @param internalName Internal name of the particle effect
+     * @return The particle effect
+     */
+    public static ParticleEffect fromInternalName(String internalName) {
+        return Stream.of(values()).filter(x -> x.isSupported() && x.isEnabled() && x.getInternalName().equalsIgnoreCase(internalName)).findFirst().orElse(null);
     }
     
     /**

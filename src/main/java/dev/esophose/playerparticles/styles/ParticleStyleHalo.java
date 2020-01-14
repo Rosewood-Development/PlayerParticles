@@ -9,21 +9,7 @@ import org.bukkit.Location;
 
 public class ParticleStyleHalo extends DefaultParticleStyle {
 
-    private static double[] cos, sin;
-    private static final int points = 16;
     private int step = 0;
-    
-    static {
-        cos = new double[points];
-        sin = new double[points];
-        
-        int i = 0;
-        for (double n = 0; n < Math.PI * 2; n += Math.PI * 2 / points) {
-            cos[i] = Math.cos(n);
-            sin[i] = Math.sin(n);
-            i++;
-        }
-    }
 
     public ParticleStyleHalo() {
         super("halo", true, false, -0.5);
@@ -31,15 +17,19 @@ public class ParticleStyleHalo extends DefaultParticleStyle {
 
     @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
-        if (step % 2 == 0) return new ArrayList<>();
+        List<PParticle> particles = new ArrayList<>();
+        if (this.step % 2 == 0)
+            return particles;
 
         int points = 16;
         double radius = .65;
-        List<PParticle> particles = new ArrayList<>();
+        double slice = 2 * Math.PI / points;
+
         for (int i = 0; i < points; i++) {
-            double dx = radius * cos[i];
+            double angle = slice * i;
+            double dx = radius * Math.cos(angle);
             double dy = 1.5;
-            double dz = radius * sin[i];
+            double dz = radius * Math.sin(angle);
             particles.add(new PParticle(location.clone().add(dx, dy, dz)));
         }
         return particles;
@@ -47,10 +37,9 @@ public class ParticleStyleHalo extends DefaultParticleStyle {
 
     @Override
     public void updateTimers() {
-        step++;
-        if (step > 30) {
-            step = 0;
-        }
+        this.step++;
+        if (this.step > 30)
+            this.step = 0;
     }
 
     @Override

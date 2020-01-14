@@ -9,22 +9,8 @@ import org.bukkit.Location;
 
 public class ParticleStyleBeam extends DefaultParticleStyle {
 
-    private static double[] cos, sin;
-    private static final int points = 16;
     private int step = 0;
     private boolean reversed = false;
-    
-    static {
-        cos = new double[points];
-        sin = new double[points];
-        
-        int i = 0;
-        for (double n = 0; n < Math.PI * 2; n += Math.PI * 2 / points) {
-            cos[i] = Math.cos(n);
-            sin[i] = Math.sin(n);
-            i++;
-        }
-    }
 
     public ParticleStyleBeam() {
         super("beam", true, true, 0.5);
@@ -32,12 +18,16 @@ public class ParticleStyleBeam extends DefaultParticleStyle {
 
     @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
+        int points = 16;
         double radius = 1;
+        double slice = 2 * Math.PI / points;
+
         List<PParticle> particles = new ArrayList<>();
         for (int i = 0; i < points; i++) {
-            double newX = location.getX() + radius * cos[i];
-            double newY = location.getY() + (step / 10D) - 1;
-            double newZ = location.getZ() + radius * sin[i];
+            double angle = slice * i;
+            double newX = location.getX() + radius * Math.cos(angle);
+            double newY = location.getY() + (this.step / 10D) - 1;
+            double newZ = location.getZ() + radius * Math.sin(angle);
             particles.add(new PParticle(new Location(location.getWorld(), newX, newY, newZ)));
         }
         return particles;
@@ -45,13 +35,12 @@ public class ParticleStyleBeam extends DefaultParticleStyle {
 
     @Override
     public void updateTimers() {
-        if (!reversed) step++;
-        else step--;
+        this.step += this.reversed ? -1 : 1;
 
-        if (step >= 30) {
-            reversed = true;
-        } else if (step <= 0) {
-            reversed = false;
+        if (this.step >= 30) {
+            this.reversed = true;
+        } else if (this.step <= 0) {
+            this.reversed = false;
         }
     }
 

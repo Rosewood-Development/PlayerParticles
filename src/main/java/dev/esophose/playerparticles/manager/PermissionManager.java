@@ -177,7 +177,7 @@ public class PermissionManager extends Manager {
      * @return True if the player has permission to use the effect
      */
     public boolean hasEffectPermission(Player player, ParticleEffect effect) {
-        return PPermission.EFFECT.check(player, effect.getName());
+        return PPermission.EFFECT.check(player, effect.getInternalName());
     }
 
     /**
@@ -189,7 +189,7 @@ public class PermissionManager extends Manager {
      * @return If the player has permission to use the style
      */
     public boolean hasStylePermission(Player player, ParticleStyle style) {
-        return PPermission.STYLE.check(player, style.getName());
+        return PPermission.STYLE.check(player, style.getInternalName());
     }
 
     /**

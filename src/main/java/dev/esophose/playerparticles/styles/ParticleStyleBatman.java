@@ -21,7 +21,8 @@ public class ParticleStyleBatman extends DefaultParticleStyle {
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
         
-        if (step != 0) return particles;
+        if (this.step != 0)
+            return particles;
         
         // Segment 1
         for (double x = -7; x <= -3; x += 0.05) {
@@ -114,7 +115,7 @@ public class ParticleStyleBatman extends DefaultParticleStyle {
 
     @Override
     public void updateTimers() {
-        step = (step + 1) % 20; // Only spawn once per second
+        this.step = (this.step + 1) % 20; // Only spawn once per second
     }
 
     @Override

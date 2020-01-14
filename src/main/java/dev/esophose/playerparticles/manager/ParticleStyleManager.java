@@ -44,17 +44,17 @@ public class ParticleStyleManager extends Manager {
             return;
         }
         
-        if (style.getName() == null || style.getName().trim().equals("")) {
-            PlayerParticles.getInstance().getLogger().severe("Tried to register a style with a null or empty name: '" + style.getName() + "'");
+        if (style.getInternalName() == null || style.getInternalName().trim().equals("")) {
+            PlayerParticles.getInstance().getLogger().severe("Tried to register a style with a null or empty name: '" + style.getInternalName() + "'");
             return;
         }
         
         for (ParticleStyle testAgainst : this.styles) {
             if (testAgainst.equals(style)) {
-                PlayerParticles.getInstance().getLogger().severe("Tried to register the same style twice: '" + style.getName() + "'");
+                PlayerParticles.getInstance().getLogger().severe("Tried to register the same style twice: '" + style.getInternalName() + "'");
                 return;
-            } else if (testAgainst.getName().equalsIgnoreCase(style.getName())) {
-                PlayerParticles.getInstance().getLogger().severe("Tried to register two styles with the same name spelling: '" + style.getName() + "'");
+            } else if (testAgainst.getInternalName().equalsIgnoreCase(style.getInternalName())) {
+                PlayerParticles.getInstance().getLogger().severe("Tried to register two styles with the same internal name spelling: '" + style.getInternalName() + "'");
                 return;
             }
         }

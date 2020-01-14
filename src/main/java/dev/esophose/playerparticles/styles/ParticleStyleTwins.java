@@ -16,11 +16,11 @@ public class ParticleStyleTwins extends DefaultParticleStyle {
     private int stepY = 0;
     private int maxStepY = 30;
     private boolean reverse = false;
-    
+
     static {
         cos = new double[120];
         sin = new double[120];
-        
+
         int i = 0;
         for (double n = 0; n < numSteps; n++) {
             cos[i] = -Math.cos(n / numSteps * Math.PI * 2);
@@ -37,9 +37,9 @@ public class ParticleStyleTwins extends DefaultParticleStyle {
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
         for (int i = 0; i < orbs; i++) {
-            double dx = cos[(stepX + (numSteps / orbs * i)) % numSteps];
-            double dy = (stepY / (double)maxStepY);
-            double dz = sin[(stepX + (numSteps / orbs * i)) % numSteps];
+            double dx = cos[(this.stepX + (numSteps / orbs * i)) % numSteps];
+            double dy = (this.stepY / (double) this.maxStepY);
+            double dz = sin[(this.stepX + (numSteps / orbs * i)) % numSteps];
             particles.add(new PParticle(location.clone().add(dx, dy, dz)));
         }
         return particles;
@@ -47,17 +47,19 @@ public class ParticleStyleTwins extends DefaultParticleStyle {
 
     @Override
     public void updateTimers() {
-        stepX++;
-        if (stepX > numSteps) {
-            stepX = 0;
+        this.stepX++;
+        if (this.stepX > numSteps) {
+            this.stepX = 0;
         }
-        
-        if (reverse) {
-            stepY++;
-            if (stepY > maxStepY) reverse = false;
+
+        if (this.reverse) {
+            this.stepY++;
+            if (this.stepY > this.maxStepY)
+                this.reverse = false;
         } else {
-            stepY--;
-            if (stepY < -maxStepY) reverse = true;
+            this.stepY--;
+            if (this.stepY < -this.maxStepY)
+                this.reverse = true;
         }
     }
 

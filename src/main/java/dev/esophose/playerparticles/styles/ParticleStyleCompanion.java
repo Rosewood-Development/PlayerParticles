@@ -50,15 +50,15 @@ public class ParticleStyleCompanion extends DefaultParticleStyle {
 
         Vector vector = new Vector();
         
-        double t = (Math.PI / numParticles) * step;
-        double r = Math.sin(t) * size;
+        double t = (Math.PI / this.numParticles) * this.step;
+        double r = Math.sin(t) * this.size;
         double s = 2 * Math.PI * t;
 
-        vector.setX(xFactor * r * Math.cos(s) + xOffset);
-        vector.setZ(zFactor * r * Math.sin(s) + zOffset);
-        vector.setY(yFactor * size * Math.cos(t) + yOffset);
+        vector.setX(this.xFactor * r * Math.cos(s) + this.xOffset);
+        vector.setZ(this.zFactor * r * Math.sin(s) + this.zOffset);
+        vector.setY(this.yFactor * this.size * Math.cos(t) + this.yOffset);
 
-        for (int i = 0; i < particlesPerIteration; i++) {
+        for (int i = 0; i < this.particlesPerIteration; i++) {
             particles.add(new PParticle(location.clone().subtract(vector)));
         }
 
@@ -67,7 +67,7 @@ public class ParticleStyleCompanion extends DefaultParticleStyle {
 
     @Override
     public void updateTimers() {
-        step++;
+        this.step++;
     }
 
     @Override

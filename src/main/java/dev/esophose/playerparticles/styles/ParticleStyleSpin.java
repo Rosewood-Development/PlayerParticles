@@ -32,15 +32,15 @@ public class ParticleStyleSpin extends DefaultParticleStyle {
     @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         double radius = .5;
-        double newX = location.getX() + radius * cos[step];
+        double newX = location.getX() + radius * cos[this.step];
         double newY = location.getY() + 1.5;
-        double newZ = location.getZ() + radius * sin[step];
+        double newZ = location.getZ() + radius * sin[this.step];
         return Collections.singletonList(new PParticle(new Location(location.getWorld(), newX, newY, newZ)));
     }
 
     @Override
     public void updateTimers() {
-        step = (step + 1) % maxSteps;
+        this.step = (this.step + 1) % maxSteps;
     }
 
     @Override

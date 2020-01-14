@@ -77,6 +77,7 @@ public class ParticleStyleCelebration extends DefaultParticleStyle {
         double dz = Math.cos(angle) * distanceFrom;
         final Location loc = location.clone().add(dx, 1, dz);
         final int fuse = 3 + random.nextInt(3);
+        Player player = pplayer.getPlayer();
         ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
 
         new BukkitRunnable() {
@@ -90,7 +91,7 @@ public class ParticleStyleCelebration extends DefaultParticleStyle {
                     trail.setEffect(ParticleEffect.FIREWORK);
                     trail.setStyle(DefaultStyles.CELEBRATION);
 
-                    particleManager.displayParticles(trail, Collections.singletonList(new PParticle(this.location)));
+                    particleManager.displayParticles(player, trail, Collections.singletonList(new PParticle(this.location)));
                     
                     this.location.add(0, 0.25, 0);
                 } else {
@@ -107,7 +108,7 @@ public class ParticleStyleCelebration extends DefaultParticleStyle {
                         
                         particles.add(new PParticle(this.location.clone().add(dx, dy, dz)));
                     }
-                    particleManager.displayParticles(particle, particles);
+                    particleManager.displayParticles(player, particle, particles);
                     
                     this.cancel();
                 }

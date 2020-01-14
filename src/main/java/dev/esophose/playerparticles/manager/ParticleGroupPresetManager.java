@@ -155,7 +155,7 @@ public class ParticleGroupPresetManager extends Manager {
 
                 this.presetGroups.add(new ParticleGroupPreset(displayName, guiIcon, permission, allowPermissionOverride, new ParticleGroup(groupName, particles)));
             } catch (Exception ex) {
-                PlayerParticles.getInstance().getLogger().severe("An error occurred while parsing the groups.yml file!");
+                PlayerParticles.getInstance().getLogger().severe("An error occurred while parsing the " + FILE_NAME + " file!");
             }
         }
     }

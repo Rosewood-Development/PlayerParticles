@@ -9,25 +9,12 @@ import org.bukkit.Location;
 
 public class ParticleStyleQuadhelix extends DefaultParticleStyle {
 
-    private static double[] cos, sin;
     private static final int orbs = 4;
     private static int maxStepX = 80;
     private static int maxStepY = 60;
     private int stepX = 0;
     private int stepY = 0;
     private boolean reverse = false;
-    
-    static {
-        cos = new double[maxStepX];
-        sin = new double[maxStepX];
-        
-        int i = 0;
-        for (double n = 0; n < maxStepX; n++) {
-            cos[i] = -Math.cos(n / maxStepX * Math.PI * 2);
-            sin[i] = -Math.sin(n / maxStepX * Math.PI * 2);
-            i++;
-        }
-    }
 
     public ParticleStyleQuadhelix() {
         super("quadhelix", true, true, 0);
@@ -37,10 +24,9 @@ public class ParticleStyleQuadhelix extends DefaultParticleStyle {
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
         for (int i = 0; i < orbs; i++) {
-            int step = (stepX + (maxStepX / orbs) * i) % maxStepX;
-            double dx = cos[step] * ((60 - Math.abs(stepY)) / (double)maxStepY);
-            double dy = (stepY / (double)maxStepY) * 1.5;
-            double dz = sin[step] * ((60 - Math.abs(stepY)) / (double)maxStepY);
+            double dx = -(Math.cos((this.stepX / (double) maxStepX) * (Math.PI * 2) + (((Math.PI * 2) / orbs) * i))) * ((maxStepY - Math.abs(this.stepY)) / (double) maxStepY);
+            double dy = (this.stepY / (double) maxStepY) * 1.5;
+            double dz = -(Math.sin((this.stepX / (double) maxStepX) * (Math.PI * 2) + (((Math.PI * 2) / orbs) * i))) * ((maxStepY - Math.abs(this.stepY)) / (double) maxStepY);
             particles.add(new PParticle(location.clone().add(dx, dy, dz)));
         }
         return particles;
@@ -48,16 +34,18 @@ public class ParticleStyleQuadhelix extends DefaultParticleStyle {
 
     @Override
     public void updateTimers() {
-        stepX++;
-        if (stepX > maxStepX) {
-            stepX = 0;
+        this.stepX++;
+        if (this.stepX > maxStepX) {
+            this.stepX = 0;
         }
-        if (reverse) {
-            stepY++;
-            if (stepY > maxStepY) reverse = false;
+        if (this.reverse) {
+            this.stepY++;
+            if (this.stepY > maxStepY)
+                this.reverse = false;
         } else {
-            stepY--;
-            if (stepY < -maxStepY) reverse = true;
+            this.stepY--;
+            if (this.stepY < -maxStepY)
+                this.reverse = true;
         }
     }
 

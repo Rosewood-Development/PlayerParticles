@@ -24,26 +24,26 @@ public class ParticleStylePopper extends DefaultParticleStyle {
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
 
-        double radius = (1 - (double)step / maxStep);
-        for (int i = 0; i < helices; i++) {
-            double angle = step * radials + (2 * Math.PI * i / helices);
-            Vector v = new Vector(Math.cos(angle) * radius, step * grow - 1, Math.sin(angle) * radius);
+        double radius = (1 - (double) this.step / this.maxStep);
+        for (int i = 0; i < this.helices; i++) {
+            double angle = this.step * this.radials + (2 * Math.PI * i / this.helices);
+            Vector v = new Vector(Math.cos(angle) * radius, this.step * this.grow - 1, Math.sin(angle) * radius);
 
             particles.add(new PParticle(location.clone().add(v)));
         }
-        
-        if (step == maxStep - 1) {
+
+        if (this.step == this.maxStep - 1) {
             for (int i = 0; i < 10; i++) {
                 particles.add(new PParticle(location.clone().add(0, 1.5, 0), 0.5, 0.5, 0.5, 0.03));
             }
         }
-        
+
         return particles;
     }
 
     @Override
     public void updateTimers() {
-        step = (step + 1) % maxStep;
+        this.step = (this.step + 1) % this.maxStep;
     }
 
     @Override

@@ -20,7 +20,7 @@ public class ParticleStyleWings extends DefaultParticleStyle {
     @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
-        if (spawnTimer == 0) {
+        if (this.spawnTimer == 0) {
             for (double t = 0; t < Math.PI * 2; t += Math.PI / 48) {
                 double offset = (Math.pow(Math.E, Math.cos(t)) - 2 * Math.cos(t * 4) - Math.pow(Math.sin(t / 12), 5)) / 2;
                 double x = Math.sin(t) * offset;
@@ -34,8 +34,8 @@ public class ParticleStyleWings extends DefaultParticleStyle {
 
     @Override
     public void updateTimers() {
-        spawnTimer++;
-        spawnTimer %= 3;
+        this.spawnTimer++;
+        this.spawnTimer %= 3;
     }
 
     @Override

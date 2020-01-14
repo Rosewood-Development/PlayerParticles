@@ -8,21 +8,9 @@ import java.util.List;
 import org.bukkit.Location;
 
 public class ParticleStyleRings extends DefaultParticleStyle {
-    
-    private static double[] cos, sin;
-    private int index = 0;
-    
-    static {
-        cos = new double[32];
-        sin = new double[32];
-        
-        int i = 0;
-        for (double n = 0; n < Math.PI * 2; n += Math.PI / 16) {
-            cos[i] = Math.sin(n);
-            sin[i] = Math.cos(n);
-            i++;
-        }
-    }
+
+    private int step = 0;
+    private final static int maxStep = 32;
 
     public ParticleStyleRings() {
         super("rings", true, true, 0);
@@ -31,28 +19,21 @@ public class ParticleStyleRings extends DefaultParticleStyle {
     @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
-        
-        particles.add(new PParticle(location.clone().add(cos[index], sin[index], sin[index])));
-        particles.add(new PParticle(location.clone().add(cos[wrap(index + 16)], sin[wrap(index + 16)], sin[wrap(index + 16)])));
-        particles.add(new PParticle(location.clone().add(cos[wrap(index + 16)], sin[index], sin[wrap(index + 16)])));
-        particles.add(new PParticle(location.clone().add(cos[index], sin[wrap(index + 16)], sin[index])));
-        
+
+        double ring1 = Math.PI / (maxStep / 2D) * this.step;
+        double ring2 = Math.PI / (maxStep / 2D) * (((this.step + maxStep / 2D) % maxStep));
+
+        particles.add(new PParticle(location.clone().add(Math.cos(ring1), Math.sin(ring1), Math.sin(ring1))));
+        particles.add(new PParticle(location.clone().add(Math.cos(ring1 + Math.PI), Math.sin(ring1), Math.sin(ring1 + Math.PI))));
+        particles.add(new PParticle(location.clone().add(Math.cos(ring2), Math.sin(ring2), Math.sin(ring2))));
+        particles.add(new PParticle(location.clone().add(Math.cos(ring2 + Math.PI), Math.sin(ring2), Math.sin(ring2 + Math.PI))));
+
         return particles;
-    }
-    
-    /**
-     * Wraps an index around the cos/sin array length
-     * 
-     * @param index The index to wrap
-     * @return The wrapped index
-     */
-    private int wrap(int index) {
-        return index % cos.length;
     }
 
     @Override
     public void updateTimers() {
-        index = (index + 1) % cos.length;
+        this.step = (this.step + 1) % maxStep;
     }
 
     @Override

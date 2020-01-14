@@ -9,22 +9,9 @@ import org.bukkit.Location;
 
 public class ParticleStyleOrbit extends DefaultParticleStyle {
 
-    private static double[] cos, sin;
     private static final int orbs = 3;
     private static final int numSteps = 120;
     private int step = 0;
-    
-    static {
-        cos = new double[120];
-        sin = new double[120];
-        
-        int i = 0;
-        for (double n = 0; n < numSteps; n++) {
-            cos[i] = -Math.cos(n / numSteps * Math.PI * 2);
-            sin[i] = -Math.sin(n / numSteps * Math.PI * 2);
-            i++;
-        }
-    }
 
     public ParticleStyleOrbit() {
         super("orbit", true, true, 0);
@@ -34,8 +21,8 @@ public class ParticleStyleOrbit extends DefaultParticleStyle {
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
         for (int i = 0; i < orbs; i++) {
-            double dx = cos[(step + (numSteps / orbs * i)) % numSteps];
-            double dz = sin[(step + (numSteps / orbs * i)) % numSteps];
+            double dx = -(Math.cos((this.step / (double) numSteps) * (Math.PI * 2) + (((Math.PI * 2) / orbs) * i)));
+            double dz = -(Math.sin((this.step / (double) numSteps) * (Math.PI * 2) + (((Math.PI * 2) / orbs) * i)));
             particles.add(new PParticle(location.clone().add(dx, 0, dz)));
         }
         return particles;
@@ -43,10 +30,7 @@ public class ParticleStyleOrbit extends DefaultParticleStyle {
 
     @Override
     public void updateTimers() {
-        step++;
-        if (step > numSteps) {
-            step = 0;
-        }
+        this.step = (this.step + 1) % numSteps;
     }
 
     @Override

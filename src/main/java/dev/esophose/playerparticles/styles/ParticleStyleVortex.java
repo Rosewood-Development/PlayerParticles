@@ -1,18 +1,18 @@
 /**
  * The MIT License (MIT)
- *
+ * <p>
  * Copyright (c) 2014 Slikey
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ * <p>
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -32,7 +32,7 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 public class ParticleStyleVortex extends DefaultParticleStyle {
-    
+
     private double grow = .05f;
     private double radials = Math.PI / 16;
     private int helices = 4;
@@ -47,20 +47,20 @@ public class ParticleStyleVortex extends DefaultParticleStyle {
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
 
-        double radius = 2 * (1 - (double)step / maxStep);
-        for (int i = 0; i < helices; i++) {
-            double angle = step * radials + (2 * Math.PI * i / helices);
-            Vector v = new Vector(Math.cos(angle) * radius, step * grow - 1, Math.sin(angle) * radius);
+        double radius = 2 * (1 - (double) this.step / this.maxStep);
+        for (int i = 0; i < this.helices; i++) {
+            double angle = this.step * this.radials + (2 * Math.PI * i / this.helices);
+            Vector v = new Vector(Math.cos(angle) * radius, this.step * this.grow - 1, Math.sin(angle) * radius);
 
             particles.add(new PParticle(location.clone().add(v)));
         }
-        
+
         return particles;
     }
 
     @Override
     public void updateTimers() {
-        step = (step + 1) % maxStep;
+        this.step = (this.step + 1) % this.maxStep;
     }
 
     @Override

@@ -29,9 +29,12 @@ public interface ParticleStyle {
     boolean isEnabled();
 
     /**
-     * The name of the style
-     * 
-     * @return The style's name
+     * @return The style's internal name that will always remain constant
+     */
+    String getInternalName();
+
+    /**
+     * @return The name that the style will display to the users as
      */
     String getName();
 
@@ -65,6 +68,19 @@ public interface ParticleStyle {
     static ParticleStyle fromName(String styleName) {
         for (ParticleStyle style : PlayerParticles.getInstance().getManager(ParticleStyleManager.class).getStyles())
             if (style.getName().equalsIgnoreCase(styleName)) 
+                return style;
+        return null;
+    }
+
+    /**
+     * Gets the ParticleStyle with the internal name given, returns null if not found
+     *
+     * @param styleName The internal name of the style to search for
+     * @return The ParticleStyle with a matching name
+     */
+    static ParticleStyle fromInternalName(String styleName) {
+        for (ParticleStyle style : PlayerParticles.getInstance().getManager(ParticleStyleManager.class).getStyles())
+            if (style.getInternalName().equalsIgnoreCase(styleName))
                 return style;
         return null;
     }

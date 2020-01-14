@@ -172,11 +172,16 @@ public class ParticleManager extends Manager implements Listener, Runnable {
 
     /**
      * An alternative method used for event styles
-     * 
+     *
+     * @param player The player the particles are spawning from
      * @param particle The ParticlePair to use for getting particle settings
      * @param particles The particles to display
      */
-    public void displayParticles(ParticlePair particle, List<PParticle> particles) {
+    public void displayParticles(Player player, ParticlePair particle, List<PParticle> particles) {
+        PermissionManager permissionManager = this.playerParticles.getManager(PermissionManager.class);
+        if (player.getGameMode() == GameMode.SPECTATOR || !permissionManager.isWorldEnabled(player.getWorld().getName()))
+            return;
+
         for (PParticle pparticle : particles)
             ParticleEffect.display(particle, pparticle, false, Bukkit.getPlayer(particle.getOwnerUniqueId()));
     }

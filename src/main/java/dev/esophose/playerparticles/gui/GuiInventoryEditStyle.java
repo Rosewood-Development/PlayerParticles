@@ -36,7 +36,7 @@ public class GuiInventoryEditStyle extends GuiInventory {
             ParticleStyle style = stylesUserHasPermissionFor.get(i);
             GuiActionButton selectButton = new GuiActionButton(
                     slot,
-                    GuiIcon.STYLE.get(style.getName()),
+                    GuiIcon.STYLE.get(style.getInternalName()),
                     localeManager.getLocaleMessage("gui-color-icon-name") + ParticleUtils.formatName(style.getName()),
                     new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-style-description", StringPlaceholders.single("style", ParticleUtils.formatName(style.getName())))},
                     (button, isShiftClick) -> {

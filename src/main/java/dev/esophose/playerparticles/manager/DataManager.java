@@ -146,8 +146,8 @@ public class DataManager extends Manager {
 
                         // Particle properties
                         int id = result.getInt("id");
-                        ParticleEffect effect = ParticleEffect.fromName(result.getString("effect"));
-                        ParticleStyle style = ParticleStyle.fromName(result.getString("style"));
+                        ParticleEffect effect = ParticleEffect.fromInternalName(result.getString("effect"));
+                        ParticleStyle style = ParticleStyle.fromInternalName(result.getString("style"));
                         Material itemMaterial = ParticleUtils.closestMatchWithFallback(true, result.getString("item_material"));
                         Material blockMaterial = ParticleUtils.closestMatchWithFallback(true, result.getString("block_material"));
                         NoteColor noteColor = new NoteColor(result.getInt("note"));
@@ -211,8 +211,8 @@ public class DataManager extends Manager {
 
                         // Particle properties
                         int particleId = result.getInt("p_id");
-                        ParticleEffect effect = ParticleEffect.fromName(result.getString("effect"));
-                        ParticleStyle style = ParticleStyle.fromName(result.getString("style"));
+                        ParticleEffect effect = ParticleEffect.fromInternalName(result.getString("effect"));
+                        ParticleStyle style = ParticleStyle.fromInternalName(result.getString("style"));
                         Material itemMaterial = ParticleUtils.closestMatchWithFallback(true, result.getString("item_material"));
                         Material blockMaterial = ParticleUtils.closestMatchWithFallback(true, result.getString("block_material"));
                         NoteColor noteColor = new NoteColor(result.getInt("note"));
@@ -341,8 +341,8 @@ public class DataManager extends Manager {
                     particlesStatement.setString(1, UUID.randomUUID().toString());
                     particlesStatement.setString(2, groupUUID);
                     particlesStatement.setInt(3, particle.getId());
-                    particlesStatement.setString(4, particle.getEffect().getName());
-                    particlesStatement.setString(5, particle.getStyle().getName());
+                    particlesStatement.setString(4, particle.getEffect().getInternalName());
+                    particlesStatement.setString(5, particle.getStyle().getInternalName());
                     particlesStatement.setString(6, particle.getItemMaterial().name());
                     particlesStatement.setString(7, particle.getBlockMaterial().name());
                     particlesStatement.setInt(8, particle.getNoteColor().getNote());
@@ -412,8 +412,8 @@ public class DataManager extends Manager {
                 ParticlePair particle = fixedEffect.getParticlePair();
                 statement.setString(1, particleUUID);
                 statement.setInt(2, fixedEffect.getId());
-                statement.setString(3, particle.getEffect().getName());
-                statement.setString(4, particle.getStyle().getName());
+                statement.setString(3, particle.getEffect().getInternalName());
+                statement.setString(4, particle.getStyle().getInternalName());
                 statement.setString(5, particle.getItemMaterial().name());
                 statement.setString(6, particle.getBlockMaterial().name());
                 statement.setInt(7, particle.getNoteColor().getNote());
@@ -461,8 +461,8 @@ public class DataManager extends Manager {
                                          "WHERE uuid = (SELECT particle_uuid FROM " + this.getTablePrefix() + "fixed WHERE owner_uuid = ? AND id = ?)";
             try (PreparedStatement statement = connection.prepareStatement(particleUpdateQuery)) {
                 ParticlePair particle = fixedEffect.getParticlePair();
-                statement.setString(1, particle.getEffect().getName());
-                statement.setString(2, particle.getStyle().getName());
+                statement.setString(1, particle.getEffect().getInternalName());
+                statement.setString(2, particle.getStyle().getInternalName());
                 statement.setString(3, particle.getItemMaterial().name());
                 statement.setString(4, particle.getBlockMaterial().name());
                 statement.setInt(5, particle.getNoteColor().getNote());

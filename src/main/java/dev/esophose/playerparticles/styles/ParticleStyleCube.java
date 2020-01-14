@@ -55,21 +55,20 @@ public class ParticleStyleCube extends DefaultParticleStyle {
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> pparticles = new ArrayList<>();
 
-        if (!skipNextStep) {
-            double xRotation = 0, yRotation = 0, zRotation = 0;
-            xRotation = step * angularVelocityX;
-            yRotation = step * angularVelocityY;
-            zRotation = step * angularVelocityZ;
-            double a = edgeLength / 2;
+        if (!this.skipNextStep) {
+            double xRotation = this.step * this.angularVelocityX;
+            double yRotation = this.step * this.angularVelocityY;
+            double zRotation = this.step * this.angularVelocityZ;
+            double a = this.edgeLength / 2;
             double angleX, angleY;
             Vector v = new Vector();
             for (int i = 0; i < 4; i++) {
                 angleY = i * Math.PI / 2;
                 for (int j = 0; j < 2; j++) {
                     angleX = j * Math.PI;
-                    for (int p = 0; p <= particles; p++) {
+                    for (int p = 0; p <= this.particles; p++) {
                         v.setX(a).setY(a);
-                        v.setZ(edgeLength * p / particles - a);
+                        v.setZ(this.edgeLength * p / this.particles - a);
                         VectorUtils.rotateAroundAxisX(v, angleX);
                         VectorUtils.rotateAroundAxisY(v, angleY);
                         VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
@@ -91,8 +90,8 @@ public class ParticleStyleCube extends DefaultParticleStyle {
 
     @Override
     public void updateTimers() {
-        skipNextStep = !skipNextStep;
-        step++;
+        this.skipNextStep = !this.skipNextStep;
+        this.step++;
     }
 
     @Override

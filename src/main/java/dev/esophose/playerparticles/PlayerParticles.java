@@ -7,10 +7,11 @@
  * + Add setting to disable particles while in combat
  * + Add a command aliases section to the config
  * * /ppo now uses your permissions instead of the player you are targetting
- *
  */
 
  /*
+ * * Fixed the 'swords' style so you have to be holding a sword/trident
+ * * Fixed several styles ignoring the disabled worlds setting
  * + Added a setting 'dust-size' to change the size of dust particles in 1.13+
  * * Cleaned up duplicated command parsing
  * + Added command '/pp fixed teleport <id>' that requires the permission playerparticles.fixed.teleport
@@ -43,6 +44,7 @@ import dev.esophose.playerparticles.hook.PlaceholderAPIHook;
 import dev.esophose.playerparticles.manager.CommandManager;
 import dev.esophose.playerparticles.manager.ConfigurationManager;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.DataMigrationManager;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.Manager;
@@ -54,7 +56,7 @@ import dev.esophose.playerparticles.manager.PluginUpdateManager;
 import dev.esophose.playerparticles.particles.PPlayerMovementListener;
 import dev.esophose.playerparticles.util.Metrics;
 import java.io.File;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
@@ -75,15 +77,16 @@ public class PlayerParticles extends JavaPlugin {
      */
     private Map<Class<?>, Manager> managers;
 
+    public PlayerParticles() {
+        INSTANCE = this;
+        this.managers = new LinkedHashMap<>();
+    }
+
     /**
      * Executes essential tasks for starting up the plugin
      */
     @Override
     public void onEnable() {
-        INSTANCE = this;
-
-        this.managers = new HashMap<>();
-
         this.reload();
 
         PluginManager pm = Bukkit.getPluginManager();
@@ -95,6 +98,8 @@ public class PlayerParticles extends JavaPlugin {
 
         if (PlaceholderAPIHook.enabled())
             new ParticlePlaceholderExpansion(this).register();
+
+        PlayerChatHook.setup();
     }
 
     @Override
@@ -141,21 +146,19 @@ public class PlayerParticles extends JavaPlugin {
      */
     public void reload() {
         this.managers.values().forEach(Manager::disable);
-        this.managers.clear();
+        this.managers.values().forEach(Manager::reload);
 
         this.getManager(CommandManager.class);
         this.getManager(ParticleStyleManager.class);
         this.getManager(ParticleGroupPresetManager.class);
         this.getManager(ConfigurationManager.class);
+        this.getManager(DataManager.class);
         this.getManager(DataMigrationManager.class);
-        this.getManager(PluginUpdateManager.class);
         this.getManager(ParticleManager.class);
         this.getManager(LocaleManager.class);
         this.getManager(ConfigurationManager.class);
         this.getManager(PermissionManager.class);
         this.getManager(PluginUpdateManager.class);
-
-        PlayerChatHook.setup();
     }
 
     /**
