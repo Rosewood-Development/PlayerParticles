@@ -26,6 +26,7 @@ package dev.esophose.playerparticles.styles;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.util.MathL;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Location;
@@ -51,12 +52,12 @@ public class ParticleStyleCompanion extends DefaultParticleStyle {
         Vector vector = new Vector();
         
         double t = (Math.PI / this.numParticles) * this.step;
-        double r = Math.sin(t) * this.size;
+        double r = MathL.sin(t) * this.size;
         double s = 2 * Math.PI * t;
 
-        vector.setX(this.xFactor * r * Math.cos(s) + this.xOffset);
-        vector.setZ(this.zFactor * r * Math.sin(s) + this.zOffset);
-        vector.setY(this.yFactor * this.size * Math.cos(t) + this.yOffset);
+        vector.setX(this.xFactor * r * MathL.cos(s) + this.xOffset);
+        vector.setZ(this.zFactor * r * MathL.sin(s) + this.zOffset);
+        vector.setY(this.yFactor * this.size * MathL.cos(t) + this.yOffset);
 
         for (int i = 0; i < this.particlesPerIteration; i++) {
             particles.add(new PParticle(location.clone().subtract(vector)));

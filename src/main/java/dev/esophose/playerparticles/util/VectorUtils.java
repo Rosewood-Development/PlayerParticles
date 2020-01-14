@@ -44,8 +44,8 @@ public final class VectorUtils {
      */
     public static Vector rotateAroundAxisX(Vector v, double angle) {
         double y, z, cos, sin;
-        cos = Math.cos(angle);
-        sin = Math.sin(angle);
+        cos = MathL.cos(angle);
+        sin = MathL.sin(angle);
         y = v.getY() * cos - v.getZ() * sin;
         z = v.getY() * sin + v.getZ() * cos;
         return v.setY(y).setZ(z);
@@ -60,8 +60,8 @@ public final class VectorUtils {
      */
     public static Vector rotateAroundAxisY(Vector v, double angle) {
         double x, z, cos, sin;
-        cos = Math.cos(angle);
-        sin = Math.sin(angle);
+        cos = MathL.cos(angle);
+        sin = MathL.sin(angle);
         x = v.getX() * cos + v.getZ() * sin;
         z = v.getX() * -sin + v.getZ() * cos;
         return v.setX(x).setZ(z);
@@ -76,8 +76,8 @@ public final class VectorUtils {
      */
     public static Vector rotateAroundAxisZ(Vector v, double angle) {
         double x, y, cos, sin;
-        cos = Math.cos(angle);
-        sin = Math.sin(angle);
+        cos = MathL.cos(angle);
+        sin = MathL.sin(angle);
         x = v.getX() * cos - v.getY() * sin;
         y = v.getX() * sin + v.getY() * cos;
         return v.setX(x).setY(y);
@@ -124,10 +124,10 @@ public final class VectorUtils {
         double yaw = Math.toRadians(-1 * (yawDegrees + 90));
         double pitch = Math.toRadians(-pitchDegrees);
 
-        double cosYaw = Math.cos(yaw);
-        double cosPitch = Math.cos(pitch);
-        double sinYaw = Math.sin(yaw);
-        double sinPitch = Math.sin(pitch);
+        double cosYaw = MathL.cos(yaw);
+        double cosPitch = MathL.cos(pitch);
+        double sinYaw = MathL.sin(yaw);
+        double sinPitch = MathL.sin(pitch);
 
         double initialX, initialY, initialZ;
         double x, y, z;

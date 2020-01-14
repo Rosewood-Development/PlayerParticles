@@ -3,6 +3,7 @@ package dev.esophose.playerparticles.styles;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.util.MathL;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Location;
@@ -24,9 +25,9 @@ public class ParticleStyleSphere extends DefaultParticleStyle {
             double v = Math.random();
             double theta = 2 * Math.PI * u;
             double phi = Math.acos(2 * v - 1);
-            double dx = radius * Math.sin(phi) * Math.cos(theta);
-            double dy = radius * Math.sin(phi) * Math.sin(theta);
-            double dz = radius * Math.cos(phi);
+            double dx = radius * MathL.sin(phi) * MathL.cos(theta);
+            double dy = radius * MathL.sin(phi) * MathL.sin(theta);
+            double dz = radius * MathL.cos(phi);
             particles.add(new PParticle(location.clone().add(dx, dy, dz)));
         }
 

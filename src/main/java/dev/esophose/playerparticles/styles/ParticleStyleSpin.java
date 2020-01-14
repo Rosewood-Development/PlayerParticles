@@ -3,27 +3,15 @@ package dev.esophose.playerparticles.styles;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.util.MathL;
 import java.util.Collections;
 import java.util.List;
 import org.bukkit.Location;
 
 public class ParticleStyleSpin extends DefaultParticleStyle {
 
-    private static double[] cos, sin;
     private static final int maxSteps = 30;
     private int step = 0;
-    
-    static {
-        cos = new double[maxSteps];
-        sin = new double[maxSteps];
-        
-        int i = 0;
-        for (double n = 0; n < Math.PI * 2; n += Math.PI * 2 / maxSteps) {
-            cos[i] = Math.cos(n);
-            sin[i] = Math.sin(n);
-            i++;
-        }
-    }
 
     public ParticleStyleSpin() {
         super("spin", true, true, -0.5);
@@ -31,10 +19,12 @@ public class ParticleStyleSpin extends DefaultParticleStyle {
 
     @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
+        double slice = (Math.PI * 2 / maxSteps) * this.step;
+
         double radius = .5;
-        double newX = location.getX() + radius * cos[this.step];
+        double newX = location.getX() + radius * MathL.cos(slice);
         double newY = location.getY() + 1.5;
-        double newZ = location.getZ() + radius * sin[this.step];
+        double newZ = location.getZ() + radius * MathL.sin(slice);
         return Collections.singletonList(new PParticle(new Location(location.getWorld(), newX, newY, newZ)));
     }
 

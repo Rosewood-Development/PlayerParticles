@@ -4,6 +4,7 @@ import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.util.MathL;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Location;
@@ -24,12 +25,12 @@ public class ParticleStyleWhirl extends DefaultParticleStyle {
         double speed = this.getSpeedByEffect(particle.getEffect());
 
         for (int i = 0; i < this.points; i++) {
-            double dx = Math.cos(this.step + (Math.PI * 2 * ((double) i / this.points)));
+            double dx = MathL.cos(this.step + (Math.PI * 2 * ((double) i / this.points)));
             double dy = -0.9;
-            double dz = Math.sin(this.step + (Math.PI * 2 * ((double) i / this.points)));
+            double dz = MathL.sin(this.step + (Math.PI * 2 * ((double) i / this.points)));
             double angle = Math.atan2(dz, dx);
-            double xAng = Math.cos(angle);
-            double zAng = Math.sin(angle);
+            double xAng = MathL.cos(angle);
+            double zAng = MathL.sin(angle);
             particles.add(new PParticle(location.clone().add(0, dy, 0), xAng, 0, zAng, speed, true));
         }
 

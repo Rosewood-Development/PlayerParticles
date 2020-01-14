@@ -3,6 +3,7 @@ package dev.esophose.playerparticles.styles;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.util.MathL;
 import dev.esophose.playerparticles.util.VectorUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +23,9 @@ public class ParticleStyleWings extends DefaultParticleStyle {
         List<PParticle> particles = new ArrayList<>();
         if (this.spawnTimer == 0) {
             for (double t = 0; t < Math.PI * 2; t += Math.PI / 48) {
-                double offset = (Math.pow(Math.E, Math.cos(t)) - 2 * Math.cos(t * 4) - Math.pow(Math.sin(t / 12), 5)) / 2;
-                double x = Math.sin(t) * offset;
-                double y = Math.cos(t) * offset;
+                double offset = (Math.pow(Math.E, MathL.cos(t)) - 2 * MathL.cos(t * 4) - Math.pow(MathL.sin(t / 12), 5)) / 2;
+                double x = MathL.sin(t) * offset;
+                double y = MathL.cos(t) * offset;
                 Vector v = VectorUtils.rotateAroundAxisY(new Vector(x, y, -0.3), -Math.toRadians(location.getYaw()));
                 particles.add(new PParticle(location.clone().add(v.getX(), v.getY(), v.getZ())));
             }

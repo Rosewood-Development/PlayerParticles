@@ -3,6 +3,7 @@ package dev.esophose.playerparticles.styles;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.util.MathL;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Location;
@@ -23,10 +24,10 @@ public class ParticleStyleRings extends DefaultParticleStyle {
         double ring1 = Math.PI / (maxStep / 2D) * this.step;
         double ring2 = Math.PI / (maxStep / 2D) * (((this.step + maxStep / 2D) % maxStep));
 
-        particles.add(new PParticle(location.clone().add(Math.cos(ring1), Math.sin(ring1), Math.sin(ring1))));
-        particles.add(new PParticle(location.clone().add(Math.cos(ring1 + Math.PI), Math.sin(ring1), Math.sin(ring1 + Math.PI))));
-        particles.add(new PParticle(location.clone().add(Math.cos(ring2), Math.sin(ring2), Math.sin(ring2))));
-        particles.add(new PParticle(location.clone().add(Math.cos(ring2 + Math.PI), Math.sin(ring2), Math.sin(ring2 + Math.PI))));
+        particles.add(new PParticle(location.clone().add(MathL.cos(ring1), MathL.sin(ring1), MathL.sin(ring1))));
+        particles.add(new PParticle(location.clone().add(MathL.cos(ring1 + Math.PI), MathL.sin(ring1), MathL.sin(ring1 + Math.PI))));
+        particles.add(new PParticle(location.clone().add(MathL.cos(ring2), MathL.sin(ring2), MathL.sin(ring2))));
+        particles.add(new PParticle(location.clone().add(MathL.cos(ring2 + Math.PI), MathL.sin(ring2), MathL.sin(ring2 + Math.PI))));
 
         return particles;
     }

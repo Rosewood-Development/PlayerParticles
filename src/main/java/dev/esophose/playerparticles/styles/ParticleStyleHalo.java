@@ -3,6 +3,7 @@ package dev.esophose.playerparticles.styles;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.util.MathL;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Location;
@@ -27,9 +28,9 @@ public class ParticleStyleHalo extends DefaultParticleStyle {
 
         for (int i = 0; i < points; i++) {
             double angle = slice * i;
-            double dx = radius * Math.cos(angle);
+            double dx = radius * MathL.cos(angle);
             double dy = 1.5;
-            double dz = radius * Math.sin(angle);
+            double dz = radius * MathL.sin(angle);
             particles.add(new PParticle(location.clone().add(dx, dy, dz)));
         }
         return particles;

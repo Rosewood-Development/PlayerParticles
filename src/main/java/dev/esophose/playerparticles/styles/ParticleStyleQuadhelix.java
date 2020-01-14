@@ -3,6 +3,7 @@ package dev.esophose.playerparticles.styles;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.util.MathL;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Location;
@@ -24,9 +25,9 @@ public class ParticleStyleQuadhelix extends DefaultParticleStyle {
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
         for (int i = 0; i < orbs; i++) {
-            double dx = -(Math.cos((this.stepX / (double) maxStepX) * (Math.PI * 2) + (((Math.PI * 2) / orbs) * i))) * ((maxStepY - Math.abs(this.stepY)) / (double) maxStepY);
+            double dx = -(MathL.cos((this.stepX / (double) maxStepX) * (Math.PI * 2) + (((Math.PI * 2) / orbs) * i))) * ((maxStepY - Math.abs(this.stepY)) / (double) maxStepY);
             double dy = (this.stepY / (double) maxStepY) * 1.5;
-            double dz = -(Math.sin((this.stepX / (double) maxStepX) * (Math.PI * 2) + (((Math.PI * 2) / orbs) * i))) * ((maxStepY - Math.abs(this.stepY)) / (double) maxStepY);
+            double dz = -(MathL.sin((this.stepX / (double) maxStepX) * (Math.PI * 2) + (((Math.PI * 2) / orbs) * i))) * ((maxStepY - Math.abs(this.stepY)) / (double) maxStepY);
             particles.add(new PParticle(location.clone().add(dx, dy, dz)));
         }
         return particles;

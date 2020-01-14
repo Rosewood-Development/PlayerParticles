@@ -9,6 +9,7 @@ import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.util.MathL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -73,8 +74,8 @@ public class ParticleStyleCelebration extends DefaultParticleStyle {
     private void spawnFirework(final Location location, final PPlayer pplayer, final ParticlePair particle, final Random random) {
         double angle = random.nextDouble() * Math.PI * 2;
         double distanceFrom = 1.25 + random.nextDouble() * 1.5;
-        double dx = Math.sin(angle) * distanceFrom;
-        double dz = Math.cos(angle) * distanceFrom;
+        double dx = MathL.sin(angle) * distanceFrom;
+        double dz = MathL.cos(angle) * distanceFrom;
         final Location loc = location.clone().add(dx, 1, dz);
         final int fuse = 3 + random.nextInt(3);
         Player player = pplayer.getPlayer();
@@ -102,9 +103,9 @@ public class ParticleStyleCelebration extends DefaultParticleStyle {
                         double v = random.nextDouble();
                         double theta = 2 * Math.PI * u;
                         double phi = Math.acos(2 * v - 1);
-                        double dx = radius * Math.sin(phi) * Math.cos(theta);
-                        double dy = radius * Math.sin(phi) * Math.sin(theta);
-                        double dz = radius * Math.cos(phi);
+                        double dx = radius * MathL.sin(phi) * MathL.cos(theta);
+                        double dy = radius * MathL.sin(phi) * MathL.sin(theta);
+                        double dz = radius * MathL.cos(phi);
                         
                         particles.add(new PParticle(this.location.clone().add(dx, dy, dz)));
                     }

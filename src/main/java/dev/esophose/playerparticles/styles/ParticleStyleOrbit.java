@@ -3,6 +3,7 @@ package dev.esophose.playerparticles.styles;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.util.MathL;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Location;
@@ -21,8 +22,8 @@ public class ParticleStyleOrbit extends DefaultParticleStyle {
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
         for (int i = 0; i < orbs; i++) {
-            double dx = -(Math.cos((this.step / (double) numSteps) * (Math.PI * 2) + (((Math.PI * 2) / orbs) * i)));
-            double dz = -(Math.sin((this.step / (double) numSteps) * (Math.PI * 2) + (((Math.PI * 2) / orbs) * i)));
+            double dx = -(MathL.cos((this.step / (double) numSteps) * (Math.PI * 2) + (((Math.PI * 2) / orbs) * i)));
+            double dz = -(MathL.sin((this.step / (double) numSteps) * (Math.PI * 2) + (((Math.PI * 2) / orbs) * i)));
             particles.add(new PParticle(location.clone().add(dx, 0, dz)));
         }
         return particles;

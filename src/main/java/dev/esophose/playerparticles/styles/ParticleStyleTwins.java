@@ -3,6 +3,7 @@ package dev.esophose.playerparticles.styles;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.util.MathL;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Location;
@@ -23,8 +24,8 @@ public class ParticleStyleTwins extends DefaultParticleStyle {
 
         int i = 0;
         for (double n = 0; n < numSteps; n++) {
-            cos[i] = -Math.cos(n / numSteps * Math.PI * 2);
-            sin[i] = -Math.sin(n / numSteps * Math.PI * 2);
+            cos[i] = -MathL.cos(n / numSteps * Math.PI * 2);
+            sin[i] = -MathL.sin(n / numSteps * Math.PI * 2);
             i++;
         }
     }

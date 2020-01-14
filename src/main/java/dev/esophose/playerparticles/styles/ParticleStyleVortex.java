@@ -26,6 +26,7 @@ package dev.esophose.playerparticles.styles;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.util.MathL;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Location;
@@ -50,7 +51,7 @@ public class ParticleStyleVortex extends DefaultParticleStyle {
         double radius = 2 * (1 - (double) this.step / this.maxStep);
         for (int i = 0; i < this.helices; i++) {
             double angle = this.step * this.radials + (2 * Math.PI * i / this.helices);
-            Vector v = new Vector(Math.cos(angle) * radius, this.step * this.grow - 1, Math.sin(angle) * radius);
+            Vector v = new Vector(MathL.cos(angle) * radius, this.step * this.grow - 1, MathL.sin(angle) * radius);
 
             particles.add(new PParticle(location.clone().add(v)));
         }

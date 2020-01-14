@@ -4,6 +4,7 @@ import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.util.MathL;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Location;
@@ -27,32 +28,32 @@ public class ParticleStyleInvocation extends DefaultParticleStyle {
         // Circle around everything, spawn less often
         if (this.circleStep % 5 == 0) {
             for (int i = 0; i < this.numSteps; i++) {
-                double dx = Math.cos(Math.PI * 2 * ((double) i / this.numSteps)) * this.radius;
+                double dx = MathL.cos(Math.PI * 2 * ((double) i / this.numSteps)) * this.radius;
                 double dy = -0.9;
-                double dz = Math.sin(Math.PI * 2 * ((double) i / this.numSteps)) * this.radius;
+                double dz = MathL.sin(Math.PI * 2 * ((double) i / this.numSteps)) * this.radius;
                 particles.add(new PParticle(location.clone().add(dx, dy, dz)));
             }
         }
 
         // Orbit going clockwise
         for (int i = 0; i < this.points; i++) {
-            double dx = Math.cos(this.step + (Math.PI * 2 * ((double) i / this.points))) * this.radius;
+            double dx = MathL.cos(this.step + (Math.PI * 2 * ((double) i / this.points))) * this.radius;
             double dy = -0.9;
-            double dz = Math.sin(this.step + (Math.PI * 2 * ((double) i / this.points))) * this.radius;
+            double dz = MathL.sin(this.step + (Math.PI * 2 * ((double) i / this.points))) * this.radius;
             double angle = Math.atan2(dz, dx);
-            double xAng = -Math.cos(angle);
-            double zAng = -Math.sin(angle);
+            double xAng = -MathL.cos(angle);
+            double zAng = -MathL.sin(angle);
             particles.add(new PParticle(location.clone().add(dx, dy, dz), xAng, 0, zAng, speed, true));
         }
 
         // Orbit going counter-clockwise
         for (int i = 0; i > -this.points; i--) {
-            double dx = Math.cos(-this.step + (Math.PI * 2 * ((double) i / this.points))) * this.radius;
+            double dx = MathL.cos(-this.step + (Math.PI * 2 * ((double) i / this.points))) * this.radius;
             double dy = -0.9;
-            double dz = Math.sin(-this.step + (Math.PI * 2 * ((double) i / this.points))) * this.radius;
+            double dz = MathL.sin(-this.step + (Math.PI * 2 * ((double) i / this.points))) * this.radius;
             double angle = Math.atan2(dz, dx);
-            double xAng = -Math.cos(angle);
-            double zAng = -Math.sin(angle);
+            double xAng = -MathL.cos(angle);
+            double zAng = -MathL.sin(angle);
             particles.add(new PParticle(location.clone().add(dx, dy, dz), xAng, 0, zAng, speed, true));
         }
 
