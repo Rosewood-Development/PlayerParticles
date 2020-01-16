@@ -15,7 +15,7 @@ public class ReloadCommandModule implements CommandModule {
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         PlayerParticles playerParticles = PlayerParticles.getInstance();
         LocaleManager localeManager = playerParticles.getManager(LocaleManager.class);
-        if (playerParticles.getManager(PermissionManager.class).canReloadPlugin(pplayer.getMessageDestination())) {
+        if (playerParticles.getManager(PermissionManager.class).canReloadPlugin(pplayer.getUnderlyingExecutor())) {
             playerParticles.reload();
             ParticleEffect.reloadSettings();
             DefaultStyles.reloadSettings(playerParticles.getManager(ParticleStyleManager.class));

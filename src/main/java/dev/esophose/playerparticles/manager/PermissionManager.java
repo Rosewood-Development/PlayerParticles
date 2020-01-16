@@ -2,12 +2,14 @@ package dev.esophose.playerparticles.manager;
 
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import dev.esophose.playerparticles.particles.OtherPPlayer;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
 
@@ -83,7 +85,11 @@ public class PermissionManager extends Manager {
      * @return If the player has reached the max number of particles in their active group
      */
     public boolean hasPlayerReachedMaxParticles(PPlayer pplayer) {
-        if (PPermission.PARTICLES_UNLIMITED.check(pplayer.getPlayer()))
+        if (PPermission.PARTICLES_UNLIMITED.check(pplayer.getUnderlyingExecutor()))
+            return false;
+
+        PPlayer executor = this.getUnderlyingExecutorAsPPlayer(pplayer);
+        if (executor != pplayer)
             return false;
 
         return pplayer.getActiveParticles().size() >= Setting.MAX_PARTICLES.getInt();
@@ -96,10 +102,14 @@ public class PermissionManager extends Manager {
      * @return If the player has reached the max number of saved particle groups
      */
     public boolean hasPlayerReachedMaxGroups(PPlayer pplayer) {
-        if (PPermission.GROUPS_UNLIMITED.check(pplayer.getPlayer()))
+        if (PPermission.GROUPS_UNLIMITED.check(pplayer.getUnderlyingExecutor()))
             return false;
 
-        return pplayer.getParticleGroups().size() - 1 >= Setting.MAX_GROUPS.getInt();
+        PPlayer executor = this.getUnderlyingExecutorAsPPlayer(pplayer);
+        if (executor != pplayer)
+            return false;
+
+        return executor.getParticleGroups().size() - 1 >= Setting.MAX_GROUPS.getInt();
     }
     
     /**
@@ -109,7 +119,7 @@ public class PermissionManager extends Manager {
      * @return If the player has permission to save groups
      */
     public boolean canPlayerSaveGroups(PPlayer pplayer) {
-        if (PPermission.GROUPS_UNLIMITED.check(pplayer.getPlayer()))
+        if (PPermission.GROUPS_UNLIMITED.check(pplayer.getUnderlyingExecutor()))
             return true;
 
         return Setting.MAX_GROUPS.getInt() != 0;
@@ -122,7 +132,11 @@ public class PermissionManager extends Manager {
      * @return If the player has reached the max number of fixed effects
      */
     public boolean hasPlayerReachedMaxFixedEffects(PPlayer pplayer) {
-        if (PPermission.FIXED_UNLIMITED.check(pplayer.getPlayer()))
+        if (PPermission.FIXED_UNLIMITED.check(pplayer.getUnderlyingExecutor()))
+            return false;
+
+        PPlayer executor = this.getUnderlyingExecutorAsPPlayer(pplayer);
+        if (executor != pplayer)
             return false;
 
         return pplayer.getFixedEffectIds().size() >= Setting.MAX_FIXED_EFFECTS.getInt();
@@ -140,11 +154,15 @@ public class PermissionManager extends Manager {
     /**
      * Gets the maximum number of particles a player is allowed to use
      * 
-     * @param player The player to check
+     * @param pplayer The pplayer to check
      * @return The maximum number of particles based on the config.yml value, or unlimited
      */
-    public int getMaxParticlesAllowed(Player player) {
-        if (PPermission.PARTICLES_UNLIMITED.check(player))
+    public int getMaxParticlesAllowed(PPlayer pplayer) {
+        if (PPermission.PARTICLES_UNLIMITED.check(pplayer.getUnderlyingExecutor()))
+            return Integer.MAX_VALUE;
+
+        PPlayer executor = this.getUnderlyingExecutorAsPPlayer(pplayer);
+        if (executor != pplayer)
             return Integer.MAX_VALUE;
 
         return Setting.MAX_PARTICLES.getInt();
@@ -176,8 +194,8 @@ public class PermissionManager extends Manager {
      * @param effect The effect to check
      * @return True if the player has permission to use the effect
      */
-    public boolean hasEffectPermission(Player player, ParticleEffect effect) {
-        return PPermission.EFFECT.check(player, effect.getInternalName());
+    public boolean hasEffectPermission(PPlayer player, ParticleEffect effect) {
+        return PPermission.EFFECT.check(player.getUnderlyingExecutor(), effect.getInternalName());
     }
 
     /**
@@ -188,8 +206,8 @@ public class PermissionManager extends Manager {
      * @param style The style to check
      * @return If the player has permission to use the style
      */
-    public boolean hasStylePermission(Player player, ParticleStyle style) {
-        return PPermission.STYLE.check(player, style.getInternalName());
+    public boolean hasStylePermission(PPlayer player, ParticleStyle style) {
+        return PPermission.STYLE.check(player.getUnderlyingExecutor(), style.getInternalName());
     }
 
     /**
@@ -198,7 +216,7 @@ public class PermissionManager extends Manager {
      * @param p The player to get effect names for
      * @return A String List of all effect names the given player has permission for
      */
-    public List<String> getEffectNamesUserHasPermissionFor(Player p) {
+    public List<String> getEffectNamesUserHasPermissionFor(PPlayer p) {
         List<String> list = new ArrayList<>();
         for (ParticleEffect pe : ParticleEffect.getEnabledEffects())
             if (this.hasEffectPermission(p, pe))
@@ -212,7 +230,7 @@ public class PermissionManager extends Manager {
      * @param p The player to get style names for
      * @return A String List of all style names the given player has permission for
      */
-    public List<String> getStyleNamesUserHasPermissionFor(Player p) {
+    public List<String> getStyleNamesUserHasPermissionFor(PPlayer p) {
         List<String> list = new ArrayList<>();
         for (ParticleStyle ps : this.playerParticles.getManager(ParticleStyleManager.class).getStyles())
             if (this.hasStylePermission(p, ps))
@@ -226,7 +244,7 @@ public class PermissionManager extends Manager {
      * @param p The player to get style names for
      * @return A String List of all fixable style names the given player has permission for
      */
-    public List<String> getFixableStyleNamesUserHasPermissionFor(Player p) {
+    public List<String> getFixableStyleNamesUserHasPermissionFor(PPlayer p) {
         List<String> list = new ArrayList<>();
         for (ParticleStyle ps : this.playerParticles.getManager(ParticleStyleManager.class).getStyles())
             if (ps.canBeFixed() && this.hasStylePermission(p, ps))
@@ -240,7 +258,7 @@ public class PermissionManager extends Manager {
      * @param p The player to get effects for
      * @return A List of all effects the given player has permission for
      */
-    public List<ParticleEffect> getEffectsUserHasPermissionFor(Player p) {
+    public List<ParticleEffect> getEffectsUserHasPermissionFor(PPlayer p) {
         List<ParticleEffect> list = new ArrayList<>();
         for (ParticleEffect pe : ParticleEffect.getEnabledEffects())
             if (this.hasEffectPermission(p, pe))
@@ -254,7 +272,7 @@ public class PermissionManager extends Manager {
      * @param p The player to get styles for
      * @return A List of all styles the given player has permission for
      */
-    public List<ParticleStyle> getStylesUserHasPermissionFor(Player p) {
+    public List<ParticleStyle> getStylesUserHasPermissionFor(PPlayer p) {
         List<ParticleStyle> list = new ArrayList<>();
         for (ParticleStyle ps : this.playerParticles.getManager(ParticleStyleManager.class).getStyles())
             if (this.hasStylePermission(p, ps))
@@ -268,8 +286,8 @@ public class PermissionManager extends Manager {
      * @param player The player to check the permission for
      * @return True if the player has permission
      */
-    public boolean canUseFixedEffects(Player player) {
-        return PPermission.FIXED.check(player);
+    public boolean canUseFixedEffects(PPlayer player) {
+        return PPermission.FIXED.check(player.getUnderlyingExecutor());
     }
     
     /**
@@ -278,8 +296,8 @@ public class PermissionManager extends Manager {
      * @param player The player to check the permission for
      * @return True if the player has permission to use /pp fixed clear
      */
-    public boolean canClearFixedEffects(Player player) {
-        return PPermission.FIXED_CLEAR.check(player);
+    public boolean canClearFixedEffects(PPlayer player) {
+        return PPermission.FIXED_CLEAR.check(player.getUnderlyingExecutor());
     }
 
     /**
@@ -288,8 +306,8 @@ public class PermissionManager extends Manager {
      * @param player The player to check the permission for
      * @return True if the player has permission to use /pp fixed teleport
      */
-    public boolean canTeleportToFixedEffects(Player player) {
-        return PPermission.FIXED_TELEPORT.check(player);
+    public boolean canTeleportToFixedEffects(PPlayer player) {
+        return PPermission.FIXED_TELEPORT.check(player.getUnderlyingExecutor());
     }
 
     /**
@@ -298,8 +316,8 @@ public class PermissionManager extends Manager {
      * @param player The player to check the permission for
      * @return True if the player has permission to open the GUI
      */
-    public boolean canOpenGui(Player player) {
-        return PPermission.GUI.check(player);
+    public boolean canOpenGui(PPlayer player) {
+        return PPermission.GUI.check(player.getUnderlyingExecutor());
     }
     
     /**
@@ -319,10 +337,30 @@ public class PermissionManager extends Manager {
      * @return If the player can use /ppo
      */
     public boolean canOverride(CommandSender sender) {
-        if (!(sender instanceof Player))
+        if (this.isConsole(sender))
             return true;
 
         return PPermission.OVERRIDE.check(sender);
+    }
+
+    private boolean isConsole(PPlayer pplayer) {
+        return this.isConsole(pplayer.getUnderlyingExecutor());
+    }
+
+    private boolean isConsole(CommandSender sender) {
+        return sender instanceof ConsoleCommandSender;
+    }
+
+    private PPlayer getUnderlyingExecutorAsPPlayer(PPlayer pplayer) {
+        if (pplayer instanceof OtherPPlayer) {
+            OtherPPlayer other = (OtherPPlayer) pplayer;
+            CommandSender executor = other.getUnderlyingExecutor();
+            if (this.isConsole(executor))
+                return null;
+            Player executingPlayer = (Player) executor;
+            return this.playerParticles.getManager(DataManager.class).getPPlayer(executingPlayer.getUniqueId());
+        }
+        return pplayer;
     }
 
 }

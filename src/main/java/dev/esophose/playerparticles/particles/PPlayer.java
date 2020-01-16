@@ -65,20 +65,18 @@ public class PPlayer {
     }
 
     /**
-     * Gets the Player from their UUID
-     * 
-     * @return The player if they are online, null if they are offline
+     * @return the underlying CommandSender who executed the command
      */
     public Player getPlayer() {
         return Bukkit.getPlayer(this.playerUUID);
     }
     
     /**
-     * Gets the destination for messages
+     * Gets the underlying CommandSender who executed the command
      * 
      * @return The destination for messages
      */
-    public CommandSender getMessageDestination() {
+    public CommandSender getUnderlyingExecutor() {
         return this.getPlayer();
     }
     

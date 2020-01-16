@@ -130,7 +130,7 @@ public class LocaleManager extends Manager {
      * @param stringPlaceholders The placeholders to apply
      */
     public void sendMessage(PPlayer pplayer, String messageKey, StringPlaceholders stringPlaceholders) {
-        pplayer.getMessageDestination().sendMessage(this.parsePlaceholders(pplayer.getPlayer(), this.getLocaleMessage("prefix") + this.getLocaleMessage(messageKey, stringPlaceholders)));
+        pplayer.getUnderlyingExecutor().sendMessage(this.parsePlaceholders(pplayer.getPlayer(), this.getLocaleMessage("prefix") + this.getLocaleMessage(messageKey, stringPlaceholders)));
     }
 
     /**
@@ -172,7 +172,7 @@ public class LocaleManager extends Manager {
      * @param stringPlaceholders The placeholders to apply
      */
     public void sendSimpleMessage(PPlayer pplayer, String messageKey, StringPlaceholders stringPlaceholders) {
-        pplayer.getMessageDestination().sendMessage(this.parsePlaceholders(pplayer.getPlayer(), this.getLocaleMessage(messageKey, stringPlaceholders)));
+        pplayer.getUnderlyingExecutor().sendMessage(this.parsePlaceholders(pplayer.getPlayer(), this.getLocaleMessage(messageKey, stringPlaceholders)));
     }
 
     /**
@@ -212,7 +212,7 @@ public class LocaleManager extends Manager {
      * @param message The message to send
      */
     public void sendCustomMessage(PPlayer pplayer, String message) {
-        this.sendCustomMessage(pplayer.getMessageDestination(), this.parsePlaceholders(pplayer.getPlayer(), message));
+        this.sendCustomMessage(pplayer.getUnderlyingExecutor(), this.parsePlaceholders(pplayer.getPlayer(), message));
     }
 
     /**

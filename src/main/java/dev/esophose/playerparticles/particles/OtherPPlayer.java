@@ -21,9 +21,9 @@ public class OtherPPlayer extends PPlayer {
     }
 
     /**
-     * @return The CommandSender where messages should be sent to
+     * @return the underlying CommandSender who executed the command
      */
-    public CommandSender getMessageDestination() {
+    public CommandSender getUnderlyingExecutor() {
         return this.sender;
     }
 

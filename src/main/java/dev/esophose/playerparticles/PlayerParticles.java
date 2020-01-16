@@ -4,11 +4,10 @@
  * * Convert fixed effect ids into names
  * + Add effect/style settings folder that lets you disable effects/style and edit style properties
  * + Add setting to disable particles while in combat
- * + Add a command aliases section to the config
- * * /ppo now uses your permissions instead of the player you are targetting
  */
 
  /*
+ * * /ppo now uses your permissions instead of the player you are targetting
  * + Add effect/style name customization through config files
  * * Fixed the 'swords' style so you have to be holding a sword/trident
  * * Fixed several styles ignoring the disabled worlds setting
