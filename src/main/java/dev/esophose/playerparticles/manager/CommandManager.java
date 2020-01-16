@@ -161,8 +161,8 @@ public class CommandManager extends Manager implements CommandExecutor, TabCompl
 
             this.playerParticles.getManager(DataManager.class).getPPlayer(p.getUniqueId(), (pplayer) -> {
                 PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
-                if (commandModule.requiresEffectsAndStyles() && (permissionManager.getEffectNamesUserHasPermissionFor(p).isEmpty() || permissionManager.getStyleNamesUserHasPermissionFor(p).isEmpty())) {
-                    localeManager.sendMessage(pplayer, "command-error-no-effects");
+                if (commandModule.requiresEffectsAndStyles() && (permissionManager.getEffectsUserHasPermissionFor(p).isEmpty() || permissionManager.getStylesUserHasPermissionFor(p).isEmpty())) {
+                    localeManager.sendMessage(pplayer, "command-error-missing-effects-or-styles");
                 } else {
                     commandModule.onCommandExecute(pplayer, cmdArgs);
                 }

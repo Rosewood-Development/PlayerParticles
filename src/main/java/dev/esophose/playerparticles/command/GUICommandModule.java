@@ -35,9 +35,9 @@ public class GUICommandModule implements CommandModule {
             return;
         }
 
-        if (!Setting.GUI_PRESETS_ONLY.getBoolean() && permissionManager.getEffectNamesUserHasPermissionFor(pplayer.getPlayer()).isEmpty()) {
+        if (!Setting.GUI_PRESETS_ONLY.getBoolean() && (permissionManager.getEffectsUserHasPermissionFor(pplayer.getPlayer()).isEmpty() || permissionManager.getStylesUserHasPermissionFor(pplayer.getPlayer()).isEmpty())) {
             if (byDefault) {
-                localeManager.sendMessage(pplayer, "command-error-no-effects");
+                localeManager.sendMessage(pplayer, "command-error-missing-effects-or-styles");
             } else {
                 localeManager.sendMessage(pplayer, "command-error-unknown");
             }

@@ -2,7 +2,6 @@
  * TODO: v7.0
  * + Add ability to create/manage fixed effects from the GUI
  * * Convert fixed effect ids into names
- * + Add effect/style name customization through config files
  * + Add effect/style settings folder that lets you disable effects/style and edit style properties
  * + Add setting to disable particles while in combat
  * + Add a command aliases section to the config
@@ -10,6 +9,7 @@
  */
 
  /*
+ * + Add effect/style name customization through config files
  * * Fixed the 'swords' style so you have to be holding a sword/trident
  * * Fixed several styles ignoring the disabled worlds setting
  * + Added a setting 'dust-size' to change the size of dust particles in 1.13+
@@ -26,6 +26,7 @@
  * * Fixed an issue where 'random' data would not parse properly in preset_groups.yml
  * * Fixed an issue where preset groups would not display in the GUI even if the player has permission for them
  * + Added permission playerparticles.override for /ppo
+ * * Changed how * permissions are handled, negative permissions should work now
  */
 
  /*
