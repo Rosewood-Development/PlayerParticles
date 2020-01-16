@@ -34,9 +34,9 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
         int index = 10;
         int nextWrap = 17;
         int maxIndex = 43;
-        List<ParticleGroupPreset> groups = PlayerParticles.getInstance().getManager(ParticleGroupPresetManager.class).getPresetGroupsForPlayer(pplayer.getPlayer());
+        List<ParticleGroupPreset> groups = PlayerParticles.getInstance().getManager(ParticleGroupPresetManager.class).getPresetGroupsForPlayer(pplayer);
         for (ParticleGroupPreset group : groups) {
-            if (!group.canPlayerUse(player))
+            if (!group.canPlayerUse(pplayer))
                 continue;
 
             List<ParticlePair> particles = new ArrayList<>(group.getGroup().getParticles().values());

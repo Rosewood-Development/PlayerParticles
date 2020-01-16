@@ -144,7 +144,7 @@ public class GroupCommandModule implements CommandModule {
                 return;
             }
             
-            if (!presetGroup.canPlayerUse(pplayer.getPlayer())) {
+            if (!presetGroup.canPlayerUse(pplayer)) {
                 localeManager.sendMessage(pplayer, "group-preset-no-permission", StringPlaceholders.single("group", groupName));
                 return;
             }
@@ -153,7 +153,7 @@ public class GroupCommandModule implements CommandModule {
             isPreset = true;
         }
 
-        if (!group.canPlayerUse(pplayer.getPlayer())) {
+        if (!group.canPlayerUse(pplayer)) {
             localeManager.sendMessage(pplayer, "group-no-permission", StringPlaceholders.single("group", groupName));
             return;
         }
@@ -230,7 +230,7 @@ public class GroupCommandModule implements CommandModule {
                 return;
             }
             
-            if (!presetGroup.canPlayerUse(pplayer.getPlayer())) {
+            if (!presetGroup.canPlayerUse(pplayer)) {
                 localeManager.sendMessage(pplayer, "group-preset-no-permission", StringPlaceholders.single("group", groupName));
                 return;
             }
@@ -273,7 +273,7 @@ public class GroupCommandModule implements CommandModule {
             groupsList = new StringBuilder(groupsList.substring(0, groupsList.length() - 2));
         
         StringBuilder presetsList = new StringBuilder();
-        for (ParticleGroupPreset group : PlayerParticles.getInstance().getManager(ParticleGroupPresetManager.class).getPresetGroupsForPlayer(pplayer.getPlayer()))
+        for (ParticleGroupPreset group : PlayerParticles.getInstance().getManager(ParticleGroupPresetManager.class).getPresetGroupsForPlayer(pplayer))
             presetsList.append(group.getGroup().getName()).append(", ");
         
         if (presetsList.toString().endsWith(", "))
@@ -309,7 +309,7 @@ public class GroupCommandModule implements CommandModule {
                     if (!group.getName().equals(ParticleGroup.DEFAULT_NAME))
                         groupNames.add(group.getName());
                 if (!args[0].equals("remove"))
-                    for (ParticleGroupPreset group : PlayerParticles.getInstance().getManager(ParticleGroupPresetManager.class).getPresetGroupsForPlayer(pplayer.getPlayer()))
+                    for (ParticleGroupPreset group : PlayerParticles.getInstance().getManager(ParticleGroupPresetManager.class).getPresetGroupsForPlayer(pplayer))
                         groupNames.add(group.getGroup().getName());
                 StringUtil.copyPartialMatches(args[1], groupNames, matches);
             }

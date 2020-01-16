@@ -60,7 +60,7 @@ public class GuiInventoryDefault extends GuiInventory {
 
         // Define what slots to put the icons at based on what other slots are visible
         boolean manageGroupsVisible = PlayerParticles.getInstance().getManager(PermissionManager.class).canPlayerSaveGroups(pplayer);
-        boolean loadPresetGroupVisible = !PlayerParticles.getInstance().getManager(ParticleGroupPresetManager.class).getPresetGroupsForPlayer(pplayer.getPlayer()).isEmpty();
+        boolean loadPresetGroupVisible = !PlayerParticles.getInstance().getManager(ParticleGroupPresetManager.class).getPresetGroupsForPlayer(pplayer).isEmpty();
         int manageParticlesSlot = -1, manageGroupsSlot = -1, loadPresetGroupSlot = -1;
 
         if (!manageGroupsVisible && !loadPresetGroupVisible) {

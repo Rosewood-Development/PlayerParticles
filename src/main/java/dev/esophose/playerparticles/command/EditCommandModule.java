@@ -84,7 +84,7 @@ public class EditCommandModule implements CommandModule {
         if (effect == null) {
             localeManager.sendMessage(pplayer, "effect-invalid", StringPlaceholders.single("effect", args[0]));
             return;
-        } else if (!PlayerParticles.getInstance().getManager(PermissionManager.class).hasEffectPermission(pplayer.getPlayer(), effect)) {
+        } else if (!PlayerParticles.getInstance().getManager(PermissionManager.class).hasEffectPermission(pplayer, effect)) {
             localeManager.sendMessage(pplayer, "effect-no-permission", StringPlaceholders.single("effect", effect.getName()));
             return;
         }
@@ -116,7 +116,7 @@ public class EditCommandModule implements CommandModule {
         if (style == null) {
             localeManager.sendMessage(pplayer, "style-invalid", StringPlaceholders.single("style", args[0]));
             return;
-        } else if (!PlayerParticles.getInstance().getManager(PermissionManager.class).hasStylePermission(pplayer.getPlayer(), style)) {
+        } else if (!PlayerParticles.getInstance().getManager(PermissionManager.class).hasStylePermission(pplayer, style)) {
             localeManager.sendMessage(pplayer, "style-no-permission", StringPlaceholders.single("style", style.getName()));
             return;
         }
@@ -229,11 +229,11 @@ public class EditCommandModule implements CommandModule {
                 switch (args[1].toLowerCase()) {
                 case "effect":
                     if (args.length == 3)
-                        StringUtil.copyPartialMatches(args[2], permissionManager.getEffectNamesUserHasPermissionFor(p), matches);
+                        StringUtil.copyPartialMatches(args[2], permissionManager.getEffectNamesUserHasPermissionFor(pplayer), matches);
                     break;
                 case "style":
                     if (args.length == 3)
-                        StringUtil.copyPartialMatches(args[2], permissionManager.getStyleNamesUserHasPermissionFor(p), matches);
+                        StringUtil.copyPartialMatches(args[2], permissionManager.getStyleNamesUserHasPermissionFor(pplayer), matches);
                     break;
                 case "data":
                     ParticleEffect effect = pplayer.getActiveParticle(id).getEffect();

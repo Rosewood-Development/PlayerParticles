@@ -52,7 +52,7 @@ public class ParticleGroup {
      * @param player The player to check
      * @return True if the player has permission
      */
-    public boolean canPlayerUse(Player player) {
+    public boolean canPlayerUse(PPlayer player) {
         PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
 
         // Make sure the player has permission for the number of particles in this group

@@ -34,7 +34,7 @@ public class AddCommandModule implements CommandModule {
         PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         
-        int maxParticlesAllowed = permissionManager.getMaxParticlesAllowed(pplayer.getPlayer());
+        int maxParticlesAllowed = permissionManager.getMaxParticlesAllowed(pplayer);
         if (pplayer.getActiveParticles().size() >= maxParticlesAllowed) {
             localeManager.sendMessage(pplayer, "add-reached-max", StringPlaceholders.single("amount", maxParticlesAllowed));
             return;
@@ -46,7 +46,7 @@ public class AddCommandModule implements CommandModule {
         if (effect == null) {
             localeManager.sendMessage(pplayer, "effect-invalid", StringPlaceholders.single("effect", args[0]));
             return;
-        } else if (!permissionManager.hasEffectPermission(pplayer.getPlayer(), effect)) {
+        } else if (!permissionManager.hasEffectPermission(pplayer, effect)) {
             localeManager.sendMessage(pplayer, "effect-no-permission", StringPlaceholders.single("effect", effect.getName()));
             return;
         }
@@ -55,7 +55,7 @@ public class AddCommandModule implements CommandModule {
         if (style == null) {
             localeManager.sendMessage(pplayer, "style-invalid", StringPlaceholders.single("style", args[1]));
             return;
-        } else if (!permissionManager.hasStylePermission(pplayer.getPlayer(), style)) {
+        } else if (!permissionManager.hasStylePermission(pplayer, style)) {
             localeManager.sendMessage(pplayer, "style-no-permission", StringPlaceholders.single("style", args[1]));
             return;
         }
@@ -118,10 +118,10 @@ public class AddCommandModule implements CommandModule {
         PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
 
         if (args.length <= 1) { // Effect name
-            if (args.length == 0) matches = permissionManager.getEffectNamesUserHasPermissionFor(p);
-            else StringUtil.copyPartialMatches(args[0], permissionManager.getEffectNamesUserHasPermissionFor(p), matches);
+            if (args.length == 0) matches = permissionManager.getEffectNamesUserHasPermissionFor(pplayer);
+            else StringUtil.copyPartialMatches(args[0], permissionManager.getEffectNamesUserHasPermissionFor(pplayer), matches);
         } else if (args.length == 2) { // Style name
-            StringUtil.copyPartialMatches(args[1], permissionManager.getStyleNamesUserHasPermissionFor(p), matches);
+            StringUtil.copyPartialMatches(args[1], permissionManager.getStyleNamesUserHasPermissionFor(pplayer), matches);
         } else { // Data
             ParticleEffect effect = ParticleEffect.fromName(args[0]);
             if (effect != null) {

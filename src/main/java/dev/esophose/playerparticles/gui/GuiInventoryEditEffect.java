@@ -24,7 +24,7 @@ public class GuiInventoryEditEffect extends GuiInventory {
         this.fillBorder(BorderColor.LIGHT_BLUE);
 
         // Select Effect Buttons
-        List<ParticleEffect> effectsUserHasPermissionFor = PlayerParticles.getInstance().getManager(PermissionManager.class).getEffectsUserHasPermissionFor(pplayer.getPlayer());
+        List<ParticleEffect> effectsUserHasPermissionFor = PlayerParticles.getInstance().getManager(PermissionManager.class).getEffectsUserHasPermissionFor(pplayer);
         int numberOfItems = effectsUserHasPermissionFor.size();
         int itemsPerPage = 28;
         int maxPages = (int) Math.ceil((double) numberOfItems / itemsPerPage);

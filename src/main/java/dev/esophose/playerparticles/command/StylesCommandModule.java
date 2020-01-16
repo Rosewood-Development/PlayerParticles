@@ -14,7 +14,7 @@ public class StylesCommandModule implements CommandModule {
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         Player p = pplayer.getPlayer();
 
-        List<String> styleNames = PlayerParticles.getInstance().getManager(PermissionManager.class).getStyleNamesUserHasPermissionFor(p);
+        List<String> styleNames = PlayerParticles.getInstance().getManager(PermissionManager.class).getStyleNamesUserHasPermissionFor(pplayer);
         StringBuilder toSend = new StringBuilder();
         for (String name : styleNames) {
             toSend.append(name).append(", ");

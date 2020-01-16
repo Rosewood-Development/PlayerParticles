@@ -16,7 +16,7 @@ public class GUICommandModule implements CommandModule {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         GuiManager guiManager = PlayerParticles.getInstance().getManager(GuiManager.class);
 
-        if (!permissionManager.canOpenGui(pplayer.getPlayer())) {
+        if (!permissionManager.canOpenGui(pplayer)) {
             localeManager.sendMessage(pplayer, "command-no-permission");
             return;
         }
@@ -35,7 +35,7 @@ public class GUICommandModule implements CommandModule {
             return;
         }
 
-        if (!Setting.GUI_PRESETS_ONLY.getBoolean() && (permissionManager.getEffectsUserHasPermissionFor(pplayer.getPlayer()).isEmpty() || permissionManager.getStylesUserHasPermissionFor(pplayer.getPlayer()).isEmpty())) {
+        if (!Setting.GUI_PRESETS_ONLY.getBoolean() && (permissionManager.getEffectsUserHasPermissionFor(pplayer).isEmpty() || permissionManager.getStylesUserHasPermissionFor(pplayer).isEmpty())) {
             if (byDefault) {
                 localeManager.sendMessage(pplayer, "command-error-missing-effects-or-styles");
             } else {

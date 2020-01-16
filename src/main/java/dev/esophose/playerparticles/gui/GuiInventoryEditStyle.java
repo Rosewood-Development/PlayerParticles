@@ -24,7 +24,7 @@ public class GuiInventoryEditStyle extends GuiInventory {
         this.fillBorder(BorderColor.BLUE);
 
         // Select Style Buttons
-        List<ParticleStyle> stylesUserHasPermissionFor = PlayerParticles.getInstance().getManager(PermissionManager.class).getStylesUserHasPermissionFor(pplayer.getPlayer());
+        List<ParticleStyle> stylesUserHasPermissionFor = PlayerParticles.getInstance().getManager(PermissionManager.class).getStylesUserHasPermissionFor(pplayer);
         int numberOfItems = stylesUserHasPermissionFor.size();
         int itemsPerPage = 28;
         int maxPages = (int) Math.ceil((double) numberOfItems / itemsPerPage);

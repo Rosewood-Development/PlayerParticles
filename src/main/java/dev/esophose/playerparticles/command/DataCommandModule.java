@@ -48,9 +48,9 @@ public class DataCommandModule implements CommandModule {
         List<String> matches = new ArrayList<>();
         if (args.length <= 1) {
             if (args.length == 0) {
-                matches = permissionManager.getEffectNamesUserHasPermissionFor(pplayer.getPlayer());
+                matches = permissionManager.getEffectNamesUserHasPermissionFor(pplayer);
             } else {
-                StringUtil.copyPartialMatches(args[0], permissionManager.getEffectNamesUserHasPermissionFor(pplayer.getPlayer()), matches);
+                StringUtil.copyPartialMatches(args[0], permissionManager.getEffectNamesUserHasPermissionFor(pplayer), matches);
             }
         }
         return matches;

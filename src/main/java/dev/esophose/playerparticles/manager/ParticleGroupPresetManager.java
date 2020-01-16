@@ -1,6 +1,7 @@
 package dev.esophose.playerparticles.manager;
 
 import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticleEffect.NoteColor;
 import dev.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
@@ -171,7 +172,7 @@ public class ParticleGroupPresetManager extends Manager {
      * @param player The player
      * @return a List of preset ParticleGroups the player can use
      */
-    public List<ParticleGroupPreset> getPresetGroupsForPlayer(Player player) {
+    public List<ParticleGroupPreset> getPresetGroupsForPlayer(PPlayer player) {
         return this.presetGroups.stream().filter(x -> x.canPlayerUse(player)).sorted(Comparator.comparing(ParticleGroupPreset::getDisplayName)).collect(Collectors.toList());
     }
     

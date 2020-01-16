@@ -74,7 +74,7 @@ public class GuiInventoryManageParticles extends GuiInventory {
         }
 
         // Create New Particle Button
-        boolean canCreate = pplayer.getActiveParticles().size() < PlayerParticles.getInstance().getManager(PermissionManager.class).getMaxParticlesAllowed(pplayer.getPlayer());
+        boolean canCreate = pplayer.getActiveParticles().size() < PlayerParticles.getInstance().getManager(PermissionManager.class).getMaxParticlesAllowed(pplayer);
         String lore = localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-create-particle-description");
         GuiActionButton createNewParticle = new GuiActionButton(
                 38,

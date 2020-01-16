@@ -34,7 +34,7 @@ public class FixedCommandModule implements CommandModule {
 
         Player p = pplayer.getPlayer();
 
-        if (!PlayerParticles.getInstance().getManager(PermissionManager.class).canUseFixedEffects(p)) {
+        if (!PlayerParticles.getInstance().getManager(PermissionManager.class).canUseFixedEffects(pplayer)) {
             localeManager.sendMessage(pplayer, "fixed-no-permission");
             return;
         }
@@ -132,7 +132,7 @@ public class FixedCommandModule implements CommandModule {
         if (effect == null) {
             localeManager.sendMessage(pplayer, "fixed-create-effect-invalid", StringPlaceholders.single("effect", args[3]));
             return;
-        } else if (!permissionManager.hasEffectPermission(p, effect)) {
+        } else if (!permissionManager.hasEffectPermission(pplayer, effect)) {
             localeManager.sendMessage(pplayer, "fixed-create-effect-no-permission", StringPlaceholders.single("effect", effect.getName()));
             return;
         }
@@ -141,7 +141,7 @@ public class FixedCommandModule implements CommandModule {
         if (style == null) {
             localeManager.sendMessage(pplayer, "fixed-create-style-invalid", StringPlaceholders.single("style", args[4]));
             return;
-        } else if (!permissionManager.hasStylePermission(p, style)) {
+        } else if (!permissionManager.hasStylePermission(pplayer, style)) {
             localeManager.sendMessage(pplayer, "fixed-create-style-no-permission", StringPlaceholders.single("style", args[4]));
             return;
         }
@@ -250,7 +250,7 @@ public class FixedCommandModule implements CommandModule {
                 if (effect == null) {
                     localeManager.sendMessage(pplayer, "fixed-edit-effect-invalid", StringPlaceholders.single("effect", args[2]));
                     return;
-                } else if (!permissionManager.hasEffectPermission(pplayer.getPlayer(), effect)) {
+                } else if (!permissionManager.hasEffectPermission(pplayer, effect)) {
                     localeManager.sendMessage(pplayer, "fixed-edit-effect-no-permission", StringPlaceholders.single("effect", effect.getName()));
                     return;
                 }
@@ -263,7 +263,7 @@ public class FixedCommandModule implements CommandModule {
                 if (style == null) {
                     localeManager.sendMessage(pplayer, "fixed-edit-style-invalid", StringPlaceholders.single("style", args[2]));
                     return;
-                } else if (!permissionManager.hasStylePermission(pplayer.getPlayer(), style)) {
+                } else if (!permissionManager.hasStylePermission(pplayer, style)) {
                     localeManager.sendMessage(pplayer, "fixed-edit-style-no-permission", StringPlaceholders.single("style", style.getName()));
                     return;
                 } else if (!style.canBeFixed()) {
@@ -443,7 +443,7 @@ public class FixedCommandModule implements CommandModule {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
 
-        if (!permissionManager.canClearFixedEffects(p)) {
+        if (!permissionManager.canClearFixedEffects(pplayer)) {
             localeManager.sendMessage(pplayer, "fixed-clear-no-permission");
             return;
         }
@@ -477,7 +477,7 @@ public class FixedCommandModule implements CommandModule {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
 
-        if (!permissionManager.canTeleportToFixedEffects(p)) {
+        if (!permissionManager.canTeleportToFixedEffects(pplayer)) {
             localeManager.sendMessage(pplayer, "fixed-teleport-no-permission");
             return;
         }
@@ -541,9 +541,9 @@ public class FixedCommandModule implements CommandModule {
                     }
 
                     if (args.length == 5) {
-                        StringUtil.copyPartialMatches(args[4], permissionManager.getEffectNamesUserHasPermissionFor(p), matches);
+                        StringUtil.copyPartialMatches(args[4], permissionManager.getEffectNamesUserHasPermissionFor(pplayer), matches);
                     } else if (args.length == 6) {
-                        StringUtil.copyPartialMatches(args[5], permissionManager.getFixableStyleNamesUserHasPermissionFor(p), matches);
+                        StringUtil.copyPartialMatches(args[5], permissionManager.getFixableStyleNamesUserHasPermissionFor(pplayer), matches);
                     } else if (args.length >= 7) {
                         ParticleEffect effect = ParticleEffect.fromName(args[4]);
                         if (effect != null) {
@@ -599,9 +599,9 @@ public class FixedCommandModule implements CommandModule {
                             }
                             StringUtil.copyPartialMatches(args[args.length - 1], possibleValues, matches);
                         } else if (property.equals("effect") && args.length == 4) {
-                            StringUtil.copyPartialMatches(args[3], permissionManager.getEffectNamesUserHasPermissionFor(p), matches);
+                            StringUtil.copyPartialMatches(args[3], permissionManager.getEffectNamesUserHasPermissionFor(pplayer), matches);
                         } else if (property.equals("style") && args.length == 4) {
-                            StringUtil.copyPartialMatches(args[3], permissionManager.getFixableStyleNamesUserHasPermissionFor(p), matches);
+                            StringUtil.copyPartialMatches(args[3], permissionManager.getFixableStyleNamesUserHasPermissionFor(pplayer), matches);
                         } else if (property.equals("data")) {
                             int id = -1;
                             try {

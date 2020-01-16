@@ -44,14 +44,14 @@ public class OtherCommandModule implements CommandModuleSecondary {
             return;
         }
         
-        if (commandModule.requiresEffectsAndStyles() && (permissionManager.getEffectsUserHasPermissionFor(other).isEmpty() || permissionManager.getStylesUserHasPermissionFor(other).isEmpty())) {
-            localeManager.sendMessage(sender, "other-success", StringPlaceholders.single("player", other.getName()));
-            localeManager.sendMessage(sender, "command-error-missing-effects-or-styles");
-            return;
-        }
-        
         PlayerParticles.getInstance().getManager(DataManager.class).getPPlayer(other.getUniqueId(), (pplayer) -> {
             OtherPPlayer otherPPlayer = new OtherPPlayer(sender, pplayer);
+
+            if (commandModule.requiresEffectsAndStyles() && (permissionManager.getEffectsUserHasPermissionFor(otherPPlayer).isEmpty() || permissionManager.getStylesUserHasPermissionFor(otherPPlayer).isEmpty())) {
+                localeManager.sendMessage(sender, "other-success", StringPlaceholders.single("player", other.getName()));
+                localeManager.sendMessage(sender, "command-error-missing-effects-or-styles");
+                return;
+            }
 
             localeManager.sendMessage(sender, "other-success", StringPlaceholders.single("player", other.getName()));
             
