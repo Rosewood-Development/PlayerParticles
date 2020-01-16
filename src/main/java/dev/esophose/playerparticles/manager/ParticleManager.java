@@ -160,6 +160,9 @@ public class ParticleManager extends Manager implements Listener, Runnable {
      */
     private void displayParticles(PPlayer pplayer, ParticlePair particle, Location location) {
         if (!this.playerParticles.getManager(ParticleStyleManager.class).isEventHandled(particle.getStyle())) {
+            if (Setting.TOGGLE_ON_COMBAT.getBoolean() && pplayer.isInCombat())
+                return;
+
             if (Setting.TOGGLE_ON_MOVE.getBoolean() && particle.getStyle().canToggleWithMovement() && pplayer.isMoving()) {
                 for (PParticle pparticle : DefaultStyles.FEET.getParticles(particle, location))
                     ParticleEffect.display(particle, pparticle, false, pplayer.getPlayer());

@@ -57,7 +57,7 @@ public abstract class DefaultParticleStyle implements ParticleStyle {
      */
     public final void loadSettings(boolean reloadConfig) {
         if (reloadConfig)
-            this.config.reloadConfig();
+            this.setDefaultSettings();
 
         this.styleName = this.config.getString("style-name");
         this.enabled = this.config.getBoolean("enabled");

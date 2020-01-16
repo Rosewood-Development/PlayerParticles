@@ -1,14 +1,16 @@
-package dev.esophose.playerparticles.particles;
+package dev.esophose.playerparticles.particles.listener;
 
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.manager.DataManager;
+import dev.esophose.playerparticles.particles.PPlayer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -35,7 +37,7 @@ public class PPlayerMovementListener implements Listener {
                 } else {
                     int standingTime = this.timeSinceLastMovement.get(uuid);
                     pplayer.setMoving(standingTime < Setting.TOGGLE_ON_MOVE_DELAY.getInt());
-                    if (standingTime < Setting.TOGGLE_ON_MOVE_DELAY.getInt())
+                    if (pplayer.isMoving())
                         this.timeSinceLastMovement.replace(uuid, standingTime + CHECK_INTERVAL);
                 }
             }
@@ -55,9 +57,11 @@ public class PPlayerMovementListener implements Listener {
         if (!Setting.TOGGLE_ON_MOVE.getBoolean())
             return;
 
-        if (event.getTo() != null && event.getTo().getBlock() == event.getFrom().getBlock())
+        Location to = event.getTo();
+        Location from = event.getFrom();
+        if (to == null || (to.getBlockX() == from.getBlockX() && to.getBlockY() == from.getBlockY() && to.getBlockZ() == from.getBlockZ()))
             return;
-        
+
         UUID playerUUID = event.getPlayer().getUniqueId();
         if (!this.timeSinceLastMovement.containsKey(playerUUID)) {
             this.timeSinceLastMovement.put(playerUUID, 0);

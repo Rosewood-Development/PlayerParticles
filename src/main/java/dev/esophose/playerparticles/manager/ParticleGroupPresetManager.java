@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 
 public class ParticleGroupPresetManager extends Manager {
     

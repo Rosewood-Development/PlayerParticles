@@ -39,6 +39,11 @@ public class PPlayer {
     private boolean isMoving;
 
     /**
+     * If the player is in combat
+     */
+    private boolean inCombat;
+
+    /**
      * Constructs a new PPlayer
      * 
      * @param uuid The player UUID
@@ -53,6 +58,7 @@ public class PPlayer {
         
         this.particlesHidden = particlesHidden;
         this.isMoving = false;
+        this.inCombat = false;
     }
 
     /**
@@ -123,6 +129,24 @@ public class PPlayer {
      */
     public boolean isMoving() {
         return this.isMoving;
+    }
+
+    /**
+     * Sets the player's combat state
+     *
+     * @param inCombat True if the player is in combat, otherwise false
+     */
+    public void setInCombat(boolean inCombat) {
+        this.inCombat = inCombat;
+    }
+
+    /**
+     * Gets if a player is in combat
+     *
+     * @return True if the player is in combat
+     */
+    public boolean isInCombat() {
+        return this.inCombat;
     }
 
     /**

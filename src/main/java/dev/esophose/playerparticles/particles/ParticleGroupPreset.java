@@ -1,7 +1,6 @@
 package dev.esophose.playerparticles.particles;
 
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 
 public class ParticleGroupPreset {
 

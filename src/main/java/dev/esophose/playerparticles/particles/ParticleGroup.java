@@ -4,7 +4,6 @@ import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.PermissionManager;
 import java.util.HashMap;
 import java.util.Map;
-import org.bukkit.entity.Player;
 
 public class ParticleGroup {
     

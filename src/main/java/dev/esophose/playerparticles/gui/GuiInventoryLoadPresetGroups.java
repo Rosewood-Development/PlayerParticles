@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 public class GuiInventoryLoadPresetGroups extends GuiInventory {
 
@@ -28,8 +27,6 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
         GuiManager guiManager = PlayerParticles.getInstance().getManager(GuiManager.class);
 
         this.fillBorder(BorderColor.GREEN);
-
-        Player player = pplayer.getPlayer();
 
         int index = 10;
         int nextWrap = 17;

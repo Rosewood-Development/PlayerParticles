@@ -154,7 +154,7 @@ public enum ParticleEffect {
             return;
 
         if (reloadConfig)
-            this.config.reloadConfig();
+            this.setDefaultSettings();
 
         this.effectName = this.config.getString("effect-name");
         this.enabled = this.config.getBoolean("enabled");

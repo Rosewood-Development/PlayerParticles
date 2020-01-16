@@ -3,12 +3,12 @@
  * + Add ability to create/manage fixed effects from the GUI
  * * Convert fixed effect ids into names
  * + Add effect/style settings folder that lets you disable effects/style and edit style properties
- * + Add setting to disable particles while in combat
  */
 
  /*
+ * + Added setting to disable particles while in combat
  * * /ppo now uses your permissions instead of the player you are targetting
- * + Add effect/style name customization through config files
+ * + Added effect/style name customization through config files
  * * Fixed the 'swords' style so you have to be holding a sword/trident
  * * Fixed several styles ignoring the disabled worlds setting
  * + Added a setting 'dust-size' to change the size of dust particles in 1.13+
@@ -53,7 +53,8 @@ import dev.esophose.playerparticles.manager.ParticleManager;
 import dev.esophose.playerparticles.manager.ParticleStyleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.manager.PluginUpdateManager;
-import dev.esophose.playerparticles.particles.PPlayerMovementListener;
+import dev.esophose.playerparticles.particles.listener.PPlayerCombatListener;
+import dev.esophose.playerparticles.particles.listener.PPlayerMovementListener;
 import dev.esophose.playerparticles.util.Metrics;
 import java.io.File;
 import java.util.LinkedHashMap;
@@ -91,6 +92,7 @@ public class PlayerParticles extends JavaPlugin {
 
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new PPlayerMovementListener(), this);
+        pm.registerEvents(new PPlayerCombatListener(), this);
         pm.registerEvents(new PlayerChatHook(), this);
 
         if (Setting.SEND_METRICS.getBoolean())

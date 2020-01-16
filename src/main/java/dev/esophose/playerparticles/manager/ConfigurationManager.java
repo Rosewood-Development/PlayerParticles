@@ -41,6 +41,8 @@ public class ConfigurationManager extends Manager {
         GUI_BUTTON_SOUND("gui-button-sound", true, "If clicking a GUI button should make a noise"),
         TOGGLE_ON_MOVE("toggle-on-move", false, "If true, styles will not display while the player is moving", "They will instead have the effect displayed at their feet", "Note: Not all styles abide by this rule, but most will"),
         TOGGLE_ON_MOVE_DELAY("toggle-on-move-delay", 9, "The time (in ticks) a player has to be standing still before they are considered to be stopped", "This setting has no effect if toggle-on-move is set to false", "The value must be a positive whole number"),
+        TOGGLE_ON_COMBAT("toggle-on-combat", false, "If true, particles will be completely disabled while the player is in combat"),
+        TOGGLE_ON_COMBAT_DELAY("toggle-on-combat-delay", 15, "The time (in seconds) a player has to not be damaged/attacked to be considered out of combat", "This setting has no effect if toggle-on-combat is set to false", "The value must be a positive whole number"),
         DISABLED_WORLDS("disabled-worlds", Collections.singletonList("disabled_world_name"), "A list of worlds that the plugin is disabled in"),
         MAX_PARTICLES("max-particles", 3, "The maximum number of particles a player can apply at once", "The GUI will only display up to 21, don't set this any higher than that"),
         MAX_GROUPS("max-groups", 10, "The maximum number of groups a player can have saved", "The GUI will only display up to 21, don't set this any higher than that"),
