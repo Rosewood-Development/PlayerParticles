@@ -36,6 +36,7 @@ public class ParticleStyleVortex extends DefaultParticleStyle {
 
     private int step = 0;
 
+    private double radius;
     private double grow;
     private double radials;
     private int helices;
@@ -49,7 +50,7 @@ public class ParticleStyleVortex extends DefaultParticleStyle {
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
 
-        double radius = 2 * (1 - (double) this.step / this.maxStep);
+        double radius = this.radius * (1 - (double) this.step / this.maxStep);
         for (int i = 0; i < this.helices; i++) {
             double angle = this.step * this.radials + (2 * Math.PI * i / this.helices);
             Vector v = new Vector(MathL.cos(angle) * radius, this.step * this.grow - 1, MathL.sin(angle) * radius);
@@ -67,7 +68,8 @@ public class ParticleStyleVortex extends DefaultParticleStyle {
 
     @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
-        this.setIfNotExists("grow", 0.05, "How much to change the radius per particle");
+        this.setIfNotExists("radius", 2.0, "The bottom radius of the vortex");
+        this.setIfNotExists("grow", 0.05, "How much to change the height per particle");
         this.setIfNotExists("radials", 16, "The steepness of how fast the particles grow upwards", "More = faster/taller growth");
         this.setIfNotExists("helices", 4, "The number of orbs spinning around the player");
         this.setIfNotExists("step-amount", 70, "How many steps it takes to reach the highest point");
@@ -75,6 +77,7 @@ public class ParticleStyleVortex extends DefaultParticleStyle {
 
     @Override
     protected void loadSettings(CommentedFileConfiguration config) {
+        this.radius = config.getDouble("radius");
         this.grow = config.getDouble("grow");
         this.radials = Math.PI / config.getInt("radials");
         this.helices = config.getInt("helices");
