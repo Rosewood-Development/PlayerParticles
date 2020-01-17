@@ -50,7 +50,7 @@ public class ConfigurationManager extends Manager {
         MAX_FIXED_EFFECT_CREATION_DISTANCE("max-fixed-effect-creation-distance", 32, "Max fixed effect creation distance", "Determines how far away a player may create a fixed effect from themselves", "This measurement is in blocks", "Set to 0 for infinite distance"),
         TICKS_PER_PARTICLE("ticks-per-particle", 1, "How many ticks to wait before spawning more particles", "Increasing this value may cause less lag (if there was any), but will decrease prettiness", "Only use whole numbers greater than or equal to 1", "Going over 3 will likely look terrible"),
         PARTICLE_RENDER_RANGE_PLAYER("particle-render-range-player", 48, "From how many blocks away should a player be able to see the particles from another player?"),
-        PARTICLE_RENDER_RANGE_FIXED_EFFECT("particle-render-range-fixed-effect", 32, "From how many blocks away should a player be able to see the particles from a fixed effect?"),
+        PARTICLE_RENDER_RANGE_FIXED_EFFECT("particle-render-range-fixed-effect", 192, "From how many blocks away should a player be able to see the particles from a fixed effect?"),
         RAINBOW_CYCLE_SPEED("rainbow-cycle-speed", 2, "How many out of 360 hue ticks to move per game tick", "Higher values make the rainbow cycle faster", "Note: Must be a positive whole number"),
         DUST_SIZE("dust-size", 1, "How large should dust particles appear?", "Note: Can include decimals", "Only works in 1.13+"),
 
