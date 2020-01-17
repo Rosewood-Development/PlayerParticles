@@ -10,7 +10,11 @@ import org.bukkit.Location;
 
 public class ParticleStyleHalo extends DefaultParticleStyle {
 
-    private int step = 0;
+    private boolean skipNextSpawn = false;
+
+    private int points;
+    private double radius;
+    private double playerOffset;
 
     public ParticleStyleHalo() {
         super("halo", true, false, -0.5);
@@ -19,18 +23,16 @@ public class ParticleStyleHalo extends DefaultParticleStyle {
     @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
-        if (this.step % 2 == 0)
+        if (this.skipNextSpawn)
             return particles;
 
-        int points = 16;
-        double radius = .65;
-        double slice = 2 * Math.PI / points;
+        double slice = 2 * Math.PI / this.points;
 
-        for (int i = 0; i < points; i++) {
+        for (int i = 0; i < this.points; i++) {
             double angle = slice * i;
-            double dx = radius * MathL.cos(angle);
-            double dy = 1.5;
-            double dz = radius * MathL.sin(angle);
+            double dx = this.radius * MathL.cos(angle);
+            double dy = this.playerOffset;
+            double dz = this.radius * MathL.sin(angle);
             particles.add(new PParticle(location.clone().add(dx, dy, dz)));
         }
         return particles;
@@ -38,19 +40,21 @@ public class ParticleStyleHalo extends DefaultParticleStyle {
 
     @Override
     public void updateTimers() {
-        this.step++;
-        if (this.step > 30)
-            this.step = 0;
+        this.skipNextSpawn = !this.skipNextSpawn;
     }
 
     @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
-
+        this.setIfNotExists("particle-amount", 16, "The number of points in the halo");
+        this.setIfNotExists("radius", 0.65, "The radius of the halo");
+        this.setIfNotExists("player-offset", 1.5, "How far to offset the player location");
     }
 
     @Override
     protected void loadSettings(CommentedFileConfiguration config) {
-
+        this.points = config.getInt("particle-amount");
+        this.radius = config.getDouble("radius");
+        this.playerOffset = config.getDouble("player-offset");
     }
 
 }

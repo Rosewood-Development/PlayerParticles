@@ -14,6 +14,8 @@ public class ParticleStyleWings extends DefaultParticleStyle {
 
     private int spawnTimer = 0; // Spawn particles every 3 ticks
 
+    private int spawnDelay;
+
     public ParticleStyleWings() {
         super("wings", false, true, 0);
     }
@@ -36,17 +38,17 @@ public class ParticleStyleWings extends DefaultParticleStyle {
     @Override
     public void updateTimers() {
         this.spawnTimer++;
-        this.spawnTimer %= 3;
+        this.spawnTimer %= this.spawnDelay;
     }
 
     @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
-
+        this.setIfNotExists("spawn-delay", 3, "The number of ticks to wait between particle spawns");
     }
 
     @Override
     protected void loadSettings(CommentedFileConfiguration config) {
-
+        this.spawnDelay = config.getInt("spawn-delay");
     }
 
 }

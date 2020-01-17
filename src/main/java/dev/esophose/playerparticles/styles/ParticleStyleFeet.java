@@ -9,6 +9,11 @@ import org.bukkit.Location;
 
 public class ParticleStyleFeet extends DefaultParticleStyle {
 
+    private double feetOffset;
+    private double particleSpreadX, particleSpreadY, particleSpreadZ;
+    private double particleSpeed;
+    private int particlesPerTick;
+
     public ParticleStyleFeet() {
         super("feet", true, false, 0.5);
     }
@@ -16,7 +21,8 @@ public class ParticleStyleFeet extends DefaultParticleStyle {
     @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
-        particles.add(new PParticle(location.clone().subtract(0, 0.95, 0), 0.4F, 0.0F, 0.4F, 0.0F));
+        for (int i = 0; i < this.particlesPerTick; i++)
+            particles.add(new PParticle(location.clone().add(0, this.feetOffset, 0), this.particleSpreadX, this.particleSpreadY, this.particleSpreadZ, this.particleSpeed));
         return particles;
     }
 
@@ -27,12 +33,22 @@ public class ParticleStyleFeet extends DefaultParticleStyle {
 
     @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
-
+        this.setIfNotExists("feet-offset", -0.95, "How far to offset the player location vertically");
+        this.setIfNotExists("particle-spread-x", 0.4, "How far to spread the particles on the x-axis");
+        this.setIfNotExists("particle-spread-y", 0.0, "How far to spread the particles on the y-axis");
+        this.setIfNotExists("particle-spread-z", 0.4, "How far to spread the particles on the z-axis");
+        this.setIfNotExists("particle-speed", 0.0, "The speed of the particles");
+        this.setIfNotExists("particles-per-tick", 1, "How many particles to spawn per tick");
     }
 
     @Override
     protected void loadSettings(CommentedFileConfiguration config) {
-
+        this.feetOffset = config.getDouble("feet-offset");
+        this.particleSpreadX = config.getDouble("particle-spread-x");
+        this.particleSpreadY = config.getDouble("particle-spread-y");
+        this.particleSpreadZ = config.getDouble("particle-spread-z");
+        this.particleSpeed = config.getDouble("particle-speed");
+        this.particlesPerTick = config.getInt("particles-per-tick");
     }
 
 }

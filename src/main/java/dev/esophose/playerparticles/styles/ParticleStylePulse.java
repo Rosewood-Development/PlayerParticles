@@ -11,10 +11,13 @@ import org.bukkit.Location;
 
 public class ParticleStylePulse extends DefaultParticleStyle {
 
-    private int points = 50;
-    private double radius = 0.5;
     private double step = 0;
-    private int numSteps = 15;
+
+    private int points;
+    private double radius;
+    private double offset;
+    private int numSteps;
+    private double speedMultiplier;
 
     public ParticleStylePulse() {
         super("pulse", true, true, 0.5);
@@ -23,12 +26,12 @@ public class ParticleStylePulse extends DefaultParticleStyle {
     @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
-        double speed = this.getSpeedByEffect(particle.getEffect());
+        double speed = this.getSpeedByEffect(particle.getEffect()) * this.speedMultiplier;
 
         if (this.step == 0) {
             for (int i = 0; i < this.points; i++) {
                 double dx = MathL.cos(Math.PI * 2 * ((double) i / this.points)) * this.radius;
-                double dy = -0.9;
+                double dy = this.offset;
                 double dz = MathL.sin(Math.PI * 2 * ((double) i / this.points)) * this.radius;
                 double angle = Math.atan2(dz, dx);
                 double xAng = MathL.cos(angle);
@@ -76,12 +79,20 @@ public class ParticleStylePulse extends DefaultParticleStyle {
 
     @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
-
+        this.setIfNotExists("points", 50, "The number of points to spawn in the pulse circle");
+        this.setIfNotExists("radius", 0.5, "The radius of the pulse circle");
+        this.setIfNotExists("offset", -0.9, "The amount to vertically offset from the player location");
+        this.setIfNotExists("delay", 15, "How many ticks to wait between pulses");
+        this.setIfNotExists("speed-multiplier", 1, "A multiplier to change how fast the particles shoot away");
     }
 
     @Override
     protected void loadSettings(CommentedFileConfiguration config) {
-
+        this.points = config.getInt("points");
+        this.radius = config.getDouble("radius");
+        this.offset = config.getDouble("offset");
+        this.numSteps = config.getInt("delay");
+        this.speedMultiplier = config.getDouble("speed-multiplier");
     }
 
 }

@@ -18,19 +18,18 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 public class ParticleStyleHurt extends DefaultParticleStyle implements Listener {
 
+    private int thickMultiplier;
+
     public ParticleStyleHurt() {
         super("hurt", false, false, 0);
     }
 
     @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
-        List<PParticle> baseParticles = DefaultStyles.THICK.getParticles(particle, location);
-
-        int multiplyingFactor = 3; // Uses the same logic as ParticleStyleThick except multiplies the resulting particles by 3x
         List<PParticle> particles = new ArrayList<>();
-        for (int i = 0; i < baseParticles.size() * multiplyingFactor; i++) {
-            particles.add(baseParticles.get(i % baseParticles.size()));
-        }
+
+        for (int i = 0; i < this.thickMultiplier; i++)
+            particles.addAll(DefaultStyles.THICK.getParticles(particle, location));
 
         return particles;
     }
@@ -58,12 +57,12 @@ public class ParticleStyleHurt extends DefaultParticleStyle implements Listener 
 
     @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
-
+        this.setIfNotExists("thick-multiplier", 3, "How much to multiply the particles by", "This style uses the same spawning as the 'thick' style");
     }
 
     @Override
     protected void loadSettings(CommentedFileConfiguration config) {
-
+        this.thickMultiplier = config.getInt("thick-multiplier");
     }
 
 }

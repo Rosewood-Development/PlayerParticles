@@ -13,6 +13,8 @@ public class ParticleStyleBatman extends DefaultParticleStyle {
     
     private int step = 0;
 
+    private int spawnDelay;
+
     public ParticleStyleBatman() {
         super("batman", true, true, -1);
     }
@@ -115,17 +117,17 @@ public class ParticleStyleBatman extends DefaultParticleStyle {
 
     @Override
     public void updateTimers() {
-        this.step = (this.step + 1) % 20; // Only spawn once per second
+        this.step = (this.step + 1) % this.spawnDelay; // Only spawn once per second
     }
 
     @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
-
+        this.setIfNotExists("spawn-delay", 20, "The number of ticks to wait between particle spawns");
     }
 
     @Override
     protected void loadSettings(CommentedFileConfiguration config) {
-
+        this.spawnDelay = config.getInt("spawn-delay");
     }
 
 }

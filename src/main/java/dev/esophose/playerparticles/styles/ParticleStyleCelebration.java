@@ -22,7 +22,17 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class ParticleStyleCelebration extends DefaultParticleStyle {
 
     private int step = 0;
-    private final int spawnTime = 15;
+
+    private int spawnFrequency;
+    private int burstAmount;
+    private double baseBurstSize;
+    private double burstSizeRandomizer;
+    private int baseFuseLength;
+    private int fuseLengthRandomizer;
+    private double baseDistanceFrom;
+    private double distanceFromRandomizer;
+    private double fuseSpacing;
+    private ParticleEffect fuseEffect;
 
     public ParticleStyleCelebration() {
         super("celebration", true, true, 0);
@@ -43,7 +53,7 @@ public class ParticleStyleCelebration extends DefaultParticleStyle {
         ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
 
         this.step++;
-        if (this.step == this.spawnTime) {
+        if (this.step == this.spawnFrequency) {
             this.step = 0;
             
             Random random = new Random();
@@ -63,21 +73,42 @@ public class ParticleStyleCelebration extends DefaultParticleStyle {
 
     @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
-
+        this.setIfNotExists("spawn-frequency", 15, "How many ticks to wait between spawns");
+        this.setIfNotExists("burst-amount", 40, "How many particles to spawn per burst");
+        this.setIfNotExists("base-burst-size", 0.6, "The minimum size of the particle burst");
+        this.setIfNotExists("burst-size-randomizer", 0.2, "The maximum size to add to the base of the particle burst");
+        this.setIfNotExists("base-fuse-length", 4, "The minimum fuse length");
+        this.setIfNotExists("fuse-length-randomizer", 3, "The max length to add to the base of the fuse");
+        this.setIfNotExists("base-distance-from", 1.25, "The minimum distance to spawn from the player");
+        this.setIfNotExists("distance-from-randomizer", 1.5, "The max distance to add to the base of the distance");
+        this.setIfNotExists("fuse-spacing", 0.25, "The vertical distance between fuse particles");
+        this.setIfNotExists("fuse-effect", "firework", "The effect type to use for the fuse particles");
     }
 
     @Override
     protected void loadSettings(CommentedFileConfiguration config) {
+        this.spawnFrequency = config.getInt("spawn-frequency");
+        this.burstAmount = config.getInt("burst-amount");
+        this.baseBurstSize = config.getDouble("base-burst-size");
+        this.burstSizeRandomizer = config.getDouble("burst-size-randomizer");
+        this.baseFuseLength = config.getInt("base-fuse-length");
+        this.fuseLengthRandomizer = config.getInt("fuse-length-randomizer");
+        this.baseDistanceFrom = config.getDouble("base-distance-from");
+        this.distanceFromRandomizer = config.getDouble("distance-from-randomizer");
+        this.fuseSpacing = config.getDouble("fuse-spacing");
+        this.fuseEffect = ParticleEffect.fromInternalName(config.getString("fuse-effect"));
 
+        if (this.fuseEffect == null)
+            this.fuseEffect = ParticleEffect.FIREWORK;
     }
     
     private void spawnFirework(final Location location, final PPlayer pplayer, final ParticlePair particle, final Random random) {
         double angle = random.nextDouble() * Math.PI * 2;
-        double distanceFrom = 1.25 + random.nextDouble() * 1.5;
+        double distanceFrom = this.baseDistanceFrom + random.nextDouble() * this.distanceFromRandomizer;
         double dx = MathL.sin(angle) * distanceFrom;
         double dz = MathL.cos(angle) * distanceFrom;
         final Location loc = location.clone().add(dx, 1, dz);
-        final int fuse = 3 + random.nextInt(3);
+        final int fuse = this.baseFuseLength + random.nextInt(this.fuseLengthRandomizer);
         Player player = pplayer.getPlayer();
         ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
 
@@ -89,16 +120,16 @@ public class ParticleStyleCelebration extends DefaultParticleStyle {
             public void run() {
                 if (this.fuseTimer < this.fuseLength) {
                     ParticlePair trail = ParticlePair.getNextDefault(pplayer);
-                    trail.setEffect(ParticleEffect.FIREWORK);
+                    trail.setEffect(ParticleStyleCelebration.this.fuseEffect);
                     trail.setStyle(DefaultStyles.CELEBRATION);
 
                     particleManager.displayParticles(player, trail, Collections.singletonList(new PParticle(this.location)));
                     
-                    this.location.add(0, 0.25, 0);
+                    this.location.add(0, ParticleStyleCelebration.this.fuseSpacing, 0);
                 } else {
                     List<PParticle> particles = new ArrayList<>();
-                    for (int i = 0; i < 40; i++) {
-                        double radius = 0.6 + random.nextDouble() * 0.2;
+                    for (int i = 0; i < ParticleStyleCelebration.this.burstAmount; i++) {
+                        double radius = ParticleStyleCelebration.this.baseBurstSize + random.nextDouble() * ParticleStyleCelebration.this.burstSizeRandomizer;
                         double u = random.nextDouble();
                         double v = random.nextDouble();
                         double theta = 2 * Math.PI * u;

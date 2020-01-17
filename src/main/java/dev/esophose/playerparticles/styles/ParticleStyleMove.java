@@ -7,6 +7,7 @@ import dev.esophose.playerparticles.manager.ParticleManager;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
@@ -16,13 +17,20 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 public class ParticleStyleMove extends DefaultParticleStyle implements Listener {
 
+    private int multiplier;
+
     public ParticleStyleMove() {
         super("move", false, false, 0);
     }
 
     @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
-        return DefaultStyles.NORMAL.getParticles(particle, location);
+        List<PParticle> particles = new ArrayList<>();
+
+        for (int i = 0; i < this.multiplier; i++)
+            particles.addAll(DefaultStyles.NORMAL.getParticles(particle, location));
+
+        return particles;
     }
 
     @Override
@@ -32,12 +40,12 @@ public class ParticleStyleMove extends DefaultParticleStyle implements Listener 
 
     @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
-
+        this.setIfNotExists("multiplier", 1, "The multiplier for the number of particles to spawn", "This style uses the same spawning as the 'normal' style");
     }
 
     @Override
     protected void loadSettings(CommentedFileConfiguration config) {
-
+        this.multiplier = config.getInt("multiplier");
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

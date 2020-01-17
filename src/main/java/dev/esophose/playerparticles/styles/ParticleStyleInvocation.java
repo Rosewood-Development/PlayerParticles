@@ -11,11 +11,14 @@ import org.bukkit.Location;
 
 public class ParticleStyleInvocation extends DefaultParticleStyle {
 
-    private int points = 6;
-    private double radius = 3.5;
     private double step = 0;
     private int circleStep = 0;
-    private int numSteps = 120;
+
+    private int points;
+    private double radius;
+    private int numSteps;
+    private double playerOffset;
+    private double speedMultiplier;
 
     public ParticleStyleInvocation() {
         super("invocation", true, true, 0.5);
@@ -23,13 +26,13 @@ public class ParticleStyleInvocation extends DefaultParticleStyle {
 
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
-        double speed = this.getSpeedByEffect(particle.getEffect());
+        double speed = this.getSpeedByEffect(particle.getEffect()) * this.speedMultiplier;
 
         // Circle around everything, spawn less often
         if (this.circleStep % 5 == 0) {
             for (int i = 0; i < this.numSteps; i++) {
                 double dx = MathL.cos(Math.PI * 2 * ((double) i / this.numSteps)) * this.radius;
-                double dy = -0.9;
+                double dy = this.playerOffset;
                 double dz = MathL.sin(Math.PI * 2 * ((double) i / this.numSteps)) * this.radius;
                 particles.add(new PParticle(location.clone().add(dx, dy, dz)));
             }
@@ -38,7 +41,7 @@ public class ParticleStyleInvocation extends DefaultParticleStyle {
         // Orbit going clockwise
         for (int i = 0; i < this.points; i++) {
             double dx = MathL.cos(this.step + (Math.PI * 2 * ((double) i / this.points))) * this.radius;
-            double dy = -0.9;
+            double dy = this.playerOffset;
             double dz = MathL.sin(this.step + (Math.PI * 2 * ((double) i / this.points))) * this.radius;
             double angle = Math.atan2(dz, dx);
             double xAng = -MathL.cos(angle);
@@ -49,7 +52,7 @@ public class ParticleStyleInvocation extends DefaultParticleStyle {
         // Orbit going counter-clockwise
         for (int i = 0; i > -this.points; i--) {
             double dx = MathL.cos(-this.step + (Math.PI * 2 * ((double) i / this.points))) * this.radius;
-            double dy = -0.9;
+            double dy = this.playerOffset;
             double dz = MathL.sin(-this.step + (Math.PI * 2 * ((double) i / this.points))) * this.radius;
             double angle = Math.atan2(dz, dx);
             double xAng = -MathL.cos(angle);
@@ -71,7 +74,7 @@ public class ParticleStyleInvocation extends DefaultParticleStyle {
             case ENCHANT:
             case NAUTILUS:
             case PORTAL:
-                return radius * 2;
+                return 7;
             case END_ROD:
             case SMOKE:
             case SQUID_INK:
@@ -96,12 +99,20 @@ public class ParticleStyleInvocation extends DefaultParticleStyle {
 
     @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
-
+        this.setIfNotExists("spinning-points", 6, "The number of points that spin around the circle in each direction");
+        this.setIfNotExists("radius", 3.5, "The radius of the circle");
+        this.setIfNotExists("circle-points", 120, "The number of points around the circle");
+        this.setIfNotExists("player-offset", -0.9, "How far to vertically offset the player's location");
+        this.setIfNotExists("speed-multiplier", 1, "A multiplier to change how fast the particles move");
     }
 
     @Override
     protected void loadSettings(CommentedFileConfiguration config) {
-
+        this.points = config.getInt("spinning-points");
+        this.radius = config.getDouble("radius");
+        this.numSteps = config.getInt("circle-points");
+        this.playerOffset = config.getDouble("player-offset");
+        this.speedMultiplier = config.getDouble("speed-multiplier");
     }
 
 }

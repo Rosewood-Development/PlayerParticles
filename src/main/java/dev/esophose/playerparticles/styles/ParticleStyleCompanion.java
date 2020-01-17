@@ -34,12 +34,13 @@ import org.bukkit.util.Vector;
 
 public class ParticleStyleCompanion extends DefaultParticleStyle {
 
-    private int numParticles = 150;
-    private int particlesPerIteration = 5;
-    private double size = 1.25;
-    private double xFactor = 1.0, yFactor = 1.5, zFactor = 1.0;
-    private double xOffset = 0.0, yOffset = -0.75, zOffset = 0.0;
     private int step = 0;
+
+    private int numParticles;
+    private int particlesPerIteration;
+    private double size;
+    private double xFactor, yFactor, zFactor;
+    private double xOffset, yOffset, zOffset;
 
     public ParticleStyleCompanion() {
         super("companion", true, false, 1);
@@ -59,9 +60,8 @@ public class ParticleStyleCompanion extends DefaultParticleStyle {
         vector.setZ(this.zFactor * r * MathL.sin(s) + this.zOffset);
         vector.setY(this.yFactor * this.size * MathL.cos(t) + this.yOffset);
 
-        for (int i = 0; i < this.particlesPerIteration; i++) {
+        for (int i = 0; i < this.particlesPerIteration; i++)
             particles.add(new PParticle(location.clone().subtract(vector)));
-        }
 
         return particles;
     }
@@ -73,12 +73,28 @@ public class ParticleStyleCompanion extends DefaultParticleStyle {
 
     @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
-
+        this.setIfNotExists("particle-amount", 150, "The number of total particles in the animation cycle");
+        this.setIfNotExists("particles-per-iteration", 5, "The number of particles spawned per iteration");
+        this.setIfNotExists("size", 1.25, "The size of the animation");
+        this.setIfNotExists("x-factor", 1.0, "The multiplier for the x-axis");
+        this.setIfNotExists("y-factor", 1.5, "The multiplier for the y-axis");
+        this.setIfNotExists("z-factor", 1.0, "The multiplier for the z-axis");
+        this.setIfNotExists("x-offset", 0.0, "The offset for the x-axis");
+        this.setIfNotExists("y-offset", -0.75, "The offset for the y-axis");
+        this.setIfNotExists("z-offset", 0.0, "The offset for the x-axis");
     }
 
     @Override
     protected void loadSettings(CommentedFileConfiguration config) {
-
+        this.numParticles = config.getInt("particle-amount");
+        this.particlesPerIteration = config.getInt("particles-per-iteration");
+        this.size = config.getDouble("size");
+        this.xFactor = config.getDouble("x-factor");
+        this.yFactor = config.getDouble("y-factor");
+        this.zFactor = config.getDouble("z-factor");
+        this.xOffset = config.getDouble("x-offset");
+        this.yOffset = config.getDouble("y-offset");
+        this.zOffset = config.getDouble("z-offset");
     }
 
 }

@@ -39,13 +39,14 @@ import org.bukkit.util.Vector;
  */
 public class ParticleStyleCube extends DefaultParticleStyle {
 
-    private double edgeLength = 2;
-    private double angularVelocityX = (Math.PI / 200) / 5;
-    private double angularVelocityY = (Math.PI / 170) / 5;
-    private double angularVelocityZ = (Math.PI / 155) / 5;
-    private int particles = 7;
     private int step = 0;
     private boolean skipNextStep = false; // Only spawn every 2 ticks
+
+    private double edgeLength;
+    private double angularVelocityX;
+    private double angularVelocityY;
+    private double angularVelocityZ;
+    private int particlesPerEdge;
 
     public ParticleStyleCube() {
         super("cube", true, true, 0);
@@ -55,33 +56,34 @@ public class ParticleStyleCube extends DefaultParticleStyle {
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> pparticles = new ArrayList<>();
 
-        if (!this.skipNextStep) {
-            double xRotation = this.step * this.angularVelocityX;
-            double yRotation = this.step * this.angularVelocityY;
-            double zRotation = this.step * this.angularVelocityZ;
-            double a = this.edgeLength / 2;
-            double angleX, angleY;
-            Vector v = new Vector();
-            for (int i = 0; i < 4; i++) {
-                angleY = i * Math.PI / 2;
-                for (int j = 0; j < 2; j++) {
-                    angleX = j * Math.PI;
-                    for (int p = 0; p <= this.particles; p++) {
-                        v.setX(a).setY(a);
-                        v.setZ(this.edgeLength * p / this.particles - a);
-                        VectorUtils.rotateAroundAxisX(v, angleX);
-                        VectorUtils.rotateAroundAxisY(v, angleY);
-                        VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
-                        pparticles.add(new PParticle(location.clone().add(v)));
-                    }
-                }
-                for (int p = 0; p <= particles; p++) {
-                    v.setX(a).setZ(a);
-                    v.setY(edgeLength * p / particles - a);
+        if (this.skipNextStep)
+            return pparticles;
+
+        double xRotation = this.step * this.angularVelocityX;
+        double yRotation = this.step * this.angularVelocityY;
+        double zRotation = this.step * this.angularVelocityZ;
+        double a = this.edgeLength / 2;
+        double angleX, angleY;
+        Vector v = new Vector();
+        for (int i = 0; i < 4; i++) {
+            angleY = i * Math.PI / 2;
+            for (int j = 0; j < 2; j++) {
+                angleX = j * Math.PI;
+                for (int p = 0; p <= this.particlesPerEdge; p++) {
+                    v.setX(a).setY(a);
+                    v.setZ(this.edgeLength * p / this.particlesPerEdge - a);
+                    VectorUtils.rotateAroundAxisX(v, angleX);
                     VectorUtils.rotateAroundAxisY(v, angleY);
                     VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
                     pparticles.add(new PParticle(location.clone().add(v)));
                 }
+            }
+            for (int p = 0; p <= this.particlesPerEdge; p++) {
+                v.setX(a).setZ(a);
+                v.setY(this.edgeLength * p / this.particlesPerEdge - a);
+                VectorUtils.rotateAroundAxisY(v, angleY);
+                VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
+                pparticles.add(new PParticle(location.clone().add(v)));
             }
         }
 
@@ -96,12 +98,20 @@ public class ParticleStyleCube extends DefaultParticleStyle {
 
     @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
-
+        this.setIfNotExists("edge-length", 2.0, "The length (in blocks) of the edges of the cube");
+        this.setIfNotExists("angular-velocity-x", 0.00314159265, "The angular velocity on the x-axis");
+        this.setIfNotExists("angular-velocity-y", 0.00369599135, "The angular velocity on the y-axis");
+        this.setIfNotExists("angular-velocity-z", 0.00405366794, "The angular velocity on the z-axis");
+        this.setIfNotExists("particles-per-edge", 7, "The number of particles to spawn per edge of the cube");
     }
 
     @Override
     protected void loadSettings(CommentedFileConfiguration config) {
-
+        this.edgeLength = config.getDouble("edge-length");
+        this.angularVelocityX = config.getDouble("angular-velocity-x");
+        this.angularVelocityY = config.getDouble("angular-velocity-y");
+        this.angularVelocityZ = config.getDouble("angular-velocity-z");
+        this.particlesPerEdge = config.getInt("particles-per-edge");
     }
 
 }

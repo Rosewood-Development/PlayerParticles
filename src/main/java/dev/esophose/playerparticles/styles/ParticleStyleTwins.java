@@ -10,25 +10,14 @@ import org.bukkit.Location;
 
 public class ParticleStyleTwins extends DefaultParticleStyle {
 
-    private static double[] cos, sin;
-    private static final int orbs = 2;
-    private static final int numSteps = 60;
     private int stepX = 0;
     private int stepY = 0;
-    private int maxStepY = 30;
     private boolean reverse = false;
 
-    static {
-        cos = new double[120];
-        sin = new double[120];
-
-        int i = 0;
-        for (double n = 0; n < numSteps; n++) {
-            cos[i] = -MathL.cos(n / numSteps * Math.PI * 2);
-            sin[i] = -MathL.sin(n / numSteps * Math.PI * 2);
-            i++;
-        }
-    }
+    private int orbs = 2;
+    private double radius = 1;
+    private int numSteps = 60;
+    private int maxStepY = 30;
 
     public ParticleStyleTwins() {
         super("twins", true, true, 0);
@@ -37,10 +26,13 @@ public class ParticleStyleTwins extends DefaultParticleStyle {
     @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
-        for (int i = 0; i < orbs; i++) {
-            double dx = cos[(this.stepX + (numSteps / orbs * i)) % numSteps];
+        for (int i = 0; i < this.orbs; i++) {
+            double slice = Math.PI * 2 / this.numSteps;
+            double orbSlice = Math.PI * 2 / this.orbs;
+
+            double dx = -MathL.cos(slice * this.stepX + orbSlice * i) * this.radius;
             double dy = (this.stepY / (double) this.maxStepY);
-            double dz = sin[(this.stepX + (numSteps / orbs * i)) % numSteps];
+            double dz = -MathL.sin(slice * this.stepX + orbSlice * i) * this.radius;
             particles.add(new PParticle(location.clone().add(dx, dy, dz)));
         }
         return particles;
@@ -49,7 +41,7 @@ public class ParticleStyleTwins extends DefaultParticleStyle {
     @Override
     public void updateTimers() {
         this.stepX++;
-        if (this.stepX > numSteps) {
+        if (this.stepX > this.numSteps) {
             this.stepX = 0;
         }
 
@@ -66,12 +58,18 @@ public class ParticleStyleTwins extends DefaultParticleStyle {
 
     @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
-
+        this.setIfNotExists("orbs", 2, "The number of particle orbs to spawn");
+        this.setIfNotExists("radius", 1.0, "The radius of where to spawn the particles");
+        this.setIfNotExists("horizontal-steps", 60, "The number of particles that spawn to make a full horizontal rotation");
+        this.setIfNotExists("vertical-steps", 30, "The number of particles that spawn to move either up or down");
     }
 
     @Override
     protected void loadSettings(CommentedFileConfiguration config) {
-
+        this.orbs = config.getInt("orbs");
+        this.radius = config.getDouble("radius");
+        this.numSteps = config.getInt("horizontal-steps");
+        this.maxStepY = config.getInt("vertical-steps");
     }
 
 }

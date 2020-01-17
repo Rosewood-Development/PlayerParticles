@@ -9,6 +9,8 @@ import org.bukkit.Location;
 
 public class ParticleStyleChains extends DefaultParticleStyle {
 
+    private int chainParticleAmount;
+
     public ParticleStyleChains() {
         super("chains", true, true, 0);
     }
@@ -17,7 +19,7 @@ public class ParticleStyleChains extends DefaultParticleStyle {
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
         
-        for (double n = -0.2; n < 0.6; n += 0.1) {
+        for (double n = -0.2; n < 0.6; n += 0.8 / this.chainParticleAmount) {
             particles.add(new PParticle(location.clone().add(1 - n, n - 1.1, 1 - n)));
             particles.add(new PParticle(location.clone().add(1 - n, n - 1.1, -1 + n)));
             particles.add(new PParticle(location.clone().add(-1 + n, n - 1.1, 1 - n)));
@@ -34,12 +36,12 @@ public class ParticleStyleChains extends DefaultParticleStyle {
 
     @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
-
+        this.setIfNotExists("chain-particle-amount", 8, "The number of particles per chain");
     }
 
     @Override
     protected void loadSettings(CommentedFileConfiguration config) {
-
+        this.chainParticleAmount = config.getInt("chain-particle-amount");
     }
 
 }

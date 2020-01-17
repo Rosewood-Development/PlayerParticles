@@ -11,9 +11,12 @@ import org.bukkit.Location;
 
 public class ParticleStyleWhirlwind extends DefaultParticleStyle {
 
-    private int points = 3;
     private double step = 0;
-    private int numSteps = 40;
+
+    private int points;
+    private int numSteps;
+    private double speedMultiplier;
+    private double offset;
 
     public ParticleStyleWhirlwind() {
         super("whirlwind", true, true, 0.5);
@@ -22,12 +25,12 @@ public class ParticleStyleWhirlwind extends DefaultParticleStyle {
     @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
-        double speed = this.getSpeedByEffect(particle.getEffect()) * 2.5;
+        double speed = this.getSpeedByEffect(particle.getEffect()) * this.speedMultiplier;
 
         // Orbit going clockwise
         for (int i = 0; i < this.points; i++) {
             double dx = MathL.cos(this.step + (Math.PI * 2 * ((double) i / this.points)));
-            double dy = -0.9;
+            double dy = this.offset;
             double dz = MathL.sin(this.step + (Math.PI * 2 * ((double) i / this.points)));
             double angle = Math.atan2(dz, dx);
             double xAng = MathL.cos(angle);
@@ -74,12 +77,18 @@ public class ParticleStyleWhirlwind extends DefaultParticleStyle {
 
     @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
-
+        this.setIfNotExists("rays", 3, "The number of rays to spawn");
+        this.setIfNotExists("steps", 40, "The number of ticks it takes to make a full rotation");
+        this.setIfNotExists("speed-multiplier", 2.5, "A multiplier to change how fast the particles move");
+        this.setIfNotExists("offset", -0.9, "The vertical offset from the player location");
     }
 
     @Override
     protected void loadSettings(CommentedFileConfiguration config) {
-
+        this.points = config.getInt("rays");
+        this.numSteps = config.getInt("steps");
+        this.speedMultiplier = config.getDouble("speed-multiplier");
+        this.offset = config.getDouble("offset");
     }
 
 }

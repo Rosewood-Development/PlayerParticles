@@ -17,8 +17,10 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 public class ParticleStyleArrows extends DefaultParticleStyle implements Listener {
 
     private static final String[] arrowEntityNames = new String[] { "ARROW", "SPECTRAL_ARROW", "TIPPED_ARROW" };
-    private static final int MAX_ARROWS_PER_PLAYER = 10;
     private List<Projectile> arrows = new ArrayList<>();
+
+    private int maxArrowsPerPlayer;
+    private boolean onlySpawnIfFlying;
 
     public ParticleStyleArrows() {
         super("arrows", false, false, 0);
@@ -31,12 +33,15 @@ public class ParticleStyleArrows extends DefaultParticleStyle implements Listene
         int count = 0;
         for (int i = this.arrows.size() - 1; i >= 0; i--) { // Loop backwards so the last-fired arrows are the ones that have particles if they go over the max
             Projectile arrow = this.arrows.get(i);
+            if (this.onlySpawnIfFlying && arrow.isOnGround())
+                continue;
+
             if (arrow.getShooter() != null && ((Player) arrow.getShooter()).getUniqueId().equals(particle.getOwnerUniqueId())) {
                 particles.add(new PParticle(arrow.getLocation(), 0.05F, 0.05F, 0.05F, 0.0F));
                 count++;
             }
             
-            if (count >= MAX_ARROWS_PER_PLAYER)
+            if (count >= this.maxArrowsPerPlayer)
                 break;
         }
 
@@ -73,12 +78,14 @@ public class ParticleStyleArrows extends DefaultParticleStyle implements Listene
 
     @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
-
+        this.setIfNotExists("max-arrows-per-player", 10, "The max number of arrows that will spawn particles per player");
+        this.setIfNotExists("only-spawn-if-flying", false, "Only spawn particles while the arrow is still in the air");
     }
 
     @Override
     protected void loadSettings(CommentedFileConfiguration config) {
-
+        this.maxArrowsPerPlayer = config.getInt("max-arrows-per-player");
+        this.onlySpawnIfFlying = config.getBoolean("only-spawn-if-flying");
     }
 
 }

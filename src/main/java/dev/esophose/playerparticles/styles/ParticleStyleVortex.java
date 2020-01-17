@@ -34,11 +34,12 @@ import org.bukkit.util.Vector;
 
 public class ParticleStyleVortex extends DefaultParticleStyle {
 
-    private double grow = .05f;
-    private double radials = Math.PI / 16;
-    private int helices = 4;
     private int step = 0;
-    private int maxStep = 70;
+
+    private double grow;
+    private double radials;
+    private int helices;
+    private int maxStep;
 
     public ParticleStyleVortex() {
         super("vortex", true, true, 0.5);
@@ -66,12 +67,18 @@ public class ParticleStyleVortex extends DefaultParticleStyle {
 
     @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
-
+        this.setIfNotExists("grow", 0.05, "How much to change the radius per particle");
+        this.setIfNotExists("radials", 16, "The steepness of how fast the particles grow upwards", "More = faster/taller growth");
+        this.setIfNotExists("helices", 4, "The number of orbs spinning around the player");
+        this.setIfNotExists("step-amount", 70, "How many steps it takes to reach the highest point");
     }
 
     @Override
     protected void loadSettings(CommentedFileConfiguration config) {
-
+        this.grow = config.getDouble("grow");
+        this.radials = Math.PI / config.getInt("radials");
+        this.helices = config.getInt("helices");
+        this.maxStep = config.getInt("step-amount");
     }
 
 }

@@ -18,6 +18,10 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 public class ParticleStyleBlockBreak extends DefaultParticleStyle implements Listener {
 
+    private int particleAmount;
+    private double particleSpread;
+    private double particleSpeed;
+
     public ParticleStyleBlockBreak() {
         super("blockbreak", false, false, 0);
     }
@@ -28,8 +32,8 @@ public class ParticleStyleBlockBreak extends DefaultParticleStyle implements Lis
         
         location.add(0.5, 0.5, 0.5); // Center around the block
 
-        for (int i = 0; i < 10; i++)
-            particles.add(new PParticle(location, 0.5F, 0.5F, 0.5F, 0.05F));
+        for (int i = 0; i < this.particleAmount; i++)
+            particles.add(new PParticle(location, this.particleSpread, this.particleSpread, this.particleSpread, this.particleSpeed));
 
         return particles;
     }
@@ -41,12 +45,16 @@ public class ParticleStyleBlockBreak extends DefaultParticleStyle implements Lis
 
     @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
-
+        this.setIfNotExists("particle-amount", 10, "The number of particles to spawn");
+        this.setIfNotExists("particle-spread", 0.5, "The distance to spread particles");
+        this.setIfNotExists("particle-speed", 0.05, "The speed of the particles");
     }
 
     @Override
     protected void loadSettings(CommentedFileConfiguration config) {
-
+        this.particleAmount = config.getInt("particle-amount");
+        this.particleSpread = config.getInt("particle-spread");
+        this.particleSpeed = config.getDouble("particle-speed");
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

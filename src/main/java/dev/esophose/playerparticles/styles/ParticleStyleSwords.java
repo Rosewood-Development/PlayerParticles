@@ -22,6 +22,8 @@ public class ParticleStyleSwords extends DefaultParticleStyle implements Listene
 
     private static final List<String> SWORD_NAMES;
 
+    private int multiplier;
+
     static {
         SWORD_NAMES = new ArrayList<>();
         SWORD_NAMES.addAll(Arrays.asList("WOOD_SWORD", "STONE_SWORD", "IRON_SWORD", "GOLD_SWORD", "GOLDEN_SWORD", "DIAMOND_SWORD", "TRIDENT"));
@@ -33,13 +35,10 @@ public class ParticleStyleSwords extends DefaultParticleStyle implements Listene
 
     @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
-        List<PParticle> baseParticles = DefaultStyles.NORMAL.getParticles(particle, location);
-
-        int multiplyingFactor = 15; // Uses the same logic as ParticleStyleNormal except multiplies the resulting particles by 3x
         List<PParticle> particles = new ArrayList<>();
-        for (int i = 0; i < baseParticles.size() * multiplyingFactor; i++) {
-            particles.add(baseParticles.get(i % baseParticles.size()));
-        }
+
+        for (int i = 0; i < this.multiplier; i++)
+            particles.addAll(DefaultStyles.NORMAL.getParticles(particle, location));
 
         return particles;
     }
@@ -51,12 +50,12 @@ public class ParticleStyleSwords extends DefaultParticleStyle implements Listene
 
     @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
-
+        this.setIfNotExists("multiplier", 15, "The multiplier for the number of particles to spawn", "This style uses the same spawning as the 'normal' style");
     }
 
     @Override
     protected void loadSettings(CommentedFileConfiguration config) {
-
+        this.multiplier = config.getInt("multiplier");
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
