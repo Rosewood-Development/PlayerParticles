@@ -44,6 +44,9 @@ public final class PlayerParticlesAPI {
         this.playerParticles = PlayerParticles.getInstance();
     }
 
+    /**
+     * @return the instance of the PlayerParticlesAPI
+     */
     public static PlayerParticlesAPI getInstance() {
         if (INSTANCE == null)
             INSTANCE = new PlayerParticlesAPI();
@@ -51,6 +54,13 @@ public final class PlayerParticlesAPI {
     }
 
     //region Get PPlayer
+
+    /**
+     * Gets a PPlayer from their UUID
+     *
+     * @param uuid The UUID of the PPlayer
+     * @return The PPlayer, or null if not found
+     */
     @Nullable
     public PPlayer getPPlayer(@NotNull UUID uuid) {
         Objects.requireNonNull(uuid);
@@ -58,15 +68,29 @@ public final class PlayerParticlesAPI {
         return this.playerParticles.getManager(DataManager.class).getPPlayer(uuid);
     }
 
+    /**
+     * Gets a PPlayer from a Player
+     *
+     * @param player The Player
+     * @return The PPlayer, or null if not found
+     */
     @Nullable
     public PPlayer getPPlayer(@NotNull Player player) {
         Objects.requireNonNull(player);
 
         return this.getPPlayer(player.getUniqueId());
     }
+
     //endregion
 
     //region Manage Active Player Particles
+
+    /**
+     * Adds an active particle to a Player's particles
+     *
+     * @param player The player to add to
+     * @param particle The particle to add
+     */
     public void addActivePlayerParticle(@NotNull Player player, @NotNull ParticlePair particle) {
         Objects.requireNonNull(particle);
 
@@ -83,22 +107,61 @@ public final class PlayerParticlesAPI {
         dataManager.saveParticleGroup(player.getUniqueId(), pplayer.getActiveParticleGroup());
     }
 
+    /**
+     * Adds an active particle to a Player's particles
+     *
+     * @param player The player to add to
+     * @param effect The effect of the particle
+     * @param style The style of the particle
+     */
     public void addActivePlayerParticle(@NotNull Player player, @NotNull ParticleEffect effect, @NotNull ParticleStyle style) {
         this.addActivePlayerParticle(player, effect, style, null, null, null);
     }
 
+    /**
+     * Adds an active particle to a Player's particles
+     *
+     * @param player The player to add to
+     * @param effect The effect of the particle
+     * @param style The style of the particle
+     * @param colorData The color data of the particle
+     */
     public void addActivePlayerParticle(@NotNull Player player, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @NotNull OrdinaryColor colorData) {
         this.addActivePlayerParticle(player, effect, style, colorData, null, null);
     }
 
+    /**
+     * Adds an active particle to a Player's particles
+     *
+     * @param player The player to add to
+     * @param effect The effect of the particle
+     * @param style The style of the particle
+     * @param noteColorData The note color data of the particle
+     */
     public void addActivePlayerParticle(@NotNull Player player, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @NotNull NoteColor noteColorData) {
         this.addActivePlayerParticle(player, effect, style, null, noteColorData, null);
     }
 
+    /**
+     * Adds an active particle to a Player's particles
+     *
+     * @param player The player to add to
+     * @param effect The effect of the particle
+     * @param style The style of the particle
+     * @param materialData The material data of the particle
+     */
     public void addActivePlayerParticle(@NotNull Player player, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @NotNull Material materialData) {
         this.addActivePlayerParticle(player, effect, style, null, null, materialData);
     }
 
+    /**
+     * @param player The player to add to
+     * @param effect The effect of the particle
+     * @param style The style of the particle
+     * @param colorData The color data of the particle
+     * @param noteColorData The note color data of the particle
+     * @param materialData The material data of the particle
+     */
     private void addActivePlayerParticle(@NotNull Player player, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @Nullable OrdinaryColor colorData, @Nullable NoteColor noteColorData, @Nullable Material materialData) {
         Objects.requireNonNull(effect);
         Objects.requireNonNull(style);
@@ -121,6 +184,13 @@ public final class PlayerParticlesAPI {
         this.addActivePlayerParticle(player, particle);
     }
 
+    /**
+     * Edits an active particle of a Player
+     *
+     * @param player The player to edit from
+     * @param id The ID of the target particle
+     * @param effect The new effect for the particle
+     */
     public void editActivePlayerParticle(@NotNull Player player, int id, @NotNull ParticleEffect effect) {
         Objects.requireNonNull(effect);
 
@@ -132,6 +202,13 @@ public final class PlayerParticlesAPI {
         }
     }
 
+    /**
+     * Edits an active particle of a Player
+     *
+     * @param player The player to edit from
+     * @param id The ID of the target particle
+     * @param style The new style for the particle
+     */
     public void editActivePlayerParticle(@NotNull Player player, int id, @NotNull ParticleStyle style) {
         Objects.requireNonNull(style);
 
@@ -143,6 +220,13 @@ public final class PlayerParticlesAPI {
         }
     }
 
+    /**
+     * Edits an active particle of a Player
+     *
+     * @param player The player to edit from
+     * @param id The ID of the target particle
+     * @param colorData The new color data for the particle
+     */
     public void editActivePlayerParticle(@NotNull Player player, int id, @NotNull OrdinaryColor colorData) {
         Objects.requireNonNull(colorData);
 
@@ -154,6 +238,13 @@ public final class PlayerParticlesAPI {
         }
     }
 
+    /**
+     * Edits an active particle of a Player
+     *
+     * @param player The player to edit from
+     * @param id The ID of the target particle
+     * @param noteColorData The new note color data for the particle
+     */
     public void editActivePlayerParticle(@NotNull Player player, int id, @NotNull NoteColor noteColorData) {
         Objects.requireNonNull(noteColorData);
 
@@ -165,6 +256,13 @@ public final class PlayerParticlesAPI {
         }
     }
 
+    /**
+     * Edits an active particle of a Player
+     *
+     * @param player The player to edit from
+     * @param id The ID of the target particle
+     * @param materialData The new material data for the particle
+     */
     public void editActivePlayerParticle(@NotNull Player player, int id, @NotNull Material materialData) {
         Objects.requireNonNull(materialData);
 
@@ -180,6 +278,12 @@ public final class PlayerParticlesAPI {
         }
     }
 
+    /**
+     * Removes an active particle from a player by ID
+     *
+     * @param player The player to remove from
+     * @param id The ID of the particle to remove
+     */
     public void removeActivePlayerParticle(@NotNull Player player, int id) {
         DataManager dataManager = this.playerParticles.getManager(DataManager.class);
         ParticleGroup group = this.validateActivePlayerParticle(player, id);
@@ -189,6 +293,12 @@ public final class PlayerParticlesAPI {
         }
     }
 
+    /**
+     * Removes active particles from a player by effect
+     *
+     * @param player The player to remove from
+     * @param effect The effect of the particle(s) to remove
+     */
     public void removeActivePlayerParticle(@NotNull Player player, @NotNull ParticleEffect effect) {
         Objects.requireNonNull(effect);
 
@@ -202,6 +312,12 @@ public final class PlayerParticlesAPI {
         dataManager.saveParticleGroup(player.getUniqueId(), group);
     }
 
+    /**
+     * Removes active particles from a player by style
+     *
+     * @param player The player to remove from
+     * @param style The style of the particle(s) to remove
+     */
     public void removeActivePlayerParticle(@NotNull Player player, @NotNull ParticleStyle style) {
         Objects.requireNonNull(style);
 
@@ -215,6 +331,13 @@ public final class PlayerParticlesAPI {
         dataManager.saveParticleGroup(player.getUniqueId(), group);
     }
 
+    /**
+     * Ensures a particle with a given ID exists for a player
+     *
+     * @param player The player to check
+     * @param id The ID of the particle
+     * @return The active particle group for the player
+     */
     @Nullable
     private ParticleGroup validateActivePlayerParticle(@NotNull Player player, int id) {
         PPlayer pplayer = this.getPPlayer(player);
@@ -228,6 +351,11 @@ public final class PlayerParticlesAPI {
         return particleGroup;
     }
 
+    /**
+     * Removes all active particles from a player
+     *
+     * @param player The player to remove from
+     */
     public void resetActivePlayerParticles(@NotNull Player player) {
         DataManager dataManager = this.playerParticles.getManager(DataManager.class);
         PPlayer pplayer = this.getPPlayer(player);
@@ -238,6 +366,12 @@ public final class PlayerParticlesAPI {
         dataManager.saveParticleGroup(pplayer.getUniqueId(), pplayer.getActiveParticleGroup());
     }
 
+    /**
+     * Gets all active particles from a player
+     *
+     * @param player The player to get from
+     * @return A collection of the player's active particles
+     */
     @NotNull
     public Collection<ParticlePair> getActivePlayerParticles(@NotNull Player player) {
         PPlayer pplayer = this.getPPlayer(player);
@@ -247,6 +381,13 @@ public final class PlayerParticlesAPI {
         return pplayer.getActiveParticles();
     }
 
+    /**
+     * Gets an active particle from a player
+     *
+     * @param player The player to get from
+     * @param id The ID of the particle to get
+     * @return A particle or null if one doesn't exist
+     */
     @Nullable
     public ParticlePair getActivePlayerParticle(@NotNull Player player, int id) {
         PPlayer pplayer = this.getPPlayer(player);
@@ -255,9 +396,17 @@ public final class PlayerParticlesAPI {
 
         return pplayer.getActiveParticle(id);
     }
+
     //endregion
 
     //region Manage Player Particle Groups
+
+    /**
+     * Saves a particle group to a player
+     *
+     * @param player The player to save to
+     * @param particleGroup The particle group to save
+     */
     public void savePlayerParticleGroup(@NotNull Player player, @NotNull ParticleGroup particleGroup) {
         Objects.requireNonNull(particleGroup);
 
@@ -273,6 +422,13 @@ public final class PlayerParticlesAPI {
         dataManager.saveParticleGroup(player.getUniqueId(), particleGroup);
     }
 
+    /**
+     * Saves a particle group to a player
+     *
+     * @param player The player to save to
+     * @param groupName The name of the group to save
+     * @param particles Particles that are part of the group
+     */
     public void savePlayerParticleGroup(@NotNull Player player, @NotNull String groupName, @NotNull Collection<ParticlePair> particles) {
         Objects.requireNonNull(groupName);
         Objects.requireNonNull(particles);
@@ -283,6 +439,12 @@ public final class PlayerParticlesAPI {
         this.savePlayerParticleGroup(player, particleGroup);
     }
 
+    /**
+     * Removes a particle group from a player
+     *
+     * @param player The player to remove from
+     * @param groupName The name of the particle group to remove
+     */
     public void removePlayerParticleGroup(@NotNull Player player, @NotNull String groupName) {
         DataManager dataManager = this.playerParticles.getManager(DataManager.class);
         PPlayer pplayer = this.getPPlayer(player);
@@ -293,12 +455,24 @@ public final class PlayerParticlesAPI {
         dataManager.removeParticleGroup(player.getUniqueId(), groupName);
     }
 
+    /**
+     * Removes a particle group from a player
+     *
+     * @param player The player to remove from
+     * @param particleGroup The particle group
+     */
     public void removePlayerParticleGroup(@NotNull Player player, @NotNull ParticleGroup particleGroup) {
         Objects.requireNonNull(particleGroup);
 
         this.removePlayerParticleGroup(player, particleGroup.getName());
     }
 
+    /**
+     * Gets a collection of the player's particle groups
+     *
+     * @param player The player to get from
+     * @return A collection of the player's particle groups
+     */
     @NotNull
     public Collection<ParticleGroup> getPlayerParticleGroups(@NotNull Player player) {
         PPlayer pplayer = this.getPPlayer(player);
@@ -307,9 +481,18 @@ public final class PlayerParticlesAPI {
 
         return pplayer.getParticleGroups().values();
     }
+
     //endregion
 
     //region Fixed Effect Management
+
+    /**
+     * Creates a fixed particle effect for a player
+     *
+     * @param player The player to create for
+     * @param location The location to create at
+     * @param particle The particle to display
+     */
     public void createFixedParticleEffect(@NotNull Player player, @NotNull Location location, @NotNull ParticlePair particle) {
         Objects.requireNonNull(location);
         Objects.requireNonNull(location.getWorld());
@@ -325,22 +508,68 @@ public final class PlayerParticlesAPI {
         dataManager.saveFixedEffect(fixedEffect);
     }
 
+    /**
+     * Creates a fixed particle effect for a player
+     *
+     * @param player The player to create for
+     * @param location The location to create at
+     * @param effect The effect of the particle
+     * @param style The style of the particle
+     */
     public void createFixedParticleEffect(@NotNull Player player, @NotNull Location location, @NotNull ParticleEffect effect, @NotNull ParticleStyle style) {
         this.createFixedParticleEffect(player, location, effect, style, null, null, null);
     }
 
+    /**
+     * Creates a fixed particle effect for a player
+     *
+     * @param player The player to create for
+     * @param location The location to create at
+     * @param effect The effect of the particle
+     * @param style The style of the particle
+     * @param colorData The color data of the particle
+     */
     public void createFixedParticleEffect(@NotNull Player player, @NotNull Location location, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @NotNull OrdinaryColor colorData) {
         this.createFixedParticleEffect(player, location, effect, style, colorData, null, null);
     }
 
+    /**
+     * Creates a fixed particle effect for a player
+     *
+     * @param player The player to create for
+     * @param location The location to create at
+     * @param effect The effect of the particle
+     * @param style The style of the particle
+     * @param noteColorData The note color data of the particle
+     */
     public void createFixedParticleEffect(@NotNull Player player, @NotNull Location location, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @NotNull NoteColor noteColorData) {
         this.createFixedParticleEffect(player, location, effect, style, null, noteColorData, null);
     }
 
+    /**
+     * Creates a fixed particle effect for a player
+     *
+     * @param player The player to create for
+     * @param location The location to create at
+     * @param effect The effect of the particle
+     * @param style The style of the particle
+     * @param materialData The material data of the particle
+     */
     public void createFixedParticleEffect(@NotNull Player player, @NotNull Location location, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @NotNull Material materialData) {
         this.createFixedParticleEffect(player, location, effect, style, null, null, materialData);
     }
 
+    /**
+     * Creates a fixed particle effect for a player
+     *
+     * @param player The player to create for
+     * @param location The location to create at
+     * @param effect The effect of the particle
+     * @param style The style of the particle
+     * @param colorData The color data of the particle
+     * @param noteColorData The note color data of the particle
+     * @param materialData The material data of the particle
+     */
     private void createFixedParticleEffect(@NotNull Player player, @NotNull Location location, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @Nullable OrdinaryColor colorData, @Nullable NoteColor noteColorData, @Nullable Material materialData) {
         Objects.requireNonNull(location);
         Objects.requireNonNull(location.getWorld());
@@ -365,6 +594,12 @@ public final class PlayerParticlesAPI {
         this.createFixedParticleEffect(player, location, particle);
     }
 
+    /**
+     * Edits a fixed particle effect for a player
+     *
+     * @param player The player to edit from
+     * @param fixedEffect The modified fixed effect to edit
+     */
     public void editFixedParticleEffect(@NotNull Player player, @NotNull FixedParticleEffect fixedEffect) {
         Objects.requireNonNull(fixedEffect);
 
@@ -380,6 +615,13 @@ public final class PlayerParticlesAPI {
         }
     }
 
+    /**
+     * Edits a fixed particle effect for a player
+     *
+     * @param player The player to edit from
+     * @param id The ID of the fixed particle effect
+     * @param location The new location
+     */
     public void editFixedParticleEffect(@NotNull Player player, int id, @NotNull Location location) {
         Objects.requireNonNull(location);
         Objects.requireNonNull(location.getWorld());
@@ -392,6 +634,13 @@ public final class PlayerParticlesAPI {
         }
     }
 
+    /**
+     * Edits a fixed particle effect for a player
+     *
+     * @param player The player to edit from
+     * @param id The ID of the fixed particle effect
+     * @param effect The new effect
+     */
     public void editFixedParticleEffect(@NotNull Player player, int id, @NotNull ParticleEffect effect) {
         Objects.requireNonNull(effect);
 
@@ -403,6 +652,13 @@ public final class PlayerParticlesAPI {
         }
     }
 
+    /**
+     * Edits a fixed particle effect for a player
+     *
+     * @param player The player to edit from
+     * @param id The ID of the fixed particle effect
+     * @param style The new style
+     */
     public void editFixedParticleEffect(@NotNull Player player, int id, @NotNull ParticleStyle style) {
         Objects.requireNonNull(style);
 
@@ -414,6 +670,13 @@ public final class PlayerParticlesAPI {
         }
     }
 
+    /**
+     * Edits a fixed particle effect for a player
+     *
+     * @param player The player to edit from
+     * @param id The ID of the fixed particle effect
+     * @param colorData The new color data
+     */
     public void editFixedParticleEffect(@NotNull Player player, int id, @NotNull OrdinaryColor colorData) {
         Objects.requireNonNull(colorData);
 
@@ -425,6 +688,13 @@ public final class PlayerParticlesAPI {
         }
     }
 
+    /**
+     * Edits a fixed particle effect for a player
+     *
+     * @param player The player to edit from
+     * @param id The ID of the fixed particle effect
+     * @param noteColorData The new note color data
+     */
     public void editFixedParticleEffect(@NotNull Player player, int id, @NotNull NoteColor noteColorData) {
         Objects.requireNonNull(noteColorData);
 
@@ -436,6 +706,13 @@ public final class PlayerParticlesAPI {
         }
     }
 
+    /**
+     * Edits a fixed particle effect for a player
+     *
+     * @param player The player to edit from
+     * @param id The ID of the fixed particle effect
+     * @param materialData The new material data
+     */
     public void editFixedParticleEffect(@NotNull Player player, int id, @NotNull Material materialData) {
         Objects.requireNonNull(materialData);
 
@@ -451,6 +728,12 @@ public final class PlayerParticlesAPI {
         }
     }
 
+    /**
+     * Removes a fixed particle effect from a player
+     *
+     * @param player The player to remove from
+     * @param id The ID of the fixed particle effect
+     */
     public void removeFixedEffect(@NotNull Player player, int id) {
         DataManager dataManager = this.playerParticles.getManager(DataManager.class);
         FixedParticleEffect fixedEffect = this.validateFixedParticleEffect(player, id);
@@ -494,6 +777,13 @@ public final class PlayerParticlesAPI {
         return removedAmount;
     }
 
+    /**
+     * Validates that a fixed particle effect with the given ID exists for a player
+     *
+     * @param player The player to check
+     * @param id The ID of the fixed particle effect
+     * @return The fixed particle effect
+     */
     @Nullable
     private FixedParticleEffect validateFixedParticleEffect(@NotNull Player player, int id) {
         PPlayer pplayer = this.getPPlayer(player);
@@ -507,6 +797,13 @@ public final class PlayerParticlesAPI {
         return fixedEffect;
     }
 
+    /**
+     * Gets a fixed particle effect for a player
+     *
+     * @param player The player to get from
+     * @param id The ID of the fixed particle effect
+     * @return The fixed particle effect, or null if not found
+     */
     @Nullable
     public FixedParticleEffect getFixedParticleEffect(@NotNull Player player, int id) {
         PPlayer pplayer = this.getPPlayer(player);
@@ -516,6 +813,12 @@ public final class PlayerParticlesAPI {
         return pplayer.getFixedEffectById(id);
     }
 
+    /**
+     * Gets a collection of a player's fixed particle effects
+     *
+     * @param player The player to get from
+     * @return A collection of the player's fixed particle effects
+     */
     @NotNull
     public Collection<FixedParticleEffect> getFixedParticleEffects(@NotNull Player player) {
         PPlayer pplayer = this.getPPlayer(player);
@@ -524,9 +827,16 @@ public final class PlayerParticlesAPI {
 
         return pplayer.getFixedParticlesMap().values();
     }
+
     //endregion
 
     //region GUI Management
+
+    /**
+     * Opens the particles gui for a player
+     *
+     * @param player The player to open the gui for
+     */
     public void openParticlesGui(@NotNull Player player) {
         PPlayer pplayer = this.getPPlayer(player);
         if (pplayer == null)
@@ -534,9 +844,17 @@ public final class PlayerParticlesAPI {
 
         this.playerParticles.getManager(GuiManager.class).openDefault(pplayer);
     }
+
     //endregion
 
     //region Player Settings
+
+    /**
+     * Toggles a player's particle visibility on/off
+     *
+     * @param player The player to toggle visibility for
+     * @param particlesHidden true if the particles should be hidden, or false for visible
+     */
     public void togglePlayerParticleVisibility(@NotNull Player player, boolean particlesHidden) {
         DataManager dataManager = this.playerParticles.getManager(DataManager.class);
         PPlayer pplayer = this.getPPlayer(player);
@@ -546,20 +864,33 @@ public final class PlayerParticlesAPI {
         pplayer.setParticlesHidden(particlesHidden);
         dataManager.updateSettingParticlesHidden(player.getUniqueId(), particlesHidden);
     }
+
     //endregion
 
     //region Registering Custom Styles
+
+    /**
+     * Registers a particle style with the plugin
+     *
+     * @param particleStyle The particle style to register
+     */
     public void registerParticleStyle(@NotNull ParticleStyle particleStyle) {
         Objects.requireNonNull(particleStyle);
 
         this.playerParticles.getManager(ParticleStyleManager.class).registerStyle(particleStyle);
     }
 
+    /**
+     * Registers an event-based particle style with the plugin
+     *
+     * @param particleStyle The particle style to register
+     */
     public void registerEventParticleStyle(@NotNull ParticleStyle particleStyle) {
         Objects.requireNonNull(particleStyle);
 
         this.playerParticles.getManager(ParticleStyleManager.class).registerEventStyle(particleStyle);
     }
+
     //endregion
 
 }

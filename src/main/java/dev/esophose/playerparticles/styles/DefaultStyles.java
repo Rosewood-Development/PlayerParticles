@@ -47,6 +47,8 @@ public class DefaultStyles {
     /**
      * Registers all the default styles to the ParticleStyleManager
      * Registered in alphabetical order
+     *
+     * @param particleStyleManager The ParticleStyleManager instance
      */
     public static void registerStyles(ParticleStyleManager particleStyleManager) {
         particleStyleManager.registerStyle(ARROWS);
@@ -95,6 +97,8 @@ public class DefaultStyles {
 
     /**
      * Reloads the settings for all default styles
+     *
+     * @param particleStyleManager The ParticleStyleManager instance
      */
     public static void reloadSettings(ParticleStyleManager particleStyleManager) {
         for (ParticleStyle style : particleStyleManager.getStylesWithDisabled())

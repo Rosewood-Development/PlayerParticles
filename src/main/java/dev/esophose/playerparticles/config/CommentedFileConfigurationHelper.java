@@ -22,6 +22,8 @@ public class CommentedFileConfigurationHelper {
 
     /**
      * Manage custom configurations and files
+     *
+     * @param plugin The JavaPlugin the configuration is for
      */
     public CommentedFileConfigurationHelper(JavaPlugin plugin) {
         this.plugin = plugin;

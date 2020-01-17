@@ -113,7 +113,7 @@ public enum ParticleEffect {
      * Construct a new particle effect
      *
      * @param enumName Name of the Particle Enum when the server version is greater than or equal to 1.13
-*    * @param enabledByDefault If the particle type is enabled by default
+     * @param enabledByDefault If the particle type is enabled by default
      * @param properties Properties of this particle effect
      */
     ParticleEffect(String enumName, boolean enabledByDefault, ParticleProperty... properties) {
@@ -148,6 +148,8 @@ public enum ParticleEffect {
 
     /**
      * Loads the settings shared for each style then calls loadSettings(CommentedFileConfiguration)
+     *
+     * @param reloadConfig If the settings should be reloaded or not
      */
     public void loadSettings(boolean reloadConfig) {
         if (!this.isSupported())
@@ -165,6 +167,7 @@ public enum ParticleEffect {
      *
      * @param setting The setting name
      * @param value The setting value
+     * @param comments Comments for the setting
      */
     private void setIfNotExists(String setting, Object value, String... comments) {
         if (this.config.get(setting) != null)

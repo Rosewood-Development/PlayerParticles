@@ -54,6 +54,8 @@ public abstract class DefaultParticleStyle implements ParticleStyle {
 
     /**
      * Loads the settings shared for each style then calls loadSettings(CommentedFileConfiguration)
+     *
+     * @param reloadConfig If the settings should be reloaded or not
      */
     public final void loadSettings(boolean reloadConfig) {
         if (reloadConfig)
@@ -73,6 +75,7 @@ public abstract class DefaultParticleStyle implements ParticleStyle {
      *
      * @param setting The setting name
      * @param value The setting value
+     * @param comments Comments for the setting
      */
     protected final void setIfNotExists(String setting, Object value, String... comments) {
         if (this.config.get(setting) != null)
