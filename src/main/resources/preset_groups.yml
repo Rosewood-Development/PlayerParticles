@@ -14,18 +14,18 @@
 #
 # Use the following format for adding new groups:
 # group-name:
-#     display-name: 'My Amazing Group'
-#     gui-icon: 'ENDER_CHEST'
-#     permission: 'playerparticles.group.group-name'
-#     allow-permission-override: true
-#     1:
-#         effect: 'dust'
-#         style: 'wings'
-#         data: '255 255 255'
-#     2: 
-#         effect: 'cloud'
-#         style: 'overhead'
-#         data: ''
+#   display-name: 'My Amazing Group'
+#   gui-icon: 'ENDER_CHEST'
+#   permission: 'playerparticles.group.group-name'
+#   allow-permission-override: true
+#   1:
+#     effect: 'dust'
+#     style: 'wings'
+#     data: '255 255 255'
+#   2:
+#     effect: 'cloud'
+#     style: 'overhead'
+#     data: ''
 #
 # What everything means:
 # group-name: The name of the group, how it will be applied by using /pp group load <group-name>.
@@ -42,41 +42,41 @@
 # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
 
 raincloud:
-    display-name: 'Raincloud'
-    gui-icon: 'ENDER_CHEST'
-    permission: ''
-    allow-permission-override: false
-    1:
-        effect: 'cloud'
-        style: 'overhead'
-        data: ''
-    2:
-        effect: 'rain'
-        style: 'overhead'
-        data: ''
+  display-name: 'Raincloud'
+  gui-icon: 'ENDER_CHEST'
+  permission: ''
+  allow-permission-override: false
+  1:
+    effect: 'cloud'
+    style: 'overhead'
+    data: ''
+  2:
+    effect: 'rain'
+    style: 'overhead'
+    data: ''
 rainbows:
-    display-name: 'Rainbows'
-    gui-icon: 'ENDER_CHEST'
-    permission: ''
-    allow-permission-override: false
-    1:
-        effect: 'dust'
-        style: 'orbit'
-        data: 'rainbow'
-    2: 
-        effect: 'entity_effect'
-        style: 'feet'
-        data: 'rainbow'
+  display-name: 'Rainbows'
+  gui-icon: 'ENDER_CHEST'
+  permission: ''
+  allow-permission-override: false
+  1:
+    effect: 'dust'
+    style: 'orbit'
+    data: 'rainbow'
+  2:
+    effect: 'entity_effect'
+    style: 'feet'
+    data: 'rainbow'
 angel:
-    display-name: 'Angel'
-    gui-icon: 'ENDER_CHEST'
-    permission: ''
-    allow-permission-override: false
-    1:
-        effect: 'dust'
-        style: 'wings'
-        data: '255 255 255'
-    2:
-        effect: 'dust'
-        style: 'halo'
-        data: '255 255 0'
+  display-name: 'Angel'
+  gui-icon: 'ENDER_CHEST'
+  permission: ''
+  allow-permission-override: false
+  1:
+    effect: 'dust'
+    style: 'wings'
+    data: '255 255 255'
+  2:
+    effect: 'dust'
+    style: 'halo'
+    data: '255 255 0'

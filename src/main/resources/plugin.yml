@@ -7,8 +7,8 @@ author: Esophose
 website: https://www.spigotmc.org/resources/playerparticles.40261/
 softdepend: [PlaceholderAPI]
 commands:
-    pp:
-        description: The main PlayerParticles command. By default, opens the GUI.
-    ppo: 
-        description: Allows executing a /pp command for another player.
-        permission: playerparticles.other
+  pp:
+    description: The main PlayerParticles command. By default, opens the GUI.
+  ppo:
+    description: Allows executing a /pp command for another player.
+    permission: playerparticles.override

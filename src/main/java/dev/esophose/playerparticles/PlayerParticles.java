@@ -2,10 +2,10 @@
  * TODO: v7.0
  * + Add ability to create/manage fixed effects from the GUI
  * * Convert fixed effect ids into names
- * + Add effect/style settings folder that lets you disable effects/style and edit style properties
  */
 
  /*
+ * + Added effect/style settings folder that lets you disable effects/style and edit style properties
  * + Added setting to disable particles while in combat
  * * /ppo now uses your permissions instead of the player you are targetting
  * + Added effect/style name customization through config files

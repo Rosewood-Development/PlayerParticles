@@ -7,11 +7,18 @@ import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
+import org.bukkit.permissions.Permission;
+import org.bukkit.plugin.PluginManager;
 
 public class PermissionManager extends Manager {
     
@@ -54,7 +61,7 @@ public class PermissionManager extends Manager {
         /**
          * Checks if a Permissible has a PlayerParticles permission with a sub-permission
          * 
-         * @param p The Permissibhle
+         * @param p The Permissible
          * @param subPermission The sub-permission
          * @return True if the Player has permission
          */
@@ -66,6 +73,57 @@ public class PermissionManager extends Manager {
     
     public PermissionManager(PlayerParticles playerParticles) {
         super(playerParticles);
+
+        // Register plugin permissions to Bukkit
+        PluginManager pluginManager = Bukkit.getPluginManager();
+
+        Set<Permission> allPermissions = new HashSet<>();
+
+        // Effects
+        Map<String, Boolean> effectPermissions = new HashMap<>();
+        for (ParticleEffect effect : ParticleEffect.values()) {
+            Permission permission = new Permission("playerparticles.effect." + effect.getInternalName());
+            pluginManager.addPermission(permission);
+            effectPermissions.put(permission.getName(), true);
+        }
+
+        // Effects Wildcard
+        allPermissions.add(new Permission("playerparticles.effect.*", effectPermissions));
+
+        // Styles
+        List<ParticleStyle> styles = this.playerParticles.getManager(ParticleStyleManager.class).getStylesWithDisabled();
+        Map<String, Boolean> stylePermissions = new HashMap<>();
+        for (ParticleStyle style : styles) {
+            Permission permission = new Permission("playerparticles.style." + style.getInternalName());
+            pluginManager.addPermission(permission);
+            stylePermissions.put(permission.getName(), true);
+        }
+
+        // Styles Wildcard
+        allPermissions.add(new Permission("playerparticles.style.*", stylePermissions));
+
+        // Fixed
+        pluginManager.addPermission(new Permission("playerparticles.fixed"));
+        pluginManager.addPermission(new Permission("playerparticles.fixed.unlimited"));
+        pluginManager.addPermission(new Permission("playerparticles.fixed.clear"));
+        pluginManager.addPermission(new Permission("playerparticles.fixed.teleport"));
+
+        // Misc
+        pluginManager.addPermission(new Permission("playerparticles.reload"));
+        pluginManager.addPermission(new Permission("playerparticles.override"));
+        pluginManager.addPermission(new Permission("playerparticles.gui"));
+        pluginManager.addPermission(new Permission("playerparticles.particles.unlimited"));
+        pluginManager.addPermission(new Permission("playerparticles.groups.unlimited"));
+
+        // Register all non-child permissions
+        Map<String, Boolean> childPermissions = new HashMap<>();
+        for (Permission permission : allPermissions) {
+            pluginManager.addPermission(permission);
+            childPermissions.put(permission.getName(), true);
+        }
+
+        // Register all permissions as a child to the global plugin permission
+        pluginManager.addPermission(new Permission("playerparticles.*", childPermissions));
     }
 
     @Override
