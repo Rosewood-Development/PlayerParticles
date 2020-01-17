@@ -172,7 +172,10 @@ public class ParticleGroupPresetManager extends Manager {
      * @return a List of preset ParticleGroups the player can use
      */
     public List<ParticleGroupPreset> getPresetGroupsForPlayer(PPlayer player) {
-        return this.presetGroups.stream().filter(x -> x.canPlayerUse(player)).sorted(Comparator.comparing(ParticleGroupPreset::getDisplayName)).collect(Collectors.toList());
+        return this.presetGroups.stream()
+                .filter(x -> x.canPlayerUse(player))
+                .sorted(Comparator.comparing(ParticleGroupPreset::getDisplayName))
+                .collect(Collectors.toList());
     }
     
     /**

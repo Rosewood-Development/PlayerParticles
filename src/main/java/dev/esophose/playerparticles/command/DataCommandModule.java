@@ -73,7 +73,7 @@ public class DataCommandModule implements CommandModule {
     }
 
     public boolean canConsoleExecute() {
-        return false;
+        return true;
     }
 
 }

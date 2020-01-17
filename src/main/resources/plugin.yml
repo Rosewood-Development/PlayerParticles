@@ -11,4 +11,3 @@ commands:
     description: The main PlayerParticles command. By default, opens the GUI.
   ppo:
     description: Allows executing a /pp command for another player.
-    permission: playerparticles.override

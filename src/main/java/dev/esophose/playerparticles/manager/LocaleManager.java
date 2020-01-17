@@ -107,7 +107,7 @@ public class LocaleManager extends Manager {
     public String getLocaleMessage(String messageKey, StringPlaceholders stringPlaceholders) {
         String message = this.locale.getString(messageKey);
         if (message == null)
-            return "null";
+            return ChatColor.RED + "Missing message in locale file: " + messageKey;
         return ChatColor.translateAlternateColorCodes('&', stringPlaceholders.apply(message));
     }
 

@@ -41,7 +41,7 @@ public class HelpCommandModule implements CommandModule {
     }
 
     public boolean canConsoleExecute() {
-        return false;
+        return true;
     }
 
 }

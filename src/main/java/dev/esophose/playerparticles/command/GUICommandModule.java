@@ -17,7 +17,7 @@ public class GUICommandModule implements CommandModule {
         GuiManager guiManager = PlayerParticles.getInstance().getManager(GuiManager.class);
 
         if (!permissionManager.canOpenGui(pplayer)) {
-            localeManager.sendMessage(pplayer, "command-no-permission");
+            localeManager.sendMessage(pplayer, "gui-no-permission");
             return;
         }
 
