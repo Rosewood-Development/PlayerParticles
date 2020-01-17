@@ -1,39 +1,7 @@
 /*
- * TODO: v7.0
+ * TODO: v7.1
  * + Add ability to create/manage fixed effects from the GUI
  * * Convert fixed effect ids into names
- */
-
- /*
- * + Added effect/style settings folder that lets you disable effects/style and edit style properties
- * + Added setting to disable particles while in combat
- * * /ppo now uses your permissions instead of the player you are targetting
- * + Added effect/style name customization through config files
- * * Fixed the 'swords' style so you have to be holding a sword/trident
- * * Fixed several styles ignoring the disabled worlds setting
- * + Added a setting 'dust-size' to change the size of dust particles in 1.13+
- * * Cleaned up duplicated command parsing
- * + Added command '/pp fixed teleport <id>' that requires the permission playerparticles.fixed.teleport
- * + Added named colors to the color data autocomplete
- * + Added an API, accessible through the dev.esophose.playerparticles.api.PlayerParticlesAPI class
- * * Refactored the DataManager to only handle saving/loading data
- * * Refactored and cleaned up code to remove static abuse
- * * Changed the package names
- * + Config and lang files will no longer reset every update
- * + Added PlaceholderAPI support
- * * The style 'normal' is no longer granted permission by default
- * * Fixed an issue where 'random' data would not parse properly in preset_groups.yml
- * * Fixed an issue where preset groups would not display in the GUI even if the player has permission for them
- * + Added permission playerparticles.override for /ppo
- * * Changed how * permissions are handled, negative permissions should work now
- */
-
- /*
-  * UPDATED LOCALE MESSAGES:
-  * Renamed command-error-no-effects to command-error-missing-effects-or-styles
-  * Changed message for command-error-missing-effects-or-styles
-  * Added message gui-no-permission
-  * Added messages for fixed particles under the section #23.5
  */
 
 package dev.esophose.playerparticles;
