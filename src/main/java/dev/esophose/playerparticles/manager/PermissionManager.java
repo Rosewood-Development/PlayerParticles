@@ -375,7 +375,7 @@ public class PermissionManager extends Manager {
      * @return True if the player has permission to open the GUI
      */
     public boolean canOpenGui(PPlayer player) {
-        return PPermission.GUI.check(player.getUnderlyingExecutor());
+        return !Setting.GUI_REQUIRE_PERMISSION.getBoolean() || PPermission.GUI.check(player.getUnderlyingExecutor());
     }
     
     /**

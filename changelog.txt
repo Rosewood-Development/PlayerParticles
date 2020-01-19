@@ -3,11 +3,12 @@
 + Added setting to disable particles while in combat
 + Added effect/style name customization through config files
 + Added a setting 'dust-size' to change the size of dust particles in 1.13+
-+ Added command '/pp fixed teleport <id>' that requires the permission playerparticles.fixed.teleport
++ Added sub-command '/pp fixed teleport <id>' that requires the permission playerparticles.fixed.teleport
 + Added named colors to the color data autocomplete
 + Added an API, accessible through the dev.esophose.playerparticles.api.PlayerParticlesAPI class
 + Added PlaceholderAPI support
 + Added permission playerparticles.override for /ppo
++ Added permission playerparticles.gui to open the GUI. Disabled in the config by default
 * Config and lang files will no longer reset every update
 * The style 'normal' is no longer granted permission by default
 * /ppo now uses your permissions instead of the player you are targeting

@@ -36,6 +36,7 @@ public class ConfigurationManager extends Manager {
         MESSAGES_ENABLED("message-enabled", true, "If you're using other plugins to execute commands you may wish to turn off messages"),
         USE_MESSAGE_PREFIX("use-message-prefix", true, "Whether or not to use the message-prefix field when displaying messages"),
         GUI_ENABLED("gui-enabled", true, "If the command /pp gui is enabled", "Disable this if you have your own custom GUI through another plugin"),
+        GUI_REQUIRE_PERMISSION("gui-require-permission", false, "If the GUI should require the permission playerparticles.gui to open"),
         GUI_PRESETS_ONLY("gui-presets-only", false, "If true, only the preset groups will be available in the GUI", "Permissions to open the GUI will change to only open if the user has any preset groups available"),
         GUI_CLOSE_AFTER_GROUP_SELECTED("gui-close-after-group-selected", true, "If true, the GUI will close after selecting a group (either saved or preset)"),
         GUI_BUTTON_SOUND("gui-button-sound", true, "If clicking a GUI button should make a noise"),

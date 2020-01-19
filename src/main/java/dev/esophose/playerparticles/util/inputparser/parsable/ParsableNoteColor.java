@@ -21,6 +21,9 @@ public class ParsableNoteColor extends Parsable<NoteColor> {
         }
 
         int note = Integer.parseInt(input);
+        if (0 > note || note > 24)
+            return null;
+
         return new NoteColor(note);
     }
 

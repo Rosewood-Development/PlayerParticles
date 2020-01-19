@@ -84,11 +84,11 @@ public class GuiInventoryEditData extends GuiInventory {
                 rainbowColorMapping[6], // 16 Blue
                 rainbowColorMapping[5], // 17 Cyan
                 rainbowColorMapping[5], // 18 Cyan
-                rainbowColorMapping[5], // 20 Lime
-                rainbowColorMapping[5], // 21 Lime
-                rainbowColorMapping[5], // 22 Lime
-                rainbowColorMapping[5], // 23 Lime
-                rainbowColorMapping[5]  // 24 Lime
+                rainbowColorMapping[3], // 20 Lime
+                rainbowColorMapping[3], // 21 Lime
+                rainbowColorMapping[3], // 22 Lime
+                rainbowColorMapping[3], // 23 Lime
+                rainbowColorMapping[3]  // 24 Lime
         };
 
         // Note: Minecraft 1.8 through 1.13 had screwed up note color values, they were thankfully fixed in 1.14
