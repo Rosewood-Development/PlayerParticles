@@ -84,6 +84,7 @@ public class GuiInventoryEditData extends GuiInventory {
                 rainbowColorMapping[6], // 16 Blue
                 rainbowColorMapping[5], // 17 Cyan
                 rainbowColorMapping[5], // 18 Cyan
+                rainbowColorMapping[5], // 19 Cyan
                 rainbowColorMapping[3], // 20 Lime
                 rainbowColorMapping[3], // 21 Lime
                 rainbowColorMapping[3], // 22 Lime
