@@ -46,6 +46,7 @@ public class LocaleManager extends Manager {
             }
         }
 
+        boolean changed = false;
         CommentedFileConfiguration configuration = CommentedFileConfiguration.loadConfiguration(this.playerParticles, file);
         if (newFile) {
             configuration.addComments(locale.getLocaleName() + " translation by " + locale.getTranslatorName());
@@ -58,6 +59,7 @@ public class LocaleManager extends Manager {
                     configuration.set(key, value);
                 }
             }
+            changed = true;
         } else {
             Map<String, String> defaultLocaleStrings = locale.getDefaultLocaleStrings();
             for (String key : defaultLocaleStrings.keySet()) {
@@ -65,12 +67,15 @@ public class LocaleManager extends Manager {
                     continue;
 
                 String value = defaultLocaleStrings.get(key);
-                if (!configuration.contains(key))
+                if (!configuration.contains(key)) {
                     configuration.set(key, value);
+                    changed = true;
+                }
             }
         }
 
-        configuration.save();
+        if (changed)
+            configuration.save();
     }
 
     @Override

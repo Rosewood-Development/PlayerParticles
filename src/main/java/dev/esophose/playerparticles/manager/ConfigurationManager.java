@@ -269,7 +269,7 @@ public class ConfigurationManager extends Manager {
             return (List<String>) this.value;
         }
 
-        public void setIfNotExists(CommentedFileConfiguration fileConfiguration) {
+        public boolean setIfNotExists(CommentedFileConfiguration fileConfiguration) {
             this.loadValue();
 
             if (fileConfiguration.get(this.key) == null) {
@@ -293,7 +293,11 @@ public class ConfigurationManager extends Manager {
                 } else {
                     fileConfiguration.addComments(comments.toArray(new String[0]));
                 }
+
+                return true;
             }
+
+            return false;
         }
 
         /**
@@ -331,6 +335,7 @@ public class ConfigurationManager extends Manager {
     public void reload() {
         File configFile = new File(this.playerParticles.getDataFolder(), "config.yml");
         boolean setHeaderFooter = !configFile.exists();
+        boolean changed = setHeaderFooter;
 
         this.configuration = CommentedFileConfiguration.loadConfiguration(this.playerParticles, configFile);
 
@@ -339,7 +344,7 @@ public class ConfigurationManager extends Manager {
 
         for (Setting setting : Setting.values()) {
             setting.reset();
-            setting.setIfNotExists(this.configuration);
+            changed |= setting.setIfNotExists(this.configuration);
         }
 
         for (GuiIcon icon : GuiIcon.values())
@@ -348,7 +353,8 @@ public class ConfigurationManager extends Manager {
         if (setHeaderFooter)
             this.configuration.addComments(FOOTER);
 
-        this.configuration.save();
+        if (changed)
+            this.configuration.save();
     }
 
     @Override

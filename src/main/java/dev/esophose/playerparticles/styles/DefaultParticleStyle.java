@@ -10,6 +10,8 @@ public abstract class DefaultParticleStyle implements ParticleStyle {
 
     protected PlayerParticles playerParticles;
     private CommentedFileConfiguration config;
+    private boolean changed;
+
     private String internalStyleName;
     private boolean canBeFixedByDefault;
     private boolean canToggleWithMovementByDefault;
@@ -42,6 +44,7 @@ public abstract class DefaultParticleStyle implements ParticleStyle {
         File file = new File(directory, this.internalStyleName + ".yml");
         this.config = CommentedFileConfiguration.loadConfiguration(PlayerParticles.getInstance(), file);
 
+        this.changed = false;
         this.setIfNotExists("style-name", this.internalStyleName, "The name the style will display as");
         this.setIfNotExists("enabled", true, "If the style is enabled or not");
         this.setIfNotExists("can-be-fixed", this.canBeFixedByDefault, "If the style can be used in /pp fixed");
@@ -49,7 +52,9 @@ public abstract class DefaultParticleStyle implements ParticleStyle {
         this.setIfNotExists("fixed-effect-offset", this.fixedEffectOffsetByDefault, "How far vertically to offset the style position for fixed effects");
 
         this.setDefaultSettings(this.config);
-        this.config.save();
+
+        if (this.changed)
+            this.config.save();
     }
 
     /**
@@ -89,6 +94,7 @@ public abstract class DefaultParticleStyle implements ParticleStyle {
         }
 
         this.config.set(setting, value, ObjectArrays.concat(comments, new String[] { defaultMessage }, String.class));
+        this.changed = true;
     }
 
     @Override

@@ -140,10 +140,11 @@ public enum ParticleEffect {
         File file = new File(directory, this.getInternalName() + ".yml");
         this.config = CommentedFileConfiguration.loadConfiguration(PlayerParticles.getInstance(), file);
 
-        this.setIfNotExists("effect-name", this.getInternalName(), "The name the effect will display as");
-        this.setIfNotExists("enabled", this.enabledByDefault, "If the effect is enabled or not");
+        boolean changed = this.setIfNotExists("effect-name", this.getInternalName(), "The name the effect will display as");
+        changed |= this.setIfNotExists("enabled", this.enabledByDefault, "If the effect is enabled or not");
 
-        this.config.save();
+        if (changed)
+            this.config.save();
     }
 
     /**
@@ -168,10 +169,11 @@ public enum ParticleEffect {
      * @param setting The setting name
      * @param value The setting value
      * @param comments Comments for the setting
+     * @return true if changes were made
      */
-    private void setIfNotExists(String setting, Object value, String... comments) {
+    private boolean setIfNotExists(String setting, Object value, String... comments) {
         if (this.config.get(setting) != null)
-            return;
+            return false;
 
         String defaultMessage = "Default: ";
         if (value instanceof String && ParticleUtils.containsConfigSpecialCharacters((String) value)) {
@@ -181,6 +183,7 @@ public enum ParticleEffect {
         }
 
         this.config.set(setting, value, ObjectArrays.concat(comments, new String[] { defaultMessage }, String.class));
+        return true;
     }
 
     /**
