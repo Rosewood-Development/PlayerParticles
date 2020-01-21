@@ -18,7 +18,8 @@ public class DefaultCommandModule implements CommandModule {
         List<String> matches = new ArrayList<>();
         List<String> commandNames = PlayerParticles.getInstance().getManager(CommandManager.class).getCommandNames();
         
-        if (args.length == 0) return commandNames;
+        if (args.length == 0)
+            return commandNames;
         
         StringUtil.copyPartialMatches(args[0], commandNames, matches);
 

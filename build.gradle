@@ -27,7 +27,7 @@ dependencies {
     shadow 'org.jetbrains:annotations:16.0.2'
     shadow 'me.clip:placeholderapi:2.10.4'
     shadow 'org.xerial:sqlite-jdbc:3.23.1'
-    shadow 'org.spigotmc:spigot-api:1.15-R0.1-SNAPSHOT'
+    shadow 'org.spigotmc:spigot-api:1.15.2-R0.1-SNAPSHOT'
 }
 
 shadowJar {
