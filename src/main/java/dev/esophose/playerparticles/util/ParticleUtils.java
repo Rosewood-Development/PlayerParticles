@@ -36,7 +36,7 @@ public final class ParticleUtils {
         if (input == null || input.trim().isEmpty())
             return null;
 
-        return Material.matchMaterial(input);
+        return Material.matchMaterial(input.toUpperCase());
     }
 
     /**
