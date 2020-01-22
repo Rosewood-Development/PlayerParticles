@@ -3,6 +3,7 @@ package dev.esophose.playerparticles.config;
 import java.io.File;
 import java.io.Reader;
 import java.lang.reflect.Field;
+import java.util.stream.Stream;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.yaml.snakeyaml.DumperOptions;
@@ -79,7 +80,9 @@ public class CommentedFileConfiguration extends CommentedConfigurationSection {
             field_yamlOptions.setAccessible(true);
             DumperOptions yamlOptions = (DumperOptions) field_yamlOptions.get(yamlConfiguration);
             yamlOptions.setWidth(Integer.MAX_VALUE);
-            yamlOptions.setIndicatorIndent(2);
+
+            if (Stream.of(DumperOptions.class.getDeclaredMethods()).anyMatch(x -> x.getName().equals("setIndicatorIndent")))
+                yamlOptions.setIndicatorIndent(2);
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
         }
