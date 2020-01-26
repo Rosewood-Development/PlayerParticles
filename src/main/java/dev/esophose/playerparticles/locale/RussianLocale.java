@@ -49,12 +49,14 @@ public class RussianLocale implements Locale {
             this.put("command-description-worlds", "Узнать, в каком мире Ваши частицы отключены.");
 
             this.put("#2", "Fixed Particle Command Description Messages");
-            this.put("command-description-fixed-create", "&e/pp fixed create «x> <y> <z>|<looking» <Эффект> <Стиль> [данные] - Создаёт новый эффект.");
-            this.put("command-description-fixed-edit", "&e/pp fixed edit <id> <Эффект|Стиль|Данные> <аргумент> - Изменяет чать эффекта по его ID.");
+            this.put("command-description-fixed-create", "&e/pp fixed create <<x> <y> <z>|<looking>> <Эффект> <Стиль> [данные] - Создаёт новый эффект.");
+            this.put("command-description-fixed-create-console", "&e/pp fixed create <x> <y> <z> <Мир> <Эффект> <Стиль> [данные] - Создаёт новый эффект.");
+            this.put("command-description-fixed-edit", "&e/pp fixed edit <id> <effect|style|data|location> <аргумент> - Изменяет чать эффекта по его ID.");
             this.put("command-description-fixed-remove", "&e/pp fixed remove <id> - Удаляет эффект по его ID.");
             this.put("command-description-fixed-list", "&e/pp fixed list - Показывает список ID всех Ваших эффектов.");
             this.put("command-description-fixed-info", "&e/pp fixed info <id> - Показывает информацию об одном из Ваших эффектов.");
             this.put("command-description-fixed-clear", "&e/pp fixed clear <Радиус> - Удаляет все эффекты игроков, находящихся в заданном радиусе.");
+            this.put("command-description-fixed-clear-console", "&e/pp fixed clear <Радиус> <x> <y> <z> <Мир> - Удаляет все эффекты игроков, находящихся в заданном радиусе.");
             this.put("command-description-fixed-teleport", "&e/pp fixed teleport <id> - Телепортирует вас к одному из ваших фиксированных эффектов");
 
             this.put("#2.5", "Group Command Description Messages");
@@ -147,11 +149,11 @@ public class RussianLocale implements Locale {
             this.put("data-usage-none", "&eЭффект &b%effect% &eне использует какие-либо данные!");
             this.put("data-usage-block", "&eЭффект &b%effect% &eзапрашивает &bблок &eданных! &bФормат: <названиеБлока>");
             this.put("data-usage-item", "&eЭффект &b%effect% &eзапрашивает &bпредмет &eданных! &bФормат: <названиеПредмета>");
-            this.put("data-usage-color", "&eЭффект &b%effect% &eзапрашивает &bцвет &eданных! &bФормат: «0-255> <0-255> <0-255»|<rainbow>|<random>");
+            this.put("data-usage-color", "&eЭффект &b%effect% &eзапрашивает &bцвет &eданных! &bФормат: <0-255> <0-255> <0-255>|<rainbow>|<random>");
             this.put("data-usage-note", "&eЭффект &b%effect% &eзапрашивает &bноту &eданных! &bФормат: <0-24>|<rainbow>|<random>");
             this.put("data-invalid-block", "&bБлок &cданных, который Вы ввели, недействителен! &bФормат: <названиеБлока>");
             this.put("data-invalid-item", "&bПредмет &cданных, который Вы ввели, недействителен! &bФормат: <названиеПредмета>");
-            this.put("data-invalid-color", "&bЦвет &cданных, который Вы ввели, недействителен! &bФормат: «0-255> <0-255> <0-255»|<rainbow>|<random>");
+            this.put("data-invalid-color", "&bЦвет &cданных, который Вы ввели, недействителен! &bФормат: <0-255> <0-255> <0-255>|<rainbow>|<random>");
             this.put("data-invalid-note", "&bНота &cданных, которую Вы ввели, недействительна! &bФормат: <0-24>|<rainbow>|<random>");
             this.put("data-invalid-material-not-item", "&bМатериал &cпредмета&b%material%&c, который Вы ввели, не является предметом!");
             this.put("data-invalid-material-not-block",  "&bМатериал &cблока&b%material%&c, который Вы ввели, не является блоком!");

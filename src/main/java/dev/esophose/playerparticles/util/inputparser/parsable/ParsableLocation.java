@@ -4,8 +4,10 @@ import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.util.inputparser.Parsable;
 import java.util.List;
 import java.util.Set;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -20,7 +22,7 @@ public class ParsableLocation extends Parsable<Location> {
         String input = inputs.remove(0);
 
         Player player = pplayer.getPlayer();
-        if (input.equalsIgnoreCase("looking")) {
+        if (player != null && input.equalsIgnoreCase("looking")) {
             Block targetBlock = player.getTargetBlock((Set<Material>) null, 8); // Need the Set<Material> cast for 1.9 support
             int maxDistanceSqrd = 6 * 6;
             if (targetBlock.getLocation().distanceSquared(player.getLocation()) > maxDistanceSqrd)
@@ -34,28 +36,38 @@ public class ParsableLocation extends Parsable<Location> {
 
         double x, y, z;
 
-        if (input.startsWith("~")) {
+        if (player != null && input.startsWith("~")) {
             if (input.equals("~")) x = player.getLocation().getX();
             else x = player.getLocation().getX() + Double.parseDouble(input.substring(1));
         } else {
             x = Double.parseDouble(input);
         }
 
-        if (input2.startsWith("~")) {
+        if (player != null && input2.startsWith("~")) {
             if (input2.equals("~")) y = player.getLocation().getY();
             else y = player.getLocation().getY() + Double.parseDouble(input2.substring(1));
         } else {
-            y = Double.parseDouble(input);
+            y = Double.parseDouble(input2);
         }
 
-        if (input3.startsWith("~")) {
+        if (player != null && input3.startsWith("~")) {
             if (input3.equals("~")) z = player.getLocation().getZ();
             else z = player.getLocation().getZ() + Double.parseDouble(input3.substring(1));
         } else {
-            z = Double.parseDouble(input);
+            z = Double.parseDouble(input3);
         }
 
-        return new Location(player.getWorld(), x, y, z);
+        World world;
+        if (player == null) {
+            world = Bukkit.getWorld(inputs.remove(0));
+        } else {
+            world = player.getWorld();
+        }
+
+        if (world == null)
+            return null;
+
+        return new Location(world, x, y, z);
     }
 
 }

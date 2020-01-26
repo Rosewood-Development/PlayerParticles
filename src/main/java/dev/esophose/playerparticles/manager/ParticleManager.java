@@ -2,6 +2,7 @@ package dev.esophose.playerparticles.manager;
 
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import dev.esophose.playerparticles.particles.ConsolePPlayer;
 import dev.esophose.playerparticles.particles.FixedParticleEffect;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.PPlayer;
@@ -68,6 +69,7 @@ public class ParticleManager extends Manager implements Listener, Runnable {
         dataManager.loadFixedEffects();
         for (Player player : Bukkit.getOnlinePlayers())
             dataManager.getPPlayer(player.getUniqueId(), (pplayer) -> { }); // Loads the PPlayer from the database
+        dataManager.getPPlayer(ConsolePPlayer.getUUID(), (pplayer) -> { }); // Load the console PPlayer
     }
 
     @Override

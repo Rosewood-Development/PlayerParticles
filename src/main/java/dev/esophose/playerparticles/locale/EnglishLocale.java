@@ -50,11 +50,13 @@ public class EnglishLocale implements Locale {
 
             this.put("#2", "Fixed Particle Command Description Messages");
             this.put("command-description-fixed-create", "&e/pp fixed create <<x> <y> <z>|<looking>> <effect> <style> [data] - Creates a new fixed effect");
-            this.put("command-description-fixed-edit", "&e/pp fixed edit <id> <effect|style|data> <args> - Edit part of a fixed effect by its ID");
+            this.put("command-description-fixed-create-console", "&e/pp fixed create <x> <y> <z> <world> <effect> <style> [data] - Creates a new fixed effect");
+            this.put("command-description-fixed-edit", "&e/pp fixed edit <id> <effect|style|data|location> <args> - Edit part of a fixed effect by its ID");
             this.put("command-description-fixed-remove", "&e/pp fixed remove <ID> - Removes a fixed effect by its ID");
             this.put("command-description-fixed-list", "&e/pp fixed list - Lists all IDs of your fixed effects");
             this.put("command-description-fixed-info", "&e/pp fixed info <ID> - Gets info on one of your fixed effects");
             this.put("command-description-fixed-clear", "&e/pp fixed clear <radius> - Clears all fixed effects of all players within the given radius");
+            this.put("command-description-fixed-clear-console", "&e/pp fixed clear <radius> <x> <y> <z> <world> - Clears all fixed effects of all players within the given radius");
             this.put("command-description-fixed-teleport", "&e/pp fixed teleport <id> - Teleports you to one of your fixed effects");
 
             this.put("#2.5", "Group Command Description Messages");

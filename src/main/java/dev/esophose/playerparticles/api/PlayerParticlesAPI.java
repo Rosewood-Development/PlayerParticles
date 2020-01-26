@@ -5,6 +5,7 @@ import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.GuiManager;
 import dev.esophose.playerparticles.manager.ParticleManager;
 import dev.esophose.playerparticles.manager.ParticleStyleManager;
+import dev.esophose.playerparticles.particles.ConsolePPlayer;
 import dev.esophose.playerparticles.particles.FixedParticleEffect;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
@@ -23,6 +24,8 @@ import java.util.Set;
 import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -79,6 +82,35 @@ public final class PlayerParticlesAPI {
         Objects.requireNonNull(player);
 
         return this.getPPlayer(player.getUniqueId());
+    }
+
+    /**
+     * Gets a PPlayer from a CommandSender
+     *
+     * @param sender The CommandSender, either a Player or ConsoleCommandSender
+     * @return The PPlayer, or null if not found
+     */
+    @Nullable
+    public PPlayer getPPlayer(@NotNull CommandSender sender) {
+        Objects.requireNonNull(sender);
+
+        if (sender instanceof Player) {
+            return this.getPPlayer((Player) sender);
+        } else if (sender instanceof ConsoleCommandSender) {
+            return this.getConsolePPlayer();
+        }
+
+        return null;
+    }
+
+    /**
+     * Gets the PPlayer representing the console
+     *
+     * @return The PPlayer, or null if not found
+     */
+    @Nullable
+    public PPlayer getConsolePPlayer() {
+        return this.getPPlayer(ConsolePPlayer.getUUID());
     }
 
     //endregion
@@ -489,21 +521,21 @@ public final class PlayerParticlesAPI {
     /**
      * Creates a fixed particle effect for a player
      *
-     * @param player The player to create for
+     * @param sender The sender to create for, either a Player or ConsoleCommandSender
      * @param location The location to create at
      * @param particle The particle to display
      */
-    public void createFixedParticleEffect(@NotNull Player player, @NotNull Location location, @NotNull ParticlePair particle) {
+    public void createFixedParticleEffect(@NotNull CommandSender sender, @NotNull Location location, @NotNull ParticlePair particle) {
         Objects.requireNonNull(location);
         Objects.requireNonNull(location.getWorld());
         Objects.requireNonNull(particle);
 
         DataManager dataManager = this.playerParticles.getManager(DataManager.class);
-        PPlayer pplayer = this.getPPlayer(player);
+        PPlayer pplayer = this.getPPlayer(sender);
         if (pplayer == null)
             return;
 
-        FixedParticleEffect fixedEffect = new FixedParticleEffect(player.getUniqueId(), pplayer.getNextFixedEffectId(), location, particle);
+        FixedParticleEffect fixedEffect = new FixedParticleEffect(pplayer.getUniqueId(), pplayer.getNextFixedEffectId(), location, particle);
         pplayer.addFixedEffect(fixedEffect);
         dataManager.saveFixedEffect(fixedEffect);
     }
@@ -511,58 +543,58 @@ public final class PlayerParticlesAPI {
     /**
      * Creates a fixed particle effect for a player
      *
-     * @param player The player to create for
+     * @param sender The sender to create for, either a Player or ConsoleCommandSender
      * @param location The location to create at
      * @param effect The effect of the particle
      * @param style The style of the particle
      */
-    public void createFixedParticleEffect(@NotNull Player player, @NotNull Location location, @NotNull ParticleEffect effect, @NotNull ParticleStyle style) {
-        this.createFixedParticleEffect(player, location, effect, style, null, null, null);
+    public void createFixedParticleEffect(@NotNull CommandSender sender, @NotNull Location location, @NotNull ParticleEffect effect, @NotNull ParticleStyle style) {
+        this.createFixedParticleEffect(sender, location, effect, style, null, null, null);
     }
 
     /**
      * Creates a fixed particle effect for a player
      *
-     * @param player The player to create for
+     * @param sender The sender to create for, either a Player or ConsoleCommandSender
      * @param location The location to create at
      * @param effect The effect of the particle
      * @param style The style of the particle
      * @param colorData The color data of the particle
      */
-    public void createFixedParticleEffect(@NotNull Player player, @NotNull Location location, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @NotNull OrdinaryColor colorData) {
-        this.createFixedParticleEffect(player, location, effect, style, colorData, null, null);
+    public void createFixedParticleEffect(@NotNull CommandSender sender, @NotNull Location location, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @NotNull OrdinaryColor colorData) {
+        this.createFixedParticleEffect(sender, location, effect, style, colorData, null, null);
     }
 
     /**
      * Creates a fixed particle effect for a player
      *
-     * @param player The player to create for
+     * @param sender The sender to create for, either a Player or ConsoleCommandSender
      * @param location The location to create at
      * @param effect The effect of the particle
      * @param style The style of the particle
      * @param noteColorData The note color data of the particle
      */
-    public void createFixedParticleEffect(@NotNull Player player, @NotNull Location location, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @NotNull NoteColor noteColorData) {
-        this.createFixedParticleEffect(player, location, effect, style, null, noteColorData, null);
+    public void createFixedParticleEffect(@NotNull CommandSender sender, @NotNull Location location, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @NotNull NoteColor noteColorData) {
+        this.createFixedParticleEffect(sender, location, effect, style, null, noteColorData, null);
     }
 
     /**
      * Creates a fixed particle effect for a player
      *
-     * @param player The player to create for
+     * @param sender The sender to create for, either a Player or ConsoleCommandSender
      * @param location The location to create at
      * @param effect The effect of the particle
      * @param style The style of the particle
      * @param materialData The material data of the particle
      */
-    public void createFixedParticleEffect(@NotNull Player player, @NotNull Location location, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @NotNull Material materialData) {
-        this.createFixedParticleEffect(player, location, effect, style, null, null, materialData);
+    public void createFixedParticleEffect(@NotNull CommandSender sender, @NotNull Location location, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @NotNull Material materialData) {
+        this.createFixedParticleEffect(sender, location, effect, style, null, null, materialData);
     }
 
     /**
      * Creates a fixed particle effect for a player
      *
-     * @param player The player to create for
+     * @param sender The sender to create for, either a Player or ConsoleCommandSender
      * @param location The location to create at
      * @param effect The effect of the particle
      * @param style The style of the particle
@@ -570,13 +602,13 @@ public final class PlayerParticlesAPI {
      * @param noteColorData The note color data of the particle
      * @param materialData The material data of the particle
      */
-    private void createFixedParticleEffect(@NotNull Player player, @NotNull Location location, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @Nullable OrdinaryColor colorData, @Nullable NoteColor noteColorData, @Nullable Material materialData) {
+    private void createFixedParticleEffect(@NotNull CommandSender sender, @NotNull Location location, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @Nullable OrdinaryColor colorData, @Nullable NoteColor noteColorData, @Nullable Material materialData) {
         Objects.requireNonNull(location);
         Objects.requireNonNull(location.getWorld());
         Objects.requireNonNull(effect);
         Objects.requireNonNull(style);
 
-        PPlayer pplayer = this.getPPlayer(player);
+        PPlayer pplayer = this.getPPlayer(sender);
         if (pplayer == null)
             return;
 
@@ -590,25 +622,25 @@ public final class PlayerParticlesAPI {
             }
         }
 
-        ParticlePair particle = new ParticlePair(player.getUniqueId(), 1, effect, style, itemMaterialData, blockMaterialData, colorData, noteColorData);
-        this.createFixedParticleEffect(player, location, particle);
+        ParticlePair particle = new ParticlePair(pplayer.getUniqueId(), 1, effect, style, itemMaterialData, blockMaterialData, colorData, noteColorData);
+        this.createFixedParticleEffect(sender, location, particle);
     }
 
     /**
      * Edits a fixed particle effect for a player
      *
-     * @param player The player to edit from
+     * @param sender The sender to edit from, either a Player or ConsoleCommandSender
      * @param fixedEffect The modified fixed effect to edit
      */
-    public void editFixedParticleEffect(@NotNull Player player, @NotNull FixedParticleEffect fixedEffect) {
+    public void editFixedParticleEffect(@NotNull CommandSender sender, @NotNull FixedParticleEffect fixedEffect) {
         Objects.requireNonNull(fixedEffect);
 
-        PPlayer pplayer = this.getPPlayer(player);
+        PPlayer pplayer = this.getPPlayer(sender);
         if (pplayer == null)
             return;
 
         DataManager dataManager = this.playerParticles.getManager(DataManager.class);
-        if (this.validateFixedParticleEffect(player, fixedEffect.getId()) != null) {
+        if (this.validateFixedParticleEffect(sender, fixedEffect.getId()) != null) {
             pplayer.removeFixedEffect(fixedEffect.getId());
             pplayer.addFixedEffect(fixedEffect);
             dataManager.updateFixedEffect(fixedEffect);
@@ -618,16 +650,16 @@ public final class PlayerParticlesAPI {
     /**
      * Edits a fixed particle effect for a player
      *
-     * @param player The player to edit from
+     * @param sender The sender to edit from, either a Player or ConsoleCommandSender
      * @param id The ID of the fixed particle effect
      * @param location The new location
      */
-    public void editFixedParticleEffect(@NotNull Player player, int id, @NotNull Location location) {
+    public void editFixedParticleEffect(@NotNull CommandSender sender, int id, @NotNull Location location) {
         Objects.requireNonNull(location);
         Objects.requireNonNull(location.getWorld());
 
         DataManager dataManager = this.playerParticles.getManager(DataManager.class);
-        FixedParticleEffect fixedEffect = this.validateFixedParticleEffect(player, id);
+        FixedParticleEffect fixedEffect = this.validateFixedParticleEffect(sender, id);
         if (fixedEffect != null) {
             fixedEffect.setCoordinates(location.getX(), location.getY(), location.getZ());
             dataManager.saveFixedEffect(fixedEffect);
@@ -637,15 +669,15 @@ public final class PlayerParticlesAPI {
     /**
      * Edits a fixed particle effect for a player
      *
-     * @param player The player to edit from
+     * @param sender The sender to edit from, either a Player or ConsoleCommandSender
      * @param id The ID of the fixed particle effect
      * @param effect The new effect
      */
-    public void editFixedParticleEffect(@NotNull Player player, int id, @NotNull ParticleEffect effect) {
+    public void editFixedParticleEffect(@NotNull CommandSender sender, int id, @NotNull ParticleEffect effect) {
         Objects.requireNonNull(effect);
 
         DataManager dataManager = this.playerParticles.getManager(DataManager.class);
-        FixedParticleEffect fixedEffect = this.validateFixedParticleEffect(player, id);
+        FixedParticleEffect fixedEffect = this.validateFixedParticleEffect(sender, id);
         if (fixedEffect != null) {
             fixedEffect.getParticlePair().setEffect(effect);
             dataManager.saveFixedEffect(fixedEffect);
@@ -655,15 +687,15 @@ public final class PlayerParticlesAPI {
     /**
      * Edits a fixed particle effect for a player
      *
-     * @param player The player to edit from
+     * @param sender The sender to edit from, either a Player or ConsoleCommandSender
      * @param id The ID of the fixed particle effect
      * @param style The new style
      */
-    public void editFixedParticleEffect(@NotNull Player player, int id, @NotNull ParticleStyle style) {
+    public void editFixedParticleEffect(@NotNull CommandSender sender, int id, @NotNull ParticleStyle style) {
         Objects.requireNonNull(style);
 
         DataManager dataManager = this.playerParticles.getManager(DataManager.class);
-        FixedParticleEffect fixedEffect = this.validateFixedParticleEffect(player, id);
+        FixedParticleEffect fixedEffect = this.validateFixedParticleEffect(sender, id);
         if (fixedEffect != null) {
             fixedEffect.getParticlePair().setStyle(style);
             dataManager.saveFixedEffect(fixedEffect);
@@ -673,15 +705,15 @@ public final class PlayerParticlesAPI {
     /**
      * Edits a fixed particle effect for a player
      *
-     * @param player The player to edit from
+     * @param sender The sender to edit from, either a Player or ConsoleCommandSender
      * @param id The ID of the fixed particle effect
      * @param colorData The new color data
      */
-    public void editFixedParticleEffect(@NotNull Player player, int id, @NotNull OrdinaryColor colorData) {
+    public void editFixedParticleEffect(@NotNull CommandSender sender, int id, @NotNull OrdinaryColor colorData) {
         Objects.requireNonNull(colorData);
 
         DataManager dataManager = this.playerParticles.getManager(DataManager.class);
-        FixedParticleEffect fixedEffect = this.validateFixedParticleEffect(player, id);
+        FixedParticleEffect fixedEffect = this.validateFixedParticleEffect(sender, id);
         if (fixedEffect != null) {
             fixedEffect.getParticlePair().setColor(colorData);
             dataManager.saveFixedEffect(fixedEffect);
@@ -691,15 +723,15 @@ public final class PlayerParticlesAPI {
     /**
      * Edits a fixed particle effect for a player
      *
-     * @param player The player to edit from
+     * @param sender The sender to edit from, either a Player or ConsoleCommandSender
      * @param id The ID of the fixed particle effect
      * @param noteColorData The new note color data
      */
-    public void editFixedParticleEffect(@NotNull Player player, int id, @NotNull NoteColor noteColorData) {
+    public void editFixedParticleEffect(@NotNull CommandSender sender, int id, @NotNull NoteColor noteColorData) {
         Objects.requireNonNull(noteColorData);
 
         DataManager dataManager = this.playerParticles.getManager(DataManager.class);
-        FixedParticleEffect fixedEffect = this.validateFixedParticleEffect(player, id);
+        FixedParticleEffect fixedEffect = this.validateFixedParticleEffect(sender, id);
         if (fixedEffect != null) {
             fixedEffect.getParticlePair().setNoteColor(noteColorData);
             dataManager.saveFixedEffect(fixedEffect);
@@ -709,15 +741,15 @@ public final class PlayerParticlesAPI {
     /**
      * Edits a fixed particle effect for a player
      *
-     * @param player The player to edit from
+     * @param sender The sender to edit from, either a Player or ConsoleCommandSender
      * @param id The ID of the fixed particle effect
      * @param materialData The new material data
      */
-    public void editFixedParticleEffect(@NotNull Player player, int id, @NotNull Material materialData) {
+    public void editFixedParticleEffect(@NotNull CommandSender sender, int id, @NotNull Material materialData) {
         Objects.requireNonNull(materialData);
 
         DataManager dataManager = this.playerParticles.getManager(DataManager.class);
-        FixedParticleEffect fixedEffect = this.validateFixedParticleEffect(player, id);
+        FixedParticleEffect fixedEffect = this.validateFixedParticleEffect(sender, id);
         if (fixedEffect != null) {
             if (materialData.isBlock()) {
                 fixedEffect.getParticlePair().setBlockMaterial(materialData);
@@ -731,19 +763,19 @@ public final class PlayerParticlesAPI {
     /**
      * Removes a fixed particle effect from a player
      *
-     * @param player The player to remove from
+     * @param sender The sender to remove from, either a Player or ConsoleCommandSender
      * @param id The ID of the fixed particle effect
      */
-    public void removeFixedEffect(@NotNull Player player, int id) {
+    public void removeFixedEffect(@NotNull CommandSender sender, int id) {
         DataManager dataManager = this.playerParticles.getManager(DataManager.class);
-        FixedParticleEffect fixedEffect = this.validateFixedParticleEffect(player, id);
+        FixedParticleEffect fixedEffect = this.validateFixedParticleEffect(sender, id);
         if (fixedEffect != null) {
-            PPlayer pplayer = this.getPPlayer(player);
+            PPlayer pplayer = this.getPPlayer(sender);
             if (pplayer == null)
                 return;
 
             pplayer.removeFixedEffect(id);
-            dataManager.removeFixedEffect(player.getUniqueId(), fixedEffect.getId());
+            dataManager.removeFixedEffect(pplayer.getUniqueId(), fixedEffect.getId());
         }
     }
 
@@ -780,13 +812,13 @@ public final class PlayerParticlesAPI {
     /**
      * Validates that a fixed particle effect with the given ID exists for a player
      *
-     * @param player The player to check
+     * @param sender The sender to check, either a Player or CommandSender
      * @param id The ID of the fixed particle effect
      * @return The fixed particle effect
      */
     @Nullable
-    private FixedParticleEffect validateFixedParticleEffect(@NotNull Player player, int id) {
-        PPlayer pplayer = this.getPPlayer(player);
+    private FixedParticleEffect validateFixedParticleEffect(@NotNull CommandSender sender, int id) {
+        PPlayer pplayer = this.getPPlayer(sender);
         if (pplayer == null)
             return null;
 
@@ -800,13 +832,13 @@ public final class PlayerParticlesAPI {
     /**
      * Gets a fixed particle effect for a player
      *
-     * @param player The player to get from
+     * @param sender The sender to get from, either a Player or CommandSender
      * @param id The ID of the fixed particle effect
      * @return The fixed particle effect, or null if not found
      */
     @Nullable
-    public FixedParticleEffect getFixedParticleEffect(@NotNull Player player, int id) {
-        PPlayer pplayer = this.getPPlayer(player);
+    public FixedParticleEffect getFixedParticleEffect(@NotNull CommandSender sender, int id) {
+        PPlayer pplayer = this.getPPlayer(sender);
         if (pplayer == null)
             return null;
 
@@ -816,12 +848,12 @@ public final class PlayerParticlesAPI {
     /**
      * Gets a collection of a player's fixed particle effects
      *
-     * @param player The player to get from
+     * @param sender The sender to get from, either a Player or CommandSender
      * @return A collection of the player's fixed particle effects
      */
     @NotNull
-    public Collection<FixedParticleEffect> getFixedParticleEffects(@NotNull Player player) {
-        PPlayer pplayer = this.getPPlayer(player);
+    public Collection<FixedParticleEffect> getFixedParticleEffects(@NotNull CommandSender sender) {
+        PPlayer pplayer = this.getPPlayer(sender);
         if (pplayer == null)
             return new ArrayList<>();
 

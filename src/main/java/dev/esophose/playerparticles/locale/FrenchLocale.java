@@ -50,11 +50,13 @@ public class FrenchLocale implements Locale {
 
             this.put("#2", "Fixed Particle Command Description Messages");
             this.put("command-description-fixed-create", "&e/pp fixed create <<x> <y> <z>|<looking>> <effect> <style> [data] - Créez une particule fixe");
-            this.put("command-description-fixed-edit", "&e/pp fixed edit <id> <effect|style|data> <args> - Modifiez une partie d'une particule fixe par son ID");
+            this.put("command-description-fixed-create-console", "&e/pp fixed create <x> <y> <z> <world> <effect> <style> [data] - Créez une particule fixe");
+            this.put("command-description-fixed-edit", "&e/pp fixed edit <id> <effect|style|data|location> <args> - Modifiez une partie d'une particule fixe par son ID");
             this.put("command-description-fixed-remove", "&e/pp fixed remove <id> - Supprimez une particule fixe par son ID");
             this.put("command-description-fixed-list", "&e/pp fixed list - Affiche l'ID de tous vos effets fixes");
             this.put("command-description-fixed-info", "&e/pp fixed info <id> - Voir des informations sur l'une de vos particules fixe");
             this.put("command-description-fixed-clear", "&e/pp fixed clear <radius> - Supprimez tous les effets fixe de tous les joueurs d'un rayon");
+            this.put("command-description-fixed-clear-console", "&e/pp fixed clear <radius> <x> <y> <z> <world> - Supprimez tous les effets fixe de tous les joueurs d'un rayon");
             this.put("command-description-fixed-teleport", "&e/pp fixed teleport <id> - Vous téléporte vers un de vos effets fixes");
 
             this.put("#2.5", "Group Command Description Messages");

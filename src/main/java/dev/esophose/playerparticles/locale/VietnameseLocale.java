@@ -50,11 +50,13 @@ public class VietnameseLocale implements Locale {
 
             this.put("#2", "Fixed Particle Command Description Messages");
             this.put("command-description-fixed-create", "&e/pp fixed create <<x> <y> <z>|<looking>> <effect> <style> [data] - Tạo mới một hiệu ứng cố định");
-            this.put("command-description-fixed-edit", "&e/pp fixed edit <id> <effect|style|data> <args> - Chỉnh sửa hiệu ứng cố định bằng IDs của nó");
+            this.put("command-description-fixed-create-console", "&e/pp fixed create <x> <y> <z> <world> <effect> <style> [data] - Tạo mới một hiệu ứng cố định");
+            this.put("command-description-fixed-edit", "&e/pp fixed edit <id> <effect|style|data|location> <args> - Chỉnh sửa hiệu ứng cố định bằng IDs của nó");
             this.put("command-description-fixed-remove", "&e/pp fixed remove <id> - Xóa hiệu ứng cố định");
             this.put("command-description-fixed-list", "&e/pp fixed list - Danh sách các hiệu ứng cố định dưới dạng IDs");
             this.put("command-description-fixed-info", "&e/pp fixed info <id> - Hiển thị thông tin về hiệu ứng cố định");
             this.put("command-description-fixed-clear", "&e/pp fixed clear <radius> - Xóa toàn bộ hiệu ứng trong khu vực bán kính");
+            this.put("command-description-fixed-clear-console", "&e/pp fixed clear <radius> <x> <y> <z> <world> - Xóa toàn bộ hiệu ứng trong khu vực bán kính");
             this.put("command-description-fixed-teleport", "&e/pp fixed teleport <id> - Dịch chuyển bạn đến một trong những hiệu ứng cố định của bạn");
 
             this.put("#2.5", "Group Command Description Messages");

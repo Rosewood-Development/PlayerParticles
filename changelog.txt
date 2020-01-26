@@ -6,6 +6,7 @@
 + Added sub-command '/pp fixed teleport <id>' that requires the permission playerparticles.fixed.teleport
 + Added named colors to the color data autocomplete
 + Added an API, accessible through the dev.esophose.playerparticles.api.PlayerParticlesAPI class
++ Added the ability for the console to manage its own fixed effects
 + Added PlaceholderAPI support
 + Added permission playerparticles.override for /ppo
 + Added permission playerparticles.gui to open the GUI. Disabled in the config by default

@@ -23,6 +23,7 @@ public class OtherPPlayer extends PPlayer {
     /**
      * @return the underlying CommandSender who executed the command
      */
+    @Override
     public CommandSender getUnderlyingExecutor() {
         return this.sender;
     }

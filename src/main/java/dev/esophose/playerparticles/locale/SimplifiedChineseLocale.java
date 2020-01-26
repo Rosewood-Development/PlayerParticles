@@ -50,11 +50,13 @@ public class SimplifiedChineseLocale implements Locale {
 
             this.put("#2", "Fixed Particle Command Description Messages");
             this.put("command-description-fixed-create", "&e/pp fixed create <<x> <y> <z>|<looking>> <特效名> <风格名> [数据名] - 创建新的定点特效");
-            this.put("command-description-fixed-edit", "&e/pp fixed edit <id> <特效名|风格名|数据名> <参数> - 根据ID编辑定点特效");
+            this.put("command-description-fixed-create-console", "&e/pp fixed create <x> <y> <z> <世界> <特效名> <风格名> [数据名] - 创建新的定点特效");
+            this.put("command-description-fixed-edit", "&e/pp fixed edit <id> <effect|style|data|location> <参数> - 根据ID编辑定点特效");
             this.put("command-description-fixed-remove", "&e/pp fixed remove <id> - 根据ID删除定点特效");
             this.put("command-description-fixed-list", "&e/pp fixed list - 列出所有定点特效的ID");
             this.put("command-description-fixed-info", "&e/pp fixed info <id> - 获取定点特效的详细信息");
             this.put("command-description-fixed-clear", "&e/pp fixed clear <半径> - 清空指定范围内的所有定点特效");
+            this.put("command-description-fixed-clear-console", "&e/pp fixed clear <半径> <x> <y> <z> <世界> - 清空指定范围内的所有定点特效");
             this.put("command-description-fixed-teleport", "&e/pp fixed teleport <id> - 传送你到固定效果之一");
 
             this.put("#2.5", "Group Command Description Messages");

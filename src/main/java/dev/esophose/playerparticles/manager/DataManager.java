@@ -5,6 +5,7 @@ import dev.esophose.playerparticles.database.DatabaseConnector;
 import dev.esophose.playerparticles.database.MySQLConnector;
 import dev.esophose.playerparticles.database.SQLiteConnector;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import dev.esophose.playerparticles.particles.ConsolePPlayer;
 import dev.esophose.playerparticles.particles.FixedParticleEffect;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
@@ -244,7 +245,12 @@ public class DataManager extends Manager {
                     groups.put(activeGroup.getName(), activeGroup);
                 }
 
-                PPlayer loadedPPlayer = new PPlayer(playerUUID, groups, fixedParticles, particlesHidden);
+                PPlayer loadedPPlayer;
+                if (!playerUUID.equals(ConsolePPlayer.getUUID())) {
+                    loadedPPlayer = new PPlayer(playerUUID, groups, fixedParticles, particlesHidden);
+                } else {
+                    loadedPPlayer = new ConsolePPlayer(groups, fixedParticles);
+                }
 
                 this.sync(() -> {
                     synchronized (loadedPPlayer) {
