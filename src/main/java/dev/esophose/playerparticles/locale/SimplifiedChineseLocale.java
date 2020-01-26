@@ -230,7 +230,7 @@ public class SimplifiedChineseLocale implements Locale {
             this.put("fixed-invalid-command", "&c你输入了无效的子指令!");
 
             this.put("#25", "Plugin Update Message");
-            this.put("update-available", "&e有新版本更新：(&b%new%&e)!你使用的版本为&bv%current%&e。 https://www.spigotmc.org/resources/playerparticles.40261/");
+            this.put("update-available", "&e有新版本更新：(v&b%new%&e)!你使用的版本为&bv%current%&e。 https://www.spigotmc.org/resources/playerparticles.40261/");
 
             this.put("#26", "GUI Messages");
             this.put("gui-disabled", "&c服务器管理员已关闭菜单!");

@@ -230,7 +230,7 @@ public class GermanLocale implements Locale {
             this.put("fixed-invalid-command", "&cUngültiger Parameter für &b/pp fixed&c!");
 
             this.put("#25", "Plugin Update Message");
-            this.put("update-available", "&eEin Update (&b%new%&e) ist verfügbar! Aktuelle Version: &bv%current%&e. https://www.spigotmc.org/resources/playerparticles.40261/");
+            this.put("update-available", "&eEin Update (v&b%new%&e) ist verfügbar! Aktuelle Version: &bv%current%&e. https://www.spigotmc.org/resources/playerparticles.40261/");
 
             this.put("#26", "GUI Messages");
             this.put("gui-disabled", "&cDer Serveradministrator hat die GUI deaktiviert!");

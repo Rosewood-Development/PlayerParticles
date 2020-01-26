@@ -230,7 +230,7 @@ public class VietnameseLocale implements Locale {
             this.put("fixed-invalid-command", "&cLệnh phụ không hợp lệ, &b/pp fixed&c!");
 
             this.put("#25", "Plugin Update Message");
-            this.put("update-available", "&eĐã có bản cập nhật (&b%new%&e)! bạn đang sử dụng &bv%current%&e. https://www.spigotmc.org/resources/playerparticles.40261/");
+            this.put("update-available", "&eĐã có bản cập nhật (v&b%new%&e)! bạn đang sử dụng &bv%current%&e. https://www.spigotmc.org/resources/playerparticles.40261/");
 
             this.put("#26", "GUI Messages");
             this.put("gui-disabled", "&cAmdinistrator đã cấm GUI!");
