@@ -1,5 +1,28 @@
-== UPDATING WILL DELETE YOUR CONFIG.YML ==
-* Create a backup of your config.yml if you wish to import all your old settings!
+=== v7.0 ===
++ Added effect/style settings folder that lets you disable effects/style and edit style properties
++ Added setting to disable particles while in combat
++ Added effect/style name customization through config files
++ Added a setting 'dust-size' to change the size of dust particles in 1.13+
++ Added sub-command '/pp fixed teleport <id>' that requires the permission playerparticles.fixed.teleport
++ Added named colors to the color data autocomplete
++ Added an API, accessible through the dev.esophose.playerparticles.api.PlayerParticlesAPI class
++ Added the ability for the console to manage its own fixed effects
++ Added PlaceholderAPI support
++ Added permission playerparticles.override for /ppo
++ Added permission playerparticles.gui to open the GUI. Disabled in the config by default
+* Config and lang files will no longer reset every update
+* The style 'normal' is no longer granted permission by default
+* /ppo now uses your permissions instead of the player you are targeting
+* Changed how * permissions are handled, negative permissions should work now
+* Fixed the 'swords' style so you have to be holding a sword/trident
+* Fixed several styles ignoring the disabled worlds setting
+* Fixed an issue where 'random' data would not parse properly in preset_groups.yml
+* Fixed an issue where preset groups would not display in the GUI even if the player has permission for them
+* Fixed GUI icons displaying incorrectly in 1.9
+* Changed the plugin update detecter to query Spigot instead of Curse
+* Cleaned up duplicated command parsing
+* Refactored and cleaned up code
+* Changed the package names
 === v6.6 ===
 + Added support for Minecraft 1.15
 + Added 1.15 effects: 'dripping_honey', 'falling_honey', 'falling_nectar', and 'landing_honey'
