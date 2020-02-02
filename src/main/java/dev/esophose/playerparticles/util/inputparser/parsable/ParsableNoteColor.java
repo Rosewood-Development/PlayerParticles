@@ -15,9 +15,9 @@ public class ParsableNoteColor extends Parsable<NoteColor> {
     public NoteColor parse(PPlayer pplayer, List<String> inputs) {
         String input = inputs.remove(0);
         if (input.equalsIgnoreCase("rainbow")) {
-            return new NoteColor(99);
+            return NoteColor.RAINBOW;
         } else if (input.equalsIgnoreCase("random")) {
-            return new NoteColor(98);
+            return NoteColor.RANDOM;
         }
 
         int note = Integer.parseInt(input);

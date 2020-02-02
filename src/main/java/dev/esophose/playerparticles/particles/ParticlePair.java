@@ -207,16 +207,16 @@ public class ParticlePair {
 
         if (this.effect.hasProperty(ParticleProperty.COLORABLE)) {
             if (this.effect == ParticleEffect.NOTE) {
-                if (this.noteColor.getNote() == 99) {
+                if (this.noteColor.equals(NoteColor.RAINBOW)) {
                     return particleManager.getRainbowNoteParticleColor();
-                } else if (this.noteColor.getNote() == 98) {
+                } else if (this.noteColor.equals(NoteColor.RANDOM)) {
                     return particleManager.getRandomNoteParticleColor();
                 }
                 return this.noteColor;
             } else {
-                if (this.color.getRed() == 999 && this.color.getGreen() == 999 && this.color.getBlue() == 999) {
+                if (this.color.equals(OrdinaryColor.RAINBOW)) {
                     return particleManager.getRainbowParticleColor();
-                } else if (this.color.getRed() == 998 && this.color.getGreen() == 998 && this.color.getBlue() == 998) {
+                } else if (this.color.equals(OrdinaryColor.RANDOM)) {
                     return particleManager.getRandomParticleColor();
                 } else {
                     return this.color;
@@ -255,16 +255,16 @@ public class ParticlePair {
             return this.itemMaterial.toString().toLowerCase();
         } else if (this.effect.hasProperty(ParticleProperty.COLORABLE)) {
             if (this.effect == ParticleEffect.NOTE) {
-                if (this.noteColor.getNote()  == 99) {
+                if (this.noteColor.equals(NoteColor.RAINBOW)) {
                     return localeManager.getLocaleMessage("rainbow");
-                } else if (this.noteColor.getNote() == 98) {
+                } else if (this.noteColor.equals(NoteColor.RANDOM)) {
                     return localeManager.getLocaleMessage("random");
                 }
                 return localeManager.getLocaleMessage("gui-select-data-note", StringPlaceholders.single("note", this.noteColor.getNote()));
             } else {
-                if (this.color.getRed() == 999 && this.color.getGreen() == 999 && this.color.getBlue() == 999) {
+                if (this.color.equals(OrdinaryColor.RAINBOW)) {
                     return localeManager.getLocaleMessage("rainbow");
-                } else if (this.color.getRed() == 998 && this.color.getGreen() == 998 && this.color.getBlue() == 998) {
+                } else if (this.color.equals(OrdinaryColor.RANDOM)) {
                     return localeManager.getLocaleMessage("random");
                 } else {
                     return ChatColor.RED + "" + this.color.getRed() + " " + ChatColor.GREEN + this.color.getGreen() + " " + ChatColor.AQUA + this.color.getBlue();
