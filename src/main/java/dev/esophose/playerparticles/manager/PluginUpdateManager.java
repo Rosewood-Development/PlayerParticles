@@ -68,10 +68,14 @@ public class PluginUpdateManager extends Manager implements Listener {
         }
 
         // Compare pieces from most significant to least significant
-        for (int i = 0; i < latestSplit.length; i++)
-            if (latestSplit[i] > currentSplit[i])
+        for (int i = 0; i < latestSplit.length; i++) {
+            if (latestSplit[i] > currentSplit[i]) {
                 return true;
-
+            } else if (currentSplit[i] > latestSplit[i]) {
+                break;
+            }
+        }
+        
         return false;
     }
 
