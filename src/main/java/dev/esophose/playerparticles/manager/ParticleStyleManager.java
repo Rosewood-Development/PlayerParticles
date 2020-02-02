@@ -40,22 +40,18 @@ public class ParticleStyleManager extends Manager {
      */
     public void registerStyle(ParticleStyle style) {
         if (style == null) {
-            PlayerParticles.getInstance().getLogger().severe("Tried to register a null style");
-            return;
+            throw new IllegalArgumentException("Tried to register a null style");
         }
         
         if (style.getInternalName() == null || style.getInternalName().trim().equals("")) {
-            PlayerParticles.getInstance().getLogger().severe("Tried to register a style with a null or empty name: '" + style.getInternalName() + "'");
-            return;
+            throw new IllegalArgumentException("Tried to register a style with a null or empty name: '" + style.getInternalName() + "'");
         }
         
         for (ParticleStyle testAgainst : this.styles) {
             if (testAgainst.equals(style)) {
-                PlayerParticles.getInstance().getLogger().severe("Tried to register the same style twice: '" + style.getInternalName() + "'");
-                return;
+                throw new IllegalArgumentException("Tried to register the same style twice: '" + style.getInternalName() + "'");
             } else if (testAgainst.getInternalName().equalsIgnoreCase(style.getInternalName())) {
-                PlayerParticles.getInstance().getLogger().severe("Tried to register two styles with the same internal name spelling: '" + style.getInternalName() + "'");
-                return;
+                throw new IllegalArgumentException("Tried to register two styles with the same internal name spelling: '" + style.getInternalName() + "'");
             }
         }
         
