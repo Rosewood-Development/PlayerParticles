@@ -216,7 +216,7 @@ public class GuiInventoryEditData extends GuiInventory {
                 localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("rainbow"),
                 new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", localeManager.getLocaleMessage("rainbow")))},
                 (button, isShiftClick) -> {
-                    editingParticle.setColor(new OrdinaryColor(999, 999, 999));
+                    editingParticle.setColor(OrdinaryColor.RAINBOW);
                     callbackList.get(callbackListPosition + 1).run();
                 });
         this.actionButtons.add(setRainbowColorButton);
@@ -231,7 +231,7 @@ public class GuiInventoryEditData extends GuiInventory {
                 localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("random"),
                 new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", localeManager.getLocaleMessage("random")))},
                 (button, isShiftClick) -> {
-                    editingParticle.setColor(new OrdinaryColor(998, 998, 998));
+                    editingParticle.setColor(OrdinaryColor.RANDOM);
                     callbackList.get(callbackListPosition + 1).run();
                 });
         this.actionButtons.add(setRandomColorButton);
@@ -289,7 +289,7 @@ public class GuiInventoryEditData extends GuiInventory {
                 localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("rainbow"),
                 new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", localeManager.getLocaleMessage("rainbow")))},
                 (button, isShiftClick) -> {
-                    editingParticle.setNoteColor(new NoteColor(99));
+                    editingParticle.setNoteColor(NoteColor.RAINBOW);
                     callbackList.get(callbackListPosition + 1).run();
                 });
         this.actionButtons.add(setRainbowColorButton);
@@ -305,7 +305,7 @@ public class GuiInventoryEditData extends GuiInventory {
                 localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("random"),
                 new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", localeManager.getLocaleMessage("random")))},
                 (button, isShiftClick) -> {
-                    editingParticle.setNoteColor(new NoteColor(98));
+                    editingParticle.setNoteColor(NoteColor.RANDOM);
                     callbackList.get(callbackListPosition + 1).run();
                 });
         this.actionButtons.add(setRandomColorButton);

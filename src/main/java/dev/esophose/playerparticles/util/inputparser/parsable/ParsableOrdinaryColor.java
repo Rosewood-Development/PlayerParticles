@@ -31,8 +31,8 @@ public class ParsableOrdinaryColor extends Parsable<OrdinaryColor> {
             this.put("gray", new OrdinaryColor(128, 128, 128));
             this.put("light_gray", new OrdinaryColor(192, 192, 192));
             this.put("white", new OrdinaryColor(255, 255, 255));
-            this.put("rainbow", new OrdinaryColor(999, 999, 999));
-            this.put("random", new OrdinaryColor(998, 998, 998));
+            this.put("rainbow", OrdinaryColor.RAINBOW);
+            this.put("random", OrdinaryColor.RANDOM);
         }};
     }
 

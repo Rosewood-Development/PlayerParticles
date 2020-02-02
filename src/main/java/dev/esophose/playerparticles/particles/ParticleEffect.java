@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -280,11 +281,11 @@ public enum ParticleEffect {
         int count = pparticle.isDirectional() ? 0 : 1;
         
         if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-            effect.display(particle.getSpawnMaterial(), pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), 1, pparticle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)), isFixedEffect, owner);
+            effect.display(particle.getSpawnMaterial(), pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), 1, pparticle.getLocation(false), isFixedEffect, owner);
         } else if (effect.hasProperty(ParticleProperty.COLORABLE)) {
-            effect.display(particle.getSpawnColor(), pparticle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)), isFixedEffect, owner);
+            effect.display(particle.getSpawnColor(), pparticle.getLocation(true), isFixedEffect, owner);
         } else {
-            effect.display(pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), count, pparticle.getLocation(effect.hasProperty(ParticleProperty.COLORABLE)), isFixedEffect, owner);
+            effect.display(pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), count, pparticle.getLocation(false), isFixedEffect, owner);
         }
     }
 
@@ -481,6 +482,9 @@ public enum ParticleEffect {
      * @since 1.7
      */
     public static final class OrdinaryColor extends ParticleColor {
+        public static final OrdinaryColor RAINBOW = new OrdinaryColor(999, 999, 999);
+        public static final OrdinaryColor RANDOM = new OrdinaryColor(998, 998, 998);
+
         private final int red;
         private final int green;
         private final int blue;
@@ -558,7 +562,8 @@ public enum ParticleEffect {
          */
         @Override
         public float getValueX() {
-            if (this.red == 999 || this.red == 998) return 0F;
+            if (this.equals(OrdinaryColor.RAINBOW) || this.equals(OrdinaryColor.RANDOM))
+                return 0F;
             return (float) this.red / 255F;
         }
 
@@ -569,7 +574,8 @@ public enum ParticleEffect {
          */
         @Override
         public float getValueY() {
-            if (this.green == 999 || this.green == 998) return 0F;
+            if (this.equals(OrdinaryColor.RAINBOW) || this.equals(OrdinaryColor.RANDOM))
+                return 0F;
             return (float) this.green / 255F;
         }
 
@@ -580,8 +586,22 @@ public enum ParticleEffect {
          */
         @Override
         public float getValueZ() {
-            if (this.blue == 999 || this.blue == 998) return 0F;
+            if (this.equals(OrdinaryColor.RAINBOW) || this.equals(OrdinaryColor.RANDOM))
+                return 0F;
             return (float) this.blue / 255F;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (!(other instanceof OrdinaryColor))
+                return false;
+            OrdinaryColor otherColor = (OrdinaryColor) other;
+            return this.red == otherColor.red && this.green == otherColor.green && this.blue == otherColor.blue;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.red, this.green, this.blue);
         }
     }
 
@@ -595,6 +615,9 @@ public enum ParticleEffect {
      * @since 1.7
      */
     public static final class NoteColor extends ParticleColor {
+        public static final NoteColor RAINBOW = new NoteColor(99);
+        public static final NoteColor RANDOM = new NoteColor(98);
+
         private final int note;
 
         /**
@@ -655,6 +678,19 @@ public enum ParticleEffect {
         @Override
         public float getValueZ() {
             return 0;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (!(other instanceof NoteColor))
+                return false;
+            NoteColor otherColor = (NoteColor) other;
+            return this.note == otherColor.note;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hashCode(this.note);
         }
 
     }
