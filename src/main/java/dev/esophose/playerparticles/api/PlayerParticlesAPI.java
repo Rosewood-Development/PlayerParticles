@@ -489,7 +489,7 @@ public final class PlayerParticlesAPI {
     //region Manage Player Particle Groups
 
     /**
-     * Saves a particle group to a player
+     * Saves a particle group to a player or edits an existing one
      *
      * @param player The player to save to
      * @param particleGroup The particle group to save
@@ -507,16 +507,13 @@ public final class PlayerParticlesAPI {
         if (pplayer == null)
             return null;
 
-        if (pplayer.getParticleGroups().containsKey(particleGroup.getName().toLowerCase()))
-            throw new IllegalArgumentException("A group already exists with the name " + particleGroup);
-
         pplayer.getParticleGroups().put(particleGroup.getName().toLowerCase(), particleGroup);
         dataManager.saveParticleGroup(player.getUniqueId(), particleGroup);
         return particleGroup;
     }
 
     /**
-     * Saves a particle group to a player
+     * Saves a particle group to a player or edits an existing one
      *
      * @param player The player to save to
      * @param groupName The name of the group to save
