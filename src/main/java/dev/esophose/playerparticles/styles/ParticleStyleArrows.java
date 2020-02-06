@@ -7,20 +7,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Location;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 
 public class ParticleStyleArrows extends DefaultParticleStyle implements Listener {
 
-    private static final String[] arrowEntityNames = new String[] { "ARROW", "SPECTRAL_ARROW", "TIPPED_ARROW" };
     private List<Projectile> arrows = new ArrayList<>();
 
     private int maxArrowsPerPlayer;
     private boolean onlySpawnIfFlying;
+    private List<String> arrowEntityNames;
 
     public ParticleStyleArrows() {
         super("arrows", false, false, 0);
@@ -61,31 +60,30 @@ public class ParticleStyleArrows extends DefaultParticleStyle implements Listene
     }
 
     /**
-     * The event used to get all arrows fired by players
-     * Adds all arrows fired from players to the array
-     * 
-     * @param e The EntityShootBowEvent
+     * The event used to get all projectiles fired by players
+     * Adds all projectiles fired from players to the array
+     *
+     * @param event The ProjectileLaunchEvent
      */
     @EventHandler
-    public void onArrowFired(EntityShootBowEvent e) {
-        if (e.getEntityType() != EntityType.PLAYER)
-            return;
-
-        String entityName = e.getProjectile().getType().toString();
-        if (Arrays.stream(arrowEntityNames).anyMatch(entityName::equalsIgnoreCase))
-            this.arrows.add((Projectile) e.getProjectile());
+    public void onProjectileLaunch(ProjectileLaunchEvent event) {
+        String entityName = event.getEntity().getType().name();
+        if (this.arrowEntityNames.contains(entityName))
+            this.arrows.add(event.getEntity());
     }
 
     @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
         this.setIfNotExists("max-arrows-per-player", 10, "The max number of arrows that will spawn particles per player");
         this.setIfNotExists("only-spawn-if-flying", false, "Only spawn particles while the arrow is still in the air");
+        this.setIfNotExists("arrow-entities", Arrays.asList("ARROW", "SPECTRAL_ARROW", "TIPPED_ARROW"), "The name of the projectile entities that are counted as arrows");
     }
 
     @Override
     protected void loadSettings(CommentedFileConfiguration config) {
         this.maxArrowsPerPlayer = config.getInt("max-arrows-per-player");
         this.onlySpawnIfFlying = config.getBoolean("only-spawn-if-flying");
+        this.arrowEntityNames = config.getStringList("arrow-entities");
     }
 
 }

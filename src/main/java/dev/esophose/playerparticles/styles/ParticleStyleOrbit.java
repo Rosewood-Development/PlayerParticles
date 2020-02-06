@@ -14,6 +14,7 @@ public class ParticleStyleOrbit extends DefaultParticleStyle {
 
     private int orbs;
     private int numSteps;
+    private double radius;
 
     public ParticleStyleOrbit() {
         super("orbit", true, true, 0);
@@ -23,8 +24,8 @@ public class ParticleStyleOrbit extends DefaultParticleStyle {
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
         for (int i = 0; i < this.orbs; i++) {
-            double dx = -(MathL.cos((this.step / (double) this.numSteps) * (Math.PI * 2) + (((Math.PI * 2) / this.orbs) * i)));
-            double dz = -(MathL.sin((this.step / (double) this.numSteps) * (Math.PI * 2) + (((Math.PI * 2) / this.orbs) * i)));
+            double dx = -(MathL.cos((this.step / (double) this.numSteps) * (Math.PI * 2) + (((Math.PI * 2) / this.orbs) * i))) * this.radius;
+            double dz = -(MathL.sin((this.step / (double) this.numSteps) * (Math.PI * 2) + (((Math.PI * 2) / this.orbs) * i))) * this.radius;
             particles.add(new PParticle(location.clone().add(dx, 0, dz)));
         }
         return particles;
@@ -39,12 +40,14 @@ public class ParticleStyleOrbit extends DefaultParticleStyle {
     protected void setDefaultSettings(CommentedFileConfiguration config) {
         this.setIfNotExists("orbs", 3, "The number of orbs that orbit the player");
         this.setIfNotExists("steps", 120, "The number of spawning steps around the player");
+        this.setIfNotExists("radius", 1.0, "The radius for spawning the orbs");
     }
 
     @Override
     protected void loadSettings(CommentedFileConfiguration config) {
         this.orbs = config.getInt("orbs");
         this.numSteps = config.getInt("steps");
+        this.radius = config.getDouble("radius");
     }
 
 }
