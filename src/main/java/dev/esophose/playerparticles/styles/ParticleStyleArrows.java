@@ -67,6 +67,9 @@ public class ParticleStyleArrows extends DefaultParticleStyle implements Listene
      */
     @EventHandler
     public void onProjectileLaunch(ProjectileLaunchEvent event) {
+        if (!(event.getEntity().getShooter() instanceof Player))
+            return;
+
         String entityName = event.getEntity().getType().name();
         if (this.arrowEntityNames.contains(entityName))
             this.arrows.add(event.getEntity());
