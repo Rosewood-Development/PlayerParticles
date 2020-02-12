@@ -34,6 +34,8 @@ public class ParticlePlaceholderExpansion extends PlaceholderExpansion {
                 return String.valueOf(pplayer.getFixedParticles().size());
             case "is_moving":
                 return String.valueOf(pplayer.isMoving());
+            case "is_in_combat":
+                return String.valueOf(pplayer.isInCombat());
             case "can_see_particles":
                 return String.valueOf(pplayer.canSeeParticles());
         }
