@@ -66,7 +66,7 @@ public class ParticleStyleBlockBreak extends DefaultParticleStyle implements Lis
         if (pplayer != null) {
             for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.BLOCKBREAK)) {
                 Location loc = event.getBlock().getLocation().clone();
-                particleManager.displayParticles(player, particle, DefaultStyles.BLOCKBREAK.getParticles(particle, loc));
+                particleManager.displayParticles(player, player.getWorld(), particle, DefaultStyles.BLOCKBREAK.getParticles(particle, loc));
             }
         }
     }

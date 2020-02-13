@@ -21,6 +21,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -178,13 +179,14 @@ public class ParticleManager extends Manager implements Listener, Runnable {
     /**
      * An alternative method used for event styles
      *
-     * @param player The player the particles are spawning from
+     * @param player The player the particles are spawning from, nullable for special cases
+     * @param world The world the particles are spawning in
      * @param particle The ParticlePair to use for getting particle settings
      * @param particles The particles to display
      */
-    public void displayParticles(Player player, ParticlePair particle, List<PParticle> particles) {
+    public void displayParticles(Player player, World world, ParticlePair particle, List<PParticle> particles) {
         PermissionManager permissionManager = this.playerParticles.getManager(PermissionManager.class);
-        if (player.getGameMode() == GameMode.SPECTATOR || !permissionManager.isWorldEnabled(player.getWorld().getName()))
+        if ((player != null && player.getGameMode() == GameMode.SPECTATOR) || !permissionManager.isWorldEnabled(world.getName()))
             return;
 
         for (PParticle pparticle : particles)

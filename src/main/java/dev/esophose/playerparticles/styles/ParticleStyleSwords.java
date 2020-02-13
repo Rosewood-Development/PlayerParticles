@@ -69,7 +69,7 @@ public class ParticleStyleSwords extends DefaultParticleStyle implements Listene
             if (pplayer != null && SWORD_NAMES.contains(player.getInventory().getItemInMainHand().getType().name())) {
                 for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.SWORDS)) {
                     Location loc = entity.getLocation().clone().add(0, 1, 0);
-                    particleManager.displayParticles(player, particle, DefaultStyles.SWORDS.getParticles(particle, loc));
+                    particleManager.displayParticles(player, player.getWorld(), particle, DefaultStyles.SWORDS.getParticles(particle, loc));
                 }
             }
         }

@@ -10,6 +10,7 @@ import dev.esophose.playerparticles.particles.ParticlePair;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -57,7 +58,8 @@ public class ParticleStyleMove extends DefaultParticleStyle implements Listener 
             for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.MOVE)) {
                 Location loc = event.getPlayer().getLocation().clone();
                 loc.setY(loc.getY() + 0.05);
-                particleManager.displayParticles(event.getPlayer(), particle, DefaultStyles.MOVE.getParticles(particle, loc));
+                Player player = event.getPlayer();
+                particleManager.displayParticles(player, player.getWorld(), particle, DefaultStyles.MOVE.getParticles(particle, loc));
             }
         }
     }
