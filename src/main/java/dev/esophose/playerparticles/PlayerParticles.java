@@ -1,5 +1,5 @@
 /*
- * TODO: v7.1
+ * TODO:
  * + Add ability to create/manage fixed effects from the GUI
  * * Convert fixed effect ids into names
  */
