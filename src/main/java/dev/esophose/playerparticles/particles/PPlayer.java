@@ -19,6 +19,11 @@ public class PPlayer {
     private final UUID playerUUID;
 
     /**
+     * Cached instance of the player
+     */
+    private Player cachedPlayer;
+
+    /**
      * A map of ParticleGroups this player has, the active particle group has an id of null
      */
     private Map<String, ParticleGroup> particleGroups;
@@ -74,7 +79,16 @@ public class PPlayer {
      * @return the underlying CommandSender who executed the command
      */
     public Player getPlayer() {
-        return Bukkit.getPlayer(this.playerUUID);
+        if (this.cachedPlayer == null)
+            this.cachedPlayer = Bukkit.getPlayer(this.playerUUID);
+        return this.cachedPlayer;
+    }
+
+    /**
+     * Clears the cached player to prevent the reference from lingering
+     */
+    public void clearCachedPlayer() {
+        this.cachedPlayer = null;
     }
     
     /**

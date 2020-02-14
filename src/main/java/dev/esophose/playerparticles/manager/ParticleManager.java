@@ -97,8 +97,11 @@ public class ParticleManager extends Manager implements Listener, Runnable {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent e) {
         PPlayer pplayer = this.playerParticles.getManager(DataManager.class).getPPlayer(e.getPlayer().getUniqueId());
-        if (pplayer != null && pplayer.getFixedEffectIds().isEmpty())
-            this.particlePlayers.remove(pplayer.getUniqueId()); // Unload the PPlayer if they don't have any fixed effects
+        if (pplayer != null) {
+            pplayer.clearCachedPlayer();
+            if (pplayer.getFixedEffectIds().isEmpty())
+                this.particlePlayers.remove(pplayer.getUniqueId()); // Unload the PPlayer if they don't have any fixed effects
+        }
     }
 
     /**
