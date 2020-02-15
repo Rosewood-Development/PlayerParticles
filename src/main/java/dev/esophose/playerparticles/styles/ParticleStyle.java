@@ -26,7 +26,9 @@ public interface ParticleStyle {
     /**
      * @return true if the style is enabled, false otherwise
      */
-    boolean isEnabled();
+    default boolean isEnabled() {
+        return true;
+    }
 
     /**
      * @return The style's internal name that will always remain constant
@@ -36,7 +38,9 @@ public interface ParticleStyle {
     /**
      * @return The name that the style will display to the users as
      */
-    String getName();
+    default String getName() {
+        return this.getInternalName();
+    }
 
     /**
      * Gets if the style can be used in a FixedParticleEffect
@@ -50,15 +54,26 @@ public interface ParticleStyle {
      * 
      * @return True if it can be, otherwise False
      */
-    boolean canToggleWithMovement();
+    default boolean canToggleWithMovement() {
+        return true;
+    }
     
     /**
      * The Y-axis offset to be applied when using '/pp fixed create looking'
      * 
      * @return How far to move the style up or down to get it centered on the block properly
      */
-    double getFixedEffectOffset();
-    
+    default double getFixedEffectOffset() {
+        return 0;
+    }
+
+    /**
+     * @return true if the particle should be seen from the fixed effect distance instead of the player distance, or false otherwise
+     */
+    default boolean hasLongRangeVisibility() {
+        return false;
+    }
+
     /**
      * Gets the ParticleStyle with the name given, returns null if not found
      * 

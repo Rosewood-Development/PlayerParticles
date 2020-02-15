@@ -171,10 +171,10 @@ public class ParticleManager extends Manager implements Listener, Runnable {
 
             if (Setting.TOGGLE_ON_MOVE.getBoolean() && particle.getStyle().canToggleWithMovement() && pplayer.isMoving()) {
                 for (PParticle pparticle : DefaultStyles.FEET.getParticles(particle, location))
-                    ParticleEffect.display(particle, pparticle, false, pplayer.getPlayer());
+                    ParticleEffect.display(particle, pparticle, particle.getStyle().hasLongRangeVisibility(), pplayer.getPlayer());
             } else {
                 for (PParticle pparticle : particle.getStyle().getParticles(particle, location))
-                    ParticleEffect.display(particle, pparticle, false, pplayer.getPlayer());
+                    ParticleEffect.display(particle, pparticle, particle.getStyle().hasLongRangeVisibility(), pplayer.getPlayer());
             }
         }  
     }
@@ -186,14 +186,15 @@ public class ParticleManager extends Manager implements Listener, Runnable {
      * @param world The world the particles are spawning in
      * @param particle The ParticlePair to use for getting particle settings
      * @param particles The particles to display
+     * @param isLongRange If the particle can be viewed from long range
      */
-    public void displayParticles(Player player, World world, ParticlePair particle, List<PParticle> particles) {
+    public void displayParticles(Player player, World world, ParticlePair particle, List<PParticle> particles, boolean isLongRange) {
         PermissionManager permissionManager = this.playerParticles.getManager(PermissionManager.class);
         if ((player != null && player.getGameMode() == GameMode.SPECTATOR) || !permissionManager.isWorldEnabled(world.getName()))
             return;
 
         for (PParticle pparticle : particles)
-            ParticleEffect.display(particle, pparticle, false, Bukkit.getPlayer(particle.getOwnerUniqueId()));
+            ParticleEffect.display(particle, pparticle, isLongRange, Bukkit.getPlayer(particle.getOwnerUniqueId()));
     }
 
     /**

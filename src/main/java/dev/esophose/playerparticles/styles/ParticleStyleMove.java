@@ -59,7 +59,7 @@ public class ParticleStyleMove extends DefaultParticleStyle implements Listener 
                 Location loc = event.getPlayer().getLocation().clone();
                 loc.setY(loc.getY() + 0.05);
                 Player player = event.getPlayer();
-                particleManager.displayParticles(player, player.getWorld(), particle, DefaultStyles.MOVE.getParticles(particle, loc));
+                particleManager.displayParticles(player, player.getWorld(), particle, DefaultStyles.MOVE.getParticles(particle, loc), false);
             }
         }
     }

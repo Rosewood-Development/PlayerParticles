@@ -273,19 +273,19 @@ public enum ParticleEffect {
      * 
      * @param particle The ParticlePair, given the effect/style/data
      * @param pparticle The particle spawn information
-     * @param isFixedEffect If the particle is spawned from a fixed effect
+     * @param isLongRange If the particle can be viewed from long range
      * @param owner The player that owns the particles
      */
-    public static void display(ParticlePair particle, PParticle pparticle, boolean isFixedEffect, Player owner) {
+    public static void display(ParticlePair particle, PParticle pparticle, boolean isLongRange, Player owner) {
         ParticleEffect effect = particle.getEffect();
         int count = pparticle.isDirectional() ? 0 : 1;
         
         if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-            effect.display(particle.getSpawnMaterial(), pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), 1, pparticle.getLocation(false), isFixedEffect, owner);
+            effect.display(particle.getSpawnMaterial(), pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), 1, pparticle.getLocation(false), isLongRange, owner);
         } else if (effect.hasProperty(ParticleProperty.COLORABLE)) {
-            effect.display(particle.getSpawnColor(), pparticle.getLocation(true), isFixedEffect, owner);
+            effect.display(particle.getSpawnColor(), pparticle.getLocation(true), isLongRange, owner);
         } else {
-            effect.display(pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), count, pparticle.getLocation(false), isFixedEffect, owner);
+            effect.display(pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), count, pparticle.getLocation(false), isLongRange, owner);
         }
     }
 
@@ -298,18 +298,16 @@ public enum ParticleEffect {
      * @param speed Display speed of the particles
      * @param amount Amount of particles
      * @param center Center location of the effect
-     * @param isFixedEffect If the particle is spawned from a fixed effect
+     * @param isLongRange If the particle can be viewed from long range
      * @param owner The player that owns the particles
      * @throws ParticleDataException If the particle effect requires additional data
      */
-    public void display(double offsetX, double offsetY, double offsetZ, double speed, int amount, Location center, boolean isFixedEffect, Player owner) throws ParticleDataException {
-        if (this.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
+    public void display(double offsetX, double offsetY, double offsetZ, double speed, int amount, Location center, boolean isLongRange, Player owner) throws ParticleDataException {
+        if (this.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA))
             throw new ParticleDataException("This particle effect requires additional data");
-        }
 
-        for (Player player : this.getPlayersInRange(center, isFixedEffect, owner)) {
+        for (Player player : this.getPlayersInRange(center, isLongRange, owner))
             player.spawnParticle(this.internalEnum, center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed);
-        }
     }
 
     /**
@@ -317,23 +315,21 @@ public enum ParticleEffect {
      * 
      * @param color Color of the particle
      * @param center Center location of the effect
-     * @param isFixedEffect If the particle is spawned from a fixed effect
+     * @param isLongRange If the particle can be viewed from long range
      * @param owner The player that owns the particles
      * @throws ParticleColorException If the particle effect is not colorable or the color type is incorrect
      */
-    public void display(ParticleColor color, Location center, boolean isFixedEffect, Player owner) throws ParticleColorException {
-        if (!this.hasProperty(ParticleProperty.COLORABLE)) {
+    public void display(ParticleColor color, Location center, boolean isLongRange, Player owner) throws ParticleColorException {
+        if (!this.hasProperty(ParticleProperty.COLORABLE))
             throw new ParticleColorException("This particle effect is not colorable");
-        }
 
-        if (this == DUST && NMSUtil.getVersionNumber() >= 13) { // DUST uses a special data object for spawning in 1.13
+        if (this == DUST && NMSUtil.getVersionNumber() >= 13) { // DUST uses a special data object for spawning in 1.13+
             OrdinaryColor dustColor = (OrdinaryColor) color;
             DustOptions dustOptions = new DustOptions(Color.fromRGB(dustColor.getRed(), dustColor.getGreen(), dustColor.getBlue()), Setting.DUST_SIZE.getFloat());
-            for (Player player : this.getPlayersInRange(center, isFixedEffect, owner)) {
+            for (Player player : this.getPlayersInRange(center, isLongRange, owner))
                 player.spawnParticle(this.internalEnum, center.getX(), center.getY(), center.getZ(), 1, 0, 0, 0, 0, dustOptions);
-            }
         } else {
-            for (Player player : this.getPlayersInRange(center, isFixedEffect, owner)) {
+            for (Player player : this.getPlayersInRange(center, isLongRange, owner)) {
                 // Minecraft clients require that you pass a non-zero value if the Red value should be zero
                 player.spawnParticle(this.internalEnum, center.getX(), center.getY(), center.getZ(), 0, this == ParticleEffect.DUST && color.getValueX() == 0 ? Float.MIN_VALUE : color.getValueX(), color.getValueY(), color.getValueZ(), 1);
             }
@@ -352,11 +348,11 @@ public enum ParticleEffect {
      * @param speed Display speed of the particles
      * @param amount Amount of particles
      * @param center Center location of the effect
-     * @param isFixedEffect If the particle is spawned from a fixed effect
+     * @param isLongRange If the particle can be viewed from long range
      * @param owner The player that owns the particles
      * @throws ParticleDataException If the particle effect does not require additional data or if the data type is incorrect
      */
-    public void display(Material spawnMaterial, double offsetX, double offsetY, double offsetZ, double speed, int amount, Location center, boolean isFixedEffect, Player owner) throws ParticleDataException {
+    public void display(Material spawnMaterial, double offsetX, double offsetY, double offsetZ, double speed, int amount, Location center, boolean isLongRange, Player owner) throws ParticleDataException {
         if (!this.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
             throw new ParticleDataException("This particle effect does not require additional data");
         }
@@ -370,7 +366,7 @@ public enum ParticleEffect {
             extraData = new MaterialData(spawnMaterial); // Deprecated, only used in versions < 1.13
         }
 
-        for (Player player : this.getPlayersInRange(center, isFixedEffect, owner))
+        for (Player player : this.getPlayersInRange(center, isLongRange, owner))
             player.spawnParticle(this.internalEnum, center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed, extraData);
     }
 
@@ -378,22 +374,22 @@ public enum ParticleEffect {
      * Gets a List of Players within the particle display range
      * 
      * @param center The center of the radius to check around
-     * @param isFixedEffect If the particle is spawned from a fixed effect
+     * @param isLongRange If the particle can be viewed from long range
      * @param owner The player that owns the particles
      * @return A List of Players within the particle display range
      */
-    private List<Player> getPlayersInRange(Location center, boolean isFixedEffect, Player owner) {
+    private List<Player> getPlayersInRange(Location center, boolean isLongRange, Player owner) {
         List<Player> players = new ArrayList<>();
-        int range = !isFixedEffect ? Setting.PARTICLE_RENDER_RANGE_PLAYER.getInt() : Setting.PARTICLE_RENDER_RANGE_FIXED_EFFECT.getInt();
+        int range = !isLongRange ? Setting.PARTICLE_RENDER_RANGE_PLAYER.getInt() : Setting.PARTICLE_RENDER_RANGE_FIXED_EFFECT.getInt();
+        range *= range;
 
         for (PPlayer pplayer : PlayerParticles.getInstance().getManager(ParticleManager.class).getPPlayers()) {
             Player p = pplayer.getPlayer();
-            if (!isFixedEffect && !this.canSee(p, owner))
+            if (!this.canSee(p, owner))
                 continue;
 
-            if (p != null && pplayer.canSeeParticles() && p.getWorld().equals(center.getWorld()) && center.distanceSquared(p.getLocation()) <= range * range) {
+            if (p != null && pplayer.canSeeParticles() && p.getWorld().equals(center.getWorld()) && center.distanceSquared(p.getLocation()) <= range)
                 players.add(p);
-            }
         }
 
         return players;

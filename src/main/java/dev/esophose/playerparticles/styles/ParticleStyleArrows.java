@@ -1,6 +1,8 @@
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
+import dev.esophose.playerparticles.manager.ParticleManager;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import java.util.ArrayList;
@@ -20,9 +22,12 @@ public class ParticleStyleArrows extends DefaultParticleStyle implements Listene
     private int maxArrowsPerPlayer;
     private boolean onlySpawnIfFlying;
     private List<String> arrowEntityNames;
+    private ParticleManager particleManager;
 
     public ParticleStyleArrows() {
         super("arrows", false, false, 0);
+
+        this.particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
     }
 
     @Override
@@ -57,6 +62,11 @@ public class ParticleStyleArrows extends DefaultParticleStyle implements Listene
             if (arrow.getTicksLived() >= 1200 || arrow.isDead() || !arrow.isValid() || arrow.getShooter() == null)
                 this.arrows.remove(i);
         }
+    }
+
+    @Override
+    public boolean hasLongRangeVisibility() {
+        return true;
     }
 
     /**
