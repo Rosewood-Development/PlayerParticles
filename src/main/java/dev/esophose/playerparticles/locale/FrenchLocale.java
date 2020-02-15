@@ -230,7 +230,7 @@ public class FrenchLocale implements Locale {
             this.put("fixed-invalid-command", "&cArguments invalides pour la commande &b/pp fixed&c!");
 
             this.put("#25", "Plugin Update Message");
-            this.put("update-available", "&eLa version (v&b%new%&e) est disponible ! vous utilisez la version &bv%current%&d. https://www.spigotmc.org/resources/playerparticles.40261/");
+            this.put("update-available", "&eLa version (&bv%new%&e) est disponible ! vous utilisez la version &bv%current%&d. https://www.spigotmc.org/resources/playerparticles.40261/");
 
             this.put("#26", "GUI Messages");
             this.put("gui-disabled", "&cL'interface du plugin à été désactivée !");

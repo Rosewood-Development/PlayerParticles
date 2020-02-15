@@ -230,7 +230,7 @@ public class RussianLocale implements Locale {
             this.put("fixed-invalid-command", "&cНедействительная команда для &b/pp fixed&c!");
 
             this.put("#25", "Plugin Update Message");
-            this.put("update-available", "&eОбновление (v&b%new%&e) доступно! Ваша версия - &bv%current%&e. https://www.spigotmc.org/resources/playerparticles.40261/");
+            this.put("update-available", "&eОбновление (&bv%new%&e) доступно! Ваша версия - &bv%current%&e. https://www.spigotmc.org/resources/playerparticles.40261/");
 
             this.put("#26", "GUI Messages");
             this.put("gui-disabled", "&cАдминистратор отключил интерфейс!");

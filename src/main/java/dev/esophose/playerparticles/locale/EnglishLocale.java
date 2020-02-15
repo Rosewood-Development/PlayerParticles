@@ -230,7 +230,7 @@ public class EnglishLocale implements Locale {
             this.put("fixed-invalid-command", "&cInvalid sub-command for &b/pp fixed&c!");
 
             this.put("#25", "Plugin Update Message");
-            this.put("update-available", "&eAn update (v&b%new%&e) is available! You are running &bv%current%&e. https://www.spigotmc.org/resources/playerparticles.40261/");
+            this.put("update-available", "&eAn update (&bv%new%&e) is available! You are running &bv%current%&e. https://www.spigotmc.org/resources/playerparticles.40261/");
 
             this.put("#26", "GUI Messages");
             this.put("gui-disabled", "&cThe server administrator has disabled the GUI!");

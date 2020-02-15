@@ -79,7 +79,7 @@ public class _1_InitialMigration extends DataMigration {
                 createStatement.addBatch("CREATE TABLE IF NOT EXISTS " + tablePrefix + "settings (player_uuid VARCHAR(36), particles_hidden TINYINT)");
                 createStatement.addBatch("CREATE TABLE IF NOT EXISTS " + tablePrefix + "particle (uuid VARCHAR(36), group_uuid VARCHAR(36), id SMALLINT, effect VARCHAR(100), style VARCHAR(100), item_material VARCHAR(100), block_material VARCHAR(100), note SMALLINT, r SMALLINT, g SMALLINT, b SMALLINT, PRIMARY KEY(uuid))");
                 createStatement.addBatch("CREATE TABLE IF NOT EXISTS " + tablePrefix + "group (uuid VARCHAR(36), owner_uuid VARCHAR(36), name VARCHAR(100), PRIMARY KEY(uuid))");
-                createStatement.addBatch("CREATE TABLE IF NOT EXISTS " + tablePrefix + "fixed (owner_uuid VARCHAR(36), id SMALLINT, particle_uuid VARCHAR(36), world VARCHAR(100), xPos DOUBLE, yPos DOUBLE, zPos DOUBLE, PRIMARY KEY(owner_uuid, id), FOREIGN KEY(particle_uuid) REFERENCES pp_particle(uuid) ON DELETE CASCADE)");
+                createStatement.addBatch("CREATE TABLE IF NOT EXISTS " + tablePrefix + "fixed (owner_uuid VARCHAR(36), id SMALLINT, particle_uuid VARCHAR(36), world VARCHAR(100), xPos DOUBLE, yPos DOUBLE, zPos DOUBLE, PRIMARY KEY(owner_uuid, id), FOREIGN KEY(particle_uuid) REFERENCES " + tablePrefix + "particle(uuid) ON DELETE CASCADE)");
                 createStatement.executeBatch();
             }
         }
