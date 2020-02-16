@@ -16,9 +16,9 @@ import dev.esophose.playerparticles.util.ParticleUtils;
 import dev.esophose.playerparticles.util.StringPlaceholders;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.Bukkit;
 
 public class GuiInventoryManageGroups extends GuiInventory {
@@ -76,9 +76,8 @@ public class GuiInventoryManageGroups extends GuiInventory {
                                 activeGroup.getParticles().put(particle.getId(), particle.clone());
                             PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), activeGroup);
 
-                            if (Setting.GUI_CLOSE_AFTER_GROUP_SELECTED.getBoolean()) {
-                                pplayer.getPlayer().closeInventory();
-                            }
+                            if (Setting.GUI_CLOSE_AFTER_GROUP_SELECTED.getBoolean())
+                                this.close();
                         }
                     });
             this.actionButtons.add(groupButton);
@@ -138,7 +137,7 @@ public class GuiInventoryManageGroups extends GuiInventory {
                             ParticleGroup group = pplayer.getParticleGroupByName(groupName);
                             boolean groupUpdated = false;
                             if (group == null) {
-                                Map<Integer, ParticlePair> particles = new HashMap<>();
+                                Map<Integer, ParticlePair> particles = new ConcurrentHashMap<>();
                                 for (ParticlePair particle : pplayer.getActiveParticles())
                                     particles.put(particle.getId(), particle.clone()); // Make sure the ParticlePairs aren't the same references in both the active and saved group
                                 group = new ParticleGroup(groupName, particles);
@@ -157,7 +156,7 @@ public class GuiInventoryManageGroups extends GuiInventory {
                             guiManager.transition(new GuiInventoryManageGroups(pplayer));
                         }
                     }));
-                    pplayer.getPlayer().closeInventory();
+                    this.close();
                 });
         this.actionButtons.add(saveGroupButton);
 

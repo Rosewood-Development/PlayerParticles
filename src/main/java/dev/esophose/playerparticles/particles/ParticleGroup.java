@@ -2,8 +2,8 @@ package dev.esophose.playerparticles.particles;
 
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.PermissionManager;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ParticleGroup {
     
@@ -42,7 +42,7 @@ public class ParticleGroup {
      * @return The default empty active ParticleGroup
      */
     public static ParticleGroup getDefaultGroup() {
-        return new ParticleGroup(DEFAULT_NAME, new HashMap<>());
+        return new ParticleGroup(DEFAULT_NAME, new ConcurrentHashMap<>());
     }
 
     /**

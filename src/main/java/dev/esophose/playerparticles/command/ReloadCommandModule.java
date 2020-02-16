@@ -9,21 +9,24 @@ import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.styles.DefaultStyles;
 import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.Bukkit;
 
 public class ReloadCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         PlayerParticles playerParticles = PlayerParticles.getInstance();
-        LocaleManager localeManager = playerParticles.getManager(LocaleManager.class);
-        if (playerParticles.getManager(PermissionManager.class).canReloadPlugin(pplayer.getUnderlyingExecutor())) {
-            playerParticles.reload();
-            ParticleEffect.reloadSettings();
-            DefaultStyles.reloadSettings(playerParticles.getManager(ParticleStyleManager.class));
-            localeManager.sendMessage(pplayer, "reload-success");
-            playerParticles.getLogger().info("Reloaded configuration.");
-        } else {
-            localeManager.sendMessage(pplayer, "reload-no-permission");
-        }
+        Bukkit.getScheduler().runTask(playerParticles, () -> {
+            LocaleManager localeManager = playerParticles.getManager(LocaleManager.class);
+            if (playerParticles.getManager(PermissionManager.class).canReloadPlugin(pplayer.getUnderlyingExecutor())) {
+                playerParticles.reload();
+                ParticleEffect.reloadSettings();
+                DefaultStyles.reloadSettings(playerParticles.getManager(ParticleStyleManager.class));
+                localeManager.sendMessage(pplayer, "reload-success");
+                playerParticles.getLogger().info("Reloaded configuration.");
+            } else {
+                localeManager.sendMessage(pplayer, "reload-no-permission");
+            }
+        });
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {

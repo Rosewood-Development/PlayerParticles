@@ -63,9 +63,8 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
                 }
                 PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), activeGroup);
 
-                if (Setting.GUI_CLOSE_AFTER_GROUP_SELECTED.getBoolean()) {
-                    pplayer.getPlayer().closeInventory();
-                }
+                if (Setting.GUI_CLOSE_AFTER_GROUP_SELECTED.getBoolean())
+                    this.close();
             });
             this.actionButtons.add(groupButton);
 

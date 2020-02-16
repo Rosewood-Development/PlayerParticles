@@ -18,11 +18,11 @@ import dev.esophose.playerparticles.util.ParticleUtils;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -106,8 +106,8 @@ public class DataManager extends Manager {
         }
 
         this.async(() -> {
-            Map<String, ParticleGroup> groups = new HashMap<>();
-            Map<Integer, FixedParticleEffect> fixedParticles = new HashMap<>();
+            Map<String, ParticleGroup> groups = new ConcurrentHashMap<>();
+            Map<Integer, FixedParticleEffect> fixedParticles = new ConcurrentHashMap<>();
 
             this.databaseConnector.connect((connection) -> {
                 // Load settings
@@ -133,9 +133,9 @@ public class DataManager extends Manager {
                 }
 
                 // Load particle groups
-                String groupQuery = "SELECT * FROM " + this.getTablePrefix() + "group g " + // @formatter:off
+                String groupQuery = "SELECT * FROM " + this.getTablePrefix() + "group g " +
         					   	    "JOIN " + this.getTablePrefix() + "particle p ON g.uuid = p.group_uuid " +
-        					   	    "WHERE g.owner_uuid = ?"; // @formatter:on
+        					   	    "WHERE g.owner_uuid = ?";
                 try (PreparedStatement statement = connection.prepareStatement(groupQuery)) {
                     statement.setString(1, playerUUID.toString());
 
@@ -172,7 +172,7 @@ public class DataManager extends Manager {
 
                         // Add the particle to a new group if one didn't already exist
                         if (!groupAlreadyExists) {
-                            HashMap<Integer, ParticlePair> particles = new HashMap<>();
+                            Map<Integer, ParticlePair> particles = new ConcurrentHashMap<>();
                             if (!invalid)
                                 particles.put(particle.getId(), particle);
                             ParticleGroup newGroup = new ParticleGroup(groupName, particles);
@@ -190,9 +190,9 @@ public class DataManager extends Manager {
                 }
 
                 // Load fixed effects
-                String fixedQuery = "SELECT f.id AS f_id, f.world, f.xPos, f.yPos, f.zPos, p.id AS p_id, p.effect, p.style, p.item_material, p.block_material, p.note, p.r, p.g, p.b FROM " + this.getTablePrefix() + "fixed f " + // @formatter:off
+                String fixedQuery = "SELECT f.id AS f_id, f.world, f.xPos, f.yPos, f.zPos, p.id AS p_id, p.effect, p.style, p.item_material, p.block_material, p.note, p.r, p.g, p.b FROM " + this.getTablePrefix() + "fixed f " +
         						    "JOIN " + this.getTablePrefix() + "particle p ON f.particle_uuid = p.uuid " +
-        						    "WHERE f.owner_uuid = ?"; // @formatter:on
+        						    "WHERE f.owner_uuid = ?";
                 try (PreparedStatement statement = connection.prepareStatement(fixedQuery)) {
                     statement.setString(1, playerUUID.toString());
 
@@ -240,7 +240,7 @@ public class DataManager extends Manager {
                 }
 
                 if (!activeGroupExists) {
-                    ParticleGroup activeGroup = new ParticleGroup(ParticleGroup.DEFAULT_NAME, new HashMap<>());
+                    ParticleGroup activeGroup = new ParticleGroup(ParticleGroup.DEFAULT_NAME, new ConcurrentHashMap<>());
                     this.saveParticleGroup(playerUUID, activeGroup);
                     groups.put(activeGroup.getName(), activeGroup);
                 }
@@ -522,12 +522,16 @@ public class DataManager extends Manager {
     }
 
     /**
-     * Asynchronizes the callback with it's own thread
+     * Asynchronizes the callback with it's own thread unless it is already not on the main thread
      *
      * @param asyncCallback The callback to run on a separate thread
      */
     private void async(Runnable asyncCallback) {
-        Bukkit.getScheduler().runTaskAsynchronously(this.playerParticles, asyncCallback);
+        if (Bukkit.isPrimaryThread()) {
+            Bukkit.getScheduler().runTaskAsynchronously(this.playerParticles, asyncCallback);
+        } else {
+            asyncCallback.run();
+        }
     }
 
     /**
