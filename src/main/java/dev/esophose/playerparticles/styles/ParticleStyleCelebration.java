@@ -62,11 +62,11 @@ public class ParticleStyleCelebration extends DefaultParticleStyle {
                 if (player != null && player.getGameMode() != GameMode.SPECTATOR && permissionManager.isWorldEnabled(player.getWorld().getName()))
                     for (ParticlePair particle : pplayer.getActiveParticles())
                         if (particle.getStyle() == this)
-                            this.spawnFirework(player.getLocation(), pplayer, particle, random);
+                            this.spawnFirework(player.getLocation(), pplayer, pplayer.getPlayer(), particle, random);
                 
                 for (FixedParticleEffect fixedEffect : pplayer.getFixedParticles())
                     if (fixedEffect.getParticlePair().getStyle() == this && permissionManager.isWorldEnabled(fixedEffect.getLocation().getWorld().getName()))
-                        this.spawnFirework(fixedEffect.getLocation(), pplayer, fixedEffect.getParticlePair(), random);
+                        this.spawnFirework(fixedEffect.getLocation(), pplayer, null, fixedEffect.getParticlePair(), random);
             }
         }
     }
@@ -102,14 +102,13 @@ public class ParticleStyleCelebration extends DefaultParticleStyle {
             this.fuseEffect = ParticleEffect.FIREWORK;
     }
     
-    private void spawnFirework(final Location location, final PPlayer pplayer, final ParticlePair particle, final Random random) {
+    private void spawnFirework(final Location location, final PPlayer pplayer, final Player player, final ParticlePair particle, final Random random) {
         double angle = random.nextDouble() * Math.PI * 2;
         double distanceFrom = this.baseDistanceFrom + random.nextDouble() * this.distanceFromRandomizer;
         double dx = MathL.sin(angle) * distanceFrom;
         double dz = MathL.cos(angle) * distanceFrom;
         final Location loc = location.clone().add(dx, 1, dz);
         final int fuse = this.baseFuseLength + random.nextInt(this.fuseLengthRandomizer);
-        Player player = pplayer.getPlayer();
         ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
 
         new BukkitRunnable() {

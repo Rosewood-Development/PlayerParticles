@@ -77,6 +77,10 @@ public class PermissionManager extends Manager {
         // Register plugin permissions to Bukkit
         PluginManager pluginManager = Bukkit.getPluginManager();
 
+        // Don't register the permissions if we already have, could have happened because of a reload?
+        if (pluginManager.getPermission("playerparticles.*") != null)
+            return;
+
         Set<Permission> allPermissions = new HashSet<>();
 
         // Effects

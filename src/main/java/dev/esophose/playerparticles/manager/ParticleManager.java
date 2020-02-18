@@ -13,11 +13,11 @@ import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.styles.DefaultStyles;
 import java.awt.Color;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -35,22 +35,28 @@ public class ParticleManager extends Manager implements Listener, Runnable {
     /**
      * The map containing all the loaded PPlayer info
      */
-    private Map<UUID, PPlayer> particlePlayers = new HashMap<>();
+    private final Map<UUID, PPlayer> particlePlayers;
 
     /**
      * The task that spawns the particles
      */
-    private BukkitTask particleTask = null;
+    private BukkitTask particleTask;
 
     /**
      * Rainbow particle effect hue and note color used for rainbow colorable effects
      */
-    private int hue = 0;
-    private int note = 0;
-    private final Random random = new Random();
+    private int hue;
+    private int note;
+    private final Random random;
 
     public ParticleManager(PlayerParticles playerParticles) {
         super(playerParticles);
+
+        this.particlePlayers = new ConcurrentHashMap<>();
+        this.particleTask = null;
+        this.hue = 0;
+        this.note = 0;
+        this.random = new Random();
 
         Bukkit.getPluginManager().registerEvents(this, this.playerParticles);
     }
@@ -62,7 +68,7 @@ public class ParticleManager extends Manager implements Listener, Runnable {
 
         Bukkit.getScheduler().runTaskLater(this.playerParticles, () -> {
             long ticks = Setting.TICKS_PER_PARTICLE.getLong();
-            this.particleTask = Bukkit.getScheduler().runTaskTimer(this.playerParticles, this, 5, ticks);
+            this.particleTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this.playerParticles, this, 5, ticks);
         }, 1);
 
         this.particlePlayers.clear();

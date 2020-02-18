@@ -13,9 +13,9 @@ import dev.esophose.playerparticles.util.StringPlaceholders;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
@@ -101,7 +101,7 @@ public class GroupCommandModule implements CommandModule {
         ParticleGroup group = pplayer.getParticleGroupByName(groupName);
         boolean groupUpdated = false;
         if (group == null) {
-            Map<Integer, ParticlePair> particles = new HashMap<>();
+            Map<Integer, ParticlePair> particles = new ConcurrentHashMap<>();
             for (ParticlePair particle : pplayer.getActiveParticles())
                 particles.put(particle.getId(), particle.clone()); // Make sure the ParticlePairs aren't the same references in both the active and saved group
             group = new ParticleGroup(groupName, particles);

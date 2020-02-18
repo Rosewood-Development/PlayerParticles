@@ -1,6 +1,6 @@
 package dev.esophose.playerparticles.particles;
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.UUID;
 import org.bukkit.command.CommandSender;
 
@@ -9,7 +9,7 @@ public class OtherPPlayer extends PPlayer {
     private CommandSender sender;
 
     public OtherPPlayer(CommandSender sender) {
-        super(UUID.randomUUID(), new HashMap<>(), new HashMap<>(), false);
+        super(UUID.randomUUID(), Collections.emptyMap(), Collections.emptyMap(), false);
 
         this.sender = sender;
     }

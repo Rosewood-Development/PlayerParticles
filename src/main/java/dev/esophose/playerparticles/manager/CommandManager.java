@@ -146,30 +146,34 @@ public class CommandManager extends Manager implements CommandExecutor, TabCompl
                 return true;
             }
 
-            String[] cmdArgs = args.length > 1 ? Arrays.copyOfRange(args, 1, args.length) : new String[0];
+            Bukkit.getScheduler().runTaskAsynchronously(this.playerParticles, () -> {
+                String[] cmdArgs = args.length > 1 ? Arrays.copyOfRange(args, 1, args.length) : new String[0];
 
-            if (!commandModule.canConsoleExecute()) {
-                if (!(sender instanceof Player)) {
-                    sender.sendMessage(ChatColor.RED + "Error: This command can only be executed by a player.");
-                    return true;
+                if (!commandModule.canConsoleExecute()) {
+                    if (!(sender instanceof Player)) {
+                        sender.sendMessage(ChatColor.RED + "Error: This command can only be executed by a player.");
+                        return;
+                    }
+                } else if (sender instanceof ConsoleCommandSender) {
+                    commandModule.onCommandExecute(PlayerParticlesAPI.getInstance().getConsolePPlayer(), cmdArgs);
+                    return;
                 }
-            } else if (sender instanceof ConsoleCommandSender) {
-                commandModule.onCommandExecute(PlayerParticlesAPI.getInstance().getConsolePPlayer(), cmdArgs);
-                return true;
-            }
-            
-            Player p = (Player) sender;
 
-            this.playerParticles.getManager(DataManager.class).getPPlayer(p.getUniqueId(), (pplayer) -> {
-                PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
-                if (commandModule.requiresEffectsAndStyles() && (permissionManager.getEffectsUserHasPermissionFor(pplayer).isEmpty() || permissionManager.getStylesUserHasPermissionFor(pplayer).isEmpty())) {
-                    localeManager.sendMessage(pplayer, "command-error-missing-effects-or-styles");
-                } else {
-                    commandModule.onCommandExecute(pplayer, cmdArgs);
-                }
+                Player p = (Player) sender;
+
+                this.playerParticles.getManager(DataManager.class).getPPlayer(p.getUniqueId(), (pplayer) -> {
+                    PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
+                    if (commandModule.requiresEffectsAndStyles() && (permissionManager.getEffectsUserHasPermissionFor(pplayer).isEmpty() || permissionManager.getStylesUserHasPermissionFor(pplayer).isEmpty())) {
+                        localeManager.sendMessage(pplayer, "command-error-missing-effects-or-styles");
+                    } else {
+                        commandModule.onCommandExecute(pplayer, cmdArgs);
+                    }
+                });
             });
+
+            return true;
         } else if (cmd.getName().equalsIgnoreCase("ppo")) {
-            this.ppoCommand.onCommandExecute(sender, args);
+            Bukkit.getScheduler().runTaskAsynchronously(this.playerParticles, () -> this.ppoCommand.onCommandExecute(sender, args));
         }
         
         return true;

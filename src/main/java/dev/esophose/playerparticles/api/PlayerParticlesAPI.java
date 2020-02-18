@@ -16,12 +16,12 @@ import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -525,7 +525,7 @@ public final class PlayerParticlesAPI {
         Objects.requireNonNull(groupName);
         Objects.requireNonNull(particles);
 
-        Map<Integer, ParticlePair> mappedParticles = new HashMap<>();
+        Map<Integer, ParticlePair> mappedParticles = new ConcurrentHashMap<>();
         particles.forEach(x -> mappedParticles.put(x.getId(), x));
         ParticleGroup particleGroup = new ParticleGroup(groupName.toLowerCase(), mappedParticles);
         return this.savePlayerParticleGroup(player, particleGroup);
