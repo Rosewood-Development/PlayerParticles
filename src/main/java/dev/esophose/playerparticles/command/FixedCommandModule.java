@@ -148,6 +148,16 @@ public class FixedCommandModule implements CommandModule {
             }
         }
 
+        // Pad the args with the coordinates so we don't have to adjust all the indices
+        if (args[0].equalsIgnoreCase("looking")) {
+            String[] paddedArgs = new String[args.length + 2];
+            paddedArgs[0] = String.valueOf(location.getX());
+            paddedArgs[1] = String.valueOf(location.getY());
+            paddedArgs[2] = String.valueOf(location.getZ());
+            System.arraycopy(args, 1, paddedArgs, 3, args.length - 1);
+            args = paddedArgs;
+        }
+
         ParticleEffect effect = inputParser.next(ParticleEffect.class);
         if (effect == null) {
             localeManager.sendMessage(pplayer, "fixed-create-effect-invalid", StringPlaceholders.single("effect", args[3]));
