@@ -1,3 +1,10 @@
+=== v7.3 ===
++ Made the majority of the plugin asynchronous, hugely improving performance
+* Fixed the celebration style disappearing with fixed effects if the owner is online and is either vanished or in spectator mode
+* Fixed the plugin trying to register permissions twice if it gets reloaded separately from the entire server (aka PlugMan)
+=== v7.2 ===
+* Fixed MySQL not creating the fixed effect table properly
+* The arrows style now displays particles from far away so you can see the full trail
 === v7.1 ===
 * Fixed an error when spawning particles for a fixed effect with the celebration style when the owner is offline
 * Performance improvement when large amounts of players are online
