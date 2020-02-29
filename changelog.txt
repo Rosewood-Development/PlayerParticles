@@ -1,3 +1,8 @@
+=== v7.4 ===
+* Fixed '/pp fixed teleport' not working due to async event issues
+* Fixed issue with a fixed celebration effect while vanished
+* Fixed issue with missing args count message with '/pp fixed create' when using 'looking'
+* Fixed issue with '/pp fixed create' with invalid effects/styles when using 'looking'
 === v7.3 ===
 + Made the majority of the plugin asynchronous, hugely improving performance
 * Fixed the celebration style disappearing with fixed effects if the owner is online and is either vanished or in spectator mode
