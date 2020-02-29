@@ -117,14 +117,22 @@ public class FixedCommandModule implements CommandModule {
             return;
         }
 
+        boolean isLooking = args.length > 0 && args[0].equalsIgnoreCase("looking");
+
         int argAmount;
         if (player != null) {
             argAmount = 5;
         } else {
             argAmount = 6;
         }
-        if (args.length < argAmount && !(args.length > 0 && args[0].equalsIgnoreCase("looking") && args.length >= 3)) {
-            localeManager.sendMessage(pplayer, "fixed-create-missing-args", StringPlaceholders.single("amount", argAmount - args.length));
+        if ((isLooking && args.length < argAmount - 2) || (!isLooking && args.length < argAmount)) {
+            String amount;
+            if (args.length == 0) {
+                amount = "3-5";
+            } else {
+                amount = String.valueOf((isLooking ? argAmount - 2 : argAmount) - args.length);
+            }
+            localeManager.sendMessage(pplayer, "fixed-create-missing-args", StringPlaceholders.single("amount", amount));
             return;
         }
 
@@ -543,7 +551,7 @@ public class FixedCommandModule implements CommandModule {
             return;
         }
 
-        player.teleport(fixedEffect.getLocation());
+        Bukkit.getScheduler().runTask(PlayerParticles.getInstance(), () -> player.teleport(fixedEffect.getLocation()));
         localeManager.sendMessage(pplayer, "fixed-teleport-success", StringPlaceholders.single("id", id));
     }
 

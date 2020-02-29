@@ -200,7 +200,7 @@ public class ParticleManager extends Manager implements Listener, Runnable {
             return;
 
         for (PParticle pparticle : particles)
-            ParticleEffect.display(particle, pparticle, isLongRange, Bukkit.getPlayer(particle.getOwnerUniqueId()));
+            ParticleEffect.display(particle, pparticle, isLongRange, player);
     }
 
     /**
