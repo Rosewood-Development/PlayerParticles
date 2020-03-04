@@ -165,7 +165,7 @@ public class GroupCommandModule implements CommandModule {
             activeGroup.getParticles().put(particle.getId(), particle.clone());
         
         // Update group and notify player
-        PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), group);
+        PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), activeGroup);
         
         if (!isPreset)
             localeManager.sendMessage(pplayer, "group-load-success", StringPlaceholders.builder("amount", activeGroup.getParticles().size()).addPlaceholder("name", groupName).build());
