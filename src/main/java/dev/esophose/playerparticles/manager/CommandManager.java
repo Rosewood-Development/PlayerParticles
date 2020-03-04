@@ -135,6 +135,7 @@ public class CommandManager extends Manager implements CommandExecutor, TabCompl
      * @param args The arguments following the command
      * @return true
      */
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
 
@@ -188,6 +189,7 @@ public class CommandManager extends Manager implements CommandExecutor, TabCompl
      * @param args All arguments following the command
      * @return A list of commands available to the sender
      */
+    @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
         if (cmd.getName().equalsIgnoreCase("pp")) {
             PPlayer pplayer = PlayerParticlesAPI.getInstance().getPPlayer(sender);
