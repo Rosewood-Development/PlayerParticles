@@ -17,7 +17,6 @@ import dev.esophose.playerparticles.styles.ParticleStyle;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -81,13 +80,10 @@ public class DataManager extends Manager {
      * @return The PPlayer from cache
      */
     public PPlayer getPPlayer(UUID playerUUID) {
-        Collection<PPlayer> pplayers;
-        synchronized (pplayers = this.playerParticles.getManager(ParticleManager.class).getPPlayers()) { // Under rare circumstances, the PPlayers list can be changed while it's looping
-            for (PPlayer pp : pplayers)
-                if (pp.getUniqueId().equals(playerUUID))
-                    return pp;
-            return null;
-        }
+        for (PPlayer pp : this.playerParticles.getManager(ParticleManager.class).getPPlayers())
+            if (pp.getUniqueId().equals(playerUUID))
+                return pp;
+        return null;
     }
 
     /**
@@ -253,12 +249,8 @@ public class DataManager extends Manager {
                 }
 
                 this.sync(() -> {
-                    synchronized (loadedPPlayer) {
-                        if (this.getPPlayer(playerUUID) == null) { // Make sure the PPlayer still isn't added, since this is async it's possible it got ran twice
-                            this.playerParticles.getManager(ParticleManager.class).addPPlayer(loadedPPlayer); // This will be fine now since loadedPPlayer is synchronized
-                            callback.accept(loadedPPlayer);
-                        }
-                    }
+                    this.playerParticles.getManager(ParticleManager.class).addPPlayer(loadedPPlayer);
+                    callback.accept(loadedPPlayer);
                 });
             });
         });
@@ -312,6 +304,7 @@ public class DataManager extends Manager {
 
         this.async(() -> this.databaseConnector.connect((connection) -> {
             String groupUUID;
+            boolean existingGroup;
 
             String groupUUIDQuery = "SELECT uuid FROM " + this.getTablePrefix() + "group WHERE owner_uuid = ? AND name = ?";
             try (PreparedStatement statement = connection.prepareStatement(groupUUIDQuery)) {
@@ -321,21 +314,25 @@ public class DataManager extends Manager {
                 ResultSet result = statement.executeQuery();
                 if (result.next()) { // Clear out particles from existing group
                     groupUUID = result.getString("uuid");
-
-                    String particlesDeleteQuery = "DELETE FROM " + this.getTablePrefix() + "particle WHERE group_uuid = ?";
-                    PreparedStatement particlesDeleteStatement = connection.prepareStatement(particlesDeleteQuery);
-                    particlesDeleteStatement.setString(1, result.getString("uuid"));
-
-                    particlesDeleteStatement.executeUpdate();
+                    existingGroup = true;
                 } else { // Create new group
                     groupUUID = UUID.randomUUID().toString();
+                    existingGroup = false;
+                }
+            }
 
-                    String groupCreateQuery = "INSERT INTO " + this.getTablePrefix() + "group (uuid, owner_uuid, name) VALUES (?, ?, ?)";
-                    PreparedStatement groupCreateStatement = connection.prepareStatement(groupCreateQuery);
+            if (existingGroup) {
+                String particlesDeleteQuery = "DELETE FROM " + this.getTablePrefix() + "particle WHERE group_uuid = ?";
+                try (PreparedStatement particlesDeleteStatement = connection.prepareStatement(particlesDeleteQuery)) {
+                    particlesDeleteStatement.setString(1, groupUUID);
+                    particlesDeleteStatement.executeUpdate();
+                }
+            } else {
+                String groupCreateQuery = "INSERT INTO " + this.getTablePrefix() + "group (uuid, owner_uuid, name) VALUES (?, ?, ?)";
+                try (PreparedStatement groupCreateStatement = connection.prepareStatement(groupCreateQuery)) {
                     groupCreateStatement.setString(1, groupUUID);
                     groupCreateStatement.setString(2, playerUUID.toString());
                     groupCreateStatement.setString(3, group.getName());
-
                     groupCreateStatement.executeUpdate();
                 }
             }
@@ -527,11 +524,7 @@ public class DataManager extends Manager {
      * @param asyncCallback The callback to run on a separate thread
      */
     private void async(Runnable asyncCallback) {
-        if (Bukkit.isPrimaryThread()) {
-            Bukkit.getScheduler().runTaskAsynchronously(this.playerParticles, asyncCallback);
-        } else {
-            asyncCallback.run();
-        }
+        Bukkit.getScheduler().runTaskAsynchronously(this.playerParticles, asyncCallback);
     }
 
     /**
