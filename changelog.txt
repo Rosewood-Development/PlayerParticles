@@ -1,3 +1,8 @@
+=== v7.5 ===
++ Added style 'trail'
++ Added settings for MySQL table prefix and connection pool size
+* Fixed preset groups loaded with '/pp group load' not saving correctly
+* Fixed possible database connection loss for MySQL
 === v7.4 ===
 * Fixed '/pp fixed teleport' not working due to async event issues
 * Fixed issue with a fixed celebration effect while vanished
