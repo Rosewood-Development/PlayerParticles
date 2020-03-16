@@ -63,7 +63,9 @@ public class ConfigurationManager extends Manager {
         MYSQL_DATABASE_NAME("mysql-settings.database-name", "", "MySQL Database Name"),
         MYSQL_USER_NAME("mysql-settings.user-name", "", "MySQL Database User Name"),
         MYSQL_USER_PASSWORD("mysql-settings.user-password", "", "MySQL Database User Password"),
+        MYSQL_TABLE_PREFIX("mysql-settings.table-prefix", PlayerParticles.getInstance().getDescription().getName().toLowerCase() + "_", "The prefix of the tables in the database", "Do not change this after tables have already been created or you will have data loss"),
         MYSQL_USE_SSL("mysql-settings.use-ssl", false, "If the database connection should use SSL", "You should enable this if your database supports SSL"),
+        MYSQL_CONNECTION_POOL_SIZE("mysql-settings.connection-pool-size", 5, "The size of the connection pool to the database", "Not recommended to go below 2 or above 5"),
 
         GUI_ICON("gui-icon", null,
                 "This configuration option allows you to change any of the GUI",

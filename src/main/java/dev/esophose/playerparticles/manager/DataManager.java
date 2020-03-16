@@ -547,7 +547,7 @@ public class DataManager extends Manager {
      * @return the prefix to be used by all table names
      */
     public String getTablePrefix() {
-        return this.playerParticles.getDescription().getName().toLowerCase() + '_';
+        return Setting.MYSQL_TABLE_PREFIX.getString();
     }
 
 }
