@@ -7,6 +7,7 @@ import dev.esophose.playerparticles.gui.GuiInventoryLoadPresetGroups;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.particles.PPlayer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -25,7 +26,7 @@ public class GuiManager extends Manager implements Listener, Runnable {
     public GuiManager(PlayerParticles playerParticles) {
         super(playerParticles);
 
-        this.guiInventories = new ArrayList<>();
+        this.guiInventories = Collections.synchronizedList(new ArrayList<>());
         this.guiTask = null;
 
         Bukkit.getPluginManager().registerEvents(this, this.playerParticles);
