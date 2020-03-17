@@ -243,7 +243,7 @@ public class SimplifiedChineseLocale implements Locale {
             this.put("gui-color-unavailable", "&c");
 
             this.put("#28", "GUI Info Messages");
-            this.put("gui-commands-info", "商人 &b/pp help 查看指令帮助");
+            this.put("gui-commands-info", "输入 &b/pp help 查看指令帮助");
             this.put("gui-back-button", "返回");
             this.put("gui-next-page-button", "下一页 (%start%/%end%)");
             this.put("gui-previous-page-button", "上一页 (%start%/%end%)");
