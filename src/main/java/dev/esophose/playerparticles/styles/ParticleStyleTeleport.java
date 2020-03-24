@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
@@ -67,6 +68,10 @@ public class ParticleStyleTeleport extends DefaultParticleStyle implements Liste
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerTeleport(PlayerTeleportEvent event) {
+        TeleportCause cause = event.getCause();
+        if (cause == TeleportCause.UNKNOWN)
+            return;
+        
         ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
 
         Player player = event.getPlayer();
