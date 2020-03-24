@@ -66,7 +66,7 @@ public class ParticleStyleTeleport extends DefaultParticleStyle implements Liste
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerMove(PlayerTeleportEvent event) {
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
         final ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
 
         final Player player = event.getPlayer();
