@@ -181,6 +181,7 @@ public class ConfigurationManager extends Manager {
         GUI_ICON_STYLE_SPIN("gui-icon.style.spin", Collections.singletonList("BEACON")),
         GUI_ICON_STYLE_SPIRAL("gui-icon.style.spiral", Collections.singletonList("HOPPER")),
         GUI_ICON_STYLE_SWORDS("gui-icon.style.swords", Collections.singletonList("IRON_SWORD")),
+        GUI_ICON_STYLE_TELEPORT("gui-icon.style.teleport", Collections.singletonList("ENDER_PEARL")),
         GUI_ICON_STYLE_THICK("gui-icon.style.thick", Arrays.asList("COBWEB", "WEB")),
         GUI_ICON_STYLE_TRAIL("gui-icon.style.trail", Collections.singletonList("GHAST_TEAR")),
         GUI_ICON_STYLE_TWINS("gui-icon.style.twins", Arrays.asList("OAK_FENCE", "FENCE")),

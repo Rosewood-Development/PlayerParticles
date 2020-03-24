@@ -37,6 +37,7 @@ public class DefaultStyles {
     public static final ParticleStyle SPIN = new ParticleStyleSpin();
     public static final ParticleStyle SPIRAL = new ParticleStyleSpiral();
     public static final ParticleStyle SWORDS = new ParticleStyleSwords();
+    public static final ParticleStyle TELEPORT = new ParticleStyleTeleport();
     public static final ParticleStyle THICK = new ParticleStyleThick();
     public static final ParticleStyle TRAIL = new ParticleStyleTrail();
     public static final ParticleStyle TWINS = new ParticleStyleTwins();
@@ -78,6 +79,7 @@ public class DefaultStyles {
         particleStyleManager.registerStyle(SPIN);
         particleStyleManager.registerStyle(SPIRAL);
         particleStyleManager.registerEventStyle(SWORDS);
+        particleStyleManager.registerEventStyle(TELEPORT);
         particleStyleManager.registerStyle(THICK);
         particleStyleManager.registerEventStyle(TRAIL);
         particleStyleManager.registerStyle(TWINS);
@@ -95,6 +97,7 @@ public class DefaultStyles {
         pluginManager.registerEvents((Listener) HURT, playerParticles);
         pluginManager.registerEvents((Listener) MOVE, playerParticles);
         pluginManager.registerEvents((Listener) SWORDS, playerParticles);
+        pluginManager.registerEvents((Listener) TELEPORT, playerParticles);
         pluginManager.registerEvents((Listener) TRAIL, playerParticles);
     }
 
