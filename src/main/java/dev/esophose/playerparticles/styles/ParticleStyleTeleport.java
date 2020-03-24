@@ -3,13 +3,13 @@ package dev.esophose.playerparticles.styles;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
@@ -34,7 +34,7 @@ public class ParticleStyleTeleport extends DefaultParticleStyle implements Liste
 
     @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
-        final List<PParticle> particles = new ArrayList<>();
+        List<PParticle> particles = new ArrayList<>();
 
         for (int i = 0; i < this.amount; i++)
             particles.add(new PParticle(location, this.spread, this.spread, this.spread, this.speed));
@@ -67,28 +67,25 @@ public class ParticleStyleTeleport extends DefaultParticleStyle implements Liste
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerTeleport(PlayerTeleportEvent event) {
-        final ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
+        ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
 
-        final Player player = event.getPlayer();
-        final PPlayer pplayer = PlayerParticles.getInstance().getManager(DataManager.class).getPPlayer(player.getUniqueId());
+        Player player = event.getPlayer();
+        PPlayer pplayer = PlayerParticles.getInstance().getManager(DataManager.class).getPPlayer(player.getUniqueId());
         if (pplayer != null) {
-            for (final ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.TELEPORT)) {
+            for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.TELEPORT)) {
 
                 if (this.before) {
-                    final Location loc1 = player.getLocation().clone();
+                    Location loc1 = player.getLocation().clone();
                     loc1.setY(loc1.getY() + 1);
                     particleManager.displayParticles(player, player.getWorld(), particle, DefaultStyles.TELEPORT.getParticles(particle, loc1), false);
                 }
 
                 if (this.after) {
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            final Location loc2 = player.getLocation().clone();
-                            loc2.setY(loc2.getY() + 1);
-                            particleManager.displayParticles(player, player.getWorld(), particle, DefaultStyles.TELEPORT.getParticles(particle, loc2), false);
-                        }
-                    }.runTaskLater(PlayerParticles.getInstance(), 1);
+                    Bukkit.getScheduler().runTaskLater(PlayerParticles.getInstance(), () -> {
+                        Location loc2 = player.getLocation().clone();
+                        loc2.setY(loc2.getY() + 1);
+                        particleManager.displayParticles(player, player.getWorld(), particle, DefaultStyles.TELEPORT.getParticles(particle, loc2), false);
+                    }, 1);
                 }
             }
         }
