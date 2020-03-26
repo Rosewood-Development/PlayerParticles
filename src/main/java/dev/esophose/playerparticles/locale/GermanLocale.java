@@ -240,6 +240,7 @@ public class GermanLocale implements Locale {
             this.put("gui-color-icon-name", "&a");
             this.put("gui-color-info", "&e");
             this.put("gui-color-subtext", "&b");
+            this.put("gui-color-unavailable", "&c");
 
             this.put("#28", "GUI Info Messages");
             this.put("gui-commands-info", "Informationen zu Befehlen finden Sie mit Hilfe von &b/pp help");
