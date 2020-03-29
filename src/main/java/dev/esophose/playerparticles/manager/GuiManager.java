@@ -116,8 +116,8 @@ public class GuiManager extends Manager implements Listener, Runnable {
             inventoryToOpen = new GuiInventoryLoadPresetGroups(pplayer, true);
         }
 
-        this.guiInventories.add(inventoryToOpen);
         pplayer.getPlayer().openInventory(inventoryToOpen.getInventory());
+        this.guiInventories.add(inventoryToOpen);
     }
     
     /**
