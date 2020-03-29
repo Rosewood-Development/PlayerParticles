@@ -26,7 +26,7 @@ public class GuiManager extends Manager implements Listener, Runnable {
     public GuiManager(PlayerParticles playerParticles) {
         super(playerParticles);
 
-        this.guiInventories = new ArrayList<>();
+        this.guiInventories = Collections.synchronizedList(new ArrayList<>());
         this.guiTask = null;
 
         Bukkit.getPluginManager().registerEvents(this, this.playerParticles);
@@ -62,7 +62,7 @@ public class GuiManager extends Manager implements Listener, Runnable {
             return;
         
         event.setCancelled(true);
-        inventory.onClick(event);
+        Bukkit.getScheduler().runTaskAsynchronously(this.playerParticles, () -> inventory.onClick(event));
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -109,15 +109,17 @@ public class GuiManager extends Manager implements Listener, Runnable {
      * @param pplayer The PPlayer to open the GUI screen for
      */
     public void openDefault(PPlayer pplayer) {
-        GuiInventory inventoryToOpen;
-        if (!Setting.GUI_PRESETS_ONLY.getBoolean()) {
-            inventoryToOpen = new GuiInventoryDefault(pplayer);
-        } else {
-            inventoryToOpen = new GuiInventoryLoadPresetGroups(pplayer, true);
-        }
+        Bukkit.getScheduler().runTask(this.playerParticles, () -> {
+            GuiInventory inventoryToOpen;
+            if (!Setting.GUI_PRESETS_ONLY.getBoolean()) {
+                inventoryToOpen = new GuiInventoryDefault(pplayer);
+            } else {
+                inventoryToOpen = new GuiInventoryLoadPresetGroups(pplayer, true);
+            }
 
-        pplayer.getPlayer().openInventory(inventoryToOpen.getInventory());
-        this.guiInventories.add(inventoryToOpen);
+            pplayer.getPlayer().openInventory(inventoryToOpen.getInventory());
+            this.guiInventories.add(inventoryToOpen);
+        });
     }
     
     /**
@@ -126,8 +128,10 @@ public class GuiManager extends Manager implements Listener, Runnable {
      * @param nextInventory The GuiInventory to transition to
      */
     public void transition(GuiInventory nextInventory) {
-        this.guiInventories.add(nextInventory);
-        nextInventory.getPPlayer().getPlayer().openInventory(nextInventory.getInventory());
+        Bukkit.getScheduler().runTask(this.playerParticles, () -> {
+            nextInventory.getPPlayer().getPlayer().openInventory(nextInventory.getInventory());
+            this.guiInventories.add(nextInventory);
+        });
     }
     
     /**
@@ -141,15 +145,6 @@ public class GuiManager extends Manager implements Listener, Runnable {
                 .filter(x -> x.getPPlayer().getUniqueId().equals(player.getUniqueId()))
                 .findFirst()
                 .orElse(null);
-    }
-    
-    /**
-     * Removes a GuiInventory from guiInventories by a PPlayer
-     * 
-     * @param pplayer The PPlayer who owns the GuiInventory
-     */
-    private void removeGuiInventory(PPlayer pplayer) {
-        this.guiInventories.removeIf(x -> x.getPPlayer().getUniqueId().equals(pplayer.getUniqueId()));
     }
 
 }

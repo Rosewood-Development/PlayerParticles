@@ -4,6 +4,7 @@ import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.util.NMSUtil;
 import dev.esophose.playerparticles.util.StringPlaceholders;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import net.md_5.bungee.api.ChatMessageType;
@@ -25,7 +26,7 @@ public class PlayerChatHook extends BukkitRunnable implements Listener {
      * Initializes all the static values for this class
      */
     public static void setup() {
-        hooks = new HashSet<>();
+        hooks = Collections.synchronizedSet(new HashSet<>());
         if (hookTask != null)
             hookTask.cancel();
         hookTask = new PlayerChatHook().runTaskTimer(PlayerParticles.getInstance(), 0, 20);
