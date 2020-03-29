@@ -8,6 +8,7 @@ import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.particles.PPlayer;
 import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.Bukkit;
 
 public class GUICommandModule implements CommandModule {
 
@@ -22,9 +23,8 @@ public class GUICommandModule implements CommandModule {
         }
 
         boolean byDefault = false;
-        if (args.length > 0 && args[0].equals("_byDefault_")) {
+        if (args.length > 0 && args[0].equals("_byDefault_")) // Why is this still the way I'm doing this smh
             byDefault = true;
-        }
 
         if (guiManager.isGuiDisabled()) {
             if (byDefault) {
@@ -45,7 +45,7 @@ public class GUICommandModule implements CommandModule {
             return;
         }
 
-        guiManager.openDefault(pplayer);
+        Bukkit.getScheduler().runTask(PlayerParticles.getInstance(), () -> guiManager.openDefault(pplayer));
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {

@@ -5,6 +5,7 @@ import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -15,7 +16,7 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 
 public class ParticleStyleArrows extends DefaultParticleStyle implements Listener {
 
-    private List<Projectile> projectiles = new ArrayList<>();
+    private List<Projectile> projectiles;
 
     private int maxArrowsPerPlayer;
     private boolean onlySpawnIfFlying;
@@ -24,6 +25,8 @@ public class ParticleStyleArrows extends DefaultParticleStyle implements Listene
 
     public ParticleStyleArrows() {
         super("arrows", false, false, 0);
+
+        this.projectiles = Collections.synchronizedList(new ArrayList<>());
     }
 
     @Override
@@ -31,8 +34,9 @@ public class ParticleStyleArrows extends DefaultParticleStyle implements Listene
         List<PParticle> particles = new ArrayList<>();
 
         int count = 0;
-        for (int i = this.projectiles.size() - 1; i >= 0; i--) { // Loop backwards so the last-fired projectiles are the ones that have particles if they go over the max
-            Projectile projectile = this.projectiles.get(i);
+        List<Projectile> listCopy = new ArrayList<>(this.projectiles); // Copy in case of modification while looping due to async
+        for (int i = listCopy.size() - 1; i >= 0; i--) { // Loop backwards so the last-fired projectiles are the ones that have particles if they go over the max
+            Projectile projectile = listCopy.get(i);
             if (this.onlySpawnIfFlying && projectile.isOnGround())
                 continue;
 

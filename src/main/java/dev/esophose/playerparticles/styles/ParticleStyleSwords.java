@@ -66,11 +66,12 @@ public class ParticleStyleSwords extends DefaultParticleStyle implements Listene
             Player player = (Player) event.getDamager();
             LivingEntity entity = (LivingEntity) event.getEntity();
             PPlayer pplayer = PlayerParticles.getInstance().getManager(DataManager.class).getPPlayer(player.getUniqueId());
-            if (pplayer != null && SWORD_NAMES.contains(player.getInventory().getItemInMainHand().getType().name())) {
-                for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.SWORDS)) {
-                    Location loc = entity.getLocation().clone().add(0, 1, 0);
-                    particleManager.displayParticles(player, player.getWorld(), particle, DefaultStyles.SWORDS.getParticles(particle, loc), false);
-                }
+            if (pplayer == null || !SWORD_NAMES.contains(player.getInventory().getItemInMainHand().getType().name()))
+                return;
+
+            for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.SWORDS)) {
+                Location loc = entity.getLocation().clone().add(0, 1, 0);
+                particleManager.displayParticles(player, player.getWorld(), particle, DefaultStyles.SWORDS.getParticles(particle, loc), false);
             }
         }
     }

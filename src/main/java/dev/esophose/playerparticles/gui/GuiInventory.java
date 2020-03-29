@@ -12,12 +12,11 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public abstract class GuiInventory implements InventoryHolder {
+public abstract class GuiInventory {
 
     protected enum BorderColor {
         WHITE(0, "WHITE_STAINED_GLASS_PANE"),

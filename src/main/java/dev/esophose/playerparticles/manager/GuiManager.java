@@ -26,7 +26,7 @@ public class GuiManager extends Manager implements Listener, Runnable {
     public GuiManager(PlayerParticles playerParticles) {
         super(playerParticles);
 
-        this.guiInventories = Collections.synchronizedList(new ArrayList<>());
+        this.guiInventories = new ArrayList<>();
         this.guiTask = null;
 
         Bukkit.getPluginManager().registerEvents(this, this.playerParticles);
@@ -62,7 +62,7 @@ public class GuiManager extends Manager implements Listener, Runnable {
             return;
         
         event.setCancelled(true);
-        Bukkit.getScheduler().runTaskAsynchronously(this.playerParticles, () -> inventory.onClick(event));
+        inventory.onClick(event);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -117,7 +117,7 @@ public class GuiManager extends Manager implements Listener, Runnable {
         }
 
         this.guiInventories.add(inventoryToOpen);
-        Bukkit.getScheduler().runTask(this.playerParticles, () -> pplayer.getPlayer().openInventory(inventoryToOpen.getInventory()));
+        pplayer.getPlayer().openInventory(inventoryToOpen.getInventory());
     }
     
     /**
@@ -127,7 +127,7 @@ public class GuiManager extends Manager implements Listener, Runnable {
      */
     public void transition(GuiInventory nextInventory) {
         this.guiInventories.add(nextInventory);
-        Bukkit.getScheduler().runTask(this.playerParticles, () -> nextInventory.getPPlayer().getPlayer().openInventory(nextInventory.getInventory()));
+        nextInventory.getPPlayer().getPlayer().openInventory(nextInventory.getInventory());
     }
     
     /**

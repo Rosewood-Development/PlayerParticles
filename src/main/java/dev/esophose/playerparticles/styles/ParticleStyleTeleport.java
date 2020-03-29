@@ -1,8 +1,14 @@
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.config.CommentedFileConfiguration;
+import dev.esophose.playerparticles.manager.DataManager;
+import dev.esophose.playerparticles.manager.ParticleManager;
+import dev.esophose.playerparticles.particles.PParticle;
+import dev.esophose.playerparticles.particles.PPlayer;
+import dev.esophose.playerparticles.particles.ParticlePair;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -11,14 +17,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-
-import dev.esophose.playerparticles.PlayerParticles;
-import dev.esophose.playerparticles.config.CommentedFileConfiguration;
-import dev.esophose.playerparticles.manager.DataManager;
-import dev.esophose.playerparticles.manager.ParticleManager;
-import dev.esophose.playerparticles.particles.PParticle;
-import dev.esophose.playerparticles.particles.PPlayer;
-import dev.esophose.playerparticles.particles.ParticlePair;
 
 public class ParticleStyleTeleport extends DefaultParticleStyle implements Listener {
 
@@ -76,22 +74,22 @@ public class ParticleStyleTeleport extends DefaultParticleStyle implements Liste
 
         Player player = event.getPlayer();
         PPlayer pplayer = PlayerParticles.getInstance().getManager(DataManager.class).getPPlayer(player.getUniqueId());
-        if (pplayer != null) {
-            for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.TELEPORT)) {
+        if (pplayer == null)
+            return;
 
-                if (this.before) {
-                    Location loc1 = player.getLocation().clone();
-                    loc1.setY(loc1.getY() + 1);
-                    particleManager.displayParticles(player, player.getWorld(), particle, DefaultStyles.TELEPORT.getParticles(particle, loc1), false);
-                }
+        for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.TELEPORT)) {
+            if (this.before) {
+                Location loc1 = player.getLocation().clone();
+                loc1.setY(loc1.getY() + 1);
+                particleManager.displayParticles(player, player.getWorld(), particle, DefaultStyles.TELEPORT.getParticles(particle, loc1), false);
+            }
 
-                if (this.after) {
-                    Bukkit.getScheduler().runTaskLater(PlayerParticles.getInstance(), () -> {
-                        Location loc2 = player.getLocation().clone();
-                        loc2.setY(loc2.getY() + 1);
-                        particleManager.displayParticles(player, player.getWorld(), particle, DefaultStyles.TELEPORT.getParticles(particle, loc2), false);
-                    }, 1);
-                }
+            if (this.after) {
+                Bukkit.getScheduler().runTaskLater(PlayerParticles.getInstance(), () -> {
+                    Location loc2 = player.getLocation().clone();
+                    loc2.setY(loc2.getY() + 1);
+                    particleManager.displayParticles(player, player.getWorld(), particle, DefaultStyles.TELEPORT.getParticles(particle, loc2), false);
+                }, 1);
             }
         }
     }

@@ -42,7 +42,7 @@ public class PlayerChatHook extends BukkitRunnable implements Listener {
             if (hook.getPlayerUUID().equals(event.getPlayer().getUniqueId())) {
                 event.setCancelled(true);
                 hooks.remove(hook);
-                Bukkit.getScheduler().scheduleSyncDelayedTask(PlayerParticles.getInstance(), () -> hook.triggerCallback(event.getMessage()));
+                hook.triggerCallback(event.getMessage());
                 return;
             }
         }
