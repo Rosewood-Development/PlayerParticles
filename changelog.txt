@@ -1,3 +1,8 @@
+=== v7.6 ===
++ Added style 'teleport' (Thanks HexedHero)
+* Fixed being able to take items out of GUI when opened from a separate GUI plugin
+* Fixed a possible ConcurrentModificationException
+* Fixed a missing message in de_DE
 === v7.5 ===
 + Added style 'trail'
 + Added settings for MySQL table prefix and connection pool size
