@@ -63,7 +63,7 @@ public class ParticleStyleBlockPlace extends DefaultParticleStyle implements Lis
 
         Player player = event.getPlayer();
         PPlayer pplayer = PlayerParticles.getInstance().getManager(DataManager.class).getPPlayer(player.getUniqueId());
-        if (pplayer != null)
+        if (pplayer == null)
             return;
 
         for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.BLOCKPLACE)) {
