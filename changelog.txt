@@ -1,3 +1,7 @@
+=== v7.8 ===
+* Fixed the messages-enabled setting not working at all
+=== v7.7 ===
+* Fixed an error with the style 'blockplace'
 === v7.6 ===
 + Added style 'teleport' (Thanks HexedHero)
 * Fixed being able to take items out of GUI when opened from a separate GUI plugin
