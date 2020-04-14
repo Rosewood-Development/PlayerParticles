@@ -65,6 +65,11 @@ public class ParticleStyleArrows extends DefaultParticleStyle implements Listene
     }
 
     @Override
+    protected List<String> getGuiIconMaterialNames() {
+        return Collections.singletonList("BOW");
+    }
+
+    @Override
     public boolean hasLongRangeVisibility() {
         return true;
     }

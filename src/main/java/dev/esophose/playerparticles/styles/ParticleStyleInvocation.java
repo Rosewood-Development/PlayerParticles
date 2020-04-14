@@ -6,6 +6,7 @@ import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.util.MathL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Location;
 
@@ -95,6 +96,11 @@ public class ParticleStyleInvocation extends DefaultParticleStyle {
     public void updateTimers() {
         this.step = (this.step + Math.PI * 2 / this.numSteps) % this.numSteps;
         this.circleStep = (this.circleStep + 1) % this.numSteps;
+    }
+
+    @Override
+    protected List<String> getGuiIconMaterialNames() {
+        return Arrays.asList("ENDER_EYE", "EYE_OF_ENDER");
     }
 
     @Override

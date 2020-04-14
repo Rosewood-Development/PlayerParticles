@@ -6,6 +6,7 @@ import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.util.MathL;
 import dev.esophose.playerparticles.util.VectorUtils;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -39,6 +40,11 @@ public class ParticleStyleWings extends DefaultParticleStyle {
     public void updateTimers() {
         this.spawnTimer++;
         this.spawnTimer %= this.spawnDelay;
+    }
+
+    @Override
+    protected List<String> getGuiIconMaterialNames() {
+        return Collections.singletonList("ELYTRA");
     }
 
     @Override

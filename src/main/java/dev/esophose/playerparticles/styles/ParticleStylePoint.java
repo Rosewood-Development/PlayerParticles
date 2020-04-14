@@ -26,6 +26,11 @@ public class ParticleStylePoint extends DefaultParticleStyle {
     }
 
     @Override
+    protected List<String> getGuiIconMaterialNames() {
+        return Collections.singletonList("STONE_BUTTON");
+    }
+
+    @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
         this.setIfNotExists("player-offset", 1.5, "How far to offset the player location vertically");
     }

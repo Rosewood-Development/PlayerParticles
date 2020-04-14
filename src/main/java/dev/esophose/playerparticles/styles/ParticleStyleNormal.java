@@ -136,6 +136,11 @@ public class ParticleStyleNormal extends DefaultParticleStyle {
     }
 
     @Override
+    protected List<String> getGuiIconMaterialNames() {
+        return Collections.singletonList("DIRT");
+    }
+
+    @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
 
     }

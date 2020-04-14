@@ -8,6 +8,7 @@ import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -44,6 +45,11 @@ public class ParticleStyleTeleport extends DefaultParticleStyle implements Liste
     @Override
     public void updateTimers() {
 
+    }
+
+    @Override
+    protected List<String> getGuiIconMaterialNames() {
+        return Collections.singletonList("ENDER_PEARL");
     }
 
     @Override

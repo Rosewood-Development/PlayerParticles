@@ -5,6 +5,7 @@ import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.util.MathL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Location;
 
@@ -54,6 +55,11 @@ public class ParticleStyleTwins extends DefaultParticleStyle {
             if (this.stepY < -this.maxStepY)
                 this.reverse = true;
         }
+    }
+
+    @Override
+    protected List<String> getGuiIconMaterialNames() {
+        return Arrays.asList("OAK_FENCE", "FENCE");
     }
 
     @Override

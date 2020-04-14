@@ -36,6 +36,11 @@ public class ParticleStyleSpin extends DefaultParticleStyle {
     }
 
     @Override
+    protected List<String> getGuiIconMaterialNames() {
+        return Collections.singletonList("BEACON");
+    }
+
+    @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
         this.setIfNotExists("particles-per-rotation", 30, "The number of particles to spawn per rotation");
         this.setIfNotExists("radius", 0.5, "The radius of the circle");

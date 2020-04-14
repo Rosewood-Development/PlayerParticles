@@ -5,6 +5,7 @@ import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.util.MathL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Location;
 
@@ -38,6 +39,11 @@ public class ParticleStyleSphere extends DefaultParticleStyle {
     @Override
     public void updateTimers() {
 
+    }
+
+    @Override
+    protected List<String> getGuiIconMaterialNames() {
+        return Arrays.asList("HEART_OF_THE_SEA", "SNOWBALL", "SNOW_BALL");
     }
 
     @Override
