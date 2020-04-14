@@ -1,6 +1,7 @@
 package dev.esophose.playerparticles.api;
 
 import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.event.ParticleStyleRegistrationEvent;
 import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.GuiManager;
 import dev.esophose.playerparticles.manager.ParticleManager;
@@ -1039,7 +1040,9 @@ public final class PlayerParticlesAPI {
      * Registers a particle style with the plugin
      *
      * @param particleStyle The particle style to register
+     * @deprecated Use {@link ParticleStyleRegistrationEvent} instead
      */
+    @Deprecated
     public void registerParticleStyle(@NotNull ParticleStyle particleStyle) {
         Objects.requireNonNull(particleStyle);
 
@@ -1050,7 +1053,9 @@ public final class PlayerParticlesAPI {
      * Registers an event-based particle style with the plugin
      *
      * @param particleStyle The particle style to register
+     * @deprecated Use {@link ParticleStyleRegistrationEvent} instead
      */
+    @Deprecated
     public void registerEventParticleStyle(@NotNull ParticleStyle particleStyle) {
         Objects.requireNonNull(particleStyle);
 
