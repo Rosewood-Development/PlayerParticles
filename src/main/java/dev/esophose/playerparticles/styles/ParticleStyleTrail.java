@@ -37,6 +37,11 @@ public class ParticleStyleTrail extends DefaultParticleStyle implements Listener
     }
 
     @Override
+    protected List<String> getGuiIconMaterialNames() {
+        return Collections.singletonList("GHAST_TEAR");
+    }
+
+    @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
         this.setIfNotExists("player-offset", 0.0, "How far to offset the player location vertically");
         this.setIfNotExists("spread", 0.1, "How much to spread the particles");

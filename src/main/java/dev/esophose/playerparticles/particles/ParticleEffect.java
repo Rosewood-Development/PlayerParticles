@@ -10,6 +10,7 @@ import dev.esophose.playerparticles.util.ParticleUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -27,97 +28,102 @@ import org.bukkit.metadata.MetadataValue;
 public enum ParticleEffect {
 
     // Ordered and named by their Minecraft 1.13+ internal names
-    AMBIENT_ENTITY_EFFECT("SPELL_MOB_AMBIENT", ParticleProperty.COLORABLE),
-    ANGRY_VILLAGER("VILLAGER_ANGRY"),
-    BARRIER("BARRIER"),
-    BLOCK("BLOCK_CRACK", ParticleProperty.REQUIRES_MATERIAL_DATA),
-    BUBBLE("WATER_BUBBLE"),
-    BUBBLE_COLUMN_UP("BUBBLE_COLUMN_UP"),
-    BUBBLE_POP("BUBBLE_POP"),
-    CAMPFIRE_COSY_SMOKE("CAMPFIRE_COSY_SMOKE"),
-    CAMPFIRE_SIGNAL_SMOKE("CAMPFIRE_SIGNAL_SMOKE"),
-    CLOUD("CLOUD"),
-    COMPOSTER("COMPOSTER"),
-    CRIT("CRIT"),
-    CURRENT_DOWN("CURRENT_DOWN"),
-    DAMAGE_INDICATOR("DAMAGE_INDICATOR"),
-    DOLPHIN("DOLPHIN"),
-    DRAGON_BREATH("DRAGON_BREATH"),
-    DRIPPING_HONEY("DRIPPING_HONEY"),
-    DRIPPING_LAVA("DRIP_LAVA"),
-    DRIPPING_WATER("DRIP_WATER"),
-    DUST("REDSTONE", ParticleProperty.COLORABLE),
-    ELDER_GUARDIAN("MOB_APPEARANCE", false), // No thank you
-    ENCHANT("ENCHANTMENT_TABLE"),
-    ENCHANTED_HIT("CRIT_MAGIC"),
-    END_ROD("END_ROD"),
-    ENTITY_EFFECT("SPELL_MOB", ParticleProperty.COLORABLE),
-    EXPLOSION("EXPLOSION_LARGE"),
-    EXPLOSION_EMITTER("EXPLOSION_HUGE"),
-    FALLING_DUST("FALLING_DUST", ParticleProperty.REQUIRES_MATERIAL_DATA),
-    FALLING_HONEY("FALLING_HONEY"),
-    FALLING_LAVA("FALLING_LAVA"),
-    FALLING_NECTAR("FALLING_NECTAR"),
-    FALLING_WATER("FALLING_WATER"),
-    FIREWORK("FIREWORKS_SPARK"),
-    FISHING("WATER_WAKE"),
-    FLAME("FLAME"),
-    FLASH("FLASH", false), // Also no thank you
-    FOOTSTEP("FOOTSTEP"), // Removed in Minecraft 1.13 :(
-    HAPPY_VILLAGER("VILLAGER_HAPPY"),
-    HEART("HEART"),
-    INSTANT_EFFECT("SPELL_INSTANT"),
-    ITEM("ITEM_CRACK", ParticleProperty.REQUIRES_MATERIAL_DATA),
-    ITEM_SLIME("SLIME"),
-    ITEM_SNOWBALL("SNOWBALL"),
-    LANDING_HONEY("LANDING_HONEY"),
-    LANDING_LAVA("LANDING_LAVA"),
-    LARGE_SMOKE("SMOKE_LARGE"),
-    LAVA("LAVA"),
-    MYCELIUM("TOWN_AURA"),
-    NAUTILUS("NAUTILUS"),
-    NOTE("NOTE", ParticleProperty.COLORABLE),
-    POOF("EXPLOSION_NORMAL"), // The 1.13 combination of explode and showshovel
-    PORTAL("PORTAL"),
-    RAIN("WATER_DROP"),
-    SMOKE("SMOKE_NORMAL"),
-    SNEEZE("SNEEZE"),
-    SPELL("SPELL"), // The Minecraft internal name for this is actually "effect", but that's the command name, so it's SPELL for the plugin instead
-    SPIT("SPIT"),
-    SPLASH("WATER_SPLASH"),
-    SQUID_INK("SQUID_INK"),
-    SWEEP_ATTACK("SWEEP_ATTACK"),
-    TOTEM_OF_UNDYING("TOTEM"),
-    UNDERWATER("SUSPENDED_DEPTH"),
-    WITCH("SPELL_WITCH");
+    AMBIENT_ENTITY_EFFECT("SPELL_MOB_AMBIENT", Collections.singletonList("BEACON"), ParticleProperty.COLORABLE),
+    ANGRY_VILLAGER("VILLAGER_ANGRY", Collections.singletonList("IRON_DOOR")),
+    BARRIER("BARRIER", Collections.singletonList("BARRIER")),
+    BLOCK("BLOCK_CRACK", Collections.singletonList("STONE"), ParticleProperty.REQUIRES_MATERIAL_DATA),
+    BUBBLE("WATER_BUBBLE", Arrays.asList("BUBBLE_CORAL", "GLASS")),
+    BUBBLE_COLUMN_UP("BUBBLE_COLUMN_UP", Collections.singletonList("MAGMA_BLOCK")),
+    BUBBLE_POP("BUBBLE_POP", Collections.singletonList("BUBBLE_CORAL_FAN")),
+    CAMPFIRE_COSY_SMOKE("CAMPFIRE_COSY_SMOKE", Collections.singletonList("CAMPFIRE")),
+    CAMPFIRE_SIGNAL_SMOKE("CAMPFIRE_SIGNAL_SMOKE", Collections.singletonList("REDSTONE_TORCH")),
+    CLOUD("CLOUD", Arrays.asList("WHITE_WOOL", "WOOL")),
+    COMPOSTER("COMPOSTER", Collections.singletonList("COMPOSTER")),
+    CRIT("CRIT", Collections.singletonList("IRON_SWORD")),
+    CURRENT_DOWN("CURRENT_DOWN", Collections.singletonList("SOUL_SAND")),
+    DAMAGE_INDICATOR("DAMAGE_INDICATOR", Collections.singletonList("BOW")),
+    DOLPHIN("DOLPHIN", Collections.singletonList("DOLPHIN_SPAWN_EGG")),
+    DRAGON_BREATH("DRAGON_BREATH", Arrays.asList("DRAGON_BREATH", "DRAGONS_BREATH")),
+    DRIPPING_HONEY("DRIPPING_HONEY", Collections.singletonList("BEE_NEST")),
+    DRIPPING_LAVA("DRIP_LAVA", Collections.singletonList("LAVA_BUCKET")),
+    DRIPPING_WATER("DRIP_WATER", Collections.singletonList("WATER_BUCKET")),
+    DUST("REDSTONE", Collections.singletonList("REDSTONE"), ParticleProperty.COLORABLE),
+    ELDER_GUARDIAN("MOB_APPEARANCE", Arrays.asList("ELDER_GUARDIAN_SPAWN_EGG", "PRISMARINE_CRYSTALS"), false), // No thank you
+    ENCHANT("ENCHANTMENT_TABLE", Arrays.asList("ENCHANTING_TABLE", "ENCHANTMENT_TABLE")),
+    ENCHANTED_HIT("CRIT_MAGIC", Collections.singletonList("DIAMOND_SWORD")),
+    END_ROD("END_ROD", Collections.singletonList("END_ROD")),
+    ENTITY_EFFECT("SPELL_MOB", Collections.singletonList("GLOWSTONE_DUST"), ParticleProperty.COLORABLE),
+    EXPLOSION("EXPLOSION_LARGE", Arrays.asList("FIRE_CHARGE", "FIREBALL")),
+    EXPLOSION_EMITTER("EXPLOSION_HUGE", Collections.singletonList("TNT")),
+    FALLING_DUST("FALLING_DUST", Collections.singletonList("SAND"), ParticleProperty.REQUIRES_MATERIAL_DATA),
+    FALLING_HONEY("FALLING_HONEY", Collections.singletonList("HONEY_BOTTLE")),
+    FALLING_LAVA("FALLING_LAVA", Collections.singletonList("RED_DYE")),
+    FALLING_NECTAR("FALLING_NECTAR", Collections.singletonList("HONEYCOMB")),
+    FALLING_WATER("FALLING_WATER", Collections.singletonList("BLUE_DYE")),
+    FIREWORK("FIREWORKS_SPARK", Arrays.asList("FIREWORK_ROCKET", "FIREWORK")),
+    FISHING("WATER_WAKE", Collections.singletonList("FISHING_ROD")),
+    FLAME("FLAME", Collections.singletonList("BLAZE_POWDER")),
+    FLASH("FLASH", Collections.singletonList("GOLD_INGOT"), false), // Also no thank you
+    FOOTSTEP("FOOTSTEP", Collections.singletonList("GRASS")), // Removed in Minecraft 1.13 :(
+    HAPPY_VILLAGER("VILLAGER_HAPPY", Arrays.asList("DARK_OAK_DOOR_ITEM", "DARK_OAK_DOOR")),
+    HEART("HEART", Arrays.asList("POPPY", "RED_ROSE")),
+    INSTANT_EFFECT("SPELL_INSTANT", Arrays.asList("SPLASH_POTION", "POTION")),
+    ITEM("ITEM_CRACK", Collections.singletonList("ITEM_FRAME"), ParticleProperty.REQUIRES_MATERIAL_DATA),
+    ITEM_SLIME("SLIME", Collections.singletonList("SLIME_BALL")),
+    ITEM_SNOWBALL("SNOWBALL", Arrays.asList("SNOWBALL", "SNOW_BALL")),
+    LANDING_HONEY("LANDING_HONEY", Collections.singletonList("HONEY_BLOCK")),
+    LANDING_LAVA("LANDING_LAVA", Collections.singletonList("ORANGE_DYE")),
+    LARGE_SMOKE("SMOKE_LARGE", Arrays.asList("COBWEB", "WEB")),
+    LAVA("LAVA", Collections.singletonList("MAGMA_CREAM")),
+    MYCELIUM("TOWN_AURA", Arrays.asList("MYCELIUM", "MYCEL")),
+    NAUTILUS("NAUTILUS", Collections.singletonList("HEART_OF_THE_SEA")),
+    NOTE("NOTE", Collections.singletonList("NOTE_BLOCK"), ParticleProperty.COLORABLE),
+    POOF("EXPLOSION_NORMAL", Arrays.asList("FIREWORK_STAR", "FIREWORK_CHARGE")), // The 1.13 combination of explode and showshovel
+    PORTAL("PORTAL", Collections.singletonList("OBSIDIAN")),
+    RAIN("WATER_DROP", Arrays.asList("PUFFERFISH_BUCKET", "LAPIS_BLOCK")),
+    SMOKE("SMOKE_NORMAL", Collections.singletonList("TORCH")),
+    SNEEZE("SNEEZE", Collections.singletonList("BAMBOO")),
+    SPELL("SPELL", Arrays.asList("POTION", "GLASS_BOTTLE")), // The Minecraft internal name for this is actually "effect", but that's the command name, so it's SPELL for the plugin instead
+    SPIT("SPIT", Arrays.asList("LLAMA_SPAWN_EGG", "PUMPKIN_SEEDS")),
+    SPLASH("WATER_SPLASH", Arrays.asList("SALMON", "FISH", "RAW_FISH")),
+    SQUID_INK("SQUID_INK", Collections.singletonList("INK_SAC")),
+    SWEEP_ATTACK("SWEEP_ATTACK", Arrays.asList("GOLDEN_SWORD", "GOLD_SWORD")),
+    TOTEM_OF_UNDYING("TOTEM", Arrays.asList("TOTEM_OF_UNDYING", "TOTEM")),
+    UNDERWATER("SUSPENDED_DEPTH", Arrays.asList("TURTLE_HELMET", "SPONGE")),
+    WITCH("SPELL_WITCH", Collections.singletonList("CAULDRON"));
 
     private Particle internalEnum;
     private List<ParticleProperty> properties;
 
     private CommentedFileConfiguration config;
     private boolean enabledByDefault;
+    private List<String> defaultIconMaterialNames;
 
     private String effectName;
     private boolean enabled;
+    private Material guiIconMaterial;
 
     /**
      * Construct a new particle effect
      * 
-     * @param enumName Name of the Particle Enum when the server version is greater than or equal to 1.13
+     * @param enumName Name of the Spigot Particle enum
+     * @param defaultIconMaterialNames The names of the Materials to display as GUI icons
      * @param properties Properties of this particle effect
      */
-    ParticleEffect(String enumName, ParticleProperty... properties) {
-        this(enumName, true, properties);
+    ParticleEffect(String enumName, List<String> defaultIconMaterialNames, ParticleProperty... properties) {
+        this(enumName, defaultIconMaterialNames, true, properties);
     }
 
     /**
      * Construct a new particle effect
      *
-     * @param enumName Name of the Particle Enum when the server version is greater than or equal to 1.13
+     * @param enumName Name of the Spigot Particle enum
+     * @param defaultIconMaterialNames The names of the Materials to display as GUI icons
      * @param enabledByDefault If the particle type is enabled by default
      * @param properties Properties of this particle effect
      */
-    ParticleEffect(String enumName, boolean enabledByDefault, ParticleProperty... properties) {
+    ParticleEffect(String enumName, List<String> defaultIconMaterialNames, boolean enabledByDefault, ParticleProperty... properties) {
+        this.defaultIconMaterialNames = defaultIconMaterialNames;
         this.enabledByDefault = enabledByDefault;
         this.properties = Arrays.asList(properties);
 
@@ -143,6 +149,7 @@ public enum ParticleEffect {
 
         boolean changed = this.setIfNotExists("effect-name", this.getInternalName(), "The name the effect will display as");
         changed |= this.setIfNotExists("enabled", this.enabledByDefault, "If the effect is enabled or not");
+        changed |= this.setIfNotExists("gui-icon-material", this.defaultIconMaterialNames);
 
         if (changed)
             this.config.save();
@@ -162,6 +169,7 @@ public enum ParticleEffect {
 
         this.effectName = this.config.getString("effect-name");
         this.enabled = this.config.getBoolean("enabled");
+        this.guiIconMaterial = ParticleUtils.closestMatchWithFallback(true, this.config.getStringList("gui-icon-material").toArray(new String[0]));
     }
 
     /**
@@ -207,6 +215,13 @@ public enum ParticleEffect {
      */
     public String getName() {
         return this.effectName;
+    }
+
+    /**
+     * @return The Material icon that represents this style in the GUI
+     */
+    public Material getGuiIconMaterial() {
+        return this.guiIconMaterial;
     }
 
     /**

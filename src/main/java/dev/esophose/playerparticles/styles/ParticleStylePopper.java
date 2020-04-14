@@ -5,6 +5,7 @@ import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.util.MathL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -49,6 +50,11 @@ public class ParticleStylePopper extends DefaultParticleStyle {
     @Override
     public void updateTimers() {
         this.step = (this.step + 1) % this.maxStep;
+    }
+
+    @Override
+    protected List<String> getGuiIconMaterialNames() {
+        return Arrays.asList("POPPED_CHORUS_FRUIT", "CHORUS_FRUIT_POPPED");
     }
 
     @Override

@@ -5,6 +5,7 @@ import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.util.MathL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Location;
 
@@ -41,6 +42,11 @@ public class ParticleStyleHalo extends DefaultParticleStyle {
     @Override
     public void updateTimers() {
         this.skipNextSpawn = !this.skipNextSpawn;
+    }
+
+    @Override
+    protected List<String> getGuiIconMaterialNames() {
+        return Arrays.asList("END_PORTAL_FRAME", "ENDER_PORTAL_FRAME");
     }
 
     @Override

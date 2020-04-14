@@ -8,6 +8,7 @@ import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -41,6 +42,11 @@ public class ParticleStyleBlockPlace extends DefaultParticleStyle implements Lis
     @Override
     public void updateTimers() {
 
+    }
+
+    @Override
+    protected List<String> getGuiIconMaterialNames() {
+        return Arrays.asList("OAK_PLANKS", "WOOD");
     }
 
     @Override

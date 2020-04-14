@@ -36,7 +36,7 @@ public class GuiInventoryEditEffect extends GuiInventory {
             ParticleEffect effect = effectsUserHasPermissionFor.get(i);
             GuiActionButton selectButton = new GuiActionButton(
                     slot,
-                    GuiIcon.EFFECT.get(effect.getInternalName()),
+                    effect.getGuiIconMaterial(),
                     localeManager.getLocaleMessage("gui-color-icon-name") + ParticleUtils.formatName(effect.getName()),
                     new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-effect-description", StringPlaceholders.single("effect", ParticleUtils.formatName(effect.getName())))},
                     (button, isShiftClick) -> {

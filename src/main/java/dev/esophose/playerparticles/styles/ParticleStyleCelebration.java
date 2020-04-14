@@ -11,6 +11,7 @@ import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.util.MathL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -69,6 +70,11 @@ public class ParticleStyleCelebration extends DefaultParticleStyle {
                         this.spawnFirework(fixedEffect.getLocation(), pplayer, null, fixedEffect.getParticlePair(), random);
             }
         }
+    }
+
+    @Override
+    protected List<String> getGuiIconMaterialNames() {
+        return Arrays.asList("FIREWORK_ROCKET", "FIREWORK");
     }
 
     @Override
