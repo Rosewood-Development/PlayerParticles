@@ -24,7 +24,6 @@ import dev.esophose.playerparticles.manager.PluginUpdateManager;
 import dev.esophose.playerparticles.particles.listener.PPlayerCombatListener;
 import dev.esophose.playerparticles.particles.listener.PPlayerMovementListener;
 import dev.esophose.playerparticles.util.Metrics;
-import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.bukkit.Bukkit;
@@ -99,16 +98,6 @@ public class PlayerParticles extends JavaPlugin {
             ex.printStackTrace();
             return null;
         }
-    }
-
-    /**
-     * Returns the file which contains this plugin
-     * Exposes the JavaPlugin.getFile() method
-     *
-     * @return File containing this plugin
-     */
-    public File getJarFile() {
-        return this.getFile();
     }
     
     /**
