@@ -55,6 +55,7 @@ public class ConfigurationManager extends Manager {
         PARTICLE_RENDER_RANGE_FIXED_EFFECT("particle-render-range-fixed-effect", 192, "From how many blocks away should a player be able to see the particles from a fixed effect?"),
         RAINBOW_CYCLE_SPEED("rainbow-cycle-speed", 2, "How many out of 360 hue ticks to move per game tick", "Higher values make the rainbow cycle faster", "Note: Must be a positive whole number"),
         DUST_SIZE("dust-size", 1.0, "How large should dust particles appear?", "Note: Can include decimals", "Only works in 1.13+"),
+        GUI_GROUP_CREATION_MESSAGE_DISPLAY_AREA("gui-group-creation-message-display-area", "ACTION_BAR", "Valid values: ACTION_BAR, TITLE, CHAT", "Where should the GUI group creation countdown message be displayed?", "Note: Server versions less than 1.11.2 will always use CHAT"),
 
         MYSQL_SETTINGS("mysql-settings", null, "Settings for if you want to use MySQL for data management"),
         MYSQL_ENABLED("mysql-settings.enabled", false, "Enable MySQL", "If false, SQLite will be used instead"),

@@ -1,6 +1,7 @@
 package dev.esophose.playerparticles.gui.hook;
 
 import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.util.NMSUtil;
 import dev.esophose.playerparticles.util.StringPlaceholders;
@@ -56,7 +57,6 @@ public class PlayerChatHook extends BukkitRunnable implements Listener {
         Set<PlayerChatHookData> hooksToRemove = new HashSet<>();
         
         for (PlayerChatHookData hook : hooks) {
-            hook.decrementHookLength();
             if (hook.timedOut()) {
                 hook.triggerCallback(null);
                 hooksToRemove.add(hook);
@@ -68,13 +68,28 @@ public class PlayerChatHook extends BukkitRunnable implements Listener {
                 hooksToRemove.remove(hook);
             } else {
                 LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
-                if (NMSUtil.getVersionNumber() == 9) {
-                    if (hook.getMaxHookLength() == hook.getTimeRemaining())
-                        player.sendMessage(localeManager.getLocaleMessage("gui-save-group-hotbar-message", StringPlaceholders.single("seconds", hook.getTimeRemaining())));
+                String message = localeManager.getLocaleMessage("gui-save-group-hotbar-message", StringPlaceholders.single("seconds", hook.getTimeRemaining()));
+
+                if (NMSUtil.getVersionNumber() >= 11) {
+                    switch (Setting.GUI_GROUP_CREATION_MESSAGE_DISPLAY_AREA.getString().toUpperCase()) {
+                        case "ACTION_BAR":
+                            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(localeManager.getLocaleMessage("gui-save-group-hotbar-message", StringPlaceholders.single("seconds", hook.getTimeRemaining()))));
+                            break;
+                        case "TITLE":
+                            player.sendTitle("", message, 5, 40, 10);
+                            break;
+                        default:
+                            if (hook.getMaxHookLength() == hook.getTimeRemaining())
+                                player.sendMessage(message);
+                            break;
+                    }
                 } else {
-                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(localeManager.getLocaleMessage("gui-save-group-hotbar-message", StringPlaceholders.single("seconds", hook.getTimeRemaining()))));
+                    if (hook.getMaxHookLength() == hook.getTimeRemaining())
+                        player.sendMessage(message);
                 }
             }
+
+            hook.decrementHookLength();
         }
         
         for (PlayerChatHookData hookToRemove : hooksToRemove) 
