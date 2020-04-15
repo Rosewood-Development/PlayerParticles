@@ -6,6 +6,7 @@ import dev.esophose.playerparticles.styles.DefaultStyles;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
@@ -38,15 +39,17 @@ public class ParticleStyleManager extends Manager {
         Bukkit.getPluginManager().callEvent(event);
 
         Collection<ParticleStyle> eventStyles = event.getRegisteredEventStyles().values();
-        for (ParticleStyle style : event.getRegisteredStyles().values()) {
-            try {
-                if (style == null) {
-                    throw new IllegalArgumentException("Tried to register a null style");
-                }
+        List<ParticleStyle> styles = new ArrayList<>(event.getRegisteredStyles().values());
+        styles.addAll(eventStyles);
+        styles.sort(Comparator.comparing(ParticleStyle::getName));
 
-                if (style.getInternalName() == null || style.getInternalName().trim().equals("")) {
+        for (ParticleStyle style : styles) {
+            try {
+                if (style == null)
+                    throw new IllegalArgumentException("Tried to register a null style");
+
+                if (style.getInternalName() == null || style.getInternalName().trim().isEmpty())
                     throw new IllegalArgumentException("Tried to register a style with a null or empty name: '" + style.getInternalName() + "'");
-                }
 
                 for (ParticleStyle testAgainst : this.styles) {
                     if (testAgainst.equals(style)) {
