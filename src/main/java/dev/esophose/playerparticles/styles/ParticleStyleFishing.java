@@ -4,18 +4,13 @@ import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.entity.FishHook;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.event.player.PlayerFishEvent.State;
 
 public class ParticleStyleFishing extends DefaultParticleStyle implements Listener {
 
@@ -58,12 +53,14 @@ public class ParticleStyleFishing extends DefaultParticleStyle implements Listen
 
     @EventHandler
     public void onPlayerFish(PlayerFishEvent event) {
-        switch (event.getState()) {
-            case FISHING:
+        // Done through a string switch for 1.9.4 compatibility
+        switch (event.getState().toString()) {
+            case "FISHING":
                 this.projectiles.add(event.getHook());
                 break;
-            case CAUGHT_FISH:
-            case REEL_IN:
+            case "CAUGHT_FISH":
+            case "CAUGHT_ENTITY":
+            case "REEL_IN":
                 this.projectiles.remove(event.getHook());
                 break;
         }
