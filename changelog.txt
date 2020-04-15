@@ -1,5 +1,8 @@
 === v7.8 ===
+* Moved GUI icon settings from the config.yml to the effects/ and styles/ files. You will need to set these again.
 * Fixed the messages-enabled setting not working at all
+* Changed toggle-on-move to have three different setting values (DISPLAY_MOVE, HIDE, NONE)
+* Changed how particle styles are registered
 === v7.7 ===
 * Fixed an error with the style 'blockplace'
 === v7.6 ===

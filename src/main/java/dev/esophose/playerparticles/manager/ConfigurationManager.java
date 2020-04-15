@@ -41,7 +41,7 @@ public class ConfigurationManager extends Manager {
         GUI_PRESETS_ONLY("gui-presets-only", false, "If true, only the preset groups will be available in the GUI", "Permissions to open the GUI will change to only open if the user has any preset groups available"),
         GUI_CLOSE_AFTER_GROUP_SELECTED("gui-close-after-group-selected", true, "If true, the GUI will close after selecting a group (either saved or preset)"),
         GUI_BUTTON_SOUND("gui-button-sound", true, "If clicking a GUI button should make a noise"),
-        TOGGLE_ON_MOVE("toggle-on-move", false, "If true, styles will not display while the player is moving", "They will instead have the effect displayed at their feet", "Note: Not all styles abide by this rule, but most will"),
+        TOGGLE_ON_MOVE("toggle-on-move", "NONE", "Valid values: DISPLAY_FEET, HIDE, NONE", "DISPLAY_FEET will display particles under the player while moving", "HIDE will hide particles while moving", "NONE will make this setting do nothing", "Note: You can change what styles follow this setting in their individual setting files"),
         TOGGLE_ON_MOVE_DELAY("toggle-on-move-delay", 9, "The time (in ticks) a player has to be standing still before they are considered to be stopped", "This setting has no effect if toggle-on-move is set to false", "The value must be a positive whole number"),
         TOGGLE_ON_COMBAT("toggle-on-combat", false, "If true, particles will be completely disabled while the player is in combat"),
         TOGGLE_ON_COMBAT_DELAY("toggle-on-combat-delay", 15, "The time (in seconds) a player has to not be damaged/attacked to be considered out of combat", "This setting has no effect if toggle-on-combat is set to false", "The value must be a positive whole number"),
@@ -149,7 +149,7 @@ public class ConfigurationManager extends Manager {
          */
         public String getString() {
             this.loadValue();
-            return (String) this.value;
+            return String.valueOf(this.value);
         }
 
         private double getNumber() {

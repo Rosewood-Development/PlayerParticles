@@ -175,13 +175,23 @@ public class ParticleManager extends Manager implements Listener, Runnable {
             if (Setting.TOGGLE_ON_COMBAT.getBoolean() && pplayer.isInCombat())
                 return;
 
-            if (Setting.TOGGLE_ON_MOVE.getBoolean() && particle.getStyle().canToggleWithMovement() && pplayer.isMoving()) {
-                for (PParticle pparticle : DefaultStyles.FEET.getParticles(particle, location))
-                    ParticleEffect.display(particle, pparticle, particle.getStyle().hasLongRangeVisibility(), pplayer.getPlayer());
-            } else {
-                for (PParticle pparticle : particle.getStyle().getParticles(particle, location))
-                    ParticleEffect.display(particle, pparticle, particle.getStyle().hasLongRangeVisibility(), pplayer.getPlayer());
+            if (particle.getStyle().canToggleWithMovement() && pplayer.isMoving()) {
+                switch (Setting.TOGGLE_ON_MOVE.getString().toUpperCase()) {
+                    case "DISPLAY_FEET":
+                    case "TRUE": // Old default value, keep here for legacy config compatibility
+                        for (PParticle pparticle : DefaultStyles.FEET.getParticles(particle, location))
+                            ParticleEffect.display(particle, pparticle, particle.getStyle().hasLongRangeVisibility(), pplayer.getPlayer());
+                        return;
+                    case "NONE":
+                    case "FALSE": // Old default value, keep here for legacy config compatibility
+                        break;
+                    default:
+                        return;
+                }
             }
+
+            for (PParticle pparticle : particle.getStyle().getParticles(particle, location))
+                ParticleEffect.display(particle, pparticle, particle.getStyle().hasLongRangeVisibility(), pplayer.getPlayer());
         }  
     }
 

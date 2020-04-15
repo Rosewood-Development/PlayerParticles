@@ -19,15 +19,13 @@ import org.bukkit.event.player.PlayerMoveEvent;
 public class PPlayerMovementListener implements Listener {
     
     private static final int CHECK_INTERVAL = 3;
-    private Map<UUID, Integer> timeSinceLastMovement = new HashMap<>();
+    private Map<UUID, Integer> timeSinceLastMovement;
     
     public PPlayerMovementListener() {
         DataManager dataManager = PlayerParticles.getInstance().getManager(DataManager.class);
+        this.timeSinceLastMovement = new HashMap<>();
 
         Bukkit.getScheduler().runTaskTimer(PlayerParticles.getInstance(), () -> {
-            if (!Setting.TOGGLE_ON_MOVE.getBoolean())
-                return;
-
             List<UUID> toRemove = new ArrayList<>();
 
             for (UUID uuid : this.timeSinceLastMovement.keySet()) {
@@ -54,9 +52,6 @@ public class PPlayerMovementListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (!Setting.TOGGLE_ON_MOVE.getBoolean())
-            return;
-
         Location to = event.getTo();
         Location from = event.getFrom();
         if (to == null || (to.getBlockX() == from.getBlockX() && to.getBlockY() == from.getBlockY() && to.getBlockZ() == from.getBlockZ()))
