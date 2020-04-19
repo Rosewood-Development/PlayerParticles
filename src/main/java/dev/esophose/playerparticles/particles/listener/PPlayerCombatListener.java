@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -55,10 +56,7 @@ public class PPlayerCombatListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerAttack(EntityDamageByEntityEvent event) {
-        if (!Setting.TOGGLE_ON_COMBAT.getBoolean())
-            return;
-
-        if (!(event.getEntity() instanceof Player))
+        if (event.getEntity().getType() != EntityType.PLAYER)
             return;
 
         Player attacker;

@@ -11,21 +11,38 @@ import java.util.Map;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.util.Vector;
 
 public class PPlayerMovementListener implements Listener {
     
     private static final int CHECK_INTERVAL = 3;
     private Map<UUID, Integer> timeSinceLastMovement;
+    private Map<UUID, Vector> previousVectors;
     
     public PPlayerMovementListener() {
         DataManager dataManager = PlayerParticles.getInstance().getManager(DataManager.class);
         this.timeSinceLastMovement = new HashMap<>();
+        this.previousVectors = new HashMap<>();
 
         Bukkit.getScheduler().runTaskTimer(PlayerParticles.getInstance(), () -> {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                UUID playerUUID = player.getUniqueId();
+                Vector previousVector = this.previousVectors.get(playerUUID);
+                Location currentLocation = player.getLocation();
+                Vector currentVector = new Vector(currentLocation.getBlockX(), currentLocation.getBlockY(), currentLocation.getBlockZ());
+                this.previousVectors.put(playerUUID, currentVector);
+
+                if (previousVector == null || !previousVector.equals(currentVector)) {
+                    if (!this.timeSinceLastMovement.containsKey(playerUUID)) {
+                        this.timeSinceLastMovement.put(playerUUID, 0);
+                    } else {
+                        this.timeSinceLastMovement.replace(playerUUID, 0);
+                    }
+                }
+            }
+
             List<UUID> toRemove = new ArrayList<>();
 
             for (UUID uuid : this.timeSinceLastMovement.keySet()) {
@@ -43,26 +60,6 @@ public class PPlayerMovementListener implements Listener {
             for (UUID uuid : toRemove)
                 this.timeSinceLastMovement.remove(uuid);
         }, 0, CHECK_INTERVAL);
-    }
-
-    /**
-     * Used to detect if the player is moving
-     * 
-     * @param event The event
-     */
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerMove(PlayerMoveEvent event) {
-        Location to = event.getTo();
-        Location from = event.getFrom();
-        if (to == null || (to.getBlockX() == from.getBlockX() && to.getBlockY() == from.getBlockY() && to.getBlockZ() == from.getBlockZ()))
-            return;
-
-        UUID playerUUID = event.getPlayer().getUniqueId();
-        if (!this.timeSinceLastMovement.containsKey(playerUUID)) {
-            this.timeSinceLastMovement.put(playerUUID, 0);
-        } else {
-            this.timeSinceLastMovement.replace(playerUUID, 0);
-        }
     }
 
 }

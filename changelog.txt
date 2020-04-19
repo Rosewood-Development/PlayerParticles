@@ -1,3 +1,6 @@
+=== v7.9 ===
+* Fixed performance issues with toggle-on-move setting
+* Fixed possible concurrency deadlock with arrows and fishing styles
 === v7.8 ===
 + Added style 'fishing'
 * Moved GUI icon settings from the config.yml to the effects/ and styles/ files. You will need to set these again.
