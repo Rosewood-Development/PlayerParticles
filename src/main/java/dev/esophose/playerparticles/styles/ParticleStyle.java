@@ -59,11 +59,20 @@ public interface ParticleStyle {
     boolean canBeFixed();
     
     /**
-     * Gets if the style can be replaced with DefaultStyles.FEET when the player is moving
+     * Gets if the style can be displayed differently based on the toggle-on-move setting when the player is moving
      * 
      * @return True if it can be, otherwise False
      */
     default boolean canToggleWithMovement() {
+        return true;
+    }
+
+    /**
+     * Gets if the style can be hidden if the player is in combat with the toggle-on-combat setting
+     *
+     * @return True if it can be, otherwise False
+     */
+    default boolean canToggleWithCombat() {
         return true;
     }
     

@@ -172,7 +172,7 @@ public class ParticleManager extends Manager implements Listener, Runnable {
      */
     private void displayParticles(PPlayer pplayer, ParticlePair particle, Location location) {
         if (!this.playerParticles.getManager(ParticleStyleManager.class).isEventHandled(particle.getStyle())) {
-            if (Setting.TOGGLE_ON_COMBAT.getBoolean() && pplayer.isInCombat())
+            if (Setting.TOGGLE_ON_COMBAT.getBoolean() && particle.getStyle().canToggleWithCombat() && pplayer.isInCombat())
                 return;
 
             if (particle.getStyle().canToggleWithMovement() && pplayer.isMoving()) {
@@ -180,6 +180,14 @@ public class ParticleManager extends Manager implements Listener, Runnable {
                     case "DISPLAY_FEET":
                     case "TRUE": // Old default value, keep here for legacy config compatibility
                         for (PParticle pparticle : DefaultStyles.FEET.getParticles(particle, location))
+                            ParticleEffect.display(particle, pparticle, particle.getStyle().hasLongRangeVisibility(), pplayer.getPlayer());
+                        return;
+                    case "DISPLAY_NORMAL":
+                        for (PParticle pparticle : DefaultStyles.NORMAL.getParticles(particle, location))
+                            ParticleEffect.display(particle, pparticle, particle.getStyle().hasLongRangeVisibility(), pplayer.getPlayer());
+                        return;
+                    case "DISPLAY_OVERHEAD":
+                        for (PParticle pparticle : DefaultStyles.OVERHEAD.getParticles(particle, location))
                             ParticleEffect.display(particle, pparticle, particle.getStyle().hasLongRangeVisibility(), pplayer.getPlayer());
                         return;
                     case "NONE":

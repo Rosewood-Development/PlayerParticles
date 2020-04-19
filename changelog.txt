@@ -1,4 +1,6 @@
 === v7.9 ===
++ Added options DISPLAY_NORMAL and DISPLAY_OVERHEAD to toggle-on-move
++ Added setting in each style setting file for can-toggle-on-combat
 * Fixed performance issues with toggle-on-move setting
 * Fixed possible concurrency deadlock with arrows and fishing styles
 === v7.8 ===

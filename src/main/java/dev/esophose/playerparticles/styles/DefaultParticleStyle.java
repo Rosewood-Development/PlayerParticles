@@ -17,12 +17,14 @@ public abstract class DefaultParticleStyle implements ParticleStyle {
     private String internalStyleName;
     private boolean canBeFixedByDefault;
     private boolean canToggleWithMovementByDefault;
+    private boolean canToggleWithCombatByDefault;
     private double fixedEffectOffsetByDefault;
 
     private String styleName;
     private boolean enabled;
     private boolean canBeFixed;
     private boolean canToggleWithMovement;
+    private boolean canToggleWithCombat;
     private double fixedEffectOffset;
     private Material guiIconMaterial;
 
@@ -30,6 +32,7 @@ public abstract class DefaultParticleStyle implements ParticleStyle {
         this.internalStyleName = internalStyleName;
         this.canBeFixedByDefault = canBeFixedByDefault;
         this.canToggleWithMovementByDefault = canToggleWithMovementByDefault;
+        this.canToggleWithCombatByDefault = true;
         this.fixedEffectOffsetByDefault = fixedEffectOffsetByDefault;
         this.playerParticles = PlayerParticles.getInstance();
 
@@ -52,6 +55,7 @@ public abstract class DefaultParticleStyle implements ParticleStyle {
         this.setIfNotExists("enabled", true, "If the style is enabled or not");
         this.setIfNotExists("can-be-fixed", this.canBeFixedByDefault, "If the style can be used in /pp fixed");
         this.setIfNotExists("can-toggle-with-movement", this.canToggleWithMovementByDefault, "If the style will only be shown at the player's feet while moving");
+        this.setIfNotExists("can-toggle-with-combat", this.canToggleWithCombatByDefault, "If particles for this style will be hidden if the player is in combat");
         this.setIfNotExists("fixed-effect-offset", this.fixedEffectOffsetByDefault, "How far vertically to offset the style position for fixed effects");
         this.setIfNotExists("gui-icon-material", this.getGuiIconMaterialNames(), "The material of the icon to display in the GUI");
 
@@ -74,6 +78,7 @@ public abstract class DefaultParticleStyle implements ParticleStyle {
         this.enabled = this.config.getBoolean("enabled");
         this.canBeFixed = this.config.getBoolean("can-be-fixed");
         this.canToggleWithMovement = this.config.getBoolean("can-toggle-with-movement");
+        this.canToggleWithCombat = this.config.getBoolean("can-toggle-with-combat");
         this.fixedEffectOffset = this.config.getDouble("fixed-effect-offset");
         this.guiIconMaterial = ParticleUtils.closestMatchWithFallback(true, this.config.getStringList("gui-icon-material").toArray(new String[0]));
 
@@ -130,6 +135,11 @@ public abstract class DefaultParticleStyle implements ParticleStyle {
     @Override
     public final boolean canToggleWithMovement() {
         return this.canToggleWithMovement;
+    }
+
+    @Override
+    public final boolean canToggleWithCombat() {
+        return this.canToggleWithCombat;
     }
 
     @Override
