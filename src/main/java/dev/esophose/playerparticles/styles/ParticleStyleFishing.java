@@ -1,14 +1,19 @@
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.FishHook;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,12 +31,15 @@ public class ParticleStyleFishing extends DefaultParticleStyle implements Listen
         }
     }
 
-    private List<Projectile> projectiles;
+    private Set<Projectile> projectiles;
 
     public ParticleStyleFishing() {
         super("fishing", false, false, 0);
 
-        this.projectiles = Collections.synchronizedList(new ArrayList<>());
+        this.projectiles = new HashSet<>();
+
+        // Removes all fish hooks that are considered dead
+        Bukkit.getScheduler().runTaskTimer(PlayerParticles.getInstance(), () -> this.projectiles.removeIf(x -> !x.isValid()), 0L, 5L);
     }
 
     @Override
@@ -45,12 +53,9 @@ public class ParticleStyleFishing extends DefaultParticleStyle implements Listen
         return particles;
     }
 
-    /**
-     * Removes all fish hooks that are considered dead
-     */
     @Override
     public void updateTimers() {
-        this.projectiles.removeIf(x -> !x.isValid());
+
     }
 
     @Override
@@ -75,7 +80,9 @@ public class ParticleStyleFishing extends DefaultParticleStyle implements Listen
             case "CAUGHT_FISH":
             case "CAUGHT_ENTITY":
             case "REEL_IN":
-                this.projectiles.remove(event.getHook());
+                try {
+                    this.projectiles.remove((Projectile) PlayerFishEvent_getHook.invoke(event));
+                } catch (ReflectiveOperationException ignored) { }
                 break;
         }
     }

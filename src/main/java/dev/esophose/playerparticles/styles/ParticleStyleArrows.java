@@ -1,5 +1,6 @@
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -26,7 +28,16 @@ public class ParticleStyleArrows extends DefaultParticleStyle implements Listene
     public ParticleStyleArrows() {
         super("arrows", false, false, 0);
 
-        this.projectiles = Collections.synchronizedList(new ArrayList<>());
+        this.projectiles = new ArrayList<>();
+
+        // Removes all arrows that are considered dead
+        Bukkit.getScheduler().runTaskTimer(PlayerParticles.getInstance(), () -> {
+            for (int i = this.projectiles.size() - 1; i >= 0; i--) {
+                Projectile projectile = this.projectiles.get(i);
+                if ((this.arrowTrackingTime != -1 && projectile.getTicksLived() >= this.arrowTrackingTime) || !projectile.isValid() || projectile.getShooter() == null)
+                    this.projectiles.remove(i);
+            }
+        }, 0L, 5L);
     }
 
     @Override
@@ -52,16 +63,9 @@ public class ParticleStyleArrows extends DefaultParticleStyle implements Listene
         return particles;
     }
 
-    /**
-     * Removes all arrows that are considered dead
-     */
     @Override
     public void updateTimers() {
-        for (int i = this.projectiles.size() - 1; i >= 0; i--) {
-            Projectile projectile = this.projectiles.get(i);
-            if ((this.arrowTrackingTime != -1 && projectile.getTicksLived() >= this.arrowTrackingTime) || projectile.isDead() || !projectile.isValid() || projectile.getShooter() == null)
-                this.projectiles.remove(i);
-        }
+
     }
 
     @Override
