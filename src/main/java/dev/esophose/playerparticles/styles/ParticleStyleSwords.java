@@ -27,7 +27,7 @@ public class ParticleStyleSwords extends DefaultParticleStyle implements Listene
 
     static {
         SWORD_NAMES = new ArrayList<>();
-        SWORD_NAMES.addAll(Arrays.asList("WOOD_SWORD", "STONE_SWORD", "IRON_SWORD", "GOLD_SWORD", "GOLDEN_SWORD", "DIAMOND_SWORD", "TRIDENT"));
+        SWORD_NAMES.addAll(Arrays.asList("WOOD_SWORD", "WOODEN_SWORD", "STONE_SWORD", "IRON_SWORD", "GOLD_SWORD", "GOLDEN_SWORD", "DIAMOND_SWORD", "TRIDENT"));
     }
 
     public ParticleStyleSwords() {
