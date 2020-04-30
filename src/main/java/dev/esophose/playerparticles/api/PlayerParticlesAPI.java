@@ -23,7 +23,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -442,6 +444,7 @@ public final class PlayerParticlesAPI {
      * @param player The player to remove from
      * @return The number of particles removed or null if failed
      */
+    @Nullable
     public Integer resetActivePlayerParticles(@NotNull Player player) {
         DataManager dataManager = this.playerParticles.getManager(DataManager.class);
         PPlayer pplayer = this.getPPlayer(player);
@@ -452,6 +455,28 @@ public final class PlayerParticlesAPI {
         pplayer.getActiveParticleGroup().getParticles().clear();
         dataManager.saveParticleGroup(pplayer.getUniqueId(), pplayer.getActiveParticleGroup());
         return amount;
+    }
+
+    /**
+     * Attempts to reset the active particles for the given player name.
+     * This works even if the player is offline.
+     *
+     * @param playerName The name of the player to reset the active particles for
+     * @param successConsumer The callback to execute when finished
+     */
+    public void resetActivePlayerParticles(@NotNull String playerName, @Nullable Consumer<Boolean> successConsumer) {
+        Objects.requireNonNull(playerName);
+
+        if (successConsumer == null)
+            successConsumer = success -> {};
+
+        Player player = Bukkit.getPlayer(playerName);
+        if (player != null) {
+            this.resetActivePlayerParticles(player);
+            successConsumer.accept(true);
+        } else {
+            this.playerParticles.getManager(DataManager.class).resetActiveParticleGroup(playerName, successConsumer);
+        }
     }
 
     /**

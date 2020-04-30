@@ -26,6 +26,7 @@ import java.util.function.Consumer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 
 /**
@@ -396,6 +397,27 @@ public class DataManager extends Manager {
                 statement.setString(1, groupUUID);
 
                 statement.executeUpdate();
+            }
+        }));
+    }
+
+    /**
+     * Attempts to reset the active particle group for the given player name.
+     * This works even if the player is offline.
+     *
+     * @param playerName The name of the player to reset the active particle group for
+     * @param callback The callback to execute when finished
+     */
+    public void resetActiveParticleGroup(String playerName, Consumer<Boolean> callback) {
+        this.async(() -> this.databaseConnector.connect((connection) -> {
+            @SuppressWarnings("deprecation")
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerName);
+
+            String query = "DELETE FROM " + this.getTablePrefix() + "particle WHERE group_uuid IN (SELECT uuid FROM " + this.getTablePrefix() + "group WHERE owner_uuid = ? AND name = ?)";
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setString(1, offlinePlayer.getUniqueId().toString());
+                statement.setString(2, ParticleGroup.DEFAULT_NAME);
+                callback.accept(statement.execute());
             }
         }));
     }

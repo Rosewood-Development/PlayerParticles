@@ -166,6 +166,8 @@ public class FrenchLocale implements Locale {
 
             this.put("#17", "Reset Message");
             this.put("reset-success", "&b%amount% &aparticule(s) actives supprimées !");
+            this.put("reset-others-success", "&aParticules enlevées pour &b%other%&a !");
+            this.put("reset-others-none", "&eAucune particule n'a été enlevée pour &b%other%&e.");
 
             this.put("#18", "Fixed Create Messages");
             this.put("fixed-create-missing-args", "&cImpossible de créer un effet fixe, vous oubliez des arguments : &b%amount%");

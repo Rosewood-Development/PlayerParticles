@@ -166,6 +166,8 @@ public class SimplifiedChineseLocale implements Locale {
 
             this.put("#17", "Reset Message");
             this.put("reset-success", "&a已删除&b%amount%个&a激活的粒子特效!");
+            this.put("reset-others-success", "&a已删除&b%other%&a的颗粒!");
+            this.put("reset-others-none", "&e没有除去&b%other%&e的颗粒.");
 
             this.put("#18", "Fixed Create Messages");
             this.put("fixed-create-missing-args", "&c无法创建定点特效， 缺少 &b%amount% &c必要参数!");

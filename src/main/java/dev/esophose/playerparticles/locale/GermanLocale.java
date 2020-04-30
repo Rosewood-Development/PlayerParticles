@@ -166,6 +166,8 @@ public class GermanLocale implements Locale {
 
             this.put("#17", "Reset Message");
             this.put("reset-success", "&b%amount% &aaktive Partikel entfernt!");
+            this.put("reset-others-success", "&aEntfertigte Partikel für &b%other%&a!");
+            this.put("reset-others-none", "&eFür &b%other%&e wurden keine Partikel entfernt.");
 
             this.put("#18", "Fixed Create Messages");
             this.put("fixed-create-missing-args", "&cFixer Effekt kann nicht erstellt werden, es fehlen &b%amount% &cerforderliche Argumente!");

@@ -166,6 +166,8 @@ public class RussianLocale implements Locale {
 
             this.put("#17", "Reset Message");
             this.put("reset-success", "&aУдалено &aактивных частиц - &b%amount%!");
+            this.put("reset-others-success", "&aУдаленные частицы для &b%other%&a!");
+            this.put("reset-others-none", "&eНикакие частицы не были удалены для &b%other% &e.");
 
             this.put("#18", "Fixed Create Messages");
             this.put("fixed-create-missing-args", "&cНевозможно создать эффект, не введено запрашиваемых аргументов - &b%amount%!");

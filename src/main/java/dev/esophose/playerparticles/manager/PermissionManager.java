@@ -37,6 +37,7 @@ public class PermissionManager extends Manager {
 
         RELOAD("reload"),
         OVERRIDE("override"),
+        RESET_OTHERS("reset.others"),
 
         GUI("gui"),
 
@@ -129,6 +130,7 @@ public class PermissionManager extends Manager {
         // Misc
         pluginManager.addPermission(new Permission("playerparticles.reload"));
         pluginManager.addPermission(new Permission("playerparticles.override"));
+        pluginManager.addPermission(new Permission("playerparticles.reset.others"));
         pluginManager.addPermission(new Permission("playerparticles.gui"));
 
         pluginManager.addPermission(new Permission("playerparticles.particles.max"));
@@ -265,6 +267,16 @@ public class PermissionManager extends Manager {
      */
     public List<String> getDisabledWorlds() {
         return Setting.DISABLED_WORLDS.getStringList();
+    }
+
+    /**
+     * Checks if a player can reset another offline player's particles
+     *
+     * @param player The player to check the permission for
+     * @return True if the player has permission, otherwise false
+     */
+    public boolean canResetOthers(PPlayer player) {
+        return PPermission.RESET_OTHERS.check(player.getUnderlyingExecutor());
     }
 
     /**

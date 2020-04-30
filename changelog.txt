@@ -1,5 +1,7 @@
 === v7.10 ===
-* Added permissions for maximum particles, groups, and fixed effects (values in the config are now the lower bounds)
++ Added command '/pp reset <player>' to be able to reset the particles of an offline player
+  - Permission: 'playerparticles.reset.others'
++ Added permissions for maximum particles, groups, and fixed effects (values in the config are now the lower bounds)
   - playerparticles.particles.max.<number>
   - playerparticles.groups.max.<number>
   - playerparticles.fixed.max.<number>

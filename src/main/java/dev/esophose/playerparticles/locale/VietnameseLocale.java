@@ -166,6 +166,8 @@ public class VietnameseLocale implements Locale {
 
             this.put("#17", "Reset Message");
             this.put("reset-success", "&aĐã xóa &b%amount% &aHạt hiệu ứng hoạt động!");
+            this.put("reset-others-success", "&aCác hạt bị loại bỏ cho &b%other%&a!");
+            this.put("reset-others-none", "&eKhông có hạt nào được loại bỏ cho &b%other%&e.");
 
             this.put("#18", "Fixed Create Messages");
             this.put("fixed-create-missing-args", "&cKhông thể tạo Hiệu ứng cố định, bạn đã quên &b%amount% &cđối số yêu cầu!");
