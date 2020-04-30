@@ -1,7 +1,7 @@
 name: PlayerParticles
 main: dev.esophose.playerparticles.PlayerParticles
-version: @version@
-api-version: 1.13
+version: '@version@'
+api-version: '1.13'
 description: Display particles around your player and blocks using customized styles and data!
 author: Esophose
 website: https://www.spigotmc.org/resources/playerparticles.40261/
