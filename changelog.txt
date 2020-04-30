@@ -1,3 +1,7 @@
+=== v7.10 ===
+* The 'swords' style now lets you edit what is considered a sword in its settings file
+* Fixed wooden swords not being counted with the 'swords' style in 1.13+
+* Fixed the 'fishing' style causing particles to spawn for users who don't even have it applied
 === v7.9 ===
 + Added options DISPLAY_NORMAL and DISPLAY_OVERHEAD to toggle-on-move
 + Added setting in each style setting file for can-toggle-on-combat

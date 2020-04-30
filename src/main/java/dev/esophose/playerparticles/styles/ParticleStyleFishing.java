@@ -8,16 +8,16 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.projectiles.ProjectileSource;
 
 public class ParticleStyleFishing extends DefaultParticleStyle implements Listener {
 
@@ -47,8 +47,11 @@ public class ParticleStyleFishing extends DefaultParticleStyle implements Listen
         List<PParticle> particles = new ArrayList<>();
 
         List<Projectile> listCopy = new ArrayList<>(this.projectiles); // Copy in case of modification while looping due to async
-        for (Projectile projectile : listCopy)
-            particles.add(new PParticle(projectile.getLocation(), 0.05F, 0.05F, 0.05F, 0.0F));
+        for (Projectile projectile : listCopy) {
+            ProjectileSource shooter = projectile.getShooter();
+            if (shooter instanceof Player && ((Player) shooter).getUniqueId().equals(particle.getOwnerUniqueId()))
+                particles.add(new PParticle(projectile.getLocation(), 0.05F, 0.05F, 0.05F, 0.0F));
+        }
 
         return particles;
     }

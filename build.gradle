@@ -10,7 +10,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 compileJava.options.encoding = 'UTF-8'
 group = 'dev.esophose'
-version = '7.9'
+version = '7.10'
 
 java {
     withJavadocJar()
