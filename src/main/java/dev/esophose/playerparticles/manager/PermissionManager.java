@@ -18,6 +18,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.PluginManager;
 
 public class PermissionManager extends Manager {
@@ -29,6 +30,7 @@ public class PermissionManager extends Manager {
         STYLE("style"),
         
         FIXED("fixed"),
+        FIXED_MAX("fixed.max"),
         FIXED_UNLIMITED("fixed.unlimited"),
         FIXED_CLEAR("fixed.clear"),
         FIXED_TELEPORT("fixed.teleport"),
@@ -37,8 +39,11 @@ public class PermissionManager extends Manager {
         OVERRIDE("override"),
 
         GUI("gui"),
-        
+
+        PARTICLES_MAX("particles.max"),
         PARTICLES_UNLIMITED("particles.unlimited"),
+
+        GROUPS_MAX("groups.max"),
         GROUPS_UNLIMITED("groups.unlimited");
         
         private final String permissionString;
@@ -69,6 +74,11 @@ public class PermissionManager extends Manager {
             String permission = PERMISSION_PREFIX + this.permissionString + '.' + subPermission;
             return p.hasPermission(permission);
         }
+
+        @Override
+        public String toString() {
+            return PERMISSION_PREFIX + this.permissionString;
+        }
     }
     
     public PermissionManager(PlayerParticles playerParticles) {
@@ -86,6 +96,9 @@ public class PermissionManager extends Manager {
         // Effects
         Map<String, Boolean> effectPermissions = new HashMap<>();
         for (ParticleEffect effect : ParticleEffect.values()) {
+            if (!effect.isSupported())
+                continue;
+
             Permission permission = new Permission("playerparticles.effect." + effect.getInternalName());
             pluginManager.addPermission(permission);
             effectPermissions.put(permission.getName(), true);
@@ -108,6 +121,7 @@ public class PermissionManager extends Manager {
 
         // Fixed
         pluginManager.addPermission(new Permission("playerparticles.fixed"));
+        pluginManager.addPermission(new Permission("playerparticles.fixed.max"));
         pluginManager.addPermission(new Permission("playerparticles.fixed.unlimited"));
         pluginManager.addPermission(new Permission("playerparticles.fixed.clear"));
         pluginManager.addPermission(new Permission("playerparticles.fixed.teleport"));
@@ -116,7 +130,11 @@ public class PermissionManager extends Manager {
         pluginManager.addPermission(new Permission("playerparticles.reload"));
         pluginManager.addPermission(new Permission("playerparticles.override"));
         pluginManager.addPermission(new Permission("playerparticles.gui"));
+
+        pluginManager.addPermission(new Permission("playerparticles.particles.max"));
         pluginManager.addPermission(new Permission("playerparticles.particles.unlimited"));
+
+        pluginManager.addPermission(new Permission("playerparticles.groups.max"));
         pluginManager.addPermission(new Permission("playerparticles.groups.unlimited"));
 
         // Register all non-child permissions
@@ -154,7 +172,7 @@ public class PermissionManager extends Manager {
         if (executor != pplayer)
             return false;
 
-        return pplayer.getActiveParticles().size() >= Setting.MAX_PARTICLES.getInt();
+        return pplayer.getActiveParticles().size() >= this.getPermissionAmount(pplayer.getUnderlyingExecutor(), PPermission.PARTICLES_MAX, Setting.MAX_PARTICLES.getInt());
     }
     
     /**
@@ -171,7 +189,7 @@ public class PermissionManager extends Manager {
         if (executor != pplayer)
             return false;
 
-        return executor.getParticleGroups().size() - 1 >= Setting.MAX_GROUPS.getInt();
+        return executor.getParticleGroups().size() - 1 >= this.getPermissionAmount(pplayer.getUnderlyingExecutor(), PPermission.GROUPS_MAX, Setting.MAX_GROUPS.getInt());
     }
     
     /**
@@ -184,7 +202,7 @@ public class PermissionManager extends Manager {
         if (PPermission.GROUPS_UNLIMITED.check(pplayer.getUnderlyingExecutor()))
             return true;
 
-        return Setting.MAX_GROUPS.getInt() != 0;
+        return this.getPermissionAmount(pplayer.getUnderlyingExecutor(), PPermission.GROUPS_MAX, Setting.MAX_GROUPS.getInt()) != 0;
     }
     
     /**
@@ -201,7 +219,7 @@ public class PermissionManager extends Manager {
         if (executor != pplayer)
             return false;
 
-        return pplayer.getFixedEffectIds().size() >= Setting.MAX_FIXED_EFFECTS.getInt();
+        return pplayer.getFixedEffectIds().size() >= this.getPermissionAmount(pplayer.getUnderlyingExecutor(), PPermission.FIXED_MAX, Setting.MAX_FIXED_EFFECTS.getInt());
     }
 
     /**
@@ -227,7 +245,7 @@ public class PermissionManager extends Manager {
         if (executor != pplayer)
             return Integer.MAX_VALUE;
 
-        return Setting.MAX_PARTICLES.getInt();
+        return this.getPermissionAmount(pplayer.getUnderlyingExecutor(), PPermission.PARTICLES_MAX, Setting.MAX_PARTICLES.getInt());
     }
 
     /**
@@ -423,6 +441,19 @@ public class PermissionManager extends Manager {
             return this.playerParticles.getManager(DataManager.class).getPPlayer(executingPlayer.getUniqueId());
         }
         return pplayer;
+    }
+
+    private int getPermissionAmount(Permissible permissible, PPermission permission, int lowerBound) {
+        int amount = lowerBound;
+        for (PermissionAttachmentInfo info : permissible.getEffectivePermissions()) {
+            String target = info.getPermission().toLowerCase();
+            if (target.startsWith(permission.toString()) && info.getValue()) {
+                try {
+                    amount = Math.max(amount, Integer.parseInt(target.substring(target.lastIndexOf('.') + 1)));
+                } catch (NumberFormatException ignored) { }
+            }
+        }
+        return amount;
     }
 
 }
