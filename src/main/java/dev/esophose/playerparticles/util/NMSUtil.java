@@ -33,4 +33,16 @@ public final class NMSUtil {
         return cachedVersionNumber;
     }
 
+    /**
+     * @return true if the server is running Spigot or a fork, false otherwise
+     */
+    public static boolean isSpigot() {
+        try {
+            Class.forName("org.spigotmc.SpigotConfig");
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
+
 }

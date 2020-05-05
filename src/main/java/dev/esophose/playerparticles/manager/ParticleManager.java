@@ -7,10 +7,11 @@ import dev.esophose.playerparticles.particles.FixedParticleEffect;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
-import dev.esophose.playerparticles.particles.ParticleEffect.NoteColor;
-import dev.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.particles.data.NoteColor;
+import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.styles.DefaultStyles;
+import dev.esophose.playerparticles.util.NMSUtil;
 import java.awt.Color;
 import java.util.Collection;
 import java.util.List;
@@ -151,7 +152,7 @@ public class ParticleManager extends Manager implements Listener, Runnable {
 
             // Don't show their particles if they are in spectator mode
             // Don't spawn particles if the world doesn't allow it
-            if (player != null && player.getGameMode() != GameMode.SPECTATOR && permissionManager.isWorldEnabled(player.getWorld().getName()))
+            if (player != null && (NMSUtil.getVersionNumber() < 8 || player.getGameMode() != GameMode.SPECTATOR) && permissionManager.isWorldEnabled(player.getWorld().getName()))
                 for (ParticlePair particles : pplayer.getActiveParticles())
                     this.displayParticles(pplayer, particles, player.getLocation().clone().add(0, 1, 0));
             
@@ -214,7 +215,7 @@ public class ParticleManager extends Manager implements Listener, Runnable {
      */
     public void displayParticles(Player player, World world, ParticlePair particle, List<PParticle> particles, boolean isLongRange) {
         PermissionManager permissionManager = this.playerParticles.getManager(PermissionManager.class);
-        if ((player != null && player.getGameMode() == GameMode.SPECTATOR) || !permissionManager.isWorldEnabled(world.getName()))
+        if ((player != null && (NMSUtil.getVersionNumber() < 8 || player.getGameMode() == GameMode.SPECTATOR)) || !permissionManager.isWorldEnabled(world.getName()))
             return;
 
         for (PParticle pparticle : particles)

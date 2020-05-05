@@ -10,10 +10,10 @@ import dev.esophose.playerparticles.particles.ConsolePPlayer;
 import dev.esophose.playerparticles.particles.FixedParticleEffect;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
-import dev.esophose.playerparticles.particles.ParticleEffect.NoteColor;
-import dev.esophose.playerparticles.particles.ParticleEffect.OrdinaryColor;
 import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.particles.data.NoteColor;
+import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -1055,36 +1055,6 @@ public final class PlayerParticlesAPI {
 
         pplayer.setParticlesHidden(particlesHidden);
         dataManager.updateSettingParticlesHidden(player.getUniqueId(), particlesHidden);
-    }
-
-    //endregion
-
-    //region Registering Custom Styles
-
-    /**
-     * Registers a particle style with the plugin
-     *
-     * @param particleStyle The particle style to register
-     * @deprecated Use {@link ParticleStyleRegistrationEvent} instead
-     */
-    @Deprecated
-    public void registerParticleStyle(@NotNull ParticleStyle particleStyle) {
-        Objects.requireNonNull(particleStyle);
-
-        this.playerParticles.getManager(ParticleStyleManager.class).registerStyle(particleStyle);
-    }
-
-    /**
-     * Registers an event-based particle style with the plugin
-     *
-     * @param particleStyle The particle style to register
-     * @deprecated Use {@link ParticleStyleRegistrationEvent} instead
-     */
-    @Deprecated
-    public void registerEventParticleStyle(@NotNull ParticleStyle particleStyle) {
-        Objects.requireNonNull(particleStyle);
-
-        this.playerParticles.getManager(ParticleStyleManager.class).registerEventStyle(particleStyle);
     }
 
     //endregion

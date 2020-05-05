@@ -1,7 +1,7 @@
 package dev.esophose.playerparticles.util.inputparser.parsable;
 
 import dev.esophose.playerparticles.particles.PPlayer;
-import dev.esophose.playerparticles.particles.ParticleEffect.NoteColor;
+import dev.esophose.playerparticles.particles.data.NoteColor;
 import dev.esophose.playerparticles.util.inputparser.Parsable;
 import java.util.List;
 

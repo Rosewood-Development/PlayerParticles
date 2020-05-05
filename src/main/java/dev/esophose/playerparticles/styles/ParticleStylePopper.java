@@ -54,7 +54,7 @@ public class ParticleStylePopper extends DefaultParticleStyle {
 
     @Override
     protected List<String> getGuiIconMaterialNames() {
-        return Arrays.asList("POPPED_CHORUS_FRUIT", "CHORUS_FRUIT_POPPED");
+        return Arrays.asList("POPPED_CHORUS_FRUIT", "CHORUS_FRUIT_POPPED", "PUMPKIN_SEEDS");
     }
 
     @Override

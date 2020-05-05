@@ -1,15 +1,25 @@
 package dev.esophose.playerparticles.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import org.apache.commons.lang.WordUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 
 public final class ParticleUtils {
-    
+
+    public final static Material FALLBACK_MATERIAL;
     private static List<String> blockMaterials, itemMaterials;
     
     static {
+        if (NMSUtil.getVersionNumber() > 7) {
+            FALLBACK_MATERIAL = Material.BARRIER;
+        } else {
+            FALLBACK_MATERIAL = Material.BEDROCK;
+        }
+
         blockMaterials = new ArrayList<>();
         itemMaterials = new ArrayList<>();
         
@@ -43,19 +53,19 @@ public final class ParticleUtils {
      * Finds a block/item as a material from a list of possible strings
      * Contains a fallback to the barrier icon just in case
      * 
-     * @param barrierFallback If the material should fall back to barrier
+     * @param fallback If the material should fall back to barrier
      * @param input A list of material names
      * @return The first matching material
      */
-    public static Material closestMatchWithFallback(boolean barrierFallback, String... input) {
+    public static Material closestMatchWithFallback(boolean fallback, String... input) {
         for (String name : input) {
             Material mat = closestMatch(name);
             if (mat != null)
                 return mat;
         }
 
-        if (barrierFallback)
-            return Material.BARRIER;
+        if (fallback)
+            return FALLBACK_MATERIAL;
 
         return null;
     }

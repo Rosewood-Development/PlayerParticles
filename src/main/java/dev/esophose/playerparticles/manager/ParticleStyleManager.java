@@ -75,43 +75,6 @@ public class ParticleStyleManager extends Manager {
     }
 
     /**
-     * Registers a style that is put into the plugin's update loop
-     * 
-     * @param style The style to add
-     */
-    @Deprecated
-    public void registerStyle(ParticleStyle style) {
-        if (style == null) {
-            throw new IllegalArgumentException("Tried to register a null style");
-        }
-        
-        if (style.getInternalName() == null || style.getInternalName().trim().equals("")) {
-            throw new IllegalArgumentException("Tried to register a style with a null or empty name: '" + style.getInternalName() + "'");
-        }
-        
-        for (ParticleStyle testAgainst : this.styles) {
-            if (testAgainst.equals(style)) {
-                throw new IllegalArgumentException("Tried to register the same style twice: '" + style.getInternalName() + "'");
-            } else if (testAgainst.getInternalName().equalsIgnoreCase(style.getInternalName())) {
-                throw new IllegalArgumentException("Tried to register two styles with the same internal name spelling: '" + style.getInternalName() + "'");
-            }
-        }
-        
-        this.styles.add(style);
-    }
-
-    /**
-     * Registers a style that isn't updated on the normal update loop
-     * 
-     * @param style The style to register
-     */
-    @Deprecated
-    public void registerEventStyle(ParticleStyle style) {
-        this.registerStyle(style);
-        this.eventStyles.add(style);
-    }
-
-    /**
      * Returns if a given style is customly handled
      * 
      * @param style The style to check

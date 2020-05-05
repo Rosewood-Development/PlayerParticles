@@ -1,3 +1,9 @@
+=== v7.11 ===
++ Added support for Spigot 1.8.8 and 1.7.10. I make no guarantees this will work perfectly.
+* The plugin will now disable and print an error message on startup if the server is running CraftBukkit
+* Removed deprecated API
+* Other API-breaking changes (Moved the color data classes to a different package)
+* Removed the version number from generating in new config.yml files
 === v7.10 ===
 + Added command '/pp reset <player>' to be able to reset the particles of an offline player
   - Permission: 'playerparticles.reset.others'

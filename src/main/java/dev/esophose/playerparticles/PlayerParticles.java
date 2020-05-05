@@ -23,9 +23,11 @@ import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.manager.PluginUpdateManager;
 import dev.esophose.playerparticles.particles.listener.PPlayerCombatListener;
 import dev.esophose.playerparticles.particles.listener.PPlayerMovementListener;
-import dev.esophose.playerparticles.util.Metrics;
+import dev.esophose.playerparticles.util.LegacyMetrics;
+import dev.esophose.playerparticles.util.NMSUtil;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.bstats.bukkit.MetricsLite;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -55,6 +57,12 @@ public class PlayerParticles extends JavaPlugin {
      */
     @Override
     public void onEnable() {
+        if (!NMSUtil.isSpigot()) {
+            this.getLogger().severe("This plugin is only compatible with Spigot and other forks. CraftBukkit is not supported. Disabling PlayerParticles.");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
+
         this.reload();
 
         PluginManager pm = Bukkit.getPluginManager();
@@ -62,8 +70,13 @@ public class PlayerParticles extends JavaPlugin {
         pm.registerEvents(new PPlayerCombatListener(), this);
         pm.registerEvents(new PlayerChatHook(), this);
 
-        if (Setting.SEND_METRICS.getBoolean())
-            new Metrics(this);
+        if (Setting.SEND_METRICS.getBoolean()) {
+            if (NMSUtil.getVersionNumber() > 7) {
+                new MetricsLite(this, 3531);
+            } else {
+                new LegacyMetrics(this);
+            }
+        }
 
         if (PlaceholderAPIHook.enabled())
             new ParticlePlaceholderExpansion(this).register();

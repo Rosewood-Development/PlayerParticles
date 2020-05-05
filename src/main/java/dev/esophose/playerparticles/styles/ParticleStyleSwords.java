@@ -7,6 +7,7 @@ import dev.esophose.playerparticles.manager.ParticleManager;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.util.NMSUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -76,8 +77,16 @@ public class ParticleStyleSwords extends DefaultParticleStyle implements Listene
             Player player = (Player) event.getDamager();
             LivingEntity entity = (LivingEntity) event.getEntity();
             PPlayer pplayer = PlayerParticles.getInstance().getManager(DataManager.class).getPPlayer(player.getUniqueId());
-            if (pplayer == null || !this.isSword(player.getInventory().getItemInMainHand()))
+            if (pplayer == null)
                 return;
+
+            if (NMSUtil.getVersionNumber() > 8) {
+                if (!this.isSword(player.getInventory().getItemInMainHand()))
+                    return;
+            } else {
+                if (!this.isSword(player.getInventory().getItemInHand()))
+                    return;
+            }
 
             for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.SWORDS)) {
                 Location loc = entity.getLocation().clone().add(0, 1, 0);

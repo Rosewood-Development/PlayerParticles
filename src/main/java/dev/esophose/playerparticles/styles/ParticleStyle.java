@@ -4,6 +4,7 @@ import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.ParticleStyleManager;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.util.ParticleUtils;
 import java.util.Collections;
 import java.util.List;
 import org.bukkit.Location;
@@ -48,7 +49,7 @@ public interface ParticleStyle {
      * @return The Material icon that represents this style in the GUI
      */
     default Material getGuiIconMaterial() {
-        return Material.BARRIER;
+        return ParticleUtils.FALLBACK_MATERIAL;
     }
 
     /**

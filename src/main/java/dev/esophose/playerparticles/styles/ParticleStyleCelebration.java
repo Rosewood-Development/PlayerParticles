@@ -10,6 +10,7 @@ import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.util.MathL;
+import dev.esophose.playerparticles.util.NMSUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -60,7 +61,7 @@ public class ParticleStyleCelebration extends DefaultParticleStyle {
             Random random = new Random();
             for (PPlayer pplayer : particleManager.getPPlayers()) {
                 Player player = pplayer.getPlayer();
-                if (player != null && player.getGameMode() != GameMode.SPECTATOR && permissionManager.isWorldEnabled(player.getWorld().getName()))
+                if (player != null && (NMSUtil.getVersionNumber() < 8 || player.getGameMode() != GameMode.SPECTATOR) && permissionManager.isWorldEnabled(player.getWorld().getName()))
                     for (ParticlePair particle : pplayer.getActiveParticles())
                         if (particle.getStyle() == this)
                             this.spawnFirework(player.getLocation(), pplayer, pplayer.getPlayer(), particle, random);

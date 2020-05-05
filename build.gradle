@@ -10,7 +10,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 compileJava.options.encoding = 'UTF-8'
 group = 'dev.esophose'
-version = '7.10'
+version = '7.11'
 
 java {
     withJavadocJar()
@@ -30,6 +30,8 @@ dependencies {
     compile 'org.slf4j:slf4j-api:1.7.25'
     compile 'org.slf4j:slf4j-nop:1.7.25'
     compile 'com.zaxxer:HikariCP:3.2.0'
+    compile 'org.bstats:bstats-bukkit-lite:1.7'
+    shadow 'com.googlecode.json-simple:json-simple:1.1.1'
     shadow 'org.jetbrains:annotations:16.0.2'
     shadow 'me.clip:placeholderapi:2.10.4'
     shadow 'org.xerial:sqlite-jdbc:3.23.1'
@@ -39,6 +41,10 @@ dependencies {
 shadowJar {
     archiveClassifier.set(null)
     minimize()
+
+    relocate('org.bstats', 'dev.esophose.playerparticles.libs.bstats')
+    relocate('org.slf4j', 'dev.esophose.playerparticles.libs.slf4j')
+    relocate('com.zaxxer.hikari', 'dev.esophose.playerparticles.libs.hikaricp')
 }
 
 processResources {

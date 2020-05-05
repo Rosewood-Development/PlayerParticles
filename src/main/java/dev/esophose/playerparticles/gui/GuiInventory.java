@@ -3,6 +3,7 @@ package dev.esophose.playerparticles.gui;
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.particles.PPlayer;
+import dev.esophose.playerparticles.util.NMSUtil;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +57,8 @@ public abstract class GuiInventory {
             ItemMeta meta = borderIcon.getItemMeta();
             if (meta != null) {
                 meta.setDisplayName(" ");
-                meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_ENCHANTS);
+                if (NMSUtil.getVersionNumber() > 7)
+                    meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_ENCHANTS);
                 borderIcon.setItemMeta(meta);
             }
             
@@ -155,7 +157,11 @@ public abstract class GuiInventory {
                 button.handleClick(isShiftClick);
                 if (Setting.GUI_BUTTON_SOUND.getBoolean() && event.getWhoClicked() instanceof Player) {
                     Player player = (Player) event.getWhoClicked();
-                    player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1);
+                    if (NMSUtil.getVersionNumber() > 8) {
+                        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1);
+                    } else {
+                        player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 0.5f, 1);
+                    }
                 }
                 break;
             }
