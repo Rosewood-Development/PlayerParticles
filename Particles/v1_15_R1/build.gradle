@@ -1,0 +1,5 @@
+dependencies {
+    implementation project(':NMS-Wrapper')
+    shadow 'org.spigotmc:spigot:1.15.2-R0.1-SNAPSHOT'
+    shadow 'com.comphenix.protocol:ProtocolLib:4.5.0'
+}

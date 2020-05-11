@@ -1,3 +1,6 @@
+=== v7.5 ===
++ Added style 'trail'
+* Adjusted the 'normal' style a bit (also includes thick, and move)
 === v7.4 ===
 * Fixed '/pp fixed teleport' not working due to async event issues
 * Fixed issue with a fixed celebration effect while vanished
@@ -20,7 +23,7 @@
 + Added a setting 'dust-size' to change the size of dust particles in 1.13+
 + Added sub-command '/pp fixed teleport <id>' that requires the permission playerparticles.fixed.teleport
 + Added named colors to the color data autocomplete
-+ Added an API, accessible through the dev.esophose.playerparticles.api.PlayerParticlesAPI class
++ Added an API, accessible through the dev.esophose.PlayerParticlesAPI class
 + Added the ability for the console to manage its own fixed effects
 + Added PlaceholderAPI support
 + Added permission playerparticles.override for /ppo

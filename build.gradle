@@ -1,94 +1,64 @@
-import org.apache.tools.ant.filters.ReplaceTokens
-
 plugins {
     id 'com.github.johnrengelman.shadow' version '5.1.0'
     id 'maven-publish'
     id 'java'
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-compileJava.options.encoding = 'UTF-8'
-group = 'dev.esophose'
-version = '7.4'
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'com.github.johnrengelman.shadow'
+    group = 'dev.esophose'
+    version = '7.5'
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
 
-java {
-    withJavadocJar()
-    withSourcesJar()
+    repositories {
+        mavenCentral()
+        jcenter()
+
+        maven { url = 'https://repo.codemc.org/repository/maven-public' }
+        maven { url = 'https://repo.codemc.org/repository/nms' }
+        maven { url = 'http://repo.extendedclip.com/content/repositories/placeholderapi/' }
+        maven { url = 'https://repo.dmulloy2.net/nexus/repository/public/' }
+    }
 }
 
-repositories {
-    mavenCentral()
-	jcenter()
-	
-    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
-    maven { url = 'https://repo.codemc.org/repository/maven-public' }
-    maven { url = 'http://repo.extendedclip.com/content/repositories/placeholderapi/' }
+//javadoc {
+//    options.encoding = 'UTF-8'
+//    if (JavaVersion.current().isJava9Compatible()) {
+//        options.addBooleanOption('html5', true)
+//    }
+//}
+//
+//java {
+//    withJavadocJar()
+//    withSourcesJar()
+//}
+
+configurations {
+    childJars
 }
 
 dependencies {
-    compile 'org.slf4j:slf4j-api:1.7.25'
-    compile 'org.slf4j:slf4j-nop:1.7.25'
-    compile 'com.zaxxer:HikariCP:3.2.0'
-    shadow 'org.jetbrains:annotations:16.0.2'
-    shadow 'me.clip:placeholderapi:2.10.4'
-    shadow 'org.xerial:sqlite-jdbc:3.23.1'
-    shadow 'org.spigotmc:spigot-api:1.15.2-R0.1-SNAPSHOT'
+    implementation project(':Plugin')
+    implementation project(':NMS-Wrapper')
+    implementation project(':NMS-v1_15_R1')
+
+    subprojects.each {
+        childJars project(it.path)
+    }
 }
 
 shadowJar {
     archiveClassifier.set(null)
-    minimize()
 }
 
-processResources {
-    from (sourceSets.main.resources.srcDirs) {
-        include '**/*.yml'
-        filter ReplaceTokens, tokens: ["version": project.property("version")]
-    }
-}
-
-publishing {
-    publications {
-        shadow(MavenPublication) { publication ->
-            project.shadow.component(publication)
+jar {
+    dependsOn configurations.childJars
+    from {
+        configurations.childJars.collect {
+            zipTree(it)
         }
-        mavenJava(MavenPublication) {
-            artifactId = 'playerparticles'
-            from components.java
-            versionMapping {
-                usage('java-api') {
-                    fromResolutionOf('runtimeClasspath')
-                }
-                usage('java-runtime') {
-                    fromResolutionResult()
-                }
-            }
-            pom {
-                name = 'playerparticles'
-            }
-        }
-    }
-    repositories {
-        if (project.hasProperty('mavenUsername') && project.hasProperty('mavenPassword')) {
-            maven {
-                credentials {
-                    username project.mavenUsername
-                    password project.mavenPassword
-                }
-
-                def releasesRepoUrl = 'https://repo.codemc.org/repository/maven-releases/'
-                def snapshotsRepoUrl = 'https://repo.codemc.org/repository/maven-snapshots/'
-                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-            }
-        }
-    }
-}
-
-javadoc {
-    options.encoding = 'UTF-8'
-    if (JavaVersion.current().isJava9Compatible()) {
-        options.addBooleanOption('html5', true)
     }
 }
 

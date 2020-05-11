@@ -1,0 +1,73 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+plugins {
+    id 'maven-publish'
+}
+
+compileJava {
+    options.compilerArgs += ['-parameters']
+    options.fork = true
+    options.forkOptions.executable = 'javac'
+    options.encoding = 'UTF-8'
+}
+
+dependencies {
+    // Other modules
+    implementation project(':NMS-Wrapper')
+
+    // Referenced dependencies
+    shadow 'org.spigotmc:spigot:1.15.2-R0.1-SNAPSHOT'
+    shadow 'org.jetbrains:annotations:16.0.2'
+    shadow 'me.clip:placeholderapi:2.10.4'
+    shadow 'org.xerial:sqlite-jdbc:3.23.1'
+    shadow 'com.comphenix.protocol:ProtocolLib:4.5.0'
+
+    // Dependencies that will be shaded into the jar
+    implementation 'org.slf4j:slf4j-api:1.7.25'
+    implementation 'org.slf4j:slf4j-nop:1.7.25'
+    implementation 'com.zaxxer:HikariCP:3.2.0'
+}
+
+processResources {
+    from (sourceSets.main.resources.srcDirs) {
+        include '**/*.yml'
+        filter ReplaceTokens, tokens: ["version": project.property("version")]
+    }
+}
+
+publishing {
+    publications {
+        shadow(MavenPublication) { publication ->
+            project.shadow.component(publication)
+        }
+        mavenJava(MavenPublication) {
+            artifactId = 'playerparticles'
+            from components.java
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+            pom {
+                name = 'playerparticles'
+            }
+        }
+    }
+    repositories {
+        if (project.hasProperty('mavenUsername') && project.hasProperty('mavenPassword')) {
+            maven {
+                credentials {
+                    username project.mavenUsername
+                    password project.mavenPassword
+                }
+
+                def releasesRepoUrl = 'https://repo.codemc.org/repository/maven-releases/'
+                def snapshotsRepoUrl = 'https://repo.codemc.org/repository/maven-snapshots/'
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            }
+        }
+    }
+}
