@@ -19,8 +19,11 @@ public class WorldGuardHook {
     public static boolean enabled() {
         if (enabled != null)
             return enabled;
+        
         enabled = Bukkit.getPluginManager().getPlugin("WorldGuard") != null;
-        worldGuardWrapper = WorldGuardWrapper.getInstance();
+        if (enabled)
+            worldGuardWrapper = WorldGuardWrapper.getInstance();
+
         return enabled;
     }
 
