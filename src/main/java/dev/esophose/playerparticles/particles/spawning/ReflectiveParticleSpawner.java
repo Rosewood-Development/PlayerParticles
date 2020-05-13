@@ -24,13 +24,21 @@ public class ReflectiveParticleSpawner extends ParticleSpawner {
         if (particleEffect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA))
             throw new ParticleDataException("This particle effect requires additional data");
 
-        new ParticlePacket(particleEffect, offsetX, offsetY, offsetZ, speed, amount, true, null).sendTo(center, this.getPlayersInRange(center, isLongRange, owner));
+        List<Player> players = this.getPlayersInRange(center, isLongRange, owner);
+        if (players.isEmpty())
+            return;
+
+        new ParticlePacket(particleEffect, offsetX, offsetY, offsetZ, speed, amount, true, null).sendTo(center, players);
     }
 
     @Override
     public void display(ParticleEffect particleEffect, ParticleColor color, Location center, boolean isLongRange, Player owner) {
         if (!particleEffect.hasProperty(ParticleProperty.COLORABLE))
             throw new ParticleColorException("This particle effect is not colorable");
+
+        List<Player> players = this.getPlayersInRange(center, isLongRange, owner);
+        if (players.isEmpty())
+            return;
 
         new ParticlePacket(particleEffect, color, true).sendTo(center, this.getPlayersInRange(center, isLongRange, owner));
     }
@@ -39,6 +47,10 @@ public class ReflectiveParticleSpawner extends ParticleSpawner {
     public void display(ParticleEffect particleEffect, Material spawnMaterial, double offsetX, double offsetY, double offsetZ, double speed, int amount, Location center, boolean isLongRange, Player owner) {
         if (!particleEffect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA))
             throw new ParticleDataException("This particle effect does not require additional data");
+
+        List<Player> players = this.getPlayersInRange(center, isLongRange, owner);
+        if (players.isEmpty())
+            return;
 
         new ParticlePacket(particleEffect, offsetX, offsetY, offsetZ, speed, amount, true, spawnMaterial).sendTo(center, this.getPlayersInRange(center, isLongRange, owner));
     }
