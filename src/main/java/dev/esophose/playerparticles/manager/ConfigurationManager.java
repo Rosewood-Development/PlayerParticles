@@ -58,7 +58,7 @@ public class ConfigurationManager extends Manager {
         GUI_GROUP_CREATION_MESSAGE_DISPLAY_AREA("gui-group-creation-message-display-area", "ACTION_BAR", "Valid values: ACTION_BAR, TITLE, CHAT", "Where should the GUI group creation countdown message be displayed?", "Note: Server versions less than 1.11.2 will always use CHAT"),
 
         WORLDGUARD_SETTINGS("worldguard-settings", null, "Settings for WorldGuard", "If WorldGuard is not installed, these settings will do nothing"),
-        WORLDGUARD_USE_ALLOWED_REGIONS("worldguard-settings.use-allowed-regions", false, "If true, particles will be able to spawn unless they are in a disallowed region", "If false, particles will not be able to spawn unless they are in an allowed region"),
+        WORLDGUARD_USE_ALLOWED_REGIONS("worldguard-settings.use-allowed-regions", false, "If true, particles will only be able to spawn if they are in an allowed region and not a disallowed region", "If false, particles will be able to spawn as long as they are not in a disallowed region"),
         WORLDGUARD_ALLOWED_REGIONS("worldguard-settings.allowed-regions", Arrays.asList("example_region_1", "example_region_2"), "Regions that particles will be allowed to spawn in"),
         WORLDGUARD_DISALLOWED_REGIONS("worldguard-settings.disallowed-regions", Arrays.asList("example_region_3", "example_region_4"), "Regions that particles will be blocked from spawning in", "This overrides allowed regions if they overlap"),
         WORLDGUARD_CHECK_INTERVAL("worldguard-settings.check-interval", 10, "How often to check if a player is in a region that allows spawning particles", "Measured in ticks"),
