@@ -1,6 +1,7 @@
 package dev.esophose.playerparticles.manager;
 
 import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.hook.WorldGuardHook;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.particles.ConsolePPlayer;
 import dev.esophose.playerparticles.particles.FixedParticleEffect;
@@ -44,6 +45,11 @@ public class ParticleManager extends Manager implements Listener, Runnable {
     private BukkitTask particleTask;
 
     /**
+     * The task that checks player worldguard region statuses
+     */
+    private BukkitTask worldGuardTask;
+
+    /**
      * Rainbow particle effect hue and note color used for rainbow colorable effects
      */
     private int hue;
@@ -67,10 +73,20 @@ public class ParticleManager extends Manager implements Listener, Runnable {
         if (this.particleTask != null)
             this.particleTask.cancel();
 
+        if (this.worldGuardTask != null) {
+            this.worldGuardTask.cancel();
+            this.worldGuardTask = null;
+        }
+
         Bukkit.getScheduler().runTaskLater(this.playerParticles, () -> {
             long ticks = Setting.TICKS_PER_PARTICLE.getLong();
-            this.particleTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this.playerParticles, this, 5, ticks);
-        }, 1);
+            this.particleTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this.playerParticles, this, 0, ticks);
+
+            if (WorldGuardHook.enabled()) {
+                long worldGuardTicks = Setting.WORLDGUARD_CHECK_INTERVAL.getLong();
+                this.worldGuardTask = Bukkit.getScheduler().runTaskTimer(this.playerParticles, this::updateWorlGuardStatuses, 0, worldGuardTicks);
+            }
+        }, 5);
 
         this.particlePlayers.clear();
         DataManager dataManager = this.playerParticles.getManager(DataManager.class);
@@ -165,6 +181,25 @@ public class ParticleManager extends Manager implements Listener, Runnable {
     }
 
     /**
+     * Updates the WorldGuard region statuses for players
+     */
+    private void updateWorlGuardStatuses() {
+        PermissionManager permissionManager = this.playerParticles.getManager(PermissionManager.class);
+
+        for (PPlayer pplayer : this.particlePlayers.values()) {
+            Player player = pplayer.getPlayer();
+            if (player == null)
+                continue;
+
+            boolean inAllowedRegion = WorldGuardHook.isInAllowedRegion(player.getLocation());
+            if (!inAllowedRegion && Setting.WORLDGUARD_ENABLE_BYPASS_PERMISSION.getBoolean())
+                inAllowedRegion = permissionManager.hasWorldGuardBypass(player);
+
+            pplayer.setInAllowedRegion(inAllowedRegion);
+        }
+    }
+
+    /**
      * Displays particles at the given player location with their settings
      * 
      * @param pplayer The PPlayer to spawn the particles for
@@ -174,6 +209,9 @@ public class ParticleManager extends Manager implements Listener, Runnable {
     private void displayParticles(PPlayer pplayer, ParticlePair particle, Location location) {
         if (!this.playerParticles.getManager(ParticleStyleManager.class).isEventHandled(particle.getStyle())) {
             if (Setting.TOGGLE_ON_COMBAT.getBoolean() && particle.getStyle().canToggleWithCombat() && pplayer.isInCombat())
+                return;
+
+            if (!pplayer.isInAllowedRegion())
                 return;
 
             if (particle.getStyle().canToggleWithMovement() && pplayer.isMoving()) {
@@ -207,14 +245,22 @@ public class ParticleManager extends Manager implements Listener, Runnable {
     /**
      * An alternative method used for event styles
      *
-     * @param player The player the particles are spawning from, nullable for special cases
+     * @param pplayer The PPlayer the particles are spawning from, nullable for special cases
      * @param world The world the particles are spawning in
      * @param particle The ParticlePair to use for getting particle settings
      * @param particles The particles to display
      * @param isLongRange If the particle can be viewed from long range
      */
-    public void displayParticles(Player player, World world, ParticlePair particle, List<PParticle> particles, boolean isLongRange) {
+    public void displayParticles(PPlayer pplayer, World world, ParticlePair particle, List<PParticle> particles, boolean isLongRange) {
         PermissionManager permissionManager = this.playerParticles.getManager(PermissionManager.class);
+
+        Player player = null;
+        if (pplayer != null) {
+            if (!pplayer.isInAllowedRegion())
+                return;
+            player = pplayer.getPlayer();
+        }
+
         if ((player != null && (NMSUtil.getVersionNumber() < 8 || player.getGameMode() == GameMode.SPECTATOR)) || !permissionManager.isWorldEnabled(world.getName()))
             return;
 

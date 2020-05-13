@@ -129,7 +129,7 @@ public class ParticleStyleCelebration extends DefaultParticleStyle {
                     trail.setEffect(ParticleStyleCelebration.this.fuseEffect);
                     trail.setStyle(DefaultStyles.CELEBRATION);
 
-                    particleManager.displayParticles(player, this.location.getWorld(), trail, Collections.singletonList(new PParticle(this.location)), true);
+                    particleManager.displayParticles(pplayer, this.location.getWorld(), trail, Collections.singletonList(new PParticle(this.location)), true);
                     
                     this.location.add(0, ParticleStyleCelebration.this.fuseSpacing, 0);
                 } else {
@@ -146,7 +146,7 @@ public class ParticleStyleCelebration extends DefaultParticleStyle {
                         
                         particles.add(new PParticle(this.location.clone().add(dx, dy, dz)));
                     }
-                    particleManager.displayParticles(player, this.location.getWorld(), particle, particles, true);
+                    particleManager.displayParticles(pplayer, this.location.getWorld(), particle, particles, true);
                     
                     this.cancel();
                 }

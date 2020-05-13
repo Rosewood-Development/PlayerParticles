@@ -24,7 +24,7 @@ import org.bukkit.plugin.PluginManager;
 public class PermissionManager extends Manager {
     
     private static final String PERMISSION_PREFIX = "playerparticles.";
-    
+
     private enum PPermission {
         EFFECT("effect"),
         STYLE("style"),
@@ -45,7 +45,9 @@ public class PermissionManager extends Manager {
         PARTICLES_UNLIMITED("particles.unlimited"),
 
         GROUPS_MAX("groups.max"),
-        GROUPS_UNLIMITED("groups.unlimited");
+        GROUPS_UNLIMITED("groups.unlimited"),
+
+        WORLDGUARD_BYPASS("worldguard.bypass");
         
         private final String permissionString;
         
@@ -138,6 +140,8 @@ public class PermissionManager extends Manager {
 
         pluginManager.addPermission(new Permission("playerparticles.groups.max"));
         pluginManager.addPermission(new Permission("playerparticles.groups.unlimited"));
+
+        pluginManager.addPermission(new Permission("playerparticles.worldguard.bypass"));
 
         // Register all non-child permissions
         Map<String, Boolean> childPermissions = new HashMap<>();
@@ -426,13 +430,23 @@ public class PermissionManager extends Manager {
      * Checks if a player can use /ppo
      *
      * @param sender The CommandSender to check
-     * @return If the player can use /ppo
+     * @return If the sender can use /ppo
      */
     public boolean canOverride(CommandSender sender) {
         if (this.isConsole(sender))
             return true;
 
         return PPermission.OVERRIDE.check(sender);
+    }
+
+    /**
+     * Checks if a player has the WorldGuard bypass permission
+     *
+     * @param player The Player to check
+     * @return If the player has the WorldGuard bypass permission
+     */
+    public boolean hasWorldGuardBypass(Player player) {
+        return PPermission.WORLDGUARD_BYPASS.check(player);
     }
 
     private boolean isConsole(PPlayer pplayer) {

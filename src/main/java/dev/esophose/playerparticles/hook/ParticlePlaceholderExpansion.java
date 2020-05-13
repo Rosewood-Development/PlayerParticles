@@ -36,6 +36,8 @@ public class ParticlePlaceholderExpansion extends PlaceholderExpansion {
                 return String.valueOf(pplayer.isMoving());
             case "is_in_combat":
                 return String.valueOf(pplayer.isInCombat());
+            case "is_in_allowed_region":
+                return String.valueOf(pplayer.isInAllowedRegion());
             case "can_see_particles":
                 return String.valueOf(pplayer.canSeeParticles());
         }

@@ -90,7 +90,7 @@ public class ParticleStyleSwords extends DefaultParticleStyle implements Listene
 
             for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.SWORDS)) {
                 Location loc = entity.getLocation().clone().add(0, 1, 0);
-                particleManager.displayParticles(player, player.getWorld(), particle, DefaultStyles.SWORDS.getParticles(particle, loc), false);
+                particleManager.displayParticles(pplayer, player.getWorld(), particle, DefaultStyles.SWORDS.getParticles(particle, loc), false);
             }
         }
     }

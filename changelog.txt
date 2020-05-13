@@ -1,3 +1,8 @@
+=== v7.12 ===
++ Added WorldGuard region support
++ Added permission 'playerparticles.worldguard.bypass'
++ Added placeholder %playerparticles_is_in_allowed_region%
+* Fixed empty player list bug with versions older than 1.9
 === v7.11 ===
 + Added support for Spigot 1.8.8 and 1.7.10. I make no guarantees this will work perfectly.
 * The plugin will now disable and print an error message on startup if the server is running CraftBukkit

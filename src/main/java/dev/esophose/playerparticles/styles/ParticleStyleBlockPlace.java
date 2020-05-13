@@ -74,7 +74,7 @@ public class ParticleStyleBlockPlace extends DefaultParticleStyle implements Lis
 
         for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.BLOCKPLACE)) {
             Location loc = event.getBlock().getLocation().clone();
-            particleManager.displayParticles(player, player.getWorld(), particle, DefaultStyles.BLOCKPLACE.getParticles(particle, loc), false);
+            particleManager.displayParticles(pplayer, player.getWorld(), particle, DefaultStyles.BLOCKPLACE.getParticles(particle, loc), false);
         }
     }
 

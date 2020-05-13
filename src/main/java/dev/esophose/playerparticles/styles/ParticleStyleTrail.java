@@ -67,7 +67,7 @@ public class ParticleStyleTrail extends DefaultParticleStyle implements Listener
         for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.TRAIL)) {
             Location loc = player.getLocation().clone();
             loc.setY(loc.getY() + 1);
-            particleManager.displayParticles(player, player.getWorld(), particle, DefaultStyles.TRAIL.getParticles(particle, loc), false);
+            particleManager.displayParticles(pplayer, player.getWorld(), particle, DefaultStyles.TRAIL.getParticles(particle, loc), false);
         }
     }
 

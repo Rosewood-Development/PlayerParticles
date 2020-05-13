@@ -49,6 +49,11 @@ public class PPlayer {
     private boolean inCombat;
 
     /**
+     * If the player is in an allowed region
+     */
+    private boolean inAllowedRegion;
+
+    /**
      * Constructs a new PPlayer
      * 
      * @param uuid The player UUID
@@ -64,6 +69,7 @@ public class PPlayer {
         this.particlesHidden = particlesHidden;
         this.isMoving = false;
         this.inCombat = false;
+        this.inAllowedRegion = true;
     }
 
     /**
@@ -130,16 +136,14 @@ public class PPlayer {
     /**
      * Sets the player's movement state
      * 
-     * @param isMoving True if the player is moving, otherwise false if they are standing still
+     * @param isMoving true if the player is moving, otherwise false if they are standing still
      */
     public void setMoving(boolean isMoving) {
         this.isMoving = isMoving;
     }
     
     /**
-     * Gets if a player is moving
-     * 
-     * @return True if the player is moving
+     * @return true if the player is moving, otherwise false
      */
     public boolean isMoving() {
         return this.isMoving;
@@ -148,19 +152,33 @@ public class PPlayer {
     /**
      * Sets the player's combat state
      *
-     * @param inCombat True if the player is in combat, otherwise false
+     * @param inCombat true if the player is in combat, otherwise false
      */
     public void setInCombat(boolean inCombat) {
         this.inCombat = inCombat;
     }
 
     /**
-     * Gets if a player is in combat
-     *
-     * @return True if the player is in combat
+     * @return true if the player is in combat, otherwise false
      */
     public boolean isInCombat() {
         return this.inCombat;
+    }
+
+    /**
+     * Sets the player's region state
+     *
+     * @param inAllowedRegion true if the player is in an allowed region, otherwise false
+     */
+    public void setInAllowedRegion(boolean inAllowedRegion) {
+        this.inAllowedRegion = inAllowedRegion;
+    }
+
+    /**
+     * @return true if the player is in an allowed region, otherwise false
+     */
+    public boolean isInAllowedRegion() {
+        return this.inAllowedRegion;
     }
 
     /**

@@ -56,7 +56,7 @@ public class ParticleStyleHurt extends DefaultParticleStyle implements Listener 
             if (pplayer != null) {
                 for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.HURT)) {
                     Location loc = player.getLocation().clone().add(0, 1, 0);
-                    particleManager.displayParticles(player, player.getWorld(), particle, DefaultStyles.HURT.getParticles(particle, loc), false);
+                    particleManager.displayParticles(pplayer, player.getWorld(), particle, DefaultStyles.HURT.getParticles(particle, loc), false);
                 }
             }
         }
