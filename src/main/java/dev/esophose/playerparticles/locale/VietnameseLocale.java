@@ -118,6 +118,7 @@ public class VietnameseLocale implements Locale {
             this.put("remove-effect-none", "&cBạn không có bất kì Hạt hiệu ứng nào để áp dụng hiệu ứng &b%effect%&c!");
             this.put("remove-style-success", "&aĐã xóa &b%amount% &aHạt hiệu ứng của bạn với style &b%style%&a!");
             this.put("remove-style-none", "&cBạn không có bất kì Hạt hiệu ứng nào để áp dụng style &b%style%&c!");
+            this.put("remove-effect-style-none", "&cBạn không có bất kỳ hạt nào được áp dụng với hiệu ứng hoặc kiểu %name%&c!");
             this.put("remove-unknown", "&cEffect hoặc Style với tên &b%name% &ckhông tồn tại!");
 
             this.put("#10", "List Messages");

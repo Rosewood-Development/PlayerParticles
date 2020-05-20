@@ -118,6 +118,7 @@ public class FrenchLocale implements Locale {
             this.put("remove-effect-none", "&cVous n'avez pas de particules appliquées avec l'effet &b%effect% &c!");
             this.put("remove-style-success", "&aSuppression &b%amount% &ade votre particule avec le style &b%style% &a!");
             this.put("remove-style-none", "&cVous n'avez pas de particules appliquées avec le style &b%style% &c!");
+            this.put("remove-effect-style-none", "&cVous n'avez pas de particules appliquées avec l'effet ou le style &b%name% &c!");
             this.put("remove-unknown", "&cL'effect avec le nom ou le style &b%name% &cn'existe pas !");
 
             this.put("#10", "List Messages");

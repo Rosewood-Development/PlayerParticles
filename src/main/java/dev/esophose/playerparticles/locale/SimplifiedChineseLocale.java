@@ -118,6 +118,7 @@ public class SimplifiedChineseLocale implements Locale {
             this.put("remove-effect-none", "&c你没有使用特效&b%effect%&c的粒子!");
             this.put("remove-style-success", "&已成功删除&b%amount%&a个使用了风格&b%style%&a的粒子!");
             this.put("remove-style-none", "&c你没有已使用风格&b%style%&c的粒子!");
+            this.put("remove-effect-style-none", "&c您没有应用任何颗粒效果或样式&b%name%&c!");
             this.put("remove-unknown", "&c名为&b%name%&c的特效或风格不存在!");
 
             this.put("#10", "List Messages");

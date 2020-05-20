@@ -71,6 +71,7 @@ public class RemoveCommandModule implements CommandModule {
                     removed = true;
                 } else if (style == null) {
                     localeManager.sendMessage(pplayer, "remove-effect-none", StringPlaceholders.single("effect", effect.getName()));
+                    return;
                 }
             }
 
@@ -89,11 +90,17 @@ public class RemoveCommandModule implements CommandModule {
                     removed = true;
                 } else if (effect == null) {
                     localeManager.sendMessage(pplayer, "remove-style-none", StringPlaceholders.single("style", style.getName()));
+                    return;
                 }
             }
 
-            if (!removed)
-                localeManager.sendMessage(pplayer, "remove-unknown", StringPlaceholders.single("name", args[0]));
+            if (!removed) {
+                if (effect != null && style != null) {
+                    localeManager.sendMessage(pplayer, "remove-effect-style-none", StringPlaceholders.single("name", style.getName()));
+                } else {
+                    localeManager.sendMessage(pplayer, "remove-unknown", StringPlaceholders.single("name", args[0]));
+                }
+            }
         }
     }
 

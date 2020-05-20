@@ -118,6 +118,7 @@ public class GermanLocale implements Locale {
             this.put("remove-effect-none", "&cSie haben keine Partikel mit dem Effekt &b%effect%&cangelegt!");
             this.put("remove-style-success", "&b%amount% &adeiner Partikel im Stil von &b%style% &aentfernt!");
             this.put("remove-style-none", "&cSie haben keine Partikel mit dem Stil &b%style%&cangelegt!");
+            this.put("remove-effect-style-none", "&cSie haben keine Partikel mit der Wirkung oder dem Stil &b%name% &cangewendet!");
             this.put("remove-unknown", "&cEs existiert kein Effekt oder Stil mit dem Namen &b%name%&c!");
 
             this.put("#10", "List Messages");
