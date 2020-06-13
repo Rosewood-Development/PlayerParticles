@@ -55,7 +55,9 @@ public class RemoveCommandModule implements CommandModule {
         } else { // Removing by effect/style name
             ParticleEffect effect = particleManager.getEffectFromName(args[0]);
             ParticleStyle style = ParticleStyle.fromName(args[0]);
-            
+
+            boolean removed = false;
+
             if (effect != null) {
                 Set<Integer> toRemove = new HashSet<>();
                 ParticleGroup activeGroup = pplayer.getActiveParticleGroup();
@@ -64,14 +66,18 @@ public class RemoveCommandModule implements CommandModule {
                         toRemove.add(id);
                 for (int id : toRemove)
                     activeGroup.getParticles().remove(id);
-                
+
                 if (toRemove.size() > 0) {
                     PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), activeGroup);
                     localeManager.sendMessage(pplayer, "remove-effect-success", StringPlaceholders.builder("amount", toRemove.size()).addPlaceholder("effect", particleManager.getEffectSettings(effect).getName()).build());
-                } else {
+                    removed = true;
+                } else if (style == null) {
                     localeManager.sendMessage(pplayer, "remove-effect-none", StringPlaceholders.single("effect", particleManager.getEffectSettings(effect).getName()));
+                    return;
                 }
-            } else if (style != null) {
+            }
+
+            if (style != null) {
                 Set<Integer> toRemove = new HashSet<>();
                 ParticleGroup activeGroup = pplayer.getActiveParticleGroup();
                 for (int id : activeGroup.getParticles().keySet())
@@ -79,15 +85,23 @@ public class RemoveCommandModule implements CommandModule {
                         toRemove.add(id);
                 for (int id : toRemove)
                     activeGroup.getParticles().remove(id);
-                
+
                 if (toRemove.size() > 0) {
                     PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), activeGroup);
                     localeManager.sendMessage(pplayer, "remove-style-success", StringPlaceholders.builder("amount", toRemove.size()).addPlaceholder("style", style.getName()).build());
-                } else {
+                    removed = true;
+                } else if (effect == null) {
                     localeManager.sendMessage(pplayer, "remove-style-none", StringPlaceholders.single("style", style.getName()));
+                    return;
                 }
-            } else {
-                localeManager.sendMessage(pplayer, "remove-unknown", StringPlaceholders.single("name", args[0]));
+            }
+
+            if (!removed) {
+                if (effect != null && style != null) {
+                    localeManager.sendMessage(pplayer, "remove-effect-style-none", StringPlaceholders.single("name", style.getName()));
+                } else {
+                    localeManager.sendMessage(pplayer, "remove-unknown", StringPlaceholders.single("name", args[0]));
+                }
             }
         }
     }

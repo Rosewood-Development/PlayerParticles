@@ -1,23 +1,22 @@
 package dev.esophose.playerparticles.manager;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.database.DatabaseConnector;
 import dev.esophose.playerparticles.database.MySQLConnector;
 import dev.esophose.playerparticles.database.SQLiteConnector;
+import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.particles.ConsolePPlayer;
 import dev.esophose.playerparticles.particles.FixedParticleEffect;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.particles.ParticlePair;
-import dev.esophose.playerparticles.PlayerParticles;
-import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
-import dev.esophose.playerparticles.particles.color.NoteColor;
-import dev.esophose.playerparticles.particles.color.OrdinaryColor;
+import dev.esophose.playerparticles.particles.data.NoteColor;
+import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -27,6 +26,7 @@ import java.util.function.Consumer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 
 /**
@@ -81,13 +81,10 @@ public class DataManager extends Manager {
      * @return The PPlayer from cache
      */
     public PPlayer getPPlayer(UUID playerUUID) {
-        Collection<PPlayer> pplayers;
-        synchronized (pplayers = this.playerParticles.getManager(ParticleManager.class).getPPlayers()) { // Under rare circumstances, the PPlayers list can be changed while it's looping
-            for (PPlayer pp : pplayers)
-                if (pp.getUniqueId().equals(playerUUID))
-                    return pp;
-            return null;
-        }
+        for (PPlayer pp : this.playerParticles.getManager(ParticleManager.class).getPPlayers())
+            if (pp.getUniqueId().equals(playerUUID))
+                return pp;
+        return null;
     }
 
     /**
@@ -253,12 +250,8 @@ public class DataManager extends Manager {
                 }
 
                 this.sync(() -> {
-                    synchronized (loadedPPlayer) {
-                        if (this.getPPlayer(playerUUID) == null) { // Make sure the PPlayer still isn't added, since this is async it's possible it got ran twice
-                            this.playerParticles.getManager(ParticleManager.class).addPPlayer(loadedPPlayer); // This will be fine now since loadedPPlayer is synchronized
-                            callback.accept(loadedPPlayer);
-                        }
-                    }
+                    this.playerParticles.getManager(ParticleManager.class).addPPlayer(loadedPPlayer);
+                    callback.accept(loadedPPlayer);
                 });
             });
         });
@@ -312,6 +305,7 @@ public class DataManager extends Manager {
 
         this.async(() -> this.databaseConnector.connect((connection) -> {
             String groupUUID;
+            boolean existingGroup;
 
             String groupUUIDQuery = "SELECT uuid FROM " + this.getTablePrefix() + "group WHERE owner_uuid = ? AND name = ?";
             try (PreparedStatement statement = connection.prepareStatement(groupUUIDQuery)) {
@@ -321,21 +315,25 @@ public class DataManager extends Manager {
                 ResultSet result = statement.executeQuery();
                 if (result.next()) { // Clear out particles from existing group
                     groupUUID = result.getString("uuid");
-
-                    String particlesDeleteQuery = "DELETE FROM " + this.getTablePrefix() + "particle WHERE group_uuid = ?";
-                    PreparedStatement particlesDeleteStatement = connection.prepareStatement(particlesDeleteQuery);
-                    particlesDeleteStatement.setString(1, result.getString("uuid"));
-
-                    particlesDeleteStatement.executeUpdate();
+                    existingGroup = true;
                 } else { // Create new group
                     groupUUID = UUID.randomUUID().toString();
+                    existingGroup = false;
+                }
+            }
 
-                    String groupCreateQuery = "INSERT INTO " + this.getTablePrefix() + "group (uuid, owner_uuid, name) VALUES (?, ?, ?)";
-                    PreparedStatement groupCreateStatement = connection.prepareStatement(groupCreateQuery);
+            if (existingGroup) {
+                String particlesDeleteQuery = "DELETE FROM " + this.getTablePrefix() + "particle WHERE group_uuid = ?";
+                try (PreparedStatement particlesDeleteStatement = connection.prepareStatement(particlesDeleteQuery)) {
+                    particlesDeleteStatement.setString(1, groupUUID);
+                    particlesDeleteStatement.executeUpdate();
+                }
+            } else {
+                String groupCreateQuery = "INSERT INTO " + this.getTablePrefix() + "group (uuid, owner_uuid, name) VALUES (?, ?, ?)";
+                try (PreparedStatement groupCreateStatement = connection.prepareStatement(groupCreateQuery)) {
                     groupCreateStatement.setString(1, groupUUID);
                     groupCreateStatement.setString(2, playerUUID.toString());
                     groupCreateStatement.setString(3, group.getName());
-
                     groupCreateStatement.executeUpdate();
                 }
             }
@@ -399,6 +397,27 @@ public class DataManager extends Manager {
                 statement.setString(1, groupUUID);
 
                 statement.executeUpdate();
+            }
+        }));
+    }
+
+    /**
+     * Attempts to reset the active particle group for the given player name.
+     * This works even if the player is offline.
+     *
+     * @param playerName The name of the player to reset the active particle group for
+     * @param callback The callback to execute when finished, true for successful, otherwise false
+     */
+    public void resetActiveParticleGroup(String playerName, Consumer<Boolean> callback) {
+        this.async(() -> this.databaseConnector.connect((connection) -> {
+            @SuppressWarnings("deprecation")
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerName);
+
+            String query = "DELETE FROM " + this.getTablePrefix() + "particle WHERE group_uuid IN (SELECT uuid FROM " + this.getTablePrefix() + "group WHERE owner_uuid = ? AND name = ?)";
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setString(1, offlinePlayer.getUniqueId().toString());
+                statement.setString(2, ParticleGroup.DEFAULT_NAME);
+                callback.accept(statement.executeUpdate() > 0);
             }
         }));
     }
@@ -554,7 +573,11 @@ public class DataManager extends Manager {
      * @return the prefix to be used by all table names
      */
     public String getTablePrefix() {
-        return this.playerParticles.getDescription().getName().toLowerCase() + '_';
+        if (this.databaseConnector instanceof MySQLConnector) {
+            return Setting.MYSQL_TABLE_PREFIX.getString();
+        } else {
+            return this.playerParticles.getDescription().getName().toLowerCase() + '_';
+        }
     }
 
 }

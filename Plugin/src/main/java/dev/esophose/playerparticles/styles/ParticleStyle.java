@@ -4,8 +4,10 @@ import dev.esophose.playerparticles.manager.ParticleStyleManager;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.util.ParticleUtils;
 import java.util.List;
 import org.bukkit.Location;
+import org.bukkit.Material;
 
 public interface ParticleStyle {
 
@@ -43,6 +45,13 @@ public interface ParticleStyle {
     }
 
     /**
+     * @return The Material icon that represents this style in the GUI
+     */
+    default Material getGuiIconMaterial() {
+        return ParticleUtils.FALLBACK_MATERIAL;
+    }
+
+    /**
      * Gets if the style can be used in a FixedParticleEffect
      * 
      * @return If the style can be used in a FixedParticleEffect
@@ -50,11 +59,20 @@ public interface ParticleStyle {
     boolean canBeFixed();
     
     /**
-     * Gets if the style can be replaced with DefaultStyles.FEET when the player is moving
+     * Gets if the style can be displayed differently based on the toggle-on-move setting when the player is moving
      * 
      * @return True if it can be, otherwise False
      */
     default boolean canToggleWithMovement() {
+        return true;
+    }
+
+    /**
+     * Gets if the style can be hidden if the player is in combat with the toggle-on-combat setting
+     *
+     * @return True if it can be, otherwise False
+     */
+    default boolean canToggleWithCombat() {
         return true;
     }
     

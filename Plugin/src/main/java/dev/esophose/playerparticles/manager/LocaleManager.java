@@ -124,6 +124,9 @@ public class LocaleManager extends Manager {
      * @param stringPlaceholders The placeholders to apply
      */
     public void sendMessage(CommandSender sender, String messageKey, StringPlaceholders stringPlaceholders) {
+        if (!Setting.MESSAGES_ENABLED.getBoolean())
+            return;
+
         sender.sendMessage(this.getLocaleMessage("prefix") + this.getLocaleMessage(messageKey, stringPlaceholders));
     }
 
@@ -135,6 +138,9 @@ public class LocaleManager extends Manager {
      * @param stringPlaceholders The placeholders to apply
      */
     public void sendMessage(PPlayer pplayer, String messageKey, StringPlaceholders stringPlaceholders) {
+        if (!Setting.MESSAGES_ENABLED.getBoolean())
+            return;
+
         pplayer.getUnderlyingExecutor().sendMessage(this.parsePlaceholders(pplayer.getPlayer(), this.getLocaleMessage("prefix") + this.getLocaleMessage(messageKey, stringPlaceholders)));
     }
 
@@ -145,6 +151,9 @@ public class LocaleManager extends Manager {
      * @param messageKey The message key of the Locale to send
      */
     public void sendMessage(CommandSender sender, String messageKey) {
+        if (!Setting.MESSAGES_ENABLED.getBoolean())
+            return;
+
         this.sendMessage(sender, messageKey, StringPlaceholders.empty());
     }
 
@@ -155,6 +164,9 @@ public class LocaleManager extends Manager {
      * @param messageKey The message key of the Locale to send
      */
     public void sendMessage(PPlayer pplayer, String messageKey) {
+        if (!Setting.MESSAGES_ENABLED.getBoolean())
+            return;
+
         this.sendMessage(pplayer, messageKey, StringPlaceholders.empty());
     }
 
@@ -166,6 +178,9 @@ public class LocaleManager extends Manager {
      * @param stringPlaceholders The placeholders to apply
      */
     public void sendSimpleMessage(CommandSender sender, String messageKey, StringPlaceholders stringPlaceholders) {
+        if (!Setting.MESSAGES_ENABLED.getBoolean())
+            return;
+
         sender.sendMessage(this.getLocaleMessage(messageKey, stringPlaceholders));
     }
 
@@ -177,6 +192,9 @@ public class LocaleManager extends Manager {
      * @param stringPlaceholders The placeholders to apply
      */
     public void sendSimpleMessage(PPlayer pplayer, String messageKey, StringPlaceholders stringPlaceholders) {
+        if (!Setting.MESSAGES_ENABLED.getBoolean())
+            return;
+
         pplayer.getUnderlyingExecutor().sendMessage(this.parsePlaceholders(pplayer.getPlayer(), this.getLocaleMessage(messageKey, stringPlaceholders)));
     }
 
@@ -187,6 +205,9 @@ public class LocaleManager extends Manager {
      * @param messageKey The message key of the Locale to send
      */
     public void sendSimpleMessage(CommandSender sender, String messageKey) {
+        if (!Setting.MESSAGES_ENABLED.getBoolean())
+            return;
+
         this.sendMessage(sender, messageKey, StringPlaceholders.empty());
     }
 
@@ -197,6 +218,9 @@ public class LocaleManager extends Manager {
      * @param messageKey The message key of the Locale to send
      */
     public void sendSimpleMessage(PPlayer pplayer, String messageKey) {
+        if (!Setting.MESSAGES_ENABLED.getBoolean())
+            return;
+
         this.sendMessage(pplayer, messageKey, StringPlaceholders.empty());
     }
 
@@ -207,6 +231,9 @@ public class LocaleManager extends Manager {
      * @param message The message to send
      */
     public void sendCustomMessage(CommandSender sender, String message) {
+        if (!Setting.MESSAGES_ENABLED.getBoolean())
+            return;
+
         sender.sendMessage(message);
     }
 
@@ -217,6 +244,9 @@ public class LocaleManager extends Manager {
      * @param message The message to send
      */
     public void sendCustomMessage(PPlayer pplayer, String message) {
+        if (!Setting.MESSAGES_ENABLED.getBoolean())
+            return;
+
         this.sendCustomMessage(pplayer.getUnderlyingExecutor(), this.parsePlaceholders(pplayer.getPlayer(), message));
     }
 

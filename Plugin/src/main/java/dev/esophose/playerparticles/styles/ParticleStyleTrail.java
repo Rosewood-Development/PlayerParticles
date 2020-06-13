@@ -37,6 +37,11 @@ public class ParticleStyleTrail extends DefaultParticleStyle implements Listener
     }
 
     @Override
+    protected List<String> getGuiIconMaterialNames() {
+        return Collections.singletonList("GHAST_TEAR");
+    }
+
+    @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
         this.setIfNotExists("player-offset", 0.0, "How far to offset the player location vertically");
         this.setIfNotExists("spread", 0.1, "How much to spread the particles");
@@ -56,12 +61,13 @@ public class ParticleStyleTrail extends DefaultParticleStyle implements Listener
 
         Player player = event.getPlayer();
         PPlayer pplayer = PlayerParticles.getInstance().getManager(DataManager.class).getPPlayer(player.getUniqueId());
-        if (pplayer != null) {
-            for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.TRAIL)) {
-                Location loc = player.getLocation().clone();
-                loc.setY(loc.getY() + 1);
-                particleManager.displayParticles(player, player.getWorld(), particle, DefaultStyles.TRAIL.getParticles(particle, loc), false);
-            }
+        if (pplayer == null)
+            return;
+
+        for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.TRAIL)) {
+            Location loc = player.getLocation().clone();
+            loc.setY(loc.getY() + 1);
+            particleManager.displayParticles(pplayer, player.getWorld(), particle, DefaultStyles.TRAIL.getParticles(particle, loc), false);
         }
     }
 

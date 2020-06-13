@@ -10,7 +10,9 @@ import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.util.MathL;
+import dev.esophose.playerparticles.util.NMSUtil;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -59,7 +61,7 @@ public class ParticleStyleCelebration extends DefaultParticleStyle {
             Random random = new Random();
             for (PPlayer pplayer : particleManager.getPPlayers()) {
                 Player player = pplayer.getPlayer();
-                if (player != null && player.getGameMode() != GameMode.SPECTATOR && permissionManager.isWorldEnabled(player.getWorld().getName()))
+                if (player != null && (NMSUtil.getVersionNumber() < 8 || player.getGameMode() != GameMode.SPECTATOR) && permissionManager.isWorldEnabled(player.getWorld().getName()))
                     for (ParticlePair particle : pplayer.getActiveParticles())
                         if (particle.getStyle() == this)
                             this.spawnFirework(player.getLocation(), pplayer, pplayer.getPlayer(), particle, random);
@@ -69,6 +71,11 @@ public class ParticleStyleCelebration extends DefaultParticleStyle {
                         this.spawnFirework(fixedEffect.getLocation(), pplayer, null, fixedEffect.getParticlePair(), random);
             }
         }
+    }
+
+    @Override
+    protected List<String> getGuiIconMaterialNames() {
+        return Arrays.asList("FIREWORK_ROCKET", "FIREWORK");
     }
 
     @Override
@@ -122,7 +129,7 @@ public class ParticleStyleCelebration extends DefaultParticleStyle {
                     trail.setEffect(ParticleStyleCelebration.this.fuseEffect);
                     trail.setStyle(DefaultStyles.CELEBRATION);
 
-                    particleManager.displayParticles(player, this.location.getWorld(), trail, Collections.singletonList(new PParticle(this.location)), true);
+                    particleManager.displayParticles(pplayer, this.location.getWorld(), trail, Collections.singletonList(new PParticle(this.location)), true);
                     
                     this.location.add(0, ParticleStyleCelebration.this.fuseSpacing, 0);
                 } else {
@@ -139,7 +146,7 @@ public class ParticleStyleCelebration extends DefaultParticleStyle {
                         
                         particles.add(new PParticle(this.location.clone().add(dx, dy, dz)));
                     }
-                    particleManager.displayParticles(player, this.location.getWorld(), particle, particles, true);
+                    particleManager.displayParticles(pplayer, this.location.getWorld(), particle, particles, true);
                     
                     this.cancel();
                 }

@@ -1,19 +1,18 @@
 package dev.esophose.playerparticles.api;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.GuiManager;
 import dev.esophose.playerparticles.manager.ParticleManager;
-import dev.esophose.playerparticles.manager.ParticleStyleManager;
 import dev.esophose.playerparticles.particles.ConsolePPlayer;
 import dev.esophose.playerparticles.particles.FixedParticleEffect;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.particles.ParticlePair;
-import dev.esophose.playerparticles.particles.color.NoteColor;
-import dev.esophose.playerparticles.particles.color.OrdinaryColor;
+import dev.esophose.playerparticles.particles.data.NoteColor;
+import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.styles.ParticleStyle;
-import dev.esophose.playerparticles.PlayerParticles;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -22,7 +21,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -51,10 +52,19 @@ public final class PlayerParticlesAPI {
     /**
      * @return the instance of the PlayerParticlesAPI
      */
+    @NotNull
     public static PlayerParticlesAPI getInstance() {
         if (INSTANCE == null)
             INSTANCE = new PlayerParticlesAPI();
         return INSTANCE;
+    }
+
+    /**
+     * @return the currently installed version of the plugin
+     */
+    @NotNull
+    public String getVersion() {
+        return this.playerParticles.getDescription().getVersion();
     }
 
     //region Get PPlayer
@@ -441,6 +451,7 @@ public final class PlayerParticlesAPI {
      * @param player The player to remove from
      * @return The number of particles removed or null if failed
      */
+    @Nullable
     public Integer resetActivePlayerParticles(@NotNull Player player) {
         DataManager dataManager = this.playerParticles.getManager(DataManager.class);
         PPlayer pplayer = this.getPPlayer(player);
@@ -451,6 +462,28 @@ public final class PlayerParticlesAPI {
         pplayer.getActiveParticleGroup().getParticles().clear();
         dataManager.saveParticleGroup(pplayer.getUniqueId(), pplayer.getActiveParticleGroup());
         return amount;
+    }
+
+    /**
+     * Attempts to reset the active particles for the given player name.
+     * This works even if the player is offline.
+     *
+     * @param playerName The name of the player to reset the active particles for
+     * @param successConsumer The callback to execute when finished
+     */
+    public void resetActivePlayerParticles(@NotNull String playerName, @Nullable Consumer<Boolean> successConsumer) {
+        Objects.requireNonNull(playerName);
+
+        if (successConsumer == null)
+            successConsumer = success -> {};
+
+        Player player = Bukkit.getPlayer(playerName);
+        if (player != null) {
+            this.resetActivePlayerParticles(player);
+            successConsumer.accept(true);
+        } else {
+            this.playerParticles.getManager(DataManager.class).resetActiveParticleGroup(playerName, successConsumer);
+        }
     }
 
     /**
@@ -1029,32 +1062,6 @@ public final class PlayerParticlesAPI {
 
         pplayer.setParticlesHidden(particlesHidden);
         dataManager.updateSettingParticlesHidden(player.getUniqueId(), particlesHidden);
-    }
-
-    //endregion
-
-    //region Registering Custom Styles
-
-    /**
-     * Registers a particle style with the plugin
-     *
-     * @param particleStyle The particle style to register
-     */
-    public void registerParticleStyle(@NotNull ParticleStyle particleStyle) {
-        Objects.requireNonNull(particleStyle);
-
-        this.playerParticles.getManager(ParticleStyleManager.class).registerStyle(particleStyle);
-    }
-
-    /**
-     * Registers an event-based particle style with the plugin
-     *
-     * @param particleStyle The particle style to register
-     */
-    public void registerEventParticleStyle(@NotNull ParticleStyle particleStyle) {
-        Objects.requireNonNull(particleStyle);
-
-        this.playerParticles.getManager(ParticleStyleManager.class).registerEventStyle(particleStyle);
     }
 
     //endregion

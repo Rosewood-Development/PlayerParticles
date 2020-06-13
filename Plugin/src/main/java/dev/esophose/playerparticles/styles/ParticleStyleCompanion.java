@@ -28,6 +28,7 @@ import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.util.MathL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -69,6 +70,11 @@ public class ParticleStyleCompanion extends DefaultParticleStyle {
     @Override
     public void updateTimers() {
         this.step++;
+    }
+
+    @Override
+    protected List<String> getGuiIconMaterialNames() {
+        return Collections.singletonList("NAME_TAG");
     }
 
     @Override

@@ -1,4 +1,4 @@
-rootProject.name = 'PlayerParticles'
+rootProject.name = 'playerparticles'
 
 include(':Plugin')
 project(':Plugin').projectDir = file('Plugin')

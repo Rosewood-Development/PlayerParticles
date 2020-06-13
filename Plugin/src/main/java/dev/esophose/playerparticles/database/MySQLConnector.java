@@ -2,6 +2,7 @@ package dev.esophose.playerparticles.database;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import java.sql.Connection;
 import java.sql.SQLException;
 import org.bukkit.plugin.Plugin;
@@ -19,7 +20,7 @@ public class MySQLConnector implements DatabaseConnector {
         config.setJdbcUrl("jdbc:mysql://" + hostname + ":" + port + "/" + database + "?useSSL=" + useSSL);
         config.setUsername(username);
         config.setPassword(password);
-        config.setMaximumPoolSize(2);
+        config.setMaximumPoolSize(Setting.MYSQL_CONNECTION_POOL_SIZE.getInt());
 
         try {
             this.hikari = new HikariDataSource(config);

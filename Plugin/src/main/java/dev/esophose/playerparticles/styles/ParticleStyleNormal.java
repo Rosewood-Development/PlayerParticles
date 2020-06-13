@@ -4,6 +4,7 @@ import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.bukkit.Location;
 
@@ -57,6 +58,11 @@ public class ParticleStyleNormal extends DefaultParticleStyle {
     @Override
     public void updateTimers() {
 
+    }
+
+    @Override
+    protected List<String> getGuiIconMaterialNames() {
+        return Collections.singletonList("DIRT");
     }
 
     @Override

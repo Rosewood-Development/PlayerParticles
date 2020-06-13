@@ -118,6 +118,7 @@ public class GermanLocale implements Locale {
             this.put("remove-effect-none", "&cSie haben keine Partikel mit dem Effekt &b%effect%&cangelegt!");
             this.put("remove-style-success", "&b%amount% &adeiner Partikel im Stil von &b%style% &aentfernt!");
             this.put("remove-style-none", "&cSie haben keine Partikel mit dem Stil &b%style%&cangelegt!");
+            this.put("remove-effect-style-none", "&cSie haben keine Partikel mit der Wirkung oder dem Stil &b%name% &cangewendet!");
             this.put("remove-unknown", "&cEs existiert kein Effekt oder Stil mit dem Namen &b%name%&c!");
 
             this.put("#10", "List Messages");
@@ -166,6 +167,8 @@ public class GermanLocale implements Locale {
 
             this.put("#17", "Reset Message");
             this.put("reset-success", "&b%amount% &aaktive Partikel entfernt!");
+            this.put("reset-others-success", "&aEntfertigte Partikel für &b%other%&a!");
+            this.put("reset-others-none", "&eFür &b%other%&e wurden keine Partikel entfernt.");
 
             this.put("#18", "Fixed Create Messages");
             this.put("fixed-create-missing-args", "&cFixer Effekt kann nicht erstellt werden, es fehlen &b%amount% &cerforderliche Argumente!");
@@ -240,6 +243,7 @@ public class GermanLocale implements Locale {
             this.put("gui-color-icon-name", "&a");
             this.put("gui-color-info", "&e");
             this.put("gui-color-subtext", "&b");
+            this.put("gui-color-unavailable", "&c");
 
             this.put("#28", "GUI Info Messages");
             this.put("gui-commands-info", "Informationen zu Befehlen finden Sie mit Hilfe von &b/pp help");

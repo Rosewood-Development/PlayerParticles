@@ -118,6 +118,7 @@ public class RussianLocale implements Locale {
             this.put("remove-effect-none", "&cУ Вас нет каких-либо частиц с эффектом &b%effect%&c!");
             this.put("remove-style-success", "&aКоличество удалённых частиц - &b%amount% &a, стилей - &b%style%&a!");
             this.put("remove-style-none", "&cУ Вас нет каких-либо частиц со стилем &b%style%&c!");
+            this.put("remove-effect-style-none", "&cУ вас нет никаких частиц с эффектом или стилем &b%name%&c!");
             this.put("remove-unknown", "&cЭффект или стиль под названием &b%name% &cне существует!");
 
             this.put("#10", "List Messages");
@@ -166,6 +167,8 @@ public class RussianLocale implements Locale {
 
             this.put("#17", "Reset Message");
             this.put("reset-success", "&aУдалено &aактивных частиц - &b%amount%!");
+            this.put("reset-others-success", "&aУдаленные частицы для &b%other%&a!");
+            this.put("reset-others-none", "&eНикакие частицы не были удалены для &b%other% &e.");
 
             this.put("#18", "Fixed Create Messages");
             this.put("fixed-create-missing-args", "&cНевозможно создать эффект, не введено запрашиваемых аргументов - &b%amount%!");

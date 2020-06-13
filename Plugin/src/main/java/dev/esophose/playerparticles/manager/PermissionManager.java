@@ -18,6 +18,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.PluginManager;
 
 public class PermissionManager extends Manager {
@@ -29,17 +30,24 @@ public class PermissionManager extends Manager {
         STYLE("style"),
         
         FIXED("fixed"),
+        FIXED_MAX("fixed.max"),
         FIXED_UNLIMITED("fixed.unlimited"),
         FIXED_CLEAR("fixed.clear"),
         FIXED_TELEPORT("fixed.teleport"),
 
         RELOAD("reload"),
         OVERRIDE("override"),
+        RESET_OTHERS("reset.others"),
 
         GUI("gui"),
-        
+
+        PARTICLES_MAX("particles.max"),
         PARTICLES_UNLIMITED("particles.unlimited"),
-        GROUPS_UNLIMITED("groups.unlimited");
+
+        GROUPS_MAX("groups.max"),
+        GROUPS_UNLIMITED("groups.unlimited"),
+
+        WORLDGUARD_BYPASS("worldguard.bypass");;
         
         private final String permissionString;
         
@@ -69,6 +77,11 @@ public class PermissionManager extends Manager {
             String permission = PERMISSION_PREFIX + this.permissionString + '.' + subPermission;
             return p.hasPermission(permission);
         }
+
+        @Override
+        public String toString() {
+            return PERMISSION_PREFIX + this.permissionString;
+        }
     }
     
     public PermissionManager(PlayerParticles playerParticles) {
@@ -87,6 +100,9 @@ public class PermissionManager extends Manager {
         // Effects
         Map<String, Boolean> effectPermissions = new HashMap<>();
         for (ParticleEffect effect : particleManager.getEnabledEffects()) {
+            if (particleManager.getEffectSettings(effect) == null)
+                continue;
+
             Permission permission = new Permission("playerparticles.effect." + particleManager.getEffectSettings(effect).getInternalName());
             pluginManager.addPermission(permission);
             effectPermissions.put(permission.getName(), true);
@@ -109,6 +125,7 @@ public class PermissionManager extends Manager {
 
         // Fixed
         pluginManager.addPermission(new Permission("playerparticles.fixed"));
+        pluginManager.addPermission(new Permission("playerparticles.fixed.max"));
         pluginManager.addPermission(new Permission("playerparticles.fixed.unlimited"));
         pluginManager.addPermission(new Permission("playerparticles.fixed.clear"));
         pluginManager.addPermission(new Permission("playerparticles.fixed.teleport"));
@@ -116,9 +133,17 @@ public class PermissionManager extends Manager {
         // Misc
         pluginManager.addPermission(new Permission("playerparticles.reload"));
         pluginManager.addPermission(new Permission("playerparticles.override"));
+        pluginManager.addPermission(new Permission("playerparticles.reset.others"));
         pluginManager.addPermission(new Permission("playerparticles.gui"));
+
+        pluginManager.addPermission(new Permission("playerparticles.particles.max"));
         pluginManager.addPermission(new Permission("playerparticles.particles.unlimited"));
+
+        pluginManager.addPermission(new Permission("playerparticles.groups.max"));
         pluginManager.addPermission(new Permission("playerparticles.groups.unlimited"));
+
+        // WorldGuard
+        pluginManager.addPermission(new Permission("playerparticles.worldguard.bypass"));
 
         // Register all non-child permissions
         Map<String, Boolean> childPermissions = new HashMap<>();
@@ -155,7 +180,7 @@ public class PermissionManager extends Manager {
         if (executor != pplayer)
             return false;
 
-        return pplayer.getActiveParticles().size() >= Setting.MAX_PARTICLES.getInt();
+        return pplayer.getActiveParticles().size() >= this.getPermissionAmount(pplayer.getUnderlyingExecutor(), PPermission.PARTICLES_MAX, Setting.MAX_PARTICLES.getInt());
     }
     
     /**
@@ -172,7 +197,7 @@ public class PermissionManager extends Manager {
         if (executor != pplayer)
             return false;
 
-        return executor.getParticleGroups().size() - 1 >= Setting.MAX_GROUPS.getInt();
+        return executor.getParticleGroups().size() - 1 >= this.getPermissionAmount(pplayer.getUnderlyingExecutor(), PPermission.GROUPS_MAX, Setting.MAX_GROUPS.getInt());
     }
     
     /**
@@ -185,7 +210,7 @@ public class PermissionManager extends Manager {
         if (PPermission.GROUPS_UNLIMITED.check(pplayer.getUnderlyingExecutor()))
             return true;
 
-        return Setting.MAX_GROUPS.getInt() != 0;
+        return this.getPermissionAmount(pplayer.getUnderlyingExecutor(), PPermission.GROUPS_MAX, Setting.MAX_GROUPS.getInt()) != 0;
     }
     
     /**
@@ -202,7 +227,7 @@ public class PermissionManager extends Manager {
         if (executor != pplayer)
             return false;
 
-        return pplayer.getFixedEffectIds().size() >= Setting.MAX_FIXED_EFFECTS.getInt();
+        return pplayer.getFixedEffectIds().size() >= this.getPermissionAmount(pplayer.getUnderlyingExecutor(), PPermission.FIXED_MAX, Setting.MAX_FIXED_EFFECTS.getInt());
     }
 
     /**
@@ -228,7 +253,7 @@ public class PermissionManager extends Manager {
         if (executor != pplayer)
             return Integer.MAX_VALUE;
 
-        return Setting.MAX_PARTICLES.getInt();
+        return this.getPermissionAmount(pplayer.getUnderlyingExecutor(), PPermission.PARTICLES_MAX, Setting.MAX_PARTICLES.getInt());
     }
 
     /**
@@ -248,6 +273,16 @@ public class PermissionManager extends Manager {
      */
     public List<String> getDisabledWorlds() {
         return Setting.DISABLED_WORLDS.getStringList();
+    }
+
+    /**
+     * Checks if a player can reset another offline player's particles
+     *
+     * @param player The player to check the permission for
+     * @return True if the player has permission, otherwise false
+     */
+    public boolean canResetOthers(PPlayer player) {
+        return PPermission.RESET_OTHERS.check(player.getUnderlyingExecutor());
     }
 
     /**
@@ -397,16 +432,26 @@ public class PermissionManager extends Manager {
     }
 
     /**
-     * Checks if a player can use /ppo
+     * Checks if a CommandSender can use /ppo
      *
      * @param sender The CommandSender to check
-     * @return If the player can use /ppo
+     * @return If the sender can use /ppo
      */
     public boolean canOverride(CommandSender sender) {
         if (this.isConsole(sender))
             return true;
 
         return PPermission.OVERRIDE.check(sender);
+    }
+
+    /**
+     * Checks if a player has the WorldGuard bypass permission
+     *
+     * @param player The Player to check
+     * @return If the player has the WorldGuard bypass permission
+     */
+    public boolean hasWorldGuardBypass(Player player) {
+        return PPermission.WORLDGUARD_BYPASS.check(player);
     }
 
     private boolean isConsole(PPlayer pplayer) {
@@ -427,6 +472,19 @@ public class PermissionManager extends Manager {
             return this.playerParticles.getManager(DataManager.class).getPPlayer(executingPlayer.getUniqueId());
         }
         return pplayer;
+    }
+
+    private int getPermissionAmount(Permissible permissible, PPermission permission, int lowerBound) {
+        int amount = lowerBound;
+        for (PermissionAttachmentInfo info : permissible.getEffectivePermissions()) {
+            String target = info.getPermission().toLowerCase();
+            if (target.startsWith(permission.toString()) && info.getValue()) {
+                try {
+                    amount = Math.max(amount, Integer.parseInt(target.substring(target.lastIndexOf('.') + 1)));
+                } catch (NumberFormatException ignored) { }
+            }
+        }
+        return amount;
     }
 
 }

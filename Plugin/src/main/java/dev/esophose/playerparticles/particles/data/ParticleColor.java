@@ -1,4 +1,4 @@
-package dev.esophose.playerparticles.particles.color;
+package dev.esophose.playerparticles.particles.data;
 
 import dev.esophose.playerparticles.particles.ParticleEffect;
 

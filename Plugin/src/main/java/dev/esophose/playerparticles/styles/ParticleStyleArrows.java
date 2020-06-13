@@ -1,11 +1,14 @@
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -15,7 +18,7 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 
 public class ParticleStyleArrows extends DefaultParticleStyle implements Listener {
 
-    private List<Projectile> projectiles = new ArrayList<>();
+    private List<Projectile> projectiles;
 
     private int maxArrowsPerPlayer;
     private boolean onlySpawnIfFlying;
@@ -24,6 +27,17 @@ public class ParticleStyleArrows extends DefaultParticleStyle implements Listene
 
     public ParticleStyleArrows() {
         super("arrows", false, false, 0);
+
+        this.projectiles = new ArrayList<>();
+
+        // Removes all arrows that are considered dead
+        Bukkit.getScheduler().runTaskTimer(PlayerParticles.getInstance(), () -> {
+            for (int i = this.projectiles.size() - 1; i >= 0; i--) {
+                Projectile projectile = this.projectiles.get(i);
+                if ((this.arrowTrackingTime != -1 && projectile.getTicksLived() >= this.arrowTrackingTime) || !projectile.isValid() || projectile.getShooter() == null)
+                    this.projectiles.remove(i);
+            }
+        }, 0L, 5L);
     }
 
     @Override
@@ -31,8 +45,9 @@ public class ParticleStyleArrows extends DefaultParticleStyle implements Listene
         List<PParticle> particles = new ArrayList<>();
 
         int count = 0;
-        for (int i = this.projectiles.size() - 1; i >= 0; i--) { // Loop backwards so the last-fired projectiles are the ones that have particles if they go over the max
-            Projectile projectile = this.projectiles.get(i);
+        List<Projectile> listCopy = new ArrayList<>(this.projectiles); // Copy in case of modification while looping due to async
+        for (int i = listCopy.size() - 1; i >= 0; i--) { // Loop backwards so the last-fired projectiles are the ones that have particles if they go over the max
+            Projectile projectile = listCopy.get(i);
             if (this.onlySpawnIfFlying && projectile.isOnGround())
                 continue;
 
@@ -48,21 +63,19 @@ public class ParticleStyleArrows extends DefaultParticleStyle implements Listene
         return particles;
     }
 
-    /**
-     * Removes all arrows that are considered dead
-     */
     @Override
     public void updateTimers() {
-        for (int i = this.projectiles.size() - 1; i >= 0; i--) {
-            Projectile projectile = this.projectiles.get(i);
-            if ((this.arrowTrackingTime != -1 && projectile.getTicksLived() >= this.arrowTrackingTime) || projectile.isDead() || !projectile.isValid() || projectile.getShooter() == null)
-                this.projectiles.remove(i);
-        }
+
     }
 
     @Override
     public boolean hasLongRangeVisibility() {
         return true;
+    }
+
+    @Override
+    protected List<String> getGuiIconMaterialNames() {
+        return Collections.singletonList("BOW");
     }
 
     /**

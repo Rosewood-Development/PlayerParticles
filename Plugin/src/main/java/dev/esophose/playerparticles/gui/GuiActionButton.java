@@ -3,6 +3,7 @@ package dev.esophose.playerparticles.gui;
 import dev.esophose.playerparticles.gui.GuiInventoryEditData.ColorData;
 import dev.esophose.playerparticles.hook.PlaceholderAPIHook;
 import dev.esophose.playerparticles.particles.PPlayer;
+import dev.esophose.playerparticles.util.NMSUtil;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.ChatColor;
@@ -107,7 +108,9 @@ public class GuiActionButton {
             if (this.colors[0].getMaterial() != null) { // Use Materials
                 itemStack = new ItemStack(this.colors[this.iconIndex].getMaterial());
             } else { // Use Dyes
-                itemStack = new Dye(this.colors[this.iconIndex].getDyeColor()).toItemStack(1);
+                Dye dye = new Dye();
+                dye.setColor(this.colors[this.iconIndex].getDyeColor());
+                itemStack = dye.toItemStack(1);
             }
         }
         
@@ -115,7 +118,8 @@ public class GuiActionButton {
         if (itemMeta != null) {
             itemMeta.setDisplayName(PlaceholderAPIHook.applyPlaceholders(pplayer.getPlayer(), this.name));
             itemMeta.setLore(parseLore(pplayer, this.lore));
-            itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_POTION_EFFECTS);
+            if (NMSUtil.getVersionNumber() > 7)
+                itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_POTION_EFFECTS);
             itemStack.setItemMeta(itemMeta);
         }
         

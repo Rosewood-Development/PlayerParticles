@@ -2,8 +2,8 @@ package dev.esophose.playerparticles.util.inputparser;
 
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
-import dev.esophose.playerparticles.particles.color.NoteColor;
-import dev.esophose.playerparticles.particles.color.OrdinaryColor;
+import dev.esophose.playerparticles.particles.data.NoteColor;
+import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import dev.esophose.playerparticles.util.inputparser.parsable.ParsableMaterial;
 import dev.esophose.playerparticles.util.inputparser.parsable.ParsableNoteColor;

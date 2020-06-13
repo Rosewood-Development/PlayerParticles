@@ -5,6 +5,7 @@ import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.util.MathL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Location;
 
@@ -34,6 +35,11 @@ public class ParticleStyleOrbit extends DefaultParticleStyle {
     @Override
     public void updateTimers() {
         this.step = (this.step + 1) % this.numSteps;
+    }
+
+    @Override
+    protected List<String> getGuiIconMaterialNames() {
+        return Arrays.asList("ENCHANTING_TABLE", "ENCHANTMENT_TABLE");
     }
 
     @Override

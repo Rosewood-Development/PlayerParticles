@@ -3,14 +3,8 @@
  * + Add ability to create/manage fixed effects from the GUI
  * * Convert fixed effect ids into names
  */
-
 package dev.esophose.playerparticles;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.wrappers.EnumWrappers.TitleAction;
 import dev.esophose.playerparticles.gui.hook.PlayerChatHook;
 import dev.esophose.playerparticles.hook.ParticlePlaceholderExpansion;
 import dev.esophose.playerparticles.hook.PlaceholderAPIHook;
@@ -28,21 +22,15 @@ import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.manager.PluginUpdateManager;
 import dev.esophose.playerparticles.particles.listener.PPlayerCombatListener;
 import dev.esophose.playerparticles.particles.listener.PPlayerMovementListener;
-import dev.esophose.playerparticles.util.Metrics;
-import io.netty.buffer.Unpooled;
-import java.awt.Color;
+import dev.esophose.playerparticles.util.LegacyMetrics;
+import dev.esophose.playerparticles.util.NMSUtil;
 import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.Map;
-import net.minecraft.server.v1_15_R1.PacketDataSerializer;
-import net.minecraft.server.v1_15_R1.PacketPlayOutTitle;
+import org.bstats.bukkit.MetricsLite;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * @author Esophose
@@ -69,6 +57,12 @@ public class PlayerParticles extends JavaPlugin {
      */
     @Override
     public void onEnable() {
+        if (!NMSUtil.isSpigot()) {
+            this.getLogger().severe("This plugin is only compatible with Spigot and other forks. CraftBukkit is not supported. Disabling PlayerParticles.");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
+
         this.reload();
 
         PluginManager pm = Bukkit.getPluginManager();
@@ -76,80 +70,16 @@ public class PlayerParticles extends JavaPlugin {
         pm.registerEvents(new PPlayerCombatListener(), this);
         pm.registerEvents(new PlayerChatHook(), this);
 
-        if (Setting.SEND_METRICS.getBoolean())
-            new Metrics(this);
+        if (Setting.SEND_METRICS.getBoolean()) {
+            if (NMSUtil.getVersionNumber() > 7) {
+                new MetricsLite(this, 3531);
+            } else {
+                new LegacyMetrics(this);
+            }
+        }
 
         if (PlaceholderAPIHook.enabled())
             new ParticlePlaceholderExpansion(this).register();
-
-        ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
-        new BukkitRunnable() {
-            private LinkedList<String> queue = new LinkedList<>();
-            private String message = "Snapshot 20w17a Chat Hex Code Colors!";
-
-            @Override
-            public void run() {
-                if (queue.size() >= message.length())
-                    queue.poll();
-
-                Color color = getRainbowColor();
-                String hex = String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
-                queue.add(hex);
-
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("[");
-                boolean isFirst = true;
-                for (int i = 0; i < queue.size(); i++) {
-                    if (!isFirst)
-                        stringBuilder.append(",");
-                    isFirst = false;
-
-                    stringBuilder.append("{");
-                    stringBuilder.append("\"color\":\"").append(queue.get(i)).append("\",");
-                    stringBuilder.append("\"text\":\"").append(message.charAt(i)).append("\"");
-                    stringBuilder.append("}");
-                }
-                stringBuilder.append("]");
-
-                PacketContainer timePacket = protocolManager.createPacket(PacketType.fromClass(PacketPlayOutTitle.class));
-                timePacket.getTitleActions().write(0, TitleAction.TIMES);
-                timePacket.getIntegers().write(0, 0).write(1, 20).write(2, 0);
-
-                PacketDataSerializer dataSerializer = new PacketDataSerializer(Unpooled.buffer());
-                try {
-                    PacketPlayOutTitle titlePacket = new PacketPlayOutTitle() {
-                        @Override
-                        public void b(PacketDataSerializer var0) {
-                            var0.a(EnumTitleAction.TITLE);
-                            var0.a(stringBuilder.toString());
-                        }
-                    };
-                    titlePacket.b(dataSerializer);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                byte[] bytes = new byte[dataSerializer.readableBytes()];
-                dataSerializer.readBytes(bytes);
-
-                Bukkit.getOnlinePlayers().forEach(x -> {
-                    try {
-                        protocolManager.sendServerPacket(x, timePacket);
-                        protocolManager.sendWirePacket(x, 0x50, bytes);
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
-                });
-            }
-        }.runTaskTimer(this, 0, 1);
-
-        PlayerChatHook.setup();
-    }
-
-    private float hue = 0;
-    private Color getRainbowColor() {
-        this.hue = (this.hue + 4) % 362;
-        return  Color.getHSBColor(this.hue / 360F, 1.0F, 1.0F);
     }
 
     @Override
@@ -179,16 +109,6 @@ public class PlayerParticles extends JavaPlugin {
             ex.printStackTrace();
             return null;
         }
-    }
-
-    /**
-     * Returns the file which contains this plugin
-     * Exposes the JavaPlugin.getFile() method
-     *
-     * @return File containing this plugin
-     */
-    public File getJarFile() {
-        return this.getFile();
     }
     
     /**

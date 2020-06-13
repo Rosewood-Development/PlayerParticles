@@ -6,6 +6,8 @@ import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.util.MathL;
 import dev.esophose.playerparticles.util.VectorUtils;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -39,6 +41,11 @@ public class ParticleStyleWings extends DefaultParticleStyle {
     public void updateTimers() {
         this.spawnTimer++;
         this.spawnTimer %= this.spawnDelay;
+    }
+
+    @Override
+    protected List<String> getGuiIconMaterialNames() {
+        return Arrays.asList("ELYTRA", "RAW_CHICKEN");
     }
 
     @Override

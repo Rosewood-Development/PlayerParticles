@@ -1,7 +1,10 @@
 package dev.esophose.playerparticles.util.inputparser.parsable;
 
 import dev.esophose.playerparticles.particles.PPlayer;
+import dev.esophose.playerparticles.util.NMSUtil;
 import dev.esophose.playerparticles.util.inputparser.Parsable;
+import java.lang.reflect.Method;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.bukkit.Bukkit;
@@ -9,9 +12,21 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 public class ParsableLocation extends Parsable<Location> {
+
+    private static Method LivingEntity_getTargetBlock;
+    static {
+        if (NMSUtil.getVersionNumber() < 8) {
+            try {
+                LivingEntity_getTargetBlock = LivingEntity.class.getDeclaredMethod("getTargetBlock", HashSet.class, int.class);
+            } catch (ReflectiveOperationException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public ParsableLocation() {
         super(Location.class);
@@ -23,7 +38,18 @@ public class ParsableLocation extends Parsable<Location> {
 
         Player player = pplayer.getPlayer();
         if (player != null && input.equalsIgnoreCase("looking")) {
-            Block targetBlock = player.getTargetBlock((Set<Material>) null, 8); // Need the Set<Material> cast for 1.9 support
+            Block targetBlock;
+            if (NMSUtil.getVersionNumber() > 7) {
+                targetBlock = player.getTargetBlock((Set<Material>) null, 8); // Need the Set<Material> cast for 1.9 support
+            } else {
+                try {
+                    targetBlock = (Block) LivingEntity_getTargetBlock.invoke(player, null, 8);
+                } catch (ReflectiveOperationException e) {
+                    targetBlock = player.getLocation().getBlock();
+                    e.printStackTrace();
+                }
+            }
+
             int maxDistanceSqrd = 6 * 6;
             if (targetBlock.getLocation().distanceSquared(player.getLocation()) > maxDistanceSqrd)
                 return null; // Looking at a block too far away

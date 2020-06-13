@@ -5,6 +5,8 @@ import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import java.io.File;
+import java.util.List;
+import org.bukkit.Material;
 
 public abstract class DefaultParticleStyle implements ParticleStyle {
 
@@ -15,18 +17,22 @@ public abstract class DefaultParticleStyle implements ParticleStyle {
     private String internalStyleName;
     private boolean canBeFixedByDefault;
     private boolean canToggleWithMovementByDefault;
+    private boolean canToggleWithCombatByDefault;
     private double fixedEffectOffsetByDefault;
 
     private String styleName;
     private boolean enabled;
     private boolean canBeFixed;
     private boolean canToggleWithMovement;
+    private boolean canToggleWithCombat;
     private double fixedEffectOffset;
+    private Material guiIconMaterial;
 
     public DefaultParticleStyle(String internalStyleName, boolean canBeFixedByDefault, boolean canToggleWithMovementByDefault, double fixedEffectOffsetByDefault) {
         this.internalStyleName = internalStyleName;
         this.canBeFixedByDefault = canBeFixedByDefault;
         this.canToggleWithMovementByDefault = canToggleWithMovementByDefault;
+        this.canToggleWithCombatByDefault = true;
         this.fixedEffectOffsetByDefault = fixedEffectOffsetByDefault;
         this.playerParticles = PlayerParticles.getInstance();
 
@@ -49,7 +55,9 @@ public abstract class DefaultParticleStyle implements ParticleStyle {
         this.setIfNotExists("enabled", true, "If the style is enabled or not");
         this.setIfNotExists("can-be-fixed", this.canBeFixedByDefault, "If the style can be used in /pp fixed");
         this.setIfNotExists("can-toggle-with-movement", this.canToggleWithMovementByDefault, "If the style will only be shown at the player's feet while moving");
+        this.setIfNotExists("can-toggle-with-combat", this.canToggleWithCombatByDefault, "If particles for this style will be hidden if the player is in combat");
         this.setIfNotExists("fixed-effect-offset", this.fixedEffectOffsetByDefault, "How far vertically to offset the style position for fixed effects");
+        this.setIfNotExists("gui-icon-material", this.getGuiIconMaterialNames(), "The material of the icon to display in the GUI");
 
         this.setDefaultSettings(this.config);
 
@@ -70,7 +78,9 @@ public abstract class DefaultParticleStyle implements ParticleStyle {
         this.enabled = this.config.getBoolean("enabled");
         this.canBeFixed = this.config.getBoolean("can-be-fixed");
         this.canToggleWithMovement = this.config.getBoolean("can-toggle-with-movement");
+        this.canToggleWithCombat = this.config.getBoolean("can-toggle-with-combat");
         this.fixedEffectOffset = this.config.getDouble("fixed-effect-offset");
+        this.guiIconMaterial = ParticleUtils.closestMatchWithFallback(true, this.config.getStringList("gui-icon-material").toArray(new String[0]));
 
         this.loadSettings(this.config);
     }
@@ -103,13 +113,18 @@ public abstract class DefaultParticleStyle implements ParticleStyle {
     }
 
     @Override
+    public final String getInternalName() {
+        return this.internalStyleName;
+    }
+
+    @Override
     public final String getName() {
         return this.styleName;
     }
 
     @Override
-    public final String getInternalName() {
-        return this.internalStyleName;
+    public final Material getGuiIconMaterial() {
+        return this.guiIconMaterial;
     }
 
     @Override
@@ -123,9 +138,19 @@ public abstract class DefaultParticleStyle implements ParticleStyle {
     }
 
     @Override
+    public final boolean canToggleWithCombat() {
+        return this.canToggleWithCombat;
+    }
+
+    @Override
     public final double getFixedEffectOffset() {
         return this.fixedEffectOffset;
     }
+
+    /**
+     * @return A list of Strings to try to turn into Materials
+     */
+    protected abstract List<String> getGuiIconMaterialNames();
 
     /**
      * Sets the default settings for this style

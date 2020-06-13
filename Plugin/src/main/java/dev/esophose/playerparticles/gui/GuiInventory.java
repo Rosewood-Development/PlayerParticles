@@ -2,6 +2,7 @@ package dev.esophose.playerparticles.gui;
 
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.particles.PPlayer;
+import dev.esophose.playerparticles.util.NMSUtil;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import dev.esophose.playerparticles.PlayerParticles;
 import java.util.ArrayList;
@@ -12,12 +13,11 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public abstract class GuiInventory implements InventoryHolder {
+public abstract class GuiInventory {
 
     protected enum BorderColor {
         WHITE(0, "WHITE_STAINED_GLASS_PANE"),
@@ -57,7 +57,8 @@ public abstract class GuiInventory implements InventoryHolder {
             ItemMeta meta = borderIcon.getItemMeta();
             if (meta != null) {
                 meta.setDisplayName(" ");
-                meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_ENCHANTS);
+                if (NMSUtil.getVersionNumber() > 7)
+                    meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_ENCHANTS);
                 borderIcon.setItemMeta(meta);
             }
             
@@ -156,7 +157,11 @@ public abstract class GuiInventory implements InventoryHolder {
                 button.handleClick(isShiftClick);
                 if (Setting.GUI_BUTTON_SOUND.getBoolean() && event.getWhoClicked() instanceof Player) {
                     Player player = (Player) event.getWhoClicked();
-                    player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1);
+                    if (NMSUtil.getVersionNumber() > 8) {
+                        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1);
+                    } else {
+                        player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 0.5f, 1);
+                    }
                 }
                 break;
             }

@@ -51,7 +51,7 @@ raincloud:
     style: 'overhead'
     data: ''
   2:
-    effect: 'rain'
+    effect: 'dripping_water'
     style: 'overhead'
     data: ''
 rainbows:

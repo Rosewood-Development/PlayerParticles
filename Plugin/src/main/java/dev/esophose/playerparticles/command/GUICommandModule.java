@@ -8,6 +8,7 @@ import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.PlayerParticles;
 import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.Bukkit;
 
 public class GUICommandModule implements CommandModule {
 
@@ -45,7 +46,7 @@ public class GUICommandModule implements CommandModule {
             return;
         }
 
-        guiManager.openDefault(pplayer);
+        Bukkit.getScheduler().runTask(PlayerParticles.getInstance(), () -> guiManager.openDefault(pplayer));
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {

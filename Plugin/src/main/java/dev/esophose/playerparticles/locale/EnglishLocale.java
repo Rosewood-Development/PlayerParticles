@@ -118,6 +118,7 @@ public class EnglishLocale implements Locale {
             this.put("remove-effect-none", "&cYou do not have any particles applied with the effect &b%effect%&c!");
             this.put("remove-style-success", "&aRemoved &b%amount% &aof your particles with the style of &b%style%&a!");
             this.put("remove-style-none", "&cYou do not have any particles applied with the style &b%style%&c!");
+            this.put("remove-effect-style-none", "&cYou do not have any particles applied with the effect or style &b%name%&c!");
             this.put("remove-unknown", "&cAn effect or style with the name of &b%name% &cdoes not exist!");
 
             this.put("#10", "List Messages");
@@ -166,6 +167,8 @@ public class EnglishLocale implements Locale {
 
             this.put("#17", "Reset Message");
             this.put("reset-success", "&aRemoved &b%amount% &aactive particle(s)!");
+            this.put("reset-others-success", "&aRemoved particles for &b%other%&a!");
+            this.put("reset-others-none", "&eNo particles were removed for &b%other%&e.");
 
             this.put("#18", "Fixed Create Messages");
             this.put("fixed-create-missing-args", "&cUnable to create fixed effect, you are missing &b%amount% &crequired arguments!");

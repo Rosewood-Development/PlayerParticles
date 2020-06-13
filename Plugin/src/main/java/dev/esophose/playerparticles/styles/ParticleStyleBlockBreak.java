@@ -8,6 +8,7 @@ import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -44,6 +45,11 @@ public class ParticleStyleBlockBreak extends DefaultParticleStyle implements Lis
     }
 
     @Override
+    protected List<String> getGuiIconMaterialNames() {
+        return Collections.singletonList("IRON_PICKAXE");
+    }
+
+    @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
         this.setIfNotExists("particle-amount", 10, "The number of particles to spawn");
         this.setIfNotExists("particle-spread", 0.5, "The distance to spread particles");
@@ -63,11 +69,12 @@ public class ParticleStyleBlockBreak extends DefaultParticleStyle implements Lis
 
         Player player = event.getPlayer();
         PPlayer pplayer = PlayerParticles.getInstance().getManager(DataManager.class).getPPlayer(player.getUniqueId());
-        if (pplayer != null) {
-            for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.BLOCKBREAK)) {
-                Location loc = event.getBlock().getLocation().clone();
-                particleManager.displayParticles(player, player.getWorld(), particle, DefaultStyles.BLOCKBREAK.getParticles(particle, loc), false);
-            }
+        if (pplayer == null)
+            return;
+
+        for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.BLOCKBREAK)) {
+            Location loc = event.getBlock().getLocation().clone();
+            particleManager.displayParticles(pplayer, player.getWorld(), particle, DefaultStyles.BLOCKBREAK.getParticles(particle, loc), false);
         }
     }
 

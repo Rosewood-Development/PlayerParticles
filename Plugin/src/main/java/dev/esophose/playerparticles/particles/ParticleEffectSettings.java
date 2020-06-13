@@ -7,6 +7,7 @@ import dev.esophose.playerparticles.util.ParticleUtils;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import org.bukkit.Material;
 
 public class ParticleEffectSettings {
 
@@ -19,6 +20,7 @@ public class ParticleEffectSettings {
 
     private String effectName;
     private boolean enabled;
+    private Material guiIconMaterial;
 
     public ParticleEffectSettings(ParticleEffect particleEffect) {
         this.particleEffect = particleEffect;
@@ -40,6 +42,7 @@ public class ParticleEffectSettings {
 
         boolean changed = this.setIfNotExists("effect-name", this.getInternalName(), "The name the effect will display as");
         changed |= this.setIfNotExists("enabled", this.enabledByDefault, "If the effect is enabled or not");
+        changed |= this.setIfNotExists("gui-icon-material", this.particleEffect.getGuiIconMaterialNames());
 
         if (changed)
             this.config.save();
@@ -56,6 +59,7 @@ public class ParticleEffectSettings {
 
         this.effectName = this.config.getString("effect-name");
         this.enabled = this.config.getBoolean("enabled");
+        this.guiIconMaterial = ParticleUtils.closestMatchWithFallback(true, this.config.getStringList("gui-icon-material").toArray(new String[0]));
     }
 
     /**
@@ -93,6 +97,13 @@ public class ParticleEffectSettings {
      */
     public String getName() {
         return this.effectName;
+    }
+
+    /**
+     * @return The Material icon that represents this style in the GUI
+     */
+    public Material getGuiIconMaterial() {
+        return this.guiIconMaterial;
     }
 
     /**

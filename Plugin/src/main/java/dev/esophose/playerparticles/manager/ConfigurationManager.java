@@ -16,11 +16,11 @@ import org.bukkit.Material;
 public class ConfigurationManager extends Manager {
 
     private static final String[] HEADER = new String[] {
-            "     _________ __                           __________                __   __        __                    _________",
-            "     \\______  \\  | _____  ___ __  __________\\______   \\_____ ________/  |_|__| ____ |  |   ____   ______   \\______  \\",
-            "     |     ___/  | \\__  \\<   |  |/ __ \\_  __ \\     ___/\\__  \\\\_  __ \\   __\\  |/ ___\\|  | _/ __ \\ /  ___/       /    /",
-            "     |    |   |  |__/ __ \\\\___  \\  ___/|  | \\/    |     / __ \\|  | \\/|  | |  \\  \\___|  |_\\  ___/ \\___ \\       /    /",
-            "     |____|   |____(____  / ____|\\___  >__|  |____|    (____  /__|   |__| |__|\\___  >____/\\___  >____  >     /____/",
+            "     _________ __                           __________                __   __        __",
+            "     \\______  \\  | _____  ___ __  __________\\______   \\_____ ________/  |_|__| ____ |  |   ____   ______",
+            "     |     ___/  | \\__  \\<   |  |/ __ \\_  __ \\     ___/\\__  \\\\_  __ \\   __\\  |/ ___\\|  | _/ __ \\ /  ___/",
+            "     |    |   |  |__/ __ \\\\___  \\  ___/|  | \\/    |     / __ \\|  | \\/|  | |  \\  \\___|  |_\\  ___/ \\___ \\",
+            "     |____|   |____(____  / ____|\\___  >__|  |____|    (____  /__|   |__| |__|\\___  >____/\\___  >____  >",
             "                        \\/\\/         \\/                     \\/                    \\/          \\/     \\/"
     };
 
@@ -41,9 +41,9 @@ public class ConfigurationManager extends Manager {
         GUI_PRESETS_ONLY("gui-presets-only", false, "If true, only the preset groups will be available in the GUI", "Permissions to open the GUI will change to only open if the user has any preset groups available"),
         GUI_CLOSE_AFTER_GROUP_SELECTED("gui-close-after-group-selected", true, "If true, the GUI will close after selecting a group (either saved or preset)"),
         GUI_BUTTON_SOUND("gui-button-sound", true, "If clicking a GUI button should make a noise"),
-        TOGGLE_ON_MOVE("toggle-on-move", false, "If true, styles will not display while the player is moving", "They will instead have the effect displayed at their feet", "Note: Not all styles abide by this rule, but most will"),
+        TOGGLE_ON_MOVE("toggle-on-move", "NONE", "Valid values: DISPLAY_FEET, DISPLAY_NORMAL, DISPLAY_OVERHEAD, HIDE, NONE", "DISPLAY_FEET will display particles using the feet style while moving", "DISPLAY_NORMAL will display particles using the normal style while moving", "DISPLAY_OVERHEAD will display particles using the overhead style while moving", "HIDE will hide particles while moving", "NONE will make this setting do nothing", "Note: You can change what styles follow this setting in their individual setting files"),
         TOGGLE_ON_MOVE_DELAY("toggle-on-move-delay", 9, "The time (in ticks) a player has to be standing still before they are considered to be stopped", "This setting has no effect if toggle-on-move is set to false", "The value must be a positive whole number"),
-        TOGGLE_ON_COMBAT("toggle-on-combat", false, "If true, particles will be completely disabled while the player is in combat"),
+        TOGGLE_ON_COMBAT("toggle-on-combat", false, "If true, particles will be completely disabled while the player is in combat", "Note: You can change what styles follow this setting in their individual setting files"),
         TOGGLE_ON_COMBAT_DELAY("toggle-on-combat-delay", 15, "The time (in seconds) a player has to not be damaged/attacked to be considered out of combat", "This setting has no effect if toggle-on-combat is set to false", "The value must be a positive whole number"),
         DISABLED_WORLDS("disabled-worlds", Collections.singletonList("disabled_world_name"), "A list of worlds that the plugin is disabled in"),
         MAX_PARTICLES("max-particles", 3, "The maximum number of particles a player can apply at once", "The GUI will only display up to 21, don't set this any higher than that"),
@@ -55,7 +55,17 @@ public class ConfigurationManager extends Manager {
         PARTICLE_RENDER_RANGE_FIXED_EFFECT("particle-render-range-fixed-effect", 192, "From how many blocks away should a player be able to see the particles from a fixed effect?"),
         RAINBOW_CYCLE_SPEED("rainbow-cycle-speed", 2, "How many out of 360 hue ticks to move per game tick", "Higher values make the rainbow cycle faster", "Note: Must be a positive whole number"),
         DUST_SIZE("dust-size", 1.0, "How large should dust particles appear?", "Note: Can include decimals", "Only works in 1.13+"),
+        GUI_GROUP_CREATION_MESSAGE_DISPLAY_AREA("gui-group-creation-message-display-area", "ACTION_BAR", "Valid values: ACTION_BAR, TITLE, CHAT", "Where should the GUI group creation countdown message be displayed?", "Note: Server versions less than 1.11.2 will always use CHAT"),
+
         OVERRIDE_PARTICLE_VERSION("override-particle-version", -1, "Allows you to override the version of Minecraft that will be assumed for spawning particles", "This should follow this format: 9, 12, 15, etc. 9 means 1.9, 14 means 1.14... and so on"),
+
+        WORLDGUARD_SETTINGS("worldguard-settings", null, "Settings for WorldGuard", "If WorldGuard is not installed, these settings will do nothing"),
+        WORLDGUARD_USE_ALLOWED_REGIONS("worldguard-settings.use-allowed-regions", false, "If true, particles will only be able to spawn if they are in an allowed region and not a disallowed region", "If false, particles will be able to spawn as long as they are not in a disallowed region"),
+        WORLDGUARD_ALLOWED_REGIONS("worldguard-settings.allowed-regions", Arrays.asList("example_region_1", "example_region_2"), "Regions that particles will be allowed to spawn in"),
+        WORLDGUARD_DISALLOWED_REGIONS("worldguard-settings.disallowed-regions", Arrays.asList("example_region_3", "example_region_4"), "Regions that particles will be blocked from spawning in", "This overrides allowed regions if they overlap"),
+        WORLDGUARD_CHECK_INTERVAL("worldguard-settings.check-interval", 10, "How often to check if a player is in a region that allows spawning particles", "Measured in ticks"),
+        WORLDGUARD_ENABLE_BYPASS_PERMISSION("worldguard-settings.enable-bypass-permission", false, "If true, the permission playerparticles.worldguard.bypass will allow", "the player to bypass the region requirements"),
+
         MYSQL_SETTINGS("mysql-settings", null, "Settings for if you want to use MySQL for data management"),
         MYSQL_ENABLED("mysql-settings.enabled", false, "Enable MySQL", "If false, SQLite will be used instead"),
         MYSQL_HOSTNAME("mysql-settings.hostname", "", "MySQL Database Hostname"),
@@ -63,14 +73,16 @@ public class ConfigurationManager extends Manager {
         MYSQL_DATABASE_NAME("mysql-settings.database-name", "", "MySQL Database Name"),
         MYSQL_USER_NAME("mysql-settings.user-name", "", "MySQL Database User Name"),
         MYSQL_USER_PASSWORD("mysql-settings.user-password", "", "MySQL Database User Password"),
+        MYSQL_TABLE_PREFIX("mysql-settings.table-prefix", PlayerParticles.getInstance().getDescription().getName().toLowerCase() + "_", "The prefix of the tables in the database", "Do not change this after tables have already been created or you will have data loss"),
         MYSQL_USE_SSL("mysql-settings.use-ssl", false, "If the database connection should use SSL", "You should enable this if your database supports SSL"),
+        MYSQL_CONNECTION_POOL_SIZE("mysql-settings.connection-pool-size", 5, "The size of the connection pool to the database", "Not recommended to go below 2 or above 5"),
 
         GUI_ICON("gui-icon", null,
-                "This configuration option allows you to change any of the GUI",
-                "icons to whatever block/item you want.",
+                "This configuration option allows you to change the GUI",
+                "icons to whatever block/item you want. If you want to change an effect",
+                "or style icon, use their respective config files.",
                 "Notes: If any of the block/item names are invalid the icon in the GUI",
                 "will be the barrier icon to show that it failed to load.",
-                "Do NOT change the particle/style name",
                 "You MUST use the Spigot-given name for it to work. You can see",
                 "all the Spigot-given names at the link below:",
                 "https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html",
@@ -87,105 +99,7 @@ public class ConfigurationManager extends Manager {
         GUI_ICON_MISC_EDIT_EFFECT("gui-icon.misc.edit_effect", Arrays.asList("FIREWORK_ROCKET", "FIREWORK")),
         GUI_ICON_MISC_EDIT_STYLE("gui-icon.misc.edit_style", Collections.singletonList("NETHER_STAR")),
         GUI_ICON_MISC_EDIT_DATA("gui-icon.misc.edit_data", Collections.singletonList("BOOK")),
-        GUI_ICON_MISC_RESET("gui-icon.misc.reset", Collections.singletonList("BARRIER")),
-        GUI_ICON_EFFECT("gui-icon.effect", null),
-        GUI_ICON_EFFECT_AMBIENT_ENTITY_EFFECT("gui-icon.effect.ambient_entity_effect", Collections.singletonList("BEACON")),
-        GUI_ICON_EFFECT_ANGRY_VILLAGER("gui-icon.effect.angry_villager", Collections.singletonList("IRON_DOOR")),
-        GUI_ICON_EFFECT_BARRIER("gui-icon.effect.barrier", Collections.singletonList("BARRIER")),
-        GUI_ICON_EFFECT_BLOCK("gui-icon.effect.block", Collections.singletonList("STONE")),
-        GUI_ICON_EFFECT_BUBBLE("gui-icon.effect.bubble", Arrays.asList("BUBBLE_CORAL", "GLASS")),
-        GUI_ICON_EFFECT_BUBBLE_COLUMN_UP("gui-icon.effect.bubble_column_up", Collections.singletonList("MAGMA_BLOCK")),
-        GUI_ICON_EFFECT_BUBBLE_POP("gui-icon.effect.bubble_pop", Collections.singletonList("BUBBLE_CORAL_FAN")),
-        GUI_ICON_EFFECT_CAMPFIRE_COSY_SMOKE("gui-icon.effect.campfire_cosy_smoke", Collections.singletonList("CAMPFIRE")),
-        GUI_ICON_EFFECT_CAMPFIRE_SIGNAL_SMOKE("gui-icon.effect.campfire_signal_smoke", Collections.singletonList("REDSTONE_TORCH")),
-        GUI_ICON_EFFECT_CLOUD("gui-icon.effect.cloud", Arrays.asList("WHITE_WOOL", "WOOL")),
-        GUI_ICON_EFFECT_COMPOSTER("gui-icon.effect.composter", Collections.singletonList("COMPOSTER")),
-        GUI_ICON_EFFECT_CRIT("gui-icon.effect.crit", Collections.singletonList("IRON_SWORD")),
-        GUI_ICON_EFFECT_CURRENT_DOWN("gui-icon.effect.current_down", Collections.singletonList("SOUL_SAND")),
-        GUI_ICON_EFFECT_DAMAGE_INDICATOR("gui-icon.effect.damage_indicator", Collections.singletonList("BOW")),
-        GUI_ICON_EFFECT_DOLPHIN("gui-icon.effect.dolphin", Collections.singletonList("DOLPHIN_SPAWN_EGG")),
-        GUI_ICON_EFFECT_DRAGON_BREATH("gui-icon.effect.dragon_breath", Arrays.asList("DRAGON_BREATH", "DRAGONS_BREATH")),
-        GUI_ICON_EFFECT_DRIPPING_HONEY("gui-icon.effect.dripping_honey", Collections.singletonList("BEE_NEST")),
-        GUI_ICON_EFFECT_DRIPPING_LAVA("gui-icon.effect.dripping_lava", Collections.singletonList("LAVA_BUCKET")),
-        GUI_ICON_EFFECT_DRIPPING_WATER("gui-icon.effect.dripping_water", Collections.singletonList("WATER_BUCKET")),
-        GUI_ICON_EFFECT_DUST("gui-icon.effect.dust", Collections.singletonList("REDSTONE")),
-        GUI_ICON_EFFECT_ELDER_GUARDIAN("gui-icon.effect.elder_guardian", Arrays.asList("ELDER_GUARDIAN_SPAWN_EGG", "PRISMARINE_CRYSTALS")),
-        GUI_ICON_EFFECT_ENCHANT("gui-icon.effect.enchant", Arrays.asList("ENCHANTING_TABLE", "ENCHANTMENT_TABLE")),
-        GUI_ICON_EFFECT_ENCHANTED_HIT("gui-icon.effect.enchanted_hit", Collections.singletonList("DIAMOND_SWORD")),
-        GUI_ICON_EFFECT_END_ROD("gui-icon.effect.end_rod", Collections.singletonList("END_ROD")),
-        GUI_ICON_EFFECT_ENTITY_EFFECT("gui-icon.effect.entity_effect", Collections.singletonList("GLOWSTONE_DUST")),
-        GUI_ICON_EFFECT_EXPLOSION("gui-icon.effect.explosion", Arrays.asList("FIRE_CHARGE", "FIREBALL")),
-        GUI_ICON_EFFECT_EXPLOSION_EMITTER("gui-icon.effect.explosion_emitter", Collections.singletonList("TNT")),
-        GUI_ICON_EFFECT_FALLING_DUST("gui-icon.effect.falling_dust", Collections.singletonList("SAND")),
-        GUI_ICON_EFFECT_FALLING_HONEY("gui-icon.effect.falling_honey", Collections.singletonList("HONEY_BOTTLE")),
-        GUI_ICON_EFFECT_FALLING_LAVA("gui-icon.effect.falling_lava", Collections.singletonList("RED_DYE")),
-        GUI_ICON_EFFECT_FALLING_NECTAR("gui-icon.effect.falling_nectar", Collections.singletonList("HONEYCOMB")),
-        GUI_ICON_EFFECT_FALLING_WATER("gui-icon.effect.falling_water", Collections.singletonList("BLUE_DYE")),
-        GUI_ICON_EFFECT_FIREWORK("gui-icon.effect.firework", Arrays.asList("FIREWORK_ROCKET", "FIREWORK")),
-        GUI_ICON_EFFECT_FISHING("gui-icon.effect.fishing", Collections.singletonList("FISHING_ROD")),
-        GUI_ICON_EFFECT_FLAME("gui-icon.effect.flame", Collections.singletonList("BLAZE_POWDER")),
-        GUI_ICON_EFFECT_FLASH("gui-icon.effect.flash", Collections.singletonList("GOLD_INGOT")),
-        GUI_ICON_EFFECT_FOOTSTEP("gui-icon.effect.footstep", Collections.singletonList("GRASS")),
-        GUI_ICON_EFFECT_HAPPY_VILLAGER("gui-icon.effect.happy_villager", Arrays.asList("DARK_OAK_DOOR_ITEM", "DARK_OAK_DOOR")),
-        GUI_ICON_EFFECT_HEART("gui-icon.effect.heart", Arrays.asList("POPPY", "RED_ROSE")),
-        GUI_ICON_EFFECT_INSTANT_EFFECT("gui-icon.effect.instant_effect", Arrays.asList("SPLASH_POTION", "POTION")),
-        GUI_ICON_EFFECT_ITEM("gui-icon.effect.item", Collections.singletonList("ITEM_FRAME")),
-        GUI_ICON_EFFECT_ITEM_SLIME("gui-icon.effect.item_slime", Collections.singletonList("SLIME_BALL")),
-        GUI_ICON_EFFECT_ITEM_SNOWBALL("gui-icon.effect.item_snowball", Arrays.asList("SNOWBALL", "SNOW_BALL")),
-        GUI_ICON_EFFECT_LARGE_SMOKE("gui-icon.effect.large_smoke", Arrays.asList("COBWEB", "WEB")),
-        GUI_ICON_EFFECT_LANDING_HONEY("gui-icon.effect.landing_honey", Collections.singletonList("HONEY_BLOCK")),
-        GUI_ICON_EFFECT_LANDING_LAVA("gui-icon.effect.landing_lava", Collections.singletonList("ORANGE_DYE")),
-        GUI_ICON_EFFECT_LAVA("gui-icon.effect.lava", Collections.singletonList("MAGMA_CREAM")),
-        GUI_ICON_EFFECT_MYCELIUM("gui-icon.effect.mycelium", Arrays.asList("MYCELIUM", "MYCEL")),
-        GUI_ICON_EFFECT_NAUTILUS("gui-icon.effect.nautilus", Collections.singletonList("HEART_OF_THE_SEA")),
-        GUI_ICON_EFFECT_NOTE("gui-icon.effect.note", Collections.singletonList("NOTE_BLOCK")),
-        GUI_ICON_EFFECT_POOF("gui-icon.effect.poof", Arrays.asList("FIREWORK_STAR", "FIREWORK_CHARGE")),
-        GUI_ICON_EFFECT_PORTAL("gui-icon.effect.portal", Collections.singletonList("OBSIDIAN")),
-        GUI_ICON_EFFECT_RAIN("gui-icon.effect.rain", Arrays.asList("PUFFERFISH_BUCKET", "LAPIS_BLOCK")),
-        GUI_ICON_EFFECT_SMOKE("gui-icon.effect.smoke", Collections.singletonList("TORCH")),
-        GUI_ICON_EFFECT_SNEEZE("gui-icon.effect.sneeze", Collections.singletonList("BAMBOO")),
-        GUI_ICON_EFFECT_SPELL("gui-icon.effect.spell", Arrays.asList("POTION", "GLASS_BOTTLE")),
-        GUI_ICON_EFFECT_SPIT("gui-icon.effect.spit", Arrays.asList("LLAMA_SPAWN_EGG", "PUMPKIN_SEEDS")),
-        GUI_ICON_EFFECT_SPLASH("gui-icon.effect.splash", Arrays.asList("SALMON", "FISH", "RAW_FISH")),
-        GUI_ICON_EFFECT_SQUID_INK("gui-icon.effect.squid_ink", Collections.singletonList("INK_SAC")),
-        GUI_ICON_EFFECT_SWEEP_ATTACK("gui-icon.effect.sweep_attack", Arrays.asList("GOLDEN_SWORD", "GOLD_SWORD")),
-        GUI_ICON_EFFECT_TOTEM_OF_UNDYING("gui-icon.effect.totem_of_undying", Arrays.asList("TOTEM_OF_UNDYING", "TOTEM")),
-        GUI_ICON_EFFECT_UNDERWATER("gui-icon.effect.underwater", Arrays.asList("TURTLE_HELMET", "SPONGE")),
-        GUI_ICON_EFFECT_WITCH("gui-icon.effect.witch", Collections.singletonList("CAULDRON")),
-        GUI_ICON_STYLE("gui-icon.style", null),
-        GUI_ICON_STYLE_ARROWS("gui-icon.style.arrows", Collections.singletonList("BOW")),
-        GUI_ICON_STYLE_BATMAN("gui-icon.style.batman", Arrays.asList("BAT_SPAWN_EGG", "COAL")),
-        GUI_ICON_STYLE_BEAM("gui-icon.style.beam", Collections.singletonList("POWERED_RAIL")),
-        GUI_ICON_STYLE_BLOCKBREAK("gui-icon.style.blockbreak", Collections.singletonList("IRON_PICKAXE")),
-        GUI_ICON_STYLE_BLOCKPLACE("gui-icon.style.blockplace", Arrays.asList("OAK_PLANKS", "WOOD")),
-        GUI_ICON_STYLE_CELEBRATION("gui-icon.style.celebration", Arrays.asList("FIREWORK_ROCKET", "FIREWORK")),
-        GUI_ICON_STYLE_CHAINS("gui-icon.style.chains", Collections.singletonList("TRIPWIRE_HOOK")),
-        GUI_ICON_STYLE_COMPANION("gui-icon.style.companion", Collections.singletonList("NAME_TAG")),
-        GUI_ICON_STYLE_CUBE("gui-icon.style.cube", Collections.singletonList("STONE")),
-        GUI_ICON_STYLE_FEET("gui-icon.style.feet", Collections.singletonList("GRASS")),
-        GUI_ICON_STYLE_HALO("gui-icon.style.halo", Arrays.asList("END_PORTAL_FRAME", "ENDER_PORTAL_FRAME")),
-        GUI_ICON_STYLE_HURT("gui-icon.style.hurt", Collections.singletonList("CACTUS")),
-        GUI_ICON_STYLE_INVOCATION("gui-icon.style.invocation", Arrays.asList("ENDER_EYE", "EYE_OF_ENDER")),
-        GUI_ICON_STYLE_MOVE("gui-icon.style.move", Arrays.asList("PISTON", "PISTON_BASE")),
-        GUI_ICON_STYLE_NORMAL("gui-icon.style.normal", Collections.singletonList("DIRT")),
-        GUI_ICON_STYLE_ORBIT("gui-icon.style.orbit", Arrays.asList("ENCHANTING_TABLE", "ENCHANTMENT_TABLE")),
-        GUI_ICON_STYLE_OVERHEAD("gui-icon.style.overhead", Collections.singletonList("GLOWSTONE")),
-        GUI_ICON_STYLE_POINT("gui-icon.style.point", Collections.singletonList("STONE_BUTTON")),
-        GUI_ICON_STYLE_POPPER("gui-icon.style.popper", Arrays.asList("POPPED_CHORUS_FRUIT", "CHORUS_FRUIT_POPPED")),
-        GUI_ICON_STYLE_PULSE("gui-icon.style.pulse", Arrays.asList("REDSTONE_TORCH", "REDSTONE_TORCH_ON")),
-        GUI_ICON_STYLE_QUADHELIX("gui-icon.style.quadhelix", Arrays.asList("NAUTILUS_SHELL", "ACTIVATOR_RAIL")),
-        GUI_ICON_STYLE_RINGS("gui-icon.style.rings", Arrays.asList("LEAD", "LEASH")),
-        GUI_ICON_STYLE_SPHERE("gui-icon.style.sphere", Arrays.asList("HEART_OF_THE_SEA", "SNOWBALL", "SNOW_BALL")),
-        GUI_ICON_STYLE_SPIN("gui-icon.style.spin", Collections.singletonList("BEACON")),
-        GUI_ICON_STYLE_SPIRAL("gui-icon.style.spiral", Collections.singletonList("HOPPER")),
-        GUI_ICON_STYLE_SWORDS("gui-icon.style.swords", Collections.singletonList("IRON_SWORD")),
-        GUI_ICON_STYLE_THICK("gui-icon.style.thick", Arrays.asList("COBWEB", "WEB")),
-        GUI_ICON_STYLE_TRAIL("gui-icon.style.trail", Collections.singletonList("GHAST_TEAR")),
-        GUI_ICON_STYLE_TWINS("gui-icon.style.twins", Arrays.asList("OAK_FENCE", "FENCE")),
-        GUI_ICON_STYLE_VORTEX("gui-icon.style.vortex", Collections.singletonList("GLOWSTONE_DUST")),
-        GUI_ICON_STYLE_WHIRL("gui-icon.style.whirl", Collections.singletonList("FEATHER")),
-        GUI_ICON_STYLE_WHIRLWIND("gui-icon.style.whirlwind", Collections.singletonList("STRING")),
-        GUI_ICON_STYLE_WINGS("gui-icon.style.wings", Collections.singletonList("ELYTRA"));
+        GUI_ICON_MISC_RESET("gui-icon.misc.reset", Collections.singletonList("BARRIER"));
 
         private final String key;
         private final Object defaultValue;
@@ -245,7 +159,7 @@ public class ConfigurationManager extends Manager {
          */
         public String getString() {
             this.loadValue();
-            return (String) this.value;
+            return String.valueOf(this.value);
         }
 
         private double getNumber() {
@@ -386,10 +300,7 @@ public class ConfigurationManager extends Manager {
         EDIT_EFFECT,
         EDIT_STYLE,
         EDIT_DATA,
-        RESET,
-
-        EFFECT,
-        STYLE;
+        RESET;
 
         private Map<String, Material> materials;
 
@@ -405,17 +316,6 @@ public class ConfigurationManager extends Manager {
          */
         public Material get() {
             return this.getInternal("gui-icon.misc." + this.name().toLowerCase());
-        }
-
-        /**
-         * Gets the Material for a subsection of this icon in the config.yml
-         * Tries to get from cache first, otherwise loads it
-         *
-         * @param subsection The name of the icon in the section
-         * @return The Material for this Icon
-         */
-        public Material get(String subsection) {
-            return this.getInternal("gui-icon." + this.name().toLowerCase() + "." + subsection);
         }
 
         /**
@@ -441,7 +341,7 @@ public class ConfigurationManager extends Manager {
             }
 
             if (material == null)
-                material = Material.BARRIER;
+                material = ParticleUtils.FALLBACK_MATERIAL;
 
             this.materials.put(configPath, material);
 

@@ -51,6 +51,11 @@ dependencies {
 
 shadowJar {
     archiveClassifier.set(null)
+
+    relocate('org.bstats', 'dev.esophose.playerparticles.libs.bstats')
+    relocate('org.slf4j', 'dev.esophose.playerparticles.libs.slf4j')
+    relocate('com.zaxxer.hikari', 'dev.esophose.playerparticles.libs.hikaricp')
+    relocate('org.codemc.worldguardwrapper', 'dev.esophose.playerparticles.libs.worldguardwrapper')
 }
 
 jar {

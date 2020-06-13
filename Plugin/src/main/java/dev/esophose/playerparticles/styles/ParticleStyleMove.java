@@ -8,6 +8,7 @@ import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -40,6 +41,11 @@ public class ParticleStyleMove extends DefaultParticleStyle implements Listener 
     }
 
     @Override
+    protected List<String> getGuiIconMaterialNames() {
+        return Arrays.asList("PISTON", "PISTON_BASE");
+    }
+
+    @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
         this.setIfNotExists("multiplier", 1, "The multiplier for the number of particles to spawn", "This style uses the same spawning as the 'normal' style");
     }
@@ -55,12 +61,13 @@ public class ParticleStyleMove extends DefaultParticleStyle implements Listener 
 
         Player player = event.getPlayer();
         PPlayer pplayer = PlayerParticles.getInstance().getManager(DataManager.class).getPPlayer(player.getUniqueId());
-        if (pplayer != null) {
-            for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.MOVE)) {
-                Location loc = player.getLocation().clone();
-                loc.setY(loc.getY() + 0.05);
-                particleManager.displayParticles(player, player.getWorld(), particle, DefaultStyles.MOVE.getParticles(particle, loc), false);
-            }
+        if (pplayer == null)
+            return;
+
+        for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.MOVE)) {
+            Location loc = player.getLocation().clone();
+            loc.setY(loc.getY() + 0.05);
+            particleManager.displayParticles(pplayer, player.getWorld(), particle, DefaultStyles.MOVE.getParticles(particle, loc), false);
         }
     }
 

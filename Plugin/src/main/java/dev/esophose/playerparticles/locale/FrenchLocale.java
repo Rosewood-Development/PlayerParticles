@@ -118,6 +118,7 @@ public class FrenchLocale implements Locale {
             this.put("remove-effect-none", "&cVous n'avez pas de particules appliquées avec l'effet &b%effect% &c!");
             this.put("remove-style-success", "&aSuppression &b%amount% &ade votre particule avec le style &b%style% &a!");
             this.put("remove-style-none", "&cVous n'avez pas de particules appliquées avec le style &b%style% &c!");
+            this.put("remove-effect-style-none", "&cVous n'avez pas de particules appliquées avec l'effet ou le style &b%name% &c!");
             this.put("remove-unknown", "&cL'effect avec le nom ou le style &b%name% &cn'existe pas !");
 
             this.put("#10", "List Messages");
@@ -166,6 +167,8 @@ public class FrenchLocale implements Locale {
 
             this.put("#17", "Reset Message");
             this.put("reset-success", "&b%amount% &aparticule(s) actives supprimées !");
+            this.put("reset-others-success", "&aParticules enlevées pour &b%other%&a !");
+            this.put("reset-others-none", "&eAucune particule n'a été enlevée pour &b%other%&e.");
 
             this.put("#18", "Fixed Create Messages");
             this.put("fixed-create-missing-args", "&cImpossible de créer un effet fixe, vous oubliez des arguments : &b%amount%");
