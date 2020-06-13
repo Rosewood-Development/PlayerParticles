@@ -1,11 +1,10 @@
 package dev.esophose.playerparticles.command;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.ParticleStyleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.particles.PPlayer;
-import dev.esophose.playerparticles.particles.ParticleEffect;
-import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.styles.DefaultStyles;
 import java.util.ArrayList;
 import java.util.List;

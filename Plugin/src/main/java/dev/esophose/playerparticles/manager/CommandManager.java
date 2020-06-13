@@ -1,6 +1,5 @@
 package dev.esophose.playerparticles.manager;
 
-import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.api.PlayerParticlesAPI;
 import dev.esophose.playerparticles.command.AddCommandModule;
@@ -23,6 +22,7 @@ import dev.esophose.playerparticles.command.StylesCommandModule;
 import dev.esophose.playerparticles.command.ToggleCommandModule;
 import dev.esophose.playerparticles.command.VersionCommandModule;
 import dev.esophose.playerparticles.command.WorldsCommandModule;
+import dev.esophose.playerparticles.particles.PPlayer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

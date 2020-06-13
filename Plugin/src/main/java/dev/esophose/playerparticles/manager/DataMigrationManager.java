@@ -1,10 +1,10 @@
 package dev.esophose.playerparticles.manager;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.database.DataMigration;
 import dev.esophose.playerparticles.database.DatabaseConnector;
 import dev.esophose.playerparticles.database.SQLiteConnector;
 import dev.esophose.playerparticles.database.migrations._1_InitialMigration;
-import dev.esophose.playerparticles.PlayerParticles;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Arrays;

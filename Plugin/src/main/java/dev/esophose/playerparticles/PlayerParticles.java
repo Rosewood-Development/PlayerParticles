@@ -24,7 +24,6 @@ import dev.esophose.playerparticles.particles.listener.PPlayerCombatListener;
 import dev.esophose.playerparticles.particles.listener.PPlayerMovementListener;
 import dev.esophose.playerparticles.util.LegacyMetrics;
 import dev.esophose.playerparticles.util.NMSUtil;
-import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.bstats.bukkit.MetricsLite;

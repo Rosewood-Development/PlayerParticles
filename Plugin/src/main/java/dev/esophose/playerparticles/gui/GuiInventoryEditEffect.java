@@ -1,5 +1,6 @@
 package dev.esophose.playerparticles.gui;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.ConfigurationManager.GuiIcon;
 import dev.esophose.playerparticles.manager.GuiManager;
 import dev.esophose.playerparticles.manager.LocaleManager;
@@ -11,7 +12,6 @@ import dev.esophose.playerparticles.particles.ParticleEffectSettings;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import dev.esophose.playerparticles.util.StringPlaceholders;
-import dev.esophose.playerparticles.PlayerParticles;
 import java.util.List;
 import org.bukkit.Bukkit;
 

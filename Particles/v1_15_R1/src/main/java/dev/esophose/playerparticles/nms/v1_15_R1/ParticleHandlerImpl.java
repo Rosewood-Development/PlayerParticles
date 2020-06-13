@@ -8,8 +8,6 @@ import dev.esophose.playerparticles.particles.version.VersionMapping;
 import io.netty.buffer.Unpooled;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import net.minecraft.server.v1_15_R1.IRegistry;
 import net.minecraft.server.v1_15_R1.PacketDataSerializer;
 import net.minecraft.server.v1_15_R1.PacketPlayOutWorldParticles;
@@ -21,7 +19,6 @@ import net.minecraft.server.v1_15_R1.ParticleParamRedstone;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle.DustOptions;
-import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_15_R1.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
@@ -29,7 +26,6 @@ import org.bukkit.craftbukkit.v1_15_R1.util.CraftMagicNumbers;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
-import org.bukkit.util.Vector;
 
 @SuppressWarnings("deprecation")
 public class ParticleHandlerImpl extends ParticleHandler {

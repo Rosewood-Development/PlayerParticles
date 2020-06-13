@@ -1,8 +1,8 @@
 package dev.esophose.playerparticles.command;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.particles.PPlayer;
-import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.util.StringPlaceholders;
 import java.util.List;
 

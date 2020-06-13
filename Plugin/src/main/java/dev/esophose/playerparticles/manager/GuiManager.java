@@ -1,11 +1,11 @@
 package dev.esophose.playerparticles.manager;
 
-import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.gui.GuiInventory;
 import dev.esophose.playerparticles.gui.GuiInventoryDefault;
 import dev.esophose.playerparticles.gui.GuiInventoryLoadPresetGroups;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import dev.esophose.playerparticles.particles.PPlayer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

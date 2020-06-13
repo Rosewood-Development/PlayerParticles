@@ -1,5 +1,7 @@
 package dev.esophose.playerparticles.gui;
 
+import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.api.PlayerParticlesAPI;
 import dev.esophose.playerparticles.gui.hook.PlayerChatHook;
 import dev.esophose.playerparticles.gui.hook.PlayerChatHookData;
 import dev.esophose.playerparticles.manager.ConfigurationManager.GuiIcon;
@@ -13,8 +15,6 @@ import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import dev.esophose.playerparticles.util.StringPlaceholders;
-import dev.esophose.playerparticles.PlayerParticles;
-import dev.esophose.playerparticles.api.PlayerParticlesAPI;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;

@@ -1,6 +1,5 @@
 package dev.esophose.playerparticles.manager;
 
-import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.hook.PlaceholderAPIHook;
@@ -12,6 +11,7 @@ import dev.esophose.playerparticles.locale.RussianLocale;
 import dev.esophose.playerparticles.locale.SimplifiedChineseLocale;
 import dev.esophose.playerparticles.locale.VietnameseLocale;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.util.StringPlaceholders;
 import java.io.File;
 import java.io.IOException;

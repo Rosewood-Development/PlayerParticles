@@ -1,10 +1,10 @@
 package dev.esophose.playerparticles.gui;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.util.NMSUtil;
 import dev.esophose.playerparticles.util.ParticleUtils;
-import dev.esophose.playerparticles.PlayerParticles;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Bukkit;

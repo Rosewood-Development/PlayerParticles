@@ -1,10 +1,10 @@
 package dev.esophose.playerparticles.gui.hook;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.util.NMSUtil;
 import dev.esophose.playerparticles.util.StringPlaceholders;
-import dev.esophose.playerparticles.PlayerParticles;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
