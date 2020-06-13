@@ -1,6 +1,51 @@
+=== v7.13 ===
++ Added particles for Minecraft 1.16
++ Added getVersion() method to API
+=== v7.12 ===
++ Added WorldGuard region support
++ Added permission 'playerparticles.worldguard.bypass'
++ Added placeholder %playerparticles_is_in_allowed_region%
+* Fixed empty player list bug with versions older than 1.9
+=== v7.11 ===
++ Added support for Spigot 1.8.8 and 1.7.10. I make no guarantees this will work perfectly.
+* The plugin will now disable and print an error message on startup if the server is running CraftBukkit
+* Removed deprecated API
+* Other API-breaking changes (Moved the color data classes to a different package)
+* Removed the version number from generating in new config.yml files
+=== v7.10 ===
++ Added command '/pp reset <player>' to be able to reset the particles of an offline player
+  - Permission: 'playerparticles.reset.others'
++ Added permissions for maximum particles, groups, and fixed effects (values in the config are now the lower bounds)
+  - playerparticles.particles.max.<number>
+  - playerparticles.groups.max.<number>
+  - playerparticles.fixed.max.<number>
+* The 'swords' style now lets you edit what is considered a sword in its settings file
+* Fixed wooden swords not being counted with the 'swords' style in 1.13+
+* Fixed the 'fishing' style causing particles to spawn for users who don't even have it applied
+* Fixed effect permissions being registered with the server even if they aren't supported
+=== v7.9 ===
++ Added options DISPLAY_NORMAL and DISPLAY_OVERHEAD to toggle-on-move
++ Added setting in each style setting file for can-toggle-on-combat
+* Fixed performance issues with toggle-on-move setting
+* Fixed possible concurrency deadlock with arrows and fishing styles
+=== v7.8 ===
++ Added style 'fishing'
+* Moved GUI icon settings from the config.yml to the effects/ and styles/ files. You will need to set these again.
+* Fixed the messages-enabled setting not working at all
+* Changed toggle-on-move to have three different setting values (DISPLAY_MOVE, HIDE, NONE)
+* Changed how particle styles are registered, deprecated old API methods for style registration
+=== v7.7 ===
+* Fixed an error with the style 'blockplace'
+=== v7.6 ===
++ Added style 'teleport' (Thanks HexedHero)
+* Fixed being able to take items out of GUI when opened from a separate GUI plugin
+* Fixed a possible ConcurrentModificationException
+* Fixed a missing message in de_DE
 === v7.5 ===
 + Added style 'trail'
-* Adjusted the 'normal' style a bit (also includes thick, and move)
++ Added settings for MySQL table prefix and connection pool size
+* Fixed preset groups loaded with '/pp group load' not saving correctly
+* Fixed possible database connection loss for MySQL
 === v7.4 ===
 * Fixed '/pp fixed teleport' not working due to async event issues
 * Fixed issue with a fixed celebration effect while vanished

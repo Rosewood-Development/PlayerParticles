@@ -20,7 +20,7 @@ dependencies {
     shadow 'org.jetbrains:annotations:16.0.2'
     shadow 'me.clip:placeholderapi:2.10.4'
     shadow 'org.xerial:sqlite-jdbc:3.23.1'
-    shadow 'com.comphenix.protocol:ProtocolLib:4.5.0'
+    shadow 'com.comphenix.protocol:ProtocolLib:4.5.1'
     shadow 'com.googlecode.json-simple:json-simple:1.1.1'
 
     // Dependencies that will be shaded into the jar

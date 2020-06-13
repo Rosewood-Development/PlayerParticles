@@ -38,7 +38,7 @@ public class ParticleStyleThick extends DefaultParticleStyle {
 
     @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
-        this.setIfNotExists("multiplier", 1, "The multiplier for the number of particles to spawn", "This style uses the same spawning as the 'normal' style");
+        this.setIfNotExists("multiplier", 3, "The multiplier for the number of particles to spawn", "This style uses the same spawning as the 'normal' style");
     }
 
     @Override

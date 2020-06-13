@@ -71,7 +71,7 @@ public class ParticleHandlerImpl extends ParticleHandler {
 
         try {
             for (Player player : players) {
-                protocolManager.sendWirePacket(player, 0x24, bytes);
+                protocolManager.sendWirePacket(player, 0x23, bytes);
             }
         } catch (Exception ex) {
             ex.printStackTrace();

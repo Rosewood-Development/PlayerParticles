@@ -80,6 +80,8 @@ public class VersionMapping16 extends VersionMapping {
             this.put(67, ParticleEffect.DRIPPING_OBSIDIAN_TEAR);
             this.put(68, ParticleEffect.FALLING_OBSIDIAN_TEAR);
             this.put(69, ParticleEffect.LANDING_OBSIDIAN_TEAR);
+            this.put(70, ParticleEffect.REVERSE_PORTAL);
+            this.put(71, ParticleEffect.WHITE_ASH);
         }};
     }
 
