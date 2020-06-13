@@ -1,11 +1,9 @@
 package dev.esophose.playerparticles.api;
 
 import dev.esophose.playerparticles.PlayerParticles;
-import dev.esophose.playerparticles.event.ParticleStyleRegistrationEvent;
 import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.GuiManager;
 import dev.esophose.playerparticles.manager.ParticleManager;
-import dev.esophose.playerparticles.manager.ParticleStyleManager;
 import dev.esophose.playerparticles.particles.ConsolePPlayer;
 import dev.esophose.playerparticles.particles.FixedParticleEffect;
 import dev.esophose.playerparticles.particles.PPlayer;
@@ -54,10 +52,19 @@ public final class PlayerParticlesAPI {
     /**
      * @return the instance of the PlayerParticlesAPI
      */
+    @NotNull
     public static PlayerParticlesAPI getInstance() {
         if (INSTANCE == null)
             INSTANCE = new PlayerParticlesAPI();
         return INSTANCE;
+    }
+
+    /**
+     * @return the currently installed version of the plugin
+     */
+    @NotNull
+    public String getVersion() {
+        return this.playerParticles.getDescription().getVersion();
     }
 
     //region Get PPlayer

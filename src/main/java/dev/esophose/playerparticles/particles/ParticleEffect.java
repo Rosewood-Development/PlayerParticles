@@ -28,6 +28,7 @@ public enum ParticleEffect {
     // Ordered and named by their Minecraft 1.13+ internal names
     AMBIENT_ENTITY_EFFECT("SPELL_MOB_AMBIENT", Collections.singletonList("BEACON"), ParticleProperty.COLORABLE),
     ANGRY_VILLAGER("VILLAGER_ANGRY", Collections.singletonList("IRON_DOOR")),
+    ASH("ASH", Collections.singletonList("BLACKSTONE")),
     BARRIER("BARRIER", Collections.singletonList("BARRIER")),
     BLOCK("BLOCK_CRACK", Collections.singletonList("STONE"), ParticleProperty.REQUIRES_MATERIAL_DATA),
     BUBBLE("WATER_BUBBLE", Arrays.asList("BUBBLE_CORAL", "GLASS")),
@@ -37,6 +38,7 @@ public enum ParticleEffect {
     CAMPFIRE_SIGNAL_SMOKE("CAMPFIRE_SIGNAL_SMOKE", Collections.singletonList("REDSTONE_TORCH")),
     CLOUD("CLOUD", Arrays.asList("WHITE_WOOL", "WOOL")),
     COMPOSTER("COMPOSTER", Collections.singletonList("COMPOSTER")),
+    CRIMSON_SPORE("CRIMSON_SPORE", Collections.singletonList("CRIMSON_SPORE")),
     CRIT("CRIT", Collections.singletonList("IRON_SWORD")),
     CURRENT_DOWN("CURRENT_DOWN", Collections.singletonList("SOUL_SAND")),
     DAMAGE_INDICATOR("DAMAGE_INDICATOR", Collections.singletonList("BOW")),
@@ -44,6 +46,7 @@ public enum ParticleEffect {
     DRAGON_BREATH("DRAGON_BREATH", Arrays.asList("DRAGON_BREATH", "DRAGONS_BREATH")),
     DRIPPING_HONEY("DRIPPING_HONEY", Collections.singletonList("BEE_NEST")),
     DRIPPING_LAVA("DRIP_LAVA", Collections.singletonList("LAVA_BUCKET")),
+    DRIPPING_OBSIDIAN_TEAR("DRIPPING_OBSIDIAN_TEAR", Collections.singletonList("CRYING_OBSIDIAN")),
     DRIPPING_WATER("DRIP_WATER", Collections.singletonList("WATER_BUCKET")),
     DUST("REDSTONE", Collections.singletonList("REDSTONE"), ParticleProperty.COLORABLE),
     ELDER_GUARDIAN("MOB_APPEARANCE", Arrays.asList("ELDER_GUARDIAN_SPAWN_EGG", "PRISMARINE_CRYSTALS"), false), // No thank you
@@ -57,6 +60,7 @@ public enum ParticleEffect {
     FALLING_HONEY("FALLING_HONEY", Collections.singletonList("HONEY_BOTTLE")),
     FALLING_LAVA("FALLING_LAVA", Collections.singletonList("RED_DYE")),
     FALLING_NECTAR("FALLING_NECTAR", Collections.singletonList("HONEYCOMB")),
+    FALLING_OBSIDIAN_TEAR("FALLING_OBSIDIAN_TEAR", Collections.singletonList("ANCIENT_DEBRIS")),
     FALLING_WATER("FALLING_WATER", Collections.singletonList("BLUE_DYE")),
     FIREWORK("FIREWORKS_SPARK", Arrays.asList("FIREWORK_ROCKET", "FIREWORK")),
     FISHING("WATER_WAKE", Collections.singletonList("FISHING_ROD")),
@@ -71,6 +75,7 @@ public enum ParticleEffect {
     ITEM_SNOWBALL("SNOWBALL", Arrays.asList("SNOWBALL", "SNOW_BALL")),
     LANDING_HONEY("LANDING_HONEY", Collections.singletonList("HONEY_BLOCK")),
     LANDING_LAVA("LANDING_LAVA", Collections.singletonList("ORANGE_DYE")),
+    LANDING_OBSIDIAN_TEAR("LANDING_OBSIDIAN_TEAR", Collections.singletonList("NETHERITE_BLOCK")),
     LARGE_SMOKE("SMOKE_LARGE", Arrays.asList("COBWEB", "WEB")),
     LAVA("LAVA", Collections.singletonList("MAGMA_CREAM")),
     MYCELIUM("TOWN_AURA", Arrays.asList("MYCELIUM", "MYCEL")),
@@ -79,8 +84,11 @@ public enum ParticleEffect {
     POOF("EXPLOSION_NORMAL", Arrays.asList("FIREWORK_STAR", "FIREWORK_CHARGE")), // The 1.13 combination of explode and showshovel
     PORTAL("PORTAL", Collections.singletonList("OBSIDIAN")),
     RAIN("WATER_DROP", Arrays.asList("PUFFERFISH_BUCKET", "LAPIS_BLOCK")),
+    REVERSE_PORTAL("REVERSE_PORTAL", Collections.singletonList("FLINT_AND_STEEL")),
     SMOKE("SMOKE_NORMAL", Collections.singletonList("TORCH")),
     SNEEZE("SNEEZE", Collections.singletonList("BAMBOO")),
+    SOUL("SOUL", Collections.singletonList("SOUL_LANTERN")),
+    SOUL_FIRE_FLAME("SOUL_FIRE_FLAME", Collections.singletonList("SOUL_CAMPFIRE")),
     SPELL("SPELL", Arrays.asList("POTION", "GLASS_BOTTLE")), // The Minecraft internal name for this is actually "effect", but that's the command name, so it's SPELL for the plugin instead
     SPIT("SPIT", Arrays.asList("LLAMA_SPAWN_EGG", "PUMPKIN_SEEDS")),
     SPLASH("WATER_SPLASH", Arrays.asList("SALMON", "FISH", "RAW_FISH")),
@@ -88,6 +96,8 @@ public enum ParticleEffect {
     SWEEP_ATTACK("SWEEP_ATTACK", Arrays.asList("GOLDEN_SWORD", "GOLD_SWORD")),
     TOTEM_OF_UNDYING("TOTEM", Arrays.asList("TOTEM_OF_UNDYING", "TOTEM")),
     UNDERWATER("SUSPENDED_DEPTH", Arrays.asList("TURTLE_HELMET", "SPONGE")),
+    WARPED_SPORE("WARPED_SPORE", Collections.singletonList("WARPED_FUNGUS")),
+    WHITE_ASH("WHITE_ASH", Collections.singletonList("BASALT")),
     WITCH("SPELL_WITCH", Collections.singletonList("CAULDRON"));
 
     private final static ParticleSpawner particleSpawner;
