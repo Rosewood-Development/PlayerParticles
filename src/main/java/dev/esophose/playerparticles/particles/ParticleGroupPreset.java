@@ -1,5 +1,7 @@
 package dev.esophose.playerparticles.particles;
 
+import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.manager.PermissionManager;
 import org.bukkit.Material;
 
 public class ParticleGroupPreset {
@@ -44,7 +46,7 @@ public class ParticleGroupPreset {
      */
     public boolean canPlayerUse(PPlayer player) {
         // If this particle group has a permission, does the player have it?
-        if (!this.permission.isEmpty() && !player.getPlayer().hasPermission(this.permission))
+        if (!this.permission.isEmpty() && PlayerParticles.getInstance().getManager(PermissionManager.class).hasPermission(player, this.permission))
             return false;
         
         // If allowPermissionOverride is true, always let the player apply this group

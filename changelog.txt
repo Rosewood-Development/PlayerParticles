@@ -1,6 +1,8 @@
 === v7.13 ===
 + Added particles for Minecraft 1.16
 + Added getVersion() method to API
+* Fixed '/ppo <user> group load <group>' not using the executor's permissions
+* Fixed confusion when using '/pp remove fishing'
 === v7.12 ===
 + Added WorldGuard region support
 + Added permission 'playerparticles.worldguard.bypass'

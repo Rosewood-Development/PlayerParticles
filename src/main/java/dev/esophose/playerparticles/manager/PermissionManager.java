@@ -165,6 +165,17 @@ public class PermissionManager extends Manager {
     }
 
     /**
+     * Checks if the given player has the given permission
+     *
+     * @param pplayer The player to check
+     * @param permission The permission to check
+     * @return true if the player has the permission, otherwise false
+     */
+    public boolean hasPermission(PPlayer pplayer, String permission) {
+        return pplayer.getUnderlyingExecutor().hasPermission(permission);
+    }
+
+    /**
      * Checks if the given player has reached the max number of particles in their active group
      * 
      * @param pplayer The player to check
