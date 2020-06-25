@@ -272,6 +272,7 @@ public class LocaleManager extends Manager {
                 String before = parsed.substring(0, matcher.start());
                 String after = parsed.substring(matcher.end());
                 parsed = before + hexColor + after;
+                matcher = HEX_PATTERN.matcher(parsed);
             }
         }
 
