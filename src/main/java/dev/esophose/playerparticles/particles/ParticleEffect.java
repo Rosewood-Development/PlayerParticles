@@ -38,7 +38,7 @@ public enum ParticleEffect {
     CAMPFIRE_SIGNAL_SMOKE("CAMPFIRE_SIGNAL_SMOKE", Collections.singletonList("REDSTONE_TORCH")),
     CLOUD("CLOUD", Arrays.asList("WHITE_WOOL", "WOOL")),
     COMPOSTER("COMPOSTER", Collections.singletonList("COMPOSTER")),
-    CRIMSON_SPORE("CRIMSON_SPORE", Collections.singletonList("CRIMSON_SPORE")),
+    CRIMSON_SPORE("CRIMSON_SPORE", Collections.singletonList("CRIMSON_FUNGUS")),
     CRIT("CRIT", Collections.singletonList("IRON_SWORD")),
     CURRENT_DOWN("CURRENT_DOWN", Collections.singletonList("SOUL_SAND")),
     DAMAGE_INDICATOR("DAMAGE_INDICATOR", Collections.singletonList("BOW")),

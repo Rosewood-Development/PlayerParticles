@@ -5,7 +5,7 @@ import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 
 public class ParticlePlaceholderExpansion extends PlaceholderExpansion {

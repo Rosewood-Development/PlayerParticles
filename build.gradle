@@ -10,7 +10,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 compileJava.options.encoding = 'UTF-8'
 group = 'dev.esophose'
-version = '7.13'
+version = '7.14'
 
 java {
     withJavadocJar()
@@ -24,6 +24,7 @@ repositories {
     maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
     maven { url = 'https://repo.codemc.org/repository/maven-public' }
     maven { url = 'http://repo.extendedclip.com/content/repositories/placeholderapi/' }
+    maven { url = 'https://repo.rosewooddev.io/repository/public/' }
 }
 
 dependencies {
@@ -36,7 +37,7 @@ dependencies {
     shadow 'org.jetbrains:annotations:16.0.2'
     shadow 'me.clip:placeholderapi:2.10.4'
     shadow 'org.xerial:sqlite-jdbc:3.23.1'
-    shadow 'org.spigotmc:spigot-api:1.15.2-R0.1-SNAPSHOT'
+    shadow 'org.spigotmc:spigot:1.16.1'
 }
 
 shadowJar {

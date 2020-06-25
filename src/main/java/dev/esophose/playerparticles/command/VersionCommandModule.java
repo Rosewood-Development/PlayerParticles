@@ -5,7 +5,7 @@ import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.particles.PPlayer;
 import java.util.ArrayList;
 import java.util.List;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 
 public class VersionCommandModule implements CommandModule {
 

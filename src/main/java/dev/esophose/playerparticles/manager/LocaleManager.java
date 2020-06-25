@@ -12,15 +12,21 @@ import dev.esophose.playerparticles.locale.SimplifiedChineseLocale;
 import dev.esophose.playerparticles.locale.VietnameseLocale;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.particles.PPlayer;
+import dev.esophose.playerparticles.util.NMSUtil;
 import dev.esophose.playerparticles.util.StringPlaceholders;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
-import org.bukkit.ChatColor;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class LocaleManager extends Manager {
+
+    private static final Pattern HEX_PATTERN = Pattern.compile("#([A-Fa-f0-9]){6}");
 
     private CommentedFileConfiguration locale;
 
@@ -127,7 +133,7 @@ public class LocaleManager extends Manager {
         if (!Setting.MESSAGES_ENABLED.getBoolean())
             return;
 
-        sender.sendMessage(this.getLocaleMessage("prefix") + this.getLocaleMessage(messageKey, stringPlaceholders));
+        this.sendParsedMessage(sender, this.getLocaleMessage("prefix") + this.getLocaleMessage(messageKey, stringPlaceholders));
     }
 
     /**
@@ -141,7 +147,7 @@ public class LocaleManager extends Manager {
         if (!Setting.MESSAGES_ENABLED.getBoolean())
             return;
 
-        pplayer.getUnderlyingExecutor().sendMessage(this.parsePlaceholders(pplayer.getPlayer(), this.getLocaleMessage("prefix") + this.getLocaleMessage(messageKey, stringPlaceholders)));
+        this.sendParsedMessage(pplayer.getUnderlyingExecutor(), this.getLocaleMessage("prefix") + this.getLocaleMessage(messageKey, stringPlaceholders));
     }
 
     /**
@@ -175,7 +181,7 @@ public class LocaleManager extends Manager {
         if (!Setting.MESSAGES_ENABLED.getBoolean())
             return;
 
-        sender.sendMessage(this.getLocaleMessage(messageKey, stringPlaceholders));
+        this.sendParsedMessage(sender, this.getLocaleMessage(messageKey, stringPlaceholders));
     }
 
     /**
@@ -189,7 +195,7 @@ public class LocaleManager extends Manager {
         if (!Setting.MESSAGES_ENABLED.getBoolean())
             return;
 
-        pplayer.getUnderlyingExecutor().sendMessage(this.parsePlaceholders(pplayer.getPlayer(), this.getLocaleMessage(messageKey, stringPlaceholders)));
+        this.sendParsedMessage(pplayer.getUnderlyingExecutor(), this.getLocaleMessage(messageKey, stringPlaceholders));
     }
 
     /**
@@ -222,7 +228,7 @@ public class LocaleManager extends Manager {
         if (!Setting.MESSAGES_ENABLED.getBoolean())
             return;
 
-        sender.sendMessage(message);
+        this.sendParsedMessage(sender, message);
     }
 
     /**
@@ -232,18 +238,58 @@ public class LocaleManager extends Manager {
      * @param message The message to send
      */
     public void sendCustomMessage(PPlayer pplayer, String message) {
-        this.sendCustomMessage(pplayer.getUnderlyingExecutor(), this.parsePlaceholders(pplayer.getPlayer(), message));
+        this.sendCustomMessage(pplayer.getUnderlyingExecutor(), message);
     }
 
     /**
      * Replaces PlaceholderAPI placeholders if PlaceholderAPI is enabled
      *
-     * @param player The Player to replace with
+     * @param sender The Player to replace with
      * @param message The message
      * @return A placeholder-replaced message
      */
-    private String parsePlaceholders(Player player, String message) {
-        return PlaceholderAPIHook.applyPlaceholders(player, message);
+    private String parsePlaceholders(CommandSender sender, String message) {
+        if (sender instanceof Player)
+            return PlaceholderAPIHook.applyPlaceholders((Player) sender, message);
+        return message;
+    }
+
+    /**
+     * Parses the colors in a message
+     * Parses & to the normal color code character
+     * Parses hex codes if the game version is 1.16 or higher
+     *
+     * @param message The message
+     * @return A color-replaced message
+     */
+    private String parseColors(String message) {
+        String parsed = message;
+
+        if (NMSUtil.getVersionNumber() >= 16) {
+            Matcher matcher = HEX_PATTERN.matcher(parsed);
+            while (matcher.find()) {
+                ChatColor hexColor = ChatColor.of(matcher.group());
+                String before = parsed.substring(0, matcher.start());
+                String after = parsed.substring(matcher.end());
+                parsed = before + hexColor + after;
+            }
+        }
+
+        return ChatColor.translateAlternateColorCodes('&', parsed);
+    }
+
+    /**
+     * Sends a message with placeholders and colors parsed to a CommandSender
+     *
+     * @param sender The sender to send the message to
+     * @param message The message
+     */
+    private void sendParsedMessage(CommandSender sender, String message) {
+        if (NMSUtil.getVersionNumber() >= 16) {
+            sender.spigot().sendMessage(TextComponent.fromLegacyText(this.parseColors(this.parsePlaceholders(sender, message))));
+        } else {
+            sender.sendMessage(this.parseColors(this.parsePlaceholders(sender, message)));
+        }
     }
 
 }

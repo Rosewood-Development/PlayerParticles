@@ -6,7 +6,7 @@ import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.util.NMSUtil;
 import java.util.ArrayList;
 import java.util.List;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
