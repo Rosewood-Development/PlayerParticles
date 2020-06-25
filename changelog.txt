@@ -1,3 +1,6 @@
+=== v7.14 ===
++ Added hex code support for 1.16 servers. Example: `prefix: '&7[#add8e6PlayerParticles&7] '`
+* Fixed typo in GUI material for crimson_spore particle
 === v7.13 ===
 + Added particles for Minecraft 1.16
 + Added getVersion() method to API
