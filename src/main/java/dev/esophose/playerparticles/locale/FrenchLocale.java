@@ -19,7 +19,7 @@ public class FrenchLocale implements Locale {
     public Map<String, String> getDefaultLocaleStrings() {
         return new LinkedHashMap<String, String>() {{
             this.put("#0", "Plugin Message Prefix");
-            this.put("prefix", "&7[&3PlayerParticles&7] ");
+            this.put("prefix", "&7[<g:#00aaaa:#0066aa>PlayerParticles&7] ");
 
             this.put("#1", "Command Description Messages");
             this.put("command-error-missing-effects-or-styles", "&cVous devez avoir accès aux effets et aux styles pour utiliser cette commande !");

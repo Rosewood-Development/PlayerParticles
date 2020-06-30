@@ -46,7 +46,7 @@ public class ParticleGroupPreset {
      */
     public boolean canPlayerUse(PPlayer player) {
         // If this particle group has a permission, does the player have it?
-        if (!this.permission.isEmpty() && PlayerParticles.getInstance().getManager(PermissionManager.class).hasPermission(player, this.permission))
+        if (!this.permission.isEmpty() && !PlayerParticles.getInstance().getManager(PermissionManager.class).hasPermission(player, this.permission))
             return false;
         
         // If allowPermissionOverride is true, always let the player apply this group

@@ -19,7 +19,7 @@ public class VietnameseLocale implements Locale {
     public Map<String, String> getDefaultLocaleStrings() {
         return new LinkedHashMap<String, String>() {{
             this.put("#0", "Plugin Message Prefix");
-            this.put("prefix", "&7[&3PlayerParticles&7] ");
+            this.put("prefix", "&7[<g:#00aaaa:#0066aa>PlayerParticles&7] ");
 
             this.put("#1", "Command Description Messages");
             this.put("command-error-missing-effects-or-styles", "&cBạn phải có quyền truy cập vào các hiệu ứng và phong cách để sử dụng lệnh này!");

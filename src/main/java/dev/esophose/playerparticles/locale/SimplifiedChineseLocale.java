@@ -19,7 +19,7 @@ public class SimplifiedChineseLocale implements Locale {
     public Map<String, String> getDefaultLocaleStrings() {
         return new LinkedHashMap<String, String>() {{
             this.put("#0", "Plugin Message Prefix");
-            this.put("prefix", "&7[&3PlayerParticles&7] ");
+            this.put("prefix", "&7[<g:#00aaaa:#0066aa>PlayerParticles&7] ");
 
             this.put("#1", "Command Description Messages");
             this.put("command-error-missing-effects-or-styles", "&c您必须有权使用效果和样式才能使用此命令!");

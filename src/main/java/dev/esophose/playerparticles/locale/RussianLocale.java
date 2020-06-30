@@ -19,7 +19,7 @@ public class RussianLocale implements Locale {
     public Map<String, String> getDefaultLocaleStrings() {
         return new LinkedHashMap<String, String>() {{
             this.put("#0", "Plugin Message Prefix");
-            this.put("prefix", "&7[&3PlayerParticles&7] ");
+            this.put("prefix", "&7[<g:#00aaaa:#0066aa>PlayerParticles&7] ");
 
             this.put("#1", "Command Description Messages");
             this.put("command-error-missing-effects-or-styles", "&cВы должны иметь доступ к эффектам и стилям, чтобы использовать эту команду!");
