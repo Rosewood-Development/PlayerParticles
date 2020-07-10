@@ -32,7 +32,7 @@ dependencies {
     compile 'org.slf4j:slf4j-nop:1.7.25'
     compile 'com.zaxxer:HikariCP:3.2.0'
     compile 'org.bstats:bstats-bukkit-lite:1.7'
-    compile 'org.codemc.worldguardwrapper:worldguardwrapper:1.1.6-SNAPSHOT'
+    compile 'org.codemc.worldguardwrapper:worldguardwrapper:1.1.9-SNAPSHOT'
     shadow 'com.googlecode.json-simple:json-simple:1.1.1'
     shadow 'org.jetbrains:annotations:16.0.2'
     shadow 'me.clip:placeholderapi:2.10.4'

@@ -203,7 +203,9 @@ public class DataManager extends Manager {
                         World world = Bukkit.getWorld(result.getString("world"));
                         if (world == null) {
                             // World was deleted, remove the fixed effect as it is no longer valid
-                            this.removeFixedEffect(playerUUID, fixedEffectId);
+                            // Only delete on SQLite, as a MySQL server may have fixed effects from other servers saved
+                            if (this.databaseConnector instanceof SQLiteConnector)
+                                this.removeFixedEffect(playerUUID, fixedEffectId);
                             continue;
                         }
 

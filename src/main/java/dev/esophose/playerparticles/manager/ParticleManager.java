@@ -84,7 +84,7 @@ public class ParticleManager extends Manager implements Listener, Runnable {
 
             if (WorldGuardHook.enabled()) {
                 long worldGuardTicks = Setting.WORLDGUARD_CHECK_INTERVAL.getLong();
-                this.worldGuardTask = Bukkit.getScheduler().runTaskTimer(this.playerParticles, this::updateWorlGuardStatuses, 0, worldGuardTicks);
+                this.worldGuardTask = Bukkit.getScheduler().runTaskTimer(this.playerParticles, this::updateWorldGuardStatuses, 0, worldGuardTicks);
             }
         }, 5);
 
@@ -183,7 +183,7 @@ public class ParticleManager extends Manager implements Listener, Runnable {
     /**
      * Updates the WorldGuard region statuses for players
      */
-    private void updateWorlGuardStatuses() {
+    private void updateWorldGuardStatuses() {
         PermissionManager permissionManager = this.playerParticles.getManager(PermissionManager.class);
 
         for (PPlayer pplayer : this.particlePlayers.values()) {
