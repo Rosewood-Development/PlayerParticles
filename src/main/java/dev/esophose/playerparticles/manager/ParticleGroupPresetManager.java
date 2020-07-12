@@ -79,7 +79,7 @@ public class ParticleGroupPresetManager extends Manager {
                     }
 
                     if (stringId.equalsIgnoreCase("gui-icon")) {
-                        guiIcon = Material.valueOf(groupSection.getString(stringId));
+                        guiIcon = Material.matchMaterial(groupSection.getString(stringId));
                         continue;
                     }
                     
