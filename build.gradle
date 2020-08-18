@@ -33,11 +33,11 @@ dependencies {
     compile 'com.zaxxer:HikariCP:3.2.0'
     compile 'org.bstats:bstats-bukkit-lite:1.7'
     compile 'org.codemc.worldguardwrapper:worldguardwrapper:1.1.9-SNAPSHOT'
-    shadow 'com.googlecode.json-simple:json-simple:1.1.1'
-    shadow 'org.jetbrains:annotations:16.0.2'
-    shadow 'me.clip:placeholderapi:2.10.4'
-    shadow 'org.xerial:sqlite-jdbc:3.23.1'
-    shadow 'org.spigotmc:spigot:1.16.1'
+    compileOnly 'com.googlecode.json-simple:json-simple:1.1.1'
+    compileOnly 'org.jetbrains:annotations:16.0.2'
+    compileOnly 'me.clip:placeholderapi:2.10.4'
+    compileOnly 'org.xerial:sqlite-jdbc:3.23.1'
+    compileOnly 'org.spigotmc:spigot:1.16.2'
 }
 
 shadowJar {
