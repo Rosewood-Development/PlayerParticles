@@ -151,13 +151,11 @@ public class GroupCommandModule implements CommandModule {
             
             group = presetGroup.getGroup();
             isPreset = true;
-        }
-
-        if (!group.canPlayerUse(pplayer)) {
+        } else if (!group.canPlayerUse(pplayer)) {
             localeManager.sendMessage(pplayer, "group-no-permission", StringPlaceholders.single("group", groupName));
             return;
         }
-        
+
         // Empty out the active group and fill it with clones from the target group
         ParticleGroup activeGroup = pplayer.getActiveParticleGroup();
         activeGroup.getParticles().clear();
