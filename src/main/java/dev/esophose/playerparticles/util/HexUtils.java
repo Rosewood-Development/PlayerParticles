@@ -154,7 +154,7 @@ public final class HexUtils {
             if (matcher.start() > searchAfter)
                 return matcher.start();
         }
-        return content.length() - 1;
+        return content.length();
     }
 
     private static String cleanHex(String hex) {
@@ -270,6 +270,9 @@ public final class HexUtils {
             this.step = this.stepIndex = 0;
         }
 
+        /**
+         * @return the next color in the gradient
+         */
         public Color next() {
             // Gradients will use the first color of the entire spectrum won't be available to preserve prettiness
             if (NMSUtil.getVersionNumber() < 16)
@@ -344,6 +347,9 @@ public final class HexUtils {
             this(totalColors, 1.0F, 1.0F);
         }
 
+        /**
+         * @return the next color in the gradient
+         */
         public Color next() {
             Color color = Color.getHSBColor(this.hue, this.saturation, this.brightness);
             this.hue += this.hueStep;
