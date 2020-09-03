@@ -19,7 +19,7 @@ public class ParticleStyleWhirl extends DefaultParticleStyle {
     private double speedMultiplier;
     private double offset;
 
-    public ParticleStyleWhirl() {
+    protected ParticleStyleWhirl() {
         super("whirl", true, true, 0.5);
     }
 

@@ -23,7 +23,7 @@ public class ParticleStyleBlockPlace extends DefaultParticleStyle implements Lis
     private double particleSpread;
     private double particleSpeed;
 
-    public ParticleStyleBlockPlace() {
+    protected ParticleStyleBlockPlace() {
         super("blockplace", false, false, 0);
     }
 

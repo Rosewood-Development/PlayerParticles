@@ -20,7 +20,7 @@ public class ParticleStylePulse extends DefaultParticleStyle {
     private int numSteps;
     private double speedMultiplier;
 
-    public ParticleStylePulse() {
+    protected ParticleStylePulse() {
         super("pulse", true, true, 0.5);
     }
 

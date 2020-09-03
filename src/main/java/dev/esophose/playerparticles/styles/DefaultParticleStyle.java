@@ -28,7 +28,7 @@ public abstract class DefaultParticleStyle implements ParticleStyle {
     private double fixedEffectOffset;
     private Material guiIconMaterial;
 
-    public DefaultParticleStyle(String internalStyleName, boolean canBeFixedByDefault, boolean canToggleWithMovementByDefault, double fixedEffectOffsetByDefault) {
+    protected DefaultParticleStyle(String internalStyleName, boolean canBeFixedByDefault, boolean canToggleWithMovementByDefault, double fixedEffectOffsetByDefault) {
         this.internalStyleName = internalStyleName;
         this.canBeFixedByDefault = canBeFixedByDefault;
         this.canToggleWithMovementByDefault = canToggleWithMovementByDefault;

@@ -33,7 +33,7 @@ public class ParticleStyleFishing extends DefaultParticleStyle implements Listen
 
     private Set<Projectile> projectiles;
 
-    public ParticleStyleFishing() {
+    protected ParticleStyleFishing() {
         super("fishing", false, false, 0);
 
         this.projectiles = new HashSet<>();

@@ -43,7 +43,7 @@ public class ParticleStyleVortex extends DefaultParticleStyle {
     private int helices;
     private int maxStep;
 
-    public ParticleStyleVortex() {
+    protected ParticleStyleVortex() {
         super("vortex", true, true, 0.5);
     }
 

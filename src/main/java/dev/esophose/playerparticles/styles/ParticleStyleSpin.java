@@ -16,7 +16,7 @@ public class ParticleStyleSpin extends DefaultParticleStyle {
     private double radius;
     private double offset;
 
-    public ParticleStyleSpin() {
+    protected ParticleStyleSpin() {
         super("spin", true, true, -0.5);
     }
 

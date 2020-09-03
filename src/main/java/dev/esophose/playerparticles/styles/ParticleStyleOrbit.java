@@ -17,7 +17,7 @@ public class ParticleStyleOrbit extends DefaultParticleStyle {
     private int numSteps;
     private double radius;
 
-    public ParticleStyleOrbit() {
+    protected ParticleStyleOrbit() {
         super("orbit", true, true, 0);
     }
 

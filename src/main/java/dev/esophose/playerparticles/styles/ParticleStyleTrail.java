@@ -22,7 +22,7 @@ public class ParticleStyleTrail extends DefaultParticleStyle implements Listener
     private double spread;
     private double speed;
 
-    public ParticleStyleTrail() {
+    protected ParticleStyleTrail() {
         super("trail", false, false, 0);
     }
 

@@ -16,7 +16,7 @@ public class ParticleStyleBatman extends DefaultParticleStyle {
 
     private int spawnDelay;
 
-    public ParticleStyleBatman() {
+    protected ParticleStyleBatman() {
         super("batman", true, true, -1);
     }
 

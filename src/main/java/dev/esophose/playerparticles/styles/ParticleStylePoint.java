@@ -11,7 +11,7 @@ public class ParticleStylePoint extends DefaultParticleStyle {
 
     private double offset;
 
-    public ParticleStylePoint() {
+    protected ParticleStylePoint() {
         super("point", true, false, -0.5);
     }
 

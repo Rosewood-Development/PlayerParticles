@@ -17,7 +17,7 @@ public class ParticleStyleSpiral extends DefaultParticleStyle {
     private int particlesPerRotation = 90;
     private double radius = 0.8;
 
-    public ParticleStyleSpiral() {
+    protected ParticleStyleSpiral() {
         super("spiral", true, true, 0);
     }
 

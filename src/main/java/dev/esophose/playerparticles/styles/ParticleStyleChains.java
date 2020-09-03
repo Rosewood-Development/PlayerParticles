@@ -12,7 +12,7 @@ public class ParticleStyleChains extends DefaultParticleStyle {
 
     private int chainParticleAmount;
 
-    public ParticleStyleChains() {
+    protected ParticleStyleChains() {
         super("chains", true, true, 0);
     }
 

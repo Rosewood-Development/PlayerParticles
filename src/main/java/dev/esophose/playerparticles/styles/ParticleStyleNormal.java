@@ -11,7 +11,7 @@ import org.bukkit.Location;
 
 public class ParticleStyleNormal extends DefaultParticleStyle {
 
-    public ParticleStyleNormal() {
+    protected ParticleStyleNormal() {
         super("normal", true, false, 0);
     }
 

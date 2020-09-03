@@ -12,7 +12,7 @@ public class ParticleStyleThick extends DefaultParticleStyle {
 
     private int multiplier;
 
-    public ParticleStyleThick() {
+    protected ParticleStyleThick() {
         super("thick", true, true, 0);
     }
 

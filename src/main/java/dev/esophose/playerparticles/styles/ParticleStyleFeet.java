@@ -15,7 +15,7 @@ public class ParticleStyleFeet extends DefaultParticleStyle {
     private double particleSpeed;
     private int particlesPerTick;
 
-    public ParticleStyleFeet() {
+    protected ParticleStyleFeet() {
         super("feet", true, false, 0.5);
     }
 

@@ -28,7 +28,7 @@ public class ParticleStyleTeleport extends DefaultParticleStyle implements Liste
     private double spread;
     private double speed;
 
-    public ParticleStyleTeleport() {
+    protected ParticleStyleTeleport() {
         super("teleport", false, false, 0);
     }
 

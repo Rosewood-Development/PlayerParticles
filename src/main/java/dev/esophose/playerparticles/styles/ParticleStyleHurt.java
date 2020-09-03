@@ -8,7 +8,6 @@ import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.bukkit.Location;
@@ -22,7 +21,7 @@ public class ParticleStyleHurt extends DefaultParticleStyle implements Listener 
 
     private int thickMultiplier;
 
-    public ParticleStyleHurt() {
+    protected ParticleStyleHurt() {
         super("hurt", false, false, 0);
     }
 

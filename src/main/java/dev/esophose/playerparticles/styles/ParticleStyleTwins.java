@@ -20,7 +20,7 @@ public class ParticleStyleTwins extends DefaultParticleStyle {
     private int numSteps = 60;
     private int maxStepY = 30;
 
-    public ParticleStyleTwins() {
+    protected ParticleStyleTwins() {
         super("twins", true, true, 0);
     }
 

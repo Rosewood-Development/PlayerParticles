@@ -36,7 +36,7 @@ public class ParticleStyleCelebration extends DefaultParticleStyle {
     private double fuseSpacing;
     private ParticleEffect fuseEffect;
 
-    public ParticleStyleCelebration() {
+    protected ParticleStyleCelebration() {
         super("celebration", true, true, 0);
     }
 

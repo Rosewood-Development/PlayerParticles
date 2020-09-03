@@ -17,7 +17,7 @@ public class ParticleStyleBeam extends DefaultParticleStyle {
     private int points;
     private double radius;
 
-    public ParticleStyleBeam() {
+    protected ParticleStyleBeam() {
         super("beam", true, true, 0.5);
     }
 

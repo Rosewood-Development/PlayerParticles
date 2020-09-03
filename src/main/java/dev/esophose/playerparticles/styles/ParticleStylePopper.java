@@ -24,7 +24,7 @@ public class ParticleStylePopper extends DefaultParticleStyle {
     private double popSpeed;
     private double popOffset;
 
-    public ParticleStylePopper() {
+    protected ParticleStylePopper() {
         super("popper", true, true, 0.5);
     }
 

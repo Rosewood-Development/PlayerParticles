@@ -15,7 +15,7 @@ public class ParticleStyleRings extends DefaultParticleStyle {
 
     private int maxStep;
 
-    public ParticleStyleRings() {
+    protected ParticleStyleRings() {
         super("rings", true, true, 0);
     }
 

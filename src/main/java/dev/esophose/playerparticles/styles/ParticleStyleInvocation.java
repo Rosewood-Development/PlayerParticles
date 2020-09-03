@@ -21,7 +21,7 @@ public class ParticleStyleInvocation extends DefaultParticleStyle {
     private double playerOffset;
     private double speedMultiplier;
 
-    public ParticleStyleInvocation() {
+    protected ParticleStyleInvocation() {
         super("invocation", true, true, 0.5);
     }
 

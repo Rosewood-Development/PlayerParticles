@@ -49,7 +49,7 @@ public class ParticleStyleCube extends DefaultParticleStyle {
     private double angularVelocityZ;
     private int particlesPerEdge;
 
-    public ParticleStyleCube() {
+    protected ParticleStyleCube() {
         super("cube", true, true, 0);
     }
 

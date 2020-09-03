@@ -43,7 +43,7 @@ public class ParticleStyleCompanion extends DefaultParticleStyle {
     private double xFactor, yFactor, zFactor;
     private double xOffset, yOffset, zOffset;
 
-    public ParticleStyleCompanion() {
+    protected ParticleStyleCompanion() {
         super("companion", true, false, 1);
     }
 

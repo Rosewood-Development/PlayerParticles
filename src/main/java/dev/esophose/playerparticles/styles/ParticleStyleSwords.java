@@ -33,7 +33,7 @@ public class ParticleStyleSwords extends DefaultParticleStyle implements Listene
         DEFAULT_SWORD_NAMES.addAll(Arrays.asList("WOOD_SWORD", "WOODEN_SWORD", "STONE_SWORD", "IRON_SWORD", "GOLD_SWORD", "GOLDEN_SWORD", "DIAMOND_SWORD", "TRIDENT"));
     }
 
-    public ParticleStyleSwords() {
+    protected ParticleStyleSwords() {
         super("swords", false, false, 0);
     }
 

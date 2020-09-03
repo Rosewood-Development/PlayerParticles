@@ -25,7 +25,7 @@ public class ParticleStyleArrows extends DefaultParticleStyle implements Listene
     private List<String> projectileEntityNames;
     private int arrowTrackingTime;
 
-    public ParticleStyleArrows() {
+    protected ParticleStyleArrows() {
         super("arrows", false, false, 0);
 
         this.projectiles = new ArrayList<>();

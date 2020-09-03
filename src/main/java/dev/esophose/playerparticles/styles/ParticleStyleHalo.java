@@ -17,7 +17,7 @@ public class ParticleStyleHalo extends DefaultParticleStyle {
     private double radius;
     private double playerOffset;
 
-    public ParticleStyleHalo() {
+    protected ParticleStyleHalo() {
         super("halo", true, false, -0.5);
     }
 

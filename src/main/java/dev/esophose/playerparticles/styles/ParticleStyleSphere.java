@@ -14,7 +14,7 @@ public class ParticleStyleSphere extends DefaultParticleStyle {
     private int density;
     private double radius;
 
-    public ParticleStyleSphere() {
+    protected ParticleStyleSphere() {
         super("sphere", true, true, 0);
     }
 
