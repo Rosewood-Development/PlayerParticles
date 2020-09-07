@@ -11,7 +11,8 @@ public class DefaultCommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         // The default command just opens the GUI, execute the GUICommandModule
-        PlayerParticles.getInstance().getManager(CommandManager.class).findMatchingCommand("gui").onCommandExecute(pplayer, new String[] { "_byDefault_" });
+        ((GUICommandModule) PlayerParticles.getInstance().getManager(CommandManager.class).findMatchingCommand("gui"))
+                .onCommandExecute(pplayer, false);
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
