@@ -93,7 +93,7 @@ public class GuiInventoryDefault extends GuiInventory {
                     GuiIcon.GROUPS.get(),
                     localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("gui-manage-your-groups"),
                     new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-manage-your-groups-description")},
-                    (button, isShiftClick) -> guiManager.transition(new GuiInventoryManageGroups(pplayer)));
+                    (button, isShiftClick) -> guiManager.transition(new GuiInventoryManageGroups(pplayer, 1)));
             this.actionButtons.add(manageYourGroupsButton);
         }
 
@@ -104,7 +104,7 @@ public class GuiInventoryDefault extends GuiInventory {
                     GuiIcon.PRESET_GROUPS.get(),
                     localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("gui-load-a-preset-group"),
                     new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-load-a-preset-group-description")},
-                    (button, isShiftClick) -> guiManager.transition(new GuiInventoryLoadPresetGroups(pplayer, false)));
+                    (button, isShiftClick) -> guiManager.transition(new GuiInventoryLoadPresetGroups(pplayer, false, 1)));
             this.actionButtons.add(loadPresetGroups);
         }
 

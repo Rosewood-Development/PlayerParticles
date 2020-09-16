@@ -19,11 +19,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 
 public class GuiInventoryManageGroups extends GuiInventory {
 
-    public GuiInventoryManageGroups(PPlayer pplayer) {
+    public GuiInventoryManageGroups(PPlayer pplayer, int pageNumber) {
         super(pplayer, Bukkit.createInventory(pplayer.getPlayer(), INVENTORY_SIZE, PlayerParticles.getInstance().getManager(LocaleManager.class).getLocaleMessage("gui-manage-your-groups")));
 
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
@@ -31,35 +32,43 @@ public class GuiInventoryManageGroups extends GuiInventory {
 
         this.fillBorder(BorderColor.BROWN);
 
-        int index = 10;
-        int nextWrap = 17;
-        int maxIndex = 35;
-        List<ParticleGroup> groups = new ArrayList<>(pplayer.getParticleGroups().values());
-        groups.sort(Comparator.comparing(ParticleGroup::getName));
+        List<ParticleGroup> groups = pplayer.getParticleGroups().values().stream()
+                .filter(x -> !x.getName().equals(ParticleGroup.DEFAULT_NAME))
+                .sorted(Comparator.comparing(ParticleGroup::getName))
+                .collect(Collectors.toList());
 
-        for (ParticleGroup group : groups) {
-            if (group.getName().equals(ParticleGroup.DEFAULT_NAME)) continue;
+        int numberOfItems = groups.size();
+        int itemsPerPage = 28;
+        int maxPages = (int) Math.max(1, Math.ceil((double) numberOfItems / itemsPerPage));
+        int slot = 10;
+        int nextWrap = 17;
+        int maxIndex = 43;
+
+        for (int i = (pageNumber - 1) * itemsPerPage; i < numberOfItems; i++) {
+            ParticleGroup group = groups.get(i);
+            if (group.getName().equals(ParticleGroup.DEFAULT_NAME))
+                continue;
 
             List<ParticlePair> particles = new ArrayList<>(group.getParticles().values());
             particles.sort(Comparator.comparingInt(ParticlePair::getId));
 
             String[] lore = new String[particles.size() + 2];
             lore[0] = localeManager.getLocaleMessage("gui-color-subtext") + localeManager.getLocaleMessage("gui-click-to-load", StringPlaceholders.single("amount", particles.size()));
-            int i = 1;
+            int n = 1;
             for (ParticlePair particle : particles) {
                 StringPlaceholders stringPlaceholders = StringPlaceholders.builder("id", particle.getId())
                         .addPlaceholder("effect", ParticleUtils.formatName(particle.getEffect().getName()))
                         .addPlaceholder("style", ParticleUtils.formatName(particle.getStyle().getName()))
                         .addPlaceholder("data", particle.getDataString())
                         .build();
-                lore[i] = localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-particle-info", stringPlaceholders);
-                i++;
+                lore[n] = localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-particle-info", stringPlaceholders);
+                n++;
             }
-            lore[i] = localeManager.getLocaleMessage("gui-color-unavailable") + localeManager.getLocaleMessage("gui-shift-click-to-delete");
+            lore[n] = localeManager.getLocaleMessage("gui-color-unavailable") + localeManager.getLocaleMessage("gui-shift-click-to-delete");
 
             // Load Group Buttons
             GuiActionButton groupButton = new GuiActionButton(
-                    index,
+                    slot,
                     GuiIcon.GROUPS.get(),
                     localeManager.getLocaleMessage("gui-color-icon-name") + group.getName(),
                     lore,
@@ -82,12 +91,34 @@ public class GuiInventoryManageGroups extends GuiInventory {
                     });
             this.actionButtons.add(groupButton);
 
-            index++;
-            if (index == nextWrap) { // Loop around border
+            slot++;
+            if (slot == nextWrap) { // Loop around border
                 nextWrap += 9;
-                index += 2;
+                slot += 2;
             }
-            if (index > maxIndex) break; // Overflowed the available space
+            if (slot > maxIndex) break; // Overflowed the available space
+        }
+
+        // Previous page button
+        if (pageNumber != 1) {
+            GuiActionButton previousPageButton = new GuiActionButton(
+                    INVENTORY_SIZE - 6,
+                    GuiIcon.PREVIOUS_PAGE.get(),
+                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-previous-page-button", StringPlaceholders.builder("start", pageNumber - 1).addPlaceholder("end", maxPages).build()),
+                    new String[]{},
+                    (button, isShiftClick) -> guiManager.transition(new GuiInventoryManageGroups(pplayer, pageNumber - 1)));
+            this.actionButtons.add(previousPageButton);
+        }
+
+        // Next page button
+        if (pageNumber != maxPages) {
+            GuiActionButton nextPageButton = new GuiActionButton(
+                    INVENTORY_SIZE - 4,
+                    GuiIcon.NEXT_PAGE.get(),
+                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-next-page-button", StringPlaceholders.builder("start", pageNumber + 1).addPlaceholder("end", maxPages).build()),
+                    new String[]{},
+                    (button, isShiftClick) -> guiManager.transition(new GuiInventoryManageGroups(pplayer, pageNumber + 1)));
+            this.actionButtons.add(nextPageButton);
         }
 
         boolean hasReachedMax = PlayerParticles.getInstance().getManager(PermissionManager.class).hasPlayerReachedMaxGroups(pplayer);
@@ -109,17 +140,16 @@ public class GuiInventoryManageGroups extends GuiInventory {
 
         // Save Group Button
         GuiActionButton saveGroupButton = new GuiActionButton(
-                40,
+                INVENTORY_SIZE - 5,
                 GuiIcon.CREATE.get(),
                 localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("gui-save-group"),
                 lore,
                 (button, isShiftClick) -> {
-                    if (hasReachedMax || !hasParticles) return;
+                    if (hasReachedMax || !hasParticles)
+                        return;
 
                     PlayerChatHook.addHook(new PlayerChatHookData(pplayer.getUniqueId(), 15, (textEntered) -> {
-                        if (textEntered == null || textEntered.equalsIgnoreCase("cancel")) {
-                            guiManager.transition(new GuiInventoryManageGroups(pplayer));
-                        } else {
+                        if (textEntered != null && !textEntered.equalsIgnoreCase("cancel")) {
                             String groupName = textEntered.split(" ")[0];
 
                             // Check that the groupName isn't the reserved name
@@ -153,8 +183,8 @@ public class GuiInventoryManageGroups extends GuiInventory {
                                 localeManager.sendMessage(pplayer, "group-save-success", StringPlaceholders.single("name", groupName));
                             }
 
-                            guiManager.transition(new GuiInventoryManageGroups(pplayer));
                         }
+                        guiManager.transition(new GuiInventoryManageGroups(pplayer, pageNumber));
                     }));
                     this.close();
                 });
