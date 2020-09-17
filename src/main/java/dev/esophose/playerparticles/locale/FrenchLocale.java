@@ -276,7 +276,6 @@ public class FrenchLocale implements Locale {
             this.put("gui-manage-your-groups-description", "Créez, éditez, et supprimez vos groupes particules");
 
             this.put("#31", "GUI Load Messages");
-            this.put("gui-load-a-preset-group", "Chargez un groupe de presets");
             this.put("gui-load-a-preset-group-description", "Chargez un groupe de particules déjà fait");
 
             this.put("#32", "GUI Save Messages");

@@ -1,20 +1,24 @@
-package dev.esophose.playerparticles.particles;
+package dev.esophose.playerparticles.particles.preset;
 
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.PermissionManager;
+import dev.esophose.playerparticles.particles.PPlayer;
+import dev.esophose.playerparticles.particles.ParticleGroup;
 import org.bukkit.Material;
 
 public class ParticleGroupPreset {
 
-    private String displayName;
-    private Material guiIcon;
-    private String permission;
-    private boolean allowPermissionOverride;
-    private ParticleGroup group;
+    private final String displayName;
+    private final Material guiIcon;
+    private final int guiSlot;
+    private final String permission;
+    private final boolean allowPermissionOverride;
+    private final ParticleGroup group;
     
-    public ParticleGroupPreset(String displayName, Material guiIcon, String permission, boolean allowPermissionOverride, ParticleGroup group) {
+    public ParticleGroupPreset(String displayName, Material guiIcon, int guiSlot, String permission, boolean allowPermissionOverride, ParticleGroup group) {
         this.displayName = displayName;
         this.guiIcon = guiIcon;
+        this.guiSlot = guiSlot;
         this.permission = permission;
         this.allowPermissionOverride = allowPermissionOverride;
         this.group = group;
@@ -36,6 +40,15 @@ public class ParticleGroupPreset {
      */
     public Material getGuiIcon() {
         return this.guiIcon;
+    }
+
+    /**
+     * Gets the GUI slot for this particle group
+     *
+     * @return The GUI slot for this particle group
+     */
+    public int getGuiSlot() {
+        return this.guiSlot;
     }
     
     /**

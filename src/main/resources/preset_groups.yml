@@ -10,72 +10,80 @@
 #   want to reset the file to its defaults, simply     #
 #   delete it and run the command '/pp reload'.        #
 # ==================================================== #
-#
-# Use the following format for adding new groups:
-# group-name:
-#   display-name: 'My Amazing Group'
-#   gui-icon: 'ENDER_CHEST'
-#   permission: 'playerparticles.group.group-name'
-#   allow-permission-override: true
-#   1:
-#     effect: 'dust'
-#     style: 'wings'
-#     data: '255 255 255'
-#   2:
-#     effect: 'cloud'
-#     style: 'overhead'
-#     data: ''
-#
+
 # What everything means:
+# The top-level items are separators and represent each individual page. The pages will be in the same order
+#   that they appear in the config. The title is what will be displayed as the title of the GUI for that given page.
 # group-name: The name of the group, how it will be applied by using /pp group load <group-name>.
-# display-name: The display name of the group, how it will show up in the GUI, this is required.
-# gui-icon: The icon to use for the GUI, this is required.
+# display-name: The display name of the group, how it will show up in the GUI.
+# gui-icon: The icon to use for the GUI.
+# gui-slot: The slot that will be filled in the GUI.
 # permission: The permission that the player must have to see this group, may be left blank as ''. The player must still have permission for all effects/styles within the group in order to use it.
 # allow-permission-override: Allow the player to see and apply the group even if they don't have access to all the effects/styles within it. This does nothing if the permission is set to ''. 
 # 1 (or any positive whole number n): The particle ID. You may have as many of these as you want, they must contain an effect, style, and data property below them. 
 # effect: The effect that the particle will have.
 # style: The style that the particle will have.
 # data: The data that the particle will have.
-#
+
 # GUI Icons MUST use the names found at the link below:
 # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
+#
+# The 'extra' section at the bottom allows you to define what slots are filled with what colors of glass
+# You can find the colors of dyes here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/DyeColor.html
 
-raincloud:
-  display-name: 'Raincloud'
-  gui-icon: 'ENDER_CHEST'
-  permission: ''
-  allow-permission-override: false
-  1:
-    effect: 'cloud'
-    style: 'overhead'
-    data: ''
-  2:
-    effect: 'dripping_water'
-    style: 'overhead'
-    data: ''
-rainbows:
-  display-name: 'Rainbows'
-  gui-icon: 'ENDER_CHEST'
-  permission: ''
-  allow-permission-override: false
-  1:
-    effect: 'dust'
-    style: 'orbit'
-    data: 'rainbow'
-  2:
-    effect: 'entity_effect'
-    style: 'feet'
-    data: 'rainbow'
-angel:
-  display-name: 'Angel'
-  gui-icon: 'ENDER_CHEST'
-  permission: ''
-  allow-permission-override: false
-  1:
-    effect: 'dust'
-    style: 'wings'
-    data: '255 255 255'
-  2:
-    effect: 'dust'
-    style: 'halo'
-    data: '255 255 0'
+page1:
+  title: 'Load A Preset Group'
+  presets:
+    raincloud:
+      display-name: 'Raincloud'
+      gui-icon: 'ENDER_CHEST'
+      gui-slot: 10
+      permission: ''
+      allow-permission-override: false
+      1:
+        effect: 'cloud'
+        style: 'overhead'
+        data: ''
+      2:
+        effect: 'dripping_water'
+        style: 'overhead'
+        data: ''
+    rainbows:
+      display-name: 'Rainbows'
+      gui-icon: 'ENDER_CHEST'
+      gui-slot: 11
+      permission: ''
+      allow-permission-override: false
+      1:
+        effect: 'dust'
+        style: 'orbit'
+        data: 'rainbow'
+      2:
+        effect: 'entity_effect'
+        style: 'feet'
+        data: 'rainbow'
+    angel:
+      display-name: 'Angel'
+      gui-icon: 'ENDER_CHEST'
+      gui-slot: 12
+      permission: ''
+      allow-permission-override: false
+      1:
+        effect: 'dust'
+        style: 'wings'
+        data: '255 255 255'
+      2:
+        effect: 'dust'
+        style: 'halo'
+        data: '255 255 0'
+  extra:
+    0-8: GREEN
+    45-53: GREEN
+    9: GREEN
+    18: GREEN
+    27: GREEN
+    36: GREEN
+    17: GREEN
+    26: GREEN
+    35: GREEN
+    44: GREEN

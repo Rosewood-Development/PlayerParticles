@@ -120,16 +120,16 @@ public class PlayerParticles extends JavaPlugin {
         this.managers.values().forEach(Manager::disable);
         this.managers.values().forEach(Manager::reload);
 
+        this.getManager(ConfigurationManager.class);
+        this.getManager(LocaleManager.class);
+        this.getManager(DataManager.class);
+        this.getManager(DataMigrationManager.class);
+        this.getManager(PermissionManager.class);
         this.getManager(CommandManager.class);
         this.getManager(ParticleStyleManager.class);
         this.getManager(ParticleGroupPresetManager.class);
         this.getManager(ConfigurationManager.class);
-        this.getManager(DataManager.class);
-        this.getManager(DataMigrationManager.class);
         this.getManager(ParticleManager.class);
-        this.getManager(LocaleManager.class);
-        this.getManager(ConfigurationManager.class);
-        this.getManager(PermissionManager.class);
         this.getManager(PluginUpdateManager.class);
     }
 

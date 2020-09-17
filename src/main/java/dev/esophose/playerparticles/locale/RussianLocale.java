@@ -276,7 +276,6 @@ public class RussianLocale implements Locale {
             this.put("gui-manage-your-groups-description", "Создание, изменение и удаление Ваших групп");
 
             this.put("#31", "GUI Load Messages");
-            this.put("gui-load-a-preset-group", "Установить группу");
             this.put("gui-load-a-preset-group-description", "Установка готовой группы частиц");
 
             this.put("#32", "GUI Save Messages");

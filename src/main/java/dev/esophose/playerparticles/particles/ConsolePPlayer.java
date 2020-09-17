@@ -8,11 +8,7 @@ import org.bukkit.entity.Player;
 
 public class ConsolePPlayer extends PPlayer {
 
-    private static final UUID uuid;
-
-    static {
-        uuid = UUID.fromString("ffffffff-ffff-ffff-ffff-ffffffffffff");
-    }
+    private static final UUID uuid = UUID.fromString("ffffffff-ffff-ffff-ffff-ffffffffffff");
 
     public ConsolePPlayer(Map<String, ParticleGroup> particleGroups, Map<Integer, FixedParticleEffect> fixedParticles) {
         super(uuid, particleGroups, fixedParticles, false);

@@ -1,5 +1,6 @@
 package dev.esophose.playerparticles.config;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -63,7 +64,9 @@ public class CommentedConfigurationSection implements ConfigurationSection {
 
     @Override
     public Set<String> getKeys(boolean b) {
-        return this.config.getKeys(b);
+        Set<String> keys = new LinkedHashSet<>(this.config.getKeys(b));
+        keys.removeIf(x -> x.contains("_COMMENT_"));
+        return keys;
     }
 
     @Override

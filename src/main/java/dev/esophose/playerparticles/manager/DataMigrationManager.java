@@ -5,6 +5,7 @@ import dev.esophose.playerparticles.database.DataMigration;
 import dev.esophose.playerparticles.database.DatabaseConnector;
 import dev.esophose.playerparticles.database.SQLiteConnector;
 import dev.esophose.playerparticles.database.migrations._1_InitialMigration;
+import dev.esophose.playerparticles.database.migrations._2_PresetGroupsGuiSections;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Arrays;
@@ -20,7 +21,8 @@ public class DataMigrationManager extends Manager {
         super(playerParticles);
 
         this.migrations = Arrays.asList(
-                new _1_InitialMigration()
+                new _1_InitialMigration(),
+                new _2_PresetGroupsGuiSections(this.playerParticles)
         );
     }
 

@@ -276,7 +276,6 @@ public class SimplifiedChineseLocale implements Locale {
             this.put("gui-manage-your-groups-description", "创建、删除和加载你的粒子组");
 
             this.put("#31", "GUI Load Messages");
-            this.put("gui-load-a-preset-group", "加载预设粒子组");
             this.put("gui-load-a-preset-group-description", "加载预设粒子组");
 
             this.put("#32", "GUI Save Messages");

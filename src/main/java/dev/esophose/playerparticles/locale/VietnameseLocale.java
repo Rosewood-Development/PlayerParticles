@@ -276,7 +276,6 @@ public class VietnameseLocale implements Locale {
             this.put("gui-manage-your-groups-description", "Tạo, xóa, và tải Group Hạt hiệu ứng của bạn");
 
             this.put("#31", "GUI Load Messages");
-            this.put("gui-load-a-preset-group", "Tải một Preset Group");
             this.put("gui-load-a-preset-group-description", "Tải Group Hạt hiệu ứng có sẵn");
 
             this.put("#32", "GUI Save Messages");
