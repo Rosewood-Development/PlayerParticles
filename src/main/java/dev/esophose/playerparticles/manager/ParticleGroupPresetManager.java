@@ -167,7 +167,7 @@ public class ParticleGroupPresetManager extends Manager {
                     particles.put(id, new ParticlePair(null, id, effect, style, itemData, blockData, colorData, noteColorData));
                 }
 
-                presets.add(new ParticleGroupPreset(displayName, guiIcon, guiSlot, permission, allowPermissionOverride, new ParticleGroup(groupName, particles)));
+                presets.add(new ParticleGroupPreset(HexUtils.colorify(displayName), guiIcon, guiSlot, permission, allowPermissionOverride, new ParticleGroup(groupName, particles)));
             }
 
             Map<Integer, BorderColor> extra = new HashMap<>();
