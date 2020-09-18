@@ -276,6 +276,7 @@ public class GermanLocale implements Locale {
             this.put("gui-manage-your-groups-description", "Erstellen, löschen und laden Sie Ihre Partikelgruppen");
 
             this.put("#31", "GUI Load Messages");
+            this.put("gui-load-a-preset-group", "Laden Sie eine vorgefertigte Gruppe");
             this.put("gui-load-a-preset-group-description", "Laden Sie eine vorgefertigte Partikelgruppe");
 
             this.put("#32", "GUI Save Messages");

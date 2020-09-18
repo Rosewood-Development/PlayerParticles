@@ -23,7 +23,7 @@ import org.bukkit.Bukkit;
 public class GuiInventoryLoadPresetGroups extends GuiInventory {
 
     public GuiInventoryLoadPresetGroups(PPlayer pplayer, boolean isEndPoint, int pageNumber) {
-        super(pplayer, Bukkit.createInventory(pplayer.getPlayer(), INVENTORY_SIZE, PlayerParticles.getInstance().getManager(ParticleGroupPresetManager.class).getPresetGroupPages().get(pageNumber).getTitle()));
+        super(pplayer, Bukkit.createInventory(pplayer.getPlayer(), INVENTORY_SIZE, PlayerParticles.getInstance().getManager(ParticleGroupPresetManager.class).getPresetGroupPages(pplayer).get(pageNumber).getTitle()));
 
         PlayerParticles playerParticles = PlayerParticles.getInstance();
         ParticleGroupPresetManager presetManager = playerParticles.getManager(ParticleGroupPresetManager.class);
@@ -32,11 +32,10 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
 
         this.fillBorder(BorderColor.GREEN);
 
-        ParticleGroupPresetPage pageInfo = presetManager.getPresetGroupPages().get(pageNumber);
-        List<ParticleGroupPreset> groups = pageInfo.getPresets();
+        ParticleGroupPresetPage pageInfo = presetManager.getPresetGroupPages(pplayer).get(pageNumber);
         Map<Integer, BorderColor> extraBorder = pageInfo.getExtraBorder();
 
-        int maxPages = presetManager.getMaxPageNumber();
+        int maxPages = presetManager.getMaxPageNumber(pplayer);
 
         // Fill borders
         extraBorder.forEach((item, color) -> this.inventory.setItem(item, color.getIcon()));

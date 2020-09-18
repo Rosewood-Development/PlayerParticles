@@ -109,17 +109,34 @@ public class GuiManager extends Manager implements Listener, Runnable {
      * @param pplayer The PPlayer to open the GUI screen for
      */
     public void openDefault(PPlayer pplayer) {
-        Bukkit.getScheduler().runTask(this.playerParticles, () -> {
-            GuiInventory inventoryToOpen;
-            if (!Setting.GUI_PRESETS_ONLY.getBoolean()) {
-                inventoryToOpen = new GuiInventoryDefault(pplayer);
-            } else {
-                inventoryToOpen = new GuiInventoryLoadPresetGroups(pplayer, true, 1);
-            }
+        if (Setting.GUI_PRESETS_ONLY.getBoolean()) {
+            this.openPresetGroups(pplayer);
+            return;
+        }
 
-            pplayer.getPlayer().openInventory(inventoryToOpen.getInventory());
-            this.guiInventories.add(inventoryToOpen);
-        });
+        Bukkit.getScheduler().runTask(this.playerParticles, () ->
+                this.openGui(pplayer, new GuiInventoryDefault(pplayer)));
+    }
+
+    /**
+     * Opens the preset groups GUI screen for a player
+     *
+     * @param pplayer The PPlayer to open the GUI screen for
+     */
+    public void openPresetGroups(PPlayer pplayer) {
+        Bukkit.getScheduler().runTask(this.playerParticles, () ->
+                this.openGui(pplayer, new GuiInventoryLoadPresetGroups(pplayer, true, 1)));
+    }
+
+    /**
+     * Opens a GUI screen for a player
+     *
+     * @param pplayer The PPlayer to open for
+     * @param guiInventory The GuiInventory to open
+     */
+    private void openGui(PPlayer pplayer, GuiInventory guiInventory) {
+        pplayer.getPlayer().openInventory(guiInventory.getInventory());
+        this.guiInventories.add(guiInventory);
     }
     
     /**

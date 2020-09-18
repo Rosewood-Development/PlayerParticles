@@ -53,7 +53,6 @@ public class ParticleManager extends Manager implements Listener, Runnable {
      * Rainbow particle effect hue and note color used for rainbow colorable effects
      */
     private int hue;
-    private int note;
     private final Random random;
 
     public ParticleManager(PlayerParticles playerParticles) {
@@ -62,7 +61,6 @@ public class ParticleManager extends Manager implements Listener, Runnable {
         this.particlePlayers = new ConcurrentHashMap<>();
         this.particleTask = null;
         this.hue = 0;
-        this.note = 0;
         this.random = new Random();
 
         Bukkit.getPluginManager().registerEvents(this, this.playerParticles);
@@ -154,11 +152,6 @@ public class ParticleManager extends Manager implements Listener, Runnable {
 
         this.hue += Setting.RAINBOW_CYCLE_SPEED.getInt();
         this.hue %= 360;
-
-        if (this.hue % 4 == 0) { // Only increment note by 5 notes per second
-            this.note++;
-            this.note %= 25;
-        }
 
         PermissionManager permissionManager = this.playerParticles.getManager(PermissionManager.class);
 
@@ -295,7 +288,8 @@ public class ParticleManager extends Manager implements Listener, Runnable {
      * @return The rainbow NoteColor for particle spawning with data 'rainbow'
      */
     public NoteColor getRainbowNoteParticleColor() {
-        return new NoteColor(this.note);
+        int note = ((int) Math.round(24 - 24 / 360.0 * this.hue) + 7) % 24;
+        return new NoteColor(note);
     }
     
     /**

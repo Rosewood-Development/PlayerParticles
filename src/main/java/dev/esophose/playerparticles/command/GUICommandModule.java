@@ -7,16 +7,17 @@ import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.particles.PPlayer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import org.bukkit.Bukkit;
+import org.bukkit.util.StringUtil;
 
 public class GUICommandModule implements CommandModule {
 
     public void onCommandExecute(PPlayer pplayer, String[] args) {
-        this.onCommandExecute(pplayer, true);
+        this.onCommandExecute(pplayer, args, true);
     }
 
-    public void onCommandExecute(PPlayer pplayer, boolean openedFromGuiCommand) {
+    public void onCommandExecute(PPlayer pplayer, String[] args, boolean openedFromGuiCommand) {
         PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         GuiManager guiManager = PlayerParticles.getInstance().getManager(GuiManager.class);
@@ -45,11 +46,20 @@ public class GUICommandModule implements CommandModule {
             return;
         }
 
-        Bukkit.getScheduler().runTask(PlayerParticles.getInstance(), () -> guiManager.openDefault(pplayer));
+        if (args.length > 0 && args[0].equalsIgnoreCase("presets")) {
+            guiManager.openPresetGroups(pplayer);
+        } else {
+            guiManager.openDefault(pplayer);
+        }
     }
 
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
-        return new ArrayList<>();
+        List<String> completions = new ArrayList<>();
+        if (args.length == 1) {
+            List<String> possibilities = Collections.singletonList("presets");
+            StringUtil.copyPartialMatches(args[0], possibilities, completions);
+        }
+        return completions;
     }
 
     public String getName() {
