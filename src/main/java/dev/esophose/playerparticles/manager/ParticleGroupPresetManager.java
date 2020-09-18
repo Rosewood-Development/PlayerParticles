@@ -84,6 +84,7 @@ public class ParticleGroupPresetManager extends Manager {
                         String displayName = "";
                         Material guiIcon = Material.ENDER_CHEST;
                         int guiSlot = -1;
+                        List<String> lore = new ArrayList<>();
                         String permission = "";
                         boolean allowPermissionOverride = false;
                         ConfigurationSection groupSection = presetsSection.getConfigurationSection(groupName);
@@ -91,7 +92,7 @@ public class ParticleGroupPresetManager extends Manager {
                         Set<String> particleKeys = groupSection.getKeys(false);
                         for (String stringId : particleKeys) {
                             if (stringId.equalsIgnoreCase("display-name")) {
-                                displayName = groupSection.getString(stringId);
+                                displayName = HexUtils.colorify(groupSection.getString(stringId));
                                 continue;
                             }
 
@@ -102,6 +103,12 @@ public class ParticleGroupPresetManager extends Manager {
 
                             if (stringId.equalsIgnoreCase("gui-slot")) {
                                 guiSlot = groupSection.getInt(stringId);
+                                continue;
+                            }
+
+                            if (stringId.equalsIgnoreCase("lore")) {
+                                lore = groupSection.getStringList("lore");
+                                lore.replaceAll(HexUtils::colorify);
                                 continue;
                             }
 
@@ -175,7 +182,7 @@ public class ParticleGroupPresetManager extends Manager {
                             particles.put(id, new ParticlePair(null, id, effect, style, itemData, blockData, colorData, noteColorData));
                         }
 
-                        presets.add(new ParticleGroupPreset(HexUtils.colorify(displayName), guiIcon, guiSlot, permission, allowPermissionOverride, new ParticleGroup(groupName, particles)));
+                        presets.add(new ParticleGroupPreset(displayName, guiIcon, guiSlot, lore, permission, allowPermissionOverride, new ParticleGroup(groupName, particles)));
                     }
                 }
 

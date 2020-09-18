@@ -10,7 +10,7 @@
 #   want to reset the file to its defaults, simply     #
 #   delete it and run the command '/pp reload'.        #
 # ==================================================== #
-
+#
 # What everything means:
 # The top-level items are separators and represent each individual page. The pages will be in the same order
 #   that they appear in the config. The title is what will be displayed as the title of the GUI for that given page.
@@ -18,13 +18,13 @@
 # display-name: The display name of the group, how it will show up in the GUI.
 # gui-icon: The icon to use for the GUI.
 # gui-slot: The slot that will be filled in the GUI.
+# lore: Extra text that will appear on the preset group button.
 # permission: The permission that the player must have to see this group, may be left blank as ''. The player must still have permission for all effects/styles within the group in order to use it.
 # allow-permission-override: Allow the player to see and apply the group even if they don't have access to all the effects/styles within it. This does nothing if the permission is set to ''. 
 # 1 (or any positive whole number n): The particle ID. You may have as many of these as you want, they must contain an effect, style, and data property below them. 
 # effect: The effect that the particle will have.
 # style: The style that the particle will have.
 # data: The data that the particle will have.
-
 # GUI Icons MUST use the names found at the link below:
 # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
 #
@@ -38,6 +38,9 @@ page1:
       display-name: 'Raincloud'
       gui-icon: 'ENDER_CHEST'
       gui-slot: 10
+      lore:
+        - '&cExample extra lore'
+        - '&cAnother extra lore line'
       permission: ''
       allow-permission-override: false
       1:

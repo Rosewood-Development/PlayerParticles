@@ -49,21 +49,21 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
             List<ParticlePair> particles = new ArrayList<>(group.getGroup().getParticles().values());
             particles.sort(Comparator.comparingInt(ParticlePair::getId));
 
-            String[] lore = new String[particles.size() + 1];
-            lore[0] = localeManager.getLocaleMessage("gui-color-subtext") + localeManager.getLocaleMessage("gui-click-to-load", StringPlaceholders.single("amount", particles.size()));
-            int n = 1;
-            for (ParticlePair particle : particles) {
-                StringPlaceholders stringPlaceholders = StringPlaceholders.builder("id", particle.getId())
-                        .addPlaceholder("effect", ParticleUtils.formatName(particle.getEffect().getName()))
-                        .addPlaceholder("style", ParticleUtils.formatName(particle.getStyle().getName()))
-                        .addPlaceholder("data", particle.getDataString())
-                        .build();
-                lore[n] = localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-particle-info", stringPlaceholders);
-                n++;
+            List<String> lore = new ArrayList<>(group.getLore());
+            if (!Setting.GUI_PRESETS_HIDE_PARTICLES_DESCRIPTIONS.getBoolean()) {
+                lore.add(localeManager.getLocaleMessage("gui-color-subtext") + localeManager.getLocaleMessage("gui-click-to-load", StringPlaceholders.single("amount", particles.size())));
+                for (ParticlePair particle : particles) {
+                    StringPlaceholders stringPlaceholders = StringPlaceholders.builder("id", particle.getId())
+                            .addPlaceholder("effect", ParticleUtils.formatName(particle.getEffect().getName()))
+                            .addPlaceholder("style", ParticleUtils.formatName(particle.getStyle().getName()))
+                            .addPlaceholder("data", particle.getDataString())
+                            .build();
+                    lore.add(localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-particle-info", stringPlaceholders));
+                }
             }
 
             // Load Group Buttons
-            GuiActionButton groupButton = new GuiActionButton(slot, group.getGuiIcon(), localeManager.getLocaleMessage("gui-color-icon-name") + group.getDisplayName(), lore, (button, isShiftClick) -> {
+            GuiActionButton groupButton = new GuiActionButton(slot, group.getGuiIcon(), localeManager.getLocaleMessage("gui-color-icon-name") + group.getDisplayName(), lore.toArray(new String[0]), (button, isShiftClick) -> {
                 ParticleGroup activeGroup = pplayer.getActiveParticleGroup();
                 activeGroup.getParticles().clear();
                 for (ParticlePair particle : particles) {
