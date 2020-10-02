@@ -152,7 +152,7 @@ public class GuiInventoryEditData extends GuiInventory {
             if (pe == ParticleEffect.NOTE) { // Note data
                 this.populateNoteData(editingParticle, pageNumber, callbackList, callbackListPosition);
             } else { // Color data
-                this.populateColorData(editingParticle, pageNumber, callbackList, callbackListPosition);
+                this.populateColorData(editingParticle, callbackList, callbackListPosition);
             }
         } else if (pe.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
             if (pe == ParticleEffect.ITEM) { // Item data
@@ -178,11 +178,10 @@ public class GuiInventoryEditData extends GuiInventory {
      * Populates the Inventory with available color data options
      *
      * @param editingParticle      The ParticlePair that's being edited
-     * @param pageNumber           The current page number
      * @param callbackList         The List of GuiInventoryEditFinishedCallbacks
      * @param callbackListPosition The index of the callbackList we're currently at
      */
-    private void populateColorData(ParticlePair editingParticle, int pageNumber, List<Runnable> callbackList, int callbackListPosition) {
+    private void populateColorData(ParticlePair editingParticle, List<Runnable> callbackList, int callbackListPosition) {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
 
         int index = 10;

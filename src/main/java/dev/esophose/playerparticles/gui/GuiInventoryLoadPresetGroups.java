@@ -9,59 +9,61 @@ import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.ParticleGroupPresetManager;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleGroup;
-import dev.esophose.playerparticles.particles.ParticleGroupPreset;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.particles.preset.ParticleGroupPreset;
+import dev.esophose.playerparticles.particles.preset.ParticleGroupPresetPage;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import dev.esophose.playerparticles.util.StringPlaceholders;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 import org.bukkit.Bukkit;
 
 public class GuiInventoryLoadPresetGroups extends GuiInventory {
 
     public GuiInventoryLoadPresetGroups(PPlayer pplayer, boolean isEndPoint, int pageNumber) {
-        super(pplayer, Bukkit.createInventory(pplayer.getPlayer(), INVENTORY_SIZE, PlayerParticles.getInstance().getManager(LocaleManager.class).getLocaleMessage("gui-load-a-preset-group")));
+        super(pplayer, Bukkit.createInventory(pplayer.getPlayer(), INVENTORY_SIZE, PlayerParticles.getInstance().getManager(ParticleGroupPresetManager.class).getPresetGroupPages(pplayer).get(pageNumber).getTitle()));
 
-        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
-        GuiManager guiManager = PlayerParticles.getInstance().getManager(GuiManager.class);
+        PlayerParticles playerParticles = PlayerParticles.getInstance();
+        ParticleGroupPresetManager presetManager = playerParticles.getManager(ParticleGroupPresetManager.class);
+        LocaleManager localeManager = playerParticles.getManager(LocaleManager.class);
+        GuiManager guiManager = playerParticles.getManager(GuiManager.class);
 
         this.fillBorder(BorderColor.GREEN);
 
-        List<ParticleGroupPreset> groups = PlayerParticles.getInstance().getManager(ParticleGroupPresetManager.class)
-                .getPresetGroupsForPlayer(pplayer)
-                .stream()
-                .filter(x -> x.canPlayerUse(pplayer))
-                .collect(Collectors.toList());
+        ParticleGroupPresetPage pageInfo = presetManager.getPresetGroupPages(pplayer).get(pageNumber);
+        Map<Integer, BorderColor> extraBorder = pageInfo.getExtraBorder();
 
-        int numberOfItems = groups.size();
-        int itemsPerPage = 28;
-        int maxPages = (int) Math.max(1, Math.ceil((double) numberOfItems / itemsPerPage));
-        int slot = 10;
-        int nextWrap = 17;
-        int maxIndex = 43;
+        int maxPages = presetManager.getMaxPageNumber(pplayer);
 
-        for (int i = (pageNumber - 1) * itemsPerPage; i < numberOfItems; i++) {
-            ParticleGroupPreset group = groups.get(i);
+        // Fill borders
+        extraBorder.forEach((item, color) -> this.inventory.setItem(item, color.getIcon()));
+
+        // Fill presets
+        for (ParticleGroupPreset group : pageInfo.getPresets()) {
+            if (!group.canPlayerUse(pplayer))
+                continue;
+
+            int slot = group.getGuiSlot();
             List<ParticlePair> particles = new ArrayList<>(group.getGroup().getParticles().values());
             particles.sort(Comparator.comparingInt(ParticlePair::getId));
 
-            String[] lore = new String[particles.size() + 1];
-            lore[0] = localeManager.getLocaleMessage("gui-color-subtext") + localeManager.getLocaleMessage("gui-click-to-load", StringPlaceholders.single("amount", particles.size()));
-            int n = 1;
-            for (ParticlePair particle : particles) {
-                StringPlaceholders stringPlaceholders = StringPlaceholders.builder("id", particle.getId())
-                        .addPlaceholder("effect", ParticleUtils.formatName(particle.getEffect().getName()))
-                        .addPlaceholder("style", ParticleUtils.formatName(particle.getStyle().getName()))
-                        .addPlaceholder("data", particle.getDataString())
-                        .build();
-                lore[n] = localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-particle-info", stringPlaceholders);
-                n++;
+            List<String> lore = new ArrayList<>(group.getLore());
+            if (!Setting.GUI_PRESETS_HIDE_PARTICLES_DESCRIPTIONS.getBoolean()) {
+                lore.add(localeManager.getLocaleMessage("gui-color-subtext") + localeManager.getLocaleMessage("gui-click-to-load", StringPlaceholders.single("amount", particles.size())));
+                for (ParticlePair particle : particles) {
+                    StringPlaceholders stringPlaceholders = StringPlaceholders.builder("id", particle.getId())
+                            .addPlaceholder("effect", ParticleUtils.formatName(particle.getEffect().getName()))
+                            .addPlaceholder("style", ParticleUtils.formatName(particle.getStyle().getName()))
+                            .addPlaceholder("data", particle.getDataString())
+                            .build();
+                    lore.add(localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-particle-info", stringPlaceholders));
+                }
             }
 
             // Load Group Buttons
-            GuiActionButton groupButton = new GuiActionButton(slot, group.getGuiIcon(), localeManager.getLocaleMessage("gui-color-icon-name") + group.getDisplayName(), lore, (button, isShiftClick) -> {
+            GuiActionButton groupButton = new GuiActionButton(slot, group.getGuiIcon(), localeManager.getLocaleMessage("gui-color-icon-name") + group.getDisplayName(), lore.toArray(new String[0]), (button, isShiftClick) -> {
                 ParticleGroup activeGroup = pplayer.getActiveParticleGroup();
                 activeGroup.getParticles().clear();
                 for (ParticlePair particle : particles) {
@@ -75,13 +77,6 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
                     this.close();
             });
             this.actionButtons.add(groupButton);
-
-            slot++;
-            if (slot == nextWrap) { // Loop around border
-                nextWrap += 9;
-                slot += 2;
-            }
-            if (slot > maxIndex) break; // Overflowed the available space
         }
 
         // Previous page button

@@ -43,7 +43,7 @@ public final class PlayerParticlesAPI {
 
     private static PlayerParticlesAPI INSTANCE;
 
-    private PlayerParticles playerParticles;
+    private final PlayerParticles playerParticles;
 
     private PlayerParticlesAPI() {
         this.playerParticles = PlayerParticles.getInstance();

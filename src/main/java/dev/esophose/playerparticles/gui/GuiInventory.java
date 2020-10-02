@@ -19,7 +19,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public abstract class GuiInventory {
 
-    protected enum BorderColor {
+    public enum BorderColor {
         WHITE(0, "WHITE_STAINED_GLASS_PANE"),
         ORANGE(1, "ORANGE_STAINED_GLASS_PANE"),
         MAGENTA(2, "MAGENTA_STAINED_GLASS_PANE"),
