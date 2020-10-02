@@ -1,8 +1,10 @@
 package dev.esophose.playerparticles.hook;
 
-import java.util.*;
-
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.codemc.worldguardwrapper.WorldGuardWrapper;
@@ -20,13 +22,11 @@ public class WorldGuardHook {
      * Must be called during onLoad, or else WorldGuard prevents flag registration.
      */
     public static void initialize() {
-        if (Bukkit.getPluginManager().getPlugin("WorldGuard") == null) {
-            return; // Unsupported
-        }
+        if (Bukkit.getPluginManager().getPlugin("WorldGuard") == null)
+            return;
         
         worldGuardWrapper = WorldGuardWrapper.getInstance();
-
-        flagPlayerParticles = worldGuardWrapper.registerFlag("player-particles", WrappedState.class, WrappedState.ALLOW).get();
+        flagPlayerParticles = worldGuardWrapper.registerFlag("player-particles", WrappedState.class, WrappedState.ALLOW).orElse(null);
     }
     
     /**
@@ -34,7 +34,6 @@ public class WorldGuardHook {
      */
     public static boolean enabled() {
         return worldGuardWrapper != null;
-
     }
 
     /**
@@ -51,29 +50,28 @@ public class WorldGuardHook {
 
         // Get the "player-particles" flag.
         // This will use the region priority to determine which one takes precedence.
-        Optional<WrappedState> playerParticles = regions
-                .stream()
-                .sorted(Comparator.comparingInt(IWrappedRegion::getPriority))
-                .map(region -> region.getFlag(flagPlayerParticles))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .findFirst();
+        if (flagPlayerParticles != null) {
+            Optional<WrappedState> flagState = regions.stream()
+                    .sorted(Comparator.comparingInt(IWrappedRegion::getPriority))
+                    .map(region -> region.getFlag(flagPlayerParticles))
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .findFirst();
 
-        if (playerParticles.isPresent())
-            return playerParticles.get() == WrappedState.ALLOW;
+            if (flagState.isPresent())
+                return flagState.get() == WrappedState.ALLOW;
+        }
 
         // Legacy blocking by region name.
         List<String> disallowedRegionIds = Setting.WORLDGUARD_DISALLOWED_REGIONS.getStringList();
-        if (regions.stream().map(IWrappedRegion::getId).anyMatch(disallowedRegionIds::contains)) {
+        if (regions.stream().map(IWrappedRegion::getId).anyMatch(disallowedRegionIds::contains))
             return false;
-        }
 
-        if (Setting.WORLDGUARD_USE_ALLOWED_REGIONS.getBoolean()) {
-            List<String> allowedRegionIds = Setting.WORLDGUARD_ALLOWED_REGIONS.getStringList();
-            return regions.stream().map(IWrappedRegion::getId).anyMatch(allowedRegionIds::contains);
-        }
+        if (!Setting.WORLDGUARD_USE_ALLOWED_REGIONS.getBoolean())
+            return true;
 
-        return true;
+        List<String> allowedRegionIds = Setting.WORLDGUARD_ALLOWED_REGIONS.getStringList();
+        return regions.stream().map(IWrappedRegion::getId).anyMatch(allowedRegionIds::contains);
     }
 
 }

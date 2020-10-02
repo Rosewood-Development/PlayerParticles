@@ -46,7 +46,7 @@ public class PlayerParticles extends JavaPlugin {
     /*
      * The plugin managers
      */
-    private Map<Class<?>, Manager> managers;
+    private final Map<Class<?>, Manager> managers;
 
     public PlayerParticles() {
         INSTANCE = this;
@@ -93,7 +93,8 @@ public class PlayerParticles extends JavaPlugin {
 
     @Override
     public void onLoad() {
-        WorldGuardHook.initialize();
+        if (NMSUtil.isSpigot())
+            WorldGuardHook.initialize();
     }
     
     /**

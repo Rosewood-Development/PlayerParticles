@@ -5,12 +5,12 @@ import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.bukkit.Material;
@@ -225,10 +225,16 @@ public class ConfigurationManager extends Manager {
         }
 
         /**
-         * @return true if this setting is only a section and doesn't contain an actual value
+         * @return true if a setting is still its default value, otherwise false
          */
-        public boolean isSection() {
-            return this.defaultValue == null;
+        public boolean isDefault() {
+            this.loadValue();
+
+            // Don't care about list ordering
+            if (this.defaultValue instanceof Collection && this.value instanceof Collection)
+                return (((Collection<?>) this.defaultValue).containsAll((Collection<?>) this.value));
+
+            return Objects.equals(this.defaultValue, this.value);
         }
 
         /**
@@ -274,35 +280,13 @@ public class ConfigurationManager extends Manager {
             this.configuration.save();
         
         // Legacy nag: WorldGuard Regions
-        if (!isDefault(Setting.WORLDGUARD_ALLOWED_REGIONS, false) || !isDefault(Setting.WORLDGUARD_DISALLOWED_REGIONS, false)) {
+        if (!(Setting.WORLDGUARD_ALLOWED_REGIONS.isDefault() && Setting.WORLDGUARD_DISALLOWED_REGIONS.isDefault())) {
             Arrays.asList(
                     "It looks like you're using the 'allowed-regions' or 'disallowed-regions' settings.",
-                    "These settings are deprecated from PlayerParticles, and will be removed in a future update.",
+                    "These settings are deprecated and will be removed in a future update.",
                     "As an alternative, consider using the newer and more flexible 'player-particles' WorldGuard region flag."
             ).forEach(PlayerParticles.getInstance().getLogger()::warning);
         }
-    }
-
-    /**
-     * Checks if a setting is the default value.
-     *
-     * @param setting        The setting to check.
-     * @param strictOrdering If true, compares lists with strict ordering.
-     * @return True if the setting is default.
-     */
-    private boolean isDefault(Setting setting, boolean strictOrdering) {
-        if (setting.defaultValue instanceof List) {
-            if (strictOrdering) return setting.defaultValue.equals(setting.value);
-            
-            HashSet<String> currentSet = new HashSet<>(setting.getStringList());
-            Set<String> defaultSet = ((List<?>) setting.defaultValue).stream()
-                    .map(Object::toString)
-                    .collect(Collectors.toSet());
-            
-            return defaultSet.equals(currentSet);
-        }
-        
-        return setting.defaultValue.equals(setting.value);
     }
 
     @Override
