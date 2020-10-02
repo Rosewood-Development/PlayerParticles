@@ -273,7 +273,7 @@ public class ConfigurationManager extends Manager {
             this.configuration.save();
         
         // Legacy nag: WorldGuard Regions
-        if (!isDefault(Setting.WORLDGUARD_ALLOWED_REGIONS) || !isDefault(Setting.WORLDGUARD_DISALLOWED_REGIONS)) {
+        if (!isDefault(Setting.WORLDGUARD_ALLOWED_REGIONS, false) || !isDefault(Setting.WORLDGUARD_DISALLOWED_REGIONS, false)) {
             Arrays.asList(
                     "It looks like you're using the 'allowed-regions' or 'disallowed-regions' settings.",
                     "These settings are deprecated from PlayerParticles, and will be removed in a future update.",
@@ -281,9 +281,18 @@ public class ConfigurationManager extends Manager {
             ).forEach(PlayerParticles.getInstance().getLogger()::warning);
         }
     }
-    
-    private boolean isDefault(Setting setting) {
+
+    /**
+     * Checks if a setting is the default value.
+     *
+     * @param setting        The setting to check.
+     * @param strictOrdering If true, compares lists with strict ordering.
+     * @return True if the setting is default.
+     */
+    private boolean isDefault(Setting setting, boolean strictOrdering) {
         if (setting.defaultValue instanceof List) {
+            if (strictOrdering) return setting.defaultValue.equals(setting.value);
+            
             HashSet<String> currentSet = new HashSet<>(setting.getStringList());
             Set<String> defaultSet = ((List<?>) setting.defaultValue).stream()
                     .map(Object::toString)
