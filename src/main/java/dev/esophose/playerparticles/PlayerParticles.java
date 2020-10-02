@@ -9,6 +9,7 @@ package dev.esophose.playerparticles;
 import dev.esophose.playerparticles.gui.hook.PlayerChatHook;
 import dev.esophose.playerparticles.hook.ParticlePlaceholderExpansion;
 import dev.esophose.playerparticles.hook.PlaceholderAPIHook;
+import dev.esophose.playerparticles.hook.WorldGuardHook;
 import dev.esophose.playerparticles.manager.CommandManager;
 import dev.esophose.playerparticles.manager.ConfigurationManager;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
@@ -90,6 +91,11 @@ public class PlayerParticles extends JavaPlugin {
         this.managers.clear();
     }
 
+    @Override
+    public void onLoad() {
+        WorldGuardHook.initialize();
+    }
+    
     /**
      * Gets a manager instance
      *
