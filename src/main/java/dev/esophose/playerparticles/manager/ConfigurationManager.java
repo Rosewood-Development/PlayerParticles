@@ -7,8 +7,10 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.bukkit.Material;
@@ -60,8 +62,8 @@ public class ConfigurationManager extends Manager {
 
         WORLDGUARD_SETTINGS("worldguard-settings", null, "Settings for WorldGuard", "If WorldGuard is not installed, these settings will do nothing"),
         WORLDGUARD_USE_ALLOWED_REGIONS("worldguard-settings.use-allowed-regions", false, "If true, particles will only be able to spawn if they are in an allowed region and not a disallowed region", "If false, particles will be able to spawn as long as they are not in a disallowed region"),
-        WORLDGUARD_ALLOWED_REGIONS("worldguard-settings.allowed-regions", Arrays.asList("example_region_1", "example_region_2"), "Regions that particles will be allowed to spawn in"),
-        WORLDGUARD_DISALLOWED_REGIONS("worldguard-settings.disallowed-regions", Arrays.asList("example_region_3", "example_region_4"), "Regions that particles will be blocked from spawning in", "This overrides allowed regions if they overlap"),
+        WORLDGUARD_ALLOWED_REGIONS("worldguard-settings.allowed-regions", Arrays.asList("example_region_1", "example_region_2"), "Regions that particles will be allowed to spawn in", "WARNING: This setting is deprecated in favor of region flags, and will be removed in a future update."),
+        WORLDGUARD_DISALLOWED_REGIONS("worldguard-settings.disallowed-regions", Arrays.asList("example_region_3", "example_region_4"), "Regions that particles will be blocked from spawning in", "This overrides allowed regions if they overlap", "WARNING: This setting is deprecated in favor of region flags, and will be removed in a future update."),
         WORLDGUARD_CHECK_INTERVAL("worldguard-settings.check-interval", 10, "How often to check if a player is in a region that allows spawning particles", "Measured in ticks"),
         WORLDGUARD_ENABLE_BYPASS_PERMISSION("worldguard-settings.enable-bypass-permission", false, "If true, the permission playerparticles.worldguard.bypass will allow", "the player to bypass the region requirements"),
 
@@ -270,6 +272,37 @@ public class ConfigurationManager extends Manager {
 
         if (changed)
             this.configuration.save();
+        
+        // Legacy nag: WorldGuard Regions
+        if (!isDefault(Setting.WORLDGUARD_ALLOWED_REGIONS, false) || !isDefault(Setting.WORLDGUARD_DISALLOWED_REGIONS, false)) {
+            Arrays.asList(
+                    "It looks like you're using the 'allowed-regions' or 'disallowed-regions' settings.",
+                    "These settings are deprecated from PlayerParticles, and will be removed in a future update.",
+                    "As an alternative, consider using the newer and more flexible 'player-particles' WorldGuard region flag."
+            ).forEach(PlayerParticles.getInstance().getLogger()::warning);
+        }
+    }
+
+    /**
+     * Checks if a setting is the default value.
+     *
+     * @param setting        The setting to check.
+     * @param strictOrdering If true, compares lists with strict ordering.
+     * @return True if the setting is default.
+     */
+    private boolean isDefault(Setting setting, boolean strictOrdering) {
+        if (setting.defaultValue instanceof List) {
+            if (strictOrdering) return setting.defaultValue.equals(setting.value);
+            
+            HashSet<String> currentSet = new HashSet<>(setting.getStringList());
+            Set<String> defaultSet = ((List<?>) setting.defaultValue).stream()
+                    .map(Object::toString)
+                    .collect(Collectors.toSet());
+            
+            return defaultSet.equals(currentSet);
+        }
+        
+        return setting.defaultValue.equals(setting.value);
     }
 
     @Override
