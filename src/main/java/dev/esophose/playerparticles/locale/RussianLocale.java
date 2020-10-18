@@ -45,6 +45,7 @@ public class RussianLocale implements Locale {
             this.put("command-description-reset", "Убрать все Ваши активные частицы.");
             this.put("command-description-styles", "Показать список стилей, которые Вы можете использовать.");
             this.put("command-description-toggle", "Сделать частицы видимыми или невидимыми.");
+            this.put("command-description-use", "Измените вашу первичную частицу");
             this.put("command-description-version", "Показать версию и создателя плагина.");
             this.put("command-description-worlds", "Узнать, в каком мире Ваши частицы отключены.");
 
@@ -129,6 +130,9 @@ public class RussianLocale implements Locale {
             this.put("#11", "Toggle Messages");
             this.put("toggle-on", "&eЧастицы были &aВКЛЮЧЕНЫ&e!");
             this.put("toggle-off", "&eЧастицы были &cВЫКЛЮЧЕНЫ&e!");
+
+            this.put("#11.5", "Use Messages");
+            this.put("use-particle-modified", "&aВаша первичная частица была изменена, чтобы использовать эффект &b%effect%&a, стиль &b%style%&a, и данные &b%data%&a!");
 
             this.put("#12", "Color Messages");
             this.put("rainbow", "&cР&6а&eд&aу&bг&9а&d!");

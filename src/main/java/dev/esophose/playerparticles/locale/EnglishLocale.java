@@ -45,6 +45,7 @@ public class EnglishLocale implements Locale {
             this.put("command-description-reset", "Removes all your active particles");
             this.put("command-description-styles", "Display a list of styles you can use");
             this.put("command-description-toggle", "Toggles particle visibility on/off");
+            this.put("command-description-use", "Modify your primary particle");
             this.put("command-description-version", "Display the plugin version and author");
             this.put("command-description-worlds", "Find out what worlds particles are disabled in");
 
@@ -129,6 +130,9 @@ public class EnglishLocale implements Locale {
             this.put("#11", "Toggle Messages");
             this.put("toggle-on", "&eParticles have been toggled &aON&e!");
             this.put("toggle-off", "&eParticles have been toggled &cOFF&e!");
+
+            this.put("#11.5", "Use Messages");
+            this.put("use-particle-modified", "&aYour primary particle has been modified to use the effect &b%effect%&a, style &b%style%&a, and data &b%data%&a!");
 
             this.put("#12", "Color Messages");
             this.put("rainbow", "&cR&6a&ei&an&bb&9o&dw");

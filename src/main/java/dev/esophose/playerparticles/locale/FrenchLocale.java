@@ -45,6 +45,7 @@ public class FrenchLocale implements Locale {
             this.put("command-description-reset", "Supprimez toutes vos particules actives");
             this.put("command-description-styles", "Affichez une liste des styles de particules que vous utilisez");
             this.put("command-description-toggle", "Activez ou désactivez vos particules actives");
+            this.put("command-description-use", "Modifiez votre particule primaire");
             this.put("command-description-version", "Affichez la version du plugin et son créateur");
             this.put("command-description-worlds", "Voir les mondes où ce plugin n'est pas autorisé");
 
@@ -129,6 +130,9 @@ public class FrenchLocale implements Locale {
             this.put("#11", "Toggle Messages");
             this.put("toggle-on", "&eLes particules sont maintenant en mode &aON &e!");
             this.put("toggle-off", "&eLes particules sont maintenant en mode &cOFF &e!");
+
+            this.put("#11.5", "Use Messages");
+            this.put("use-particle-modified", "&aVotre particule primaire a été modifiée pour utiliser l'effet &b%effect%&a, le style &b%style%&a, et les données &b%data%&a !");
 
             this.put("#12", "Color Messages");
             this.put("rainbow", "&cr&6a&ei&an&bb&9o&dw");

@@ -56,7 +56,7 @@ public class AddCommandModule implements CommandModule {
             localeManager.sendMessage(pplayer, "style-invalid", StringPlaceholders.single("style", args[1]));
             return;
         } else if (!permissionManager.hasStylePermission(pplayer, style)) {
-            localeManager.sendMessage(pplayer, "style-no-permission", StringPlaceholders.single("style", args[1]));
+            localeManager.sendMessage(pplayer, "style-no-permission", StringPlaceholders.single("style", style.getName()));
             return;
         }
 

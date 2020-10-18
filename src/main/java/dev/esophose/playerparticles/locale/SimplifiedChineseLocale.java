@@ -45,6 +45,7 @@ public class SimplifiedChineseLocale implements Locale {
             this.put("command-description-reset", "删除你身上所有特效");
             this.put("command-description-styles", "显示你可以使用的粒子风格");
             this.put("command-description-toggle", "开启或关闭粒子效果显示");
+            this.put("command-description-use", "修改您的主粒子");
             this.put("command-description-version", "显示插件版本和作者");
             this.put("command-description-worlds", "查看禁用粒子特效的世界");
 
@@ -129,6 +130,9 @@ public class SimplifiedChineseLocale implements Locale {
             this.put("#11", "Toggle Messages");
             this.put("toggle-on", "&e粒子特效已&a开启&e!");
             this.put("toggle-off", "&e粒子特效已&c关闭&e!");
+
+            this.put("#11.5", "Use Messages");
+            this.put("use-particle-modified", "你的主粒子已经被修改为使用效果&b%effect%&a、样式&b%style%&a和数据&b%data%&a!");
 
             this.put("#12", "Color Messages");
             this.put("rainbow", "&c彩&6虹");

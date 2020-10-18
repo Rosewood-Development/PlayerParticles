@@ -45,6 +45,7 @@ public class GermanLocale implements Locale {
             this.put("command-description-reset", "Entfernt alle aktiven Partikel");
             this.put("command-description-styles", "Zeigen Sie eine Liste der Stile an, die Sie verwenden können");
             this.put("command-description-toggle", "Schaltet die Partikelsichtbarkeit ein / aus");
+            this.put("command-description-use", "Modifizieren Sie Ihr Primärteilchen");
             this.put("command-description-version", "Zeigen Sie die Plugin-Version und den Autor an");
             this.put("command-description-worlds", "Finde heraus, in welchen Welten Partikel deaktiviert sind");
 
@@ -129,6 +130,9 @@ public class GermanLocale implements Locale {
             this.put("#11", "Toggle Messages");
             this.put("toggle-on", "&ePartikel wurden umgeschaltet &aAN&e!");
             this.put("toggle-off", "&ePartikel wurden umgeschaltet &cAUS&e!");
+
+            this.put("#11.5", "Use Messages");
+            this.put("use-particle-modified", "&aIhr Primärpartikel wurde modifiziert, um den Effekt &b%effect%&a, style &b%style%&a und data &b%data%&a zu verwenden!");
 
             this.put("#12", "Color Messages");
             this.put("rainbow", "&cR&6e&eg&ae&bn&9b&do&cg&4e&2n");

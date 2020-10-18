@@ -181,7 +181,7 @@ public class FixedCommandModule implements CommandModule {
             localeManager.sendMessage(pplayer, "fixed-create-style-invalid", StringPlaceholders.single("style", args[4]));
             return;
         } else if (!permissionManager.hasStylePermission(pplayer, style)) {
-            localeManager.sendMessage(pplayer, "fixed-create-style-no-permission", StringPlaceholders.single("style", args[4]));
+            localeManager.sendMessage(pplayer, "fixed-create-style-no-permission", StringPlaceholders.single("style", style.getName()));
             return;
         }
 

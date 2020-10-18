@@ -45,6 +45,7 @@ public class VietnameseLocale implements Locale {
             this.put("command-description-reset", "Xóa tất cả hiệu ứng đang hoạt động của bạn");
             this.put("command-description-styles", "Hiển thị danh sách Style bạn có thể sử dụng");
             this.put("command-description-toggle", "Bật/Tắt tàng hình hiệu ứng");
+            this.put("command-description-use", "Sửa đổi hạt chính của bạn");
             this.put("command-description-version", "Hiển thị phiên bản và tác giả của plugins");
             this.put("command-description-worlds", "Hiển thị danh sách thế giới bị cấm hiệu ứng");
 
@@ -129,6 +130,9 @@ public class VietnameseLocale implements Locale {
             this.put("#11", "Toggle Messages");
             this.put("toggle-on", "&eHạt hiệu ứng : &aON&e!");
             this.put("toggle-off", "&eHạt hiệu ứng : &cOFF&e!");
+
+            this.put("#11.5", "Use Messages");
+            this.put("use-particle-modified", "&aHạt chính của bạn đã được sửa đổi để sử dụng hiệu ứng &b%effect%&a, style &b%style%&a, và data &b%data%&a!");
 
             this.put("#12", "Color Messages");
             this.put("rainbow", "&cR&6a&ei&an&bb&9o&dw");
