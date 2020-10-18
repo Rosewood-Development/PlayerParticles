@@ -19,11 +19,11 @@ import dev.esophose.playerparticles.util.inputparser.parsable.ParsableOrdinaryCo
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 public class EditCommandModule implements CommandModule {
 
+    @Override
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
 
@@ -198,9 +198,9 @@ public class EditCommandModule implements CommandModule {
         localeManager.sendMessage(pplayer, "edit-success-data", StringPlaceholders.builder("id", id).addPlaceholder("data", updatedDataString).build());
     }
 
+    @Override
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
         PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
-        Player p = pplayer.getPlayer();
         List<String> matches = new ArrayList<>();
         List<String> ids = new ArrayList<>();
         
@@ -272,22 +272,27 @@ public class EditCommandModule implements CommandModule {
         return matches;
     }
 
+    @Override
     public String getName() {
         return "edit";
     }
 
+    @Override
     public String getDescriptionKey() {
         return "command-description-edit";
     }
 
+    @Override
     public String getArguments() {
         return "<ID> <effect>|<style>|<data> <args>";
     }
 
+    @Override
     public boolean requiresEffectsAndStyles() {
         return true;
     }
 
+    @Override
     public boolean canConsoleExecute() {
         return false;
     }

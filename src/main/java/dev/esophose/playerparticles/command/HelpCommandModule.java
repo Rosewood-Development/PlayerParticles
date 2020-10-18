@@ -9,6 +9,7 @@ import java.util.List;
 
 public class HelpCommandModule implements CommandModule {
 
+    @Override
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         boolean isConsole = pplayer.getPlayer() == null;
@@ -22,26 +23,32 @@ public class HelpCommandModule implements CommandModule {
         localeManager.sendSimpleMessage(pplayer, "command-descriptions-help-other");
     }
 
+    @Override
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
         return new ArrayList<>();
     }
 
+    @Override
     public String getName() {
         return "help";
     }
 
+    @Override
     public String getDescriptionKey() {
         return "command-description-help";
     }
 
+    @Override
     public String getArguments() {
         return "";
     }
 
+    @Override
     public boolean requiresEffectsAndStyles() {
         return false;
     }
 
+    @Override
     public boolean canConsoleExecute() {
         return true;
     }

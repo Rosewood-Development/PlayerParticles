@@ -31,6 +31,7 @@ import org.bukkit.util.StringUtil;
 
 public class FixedCommandModule implements CommandModule {
 
+    @Override
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
 
@@ -555,6 +556,7 @@ public class FixedCommandModule implements CommandModule {
         localeManager.sendMessage(pplayer, "fixed-teleport-success", StringPlaceholders.single("id", id));
     }
 
+    @Override
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
         PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
         List<String> matches = new ArrayList<>();
@@ -772,22 +774,27 @@ public class FixedCommandModule implements CommandModule {
         return matches;
     }
 
+    @Override
     public String getName() {
         return "fixed";
     }
 
+    @Override
     public String getDescriptionKey() {
         return "command-description-fixed";
     }
 
+    @Override
     public String getArguments() {
         return "<sub-command>";
     }
 
+    @Override
     public boolean requiresEffectsAndStyles() {
         return true;
     }
 
+    @Override
     public boolean canConsoleExecute() {
         return true;
     }

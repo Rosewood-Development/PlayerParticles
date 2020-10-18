@@ -7,14 +7,12 @@ import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.util.StringPlaceholders;
 import java.util.ArrayList;
 import java.util.List;
-import org.bukkit.entity.Player;
 
 public class EffectsCommandModule implements CommandModule {
 
+    @Override
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
-
-        Player p = pplayer.getPlayer();
 
         List<String> effectList = PlayerParticles.getInstance().getManager(PermissionManager.class).getEffectNamesUserHasPermissionFor(pplayer);
         if (effectList.isEmpty()) {
@@ -34,26 +32,32 @@ public class EffectsCommandModule implements CommandModule {
         localeManager.sendMessage(pplayer, "effect-list", StringPlaceholders.single("effects", toSend.toString()));
     }
 
+    @Override
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
         return new ArrayList<>();
     }
 
+    @Override
     public String getName() {
         return "effects";
     }
 
+    @Override
     public String getDescriptionKey() {
         return "command-description-effects";
     }
 
+    @Override
     public String getArguments() {
         return "";
     }
 
+    @Override
     public boolean requiresEffectsAndStyles() {
         return false;
     }
 
+    @Override
     public boolean canConsoleExecute() {
         return false;
     }

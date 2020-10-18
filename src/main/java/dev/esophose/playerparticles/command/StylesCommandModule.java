@@ -7,13 +7,11 @@ import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.util.StringPlaceholders;
 import java.util.ArrayList;
 import java.util.List;
-import org.bukkit.entity.Player;
 
 public class StylesCommandModule implements CommandModule {
 
+    @Override
     public void onCommandExecute(PPlayer pplayer, String[] args) {
-        Player p = pplayer.getPlayer();
-
         List<String> styleNames = PlayerParticles.getInstance().getManager(PermissionManager.class).getStyleNamesUserHasPermissionFor(pplayer);
         StringBuilder toSend = new StringBuilder();
         for (String name : styleNames) {
@@ -27,26 +25,32 @@ public class StylesCommandModule implements CommandModule {
         PlayerParticles.getInstance().getManager(LocaleManager.class).sendMessage(pplayer, "style-list", StringPlaceholders.single("styles", toSend.toString()));
     }
 
+    @Override
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
         return new ArrayList<>();
     }
 
+    @Override
     public String getName() {
         return "styles";
     }
 
+    @Override
     public String getDescriptionKey() {
         return "command-description-styles";
     }
 
+    @Override
     public String getArguments() {
         return "";
     }
 
+    @Override
     public boolean requiresEffectsAndStyles() {
         return false;
     }
 
+    @Override
     public boolean canConsoleExecute() {
         return false;
     }

@@ -10,6 +10,7 @@ import java.util.List;
 
 public class WorldsCommandModule implements CommandModule {
 
+    @Override
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
@@ -28,26 +29,32 @@ public class WorldsCommandModule implements CommandModule {
         localeManager.sendCustomMessage(pplayer, localeManager.getLocaleMessage("disabled-worlds", StringPlaceholders.single("worlds", worlds)));
     }
 
+    @Override
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
         return new ArrayList<>();
     }
 
+    @Override
     public String getName() {
         return "worlds";
     }
 
+    @Override
     public String getDescriptionKey() {
         return "command-description-worlds";
     }
 
+    @Override
     public String getArguments() {
         return "";
     }
 
+    @Override
     public boolean requiresEffectsAndStyles() {
         return false;
     }
 
+    @Override
     public boolean canConsoleExecute() {
         return true;
     }

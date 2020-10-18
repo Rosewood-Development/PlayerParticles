@@ -18,6 +18,7 @@ import org.bukkit.util.StringUtil;
 
 public class OtherCommandModule implements CommandModuleSecondary {
 
+    @Override
     public void onCommandExecute(CommandSender sender, String[] args) {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
@@ -60,6 +61,7 @@ public class OtherCommandModule implements CommandModuleSecondary {
         });
     }
 
+    @Override
     public List<String> onTabComplete(CommandSender sender, String[] args) {
         List<String> completions = new ArrayList<>();
         

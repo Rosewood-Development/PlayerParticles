@@ -13,6 +13,7 @@ import org.bukkit.util.StringUtil;
 
 public class GUICommandModule implements CommandModule {
 
+    @Override
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         this.onCommandExecute(pplayer, args, true);
     }
@@ -53,6 +54,7 @@ public class GUICommandModule implements CommandModule {
         }
     }
 
+    @Override
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
         List<String> completions = new ArrayList<>();
         if (args.length == 1) {
@@ -62,22 +64,27 @@ public class GUICommandModule implements CommandModule {
         return completions;
     }
 
+    @Override
     public String getName() {
         return "gui";
     }
 
+    @Override
     public String getDescriptionKey() {
         return "command-description-gui";
     }
 
+    @Override
     public String getArguments() {
         return "";
     }
 
+    @Override
     public boolean requiresEffectsAndStyles() {
         return false;
     }
 
+    @Override
     public boolean canConsoleExecute() {
         return false;
     }

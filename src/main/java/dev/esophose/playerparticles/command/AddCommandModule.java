@@ -20,11 +20,11 @@ import dev.esophose.playerparticles.util.inputparser.parsable.ParsableOrdinaryCo
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 public class AddCommandModule implements CommandModule {
 
+    @Override
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         if (args.length < 2) {
             CommandModule.printUsage(pplayer, this);
@@ -112,8 +112,8 @@ public class AddCommandModule implements CommandModule {
         }
     }
 
+    @Override
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
-        Player p = pplayer.getPlayer();
         List<String> matches = new ArrayList<>();
         PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
 
@@ -158,22 +158,27 @@ public class AddCommandModule implements CommandModule {
         return matches;
     }
 
+    @Override
     public String getName() {
         return "add";
     }
 
+    @Override
     public String getDescriptionKey() {
         return "command-description-add";
     }
 
+    @Override
     public String getArguments() {
         return "<effect> <style> [data]";
     }
 
+    @Override
     public boolean requiresEffectsAndStyles() {
         return true;
     }
 
+    @Override
     public boolean canConsoleExecute() {
         return false;
     }

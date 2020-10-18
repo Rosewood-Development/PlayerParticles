@@ -3,7 +3,6 @@ package dev.esophose.playerparticles.util.inputparser.parsable;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.util.NMSUtil;
 import dev.esophose.playerparticles.util.inputparser.Parsable;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.List;

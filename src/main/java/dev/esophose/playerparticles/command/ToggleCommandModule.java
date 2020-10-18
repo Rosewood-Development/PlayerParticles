@@ -11,6 +11,7 @@ import org.bukkit.util.StringUtil;
 
 public class ToggleCommandModule implements CommandModule {
 
+    @Override
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
 
@@ -32,6 +33,7 @@ public class ToggleCommandModule implements CommandModule {
         }
     }
 
+    @Override
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
         List<String> completions = new ArrayList<>();
         if (args.length == 1) {
@@ -41,22 +43,27 @@ public class ToggleCommandModule implements CommandModule {
         return completions;
     }
 
+    @Override
     public String getName() {
         return "toggle";
     }
 
+    @Override
     public String getDescriptionKey() {
         return "command-description-toggle";
     }
 
+    @Override
     public String getArguments() {
         return "[on|off]";
     }
 
+    @Override
     public boolean requiresEffectsAndStyles() {
         return false;
     }
 
+    @Override
     public boolean canConsoleExecute() {
         return false;
     }

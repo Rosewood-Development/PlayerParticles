@@ -15,6 +15,7 @@ import org.bukkit.util.StringUtil;
 
 public class ResetCommandModule implements CommandModule {
 
+    @Override
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
 
@@ -39,6 +40,7 @@ public class ResetCommandModule implements CommandModule {
         }
     }
 
+    @Override
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
         if (args.length == 1 && PlayerParticles.getInstance().getManager(PermissionManager.class).canResetOthers(pplayer)) {
             List<String> replacements = Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList());
@@ -49,22 +51,27 @@ public class ResetCommandModule implements CommandModule {
         return new ArrayList<>();
     }
 
+    @Override
     public String getName() {
         return "reset";
     }
 
+    @Override
     public String getDescriptionKey() {
         return "command-description-reset";
     }
 
+    @Override
     public String getArguments() {
         return "[other]";
     }
 
+    @Override
     public boolean requiresEffectsAndStyles() {
         return false;
     }
 
+    @Override
     public boolean canConsoleExecute() {
         return true;
     }

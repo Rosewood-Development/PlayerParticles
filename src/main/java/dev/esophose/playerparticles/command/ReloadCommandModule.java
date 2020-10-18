@@ -13,6 +13,7 @@ import org.bukkit.Bukkit;
 
 public class ReloadCommandModule implements CommandModule {
 
+    @Override
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         PlayerParticles playerParticles = PlayerParticles.getInstance();
         Bukkit.getScheduler().runTask(playerParticles, () -> {
@@ -29,26 +30,32 @@ public class ReloadCommandModule implements CommandModule {
         });
     }
 
+    @Override
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
         return new ArrayList<>();
     }
 
+    @Override
     public String getName() {
         return "reload";
     }
 
+    @Override
     public String getDescriptionKey() {
         return "command-description-reload";
     }
 
+    @Override
     public String getArguments() {
         return "";
     }
 
+    @Override
     public boolean requiresEffectsAndStyles() {
         return false;
     }
 
+    @Override
     public boolean canConsoleExecute() {
         return true;
     }

@@ -13,6 +13,7 @@ import org.bukkit.util.StringUtil;
 
 public class DataCommandModule implements CommandModule {
 
+    @Override
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
 
@@ -43,6 +44,7 @@ public class DataCommandModule implements CommandModule {
         }
     }
 
+    @Override
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
         PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
         List<String> matches = new ArrayList<>();

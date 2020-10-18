@@ -7,8 +7,8 @@ import dev.esophose.playerparticles.manager.ParticleGroupPresetManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleGroup;
-import dev.esophose.playerparticles.particles.preset.ParticleGroupPreset;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.particles.preset.ParticleGroupPreset;
 import dev.esophose.playerparticles.util.StringPlaceholders;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +21,7 @@ import org.bukkit.util.StringUtil;
 
 public class GroupCommandModule implements CommandModule {
 
+    @Override
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
 
@@ -291,6 +292,7 @@ public class GroupCommandModule implements CommandModule {
         }
     }
 
+    @Override
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
         List<String> matches = new ArrayList<>();
         List<String> subCommands = Arrays.asList("save", "load", "remove", "info", "list");
@@ -316,22 +318,27 @@ public class GroupCommandModule implements CommandModule {
         return matches;
     }
 
+    @Override
     public String getName() {
         return "group";
     }
 
+    @Override
     public String getDescriptionKey() {
         return "command-description-group";
     }
 
+    @Override
     public String getArguments() {
         return "<sub-command>";
     }
 
+    @Override
     public boolean requiresEffectsAndStyles() {
         return false;
     }
 
+    @Override
     public boolean canConsoleExecute() {
         return false;
     }

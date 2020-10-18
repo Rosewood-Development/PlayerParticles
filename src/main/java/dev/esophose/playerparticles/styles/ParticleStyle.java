@@ -5,7 +5,6 @@ import dev.esophose.playerparticles.manager.ParticleStyleManager;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.util.ParticleUtils;
-import java.util.Collections;
 import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.Material;
