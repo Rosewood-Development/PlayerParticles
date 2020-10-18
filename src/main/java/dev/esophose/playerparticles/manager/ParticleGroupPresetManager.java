@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -69,6 +70,10 @@ public class ParticleGroupPresetManager extends Manager {
             this.tryMigrateOld(presetsFile);
         }
         
+        Bukkit.getScheduler().runTaskLater(this.playerParticles, () -> this.tryParseFile(presetsFile), 3L);
+    }
+
+    private void tryParseFile(File presetsFile) {
         // Parse groups.yml file
         try {
             YamlConfiguration groupsYaml = YamlConfiguration.loadConfiguration(presetsFile);

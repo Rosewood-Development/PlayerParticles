@@ -76,6 +76,8 @@ public class ParticleManager extends Manager implements Listener, Runnable {
             this.worldGuardTask = null;
         }
 
+        this.particlePlayers.clear();
+
         Bukkit.getScheduler().runTaskLater(this.playerParticles, () -> {
             long ticks = Setting.TICKS_PER_PARTICLE.getLong();
             this.particleTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this.playerParticles, this, 0, ticks);
@@ -84,14 +86,13 @@ public class ParticleManager extends Manager implements Listener, Runnable {
                 long worldGuardTicks = Setting.WORLDGUARD_CHECK_INTERVAL.getLong();
                 this.worldGuardTask = Bukkit.getScheduler().runTaskTimer(this.playerParticles, this::updateWorldGuardStatuses, 0, worldGuardTicks);
             }
-        }, 5);
 
-        this.particlePlayers.clear();
-        DataManager dataManager = this.playerParticles.getManager(DataManager.class);
-        dataManager.loadFixedEffects();
-        for (Player player : Bukkit.getOnlinePlayers())
-            dataManager.getPPlayer(player.getUniqueId(), (pplayer) -> { }); // Loads the PPlayer from the database
-        dataManager.getPPlayer(ConsolePPlayer.getUUID(), (pplayer) -> { }); // Load the console PPlayer
+            DataManager dataManager = this.playerParticles.getManager(DataManager.class);
+            dataManager.loadFixedEffects();
+            for (Player player : Bukkit.getOnlinePlayers())
+                dataManager.getPPlayer(player.getUniqueId(), (pplayer) -> { }); // Loads the PPlayer from the database
+            dataManager.getPPlayer(ConsolePPlayer.getUUID(), (pplayer) -> { }); // Load the console PPlayer
+        }, 5);
     }
 
     @Override

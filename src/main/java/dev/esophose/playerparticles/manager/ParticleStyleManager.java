@@ -16,8 +16,8 @@ public class ParticleStyleManager extends Manager {
     /**
      * Arrays that contain all registered styles
      */
-    private List<ParticleStyle> styles;
-    private List<ParticleStyle> eventStyles;
+    private final List<ParticleStyle> styles;
+    private final List<ParticleStyle> eventStyles;
 
     public ParticleStyleManager(PlayerParticles playerParticles) {
         super(playerParticles);
@@ -33,40 +33,43 @@ public class ParticleStyleManager extends Manager {
         this.styles.clear();
         this.eventStyles.clear();
 
-        // Call registration event
-        // We use this event internally, so no other action needs to be done for us to register the default styles
-        ParticleStyleRegistrationEvent event = new ParticleStyleRegistrationEvent();
-        Bukkit.getPluginManager().callEvent(event);
+        // Run task a tick later to allow other plugins to finish registering to the event
+        Bukkit.getScheduler().runTask(this.playerParticles, () -> {
+            // Call registration event
+            // We use this event internally, so no other action needs to be done for us to register the default styles
+            ParticleStyleRegistrationEvent event = new ParticleStyleRegistrationEvent();
+            Bukkit.getPluginManager().callEvent(event);
 
-        Collection<ParticleStyle> eventStyles = event.getRegisteredEventStyles().values();
-        List<ParticleStyle> styles = new ArrayList<>(event.getRegisteredStyles().values());
-        styles.addAll(eventStyles);
-        styles.sort(Comparator.comparing(ParticleStyle::getName));
+            Collection<ParticleStyle> eventStyles = event.getRegisteredEventStyles().values();
+            List<ParticleStyle> styles = new ArrayList<>(event.getRegisteredStyles().values());
+            styles.addAll(eventStyles);
+            styles.sort(Comparator.comparing(ParticleStyle::getName));
 
-        for (ParticleStyle style : styles) {
-            try {
-                if (style == null)
-                    throw new IllegalArgumentException("Tried to register a null style");
+            for (ParticleStyle style : styles) {
+                try {
+                    if (style == null)
+                        throw new IllegalArgumentException("Tried to register a null style");
 
-                if (style.getInternalName() == null || style.getInternalName().trim().isEmpty())
-                    throw new IllegalArgumentException("Tried to register a style with a null or empty name: '" + style.getInternalName() + "'");
+                    if (style.getInternalName() == null || style.getInternalName().trim().isEmpty())
+                        throw new IllegalArgumentException("Tried to register a style with a null or empty name: '" + style.getInternalName() + "'");
 
-                for (ParticleStyle testAgainst : this.styles) {
-                    if (testAgainst.equals(style)) {
-                        throw new IllegalArgumentException("Tried to register the same style twice: '" + style.getInternalName() + "'");
-                    } else if (testAgainst.getInternalName().equalsIgnoreCase(style.getInternalName())) {
-                        throw new IllegalArgumentException("Tried to register two styles with the same internal name spelling: '" + style.getInternalName() + "'");
+                    for (ParticleStyle testAgainst : this.styles) {
+                        if (testAgainst.equals(style)) {
+                            throw new IllegalArgumentException("Tried to register the same style twice: '" + style.getInternalName() + "'");
+                        } else if (testAgainst.getInternalName().equalsIgnoreCase(style.getInternalName())) {
+                            throw new IllegalArgumentException("Tried to register two styles with the same internal name spelling: '" + style.getInternalName() + "'");
+                        }
                     }
+
+                    this.styles.add(style);
+
+                    if (eventStyles.contains(style))
+                        this.eventStyles.add(style);
+                } catch (IllegalArgumentException ex) {
+                    ex.printStackTrace();
                 }
-
-                this.styles.add(style);
-
-                if (eventStyles.contains(style))
-                    this.eventStyles.add(style);
-            } catch (IllegalArgumentException ex) {
-                ex.printStackTrace();
             }
-        }
+        });
     }
 
     @Override

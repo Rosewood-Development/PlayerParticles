@@ -37,7 +37,7 @@ dependencies {
     compileOnly 'org.jetbrains:annotations:16.0.2'
     compileOnly 'me.clip:placeholderapi:2.10.4'
     compileOnly 'org.xerial:sqlite-jdbc:3.23.1'
-    compileOnly 'org.spigotmc:spigot:1.16.2'
+    compileOnly 'org.spigotmc:spigot:1.16.3'
 }
 
 shadowJar {
