@@ -16,7 +16,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 public class GroupCommandModule implements CommandModule {
@@ -160,8 +159,11 @@ public class GroupCommandModule implements CommandModule {
         // Empty out the active group and fill it with clones from the target group
         ParticleGroup activeGroup = pplayer.getActiveParticleGroup();
         activeGroup.getParticles().clear();
-        for (ParticlePair particle : group.getParticles().values())
-            activeGroup.getParticles().put(particle.getId(), particle.clone());
+        for (ParticlePair particle : group.getParticles().values()) {
+            ParticlePair clonedParticle = particle.clone();
+            clonedParticle.setOwner(pplayer);
+            activeGroup.getParticles().put(clonedParticle.getId(), clonedParticle);
+        }
         
         // Update group and notify player
         PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), activeGroup);
@@ -262,7 +264,6 @@ public class GroupCommandModule implements CommandModule {
         List<ParticleGroup> groups = new ArrayList<>(pplayer.getParticleGroups().values());
         groups.sort(Comparator.comparing(ParticleGroup::getName));
 
-        Player player = pplayer.getPlayer();
         StringBuilder groupsList = new StringBuilder();
         for (ParticleGroup group : groups)
             if (!group.getName().equals(ParticleGroup.DEFAULT_NAME))
