@@ -122,8 +122,14 @@ public class ParticleStyleCelebration extends DefaultParticleStyle {
             private Location location = loc;
             private int fuseLength = fuse;
             private int fuseTimer = 0;
+            private boolean finished = false;
 
             public void run() {
+                if (this.finished) {
+                    this.cancel();
+                    return;
+                }
+
                 if (this.fuseTimer < this.fuseLength) {
                     ParticlePair trail = ParticlePair.getNextDefault(pplayer);
                     trail.setEffect(ParticleStyleCelebration.this.fuseEffect);
@@ -147,8 +153,8 @@ public class ParticleStyleCelebration extends DefaultParticleStyle {
                         particles.add(new PParticle(this.location.clone().add(dx, dy, dz)));
                     }
                     particleManager.displayParticles(pplayer, this.location.getWorld(), particle, particles, true);
-                    
-                    this.cancel();
+
+                    this.finished = true;
                 }
                 this.fuseTimer++;
             }
