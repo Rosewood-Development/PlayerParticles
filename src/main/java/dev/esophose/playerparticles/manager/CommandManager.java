@@ -176,7 +176,7 @@ public class CommandManager extends Manager implements CommandExecutor, TabCompl
 
             return true;
         } else if (cmd.getName().equalsIgnoreCase("ppo")) {
-            Bukkit.getScheduler().runTaskAsynchronously(this.playerParticles, () -> this.ppoCommand.onCommandExecute(sender, args));
+            Bukkit.getScheduler().runTask(this.playerParticles, () -> this.ppoCommand.onCommandExecute(sender, args));
         }
         
         return true;
