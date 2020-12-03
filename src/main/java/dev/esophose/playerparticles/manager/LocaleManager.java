@@ -128,7 +128,11 @@ public class LocaleManager extends Manager {
         if (!Setting.MESSAGES_ENABLED.getBoolean())
             return;
 
-        this.sendParsedMessage(sender, this.getLocaleMessage("prefix") + this.getLocaleMessage(messageKey, stringPlaceholders));
+        String prefix = "";
+        if (Setting.USE_MESSAGE_PREFIX.getBoolean())
+            prefix = this.getLocaleMessage("prefix");
+
+        this.sendParsedMessage(sender, prefix + this.getLocaleMessage(messageKey, stringPlaceholders));
     }
 
     /**
@@ -142,7 +146,11 @@ public class LocaleManager extends Manager {
         if (!Setting.MESSAGES_ENABLED.getBoolean())
             return;
 
-        this.sendParsedMessage(pplayer.getUnderlyingExecutor(), this.getLocaleMessage("prefix") + this.getLocaleMessage(messageKey, stringPlaceholders));
+        String prefix = "";
+        if (Setting.USE_MESSAGE_PREFIX.getBoolean())
+            prefix = this.getLocaleMessage("prefix");
+
+        this.sendParsedMessage(pplayer.getUnderlyingExecutor(), prefix + this.getLocaleMessage(messageKey, stringPlaceholders));
     }
 
     /**
