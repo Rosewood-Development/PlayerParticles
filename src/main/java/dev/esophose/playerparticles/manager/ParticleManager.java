@@ -68,16 +68,6 @@ public class ParticleManager extends Manager implements Listener, Runnable {
 
     @Override
     public void reload() {
-        if (this.particleTask != null)
-            this.particleTask.cancel();
-
-        if (this.worldGuardTask != null) {
-            this.worldGuardTask.cancel();
-            this.worldGuardTask = null;
-        }
-
-        this.particlePlayers.clear();
-
         Bukkit.getScheduler().runTaskLater(this.playerParticles, () -> {
             long ticks = Setting.TICKS_PER_PARTICLE.getLong();
             this.particleTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this.playerParticles, this, 0, ticks);
@@ -97,8 +87,17 @@ public class ParticleManager extends Manager implements Listener, Runnable {
 
     @Override
     public void disable() {
-        if (this.particleTask != null)
+        if (this.particleTask != null) {
             this.particleTask.cancel();
+            this.particleTask = null;
+        }
+
+        if (this.worldGuardTask != null) {
+            this.worldGuardTask.cancel();
+            this.worldGuardTask = null;
+        }
+
+        this.particlePlayers.clear();
     }
 
     /**
