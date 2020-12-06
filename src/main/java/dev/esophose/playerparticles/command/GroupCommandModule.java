@@ -92,22 +92,17 @@ public class GroupCommandModule implements CommandModule {
         }
         
         // Check if they are creating a new group, if they are, check that they haven't gone over their limit
-        if (pplayer.getParticleGroupByName(groupName) == null && PlayerParticles.getInstance().getManager(PermissionManager.class).hasPlayerReachedMaxGroups(pplayer)) {
+        boolean groupUpdated = pplayer.getParticleGroupByName(groupName) != null;
+        if (!groupUpdated && PlayerParticles.getInstance().getManager(PermissionManager.class).hasPlayerReachedMaxGroups(pplayer)) {
             localeManager.sendMessage(pplayer, "group-save-reached-max");
             return;
         }
         
         // Use the existing group if available, otherwise create a new one
-        ParticleGroup group = pplayer.getParticleGroupByName(groupName);
-        boolean groupUpdated = false;
-        if (group == null) {
-            Map<Integer, ParticlePair> particles = new ConcurrentHashMap<>();
-            for (ParticlePair particle : pplayer.getActiveParticles())
-                particles.put(particle.getId(), particle.clone()); // Make sure the ParticlePairs aren't the same references in both the active and saved group
-            group = new ParticleGroup(groupName, particles);
-        } else {
-            groupUpdated = true;
-        }
+        Map<Integer, ParticlePair> particles = new ConcurrentHashMap<>();
+        for (ParticlePair particle : pplayer.getActiveParticles())
+            particles.put(particle.getId(), particle.clone()); // Make sure the ParticlePairs aren't the same references in both the active and saved group
+        ParticleGroup group = new ParticleGroup(groupName, particles);
         
         // Apply changes and notify player
         PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), group);
