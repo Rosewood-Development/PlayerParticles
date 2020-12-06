@@ -289,6 +289,7 @@ public class GermanLocale implements Locale {
             this.put("gui-save-group-full", "Sie haben die maximale Anzahl von Gruppen erreicht");
             this.put("gui-save-group-no-particles", "Sie haben keine Partikel");
             this.put("gui-save-group-hotbar-message", "&eGeben Sie im Chat &b1 &eWort für den neuen Gruppennamen ein. Geben Sie &ccancel&e ein, um den Vorgang abzubrechen. (Noch&b%seconds%&e)");
+            this.put("gui-save-group-chat-message", "&eVerwenden Sie /pp group save <name>&e, um eine neue Partikelgruppe zu speichern.");
 
             this.put("#33", "GUI Reset Messages");
             this.put("gui-reset-particles", "Setzen Sie Ihre Partikel zurück");

@@ -289,6 +289,7 @@ public class RussianLocale implements Locale {
             this.put("gui-save-group-full", "Вы достигли максимального числа групп!");
             this.put("gui-save-group-no-particles", "У Вас нет каких-либо активных частиц!");
             this.put("gui-save-group-hotbar-message", "&eВведите &b1 &eслово в чат, которое будет названием группы. Введите &cотмена&e для отмены.");
+            this.put("gui-save-group-chat-message", "&eИспользуйте &b/pp group save <имя> &eдля сохранения новой группы частиц.");
 
             this.put("#33", "GUI Reset Messages");
             this.put("gui-reset-particles", "Удалить ваши частицы");

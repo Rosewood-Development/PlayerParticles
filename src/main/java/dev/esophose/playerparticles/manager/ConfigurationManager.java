@@ -59,6 +59,7 @@ public class ConfigurationManager extends Manager {
         RAINBOW_CYCLE_SPEED("rainbow-cycle-speed", 2, "How many out of 360 hue ticks to move per game tick", "Higher values make the rainbow cycle faster", "Note: Must be a positive whole number"),
         DUST_SIZE("dust-size", 1.0, "How large should dust particles appear?", "Note: Can include decimals", "Only works in 1.13+"),
         GUI_GROUP_CREATION_MESSAGE_DISPLAY_AREA("gui-group-creation-message-display-area", "ACTION_BAR", "Valid values: ACTION_BAR, TITLE, CHAT", "Where should the GUI group creation countdown message be displayed?", "Note: Server versions less than 1.11.2 will always use CHAT"),
+        GUI_GROUP_CREATION_BUNGEE_SUPPORT("gui-group-creation-bungee-support", false, "If true, a message will be displayed in chat telling the player to enter the command", "This might be required for some servers using bungee chat plugins"),
 
         WORLDGUARD_SETTINGS("worldguard-settings", null, "Settings for WorldGuard", "If WorldGuard is not installed, these settings will do nothing"),
         WORLDGUARD_USE_ALLOWED_REGIONS("worldguard-settings.use-allowed-regions", false, "If true, particles will only be able to spawn if they are in an allowed region and not a disallowed region", "If false, particles will be able to spawn as long as they are not in a disallowed region"),

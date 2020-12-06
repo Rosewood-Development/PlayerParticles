@@ -289,6 +289,7 @@ public class VietnameseLocale implements Locale {
             this.put("gui-save-group-full", "Bạn đã đạt đến giới hạn số lượng group có thể tạo");
             this.put("gui-save-group-no-particles", "Bạn không có bất kì Hhạt hiệu ứng nào được áp dụng");
             this.put("gui-save-group-hotbar-message", "&eNhập &b1 &etên group trong chat. Nhập &ccancel&e để hủy. (&b%seconds%&es left)");
+            this.put("gui-save-group-chat-message", "&eSử dụng &b/pp group save <Tên> &eđể lưu một nhóm hạt mới.");
 
             this.put("#33", "GUI Reset Messages");
             this.put("gui-reset-particles", "Làm mới Hạt hiệu ứng của bạn");

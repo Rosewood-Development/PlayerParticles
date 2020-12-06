@@ -289,6 +289,7 @@ public class EnglishLocale implements Locale {
             this.put("gui-save-group-full", "You have reached the max number of groups");
             this.put("gui-save-group-no-particles", "You do not have any particles applied");
             this.put("gui-save-group-hotbar-message", "&eType &b1 &eword in chat for the new group name. Type &ccancel&e to cancel. (&b%seconds%&es left)");
+            this.put("gui-save-group-chat-message", "&eUse &b/pp group save <name> &eto save a new particle group.");
 
             this.put("#33", "GUI Reset Messages");
             this.put("gui-reset-particles", "Reset Your Particles");

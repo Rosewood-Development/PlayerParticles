@@ -289,6 +289,7 @@ public class SimplifiedChineseLocale implements Locale {
             this.put("gui-save-group-full", "你已达到粒子组上限");
             this.put("gui-save-group-no-particles", "你没有使用粒子特效");
             this.put("gui-save-group-hotbar-message", "&e请在聊天框内输入&b1 &e新的粒子组名。 输入 &ccancel&e 取消。 (剩余&b%seconds%&e秒)");
+            this.put("gui-save-group-chat-message", "&e使用&b/pp group save <名称>&e来保存一个新的粒子组。");
 
             this.put("#33", "GUI Reset Messages");
             this.put("gui-reset-particles", "重置你的粒子特效");

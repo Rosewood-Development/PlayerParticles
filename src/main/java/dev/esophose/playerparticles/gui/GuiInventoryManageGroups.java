@@ -12,6 +12,7 @@ import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.util.NMSUtil;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import dev.esophose.playerparticles.util.StringPlaceholders;
 import java.util.ArrayList;
@@ -20,6 +21,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ClickEvent.Action;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 
 public class GuiInventoryManageGroups extends GuiInventory {
@@ -148,44 +152,60 @@ public class GuiInventoryManageGroups extends GuiInventory {
                     if (hasReachedMax || !hasParticles)
                         return;
 
-                    PlayerChatHook.addHook(new PlayerChatHookData(pplayer.getUniqueId(), 15, (textEntered) -> {
-                        if (textEntered != null && !textEntered.equalsIgnoreCase("cancel")) {
-                            String groupName = textEntered.split(" ")[0];
+                    if (!Setting.GUI_GROUP_CREATION_BUNGEE_SUPPORT.getBoolean()) {
+                        PlayerChatHook.addHook(new PlayerChatHookData(pplayer.getUniqueId(), 15, (textEntered) -> {
+                            if (textEntered != null && !textEntered.equalsIgnoreCase("cancel")) {
+                                String groupName = textEntered.split(" ")[0];
 
-                            // Check that the groupName isn't the reserved name
-                            if (groupName.equalsIgnoreCase(ParticleGroup.DEFAULT_NAME)) {
-                                localeManager.sendMessage(pplayer, "group-reserved");
-                                return;
+                                // Check that the groupName isn't the reserved name
+                                if (groupName.equalsIgnoreCase(ParticleGroup.DEFAULT_NAME)) {
+                                    localeManager.sendMessage(pplayer, "group-reserved");
+                                    return;
+                                }
+
+                                // The database column can only hold up to 100 characters, cut it off there
+                                if (groupName.length() >= 100) {
+                                    groupName = groupName.substring(0, 100);
+                                }
+
+                                // Use the existing group if available, otherwise create a new one
+                                ParticleGroup group = pplayer.getParticleGroupByName(groupName);
+                                boolean groupUpdated = false;
+                                if (group == null) {
+                                    Map<Integer, ParticlePair> particles = new ConcurrentHashMap<>();
+                                    for (ParticlePair particle : pplayer.getActiveParticles())
+                                        particles.put(particle.getId(), particle.clone()); // Make sure the ParticlePairs aren't the same references in both the active and saved group
+                                    group = new ParticleGroup(groupName, particles);
+                                } else {
+                                    groupUpdated = true;
+                                }
+
+                                // Apply changes and notify player
+                                PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), group);
+                                if (groupUpdated) {
+                                    localeManager.sendMessage(pplayer, "group-save-success-overwrite", StringPlaceholders.single("name", groupName));
+                                } else {
+                                    localeManager.sendMessage(pplayer, "group-save-success", StringPlaceholders.single("name", groupName));
+                                }
+
                             }
+                            guiManager.transition(new GuiInventoryManageGroups(pplayer, pageNumber));
+                        }));
+                    } else {
+                        if (NMSUtil.getVersionNumber() >= 8) {
+                            String message = localeManager.getLocaleMessage("gui-save-group-chat-message");
+                            String prefix = "";
+                            if (Setting.USE_MESSAGE_PREFIX.getBoolean())
+                                prefix = localeManager.getLocaleMessage("prefix");
 
-                            // The database column can only hold up to 100 characters, cut it off there
-                            if (groupName.length() >= 100) {
-                                groupName = groupName.substring(0, 100);
-                            }
-
-                            // Use the existing group if available, otherwise create a new one
-                            ParticleGroup group = pplayer.getParticleGroupByName(groupName);
-                            boolean groupUpdated = false;
-                            if (group == null) {
-                                Map<Integer, ParticlePair> particles = new ConcurrentHashMap<>();
-                                for (ParticlePair particle : pplayer.getActiveParticles())
-                                    particles.put(particle.getId(), particle.clone()); // Make sure the ParticlePairs aren't the same references in both the active and saved group
-                                group = new ParticleGroup(groupName, particles);
-                            } else {
-                                groupUpdated = true;
-                            }
-
-                            // Apply changes and notify player
-                            PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), group);
-                            if (groupUpdated) {
-                                localeManager.sendMessage(pplayer, "group-save-success-overwrite", StringPlaceholders.single("name", groupName));
-                            } else {
-                                localeManager.sendMessage(pplayer, "group-save-success", StringPlaceholders.single("name", groupName));
-                            }
-
+                            TextComponent component = new TextComponent(TextComponent.fromLegacyText(prefix + message));
+                            component.setClickEvent(new ClickEvent(Action.SUGGEST_COMMAND, "/pp group save "));
+                            pplayer.getPlayer().spigot().sendMessage(component);
+                        } else {
+                            localeManager.sendMessage(pplayer, "gui-save-group-chat-message");
                         }
-                        guiManager.transition(new GuiInventoryManageGroups(pplayer, pageNumber));
-                    }));
+                    }
+
                     this.close();
                 });
         this.actionButtons.add(saveGroupButton);
