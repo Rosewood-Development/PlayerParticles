@@ -7,6 +7,7 @@ import java.util.Map;
 @SuppressWarnings("StaticInitializerReferencesSubClass")
 public abstract class VersionMapping {
 
+    public static final VersionMapping _17 = new VersionMapping17();
     public static final VersionMapping _16 = new VersionMapping16();
     public static final VersionMapping _15 = new VersionMapping15();
 
@@ -26,6 +27,8 @@ public abstract class VersionMapping {
 
     public static VersionMapping getVersionMapping(int version) {
         switch (version) {
+            case 17:
+                return _17;
             case 16:
                 return _16;
             case 15:

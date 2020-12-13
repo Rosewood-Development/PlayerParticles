@@ -6,6 +6,6 @@ project(':Plugin').projectDir = file('Plugin')
 include(':NMS-Wrapper')
 project(':NMS-Wrapper').projectDir = file('Particles/Wrapper')
 
-include(':NMS-v1_15_R1')
-project(':NMS-v1_15_R1').projectDir = file('Particles/v1_15_R1')
+include(':NMS-v1_16_R3')
+project(':NMS-v1_16_R3').projectDir = file('Particles/v1_16_R3')
 

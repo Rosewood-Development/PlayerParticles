@@ -1,8 +1,8 @@
-package dev.esophose.playerparticles.nms.v1_15_R1;
+package dev.esophose.playerparticles.nms.v1_16_R3;
 
-import net.minecraft.server.v1_15_R1.PacketDataSerializer;
-import net.minecraft.server.v1_15_R1.PacketPlayOutWorldParticles;
-import net.minecraft.server.v1_15_R1.ParticleParam;
+import net.minecraft.server.v1_16_R3.PacketDataSerializer;
+import net.minecraft.server.v1_16_R3.PacketPlayOutWorldParticles;
+import net.minecraft.server.v1_16_R3.ParticleParam;
 
 class ModifiedPacketPlayOutWorldParticles extends PacketPlayOutWorldParticles {
 

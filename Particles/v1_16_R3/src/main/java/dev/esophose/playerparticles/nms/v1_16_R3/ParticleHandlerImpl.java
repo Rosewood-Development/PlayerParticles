@@ -1,28 +1,29 @@
-package dev.esophose.playerparticles.nms.v1_15_R1;
+package dev.esophose.playerparticles.nms.v1_16_R3;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
+import dev.esophose.playerparticles.nms.v1_16_R3.param.ParticleParamRedstoneTransition;
 import dev.esophose.playerparticles.nms.wrapper.ParticleHandler;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.version.VersionMapping;
 import io.netty.buffer.Unpooled;
 import java.io.IOException;
 import java.util.Collection;
-import net.minecraft.server.v1_15_R1.IRegistry;
-import net.minecraft.server.v1_15_R1.PacketDataSerializer;
-import net.minecraft.server.v1_15_R1.PacketPlayOutWorldParticles;
-import net.minecraft.server.v1_15_R1.Particle;
-import net.minecraft.server.v1_15_R1.ParticleParam;
-import net.minecraft.server.v1_15_R1.ParticleParamBlock;
-import net.minecraft.server.v1_15_R1.ParticleParamItem;
-import net.minecraft.server.v1_15_R1.ParticleParamRedstone;
+import net.minecraft.server.v1_16_R3.IRegistry;
+import net.minecraft.server.v1_16_R3.PacketDataSerializer;
+import net.minecraft.server.v1_16_R3.PacketPlayOutWorldParticles;
+import net.minecraft.server.v1_16_R3.Particle;
+import net.minecraft.server.v1_16_R3.ParticleParam;
+import net.minecraft.server.v1_16_R3.ParticleParamBlock;
+import net.minecraft.server.v1_16_R3.ParticleParamItem;
+import net.minecraft.server.v1_16_R3.ParticleParamRedstone;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.craftbukkit.v1_15_R1.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_15_R1.util.CraftMagicNumbers;
+import org.bukkit.craftbukkit.v1_16_R3.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_16_R3.util.CraftMagicNumbers;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
@@ -52,7 +53,11 @@ public class ParticleHandlerImpl extends ParticleHandler {
         } else if (data instanceof DustOptions) {
             DustOptions dustOptions = (DustOptions) data;
             Color color = dustOptions.getColor();
-            particleParam = new ParticleParamRedstone((float) color.getRed() / 255.0F, (float) color.getGreen() / 255.0F, (float) color.getBlue() / 255.0F, dustOptions.getSize());
+            if (particleEffect == ParticleEffect.DUST_COLOR_TRANSITION) {
+                particleParam = new ParticleParamRedstoneTransition((float) color.getRed() / 255.0F, (float) color.getGreen() / 255.0F, (float) color.getBlue() / 255.0F, (float) 1 - color.getRed() / 255.0F, (float) 1 - color.getGreen() / 255.0F, (float) 1 - color.getBlue() / 255.0F, dustOptions.getSize());
+            } else {
+                particleParam = new ParticleParamRedstone((float) color.getRed() / 255.0F, (float) color.getGreen() / 255.0F, (float) color.getBlue() / 255.0F, dustOptions.getSize());
+            }
         }
 
         PacketPlayOutWorldParticles packetplayoutworldparticles = new ModifiedPacketPlayOutWorldParticles(particleId, particleParam, true, location.getX(), location.getY(), location.getZ(), offsetX, offsetY, offsetZ, extra, count);

@@ -343,14 +343,14 @@ public class ParticleManager extends Manager implements Listener, Runnable {
             center = pparticle.getLocation(true);
 
             ParticleColor color = particle.getSpawnColor();
-            if (effect == ParticleEffect.DUST && NMSUtil.getVersionNumber() >= 13) {
+            if ((effect == ParticleEffect.DUST || effect == ParticleEffect.DUST_COLOR_TRANSITION) && NMSUtil.getVersionNumber() >= 13) {
                 OrdinaryColor dustColor = (OrdinaryColor) color;
                 data = new DustOptions(org.bukkit.Color.fromRGB(dustColor.getRed(), dustColor.getGreen(), dustColor.getBlue()), Setting.DUST_SIZE.getFloat());
                 offsetX = 0;
                 offsetY = 0;
                 offsetZ = 0;
             } else {
-                offsetX = effect == ParticleEffect.DUST && color.getValueX() == 0 ? Float.MIN_VALUE : color.getValueX();
+                offsetX = (effect == ParticleEffect.DUST || effect == ParticleEffect.DUST_COLOR_TRANSITION) && color.getValueX() == 0 ? Float.MIN_VALUE : color.getValueX();
                 offsetY = color.getValueY();
                 offsetZ = color.getValueZ();
             }

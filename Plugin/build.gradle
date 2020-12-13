@@ -16,7 +16,7 @@ dependencies {
     implementation project(':NMS-Wrapper')
 
     // Referenced dependencies
-    shadow 'org.spigotmc:spigot:1.15.2-R0.1-SNAPSHOT'
+    shadow 'org.spigotmc:spigot:1.16.4'
     shadow 'org.jetbrains:annotations:16.0.2'
     shadow 'me.clip:placeholderapi:2.10.4'
     shadow 'org.xerial:sqlite-jdbc:3.23.1'
