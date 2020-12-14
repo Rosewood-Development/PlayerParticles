@@ -3,12 +3,15 @@ package dev.esophose.playerparticles.nms.v1_16_R3;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import dev.esophose.playerparticles.nms.v1_16_R3.param.ParticleParamRedstoneTransition;
+import dev.esophose.playerparticles.nms.v1_16_R3.param.ParticleParamVibration;
+import dev.esophose.playerparticles.nms.v1_16_R3.param.vibration.BlockPositionSource;
 import dev.esophose.playerparticles.nms.wrapper.ParticleHandler;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.version.VersionMapping;
 import io.netty.buffer.Unpooled;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.concurrent.ThreadLocalRandom;
 import net.minecraft.server.v1_16_R3.IRegistry;
 import net.minecraft.server.v1_16_R3.PacketDataSerializer;
 import net.minecraft.server.v1_16_R3.PacketPlayOutWorldParticles;
@@ -58,6 +61,13 @@ public class ParticleHandlerImpl extends ParticleHandler {
             } else {
                 particleParam = new ParticleParamRedstone((float) color.getRed() / 255.0F, (float) color.getGreen() / 255.0F, (float) color.getBlue() / 255.0F, dustOptions.getSize());
             }
+        } else if (particleEffect == ParticleEffect.VIBRATION) {
+            ThreadLocalRandom random = ThreadLocalRandom.current();
+            particleParam = new ParticleParamVibration(location, new BlockPositionSource(location.clone().add(
+                    random.nextDouble() * 20 - 10,
+                    random.nextDouble() * 20 - 10,
+                    random.nextDouble() * 20 - 10
+            )), 60);
         }
 
         PacketPlayOutWorldParticles packetplayoutworldparticles = new ModifiedPacketPlayOutWorldParticles(particleId, particleParam, true, location.getX(), location.getY(), location.getZ(), offsetX, offsetY, offsetZ, extra, count);
