@@ -3,6 +3,7 @@ package dev.esophose.playerparticles.particles;
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.ParticleManager;
+import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
 import dev.esophose.playerparticles.particles.data.NoteColor;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
@@ -11,6 +12,7 @@ import dev.esophose.playerparticles.styles.DefaultStyles;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import dev.esophose.playerparticles.util.StringPlaceholders;
+import java.util.List;
 import java.util.UUID;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
@@ -305,10 +307,14 @@ public class ParticlePair {
      * @return A ParticlePair with default values
      */
     public static ParticlePair getNextDefault(PPlayer pplayer) {
+        PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
+        List<ParticleEffect> effects = permissionManager.getEffectsUserHasPermissionFor(pplayer);
+        List<ParticleStyle> styles = permissionManager.getStylesUserHasPermissionFor(pplayer);
+
         return new ParticlePair(pplayer.getUniqueId(), // @formatter:off
-                                pplayer.getNextActiveParticleId(), 
-    							ParticleEffect.FLAME, 
-    							DefaultStyles.NORMAL, 
+                                pplayer.getNextActiveParticleId(),
+                                effects.stream().findFirst().orElse(ParticleEffect.FLAME),
+    							styles.stream().findFirst().orElse(DefaultStyles.NORMAL),
     							ParticleUtils.closestMatchWithFallback(true, "IRON_SHOVEL", "IRON_SPADE"), 
     							Material.STONE, 
     							new OrdinaryColor(0, 0, 0), 
