@@ -4,6 +4,8 @@ import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.gui.GuiInventory;
 import dev.esophose.playerparticles.gui.GuiInventoryDefault;
 import dev.esophose.playerparticles.gui.GuiInventoryLoadPresetGroups;
+import dev.esophose.playerparticles.gui.GuiInventoryManageGroups;
+import dev.esophose.playerparticles.gui.GuiInventoryManageParticles;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.particles.PPlayer;
 import java.util.ArrayList;
@@ -126,6 +128,26 @@ public class GuiManager extends Manager implements Listener, Runnable {
     public void openPresetGroups(PPlayer pplayer) {
         Bukkit.getScheduler().runTask(this.playerParticles, () ->
                 this.openGui(pplayer, new GuiInventoryLoadPresetGroups(pplayer, true, 1)));
+    }
+
+    /**
+     * Opens the groups GUI screen for a player
+     *
+     * @param pplayer The PPlayer to open the GUI screen for
+     */
+    public void openGroups(PPlayer pplayer) {
+        Bukkit.getScheduler().runTask(this.playerParticles, () ->
+                this.openGui(pplayer, new GuiInventoryManageGroups(pplayer, 1)));
+    }
+
+    /**
+     * Opens the edit particles GUI screen for a player
+     *
+     * @param pplayer The PPlayer to open the GUI screen for
+     */
+    public void openParticles(PPlayer pplayer) {
+        Bukkit.getScheduler().runTask(this.playerParticles, () ->
+                this.openGui(pplayer, new GuiInventoryManageParticles(pplayer)));
     }
 
     /**

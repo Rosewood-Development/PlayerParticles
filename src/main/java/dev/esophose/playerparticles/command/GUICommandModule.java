@@ -7,7 +7,7 @@ import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.particles.PPlayer;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import org.bukkit.util.StringUtil;
 
@@ -47,10 +47,23 @@ public class GUICommandModule implements CommandModule {
             return;
         }
 
-        if (args.length > 0 && args[0].equalsIgnoreCase("presets")) {
-            guiManager.openPresetGroups(pplayer);
-        } else {
+        if (args.length == 0) {
             guiManager.openDefault(pplayer);
+        } else {
+            switch (args[0].toLowerCase()) {
+                case "presets":
+                    guiManager.openPresetGroups(pplayer);
+                    break;
+                case "groups":
+                    guiManager.openGroups(pplayer);
+                    break;
+                case "particles":
+                    guiManager.openParticles(pplayer);
+                    break;
+                default:
+                    guiManager.openDefault(pplayer);
+                    break;
+            }
         }
     }
 
@@ -58,7 +71,7 @@ public class GUICommandModule implements CommandModule {
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
         List<String> completions = new ArrayList<>();
         if (args.length == 1) {
-            List<String> possibilities = Collections.singletonList("presets");
+            List<String> possibilities = Arrays.asList("presets", "groups", "particles");
             StringUtil.copyPartialMatches(args[0], possibilities, completions);
         }
         return completions;
