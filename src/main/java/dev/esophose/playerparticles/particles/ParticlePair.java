@@ -12,6 +12,7 @@ import dev.esophose.playerparticles.styles.DefaultStyles;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import dev.esophose.playerparticles.util.StringPlaceholders;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import net.md_5.bungee.api.ChatColor;
@@ -308,8 +309,16 @@ public class ParticlePair {
      */
     public static ParticlePair getNextDefault(PPlayer pplayer) {
         PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
-        List<ParticleEffect> effects = permissionManager.getEffectsUserHasPermissionFor(pplayer);
-        List<ParticleStyle> styles = permissionManager.getStylesUserHasPermissionFor(pplayer);
+
+        List<ParticleEffect> effects;
+        List<ParticleStyle> styles;
+        if (pplayer.getPlayer() == null) {
+            effects = Collections.emptyList();
+            styles = Collections.emptyList();
+        } else {
+            effects = permissionManager.getEffectsUserHasPermissionFor(pplayer);
+            styles = permissionManager.getStylesUserHasPermissionFor(pplayer);
+        }
 
         return new ParticlePair(pplayer.getUniqueId(), // @formatter:off
                                 pplayer.getNextActiveParticleId(),
