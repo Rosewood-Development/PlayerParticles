@@ -1,14 +1,20 @@
 package dev.esophose.playerparticles.util;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.apache.commons.lang.WordUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 public final class ParticleUtils {
 
-    public final static Material FALLBACK_MATERIAL;
-    private static List<String> blockMaterials, itemMaterials;
+    public static final Material FALLBACK_MATERIAL;
+    public static final List<Material> BLOCK_MATERIALS, ITEM_MATERIALS;
+    public static final List<String> BLOCK_MATERIALS_STRING, ITEM_MATERIALS_STRING;
     
     static {
         if (NMSUtil.getVersionNumber() > 7) {
@@ -17,16 +23,27 @@ public final class ParticleUtils {
             FALLBACK_MATERIAL = Material.BEDROCK;
         }
 
-        blockMaterials = new ArrayList<>();
-        itemMaterials = new ArrayList<>();
-        
+        BLOCK_MATERIALS = new ArrayList<>();
+        ITEM_MATERIALS = new ArrayList<>();
+
+        Inventory tempInventory = Bukkit.createInventory(null, 9);
         for (Material mat : Material.values()) {
-            if (mat.isBlock()) {
-                blockMaterials.add(mat.name().toLowerCase());
-            } else {
-                itemMaterials.add(mat.name().toLowerCase());
+            // Verify an ItemStack of the material can be placed into an inventory. In 1.12 and up this can easily be checked with mat.isItem(), but that doesn't exist pre-1.12
+            tempInventory.clear();
+            tempInventory.setItem(0, new ItemStack(mat, 1));
+            ItemStack itemStack = tempInventory.getItem(0);
+            if (itemStack != null) {
+                if (mat.isBlock())
+                    BLOCK_MATERIALS.add(mat);
+                ITEM_MATERIALS.add(mat); // Items allow both items and blocks to be selected
             }
         }
+
+        BLOCK_MATERIALS.sort(Comparator.comparing(Enum::name));
+        ITEM_MATERIALS.sort(Comparator.comparing(Enum::name));
+
+        BLOCK_MATERIALS_STRING = BLOCK_MATERIALS.stream().map(Enum::name).map(String::toLowerCase).collect(Collectors.toList());
+        ITEM_MATERIALS_STRING = ITEM_MATERIALS.stream().map(Enum::name).map(String::toLowerCase).collect(Collectors.toList());
     }
     
     private ParticleUtils() {
@@ -65,24 +82,6 @@ public final class ParticleUtils {
             return FALLBACK_MATERIAL;
 
         return null;
-    }
-
-    /**
-     * Gets all block materials in the game
-     * 
-     * @return A List of all block material names available in the game
-     */
-    public static List<String> getAllBlockMaterials() {
-        return blockMaterials;
-    }
-
-    /**
-     * Gets all item materials in the game
-     * 
-     * @return A List of all item material names available in the game
-     */
-    public static List<String> getAllItemMaterials() {
-        return itemMaterials;
     }
     
     /**

@@ -13,7 +13,6 @@ import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.util.NMSUtil;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import dev.esophose.playerparticles.util.StringPlaceholders;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -21,13 +20,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 @SuppressWarnings("deprecation")
 public class GuiInventoryEditData extends GuiInventory {
 
-    private static List<Material> BLOCK_MATERIALS, ITEM_MATERIALS;
     private static ColorData[] colorMapping;
     private static ColorData[] rainbowColorMapping;
     private static ColorData[] noteColorMapping, noteColorMappingOld;
@@ -120,24 +116,6 @@ public class GuiInventoryEditData extends GuiInventory {
                 colorMapping[7],  // 23 Light Blue
                 colorMapping[7]   // 24 Light Blue
         };
-
-        BLOCK_MATERIALS = new ArrayList<>();
-        ITEM_MATERIALS = new ArrayList<>();
-
-        Inventory tempInventory = Bukkit.createInventory(null, 9);
-        for (Material mat : Material.values()) {
-            // Verify an ItemStack of the material can be placed into an inventory. In 1.12 and up this can easily be checked with mat.isItem(), but that doesn't exist pre-1.12
-            tempInventory.clear();
-            tempInventory.setItem(0, new ItemStack(mat, 1));
-            ItemStack itemStack = tempInventory.getItem(0);
-            if (itemStack != null) {
-                if (mat.isBlock()) {
-                    BLOCK_MATERIALS.add(mat);
-                } else if (!mat.isBlock()) {
-                    ITEM_MATERIALS.add(mat);
-                }
-            }
-        }
     }
 
     public GuiInventoryEditData(PPlayer pplayer, ParticlePair editingParticle, int pageNumber, List<Runnable> callbackList, int callbackListPosition) {
@@ -344,7 +322,7 @@ public class GuiInventoryEditData extends GuiInventory {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         GuiManager guiManager = PlayerParticles.getInstance().getManager(GuiManager.class);
 
-        int numberOfItems = ITEM_MATERIALS.size();
+        int numberOfItems = ParticleUtils.ITEM_MATERIALS.size();
         int itemsPerPage = 28;
         int maxPages = (int) Math.ceil((double) numberOfItems / itemsPerPage);
         int slot = 10;
@@ -353,7 +331,7 @@ public class GuiInventoryEditData extends GuiInventory {
 
         for (int i = (pageNumber - 1) * itemsPerPage; i < numberOfItems; i++) {
             // Item Data Button
-            Material material = ITEM_MATERIALS.get(i);
+            Material material = ParticleUtils.ITEM_MATERIALS.get(i);
             GuiActionButton setRainbowColorButton = new GuiActionButton(
                     slot,
                     material,
@@ -408,7 +386,7 @@ public class GuiInventoryEditData extends GuiInventory {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         GuiManager guiManager = PlayerParticles.getInstance().getManager(GuiManager.class);
 
-        int numberOfItems = BLOCK_MATERIALS.size();
+        int numberOfItems = ParticleUtils.BLOCK_MATERIALS.size();
         int itemsPerPage = 28;
         int maxPages = (int) Math.ceil((double) numberOfItems / itemsPerPage);
         int slot = 10;
@@ -417,7 +395,7 @@ public class GuiInventoryEditData extends GuiInventory {
 
         for (int i = (pageNumber - 1) * itemsPerPage; i < numberOfItems; i++) {
             // Item Data Button
-            Material material = BLOCK_MATERIALS.get(i);
+            Material material = ParticleUtils.BLOCK_MATERIALS.get(i);
             GuiActionButton setRainbowColorButton = new GuiActionButton(
                     slot,
                     material,

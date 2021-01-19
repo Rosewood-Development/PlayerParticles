@@ -259,9 +259,9 @@ public class EditCommandModule implements CommandModule {
                         StringUtil.copyPartialMatches(args[args.length - 1], possibleValues, matches);
                     } else if (args.length == 3 && effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
                         if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST) { // Block material
-                            StringUtil.copyPartialMatches(args[2], ParticleUtils.getAllBlockMaterials(), matches);
+                            StringUtil.copyPartialMatches(args[2], ParticleUtils.BLOCK_MATERIALS_STRING, matches);
                         } else if (effect == ParticleEffect.ITEM) { // Item material
-                            StringUtil.copyPartialMatches(args[2], ParticleUtils.getAllItemMaterials(), matches);
+                            StringUtil.copyPartialMatches(args[2], ParticleUtils.ITEM_MATERIALS_STRING, matches);
                         }
                     }
                     break;

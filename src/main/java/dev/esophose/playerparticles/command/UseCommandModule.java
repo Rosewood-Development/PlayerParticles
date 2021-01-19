@@ -162,9 +162,9 @@ public class UseCommandModule implements CommandModule {
                         }
                     } else if (args.length == 3 && effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
                         if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST) { // Block material
-                            possibleValues.addAll(ParticleUtils.getAllBlockMaterials());
+                            possibleValues.addAll(ParticleUtils.BLOCK_MATERIALS_STRING);
                         } else if (effect == ParticleEffect.ITEM) { // Item material
-                            possibleValues.addAll(ParticleUtils.getAllItemMaterials());
+                            possibleValues.addAll(ParticleUtils.ITEM_MATERIALS_STRING);
                         }
                     }
                     break;
