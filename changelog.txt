@@ -1,3 +1,29 @@
+=== v7.18 ===
++ Added commands to directly open two more GUI pages '/gui <type>'
+* Updated WorldGuardWrapper to fix an error with newer versions of WorldEdit/WorldGuard
+* Fixed primary effects/styles defaulting to flame and normal even if the player doesn't have permission
+* Fixed an NPE with the celebration style trying to get effects/styles for an offline player
+* Alphabetized the blocks and items data GUI pages, added blocks to the item data
+=== v7.17 ===
++ Added an option to make the group save GUI icon print a message to chat (This is for bungee servers)
+* Fixed /pp group save not overwriting existing particles properly
+* Fixed permissions getting registered before effects/styles were registered
+* Fixed messages having a prefix even when the prefix is disabled
+* Fixed several tasks not loading properly after a /pp reload
+* Fixed netherite swords not being included in the swords style list by default
+* Fixed /ppo sometimes causing race conditions
+* Fixed a rare issue with the celebration style that could create endless particle loops
+=== v7.16 ===
++ The GUI particle presets page is now fully customizable from the preset_groups.yml file and supports multiple pages
++ Added '/pp use <effect>|<style>|<data> <value>', functions the same as '/pp effect|style|data' did in v5 and below
++ Added optional parameters to '/pp toggle [on|off]', if absent it will toggle
++ Added new WorldGuard flag player-particles to allow/deny particles in specific regions
+- The old WorldGuard region handling is deprecated, please get moved over to the new system
+* The plugin now waits a few ticks before initializing to wait for other plugins to register to the custom styles event
+* Fixed off by 1 for hex colors in messages if at end of string
+* Now uses double math everywhere rather than sometimes floats, more precise
+* Fixed the janky way of opening /pp gui by default
+* ParticleStyle constructors are now marked as protected to prevent accidental initialization
 === v7.15 ===
 + Added additional hex color support
 + Fixed preset group permissions not working
