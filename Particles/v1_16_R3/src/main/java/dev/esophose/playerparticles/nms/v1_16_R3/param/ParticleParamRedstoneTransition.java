@@ -26,10 +26,10 @@ public class ParticleParamRedstoneTransition implements ParticleParam {
         serializer.writeFloat(this.r);
         serializer.writeFloat(this.g);
         serializer.writeFloat(this.b);
+        serializer.writeFloat(this.size);
         serializer.writeFloat(this.r2);
         serializer.writeFloat(this.g2);
         serializer.writeFloat(this.b2);
-        serializer.writeFloat(this.size);
     }
 
     @Override

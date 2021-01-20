@@ -52,6 +52,8 @@ public enum ParticleEffect {
     FLAME(Collections.singletonList("BLAZE_POWDER")),
     FLASH(Collections.singletonList("GOLD_INGOT")),
     FOOTSTEP(Collections.singletonList("GRASS")),
+    GLOW_SQUID_INK(Collections.singletonList("GLOW_SQUID_SPAWN_EGG")),
+    GLOW(Collections.singletonList("GLOW_INK_SAC")),
     HAPPY_VILLAGER(Arrays.asList("DARK_OAK_DOOR_ITEM", "DARK_OAK_DOOR")),
     HEART(Arrays.asList("POPPY", "RED_ROSE")),
     INSTANT_EFFECT(Arrays.asList("SPLASH_POTION", "POTION")),

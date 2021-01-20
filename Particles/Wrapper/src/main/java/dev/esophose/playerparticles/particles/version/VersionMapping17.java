@@ -95,6 +95,8 @@ public class VersionMapping17 extends VersionMapping {
             this.put(77, ParticleEffect.FALLING_DRIPSTONE_LAVA);
             this.put(78, ParticleEffect.DRIPPING_DRIPSTONE_WATER);
             this.put(79, ParticleEffect.FALLING_DRIPSTONE_WATER);
+            this.put(80, ParticleEffect.GLOW_SQUID_INK);
+            this.put(81, ParticleEffect.GLOW);
         }};
     }
 
