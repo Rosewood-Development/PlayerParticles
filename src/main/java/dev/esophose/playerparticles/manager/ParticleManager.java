@@ -8,6 +8,7 @@ import dev.esophose.playerparticles.particles.FixedParticleEffect;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
+import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.particles.data.NoteColor;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
@@ -15,6 +16,7 @@ import dev.esophose.playerparticles.styles.DefaultStyles;
 import dev.esophose.playerparticles.util.NMSUtil;
 import java.awt.Color;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -107,7 +109,43 @@ public class ParticleManager extends Manager implements Listener, Runnable {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent e) {
-        this.playerParticles.getManager(DataManager.class).getPPlayer(e.getPlayer().getUniqueId(), (pplayer) -> { }); // Loads the PPlayer from the database
+        // Loads the PPlayer from the database
+        this.playerParticles.getManager(DataManager.class).getPPlayer(e.getPlayer().getUniqueId(), pplayer -> {
+            // If enabled, check permissions for that player
+            if (!Setting.CHECK_PERMISSIONS_ON_LOGIN.getBoolean())
+                return;
+
+            DataManager dataManager = this.playerParticles.getManager(DataManager.class);
+            PermissionManager permissionManager = this.playerParticles.getManager(PermissionManager.class);
+
+            // Check groups
+            Iterator<ParticleGroup> groupIterator = pplayer.getParticleGroups().values().iterator();
+            while (groupIterator.hasNext()) {
+                ParticleGroup group = groupIterator.next();
+                int originalSize = group.getParticles().size();
+                group.getParticles().values().removeIf(x -> !permissionManager.hasEffectPermission(pplayer, x.getEffect()) || !permissionManager.hasStylePermission(pplayer, x.getStyle()));
+                if (group.getParticles().size() == originalSize)
+                    continue;
+
+                if (group.getParticles().isEmpty() && !group.getName().equals(ParticleGroup.DEFAULT_NAME)) {
+                    dataManager.removeParticleGroup(pplayer.getUniqueId(), group.getName());
+                    groupIterator.remove();
+                } else {
+                    dataManager.saveParticleGroup(pplayer.getUniqueId(), group);
+                }
+            }
+
+            // Check fixed effects
+            Iterator<FixedParticleEffect> fixedParticleEffectIterator = pplayer.getFixedParticles().iterator();
+            while (fixedParticleEffectIterator.hasNext()) {
+                FixedParticleEffect fixedParticleEffect = fixedParticleEffectIterator.next();
+                ParticlePair particlePair = fixedParticleEffect.getParticlePair();
+                if (!permissionManager.hasEffectPermission(pplayer, particlePair.getEffect()) || permissionManager.hasStylePermission(pplayer, particlePair.getStyle())) {
+                    dataManager.removeFixedEffect(pplayer.getUniqueId(), fixedParticleEffect.getId());
+                    fixedParticleEffectIterator.remove();
+                }
+            }
+        });
     }
 
     /**
