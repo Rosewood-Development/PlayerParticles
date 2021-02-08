@@ -3,7 +3,6 @@ package dev.esophose.playerparticles.manager;
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.hook.WorldGuardHook;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
-import dev.esophose.playerparticles.particles.ConsolePPlayer;
 import dev.esophose.playerparticles.particles.FixedParticleEffect;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.PPlayer;
@@ -78,12 +77,6 @@ public class ParticleManager extends Manager implements Listener, Runnable {
                 long worldGuardTicks = Setting.WORLDGUARD_CHECK_INTERVAL.getLong();
                 this.worldGuardTask = Bukkit.getScheduler().runTaskTimer(this.playerParticles, this::updateWorldGuardStatuses, 0, worldGuardTicks);
             }
-
-            DataManager dataManager = this.playerParticles.getManager(DataManager.class);
-            dataManager.loadFixedEffects();
-            for (Player player : Bukkit.getOnlinePlayers())
-                dataManager.getPPlayer(player.getUniqueId(), (pplayer) -> { }); // Loads the PPlayer from the database
-            dataManager.getPPlayer(ConsolePPlayer.getUUID(), (pplayer) -> { }); // Load the console PPlayer
         }, 5);
     }
 
@@ -140,7 +133,7 @@ public class ParticleManager extends Manager implements Listener, Runnable {
             while (fixedParticleEffectIterator.hasNext()) {
                 FixedParticleEffect fixedParticleEffect = fixedParticleEffectIterator.next();
                 ParticlePair particlePair = fixedParticleEffect.getParticlePair();
-                if (!permissionManager.hasEffectPermission(pplayer, particlePair.getEffect()) || permissionManager.hasStylePermission(pplayer, particlePair.getStyle())) {
+                if (!permissionManager.hasEffectPermission(pplayer, particlePair.getEffect()) || !permissionManager.hasStylePermission(pplayer, particlePair.getStyle())) {
                     dataManager.removeFixedEffect(pplayer.getUniqueId(), fixedParticleEffect.getId());
                     fixedParticleEffectIterator.remove();
                 }

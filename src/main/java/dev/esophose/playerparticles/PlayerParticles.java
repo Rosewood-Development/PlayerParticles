@@ -125,12 +125,15 @@ public class PlayerParticles extends JavaPlugin {
      */
     public void reload() {
         this.managers.values().forEach(Manager::disable);
+
+        // This will be loaded after the DataManager connects to the database
+        this.managers.remove(DataMigrationManager.class);
+
         this.managers.values().forEach(Manager::reload);
 
         this.getManager(ConfigurationManager.class);
         this.getManager(LocaleManager.class);
         this.getManager(DataManager.class);
-        this.getManager(DataMigrationManager.class);
         this.getManager(PermissionManager.class);
         this.getManager(CommandManager.class);
         this.getManager(ParticleStyleManager.class);

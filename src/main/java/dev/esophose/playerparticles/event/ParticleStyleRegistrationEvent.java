@@ -4,6 +4,7 @@ import dev.esophose.playerparticles.styles.ParticleStyle;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -18,6 +19,7 @@ public class ParticleStyleRegistrationEvent extends Event {
     private Map<String, ParticleStyle> registeredEventStyles;
 
     public ParticleStyleRegistrationEvent() {
+        super(!Bukkit.isPrimaryThread());
         this.registeredStyles = new HashMap<>();
         this.registeredEventStyles = new HashMap<>();
     }

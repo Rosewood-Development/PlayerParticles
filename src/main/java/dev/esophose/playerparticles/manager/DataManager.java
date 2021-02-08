@@ -28,6 +28,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 
 /**
  * All data changes to PPlayers such as group or fixed effect changes must be done through here,
@@ -43,33 +44,42 @@ public class DataManager extends Manager {
 
     @Override
     public void reload() {
-        if (this.databaseConnector != null)
-            this.databaseConnector.closeConnection();
+        Bukkit.getScheduler().runTaskAsynchronously(this.playerParticles, () -> {
+            try {
+                if (Setting.MYSQL_ENABLED.getBoolean()) {
+                    String hostname = Setting.MYSQL_HOSTNAME.getString();
+                    int port = Setting.MYSQL_PORT.getInt();
+                    String database = Setting.MYSQL_DATABASE_NAME.getString();
+                    String username = Setting.MYSQL_USER_NAME.getString();
+                    String password = Setting.MYSQL_USER_PASSWORD.getString();
+                    boolean useSSL = Setting.MYSQL_USE_SSL.getBoolean();
 
-        try {
-            if (Setting.MYSQL_ENABLED.getBoolean()) {
-                String hostname = Setting.MYSQL_HOSTNAME.getString();
-                int port = Setting.MYSQL_PORT.getInt();
-                String database = Setting.MYSQL_DATABASE_NAME.getString();
-                String username = Setting.MYSQL_USER_NAME.getString();
-                String password = Setting.MYSQL_USER_PASSWORD.getString();
-                boolean useSSL = Setting.MYSQL_USE_SSL.getBoolean();
-
-                this.databaseConnector = new MySQLConnector(this.playerParticles, hostname, port, database, username, password, useSSL);
-                this.playerParticles.getLogger().info("Data handler connected using MySQL.");
-            } else {
-                this.databaseConnector = new SQLiteConnector(this.playerParticles);
-                this.playerParticles.getLogger().info("Data handler connected using SQLite.");
+                    this.databaseConnector = new MySQLConnector(this.playerParticles, hostname, port, database, username, password, useSSL);
+                    this.playerParticles.getLogger().info("Data handler connected using MySQL.");
+                } else {
+                    this.databaseConnector = new SQLiteConnector(this.playerParticles);
+                    this.playerParticles.getLogger().info("Data handler connected using SQLite.");
+                }
+            } catch (Exception ex) {
+                this.playerParticles.getLogger().severe("Fatal error trying to connect to database. Please make sure all your connection settings are correct and try again. Plugin has been disabled.");
+                Bukkit.getPluginManager().disablePlugin(this.playerParticles);
+                return;
             }
-        } catch (Exception ex) {
-            this.playerParticles.getLogger().severe("Fatal error trying to connect to database. Please make sure all your connection settings are correct and try again. Plugin has been disabled.");
-            Bukkit.getPluginManager().disablePlugin(this.playerParticles);
-        }
+
+            // Migrate data after establishing connection
+            this.playerParticles.getManager(DataMigrationManager.class);
+
+            this.loadFixedEffects();
+            for (Player player : Bukkit.getOnlinePlayers())
+                this.getPPlayer(player.getUniqueId(), (pplayer) -> { }); // Loads the PPlayer from the database
+            this.getPPlayer(ConsolePPlayer.getUUID(), (pplayer) -> { }); // Load the console PPlayer
+        });
     }
 
     @Override
     public void disable() {
-        this.databaseConnector.closeConnection();
+        if (this.databaseConnector != null)
+            this.databaseConnector.closeConnection();
     }
 
     /**
