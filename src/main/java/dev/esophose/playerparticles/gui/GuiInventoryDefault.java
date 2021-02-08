@@ -49,14 +49,25 @@ public class GuiInventoryDefault extends GuiInventory {
                     localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-saved-groups", StringPlaceholders.single("amount", pplayer.getParticleGroups().size() - 1)),
                     localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-fixed-effects", StringPlaceholders.single("amount", pplayer.getFixedEffectIds().size())),
                     " ",
-                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-commands-info")
+                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-commands-info"),
+                    " ",
+                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-toggle-visibility-" + (pplayer.canSeeParticles() ? "on" : "off")),
+                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-toggle-visibility-info")
             };
             currentIconMeta.setLore(GuiActionButton.parseLore(this.pplayer, currentIconLore));
             currentIconMeta.setOwner(pplayer.getPlayer().getName());
             headIcon.setItemMeta(currentIconMeta);
         }
 
-        this.inventory.setItem(13, headIcon);
+        GuiActionButton headButton = new GuiActionButton(
+                13,
+                headIcon,
+                (button, isShiftClick) -> {
+                    PlayerParticlesAPI.getInstance().togglePlayerParticleVisibility(pplayer.getPlayer(), pplayer.canSeeParticles());
+                    guiManager.transition(new GuiInventoryDefault(pplayer));
+                }
+        );
+        this.actionButtons.add(headButton);
 
         // Define what slots to put the icons at based on what other slots are visible
         boolean manageGroupsVisible = PlayerParticles.getInstance().getManager(PermissionManager.class).canPlayerSaveGroups(pplayer);

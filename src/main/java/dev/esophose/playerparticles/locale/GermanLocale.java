@@ -251,6 +251,9 @@ public class GermanLocale implements Locale {
 
             this.put("#28", "GUI Info Messages");
             this.put("gui-commands-info", "Informationen zu Befehlen finden Sie mit Hilfe von &b/pp help");
+            this.put("gui-toggle-visibility-on", "Partikel sind derzeit &asichtbar");
+            this.put("gui-toggle-visibility-off", "Partikel sind derzeit &causgeblendet");
+            this.put("gui-toggle-visibility-info", "Klicken Sie, um die Sichtbarkeit der Partikel einzuschalten");
             this.put("gui-back-button", "Zurück");
             this.put("gui-next-page-button", "Nächste Seite (%start%/%end%)");
             this.put("gui-previous-page-button", "Vorherige Seite (%start%/%end%)");

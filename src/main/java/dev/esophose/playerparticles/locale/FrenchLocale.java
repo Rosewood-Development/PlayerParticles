@@ -251,6 +251,9 @@ public class FrenchLocale implements Locale {
 
             this.put("#28", "GUI Info Messages");
             this.put("gui-commands-info", "Affichez des informations avec &b/pp help");
+            this.put("gui-toggle-visibility-on", "Les particules sont actuellement &avisibles");
+            this.put("gui-toggle-visibility-off", "Les particules sont actuellement &ccachées");
+            this.put("gui-toggle-visibility-info", "Cliquer pour basculer la visibilité des particules");
             this.put("gui-back-button", "Retour en arrière");
             this.put("gui-next-page-button", "Page Suivante (%start%/%end%)");
             this.put("gui-previous-page-button", "Page Précédente (%start%/%end%)");

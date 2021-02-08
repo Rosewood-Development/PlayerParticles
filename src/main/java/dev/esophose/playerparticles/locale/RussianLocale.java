@@ -251,6 +251,9 @@ public class RussianLocale implements Locale {
 
             this.put("#28", "GUI Info Messages");
             this.put("gui-commands-info", "Узнать подробнее о командах - &b/pp help");
+            this.put("gui-toggle-visibility-on", "Частицы в настоящее время &aвидны");
+            this.put("gui-toggle-visibility-off", "В настоящее время частицы &cскрыты");
+            this.put("gui-toggle-visibility-info", "Нажмите, чтобы переключить видимость частиц");
             this.put("gui-back-button", "Назад");
             this.put("gui-next-page-button", "Следующая страница (%start%/%end%)");
             this.put("gui-previous-page-button", "Предыдущая страница (%start%/%end%)");

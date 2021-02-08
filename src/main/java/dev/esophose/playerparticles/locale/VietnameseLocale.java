@@ -251,6 +251,9 @@ public class VietnameseLocale implements Locale {
 
             this.put("#28", "GUI Info Messages");
             this.put("gui-commands-info", "Hiển thị thêm các lệnh bằng cách gõ &b/pp help");
+            this.put("gui-toggle-visibility-on", "Các hạt hiện có thể nhìn thấy được");
+            this.put("gui-toggle-visibility-off", "Các hạt hiện đang bị ẩn");
+            this.put("gui-toggle-visibility-info", "Nhấp để chuyển đổi chế độ hiển thị hạt");
             this.put("gui-back-button", "Quay trở về");
             this.put("gui-next-page-button", "Trang tiếp theo (%start%/%end%)");
             this.put("gui-previous-page-button", "Trang trước (%start%/%end%)");

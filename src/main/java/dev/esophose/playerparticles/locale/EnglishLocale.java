@@ -251,6 +251,9 @@ public class EnglishLocale implements Locale {
 
             this.put("#28", "GUI Info Messages");
             this.put("gui-commands-info", "Find info about commands with &b/pp help");
+            this.put("gui-toggle-visibility-on", "Particles are currently &avisible");
+            this.put("gui-toggle-visibility-off", "Particles are currently &chidden");
+            this.put("gui-toggle-visibility-info", "Click to toggle particle visibility");
             this.put("gui-back-button", "Go Back");
             this.put("gui-next-page-button", "Next Page (%start%/%end%)");
             this.put("gui-previous-page-button", "Previous Page (%start%/%end%)");

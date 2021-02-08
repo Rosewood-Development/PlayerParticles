@@ -16,12 +16,26 @@ import org.bukkit.material.Dye;
 public class GuiActionButton {
 
     private int slot;
+    private ItemStack itemStack;
     private Material[] icons;
     private ColorData[] colors;
     private String name;
     private String[] lore;
     private GuiActionButtonClickCallback onClick;
     private int iconIndex;
+
+    /**
+     * Constructor for creating a non-animated item from an already created ItemStack
+     *
+     * @param slot The slot ID of the inventory
+     * @param itemStack The ItemStack to display
+     * @param onClick The callback to execute when this button is clicked
+     */
+    public GuiActionButton(int slot, ItemStack itemStack, GuiActionButtonClickCallback onClick) {
+        this.slot = slot;
+        this.itemStack = itemStack;
+        this.onClick = onClick;
+    }
     
     /**
      * Constructor for creating animated icons
@@ -101,6 +115,9 @@ public class GuiActionButton {
      * @return The icon ItemStack for the GUI
      */
     public ItemStack getIcon(PPlayer pplayer) {
+        if (this.itemStack != null)
+            return this.itemStack;
+
         ItemStack itemStack;
         if (this.icons != null) {
             itemStack = new ItemStack(this.icons[this.iconIndex]);
