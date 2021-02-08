@@ -166,6 +166,8 @@ public class GuiActionButton {
      * @return If this GuiActionButton has more than one icon/name
      */
     public boolean isTickable() {
+        if (this.itemStack != null)
+            return false;
         return this.icons != null ? this.icons.length > 1 : this.colors.length > 1;
     }
     
