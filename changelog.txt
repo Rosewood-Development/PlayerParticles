@@ -1,4 +1,5 @@
 === v7.19 ===
++ Added the ability to toggle particles from the main GUI
 * Fixed fixed effects always getting deleted on join when the check-permissions-on-login setting is enabled
 * The database connection and migrations are now established asynchronously
 === v7.18 ===

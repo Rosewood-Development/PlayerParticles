@@ -16,3 +16,7 @@ The versions of Minecraft that are currently supported are `1.16.5-1.7.10`.
 
 PlayerParticles uses Gradle to compile and build the plugin. Run `./gradlew build` in the project's root directory to build the jar.
 The plugin jar will be located in `./build/libs` when finished.
+
+### Development Builds
+
+You can find development builds for this plugin [here](https://ci.codemc.io/job/Esophose/job/PlayerParticles/).
