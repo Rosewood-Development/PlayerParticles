@@ -12,7 +12,7 @@ import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.particles.data.NoteColor;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.styles.DefaultStyles;
-import dev.esophose.playerparticles.util.NMSUtil;
+import dev.esophose.playerparticles.util.ParticleUtils;
 import java.awt.Color;
 import java.util.Collection;
 import java.util.Iterator;
@@ -22,7 +22,6 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -190,9 +189,9 @@ public class ParticleManager extends Manager implements Listener, Runnable {
         for (PPlayer pplayer : this.particlePlayers.values()) {
             Player player = pplayer.getPlayer();
 
-            // Don't show their particles if they are in spectator mode
+            // Don't show their particles if they are invisible
             // Don't spawn particles if the world doesn't allow it
-            if (player != null && (NMSUtil.getVersionNumber() < 8 || player.getGameMode() != GameMode.SPECTATOR) && permissionManager.isWorldEnabled(player.getWorld().getName()))
+            if (player != null && ParticleUtils.isPlayerVisible(player) && permissionManager.isWorldEnabled(player.getWorld().getName()))
                 for (ParticlePair particles : pplayer.getActiveParticles())
                     this.displayParticles(pplayer, particles, player.getLocation().clone().add(0, 1, 0));
             
@@ -285,7 +284,7 @@ public class ParticleManager extends Manager implements Listener, Runnable {
             player = pplayer.getPlayer();
         }
 
-        if ((player != null && (NMSUtil.getVersionNumber() < 8 || player.getGameMode() == GameMode.SPECTATOR)) || !permissionManager.isWorldEnabled(world.getName()))
+        if ((player != null && !ParticleUtils.isPlayerVisible(player)) || !permissionManager.isWorldEnabled(world.getName()))
             return;
 
         for (PParticle pparticle : particles)

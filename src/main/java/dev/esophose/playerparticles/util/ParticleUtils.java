@@ -6,9 +6,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 
 public final class ParticleUtils {
 
@@ -126,6 +129,11 @@ public final class ParticleUtils {
             }
         }
         return false;
+    }
+
+    public static boolean isPlayerVisible(Player player) {
+        return (NMSUtil.getVersionNumber() <= 8 || player.getGameMode() != GameMode.SPECTATOR)
+                && !player.hasPotionEffect(PotionEffectType.INVISIBILITY);
     }
 
 }
