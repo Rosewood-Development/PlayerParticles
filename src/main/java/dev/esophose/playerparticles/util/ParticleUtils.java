@@ -1,5 +1,6 @@
 package dev.esophose.playerparticles.util;
 
+import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -132,8 +133,8 @@ public final class ParticleUtils {
     }
 
     public static boolean isPlayerVisible(Player player) {
-        return (NMSUtil.getVersionNumber() <= 8 || player.getGameMode() != GameMode.SPECTATOR)
-                && !player.hasPotionEffect(PotionEffectType.INVISIBILITY);
+        return Setting.DISPLAY_WHEN_INVISIBLE.getBoolean() || ((NMSUtil.getVersionNumber() <= 8 || player.getGameMode() != GameMode.SPECTATOR)
+                && !player.hasPotionEffect(PotionEffectType.INVISIBILITY));
     }
 
 }
