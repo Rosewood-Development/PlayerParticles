@@ -31,6 +31,7 @@ public class DefaultStyles implements Listener {
     public static final ParticleStyle MOVE = new ParticleStyleMove();
     public static final ParticleStyle NORMAL = new ParticleStyleNormal();
     public static final ParticleStyle ORBIT = new ParticleStyleOrbit();
+    public static final ParticleStyle OUTLINE = new ParticleStyleOutline();
     public static final ParticleStyle OVERHEAD = new ParticleStyleOverhead();
     public static final ParticleStyle POINT = new ParticleStylePoint();
     public static final ParticleStyle POPPER = new ParticleStylePopper();
@@ -90,6 +91,7 @@ public class DefaultStyles implements Listener {
         event.registerEventStyle(MOVE);
         event.registerStyle(NORMAL);
         event.registerStyle(ORBIT);
+        event.registerStyle(OUTLINE);
         event.registerStyle(OVERHEAD);
         event.registerStyle(POINT);
         event.registerStyle(POPPER);
