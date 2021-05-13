@@ -27,6 +27,7 @@ public class DefaultStyles implements Listener {
     public static final ParticleStyle FISHING = new ParticleStyleFishing();
     public static final ParticleStyle HALO = new ParticleStyleHalo();
     public static final ParticleStyle HURT = new ParticleStyleHurt();
+    public static final ParticleStyle ICOSPHERE = new ParticleStyleIcosphere();
     public static final ParticleStyle INVOCATION = new ParticleStyleInvocation();
     public static final ParticleStyle MOVE = new ParticleStyleMove();
     public static final ParticleStyle NORMAL = new ParticleStyleNormal();
@@ -87,6 +88,7 @@ public class DefaultStyles implements Listener {
         event.registerStyle(FISHING);
         event.registerStyle(HALO);
         event.registerEventStyle(HURT);
+        event.registerStyle(ICOSPHERE);
         event.registerStyle(INVOCATION);
         event.registerEventStyle(MOVE);
         event.registerStyle(NORMAL);
