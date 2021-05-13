@@ -3,6 +3,8 @@ package dev.esophose.playerparticles.particles;
 import com.google.common.collect.ObjectArrays;
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
+import dev.esophose.playerparticles.particles.data.NoteColor;
+import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.particles.data.ParticleColor;
 import dev.esophose.playerparticles.particles.spawning.ParticleSpawner;
 import dev.esophose.playerparticles.particles.spawning.ParticleSpawner.ParticleColorException;
@@ -326,9 +328,23 @@ public enum ParticleEffect {
         int count = pparticle.isDirectional() ? 0 : 1;
 
         if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-            effect.display(particle.getSpawnMaterial(), pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), 1, pparticle.getLocation(false), isLongRange, owner);
+            Material data;
+            if (pparticle.getOverrideData() instanceof Material) {
+                data = (Material) pparticle.getOverrideData();
+            } else {
+                data = particle.getSpawnMaterial();
+            }
+            effect.display(data, pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), 1, pparticle.getLocation(false), isLongRange, owner);
         } else if (effect.hasProperty(ParticleProperty.COLORABLE)) {
-            effect.display(particle.getSpawnColor(), pparticle.getLocation(true), isLongRange, owner);
+            ParticleColor data;
+            if (pparticle.getOverrideData() instanceof NoteColor && particle.getEffect() == ParticleEffect.NOTE) {
+                data = (NoteColor) pparticle.getOverrideData();
+            } else if (pparticle.getOverrideData() instanceof OrdinaryColor && particle.getEffect() != ParticleEffect.NOTE) {
+                data = (OrdinaryColor) pparticle.getOverrideData();
+            } else {
+                data = particle.getSpawnColor();
+            }
+            effect.display(data, pparticle.getLocation(true), isLongRange, owner);
         } else {
             effect.display(pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), count, pparticle.getLocation(false), isLongRange, owner);
         }

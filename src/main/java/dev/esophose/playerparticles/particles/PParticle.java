@@ -11,6 +11,28 @@ public class PParticle {
     private double speed;
     private double xOff, yOff, zOff;
     private boolean directional;
+    private Object overrideData;
+
+    /**
+     * The constructor with all the fancy parameters and override data for customization
+     *
+     * @param location The location to display the particle at
+     * @param xOff The offset for the x-axis
+     * @param yOff The offset for the y-axis
+     * @param zOff The offset for the z-axis
+     * @param speed The speed the particle will move at
+     * @param directional If the particle should use the x, y, and z offsets as directions instead
+     * @param overrideData If not null, will override the player's set data on spawn
+     */
+    public PParticle(Location location, double xOff, double yOff, double zOff, double speed, boolean directional, Object overrideData) {
+        this.location = location;
+        this.xOff = xOff;
+        this.yOff = yOff;
+        this.zOff = zOff;
+        this.speed = speed;
+        this.directional = directional;
+        this.overrideData = overrideData;
+    }
 
     /**
      * The constructor with all the fancy parameters for customization
@@ -23,12 +45,7 @@ public class PParticle {
      * @param directional If the particle should use the x, y, and z offsets as directions instead
      */
     public PParticle(Location location, double xOff, double yOff, double zOff, double speed, boolean directional) {
-        this.location = location;
-        this.xOff = xOff;
-        this.yOff = yOff;
-        this.zOff = zOff;
-        this.speed = speed;
-        this.directional = directional;
+        this(location, xOff, yOff, zOff, speed, directional, null);
     }
     
     /**
@@ -41,7 +58,7 @@ public class PParticle {
      * @param speed The speed the particle will move at
      */
     public PParticle(Location location, double xOff, double yOff, double zOff, double speed) {
-        this(location, xOff, yOff, zOff, speed, false);
+        this(location, xOff, yOff, zOff, speed, false, null);
     }
 
     /**
@@ -51,7 +68,7 @@ public class PParticle {
      * @param location The location to display the particles at
      */
     public PParticle(Location location) {
-        this(location, 0.0F, 0.0F, 0.0F, 0.0F, false);
+        this(location, 0.0F, 0.0F, 0.0F, 0.0F, false, null);
     }
 
     /**
@@ -120,6 +137,15 @@ public class PParticle {
      */
     public double getZOff() {
         return this.zOff;
+    }
+
+    /**
+     * Gets the data to override for the particle
+     *
+     * @return The data to override for the particle, may be null
+     */
+    public Object getOverrideData() {
+        return this.overrideData;
     }
 
 }
