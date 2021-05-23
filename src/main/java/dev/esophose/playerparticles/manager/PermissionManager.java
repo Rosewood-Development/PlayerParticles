@@ -107,9 +107,8 @@ public class PermissionManager extends Manager {
         allPermissions.add(new Permission("playerparticles.effect.*", effectPermissions));
 
         // Styles
-        List<ParticleStyle> styles = this.playerParticles.getManager(ParticleStyleManager.class).getStylesWithDisabled();
         Map<String, Boolean> stylePermissions = new HashMap<>();
-        for (ParticleStyle style : styles) {
+        for (ParticleStyle style : this.playerParticles.getManager(ParticleStyleManager.class).getStylesWithDisabled()) {
             Permission permission = new Permission("playerparticles.style." + style.getInternalName());
             pluginManager.addPermission(permission);
             stylePermissions.put(permission.getName(), true);
