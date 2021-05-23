@@ -2,6 +2,7 @@ package dev.esophose.playerparticles.styles;
 
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
+import dev.esophose.playerparticles.manager.ConfigurationManager;
 import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.ParticleManager;
 import dev.esophose.playerparticles.particles.PParticle;
@@ -13,6 +14,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,6 +25,8 @@ public class ParticleStyleDeath extends DefaultParticleStyle implements Listener
 
     private String style;
     private List<EntityDamageEvent.DamageCause> causes;
+    private int targetDuration;
+    private final long ticksPerParticle = ConfigurationManager.Setting.TICKS_PER_PARTICLE.getLong();
 
     protected ParticleStyleDeath() {
         super("death", false, false, 0);
@@ -50,12 +54,14 @@ public class ParticleStyleDeath extends DefaultParticleStyle implements Listener
     @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
         this.setIfNotExists("style", "whirl", "The name of the style to be displayed.");
+        this.setIfNotExists("target-duration", 60, "How long to display the particles for.");
         this.setIfNotExists("disabled-causes", Collections.singletonList("DROWNING"), "What damage types shouldn't spawn particles?");
     }
 
     @Override
     protected void loadSettings(CommentedFileConfiguration config) {
-        this.style = null;
+        this.style = config.getString("style");
+        this.targetDuration = config.getInt("target-duration");
 
         // Nicole you may wanna clean this up a bit
         this.causes = config.getStringList("disabled-causes").stream()
@@ -75,10 +81,24 @@ public class ParticleStyleDeath extends DefaultParticleStyle implements Listener
         ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
         PPlayer pplayer = PlayerParticles.getInstance().getManager(DataManager.class).getPPlayer(event.getEntity().getUniqueId());
 
-        for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.DEATH)) {
-            final Location loc = event.getEntity().getLocation().clone();
-            particleManager.displayParticles(pplayer, event.getEntity().getWorld(), particle, DefaultStyles.DEATH.getParticles(particle, loc), false);
-        }
+        new BukkitRunnable() {
+            private int totalDuration = 0;
+            final Location loc = event.getEntity().getLocation().clone().add(0, 1, 0);
+
+            @Override
+            public void run() {
+                for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.DEATH)) {
+
+                    particleManager.displayParticles(pplayer, event.getEntity().getWorld(), particle, DefaultStyles.DEATH.getParticles(particle, loc), false);
+                    this.totalDuration += ticksPerParticle;
+                    if (this.totalDuration > targetDuration)
+                        this.cancel();
+
+                }
+
+            }
+
+        }.runTaskTimer(PlayerParticles.getInstance(), 0, ticksPerParticle);
 
     }
 
