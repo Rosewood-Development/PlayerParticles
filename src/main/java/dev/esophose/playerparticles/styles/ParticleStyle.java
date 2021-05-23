@@ -99,10 +99,7 @@ public interface ParticleStyle {
      * @return The ParticleStyle with a matching name
      */
     static ParticleStyle fromName(String styleName) {
-        for (ParticleStyle style : PlayerParticles.getInstance().getManager(ParticleStyleManager.class).getStyles())
-            if (style.getName().equalsIgnoreCase(styleName)) 
-                return style;
-        return null;
+        return PlayerParticles.getInstance().getManager(ParticleStyleManager.class).getStyleByName(styleName);
     }
 
     /**
@@ -112,10 +109,7 @@ public interface ParticleStyle {
      * @return The ParticleStyle with a matching name
      */
     static ParticleStyle fromInternalName(String styleName) {
-        for (ParticleStyle style : PlayerParticles.getInstance().getManager(ParticleStyleManager.class).getStyles())
-            if (style.getInternalName().equalsIgnoreCase(styleName))
-                return style;
-        return null;
+        return PlayerParticles.getInstance().getManager(ParticleStyleManager.class).getStyleByInternalName(styleName);
     }
 
 }
