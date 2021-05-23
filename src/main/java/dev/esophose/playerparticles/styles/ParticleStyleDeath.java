@@ -88,13 +88,12 @@ public class ParticleStyleDeath extends DefaultParticleStyle implements Listener
             @Override
             public void run() {
                 for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.DEATH)) {
-
                     particleManager.displayParticles(pplayer, event.getEntity().getWorld(), particle, DefaultStyles.DEATH.getParticles(particle, loc), false);
-                    this.totalDuration += ticksPerParticle;
-                    if (this.totalDuration > targetDuration)
-                        this.cancel();
-
                 }
+
+                this.totalDuration += ticksPerParticle;
+                if (this.totalDuration > targetDuration)
+                    this.cancel();
 
             }
 
