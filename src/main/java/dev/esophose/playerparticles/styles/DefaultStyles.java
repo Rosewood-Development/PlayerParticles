@@ -23,6 +23,7 @@ public class DefaultStyles implements Listener {
     public static final ParticleStyle CHAINS = new ParticleStyleChains();
     public static final ParticleStyle COMPANION = new ParticleStyleCompanion();
     public static final ParticleStyle CUBE = new ParticleStyleCube();
+    public static final ParticleStyle DEATH = new ParticleStyleDeath();
     public static final ParticleStyle FEET = new ParticleStyleFeet();
     public static final ParticleStyle FISHING = new ParticleStyleFishing();
     public static final ParticleStyle HALO = new ParticleStyleHalo();
@@ -65,6 +66,7 @@ public class DefaultStyles implements Listener {
         pluginManager.registerEvents((Listener) ARROWS, playerParticles);
         pluginManager.registerEvents((Listener) BLOCKBREAK, playerParticles);
         pluginManager.registerEvents((Listener) BLOCKPLACE, playerParticles);
+        pluginManager.registerEvents((Listener) DEATH, playerParticles);
         pluginManager.registerEvents((Listener) FISHING, playerParticles);
         pluginManager.registerEvents((Listener) HURT, playerParticles);
         pluginManager.registerEvents((Listener) MOVE, playerParticles);
@@ -84,6 +86,7 @@ public class DefaultStyles implements Listener {
         event.registerStyle(CHAINS);
         event.registerStyle(COMPANION);
         event.registerStyle(CUBE);
+        event.registerEventStyle(DEATH);
         event.registerStyle(FEET);
         event.registerStyle(FISHING);
         event.registerStyle(HALO);
