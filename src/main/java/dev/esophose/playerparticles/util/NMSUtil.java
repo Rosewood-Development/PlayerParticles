@@ -15,7 +15,7 @@ public final class NMSUtil {
     public static String getVersion() {
         if (cachedVersion == null) {
             String name = Bukkit.getServer().getClass().getPackage().getName();
-            cachedVersion = name.substring(name.lastIndexOf('.') + 1) + ".";
+            cachedVersion = name.substring(name.lastIndexOf('.') + 1);
         }
         return cachedVersion;
     }
@@ -28,7 +28,7 @@ public final class NMSUtil {
     public static int getVersionNumber() {
         if (cachedVersionNumber == -1) {
             String name = getVersion().substring(3);
-            cachedVersionNumber = Integer.parseInt(name.substring(0, name.length() - 4));
+            cachedVersionNumber = Integer.parseInt(name.substring(0, name.length() - 3));
         }
         return cachedVersionNumber;
     }

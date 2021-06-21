@@ -48,6 +48,12 @@ public class ParticleStyleWhirlwind extends DefaultParticleStyle {
             case DAMAGE_INDICATOR:
             case ENCHANTED_HIT:
                 return 1;
+            case ELECTRIC_SPARK:
+            case SCRAPE:
+                return 2;
+            case WAX_OFF:
+            case WAX_ON:
+                return 3;
             case DRAGON_BREATH:
                 return 0.01;
             case ENCHANT:

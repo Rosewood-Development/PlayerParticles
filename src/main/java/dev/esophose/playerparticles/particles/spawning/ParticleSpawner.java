@@ -5,7 +5,9 @@ import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.manager.ParticleManager;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
+import dev.esophose.playerparticles.particles.data.ColorTransition;
 import dev.esophose.playerparticles.particles.data.ParticleColor;
+import dev.esophose.playerparticles.particles.data.Vibration;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Location;
@@ -63,6 +65,42 @@ public abstract class ParticleSpawner {
     public abstract void display(ParticleEffect particleEffect, Material spawnMaterial, double offsetX, double offsetY, double offsetZ, double speed, int amount, Location center, boolean isLongRange, Player owner);
 
     /**
+     * Displays a particle effect which requires additional data and is only
+     * visible for all players within a certain range in the world of @param
+     * center
+     *
+     * @param particleEffect The particle type to display
+     * @param colorTransition Color transition of the effect
+     * @param offsetX Maximum distance particles can fly away from the center on the x-axis
+     * @param offsetY Maximum distance particles can fly away from the center on the y-axis
+     * @param offsetZ Maximum distance particles can fly away from the center on the z-axis
+     * @param amount Amount of particles
+     * @param center Center location of the effect
+     * @param isLongRange If the particle can be viewed from long range
+     * @param owner The player that owns the particles
+     * @throws ParticleDataException If the particle effect does not require additional data or if the data type is incorrect
+     */
+    public abstract void display(ParticleEffect particleEffect, ColorTransition colorTransition, double offsetX, double offsetY, double offsetZ, int amount, Location center, boolean isLongRange, Player owner);
+
+    /**
+     * Displays a particle effect which requires additional data and is only
+     * visible for all players within a certain range in the world of @param
+     * center
+     *
+     * @param particleEffect The particle type to display
+     * @param vibration Vibration of the effect
+     * @param offsetX Maximum distance particles can fly away from the center on the x-axis
+     * @param offsetY Maximum distance particles can fly away from the center on the y-axis
+     * @param offsetZ Maximum distance particles can fly away from the center on the z-axis
+     * @param amount Amount of particles
+     * @param center Center location of the effect
+     * @param isLongRange If the particle can be viewed from long range
+     * @param owner The player that owns the particles
+     * @throws ParticleDataException If the particle effect does not require additional data or if the data type is incorrect
+     */
+    public abstract void display(ParticleEffect particleEffect, Vibration vibration, double offsetX, double offsetY, double offsetZ, int amount, Location center, boolean isLongRange, Player owner);
+
+    /**
      * Gets a List of Players within the particle display range
      *
      * @param center The center of the radius to check around
@@ -70,14 +108,14 @@ public abstract class ParticleSpawner {
      * @param owner The player that owns the particles
      * @return A List of Players within the particle display range
      */
-    protected List<Player> getPlayersInRange(Location center, boolean isLongRange, Player owner) {
+    public static List<Player> getPlayersInRange(Location center, boolean isLongRange, Player owner) {
         List<Player> players = new ArrayList<>();
         int range = !isLongRange ? Setting.PARTICLE_RENDER_RANGE_PLAYER.getInt() : Setting.PARTICLE_RENDER_RANGE_FIXED_EFFECT.getInt();
         range *= range;
 
-        for (PPlayer pplayer : PlayerParticles.getInstance().getManager(ParticleManager.class).getPPlayers()) {
+        for (PPlayer pplayer : PlayerParticles.getInstance().getManager(ParticleManager.class).getPPlayers().values()) {
             Player p = pplayer.getPlayer();
-            if (!this.canSee(p, owner))
+            if (!canSee(p, owner))
                 continue;
 
             if (p != null && pplayer.canSeeParticles() && p.getWorld().equals(center.getWorld()) && center.distanceSquared(p.getLocation()) <= range)
@@ -94,7 +132,7 @@ public abstract class ParticleSpawner {
      * @param target The target
      * @return True if player can see target, otherwise false
      */
-    private boolean canSee(Player player, Player target) {
+    public static boolean canSee(Player player, Player target) {
         if (player == null || target == null)
             return true;
 

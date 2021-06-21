@@ -7,7 +7,6 @@ import dev.esophose.playerparticles.manager.GuiManager;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.particles.PPlayer;
-import dev.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
 import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.util.ParticleUtils;
@@ -89,8 +88,8 @@ public class GuiInventoryManageParticles extends GuiInventory {
                     callbacks.add(() -> guiManager.transition(new GuiInventoryEditEffect(pplayer, editingParticle, 1, callbacks, 1)));
                     callbacks.add(() -> guiManager.transition(new GuiInventoryEditStyle(pplayer, editingParticle, 1, callbacks, 2)));
                     callbacks.add(() -> {
-                        if (editingParticle.getEffect().hasProperty(ParticleProperty.COLORABLE) || editingParticle.getEffect().hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-                            guiManager.transition(new GuiInventoryEditData(pplayer, editingParticle, 1, callbacks, 3));
+                        if (editingParticle.getEffect().hasProperties()) {
+                            guiManager.transition(new GuiInventoryEditData(pplayer, editingParticle, 1, callbacks, 3, null));
                         } else {
                             callbacks.get(4).run();
                         }

@@ -6,7 +6,6 @@ import dev.esophose.playerparticles.manager.ConfigurationManager.GuiIcon;
 import dev.esophose.playerparticles.manager.GuiManager;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.particles.PPlayer;
-import dev.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
 import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.util.StringPlaceholders;
@@ -93,7 +92,7 @@ public class GuiInventoryEditParticle extends GuiInventory {
         this.actionButtons.add(editStyleButton);
 
         // Edit Data Button
-        boolean usesData = editingParticle.getEffect().hasProperty(ParticleProperty.COLORABLE) || editingParticle.getEffect().hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA);
+        boolean usesData = editingParticle.getEffect().hasProperties();
         GuiActionButton editDataButton = new GuiActionButton(42,
                 GuiIcon.EDIT_DATA.get(),
                 localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("gui-edit-data"),
@@ -103,7 +102,7 @@ public class GuiInventoryEditParticle extends GuiInventory {
                     if (usesData) {
                         List<Runnable> callbacks = new ArrayList<>();
                         callbacks.add(() -> guiManager.transition(new GuiInventoryEditParticle(pplayer, editingParticle)));
-                        callbacks.add(() -> guiManager.transition(new GuiInventoryEditData(pplayer, editingParticle, 1, callbacks, 1)));
+                        callbacks.add(() -> guiManager.transition(new GuiInventoryEditData(pplayer, editingParticle, 1, callbacks, 1, null)));
                         callbacks.add(() -> {
                             ParticleGroup group = pplayer.getActiveParticleGroup();
                             for (ParticlePair particle : group.getParticles().values()) {

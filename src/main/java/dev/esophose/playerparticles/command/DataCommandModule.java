@@ -36,6 +36,10 @@ public class DataCommandModule implements CommandModule {
                 } else {
                     localeManager.sendMessage(pplayer, "data-usage-block", StringPlaceholders.single("effect", effect.getName()));
                 }
+            } else if (effect.hasProperty(ParticleProperty.COLORABLE_TRANSITION)) {
+                localeManager.sendMessage(pplayer, "data-usage-color-transition", StringPlaceholders.single("effect", effect.getName()));
+            } else if (effect.hasProperty(ParticleProperty.VIBRATION)) {
+                localeManager.sendMessage(pplayer, "data-usage-vibration", StringPlaceholders.single("effect", effect.getName()));
             } else {
                 localeManager.sendMessage(pplayer, "data-usage-none", StringPlaceholders.single("effect", effect.getName()));
             }

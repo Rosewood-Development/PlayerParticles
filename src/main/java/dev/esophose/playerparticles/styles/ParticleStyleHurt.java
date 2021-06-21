@@ -45,7 +45,7 @@ public class ParticleStyleHurt extends DefaultParticleStyle implements Listener 
         return Collections.singletonList("CACTUS");
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event) {
         ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
 

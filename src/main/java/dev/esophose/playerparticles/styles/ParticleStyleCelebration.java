@@ -59,7 +59,7 @@ public class ParticleStyleCelebration extends DefaultParticleStyle {
             this.step = 0;
             
             Random random = new Random();
-            for (PPlayer pplayer : particleManager.getPPlayers()) {
+            for (PPlayer pplayer : particleManager.getPPlayers().values()) {
                 Player player = pplayer.getPlayer();
                 if (player != null && (NMSUtil.getVersionNumber() < 8 || player.getGameMode() != GameMode.SPECTATOR) && permissionManager.isWorldEnabled(player.getWorld().getName()))
                     for (ParticlePair particle : pplayer.getActiveParticles())

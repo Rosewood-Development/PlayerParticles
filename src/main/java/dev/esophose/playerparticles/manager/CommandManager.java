@@ -24,11 +24,13 @@ import dev.esophose.playerparticles.command.UseCommandModule;
 import dev.esophose.playerparticles.command.VersionCommandModule;
 import dev.esophose.playerparticles.command.WorldsCommandModule;
 import dev.esophose.playerparticles.particles.PPlayer;
+import dev.esophose.playerparticles.util.ParticleUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -157,7 +159,7 @@ public class CommandManager extends Manager implements CommandExecutor, TabCompl
                         sender.sendMessage(ChatColor.RED + "Error: This command can only be executed by a player.");
                         return;
                     }
-                } else if (sender instanceof ConsoleCommandSender) {
+                } else if (sender instanceof ConsoleCommandSender || sender instanceof BlockCommandSender) {
                     commandModule.onCommandExecute(PlayerParticlesAPI.getInstance().getConsolePPlayer(), cmdArgs);
                     return;
                 }
@@ -194,7 +196,13 @@ public class CommandManager extends Manager implements CommandExecutor, TabCompl
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
         if (cmd.getName().equalsIgnoreCase("pp")) {
-            PPlayer pplayer = PlayerParticlesAPI.getInstance().getPPlayer(sender);
+            PPlayer pplayer;
+            if (sender instanceof Player && !ParticleUtils.getTargetBlock((Player) sender).getType().name().contains("COMMAND_BLOCK")) {
+                pplayer = PlayerParticlesAPI.getInstance().getPPlayer(sender);
+            } else {
+                pplayer = PlayerParticlesAPI.getInstance().getConsolePPlayer();
+            }
+
             if (pplayer == null)
                 return new ArrayList<>();
             
@@ -204,7 +212,7 @@ public class CommandManager extends Manager implements CommandExecutor, TabCompl
             } else {
                 CommandModule commandModule = this.findMatchingCommand(args[0]);
                 if (commandModule != null) {
-                    if (sender instanceof ConsoleCommandSender && !commandModule.canConsoleExecute())
+                    if (pplayer.getPlayer() == null && !commandModule.canConsoleExecute())
                         return new ArrayList<>();
 
                     String[] cmdArgs = Arrays.copyOfRange(args, 1, args.length);

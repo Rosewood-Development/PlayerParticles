@@ -9,8 +9,10 @@ import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
 import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.particles.data.ColorTransition;
 import dev.esophose.playerparticles.particles.data.NoteColor;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
+import dev.esophose.playerparticles.particles.data.Vibration;
 import dev.esophose.playerparticles.particles.preset.ParticleGroupPreset;
 import dev.esophose.playerparticles.particles.preset.ParticleGroupPresetPage;
 import dev.esophose.playerparticles.styles.ParticleStyle;
@@ -147,6 +149,8 @@ public class ParticleGroupPresetManager extends Manager {
                             Material blockData = null;
                             OrdinaryColor colorData = null;
                             NoteColor noteColorData = null;
+                            ColorTransition colorTransitionData = null;
+                            Vibration vibrationData = null;
 
                             String dataString = particleSection.getString("data");
                             if (dataString != null && !dataString.isEmpty()) {
@@ -181,10 +185,22 @@ public class ParticleGroupPresetManager extends Manager {
                                             continue;
                                         }
                                     }
+                                } else if (effect.hasProperty(ParticleProperty.COLORABLE_TRANSITION)) {
+                                    colorTransitionData = inputParser.next(ColorTransition.class);
+                                    if (colorTransitionData == null) {
+                                        PlayerParticles.getInstance().getLogger().severe("Invalid color transition: '" + dataString + "'!");
+                                        return;
+                                    }
+                                } else if (effect.hasProperty(ParticleProperty.VIBRATION)) {
+                                    vibrationData = inputParser.next(Vibration.class);
+                                    if (vibrationData == null) {
+                                        PlayerParticles.getInstance().getLogger().severe("Invalid vibration: '" + dataString + "'!");
+                                        return;
+                                    }
                                 }
                             }
 
-                            particles.put(id, new ParticlePair(null, id, effect, style, itemData, blockData, colorData, noteColorData));
+                            particles.put(id, new ParticlePair(null, id, effect, style, itemData, blockData, colorData, noteColorData, colorTransitionData, vibrationData));
                         }
 
                         presets.add(new ParticleGroupPreset(displayName, guiIcon, guiSlot, lore, permission, allowPermissionOverride, new ParticleGroup(groupName, particles)));

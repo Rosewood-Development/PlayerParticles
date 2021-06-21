@@ -1,16 +1,16 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
-    id 'com.github.johnrengelman.shadow' version '5.1.0'
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
     id 'maven-publish'
-    id 'java'
+    id 'java-library'
 }
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 compileJava.options.encoding = 'UTF-8'
 group = 'dev.esophose'
-version = '7.19'
+version = '7.20'
 
 java {
     withJavadocJar()
@@ -19,25 +19,24 @@ java {
 
 repositories {
     mavenCentral()
-	jcenter()
-	
+
     maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
     maven { url = 'https://repo.codemc.org/repository/maven-public' }
-    maven { url = 'http://repo.extendedclip.com/content/repositories/placeholderapi/' }
+    maven { url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
     maven { url = 'https://repo.rosewooddev.io/repository/public/' }
 }
 
 dependencies {
-    compile 'org.slf4j:slf4j-api:1.7.25'
-    compile 'org.slf4j:slf4j-nop:1.7.25'
-    compile 'com.zaxxer:HikariCP:3.2.0'
-    compile 'org.bstats:bstats-bukkit-lite:1.7'
-    compile 'org.codemc.worldguardwrapper:worldguardwrapper:1.2.0-SNAPSHOT'
+    api 'org.slf4j:slf4j-api:1.7.25'
+    api 'org.slf4j:slf4j-nop:1.7.25'
+    api 'com.zaxxer:HikariCP:3.2.0'
+    api 'org.bstats:bstats-bukkit-lite:1.7'
+    api 'org.codemc.worldguardwrapper:worldguardwrapper:1.2.0-SNAPSHOT'
     compileOnly 'com.googlecode.json-simple:json-simple:1.1.1'
     compileOnly 'org.jetbrains:annotations:16.0.2'
     compileOnly 'me.clip:placeholderapi:2.10.4'
     compileOnly 'org.xerial:sqlite-jdbc:3.23.1'
-    compileOnly 'org.spigotmc:spigot:1.16.3'
+    compileOnly 'org.spigotmc:spigot:1.17'
 }
 
 shadowJar {
@@ -54,6 +53,7 @@ processResources {
     from (sourceSets.main.resources.srcDirs) {
         include '**/*.yml'
         filter ReplaceTokens, tokens: ["version": project.property("version")]
+        duplicatesStrategy DuplicatesStrategy.INCLUDE
     }
 }
 

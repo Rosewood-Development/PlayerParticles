@@ -1,14 +1,19 @@
 package dev.esophose.playerparticles.util;
 
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -19,6 +24,7 @@ public final class ParticleUtils {
     public static final Material FALLBACK_MATERIAL;
     public static final List<Material> BLOCK_MATERIALS, ITEM_MATERIALS;
     public static final List<String> BLOCK_MATERIALS_STRING, ITEM_MATERIALS_STRING;
+    private static Method LivingEntity_getTargetBlock;
     
     static {
         if (NMSUtil.getVersionNumber() > 7) {
@@ -48,6 +54,14 @@ public final class ParticleUtils {
 
         BLOCK_MATERIALS_STRING = BLOCK_MATERIALS.stream().map(Enum::name).map(String::toLowerCase).collect(Collectors.toList());
         ITEM_MATERIALS_STRING = ITEM_MATERIALS.stream().map(Enum::name).map(String::toLowerCase).collect(Collectors.toList());
+
+        if (NMSUtil.getVersionNumber() < 8) {
+            try {
+                LivingEntity_getTargetBlock = LivingEntity.class.getDeclaredMethod("getTargetBlock", HashSet.class, int.class);
+            } catch (ReflectiveOperationException e) {
+                e.printStackTrace();
+            }
+        }
     }
     
     private ParticleUtils() {
@@ -135,6 +149,23 @@ public final class ParticleUtils {
     public static boolean isPlayerVisible(Player player) {
         return Setting.DISPLAY_WHEN_INVISIBLE.getBoolean() || ((NMSUtil.getVersionNumber() <= 8 || player.getGameMode() != GameMode.SPECTATOR)
                 && !player.hasPotionEffect(PotionEffectType.INVISIBILITY));
+    }
+
+    public static String rgbToHex(int r, int g, int b) {
+        return String.format("%02x%02x%02x", r, g, b);
+    }
+
+    public static Block getTargetBlock(Player player) {
+        if (NMSUtil.getVersionNumber() > 7) {
+            return player.getTargetBlock((Set<Material>) null, 8); // Need the Set<Material> cast for 1.9 support
+        } else {
+            try {
+                return (Block) LivingEntity_getTargetBlock.invoke(player, null, 8);
+            } catch (ReflectiveOperationException e) {
+                e.printStackTrace();
+                return player.getLocation().getBlock();
+            }
+        }
     }
 
 }

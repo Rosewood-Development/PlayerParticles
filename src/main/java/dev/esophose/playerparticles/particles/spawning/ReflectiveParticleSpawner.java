@@ -2,8 +2,10 @@ package dev.esophose.playerparticles.particles.spawning;
 
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
+import dev.esophose.playerparticles.particles.data.ColorTransition;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.particles.data.ParticleColor;
+import dev.esophose.playerparticles.particles.data.Vibration;
 import dev.esophose.playerparticles.particles.spawning.reflective.ReflectionUtils;
 import dev.esophose.playerparticles.particles.spawning.reflective.ReflectionUtils.PackageType;
 import dev.esophose.playerparticles.particles.spawning.reflective.ReflectiveParticleEffectMapping;
@@ -24,7 +26,7 @@ public class ReflectiveParticleSpawner extends ParticleSpawner {
         if (particleEffect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA))
             throw new ParticleDataException("This particle effect requires additional data");
 
-        List<Player> players = this.getPlayersInRange(center, isLongRange, owner);
+        List<Player> players = getPlayersInRange(center, isLongRange, owner);
         if (players.isEmpty())
             return;
 
@@ -36,11 +38,11 @@ public class ReflectiveParticleSpawner extends ParticleSpawner {
         if (!particleEffect.hasProperty(ParticleProperty.COLORABLE))
             throw new ParticleColorException("This particle effect is not colorable");
 
-        List<Player> players = this.getPlayersInRange(center, isLongRange, owner);
+        List<Player> players = getPlayersInRange(center, isLongRange, owner);
         if (players.isEmpty())
             return;
 
-        new ParticlePacket(particleEffect, color, true).sendTo(center, this.getPlayersInRange(center, isLongRange, owner));
+        new ParticlePacket(particleEffect, color, true).sendTo(center, getPlayersInRange(center, isLongRange, owner));
     }
 
     @Override
@@ -48,11 +50,21 @@ public class ReflectiveParticleSpawner extends ParticleSpawner {
         if (!particleEffect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA))
             throw new ParticleDataException("This particle effect does not require additional data");
 
-        List<Player> players = this.getPlayersInRange(center, isLongRange, owner);
+        List<Player> players = getPlayersInRange(center, isLongRange, owner);
         if (players.isEmpty())
             return;
 
-        new ParticlePacket(particleEffect, offsetX, offsetY, offsetZ, speed, amount, true, spawnMaterial).sendTo(center, this.getPlayersInRange(center, isLongRange, owner));
+        new ParticlePacket(particleEffect, offsetX, offsetY, offsetZ, speed, amount, true, spawnMaterial).sendTo(center, getPlayersInRange(center, isLongRange, owner));
+    }
+
+    @Override
+    public void display(ParticleEffect particleEffect, ColorTransition colorTransition, double offsetX, double offsetY, double offsetZ, int amount, Location center, boolean isLongRange, Player owner) {
+        throw new IllegalStateException("This method is unavailable for legacy versions");
+    }
+
+    @Override
+    public void display(ParticleEffect particleEffect, Vibration vibration, double offsetX, double offsetY, double offsetZ, int amount, Location center, boolean isLongRange, Player owner) {
+        throw new IllegalStateException("This method is unavailable for legacy versions");
     }
 
     /**

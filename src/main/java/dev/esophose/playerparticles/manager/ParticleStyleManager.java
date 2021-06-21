@@ -7,7 +7,7 @@ import dev.esophose.playerparticles.styles.ParticleStyle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,8 +25,8 @@ public class ParticleStyleManager extends Manager {
     public ParticleStyleManager(PlayerParticles playerParticles) {
         super(playerParticles);
 
-        this.stylesByName = new HashMap<>();
-        this.stylesByInternalName = new HashMap<>();
+        this.stylesByName = new LinkedHashMap<>();
+        this.stylesByInternalName = new LinkedHashMap<>();
         this.eventStyles = new ArrayList<>();
 
         DefaultStyles.initStyles();

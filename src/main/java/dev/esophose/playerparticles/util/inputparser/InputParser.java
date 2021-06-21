@@ -2,9 +2,12 @@ package dev.esophose.playerparticles.util.inputparser;
 
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
+import dev.esophose.playerparticles.particles.data.ColorTransition;
 import dev.esophose.playerparticles.particles.data.NoteColor;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
+import dev.esophose.playerparticles.particles.data.Vibration;
 import dev.esophose.playerparticles.styles.ParticleStyle;
+import dev.esophose.playerparticles.util.inputparser.parsable.ParsableColorTransition;
 import dev.esophose.playerparticles.util.inputparser.parsable.ParsableInteger;
 import dev.esophose.playerparticles.util.inputparser.parsable.ParsableLocation;
 import dev.esophose.playerparticles.util.inputparser.parsable.ParsableMaterial;
@@ -13,6 +16,7 @@ import dev.esophose.playerparticles.util.inputparser.parsable.ParsableOrdinaryCo
 import dev.esophose.playerparticles.util.inputparser.parsable.ParsableParticleEffect;
 import dev.esophose.playerparticles.util.inputparser.parsable.ParsableParticleStyle;
 import dev.esophose.playerparticles.util.inputparser.parsable.ParsableString;
+import dev.esophose.playerparticles.util.inputparser.parsable.ParsableVibration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -32,6 +36,8 @@ public class InputParser {
             this.put(Material.class, new ParsableMaterial());
             this.put(NoteColor.class, new ParsableNoteColor());
             this.put(OrdinaryColor.class, new ParsableOrdinaryColor());
+            this.put(ColorTransition.class, new ParsableColorTransition());
+            this.put(Vibration.class, new ParsableVibration());
             this.put(ParticleEffect.class, new ParsableParticleEffect());
             this.put(ParticleStyle.class, new ParsableParticleStyle());
             this.put(String.class, new ParsableString());
@@ -70,6 +76,13 @@ public class InputParser {
      */
     public boolean hasNext() {
         return !this.input.isEmpty();
+    }
+
+    /**
+     * @return the number of input values remaining
+     */
+    public int numRemaining() {
+        return this.input.size();
     }
 
 }

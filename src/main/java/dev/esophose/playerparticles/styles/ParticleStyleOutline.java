@@ -34,7 +34,7 @@ public class ParticleStyleOutline extends DefaultParticleStyle {
         ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
 
         boolean fixed = false;
-        for (PPlayer pplayer : particleManager.getPPlayers()) {
+        for (PPlayer pplayer : particleManager.getPPlayers().values()) {
             if (!pplayer.getUniqueId().equals(particle.getOwnerUniqueId()))
                 continue;
 

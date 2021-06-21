@@ -19,6 +19,9 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 public class ParticleStyleMove extends DefaultParticleStyle implements Listener {
 
+    private final ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
+    private final DataManager dataManager = PlayerParticles.getInstance().getManager(DataManager.class);
+
     private int multiplier;
 
     protected ParticleStyleMove() {
@@ -55,19 +58,22 @@ public class ParticleStyleMove extends DefaultParticleStyle implements Listener 
         this.multiplier = config.getInt("multiplier");
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent event) {
-        ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
-
+        Location from = event.getFrom();
+        Location to = event.getTo();
+        if (to == null || (from.getX() == to.getX() && from.getY() == to.getY() && from.getZ() == to.getZ()))
+            return;
+        
         Player player = event.getPlayer();
-        PPlayer pplayer = PlayerParticles.getInstance().getManager(DataManager.class).getPPlayer(player.getUniqueId());
+        PPlayer pplayer = this.dataManager.getPPlayer(player.getUniqueId());
         if (pplayer == null)
             return;
 
         for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.MOVE)) {
             Location loc = player.getLocation().clone();
             loc.setY(loc.getY() + 0.05);
-            particleManager.displayParticles(pplayer, player.getWorld(), particle, DefaultStyles.MOVE.getParticles(particle, loc), false);
+            this.particleManager.displayParticles(pplayer, player.getWorld(), particle, DefaultStyles.MOVE.getParticles(particle, loc), false);
         }
     }
 

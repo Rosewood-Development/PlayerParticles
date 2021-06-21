@@ -14,7 +14,7 @@ import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.styles.DefaultStyles;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import java.awt.Color;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -160,8 +160,8 @@ public class ParticleManager extends Manager implements Listener, Runnable {
      * 
      * @return The loaded PPlayers
      */
-    public Collection<PPlayer> getPPlayers() {
-        return this.particlePlayers.values();
+    public Map<UUID, PPlayer> getPPlayers() {
+        return Collections.unmodifiableMap(this.particlePlayers);
     }
 
     /**
@@ -309,6 +309,16 @@ public class ParticleManager extends Manager implements Listener, Runnable {
      */
     public OrdinaryColor getRainbowParticleColor() {
         Color rgb = Color.getHSBColor(this.hue / 360F, 1.0F, 1.0F);
+        return new OrdinaryColor(rgb.getRed(), rgb.getGreen(), rgb.getBlue());
+    }
+
+    /**
+     * Gets the rainbow OrdinaryColor for particle spawning with data 'rainbow', shifted half way through the HSB spectrum
+     *
+     * @return The rainbow OrdinaryColor for particle spawning with data 'rainbow', shifted half way through the HSB spectrum
+     */
+    public OrdinaryColor getShiftedRainbowParticleColor() {
+        Color rgb = Color.getHSBColor((this.hue / 360F) + 0.5F, 1.0F, 1.0F);
         return new OrdinaryColor(rgb.getRed(), rgb.getGreen(), rgb.getBlue());
     }
 

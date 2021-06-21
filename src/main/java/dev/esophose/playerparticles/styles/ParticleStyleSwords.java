@@ -69,7 +69,7 @@ public class ParticleStyleSwords extends DefaultParticleStyle implements Listene
         this.swordNames = config.getStringList("sword-materials");
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
         ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
 

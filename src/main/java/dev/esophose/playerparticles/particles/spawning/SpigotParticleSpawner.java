@@ -3,10 +3,12 @@ package dev.esophose.playerparticles.particles.spawning;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
+import dev.esophose.playerparticles.particles.data.ColorTransition;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.particles.data.ParticleColor;
+import dev.esophose.playerparticles.particles.data.Vibration;
 import dev.esophose.playerparticles.util.NMSUtil;
-import org.bukkit.Color;
+import dev.esophose.playerparticles.util.VibrationUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle.DustOptions;
@@ -21,7 +23,7 @@ public class SpigotParticleSpawner extends ParticleSpawner {
         if (particleEffect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA))
             throw new ParticleDataException("This particle effect requires additional data");
 
-        for (Player player : this.getPlayersInRange(center, isLongRange, owner))
+        for (Player player : getPlayersInRange(center, isLongRange, owner))
             player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed);
     }
 
@@ -32,11 +34,11 @@ public class SpigotParticleSpawner extends ParticleSpawner {
 
         if (particleEffect == ParticleEffect.DUST && NMSUtil.getVersionNumber() >= 13) { // DUST uses a special data object for spawning in 1.13+
             OrdinaryColor dustColor = (OrdinaryColor) color;
-            DustOptions dustOptions = new DustOptions(Color.fromRGB(dustColor.getRed(), dustColor.getGreen(), dustColor.getBlue()), Setting.DUST_SIZE.getFloat());
-            for (Player player : this.getPlayersInRange(center, isLongRange, owner))
+            DustOptions dustOptions = new DustOptions(dustColor.toSpigot(), Setting.DUST_SIZE.getFloat());
+            for (Player player : getPlayersInRange(center, isLongRange, owner))
                 player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), 1, 0, 0, 0, 0, dustOptions);
         } else {
-            for (Player player : this.getPlayersInRange(center, isLongRange, owner)) {
+            for (Player player : getPlayersInRange(center, isLongRange, owner)) {
                 // Minecraft clients require that you pass a non-zero value if the Red value should be zero
                 player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), 0, particleEffect == ParticleEffect.DUST && color.getValueX() == 0 ? Float.MIN_VALUE : color.getValueX(), color.getValueY(), color.getValueZ(), 1);
             }
@@ -58,8 +60,29 @@ public class SpigotParticleSpawner extends ParticleSpawner {
             extraData = new MaterialData(spawnMaterial); // Deprecated, only used in versions < 1.13
         }
 
-        for (Player player : this.getPlayersInRange(center, isLongRange, owner))
+        for (Player player : getPlayersInRange(center, isLongRange, owner))
             player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed, extraData);
+    }
+
+    @Override
+    public void display(ParticleEffect particleEffect, ColorTransition colorTransition, double offsetX, double offsetY, double offsetZ, int amount, Location center, boolean isLongRange, Player owner) {
+        if (NMSUtil.getVersionNumber() < 17)
+            return;
+
+        if (!particleEffect.hasProperty(ParticleProperty.COLORABLE_TRANSITION))
+            throw new ParticleDataException("This particle effect does not require additional data");
+
+        org.bukkit.Particle.DustTransition dustTransition = new org.bukkit.Particle.DustTransition(colorTransition.getStartColor().toSpigot(), colorTransition.getEndColor().toSpigot(), Setting.DUST_SIZE.getFloat());
+        for (Player player : getPlayersInRange(center, isLongRange, owner))
+            player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, dustTransition);
+    }
+
+    @Override
+    public void display(ParticleEffect particleEffect, Vibration vibration, double offsetX, double offsetY, double offsetZ, int amount, Location center, boolean isLongRange, Player owner) {
+        if (NMSUtil.getVersionNumber() < 17)
+            return;
+
+        VibrationUtil.spawnParticles(particleEffect, vibration, offsetX, offsetY, offsetZ, amount, center, isLongRange, owner);
     }
 
 }

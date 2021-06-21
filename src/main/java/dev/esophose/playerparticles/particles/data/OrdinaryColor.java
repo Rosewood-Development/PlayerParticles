@@ -2,6 +2,7 @@ package dev.esophose.playerparticles.particles.data;
 
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import java.util.Objects;
+import org.bukkit.Color;
 
 /**
  * Represents the color for effects like {@link ParticleEffect#ENTITY_EFFECT},
@@ -135,4 +136,11 @@ public final class OrdinaryColor extends ParticleColor {
     public int hashCode() {
         return Objects.hash(this.red, this.green, this.blue);
     }
+
+    public Color toSpigot() {
+        if (this == RAINBOW || this == RANDOM)
+            throw new IllegalStateException("Cannot convert special value to Spigot Color");
+        return Color.fromRGB(this.red, this.green, this.blue);
+    }
+
 }

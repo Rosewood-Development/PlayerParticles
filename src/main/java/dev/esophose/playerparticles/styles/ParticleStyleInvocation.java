@@ -70,6 +70,13 @@ public class ParticleStyleInvocation extends DefaultParticleStyle {
             case DAMAGE_INDICATOR:
             case ENCHANTED_HIT:
                 return 2;
+            case ELECTRIC_SPARK:
+                return 3;
+            case SCRAPE:
+                return 2.5;
+            case WAX_OFF:
+            case WAX_ON:
+                return 4.5;
             case DRAGON_BREATH:
                 return 0.01;
             case ENCHANT:

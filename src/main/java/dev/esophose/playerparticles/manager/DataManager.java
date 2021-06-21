@@ -11,8 +11,10 @@ import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.particles.data.ColorTransition;
 import dev.esophose.playerparticles.particles.data.NoteColor;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
+import dev.esophose.playerparticles.particles.data.Vibration;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import java.sql.PreparedStatement;
@@ -91,10 +93,7 @@ public class DataManager extends Manager {
      * @return The PPlayer from cache
      */
     public PPlayer getPPlayer(UUID playerUUID) {
-        for (PPlayer pp : this.playerParticles.getManager(ParticleManager.class).getPPlayers())
-            if (pp.getUniqueId().equals(playerUUID))
-                return pp;
-        return null;
+        return this.playerParticles.getManager(ParticleManager.class).getPPlayers().get(playerUUID);
     }
 
     /**
@@ -160,7 +159,9 @@ public class DataManager extends Manager {
                         Material blockMaterial = ParticleUtils.closestMatchWithFallback(true, result.getString("block_material"));
                         NoteColor noteColor = new NoteColor(result.getInt("note"));
                         OrdinaryColor color = new OrdinaryColor(result.getInt("r"), result.getInt("g"), result.getInt("b"));
-                        ParticlePair particle = new ParticlePair(playerUUID, id, effect, style, itemMaterial, blockMaterial, color, noteColor);
+                        ColorTransition colorTransition = new ColorTransition(new OrdinaryColor(result.getInt("r"), result.getInt("g"), result.getInt("b")), new OrdinaryColor(result.getInt("r_end"), result.getInt("g_end"), result.getInt("b_end")));
+                        Vibration vibration = new Vibration(result.getInt("duration"));
+                        ParticlePair particle = new ParticlePair(playerUUID, id, effect, style, itemMaterial, blockMaterial, color, noteColor, colorTransition, vibration);
 
                         boolean invalid = effect == null || style == null;
                         if (invalid) // Effect or style is now missing or disabled, remove the particle
@@ -197,7 +198,7 @@ public class DataManager extends Manager {
                 }
 
                 // Load fixed effects
-                String fixedQuery = "SELECT f.id AS f_id, f.world, f.xPos, f.yPos, f.zPos, p.id AS p_id, p.effect, p.style, p.item_material, p.block_material, p.note, p.r, p.g, p.b FROM " + this.getTablePrefix() + "fixed f " +
+                String fixedQuery = "SELECT f.id AS f_id, f.world, f.xPos, f.yPos, f.zPos, p.id AS p_id, p.effect, p.style, p.item_material, p.block_material, p.note, p.r, p.g, p.b, p.r_end, p.g_end, p.b_end, p.duration FROM " + this.getTablePrefix() + "fixed f " +
         						    "JOIN " + this.getTablePrefix() + "particle p ON f.particle_uuid = p.uuid " +
         						    "WHERE f.owner_uuid = ?";
                 try (PreparedStatement statement = connection.prepareStatement(fixedQuery)) {
@@ -227,7 +228,9 @@ public class DataManager extends Manager {
                         Material blockMaterial = ParticleUtils.closestMatchWithFallback(true, result.getString("block_material"));
                         NoteColor noteColor = new NoteColor(result.getInt("note"));
                         OrdinaryColor color = new OrdinaryColor(result.getInt("r"), result.getInt("g"), result.getInt("b"));
-                        ParticlePair particle = new ParticlePair(playerUUID, particleId, effect, style, itemMaterial, blockMaterial, color, noteColor);
+                        ColorTransition colorTransition = new ColorTransition(new OrdinaryColor(result.getInt("r"), result.getInt("g"), result.getInt("b")), new OrdinaryColor(result.getInt("r_end"), result.getInt("g_end"), result.getInt("b_end")));
+                        Vibration vibration = new Vibration(result.getInt("duration"));
+                        ParticlePair particle = new ParticlePair(playerUUID, particleId, effect, style, itemMaterial, blockMaterial, color, noteColor, colorTransition, vibration);
 
                         // Effect or style is now missing or disabled, remove the fixed effect
                         if (effect == null || style == null) {
@@ -351,7 +354,7 @@ public class DataManager extends Manager {
             }
 
             // Fill group with new particles
-            String createParticlesQuery = "INSERT INTO " + this.getTablePrefix() + "particle (uuid, group_uuid, id, effect, style, item_material, block_material, note, r, g, b) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String createParticlesQuery = "INSERT INTO " + this.getTablePrefix() + "particle (uuid, group_uuid, id, effect, style, item_material, block_material, note, r, g, b, r_end, g_end, b_end, duration) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement particlesStatement = connection.prepareStatement(createParticlesQuery)) {
                 for (ParticlePair particle : group.getParticles().values()) {
                     particlesStatement.setString(1, UUID.randomUUID().toString());
@@ -365,6 +368,10 @@ public class DataManager extends Manager {
                     particlesStatement.setInt(9, particle.getColor().getRed());
                     particlesStatement.setInt(10, particle.getColor().getGreen());
                     particlesStatement.setInt(11, particle.getColor().getBlue());
+                    particlesStatement.setInt(12, particle.getColorTransition().getEndColor().getRed());
+                    particlesStatement.setInt(13, particle.getColorTransition().getEndColor().getGreen());
+                    particlesStatement.setInt(14, particle.getColorTransition().getEndColor().getBlue());
+                    particlesStatement.setInt(15, particle.getVibration().getDuration());
                     particlesStatement.addBatch();
                 }
 
@@ -444,7 +451,7 @@ public class DataManager extends Manager {
         this.async(() -> this.databaseConnector.connect((connection) -> {
             String particleUUID = UUID.randomUUID().toString();
 
-            String particleQuery = "INSERT INTO " + this.getTablePrefix() + "particle (uuid, id, effect, style, item_material, block_material, note, r, g, b) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String particleQuery = "INSERT INTO " + this.getTablePrefix() + "particle (uuid, id, effect, style, item_material, block_material, note, r, g, b, r_end, g_end, b_end, duration) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement statement = connection.prepareStatement(particleQuery)) {
                 ParticlePair particle = fixedEffect.getParticlePair();
                 statement.setString(1, particleUUID);
@@ -457,6 +464,10 @@ public class DataManager extends Manager {
                 statement.setInt(8, particle.getColor().getRed());
                 statement.setInt(9, particle.getColor().getGreen());
                 statement.setInt(10, particle.getColor().getBlue());
+                statement.setInt(11, particle.getColorTransition().getEndColor().getRed());
+                statement.setInt(12, particle.getColorTransition().getEndColor().getGreen());
+                statement.setInt(13, particle.getColorTransition().getEndColor().getBlue());
+                statement.setInt(14, particle.getVibration().getDuration());
                 statement.executeUpdate();
             }
 
@@ -494,7 +505,7 @@ public class DataManager extends Manager {
 
             // Update particle
             String particleUpdateQuery = "UPDATE " + this.getTablePrefix() + "particle " +
-                                         "SET effect = ?, style = ?, item_material = ?, block_material = ?, note = ?, r = ?, g = ?, b = ? " +
+                                         "SET effect = ?, style = ?, item_material = ?, block_material = ?, note = ?, r = ?, g = ?, b = ?, r_end = ?, g_end = ?, b_end = ?, duration = ? " +
                                          "WHERE uuid = (SELECT particle_uuid FROM " + this.getTablePrefix() + "fixed WHERE owner_uuid = ? AND id = ?)";
             try (PreparedStatement statement = connection.prepareStatement(particleUpdateQuery)) {
                 ParticlePair particle = fixedEffect.getParticlePair();
@@ -506,8 +517,12 @@ public class DataManager extends Manager {
                 statement.setInt(6, particle.getColor().getRed());
                 statement.setInt(7, particle.getColor().getGreen());
                 statement.setInt(8, particle.getColor().getBlue());
-                statement.setString(9, fixedEffect.getOwnerUniqueId().toString());
-                statement.setInt(10, fixedEffect.getId());
+                statement.setInt(9, particle.getColorTransition().getEndColor().getRed());
+                statement.setInt(10, particle.getColorTransition().getEndColor().getGreen());
+                statement.setInt(11, particle.getColorTransition().getEndColor().getBlue());
+                statement.setInt(12, particle.getVibration().getDuration());
+                statement.setString(13, fixedEffect.getOwnerUniqueId().toString());
+                statement.setInt(14, fixedEffect.getId());
                 statement.executeUpdate();
             }
         }));

@@ -70,7 +70,7 @@ public class ParticleStyleTeleport extends DefaultParticleStyle implements Liste
         this.speed = config.getDouble("speed");
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         TeleportCause cause = event.getCause();
         if (cause == TeleportCause.UNKNOWN)

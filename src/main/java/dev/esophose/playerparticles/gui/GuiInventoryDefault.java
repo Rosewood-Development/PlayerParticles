@@ -8,7 +8,6 @@ import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.ParticleGroupPresetManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.particles.PPlayer;
-import dev.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
 import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.util.ParticleUtils;
@@ -121,7 +120,7 @@ public class GuiInventoryDefault extends GuiInventory {
 
         final ParticlePair editingParticle = pplayer.getPrimaryParticle();
         boolean canEditPrimaryStyleAndData = pplayer.getActiveParticle(1) != null;
-        boolean doesEffectUseData = editingParticle.getEffect().hasProperty(ParticleProperty.COLORABLE) || editingParticle.getEffect().hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA);
+        boolean doesEffectUseData = editingParticle.getEffect().hasProperties();
 
         // Edit Primary Effect
         GuiActionButton editPrimaryEffect = new GuiActionButton(
@@ -217,7 +216,7 @@ public class GuiInventoryDefault extends GuiInventory {
 
                     List<Runnable> callbacks = new ArrayList<>();
                     callbacks.add(() -> guiManager.transition(new GuiInventoryDefault(pplayer)));
-                    callbacks.add(() -> guiManager.transition(new GuiInventoryEditData(pplayer, editingParticle, 1, callbacks, 1)));
+                    callbacks.add(() -> guiManager.transition(new GuiInventoryEditData(pplayer, editingParticle, 1, callbacks, 1, null)));
                     callbacks.add(() -> {
                         ParticleGroup group = pplayer.getActiveParticleGroup();
                         for (ParticlePair particle : group.getParticles().values()) {

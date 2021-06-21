@@ -3,9 +3,11 @@ package dev.esophose.playerparticles.particles;
 import com.google.common.collect.ObjectArrays;
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
+import dev.esophose.playerparticles.particles.data.ColorTransition;
 import dev.esophose.playerparticles.particles.data.NoteColor;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.particles.data.ParticleColor;
+import dev.esophose.playerparticles.particles.data.Vibration;
 import dev.esophose.playerparticles.particles.spawning.ParticleSpawner;
 import dev.esophose.playerparticles.particles.spawning.ParticleSpawner.ParticleColorException;
 import dev.esophose.playerparticles.particles.spawning.ParticleSpawner.ParticleDataException;
@@ -46,28 +48,37 @@ public enum ParticleEffect {
     DAMAGE_INDICATOR("DAMAGE_INDICATOR", Collections.singletonList("BOW")),
     DOLPHIN("DOLPHIN", Collections.singletonList("DOLPHIN_SPAWN_EGG")),
     DRAGON_BREATH("DRAGON_BREATH", Arrays.asList("DRAGON_BREATH", "DRAGONS_BREATH")),
+    DRIPPING_DRIPSTONE_LAVA("DRIPPING_DRIPSTONE_LAVA", Collections.singletonList("POINTED_DRIPSTONE")),
+    DRIPPING_DRIPSTONE_WATER("DRIPPING_DRIPSTONE_WATER", Collections.singletonList("DRIPSTONE_BLOCK")),
     DRIPPING_HONEY("DRIPPING_HONEY", Collections.singletonList("BEE_NEST")),
     DRIPPING_LAVA("DRIP_LAVA", Collections.singletonList("LAVA_BUCKET")),
     DRIPPING_OBSIDIAN_TEAR("DRIPPING_OBSIDIAN_TEAR", Collections.singletonList("CRYING_OBSIDIAN")),
     DRIPPING_WATER("DRIP_WATER", Collections.singletonList("WATER_BUCKET")),
     DUST("REDSTONE", Collections.singletonList("REDSTONE"), ParticleProperty.COLORABLE),
+    DUST_COLOR_TRANSITION("DUST_COLOR_TRANSITION", Collections.singletonList("DEEPSLATE_REDSTONE_ORE"), ParticleProperty.COLORABLE_TRANSITION),
     ELDER_GUARDIAN("MOB_APPEARANCE", Arrays.asList("ELDER_GUARDIAN_SPAWN_EGG", "PRISMARINE_CRYSTALS"), false), // No thank you
+    ELECTRIC_SPARK("ELECTRIC_SPARK", Collections.singletonList("LIGHTNING_ROD")),
     ENCHANT("ENCHANTMENT_TABLE", Arrays.asList("ENCHANTING_TABLE", "ENCHANTMENT_TABLE")),
     ENCHANTED_HIT("CRIT_MAGIC", Collections.singletonList("DIAMOND_SWORD")),
     END_ROD("END_ROD", Collections.singletonList("END_ROD")),
     ENTITY_EFFECT("SPELL_MOB", Collections.singletonList("GLOWSTONE_DUST"), ParticleProperty.COLORABLE),
     EXPLOSION("EXPLOSION_LARGE", Arrays.asList("FIRE_CHARGE", "FIREBALL")),
     EXPLOSION_EMITTER("EXPLOSION_HUGE", Collections.singletonList("TNT")),
+    FALLING_DRIPSTONE_LAVA("FALLING_DRIPSTONE_LAVA", Collections.singletonList("SMOOTH_BASALT")),
+    FALLING_DRIPSTONE_WATER("FALLING_DRIPSTONE_WATER", Collections.singletonList("CALCITE")),
     FALLING_DUST("FALLING_DUST", Collections.singletonList("SAND"), ParticleProperty.REQUIRES_MATERIAL_DATA),
     FALLING_HONEY("FALLING_HONEY", Collections.singletonList("HONEY_BOTTLE")),
     FALLING_LAVA("FALLING_LAVA", Collections.singletonList("RED_DYE")),
     FALLING_NECTAR("FALLING_NECTAR", Collections.singletonList("HONEYCOMB")),
     FALLING_OBSIDIAN_TEAR("FALLING_OBSIDIAN_TEAR", Collections.singletonList("ANCIENT_DEBRIS")),
+    FALLING_SPORE_BLOSSOM("FALLING_SPORE_BLOSSOM", Collections.singletonList("FLOWERING_AZALEA")),
     FALLING_WATER("FALLING_WATER", Collections.singletonList("BLUE_DYE")),
     FIREWORK("FIREWORKS_SPARK", Arrays.asList("FIREWORK_ROCKET", "FIREWORK")),
     FISHING("WATER_WAKE", Collections.singletonList("FISHING_ROD")),
     FLAME("FLAME", Collections.singletonList("BLAZE_POWDER")),
     FLASH("FLASH", Collections.singletonList("GOLD_INGOT"), false), // Also no thank you
+    GLOW("GLOW", Collections.singletonList("GLOW_ITEM_FRAME")),
+    GLOW_SQUID_INK("GLOW_SQUID_INK", Collections.singletonList("GLOW_INK_SAC")),
     FOOTSTEP("FOOTSTEP", Collections.singletonList("GRASS")), // Removed in Minecraft 1.13 :(
     HAPPY_VILLAGER("VILLAGER_HAPPY", Arrays.asList("DARK_OAK_DOOR_ITEM", "DARK_OAK_DOOR")),
     HEART("HEART", Arrays.asList("POPPY", "RED_ROSE")),
@@ -80,6 +91,7 @@ public enum ParticleEffect {
     LANDING_OBSIDIAN_TEAR("LANDING_OBSIDIAN_TEAR", Collections.singletonList("NETHERITE_BLOCK")),
     LARGE_SMOKE("SMOKE_LARGE", Arrays.asList("COBWEB", "WEB")),
     LAVA("LAVA", Collections.singletonList("MAGMA_CREAM")),
+    LIGHT("LIGHT", Collections.singletonList("LIGHT")),
     MYCELIUM("TOWN_AURA", Arrays.asList("MYCELIUM", "MYCEL")),
     NAUTILUS("NAUTILUS", Collections.singletonList("HEART_OF_THE_SEA")),
     NOTE("NOTE", Collections.singletonList("NOTE_BLOCK"), ParticleProperty.COLORABLE),
@@ -87,25 +99,29 @@ public enum ParticleEffect {
     PORTAL("PORTAL", Collections.singletonList("OBSIDIAN")),
     RAIN("WATER_DROP", Arrays.asList("PUFFERFISH_BUCKET", "LAPIS_BLOCK")),
     REVERSE_PORTAL("REVERSE_PORTAL", Collections.singletonList("FLINT_AND_STEEL")),
+    SCRAPE("SCRAPE", Collections.singletonList("GOLDEN_AXE")),
+    SMALL_FLAME("SMALL_FLAME", Collections.singletonList("CANDLE")),
     SMOKE("SMOKE_NORMAL", Collections.singletonList("TORCH")),
     SNEEZE("SNEEZE", Collections.singletonList("BAMBOO")),
+    SNOWFLAKE("SNOWFLAKE", Collections.singletonList("POWDER_SNOW_BUCKET")),
     SOUL("SOUL", Collections.singletonList("SOUL_LANTERN")),
     SOUL_FIRE_FLAME("SOUL_FIRE_FLAME", Collections.singletonList("SOUL_CAMPFIRE")),
     SPELL("SPELL", Arrays.asList("POTION", "GLASS_BOTTLE")), // The Minecraft internal name for this is actually "effect", but that's the command name, so it's SPELL for the plugin instead
     SPIT("SPIT", Arrays.asList("LLAMA_SPAWN_EGG", "PUMPKIN_SEEDS")),
     SPLASH("WATER_SPLASH", Arrays.asList("SALMON", "FISH", "RAW_FISH")),
+    SPORE_BLOSSOM_AIR("SPORE_BLOSSOM_AIR", Collections.singletonList("SPORE_BLOSSOM")),
     SQUID_INK("SQUID_INK", Collections.singletonList("INK_SAC")),
     SWEEP_ATTACK("SWEEP_ATTACK", Arrays.asList("GOLDEN_SWORD", "GOLD_SWORD")),
     TOTEM_OF_UNDYING("TOTEM", Arrays.asList("TOTEM_OF_UNDYING", "TOTEM")),
     UNDERWATER("SUSPENDED_DEPTH", Arrays.asList("TURTLE_HELMET", "SPONGE")),
+    VIBRATION("VIBRATION", Collections.singletonList("SCULK_SENSOR"), false, ParticleProperty.VIBRATION),
     WARPED_SPORE("WARPED_SPORE", Collections.singletonList("WARPED_FUNGUS")),
+    WAX_OFF("WAX_OFF", Collections.singletonList("OXIDIZED_COPPER")),
+    WAX_ON("WAX_ON", Collections.singletonList("WAXED_COPPER_BLOCK")),
     WHITE_ASH("WHITE_ASH", Collections.singletonList("BASALT")),
     WITCH("SPELL_WITCH", Collections.singletonList("CAULDRON"));
 
-    private final static ParticleSpawner particleSpawner;
-    static {
-        particleSpawner = NMSUtil.getVersionNumber() >= 9 ? new SpigotParticleSpawner() : new ReflectiveParticleSpawner();
-    }
+    private final static ParticleSpawner particleSpawner = NMSUtil.getVersionNumber() >= 9 ? new SpigotParticleSpawner() : new ReflectiveParticleSpawner();
 
     private Particle internalEnum;
     private List<ParticleProperty> properties;
@@ -267,6 +283,13 @@ public enum ParticleEffect {
     }
 
     /**
+     * @return true if this effect has any properties
+     */
+    public boolean hasProperties() {
+        return !this.properties.isEmpty();
+    }
+
+    /**
      * Determine if this particle effect is supported by the current server version
      * 
      * @return Whether the particle effect is supported or not
@@ -345,6 +368,22 @@ public enum ParticleEffect {
                 data = particle.getSpawnColor();
             }
             effect.display(data, pparticle.getLocation(true), isLongRange, owner);
+        } else if (effect.hasProperty(ParticleProperty.COLORABLE_TRANSITION)) {
+            ColorTransition data;
+            if (pparticle.getOverrideData() instanceof ColorTransition) {
+                data = (ColorTransition) pparticle.getOverrideData();
+            } else {
+                data = particle.getSpawnColorTransition();
+            }
+            effect.display(data, pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), 1, pparticle.getLocation(false), isLongRange, owner);
+        } else if (effect.hasProperty(ParticleProperty.VIBRATION)) {
+            Vibration data;
+            if (pparticle.getOverrideData() instanceof Vibration) {
+                data = (Vibration) pparticle.getOverrideData();
+            } else {
+                data = particle.getVibration();
+            }
+            effect.display(data, pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), 1, pparticle.getLocation(false), isLongRange, owner);
         } else {
             effect.display(pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), count, pparticle.getLocation(false), isLongRange, owner);
         }
@@ -401,13 +440,45 @@ public enum ParticleEffect {
     }
 
     /**
+     * Displays a particle effect which requires additional data and is only
+     * visible for all players within a certain range in the world of @param
+     * center
+     *
+     * @param colorTransition Color transition of the effect
+     * @param offsetX Maximum distance particles can fly away from the center on the x-axis
+     * @param offsetY Maximum distance particles can fly away from the center on the y-axis
+     * @param offsetZ Maximum distance particles can fly away from the center on the z-axis
+     * @param amount Amount of particles
+     * @param center Center location of the effect
+     * @param isLongRange If the particle can be viewed from long range
+     * @param owner The player that owns the particles
+     * @throws ParticleDataException If the particle effect does not require additional data or if the data type is incorrect
+     */
+    public void display(ColorTransition colorTransition, double offsetX, double offsetY, double offsetZ, int amount, Location center, boolean isLongRange, Player owner) {
+        particleSpawner.display(this, colorTransition, offsetX, offsetY, offsetZ, amount, center, isLongRange, owner);
+    }
+
+    /**
+     * Displays a particle effect which requires additional data and is only
+     * visible for all players within a certain range in the world of @param
+     * center
+     *
+     * @param vibration Vibration of the effect
+     * @param offsetX Maximum distance particles can fly away from the center on the x-axis
+     * @param offsetY Maximum distance particles can fly away from the center on the y-axis
+     * @param offsetZ Maximum distance particles can fly away from the center on the z-axis
+     * @param amount Amount of particles
+     * @param center Center location of the effect
+     * @param isLongRange If the particle can be viewed from long range
+     * @param owner The player that owns the particles
+     * @throws ParticleDataException If the particle effect does not require additional data or if the data type is incorrect
+     */
+    public void display(Vibration vibration, double offsetX, double offsetY, double offsetZ, int amount, Location center, boolean isLongRange, Player owner) {
+        particleSpawner.display(this, vibration, offsetX, offsetY, offsetZ, amount, center, isLongRange, owner);
+    }
+
+    /**
      * Represents the property of a particle effect
-     * <p>
-     * This class is part of the <b>ParticleEffect Library</b> and follows the
-     * same usage conditions
-     * 
-     * @author DarkBlade12
-     * @since 1.7
      */
     public enum ParticleProperty {
         /**
@@ -417,7 +488,15 @@ public enum ParticleEffect {
         /**
          * The particle effect uses the offsets as color values
          */
-        COLORABLE
+        COLORABLE,
+        /**
+         * The particle effect uses two color values to transition between
+         */
+        COLORABLE_TRANSITION,
+        /**
+         * The particle effect uses an origin location, destination location, and duration in ticks
+         */
+        VIBRATION
     }
 
 }

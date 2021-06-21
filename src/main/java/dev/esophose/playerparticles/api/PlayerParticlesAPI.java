@@ -10,8 +10,10 @@ import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.particles.data.ColorTransition;
 import dev.esophose.playerparticles.particles.data.NoteColor;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
+import dev.esophose.playerparticles.particles.data.Vibration;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -163,7 +165,7 @@ public final class PlayerParticlesAPI {
      */
     @Nullable
     public ParticlePair addActivePlayerParticle(@NotNull Player player, @NotNull ParticleEffect effect, @NotNull ParticleStyle style) {
-        return this.addActivePlayerParticle(player, effect, style, null, null, null);
+        return this.addActivePlayerParticle(player, effect, style, null, null, null, null, null);
     }
 
     /**
@@ -177,7 +179,7 @@ public final class PlayerParticlesAPI {
      */
     @Nullable
     public ParticlePair addActivePlayerParticle(@NotNull Player player, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @NotNull OrdinaryColor colorData) {
-        return this.addActivePlayerParticle(player, effect, style, colorData, null, null);
+        return this.addActivePlayerParticle(player, effect, style, colorData, null, null, null, null);
     }
 
     /**
@@ -191,7 +193,7 @@ public final class PlayerParticlesAPI {
      */
     @Nullable
     public ParticlePair addActivePlayerParticle(@NotNull Player player, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @NotNull NoteColor noteColorData) {
-        return this.addActivePlayerParticle(player, effect, style, null, noteColorData, null);
+        return this.addActivePlayerParticle(player, effect, style, null, noteColorData, null, null, null);
     }
 
     /**
@@ -205,7 +207,35 @@ public final class PlayerParticlesAPI {
      */
     @Nullable
     public ParticlePair addActivePlayerParticle(@NotNull Player player, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @NotNull Material materialData) {
-        return this.addActivePlayerParticle(player, effect, style, null, null, materialData);
+        return this.addActivePlayerParticle(player, effect, style, null, null, materialData, null, null);
+    }
+
+    /**
+     * Adds an active particle to a Player's particles
+     *
+     * @param player The player to add to
+     * @param effect The effect of the particle
+     * @param style The style of the particle
+     * @param colorTransitionData The color transition data of the particle
+     * @return The ParticlePair that was added or null if failed
+     */
+    @Nullable
+    public ParticlePair addActivePlayerParticle(@NotNull Player player, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @NotNull ColorTransition colorTransitionData) {
+        return this.addActivePlayerParticle(player, effect, style, null, null, null, colorTransitionData, null);
+    }
+
+    /**
+     * Adds an active particle to a Player's particles
+     *
+     * @param player The player to add to
+     * @param effect The effect of the particle
+     * @param style The style of the particle
+     * @param vibrationData The vibration data of the particle
+     * @return The ParticlePair that was added or null if failed
+     */
+    @Nullable
+    public ParticlePair addActivePlayerParticle(@NotNull Player player, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @NotNull Vibration vibrationData) {
+        return this.addActivePlayerParticle(player, effect, style, null, null, null, null, vibrationData);
     }
 
     /**
@@ -216,9 +246,10 @@ public final class PlayerParticlesAPI {
      * @param noteColorData The note color data of the particle
      * @param materialData The material data of the particle
      * @return The ParticlePair that was added or null if failed
+     * @deprecated Use
      */
     @Nullable
-    private ParticlePair addActivePlayerParticle(@NotNull Player player, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @Nullable OrdinaryColor colorData, @Nullable NoteColor noteColorData, @Nullable Material materialData) {
+    private ParticlePair addActivePlayerParticle(@NotNull Player player, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @Nullable OrdinaryColor colorData, @Nullable NoteColor noteColorData, @Nullable Material materialData, @Nullable ColorTransition colorTransitionData, @Nullable Vibration vibrationData) {
         Objects.requireNonNull(effect);
         Objects.requireNonNull(style);
 
@@ -236,7 +267,7 @@ public final class PlayerParticlesAPI {
             }
         }
 
-        ParticlePair particle = new ParticlePair(player.getUniqueId(), pplayer.getNextActiveParticleId(), effect, style, itemMaterialData, blockMaterialData, colorData, noteColorData);
+        ParticlePair particle = new ParticlePair(player.getUniqueId(), pplayer.getNextActiveParticleId(), effect, style, itemMaterialData, blockMaterialData, colorData, noteColorData, colorTransitionData, vibrationData);
         this.addActivePlayerParticle(player, particle);
         return particle;
     }
@@ -677,7 +708,7 @@ public final class PlayerParticlesAPI {
      */
     @Nullable
     public FixedParticleEffect createFixedParticleEffect(@NotNull CommandSender sender, @NotNull Location location, @NotNull ParticleEffect effect, @NotNull ParticleStyle style) {
-        return this.createFixedParticleEffect(sender, location, effect, style, null, null, null);
+        return this.createFixedParticleEffect(sender, location, effect, style, null, null, null, null, null);
     }
 
     /**
@@ -692,7 +723,7 @@ public final class PlayerParticlesAPI {
      */
     @Nullable
     public FixedParticleEffect createFixedParticleEffect(@NotNull CommandSender sender, @NotNull Location location, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @NotNull OrdinaryColor colorData) {
-        return this.createFixedParticleEffect(sender, location, effect, style, colorData, null, null);
+        return this.createFixedParticleEffect(sender, location, effect, style, colorData, null, null, null, null);
     }
 
     /**
@@ -707,7 +738,7 @@ public final class PlayerParticlesAPI {
      */
     @Nullable
     public FixedParticleEffect createFixedParticleEffect(@NotNull CommandSender sender, @NotNull Location location, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @NotNull NoteColor noteColorData) {
-        return this.createFixedParticleEffect(sender, location, effect, style, null, noteColorData, null);
+        return this.createFixedParticleEffect(sender, location, effect, style, null, noteColorData, null, null, null);
     }
 
     /**
@@ -722,7 +753,37 @@ public final class PlayerParticlesAPI {
      */
     @Nullable
     public FixedParticleEffect createFixedParticleEffect(@NotNull CommandSender sender, @NotNull Location location, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @NotNull Material materialData) {
-        return this.createFixedParticleEffect(sender, location, effect, style, null, null, materialData);
+        return this.createFixedParticleEffect(sender, location, effect, style, null, null, materialData, null, null);
+    }
+
+    /**
+     * Creates a fixed particle effect for a player
+     *
+     * @param sender The sender to create for, either a Player or ConsoleCommandSender
+     * @param location The location to create at
+     * @param effect The effect of the particle
+     * @param style The style of the particle
+     * @param colorTransitionData The color transition data of the particle
+     * @return The FixedParticleEffect that was created or null if failed
+     */
+    @Nullable
+    public FixedParticleEffect createFixedParticleEffect(@NotNull CommandSender sender, @NotNull Location location, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @NotNull ColorTransition colorTransitionData) {
+        return this.createFixedParticleEffect(sender, location, effect, style, null, null, null, colorTransitionData, null);
+    }
+
+    /**
+     * Creates a fixed particle effect for a player
+     *
+     * @param sender The sender to create for, either a Player or ConsoleCommandSender
+     * @param location The location to create at
+     * @param effect The effect of the particle
+     * @param style The style of the particle
+     * @param vibrationData The vibration data of the particle
+     * @return The FixedParticleEffect that was created or null if failed
+     */
+    @Nullable
+    public FixedParticleEffect createFixedParticleEffect(@NotNull CommandSender sender, @NotNull Location location, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @NotNull Vibration vibrationData) {
+        return this.createFixedParticleEffect(sender, location, effect, style, null, null, null, null, vibrationData);
     }
 
     /**
@@ -738,7 +799,7 @@ public final class PlayerParticlesAPI {
      * @return The FixedParticleEffect that was created or null if failed
      */
     @Nullable
-    private FixedParticleEffect createFixedParticleEffect(@NotNull CommandSender sender, @NotNull Location location, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @Nullable OrdinaryColor colorData, @Nullable NoteColor noteColorData, @Nullable Material materialData) {
+    private FixedParticleEffect createFixedParticleEffect(@NotNull CommandSender sender, @NotNull Location location, @NotNull ParticleEffect effect, @NotNull ParticleStyle style, @Nullable OrdinaryColor colorData, @Nullable NoteColor noteColorData, @Nullable Material materialData, @Nullable ColorTransition colorTransitionData, @Nullable Vibration vibrationData) {
         Objects.requireNonNull(location);
         Objects.requireNonNull(location.getWorld());
         Objects.requireNonNull(effect);
@@ -758,7 +819,7 @@ public final class PlayerParticlesAPI {
             }
         }
 
-        ParticlePair particle = new ParticlePair(pplayer.getUniqueId(), 1, effect, style, itemMaterialData, blockMaterialData, colorData, noteColorData);
+        ParticlePair particle = new ParticlePair(pplayer.getUniqueId(), 1, effect, style, itemMaterialData, blockMaterialData, colorData, noteColorData, colorTransitionData, vibrationData);
         return this.createFixedParticleEffect(sender, location, particle);
     }
 
@@ -961,7 +1022,7 @@ public final class PlayerParticlesAPI {
         ParticleManager particleManager = this.playerParticles.getManager(ParticleManager.class);
 
         int removedAmount = 0;
-        for (PPlayer pplayer : particleManager.getPPlayers()) {
+        for (PPlayer pplayer : particleManager.getPPlayers().values()) {
             Set<Integer> removedIds = new HashSet<>();
             for (FixedParticleEffect fixedEffect : pplayer.getFixedParticles())
                 if (fixedEffect.getLocation().getWorld() == location.getWorld() && fixedEffect.getLocation().distance(location) <= radius)

@@ -63,7 +63,7 @@ public class ParticleStyleBlockPlace extends DefaultParticleStyle implements Lis
         this.particleSpeed = config.getDouble("particle-speed");
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
         ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
 

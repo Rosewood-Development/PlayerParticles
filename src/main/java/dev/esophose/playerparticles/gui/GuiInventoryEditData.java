@@ -8,8 +8,10 @@ import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.particles.data.ColorTransition;
 import dev.esophose.playerparticles.particles.data.NoteColor;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
+import dev.esophose.playerparticles.particles.data.Vibration;
 import dev.esophose.playerparticles.util.NMSUtil;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import dev.esophose.playerparticles.util.StringPlaceholders;
@@ -20,6 +22,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.block.data.type.Light;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BlockDataMeta;
 
 @SuppressWarnings("deprecation")
 public class GuiInventoryEditData extends GuiInventory {
@@ -118,7 +123,7 @@ public class GuiInventoryEditData extends GuiInventory {
         };
     }
 
-    public GuiInventoryEditData(PPlayer pplayer, ParticlePair editingParticle, int pageNumber, List<Runnable> callbackList, int callbackListPosition) {
+    public GuiInventoryEditData(PPlayer pplayer, ParticlePair editingParticle, int pageNumber, List<Runnable> callbackList, int callbackListPosition, OrdinaryColor startColor) {
         super(pplayer, Bukkit.createInventory(pplayer.getPlayer(), INVENTORY_SIZE, PlayerParticles.getInstance().getManager(LocaleManager.class).getLocaleMessage("gui-select-data")));
 
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
@@ -138,6 +143,10 @@ public class GuiInventoryEditData extends GuiInventory {
             } else { // Block data
                 this.populateBlockData(editingParticle, pageNumber, callbackList, callbackListPosition);
             }
+        } else if (pe.hasProperty(ParticleProperty.COLORABLE_TRANSITION)) {
+            this.populateColorTransitionData(editingParticle, callbackList, callbackListPosition, startColor);
+        } else if (pe.hasProperty(ParticleProperty.VIBRATION)) {
+            this.populateVibrationData(editingParticle, callbackList, callbackListPosition);
         }
 
         // Back Button
@@ -198,7 +207,7 @@ public class GuiInventoryEditData extends GuiInventory {
                 });
         this.actionButtons.add(setRainbowColorButton);
 
-        // Rainbow Color Data Button
+        // Random Color Data Button
         List<ColorData> randomizedColorsList = Arrays.asList(colorMapping.clone());
         Collections.shuffle(randomizedColorsList);
         ColorData[] randomizedColors = new ColorData[randomizedColorsList.size()];
@@ -294,7 +303,7 @@ public class GuiInventoryEditData extends GuiInventory {
                     GuiIcon.PREVIOUS_PAGE.get(),
                     localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-previous-page-button", StringPlaceholders.builder("start", pageNumber - 1).addPlaceholder("end", maxPages).build()),
                     new String[]{},
-                    (button, isShiftClick) -> guiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber - 1, callbackList, callbackListPosition)));
+                    (button, isShiftClick) -> guiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber - 1, callbackList, callbackListPosition, null)));
             this.actionButtons.add(previousPageButton);
         }
 
@@ -305,7 +314,7 @@ public class GuiInventoryEditData extends GuiInventory {
                     GuiIcon.NEXT_PAGE.get(),
                     localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-next-page-button", StringPlaceholders.builder("start", pageNumber + 1).addPlaceholder("end", maxPages).build()),
                     new String[]{},
-                    (button, isShiftClick) -> guiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber + 1, callbackList, callbackListPosition)));
+                    (button, isShiftClick) -> guiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber + 1, callbackList, callbackListPosition, null)));
             this.actionButtons.add(nextPageButton);
         }
     }
@@ -358,7 +367,7 @@ public class GuiInventoryEditData extends GuiInventory {
                     GuiIcon.PREVIOUS_PAGE.get(),
                     localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-previous-page-button", StringPlaceholders.builder("start", pageNumber - 1).addPlaceholder("end", maxPages).build()),
                     new String[]{},
-                    (button, isShiftClick) -> guiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber - 1, callbackList, callbackListPosition)));
+                    (button, isShiftClick) -> guiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber - 1, callbackList, callbackListPosition, null)));
             this.actionButtons.add(previousPageButton);
         }
 
@@ -369,7 +378,7 @@ public class GuiInventoryEditData extends GuiInventory {
                     GuiIcon.NEXT_PAGE.get(),
                     localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-next-page-button", StringPlaceholders.builder("start", pageNumber + 1).addPlaceholder("end", maxPages).build()),
                     new String[]{},
-                    (button, isShiftClick) -> guiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber + 1, callbackList, callbackListPosition)));
+                    (button, isShiftClick) -> guiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber + 1, callbackList, callbackListPosition, null)));
             this.actionButtons.add(nextPageButton);
         }
     }
@@ -422,7 +431,7 @@ public class GuiInventoryEditData extends GuiInventory {
                     GuiIcon.PREVIOUS_PAGE.get(),
                     localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-previous-page-button", StringPlaceholders.builder("start", pageNumber - 1).addPlaceholder("end", maxPages).build()),
                     new String[]{},
-                    (button, isShiftClick) -> guiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber - 1, callbackList, callbackListPosition)));
+                    (button, isShiftClick) -> guiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber - 1, callbackList, callbackListPosition, null)));
             this.actionButtons.add(previousPageButton);
         }
 
@@ -433,8 +442,131 @@ public class GuiInventoryEditData extends GuiInventory {
                     GuiIcon.NEXT_PAGE.get(),
                     localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-next-page-button", StringPlaceholders.builder("start", pageNumber + 1).addPlaceholder("end", maxPages).build()),
                     new String[]{},
-                    (button, isShiftClick) -> guiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber + 1, callbackList, callbackListPosition)));
+                    (button, isShiftClick) -> guiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber + 1, callbackList, callbackListPosition, null)));
             this.actionButtons.add(nextPageButton);
+        }
+    }
+
+    /**
+     * Populates the Inventory with available color transition data options.
+     * This is a copy of the Color data options, but it will be displayed twice.
+     *
+     * @param editingParticle      The ParticlePair that's being edited
+     * @param callbackList         The List of GuiInventoryEditFinishedCallbacks
+     * @param callbackListPosition The index of the callbackList we're currently at
+     * @param startColor           The start color of the color transition, will be null if no start color has been selected yet
+     */
+    private void populateColorTransitionData(ParticlePair editingParticle, List<Runnable> callbackList, int callbackListPosition, OrdinaryColor startColor) {
+        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
+
+        int index = 10;
+        int nextWrap = 17;
+        for (ColorData colorData : colorMapping) {
+            String formattedDisplayColor = ChatColor.RED.toString() + colorData.getOrdinaryColor().getRed() + " " + ChatColor.GREEN + colorData.getOrdinaryColor().getGreen() + " " + ChatColor.AQUA + colorData.getOrdinaryColor().getBlue();
+
+            // Color Data Buttons
+            GuiActionButton setColorButton = new GuiActionButton(
+                    index,
+                    colorData,
+                    colorData.getName(),
+                    new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", formattedDisplayColor))},
+                    (button, isShiftClick) -> {
+                        if (startColor == null) {
+                            PlayerParticles.getInstance().getManager(GuiManager.class).transition(new GuiInventoryEditData(this.pplayer, editingParticle, 1, callbackList, callbackListPosition, colorData.getOrdinaryColor()));
+                        } else {
+                            editingParticle.setColorTransition(new ColorTransition(startColor, colorData.getOrdinaryColor()));
+                            callbackList.get(callbackListPosition + 1).run();
+                        }
+                    });
+            this.actionButtons.add(setColorButton);
+
+            index++;
+            if (index == nextWrap) { // Loop around border
+                nextWrap += 9;
+                index += 2;
+            }
+        }
+
+        // Rainbow Color Data Button
+        GuiActionButton setRainbowColorButton = new GuiActionButton(
+                39,
+                rainbowColorMapping,
+                localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("rainbow"),
+                new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", localeManager.getLocaleMessage("rainbow")))},
+                (button, isShiftClick) -> {
+                    if (startColor == null) {
+                        PlayerParticles.getInstance().getManager(GuiManager.class).transition(new GuiInventoryEditData(this.pplayer, editingParticle, 1, callbackList, callbackListPosition, OrdinaryColor.RAINBOW));
+                    } else {
+                        editingParticle.setColorTransition(new ColorTransition(startColor, OrdinaryColor.RAINBOW));
+                        callbackList.get(callbackListPosition + 1).run();
+                    }
+                });
+        this.actionButtons.add(setRainbowColorButton);
+
+        // Random Color Data Button
+        List<ColorData> randomizedColorsList = Arrays.asList(colorMapping.clone());
+        Collections.shuffle(randomizedColorsList);
+        ColorData[] randomizedColors = new ColorData[randomizedColorsList.size()];
+        randomizedColors = randomizedColorsList.toArray(randomizedColors);
+        GuiActionButton setRandomColorButton = new GuiActionButton(41,
+                randomizedColors,
+                localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("random"),
+                new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", localeManager.getLocaleMessage("random")))},
+                (button, isShiftClick) -> {
+                    if (startColor == null) {
+                        PlayerParticles.getInstance().getManager(GuiManager.class).transition(new GuiInventoryEditData(this.pplayer, editingParticle, 1, callbackList, callbackListPosition, OrdinaryColor.RANDOM));
+                    } else {
+                        editingParticle.setColorTransition(new ColorTransition(startColor, OrdinaryColor.RANDOM));
+                        callbackList.get(callbackListPosition + 1).run();
+                    }
+                });
+        this.actionButtons.add(setRandomColorButton);
+
+        // Which particle are we selecting?
+        // Display a light with either the number 1 or 2
+        ItemStack light = new ItemStack(Material.LIGHT);
+        BlockDataMeta blockDataMeta = (BlockDataMeta) light.getItemMeta();
+        if (blockDataMeta != null) {
+            Light lightData = (Light) Material.LIGHT.createBlockData();
+            lightData.setLevel(startColor == null ? 1 : 2);
+            blockDataMeta.setBlockData(lightData);
+            blockDataMeta.setDisplayName(localeManager.getLocaleMessage("gui-select-data-color-transition-" + (startColor == null ? "start" : "end")));
+        }
+        light.setItemMeta(blockDataMeta);
+
+        this.inventory.setItem(4, light);
+    }
+
+    /**
+     * Populates the Inventory with available vibration data options
+     *
+     * @param editingParticle      The ParticlePair that's being edited
+     * @param callbackList         The List of GuiInventoryEditFinishedCallbacks
+     * @param callbackListPosition The index of the callbackList we're currently at
+     */
+    private void populateVibrationData(ParticlePair editingParticle, List<Runnable> callbackList, int callbackListPosition) {
+        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
+
+        int slot = 21;
+        for (int i = 1; i <= 6; i++) {
+            int vibration = i * 10;
+            String formattedDisplayName = localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("gui-select-data-vibration", StringPlaceholders.single("ticks", vibration));
+            String formattedDescription = localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", localeManager.getLocaleMessage("gui-select-data-vibration", StringPlaceholders.single("ticks", vibration))));
+
+            // Vibration Buttons
+            GuiActionButton setColorButton = new GuiActionButton(
+                    slot,
+                    Material.SCULK_SENSOR,
+                    formattedDisplayName,
+                    new String[]{formattedDescription},
+                    (button, isShiftClick) -> {
+                        editingParticle.setVibration(new Vibration(vibration));
+                        callbackList.get(callbackListPosition + 1).run();
+                    });
+            this.actionButtons.add(setColorButton);
+
+            if (slot++ == 23) // Loop around
+                slot = 30;
         }
     }
 
@@ -442,10 +574,10 @@ public class GuiInventoryEditData extends GuiInventory {
      * A data class used for storing information about the color data
      */
     protected static class ColorData {
-        private DyeColor dyeColor;
-        private Material material;
-        private OrdinaryColor ordinaryColor;
-        private String nameKey;
+        private final DyeColor dyeColor;
+        private final Material material;
+        private final OrdinaryColor ordinaryColor;
+        private final String nameKey;
 
         public ColorData(DyeColor dyeColor, Material material, OrdinaryColor ordinaryColor, String nameKey) {
             this.dyeColor = dyeColor;

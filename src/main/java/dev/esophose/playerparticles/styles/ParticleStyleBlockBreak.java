@@ -63,7 +63,7 @@ public class ParticleStyleBlockBreak extends DefaultParticleStyle implements Lis
         this.particleSpeed = config.getDouble("particle-speed");
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
         ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
 

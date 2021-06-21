@@ -4,17 +4,16 @@ import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.util.inputparser.Parsable;
 import java.awt.Color;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ParsableOrdinaryColor extends Parsable<OrdinaryColor> {
 
-    private static Map<String, OrdinaryColor> colorNameMap;
+    public static final Map<String, OrdinaryColor> COLOR_NAME_MAP;
 
     static {
-        colorNameMap = new HashMap<String, OrdinaryColor>() {{
+        COLOR_NAME_MAP = new HashMap<String, OrdinaryColor>() {{
             this.put("red", new OrdinaryColor(255, 0, 0));
             this.put("orange", new OrdinaryColor(255, 140, 0));
             this.put("yellow", new OrdinaryColor(255, 255, 0));
@@ -53,7 +52,7 @@ public class ParsableOrdinaryColor extends Parsable<OrdinaryColor> {
         }
 
         // Try color names
-        OrdinaryColor namedColor = colorNameMap.get(input.toLowerCase());
+        OrdinaryColor namedColor = COLOR_NAME_MAP.get(input.toLowerCase());
         if (namedColor != null)
             return namedColor;
 
@@ -62,13 +61,6 @@ public class ParsableOrdinaryColor extends Parsable<OrdinaryColor> {
 
         // Use rgb
         return new OrdinaryColor(Integer.parseInt(input), Integer.parseInt(input2), Integer.parseInt(input3));
-    }
-
-    /**
-     * @return the color String to OrdinaryColor mapping
-     */
-    public static Map<String, OrdinaryColor> getColorNameMap() {
-        return Collections.unmodifiableMap(colorNameMap);
     }
     
 }
