@@ -275,17 +275,33 @@ public class ParticleManager extends Manager implements Listener, Runnable {
      * @param isLongRange If the particle can be viewed from long range
      */
     public void displayParticles(PPlayer pplayer, World world, ParticlePair particle, List<PParticle> particles, boolean isLongRange) {
+        this.displayParticles(pplayer, world, particle, particles, isLongRange, false);
+    }
+
+    /**
+     * An alternative method used for event styles
+     *
+     * @param pplayer The PPlayer the particles are spawning from, nullable for special cases
+     * @param world The world the particles are spawning in
+     * @param particle The ParticlePair to use for getting particle settings
+     * @param particles The particles to display
+     * @param isLongRange If the particle can be viewed from long range
+     * @param ignorePlayerState If the player's visibility state should be ignored
+     */
+    public void displayParticles(PPlayer pplayer, World world, ParticlePair particle, List<PParticle> particles, boolean isLongRange, boolean ignorePlayerState) {
         PermissionManager permissionManager = this.playerParticles.getManager(PermissionManager.class);
 
         Player player = null;
-        if (pplayer != null) {
-            if (!pplayer.isInAllowedRegion())
-                return;
-            player = pplayer.getPlayer();
-        }
+        if (!ignorePlayerState) {
+            if (pplayer != null) {
+                if (!pplayer.isInAllowedRegion())
+                    return;
+                player = pplayer.getPlayer();
+            }
 
-        if ((player != null && !ParticleUtils.isPlayerVisible(player)) || !permissionManager.isWorldEnabled(world.getName()))
-            return;
+            if ((player != null && !ParticleUtils.isPlayerVisible(player)) || !permissionManager.isWorldEnabled(world.getName()))
+                return;
+        }
 
         for (PParticle pparticle : particles)
             ParticleEffect.display(particle, pparticle, isLongRange, player);
