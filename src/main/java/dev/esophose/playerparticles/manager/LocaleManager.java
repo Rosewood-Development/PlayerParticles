@@ -9,6 +9,7 @@ import dev.esophose.playerparticles.locale.GermanLocale;
 import dev.esophose.playerparticles.locale.Locale;
 import dev.esophose.playerparticles.locale.RussianLocale;
 import dev.esophose.playerparticles.locale.SimplifiedChineseLocale;
+import dev.esophose.playerparticles.locale.SpanishLocale;
 import dev.esophose.playerparticles.locale.VietnameseLocale;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.particles.PPlayer;
@@ -90,6 +91,7 @@ public class LocaleManager extends Manager {
         this.registerLocale(new GermanLocale());
         this.registerLocale(new RussianLocale());
         this.registerLocale(new SimplifiedChineseLocale());
+        this.registerLocale(new SpanishLocale());
         this.registerLocale(new VietnameseLocale());
 
         File targetLocaleFile = new File(this.playerParticles.getDataFolder() + "/locale", Setting.LOCALE.getString() + ".lang");
