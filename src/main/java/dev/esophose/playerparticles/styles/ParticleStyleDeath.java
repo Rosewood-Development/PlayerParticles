@@ -71,33 +71,29 @@ public class ParticleStyleDeath extends DefaultParticleStyle implements Listener
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDeath(PlayerDeathEvent event) {
-
-        final EntityDamageEvent damageEvent = event.getEntity().getLastDamageCause();
-        if (damageEvent == null) return;
-
-        if (causes.contains(damageEvent.getCause())) return;
+        EntityDamageEvent damageEvent = event.getEntity().getLastDamageCause();
+        if (damageEvent != null && this.causes.contains(damageEvent.getCause()))
+            return;
 
         ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
         PPlayer pplayer = PlayerParticles.getInstance().getManager(DataManager.class).getPPlayer(event.getEntity().getUniqueId());
+        if (pplayer == null)
+            return;
 
+        Location location = event.getEntity().getLocation().clone().add(0, 1, 0);
         new BukkitRunnable() {
             private int totalDuration = 0;
-            final Location loc = event.getEntity().getLocation().clone().add(0, 1, 0);
 
             @Override
             public void run() {
-                for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.DEATH)) {
-                    particleManager.displayParticles(pplayer, event.getEntity().getWorld(), particle, DefaultStyles.DEATH.getParticles(particle, loc), false);
-                }
+                for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.DEATH))
+                    particleManager.displayParticles(pplayer, event.getEntity().getWorld(), particle, DefaultStyles.DEATH.getParticles(particle, location), false);
 
-                this.totalDuration += ticksPerParticle;
-                if (this.totalDuration > targetDuration)
+                this.totalDuration += ParticleStyleDeath.this.ticksPerParticle;
+                if (this.totalDuration > ParticleStyleDeath.this.targetDuration)
                     this.cancel();
-
             }
-
-        }.runTaskTimer(PlayerParticles.getInstance(), 0, ticksPerParticle);
-
+        }.runTaskTimer(PlayerParticles.getInstance(), 0, this.ticksPerParticle);
     }
 
 }
