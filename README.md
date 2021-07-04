@@ -5,7 +5,7 @@ or blocks with any particle effect in the game with a plethora of skillfully cra
 
 ### Wiki
 
-For information about how to use the plugin or API within the plugin, please refer to the [Wiki](https://github.com/Esophose/PlayerParticles/wiki)
+For information about how to use the plugin or API within the plugin, please refer to the [Wiki](https://github.com/Rosewood-Development/PlayerParticles/wiki)
 
 ### Server Compatibility 
 This plugin is compatible with [Spigot](https://www.spigotmc.org/) and any forks, I recommend using [Paper](https://papermc.io/). 
