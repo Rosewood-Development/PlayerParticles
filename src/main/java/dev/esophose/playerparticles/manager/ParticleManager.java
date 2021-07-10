@@ -193,7 +193,7 @@ public class ParticleManager extends Manager implements Listener, Runnable {
             // Don't spawn particles if the world doesn't allow it
             if (player != null && ParticleUtils.isPlayerVisible(player) && permissionManager.isWorldEnabled(player.getWorld().getName()))
                 for (ParticlePair particles : pplayer.getActiveParticles())
-                    this.displayParticles(pplayer, particles, player.getLocation().clone().add(0, 1, 0));
+                    this.displayParticles(pplayer, particles, player.getEyeLocation().add(0, -0.6, 0));
             
             // Loop for FixedParticleEffects
             // Don't spawn particles if the world doesn't allow it
