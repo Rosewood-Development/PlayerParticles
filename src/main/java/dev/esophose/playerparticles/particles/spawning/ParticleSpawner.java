@@ -136,9 +136,9 @@ public abstract class ParticleSpawner {
         if (player == null || target == null)
             return true;
 
-        for (MetadataValue meta : target.getMetadata("vanished"))
+        /*for (MetadataValue meta : target.getMetadata("vanished"))
             if (meta.asBoolean())
-                return false;
+                return false;*/
 
         return player.canSee(target);
     }
