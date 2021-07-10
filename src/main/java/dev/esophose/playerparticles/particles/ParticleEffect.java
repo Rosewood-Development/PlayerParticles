@@ -114,7 +114,7 @@ public enum ParticleEffect {
     SWEEP_ATTACK("SWEEP_ATTACK", Arrays.asList("GOLDEN_SWORD", "GOLD_SWORD")),
     TOTEM_OF_UNDYING("TOTEM", Arrays.asList("TOTEM_OF_UNDYING", "TOTEM")),
     UNDERWATER("SUSPENDED_DEPTH", Arrays.asList("TURTLE_HELMET", "SPONGE")),
-    VIBRATION("VIBRATION", Collections.singletonList("SCULK_SENSOR"), false, ParticleProperty.VIBRATION),
+    VIBRATION("VIBRATION", Collections.singletonList("SCULK_SENSOR"), true, ParticleProperty.VIBRATION),
     WARPED_SPORE("WARPED_SPORE", Collections.singletonList("WARPED_FUNGUS")),
     WAX_OFF("WAX_OFF", Collections.singletonList("OXIDIZED_COPPER")),
     WAX_ON("WAX_ON", Collections.singletonList("WAXED_COPPER_BLOCK")),
@@ -378,8 +378,8 @@ public enum ParticleEffect {
             effect.display(data, pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), 1, pparticle.getLocation(false), isLongRange, owner);
         } else if (effect.hasProperty(ParticleProperty.VIBRATION)) {
             Vibration data;
-            if (pparticle.getOverrideData() instanceof Vibration) {
-                data = (Vibration) pparticle.getOverrideData();
+            if (pparticle.getOverrideData() instanceof org.bukkit.Vibration) {
+                data = new Vibration((org.bukkit.Vibration) pparticle.getOverrideData());
             } else {
                 data = particle.getVibration();
             }
