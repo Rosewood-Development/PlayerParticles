@@ -28,13 +28,13 @@ public class SpigotParticleSpawner extends ParticleSpawner {
     }
 
     @Override
-    public void display(ParticleEffect particleEffect, ParticleColor color, Location center, boolean isLongRange, Player owner) {
+    public void display(ParticleEffect particleEffect, ParticleColor color, Location center, boolean isLongRange, Player owner, float size) {
         if (!particleEffect.hasProperty(ParticleProperty.COLORABLE))
             throw new ParticleColorException("This particle effect is not colorable");
 
         if (particleEffect == ParticleEffect.DUST && NMSUtil.getVersionNumber() >= 13) { // DUST uses a special data object for spawning in 1.13+
             OrdinaryColor dustColor = (OrdinaryColor) color;
-            DustOptions dustOptions = new DustOptions(dustColor.toSpigot(), Setting.DUST_SIZE.getFloat());
+            DustOptions dustOptions = new DustOptions(dustColor.toSpigot(), size != 0 ? size : Setting.DUST_SIZE.getFloat());
             for (Player player : getPlayersInRange(center, isLongRange, owner))
                 player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), 1, 0, 0, 0, 0, dustOptions);
         } else {

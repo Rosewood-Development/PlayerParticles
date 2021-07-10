@@ -416,7 +416,7 @@ public enum ParticleEffect {
      * @throws ParticleColorException If the particle effect is not colorable or the color type is incorrect
      */
     public void display(ParticleColor color, Location center, boolean isLongRange, Player owner) {
-        particleSpawner.display(this, color, center, isLongRange, owner);
+        particleSpawner.display(this, color, center, isLongRange, owner, 1.0F);
     }
 
     /**

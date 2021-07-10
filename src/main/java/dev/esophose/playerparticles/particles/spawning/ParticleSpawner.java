@@ -41,9 +41,10 @@ public abstract class ParticleSpawner {
      * @param center Center location of the effect
      * @param isLongRange If the particle can be viewed from long range
      * @param owner The player that owns the particles
+     * @param size The size of the particle
      * @throws ParticleColorException If the particle effect is not colorable or the color type is incorrect
      */
-    public abstract void display(ParticleEffect particleEffect, ParticleColor color, Location center, boolean isLongRange, Player owner);
+    public abstract void display(ParticleEffect particleEffect, ParticleColor color, Location center, boolean isLongRange, Player owner, float size);
 
     /**
      * Displays a particle effect which requires additional data and is only

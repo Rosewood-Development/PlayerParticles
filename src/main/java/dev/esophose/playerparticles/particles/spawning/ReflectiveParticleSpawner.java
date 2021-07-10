@@ -34,7 +34,7 @@ public class ReflectiveParticleSpawner extends ParticleSpawner {
     }
 
     @Override
-    public void display(ParticleEffect particleEffect, ParticleColor color, Location center, boolean isLongRange, Player owner) {
+    public void display(ParticleEffect particleEffect, ParticleColor color, Location center, boolean isLongRange, Player owner, float size) {
         if (!particleEffect.hasProperty(ParticleProperty.COLORABLE))
             throw new ParticleColorException("This particle effect is not colorable");
 
