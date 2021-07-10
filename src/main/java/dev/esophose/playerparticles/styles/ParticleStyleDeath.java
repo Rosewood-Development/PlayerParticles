@@ -86,7 +86,7 @@ public class ParticleStyleDeath extends DefaultParticleStyle implements Listener
         if (pplayer == null)
             return;
 
-        Location location = event.getEntity().getLocation().clone().add(0, 1, 0);
+        Location location = event.getEntity().getLocation().add(0, 1, 0);
         new BukkitRunnable() {
             private int totalDuration = 0;
 

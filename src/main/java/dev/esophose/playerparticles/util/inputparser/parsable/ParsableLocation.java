@@ -28,7 +28,7 @@ public class ParsableLocation extends Parsable<Location> {
             if (targetBlock.getLocation().distanceSquared(player.getLocation()) > maxDistanceSqrd)
                 return null; // Looking at a block too far away
 
-            return targetBlock.getLocation().clone().add(0.5, 0.5, 0.5); // Center of block
+            return targetBlock.getLocation().add(0.5, 0.5, 0.5); // Center of block
         }
 
         String input2 = inputs.remove(0);
