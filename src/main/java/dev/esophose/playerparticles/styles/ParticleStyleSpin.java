@@ -7,6 +7,7 @@ import dev.esophose.playerparticles.util.MathL;
 import java.util.Collections;
 import java.util.List;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 public class ParticleStyleSpin extends DefaultParticleStyle {
 
@@ -28,6 +29,11 @@ public class ParticleStyleSpin extends DefaultParticleStyle {
         double newY = location.getY() + this.offset;
         double newZ = location.getZ() + this.radius * MathL.sin(slice);
         return Collections.singletonList(new PParticle(new Location(location.getWorld(), newX, newY, newZ)));
+    }
+
+    @Override
+    public List<PParticle> getParticles(ParticlePair particle, Location location, Player player) {
+        return null;
     }
 
     @Override

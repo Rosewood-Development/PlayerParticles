@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 public class ParticleStyleIcosphere extends DefaultParticleStyle {
@@ -78,6 +79,11 @@ public class ParticleStyleIcosphere extends DefaultParticleStyle {
         }
 
         return particles;
+    }
+
+    @Override
+    public List<PParticle> getParticles(ParticlePair particle, Location location, Player player) {
+        return null;
     }
 
     @Override

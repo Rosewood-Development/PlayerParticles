@@ -6,6 +6,7 @@ import dev.esophose.playerparticles.particles.ParticlePair;
 import java.util.Collections;
 import java.util.List;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 public class ParticleStylePoint extends DefaultParticleStyle {
 
@@ -18,6 +19,11 @@ public class ParticleStylePoint extends DefaultParticleStyle {
     @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         return Collections.singletonList(new PParticle(location.clone().add(0.0, this.offset, 0.0)));
+    }
+
+    @Override
+    public List<PParticle> getParticles(ParticlePair particle, Location location, Player player) {
+        return null;
     }
 
     @Override

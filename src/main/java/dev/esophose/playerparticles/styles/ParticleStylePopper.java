@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 public class ParticleStylePopper extends DefaultParticleStyle {
@@ -45,6 +46,11 @@ public class ParticleStylePopper extends DefaultParticleStyle {
                 particles.add(new PParticle(location.clone().add(0, this.popOffset, 0), this.popSpread, this.popSpread, this.popSpread, this.popSpeed));
 
         return particles;
+    }
+
+    @Override
+    public List<PParticle> getParticles(ParticlePair particle, Location location, Player player) {
+        return null;
     }
 
     @Override

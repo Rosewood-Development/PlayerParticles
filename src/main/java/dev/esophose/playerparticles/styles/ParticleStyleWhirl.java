@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 public class ParticleStyleWhirl extends DefaultParticleStyle {
 
@@ -39,6 +40,11 @@ public class ParticleStyleWhirl extends DefaultParticleStyle {
         }
 
         return particles;
+    }
+
+    @Override
+    public List<PParticle> getParticles(ParticlePair particle, Location location, Player player) {
+        return null;
     }
 
     private double getSpeedByEffect(ParticleEffect effect) {

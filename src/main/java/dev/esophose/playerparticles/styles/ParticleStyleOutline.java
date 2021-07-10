@@ -62,6 +62,11 @@ public class ParticleStyleOutline extends DefaultParticleStyle {
     }
 
     @Override
+    public List<PParticle> getParticles(ParticlePair particle, Location location, Player player) {
+        return null;
+    }
+
+    @Override
     public void updateTimers() {
         this.step = (this.step + 1) % this.spawnDelay;
     }

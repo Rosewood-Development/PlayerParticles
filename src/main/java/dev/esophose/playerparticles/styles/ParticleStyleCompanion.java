@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 public class ParticleStyleCompanion extends DefaultParticleStyle {
@@ -65,6 +66,11 @@ public class ParticleStyleCompanion extends DefaultParticleStyle {
             particles.add(new PParticle(location.clone().subtract(vector)));
 
         return particles;
+    }
+
+    @Override
+    public List<PParticle> getParticles(ParticlePair particle, Location location, Player player) {
+        return null;
     }
 
     @Override

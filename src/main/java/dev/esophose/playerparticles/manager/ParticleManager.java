@@ -260,9 +260,22 @@ public class ParticleManager extends Manager implements Listener, Runnable {
                 }
             }
 
-            for (PParticle pparticle : particle.getStyle().getParticles(particle, location))
+            for (PParticle pparticle : getParticlesWithPlayer(particle, location, pplayer.getPlayer()))
                 ParticleEffect.display(particle, pparticle, particle.getStyle().hasLongRangeVisibility(), pplayer.getPlayer());
         }  
+    }
+
+    /**
+     * Gets all particles with the player object, if no particles are returned it defaults to non-player method
+     *
+     * @param particle The ParticlePair that contains the particle's data
+     * @param location The central location of the particles
+     * @param player The player that the particles are spawning on - null for fixed effects
+     * @return A List of PParticles to spawn
+     */
+    private List<PParticle> getParticlesWithPlayer(ParticlePair particle, Location location, Player player){
+      List<PParticle> particles = particle.getStyle().getParticles(particle, location, player);
+      return particles != null ? particles :  particle.getStyle().getParticles(particle, location);
     }
 
     /**

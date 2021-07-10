@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 public class ParticleStyleBeam extends DefaultParticleStyle {
 
@@ -34,6 +35,11 @@ public class ParticleStyleBeam extends DefaultParticleStyle {
             particles.add(new PParticle(new Location(location.getWorld(), newX, newY, newZ)));
         }
         return particles;
+    }
+
+    @Override
+    public List<PParticle> getParticles(ParticlePair particle, Location location, Player player) {
+        return null;
     }
 
     @Override

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 public class ParticleStyleFeet extends DefaultParticleStyle {
 
@@ -25,6 +26,11 @@ public class ParticleStyleFeet extends DefaultParticleStyle {
         for (int i = 0; i < this.particlesPerTick; i++)
             particles.add(new PParticle(location.clone().add(0, this.feetOffset, 0), this.particleSpreadX, this.particleSpreadY, this.particleSpreadZ, this.particleSpeed));
         return particles;
+    }
+
+    @Override
+    public List<PParticle> getParticles(ParticlePair particle, Location location, Player player) {
+        return null;
     }
 
     @Override
