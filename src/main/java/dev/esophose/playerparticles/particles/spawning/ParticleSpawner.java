@@ -81,7 +81,7 @@ public abstract class ParticleSpawner {
      * @param owner The player that owns the particles
      * @throws ParticleDataException If the particle effect does not require additional data or if the data type is incorrect
      */
-    public abstract void display(ParticleEffect particleEffect, ColorTransition colorTransition, double offsetX, double offsetY, double offsetZ, int amount, Location center, boolean isLongRange, Player owner);
+    public abstract void display(ParticleEffect particleEffect, ColorTransition colorTransition, double offsetX, double offsetY, double offsetZ, int amount, Location center, boolean isLongRange, Player owner, float size);
 
     /**
      * Displays a particle effect which requires additional data and is only

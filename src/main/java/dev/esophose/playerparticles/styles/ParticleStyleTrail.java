@@ -34,10 +34,6 @@ public class ParticleStyleTrail extends DefaultParticleStyle implements Listener
         return Collections.singletonList(new PParticle(location.clone().add(0.0, this.offset, 0.0), this.spread, this.spread, this.spread, this.speed));
     }
 
-    @Override
-    public List<PParticle> getParticles(ParticlePair particle, Location location, Player player) {
-        return null;
-    }
 
     @Override
     public void updateTimers() {

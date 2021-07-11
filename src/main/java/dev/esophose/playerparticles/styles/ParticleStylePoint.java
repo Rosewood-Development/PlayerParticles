@@ -21,10 +21,6 @@ public class ParticleStylePoint extends DefaultParticleStyle {
         return Collections.singletonList(new PParticle(location.clone().add(0.0, this.offset, 0.0)));
     }
 
-    @Override
-    public List<PParticle> getParticles(ParticlePair particle, Location location, Player player) {
-        return null;
-    }
 
     @Override
     public void updateTimers() {

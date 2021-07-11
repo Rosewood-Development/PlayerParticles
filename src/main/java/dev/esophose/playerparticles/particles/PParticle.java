@@ -147,7 +147,7 @@ public class PParticle {
      *
      * @return The size
      */
-    public double getSize() {
+    public float getSize() {
         return this.size;
     }
 

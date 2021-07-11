@@ -58,7 +58,7 @@ public class ReflectiveParticleSpawner extends ParticleSpawner {
     }
 
     @Override
-    public void display(ParticleEffect particleEffect, ColorTransition colorTransition, double offsetX, double offsetY, double offsetZ, int amount, Location center, boolean isLongRange, Player owner) {
+    public void display(ParticleEffect particleEffect, ColorTransition colorTransition, double offsetX, double offsetY, double offsetZ, int amount, Location center, boolean isLongRange, Player owner,float size) {
         throw new IllegalStateException("This method is unavailable for legacy versions");
     }
 

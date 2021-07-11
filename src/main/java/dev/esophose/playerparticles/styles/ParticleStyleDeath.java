@@ -41,10 +41,6 @@ public class ParticleStyleDeath extends DefaultParticleStyle implements Listener
         return style.getParticles(particle, location);
     }
 
-    @Override
-    public List<PParticle> getParticles(ParticlePair particle, Location location, Player player) {
-        return null;
-    }
 
     @Override
     public void updateTimers() {

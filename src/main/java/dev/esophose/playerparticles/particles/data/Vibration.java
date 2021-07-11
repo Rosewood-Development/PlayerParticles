@@ -14,10 +14,10 @@ public class Vibration {
     }
 
     public int getDuration() {
-        return duration;
+        return this.duration;
     }
 
     public org.bukkit.Vibration getVibration() {
-        return vibration;
+        return this.vibration;
     }
 }

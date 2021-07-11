@@ -31,10 +31,6 @@ public class ParticleStyleSpin extends DefaultParticleStyle {
         return Collections.singletonList(new PParticle(new Location(location.getWorld(), newX, newY, newZ)));
     }
 
-    @Override
-    public List<PParticle> getParticles(ParticlePair particle, Location location, Player player) {
-        return null;
-    }
 
     @Override
     public void updateTimers() {

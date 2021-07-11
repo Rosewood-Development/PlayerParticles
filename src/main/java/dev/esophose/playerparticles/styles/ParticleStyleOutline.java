@@ -61,10 +61,6 @@ public class ParticleStyleOutline extends DefaultParticleStyle {
         return this.getHollowCube(corner1, corner2, this.particleDistance).stream().map(PParticle::new).collect(Collectors.toList());
     }
 
-    @Override
-    public List<PParticle> getParticles(ParticlePair particle, Location location, Player player) {
-        return null;
-    }
 
     @Override
     public void updateTimers() {

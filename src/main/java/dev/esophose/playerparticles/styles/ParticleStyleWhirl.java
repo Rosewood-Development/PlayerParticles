@@ -42,10 +42,6 @@ public class ParticleStyleWhirl extends DefaultParticleStyle {
         return particles;
     }
 
-    @Override
-    public List<PParticle> getParticles(ParticlePair particle, Location location, Player player) {
-        return null;
-    }
 
     private double getSpeedByEffect(ParticleEffect effect) {
         switch (effect) {

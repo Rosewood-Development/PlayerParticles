@@ -26,10 +26,12 @@ public interface ParticleStyle {
      *
      * @param particle The ParticlePair that contains the particle's data
      * @param location The central location of the particles
-     * @param player The player that the particles are spawning on - null for fixed effects
+     * @param player   The player that the particles are spawning on - null for fixed effects
      * @return A List of PParticles to spawn
      */
-    List<PParticle> getParticles(ParticlePair particle, Location location, Player player);
+    default List<PParticle> getParticles(ParticlePair particle, Location location, Player player) {
+        return null;
+    }
 
     /**
      * Used to update timers for animations, called once per particle tick
