@@ -44,8 +44,7 @@ public class ParticleStyleCelebration extends DefaultParticleStyle {
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         return new ArrayList<>();
     }
-
-
+    
     /**
      * Spawns fireworks every spawnTime number of ticks
      * This style uses two different effects, one is always 'firework'
