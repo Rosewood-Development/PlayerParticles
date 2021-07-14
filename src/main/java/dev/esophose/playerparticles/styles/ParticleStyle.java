@@ -8,6 +8,7 @@ import dev.esophose.playerparticles.util.ParticleUtils;
 import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 
 public interface ParticleStyle {
 
@@ -19,6 +20,18 @@ public interface ParticleStyle {
      * @return A List of PParticles to spawn
      */
     List<PParticle> getParticles(ParticlePair particle, Location location);
+
+    /**
+     * Gets all the particles to display based on the style's logic
+     *
+     * @param particle The ParticlePair that contains the particle's data
+     * @param location The central location of the particles
+     * @param player   The player that the particles are spawning on - null for fixed effects
+     * @return A List of PParticles to spawn
+     */
+    default List<PParticle> getParticles(ParticlePair particle, Location location, Player player) {
+        return null;
+    }
 
     /**
      * Used to update timers for animations, called once per particle tick

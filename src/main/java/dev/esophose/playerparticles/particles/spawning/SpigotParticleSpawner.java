@@ -28,13 +28,13 @@ public class SpigotParticleSpawner extends ParticleSpawner {
     }
 
     @Override
-    public void display(ParticleEffect particleEffect, ParticleColor color, Location center, boolean isLongRange, Player owner) {
+    public void display(ParticleEffect particleEffect, ParticleColor color, Location center, boolean isLongRange, Player owner, float size) {
         if (!particleEffect.hasProperty(ParticleProperty.COLORABLE))
             throw new ParticleColorException("This particle effect is not colorable");
 
         if (particleEffect == ParticleEffect.DUST && NMSUtil.getVersionNumber() >= 13) { // DUST uses a special data object for spawning in 1.13+
             OrdinaryColor dustColor = (OrdinaryColor) color;
-            DustOptions dustOptions = new DustOptions(dustColor.toSpigot(), Setting.DUST_SIZE.getFloat());
+            DustOptions dustOptions = new DustOptions(dustColor.toSpigot(), size > 0 ? size : Setting.DUST_SIZE.getFloat());
             for (Player player : getPlayersInRange(center, isLongRange, owner))
                 player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), 1, 0, 0, 0, 0, dustOptions);
         } else {
@@ -65,14 +65,14 @@ public class SpigotParticleSpawner extends ParticleSpawner {
     }
 
     @Override
-    public void display(ParticleEffect particleEffect, ColorTransition colorTransition, double offsetX, double offsetY, double offsetZ, int amount, Location center, boolean isLongRange, Player owner) {
+    public void display(ParticleEffect particleEffect, ColorTransition colorTransition, double offsetX, double offsetY, double offsetZ, int amount, Location center, boolean isLongRange, Player owner, float size) {
         if (NMSUtil.getVersionNumber() < 17)
             return;
 
         if (!particleEffect.hasProperty(ParticleProperty.COLORABLE_TRANSITION))
             throw new ParticleDataException("This particle effect does not require additional data");
 
-        org.bukkit.Particle.DustTransition dustTransition = new org.bukkit.Particle.DustTransition(colorTransition.getStartColor().toSpigot(), colorTransition.getEndColor().toSpigot(), Setting.DUST_SIZE.getFloat());
+        org.bukkit.Particle.DustTransition dustTransition = new org.bukkit.Particle.DustTransition(colorTransition.getStartColor().toSpigot(), colorTransition.getEndColor().toSpigot(), size > 0 ? size : Setting.DUST_SIZE.getFloat());
         for (Player player : getPlayersInRange(center, isLongRange, owner))
             player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, dustTransition);
     }

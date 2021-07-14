@@ -41,9 +41,10 @@ public abstract class ParticleSpawner {
      * @param center Center location of the effect
      * @param isLongRange If the particle can be viewed from long range
      * @param owner The player that owns the particles
+     * @param size The size of the particle
      * @throws ParticleColorException If the particle effect is not colorable or the color type is incorrect
      */
-    public abstract void display(ParticleEffect particleEffect, ParticleColor color, Location center, boolean isLongRange, Player owner);
+    public abstract void display(ParticleEffect particleEffect, ParticleColor color, Location center, boolean isLongRange, Player owner, float size);
 
     /**
      * Displays a particle effect which requires additional data and is only
@@ -80,7 +81,7 @@ public abstract class ParticleSpawner {
      * @param owner The player that owns the particles
      * @throws ParticleDataException If the particle effect does not require additional data or if the data type is incorrect
      */
-    public abstract void display(ParticleEffect particleEffect, ColorTransition colorTransition, double offsetX, double offsetY, double offsetZ, int amount, Location center, boolean isLongRange, Player owner);
+    public abstract void display(ParticleEffect particleEffect, ColorTransition colorTransition, double offsetX, double offsetY, double offsetZ, int amount, Location center, boolean isLongRange, Player owner, float size);
 
     /**
      * Displays a particle effect which requires additional data and is only
@@ -136,9 +137,9 @@ public abstract class ParticleSpawner {
         if (player == null || target == null)
             return true;
 
-        for (MetadataValue meta : target.getMetadata("vanished"))
+        /*for (MetadataValue meta : target.getMetadata("vanished"))
             if (meta.asBoolean())
-                return false;
+                return false;*/
 
         return player.canSee(target);
     }

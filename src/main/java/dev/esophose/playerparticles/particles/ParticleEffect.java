@@ -375,7 +375,7 @@ public enum ParticleEffect {
             } else {
                 data = particle.getSpawnColorTransition();
             }
-            effect.display(data, pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), 1, pparticle.getLocation(false), isLongRange, owner);
+            effect.display(data, pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), 1, pparticle.getLocation(false), isLongRange, owner, pparticle.getSize());
         } else if (effect.hasProperty(ParticleProperty.VIBRATION)) {
             Vibration data;
             if (pparticle.getOverrideData() instanceof Vibration) {
@@ -416,7 +416,7 @@ public enum ParticleEffect {
      * @throws ParticleColorException If the particle effect is not colorable or the color type is incorrect
      */
     public void display(ParticleColor color, Location center, boolean isLongRange, Player owner) {
-        particleSpawner.display(this, color, center, isLongRange, owner);
+        particleSpawner.display(this, color, center, isLongRange, owner, 1.0F);
     }
 
     /**
@@ -454,8 +454,8 @@ public enum ParticleEffect {
      * @param owner The player that owns the particles
      * @throws ParticleDataException If the particle effect does not require additional data or if the data type is incorrect
      */
-    public void display(ColorTransition colorTransition, double offsetX, double offsetY, double offsetZ, int amount, Location center, boolean isLongRange, Player owner) {
-        particleSpawner.display(this, colorTransition, offsetX, offsetY, offsetZ, amount, center, isLongRange, owner);
+    public void display(ColorTransition colorTransition, double offsetX, double offsetY, double offsetZ, int amount, Location center, boolean isLongRange, Player owner, float size) {
+        particleSpawner.display(this, colorTransition, offsetX, offsetY, offsetZ, amount, center, isLongRange, owner, size);
     }
 
     /**

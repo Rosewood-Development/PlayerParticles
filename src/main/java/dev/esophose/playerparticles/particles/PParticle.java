@@ -12,6 +12,7 @@ public class PParticle {
     private double xOff, yOff, zOff;
     private boolean directional;
     private Object overrideData;
+    private float size;
 
     /**
      * The constructor with all the fancy parameters and override data for customization
@@ -32,6 +33,26 @@ public class PParticle {
         this.speed = speed;
         this.directional = directional;
         this.overrideData = overrideData;
+    }
+    /**
+     * The constructor with all the fancy parameters and override data for customization
+     *
+     * @param location The location to display the particle at
+     * @param xOff The offset for the x-axis
+     * @param yOff The offset for the y-axis
+     * @param zOff The offset for the z-axis
+     * @param speed The speed the particle will move at
+     * @param directional If the particle should use the x, y, and z offsets as directions instead
+     * @param size Size of the redstone particle
+     */
+    public PParticle(Location location, double xOff, double yOff, double zOff, double speed, boolean directional, float size) {
+        this.location = location;
+        this.xOff = xOff;
+        this.yOff = yOff;
+        this.zOff = zOff;
+        this.speed = speed;
+        this.directional = directional;
+        this.size = size;
     }
 
     /**
@@ -119,6 +140,15 @@ public class PParticle {
      */
     public double getXOff() {
         return this.xOff;
+    }
+
+    /**
+     * Gets the size of the particle
+     *
+     * @return The size
+     */
+    public float getSize() {
+        return this.size;
     }
 
     /**

@@ -85,14 +85,14 @@ public class ParticleStyleTeleport extends DefaultParticleStyle implements Liste
 
         for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.TELEPORT)) {
             if (this.before) {
-                Location loc1 = player.getLocation().clone();
+                Location loc1 = player.getLocation();
                 loc1.setY(loc1.getY() + 1);
                 particleManager.displayParticles(pplayer, player.getWorld(), particle, DefaultStyles.TELEPORT.getParticles(particle, loc1), false);
             }
 
             if (this.after) {
                 Bukkit.getScheduler().runTaskLater(PlayerParticles.getInstance(), () -> {
-                    Location loc2 = player.getLocation().clone();
+                    Location loc2 = player.getLocation();
                     loc2.setY(loc2.getY() + 1);
                     particleManager.displayParticles(pplayer, player.getWorld(), particle, DefaultStyles.TELEPORT.getParticles(particle, loc2), false);
                 }, 1);
