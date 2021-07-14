@@ -87,66 +87,70 @@ public class PermissionManager extends Manager {
     public PermissionManager(PlayerParticles playerParticles) {
         super(playerParticles);
 
-        // Register plugin permissions to Bukkit
-        PluginManager pluginManager = Bukkit.getPluginManager();
+        try {
+            // Register plugin permissions to Bukkit
+            PluginManager pluginManager = Bukkit.getPluginManager();
 
-        Set<Permission> allPermissions = new HashSet<>();
+            Set<Permission> allPermissions = new HashSet<>();
 
-        // Effects
-        Map<String, Boolean> effectPermissions = new HashMap<>();
-        for (ParticleEffect effect : ParticleEffect.values()) {
-            if (!effect.isSupported())
-                continue;
+            // Effects
+            Map<String, Boolean> effectPermissions = new HashMap<>();
+            for (ParticleEffect effect : ParticleEffect.values()) {
+                if (!effect.isSupported())
+                    continue;
 
-            Permission permission = new Permission("playerparticles.effect." + effect.getInternalName());
-            pluginManager.addPermission(permission);
-            effectPermissions.put(permission.getName(), true);
+                Permission permission = new Permission("playerparticles.effect." + effect.getInternalName());
+                pluginManager.addPermission(permission);
+                effectPermissions.put(permission.getName(), true);
+            }
+
+            // Effects Wildcard
+            allPermissions.add(new Permission("playerparticles.effect.*", effectPermissions));
+
+            // Styles
+            Map<String, Boolean> stylePermissions = new HashMap<>();
+            for (ParticleStyle style : this.playerParticles.getManager(ParticleStyleManager.class).getStylesWithDisabled()) {
+                Permission permission = new Permission("playerparticles.style." + style.getInternalName());
+                pluginManager.addPermission(permission);
+                stylePermissions.put(permission.getName(), true);
+            }
+
+            // Styles Wildcard
+            allPermissions.add(new Permission("playerparticles.style.*", stylePermissions));
+
+            // Fixed
+            pluginManager.addPermission(new Permission("playerparticles.fixed"));
+            pluginManager.addPermission(new Permission("playerparticles.fixed.max"));
+            pluginManager.addPermission(new Permission("playerparticles.fixed.unlimited"));
+            pluginManager.addPermission(new Permission("playerparticles.fixed.clear"));
+            pluginManager.addPermission(new Permission("playerparticles.fixed.teleport"));
+
+            // Misc
+            pluginManager.addPermission(new Permission("playerparticles.reload"));
+            pluginManager.addPermission(new Permission("playerparticles.override"));
+            pluginManager.addPermission(new Permission("playerparticles.reset.others"));
+            pluginManager.addPermission(new Permission("playerparticles.gui"));
+
+            pluginManager.addPermission(new Permission("playerparticles.particles.max"));
+            pluginManager.addPermission(new Permission("playerparticles.particles.unlimited"));
+
+            pluginManager.addPermission(new Permission("playerparticles.groups.max"));
+            pluginManager.addPermission(new Permission("playerparticles.groups.unlimited"));
+
+            pluginManager.addPermission(new Permission("playerparticles.worldguard.bypass"));
+
+            // Register all non-child permissions
+            Map<String, Boolean> childPermissions = new HashMap<>();
+            for (Permission permission : allPermissions) {
+                pluginManager.addPermission(permission);
+                childPermissions.put(permission.getName(), true);
+            }
+
+            // Register all permissions as a child to the global plugin permission
+            pluginManager.addPermission(new Permission("playerparticles.*", childPermissions));
+        } catch (Exception e) {
+            playerParticles.getLogger().warning("Failed to register permissions dynamically. Did you load PlayerParticles through means other than a restart or reload?");
         }
-
-        // Effects Wildcard
-        allPermissions.add(new Permission("playerparticles.effect.*", effectPermissions));
-
-        // Styles
-        Map<String, Boolean> stylePermissions = new HashMap<>();
-        for (ParticleStyle style : this.playerParticles.getManager(ParticleStyleManager.class).getStylesWithDisabled()) {
-            Permission permission = new Permission("playerparticles.style." + style.getInternalName());
-            pluginManager.addPermission(permission);
-            stylePermissions.put(permission.getName(), true);
-        }
-
-        // Styles Wildcard
-        allPermissions.add(new Permission("playerparticles.style.*", stylePermissions));
-
-        // Fixed
-        pluginManager.addPermission(new Permission("playerparticles.fixed"));
-        pluginManager.addPermission(new Permission("playerparticles.fixed.max"));
-        pluginManager.addPermission(new Permission("playerparticles.fixed.unlimited"));
-        pluginManager.addPermission(new Permission("playerparticles.fixed.clear"));
-        pluginManager.addPermission(new Permission("playerparticles.fixed.teleport"));
-
-        // Misc
-        pluginManager.addPermission(new Permission("playerparticles.reload"));
-        pluginManager.addPermission(new Permission("playerparticles.override"));
-        pluginManager.addPermission(new Permission("playerparticles.reset.others"));
-        pluginManager.addPermission(new Permission("playerparticles.gui"));
-
-        pluginManager.addPermission(new Permission("playerparticles.particles.max"));
-        pluginManager.addPermission(new Permission("playerparticles.particles.unlimited"));
-
-        pluginManager.addPermission(new Permission("playerparticles.groups.max"));
-        pluginManager.addPermission(new Permission("playerparticles.groups.unlimited"));
-
-        pluginManager.addPermission(new Permission("playerparticles.worldguard.bypass"));
-
-        // Register all non-child permissions
-        Map<String, Boolean> childPermissions = new HashMap<>();
-        for (Permission permission : allPermissions) {
-            pluginManager.addPermission(permission);
-            childPermissions.put(permission.getName(), true);
-        }
-
-        // Register all permissions as a child to the global plugin permission
-        pluginManager.addPermission(new Permission("playerparticles.*", childPermissions));
     }
 
     @Override
