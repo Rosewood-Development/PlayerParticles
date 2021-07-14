@@ -42,7 +42,6 @@ public class ParticleStyleWhirlwind extends DefaultParticleStyle {
         return particles;
     }
 
-
     private double getSpeedByEffect(ParticleEffect effect) {
         switch (effect) {
             case CRIT:
