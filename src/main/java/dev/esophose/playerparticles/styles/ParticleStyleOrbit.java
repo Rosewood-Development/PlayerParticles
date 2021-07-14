@@ -33,7 +33,6 @@ public class ParticleStyleOrbit extends DefaultParticleStyle {
         return particles;
     }
 
-
     @Override
     public void updateTimers() {
         this.step = (this.step + 1) % this.numSteps;

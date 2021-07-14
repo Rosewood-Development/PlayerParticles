@@ -47,7 +47,6 @@ public class ParticleStyleSwords extends DefaultParticleStyle implements Listene
         return particles;
     }
 
-
     @Override
     public void updateTimers() {
 

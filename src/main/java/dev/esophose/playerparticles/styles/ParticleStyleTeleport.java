@@ -42,7 +42,6 @@ public class ParticleStyleTeleport extends DefaultParticleStyle implements Liste
         return particles;
     }
 
-
     @Override
     public void updateTimers() {
 

@@ -30,7 +30,6 @@ public class ParticleStyleOverhead extends DefaultParticleStyle {
         return particles;
     }
 
-
     @Override
     public void updateTimers() {
 

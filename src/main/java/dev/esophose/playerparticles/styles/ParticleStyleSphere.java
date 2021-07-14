@@ -37,7 +37,6 @@ public class ParticleStyleSphere extends DefaultParticleStyle {
         return particles;
     }
 
-
     @Override
     public void updateTimers() {
 

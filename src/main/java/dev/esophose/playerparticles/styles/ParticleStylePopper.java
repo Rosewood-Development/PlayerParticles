@@ -48,7 +48,6 @@ public class ParticleStylePopper extends DefaultParticleStyle {
         return particles;
     }
 
-
     @Override
     public void updateTimers() {
         this.step = (this.step + 1) % this.maxStep;

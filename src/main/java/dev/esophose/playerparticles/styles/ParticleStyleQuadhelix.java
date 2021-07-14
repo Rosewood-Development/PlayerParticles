@@ -36,7 +36,6 @@ public class ParticleStyleQuadhelix extends DefaultParticleStyle {
         return particles;
     }
 
-
     @Override
     public void updateTimers() {
         this.stepX++;

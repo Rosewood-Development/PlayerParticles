@@ -92,7 +92,6 @@ public class ParticleStyleCube extends DefaultParticleStyle {
         return pparticles;
     }
 
-
     @Override
     public void updateTimers() {
         this.skipNextStep = !this.skipNextStep;

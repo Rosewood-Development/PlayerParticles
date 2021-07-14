@@ -40,7 +40,6 @@ public class ParticleStyleHalo extends DefaultParticleStyle {
         return particles;
     }
 
-
     @Override
     public void updateTimers() {
         this.skipNextSpawn = !this.skipNextSpawn;

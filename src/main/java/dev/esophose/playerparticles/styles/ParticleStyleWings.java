@@ -37,7 +37,6 @@ public class ParticleStyleWings extends DefaultParticleStyle {
         return particles;
     }
 
-
     @Override
     public void updateTimers() {
         this.spawnTimer++;

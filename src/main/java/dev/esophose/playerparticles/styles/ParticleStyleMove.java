@@ -38,7 +38,6 @@ public class ParticleStyleMove extends DefaultParticleStyle implements Listener 
         return particles;
     }
 
-
     @Override
     public void updateTimers() {
 

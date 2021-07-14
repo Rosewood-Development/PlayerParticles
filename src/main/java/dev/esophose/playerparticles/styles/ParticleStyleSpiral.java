@@ -34,7 +34,6 @@ public class ParticleStyleSpiral extends DefaultParticleStyle {
         return particles;
     }
 
-
     @Override
     public void updateTimers() {
         this.stepX++;

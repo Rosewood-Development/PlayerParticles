@@ -131,7 +131,6 @@ public class ParticleStyleNormal extends DefaultParticleStyle {
         }
     }
 
-
     @Override
     public void updateTimers() {
 

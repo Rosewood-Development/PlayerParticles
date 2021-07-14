@@ -28,7 +28,6 @@ public class ParticleStyleFeet extends DefaultParticleStyle {
         return particles;
     }
 
-
     @Override
     public void updateTimers() {
 

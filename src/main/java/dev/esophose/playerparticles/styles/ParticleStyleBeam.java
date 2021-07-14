@@ -37,7 +37,6 @@ public class ParticleStyleBeam extends DefaultParticleStyle {
         return particles;
     }
 
-
     @Override
     public void updateTimers() {
         this.step += this.reversed ? -1 : 1;

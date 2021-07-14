@@ -39,7 +39,6 @@ public class ParticleStyleBlockPlace extends DefaultParticleStyle implements Lis
         return particles;
     }
 
-
     @Override
     public void updateTimers() {
 

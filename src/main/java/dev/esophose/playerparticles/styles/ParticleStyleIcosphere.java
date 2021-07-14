@@ -81,7 +81,6 @@ public class ParticleStyleIcosphere extends DefaultParticleStyle {
         return particles;
     }
 
-
     @Override
     public void updateTimers() {
         this.step++;

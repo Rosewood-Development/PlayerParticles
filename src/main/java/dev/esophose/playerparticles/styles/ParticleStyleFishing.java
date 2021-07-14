@@ -57,7 +57,6 @@ public class ParticleStyleFishing extends DefaultParticleStyle implements Listen
         return particles;
     }
 
-
     @Override
     public void updateTimers() {
 

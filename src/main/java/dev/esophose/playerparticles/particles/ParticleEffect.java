@@ -114,7 +114,7 @@ public enum ParticleEffect {
     SWEEP_ATTACK("SWEEP_ATTACK", Arrays.asList("GOLDEN_SWORD", "GOLD_SWORD")),
     TOTEM_OF_UNDYING("TOTEM", Arrays.asList("TOTEM_OF_UNDYING", "TOTEM")),
     UNDERWATER("SUSPENDED_DEPTH", Arrays.asList("TURTLE_HELMET", "SPONGE")),
-    VIBRATION("VIBRATION", Collections.singletonList("SCULK_SENSOR"), true, ParticleProperty.VIBRATION),
+    VIBRATION("VIBRATION", Collections.singletonList("SCULK_SENSOR"), false, ParticleProperty.VIBRATION),
     WARPED_SPORE("WARPED_SPORE", Collections.singletonList("WARPED_FUNGUS")),
     WAX_OFF("WAX_OFF", Collections.singletonList("OXIDIZED_COPPER")),
     WAX_ON("WAX_ON", Collections.singletonList("WAXED_COPPER_BLOCK")),

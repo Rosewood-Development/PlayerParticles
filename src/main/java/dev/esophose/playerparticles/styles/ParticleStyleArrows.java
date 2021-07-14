@@ -64,7 +64,6 @@ public class ParticleStyleArrows extends DefaultParticleStyle implements Listene
         return particles;
     }
 
-
     @Override
     public void updateTimers() {
 

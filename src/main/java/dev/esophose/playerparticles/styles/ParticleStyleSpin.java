@@ -31,7 +31,6 @@ public class ParticleStyleSpin extends DefaultParticleStyle {
         return Collections.singletonList(new PParticle(new Location(location.getWorld(), newX, newY, newZ)));
     }
 
-
     @Override
     public void updateTimers() {
         this.step = (this.step + 1) % this.maxSteps;
