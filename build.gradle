@@ -10,7 +10,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 compileJava.options.encoding = 'UTF-8'
 group = 'dev.esophose'
-version = '7.20'
+version = '7.21'
 
 java {
     withJavadocJar()
@@ -32,11 +32,10 @@ dependencies {
     api 'com.zaxxer:HikariCP:3.2.0'
     api 'org.bstats:bstats-bukkit-lite:1.7'
     api 'org.codemc.worldguardwrapper:worldguardwrapper:1.2.0-SNAPSHOT'
-    compileOnly 'com.googlecode.json-simple:json-simple:1.1.1'
     compileOnly 'org.jetbrains:annotations:16.0.2'
     compileOnly 'me.clip:placeholderapi:2.10.4'
     compileOnly 'org.xerial:sqlite-jdbc:3.23.1'
-    compileOnly 'org.spigotmc:spigot:1.17'
+    compileOnly 'org.spigotmc:spigot:1.17.1'
 }
 
 shadowJar {

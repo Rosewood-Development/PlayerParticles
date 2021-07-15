@@ -260,9 +260,9 @@ public class ParticleManager extends Manager implements Listener, Runnable {
                 }
             }
 
-            for (PParticle pparticle : getParticlesWithPlayer(particle, location, pplayer.getPlayer()))
+            for (PParticle pparticle : this.getParticlesWithPlayer(particle, location, pplayer.getPlayer()))
                 ParticleEffect.display(particle, pparticle, particle.getStyle().hasLongRangeVisibility(), pplayer.getPlayer());
-        }  
+        }
     }
 
     /**

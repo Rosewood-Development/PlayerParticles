@@ -452,6 +452,7 @@ public enum ParticleEffect {
      * @param center Center location of the effect
      * @param isLongRange If the particle can be viewed from long range
      * @param owner The player that owns the particles
+     * @param size The size of the particles
      * @throws ParticleDataException If the particle effect does not require additional data or if the data type is incorrect
      */
     public void display(ColorTransition colorTransition, double offsetX, double offsetY, double offsetZ, int amount, Location center, boolean isLongRange, Player owner, float size) {
