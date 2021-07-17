@@ -367,7 +367,7 @@ public enum ParticleEffect {
             } else {
                 data = particle.getSpawnColor();
             }
-            effect.display(data, pparticle.getLocation(true), isLongRange, owner);
+            effect.display(data, pparticle.getLocation(true), isLongRange, owner, pparticle.getSize());
         } else if (effect.hasProperty(ParticleProperty.COLORABLE_TRANSITION)) {
             ColorTransition data;
             if (pparticle.getOverrideData() instanceof ColorTransition) {
@@ -413,10 +413,11 @@ public enum ParticleEffect {
      * @param center Center location of the effect
      * @param isLongRange If the particle can be viewed from long range
      * @param owner The player that owns the particles
+     * @param size The size of the particles
      * @throws ParticleColorException If the particle effect is not colorable or the color type is incorrect
      */
-    public void display(ParticleColor color, Location center, boolean isLongRange, Player owner) {
-        particleSpawner.display(this, color, center, isLongRange, owner, 1.0F);
+    public void display(ParticleColor color, Location center, boolean isLongRange, Player owner, float size) {
+        particleSpawner.display(this, color, center, isLongRange, owner, size);
     }
 
     /**
