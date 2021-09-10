@@ -12,6 +12,7 @@ import dev.esophose.playerparticles.particles.data.ColorTransition;
 import dev.esophose.playerparticles.particles.data.NoteColor;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.particles.data.Vibration;
+import dev.esophose.playerparticles.util.CavesAndCliffsUtil;
 import dev.esophose.playerparticles.util.NMSUtil;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import dev.esophose.playerparticles.util.StringPlaceholders;
@@ -22,9 +23,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.block.data.type.Light;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BlockDataMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 
 @SuppressWarnings("deprecation")
 public class GuiInventoryEditData extends GuiInventory {
@@ -525,14 +525,12 @@ public class GuiInventoryEditData extends GuiInventory {
         // Which particle are we selecting?
         // Display a light with either the number 1 or 2
         ItemStack light = new ItemStack(Material.LIGHT);
-        BlockDataMeta blockDataMeta = (BlockDataMeta) light.getItemMeta();
-        if (blockDataMeta != null) {
-            Light lightData = (Light) Material.LIGHT.createBlockData();
-            lightData.setLevel(startColor == null ? 1 : 2);
-            blockDataMeta.setBlockData(lightData);
-            blockDataMeta.setDisplayName(localeManager.getLocaleMessage("gui-select-data-color-transition-" + (startColor == null ? "start" : "end")));
+        ItemMeta itemMeta = light.getItemMeta();
+        if (itemMeta != null) {
+            CavesAndCliffsUtil.setLightLevel(itemMeta, startColor == null ? 1 : 2);
+            itemMeta.setDisplayName(localeManager.getLocaleMessage("gui-select-data-color-transition-" + (startColor == null ? "start" : "end")));
+            light.setItemMeta(itemMeta);
         }
-        light.setItemMeta(blockDataMeta);
 
         this.inventory.setItem(4, light);
     }

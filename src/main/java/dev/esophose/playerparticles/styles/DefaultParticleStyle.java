@@ -54,8 +54,8 @@ public abstract class DefaultParticleStyle implements ParticleStyle {
         this.setIfNotExists("style-name", this.internalStyleName, "The name the style will display as");
         this.setIfNotExists("enabled", true, "If the style is enabled or not");
         this.setIfNotExists("can-be-fixed", this.canBeFixedByDefault, "If the style can be used in /pp fixed");
-        this.setIfNotExists("can-toggle-with-movement", this.canToggleWithMovementByDefault, "If the style will only be shown at the player's feet while moving");
-        this.setIfNotExists("can-toggle-with-combat", this.canToggleWithCombatByDefault, "If particles for this style will be hidden if the player is in combat");
+        this.setIfNotExists("can-toggle-with-movement", this.canToggleWithMovementByDefault, "If the style will toggle to a different appearance when the player is moving", "Also requires the setting in the config.yml to be enabled");
+        this.setIfNotExists("can-toggle-with-combat", this.canToggleWithCombatByDefault, "If particles for this style will be hidden if the player is in combat", "Also requires the setting in the config.yml to be enabled");
         this.setIfNotExists("fixed-effect-offset", this.fixedEffectOffsetByDefault, "How far vertically to offset the style position for fixed effects");
         this.setIfNotExists("gui-icon-material", this.getGuiIconMaterialNames(), "The material of the icon to display in the GUI");
 

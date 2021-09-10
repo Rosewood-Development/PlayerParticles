@@ -52,8 +52,8 @@ public class ParticleStyleDeath extends DefaultParticleStyle implements Listener
 
     @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
-        this.setIfNotExists("style", "whirl", "The name of the style to be displayed.");
-        this.setIfNotExists("target-duration", 60, "How long to display the particles for.");
+        this.setIfNotExists("style", "whirl", "The name of the style to be displayed");
+        this.setIfNotExists("target-duration", 60, "How long to display the particles for");
         this.setIfNotExists("disabled-causes", Collections.singletonList("DROWNING"), "What damage types shouldn't spawn particles?");
     }
 
@@ -61,12 +61,9 @@ public class ParticleStyleDeath extends DefaultParticleStyle implements Listener
     protected void loadSettings(CommentedFileConfiguration config) {
         this.style = config.getString("style");
         this.targetDuration = config.getInt("target-duration");
-
-        // Nicole you may wanna clean this up a bit
         this.causes = config.getStringList("disabled-causes").stream()
                 .map(s -> EntityDamageEvent.DamageCause.valueOf(s.toUpperCase()))
                 .collect(Collectors.toList());
-
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

@@ -8,7 +8,7 @@ import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.particles.data.ParticleColor;
 import dev.esophose.playerparticles.particles.data.Vibration;
 import dev.esophose.playerparticles.util.NMSUtil;
-import dev.esophose.playerparticles.util.VibrationUtil;
+import dev.esophose.playerparticles.util.CavesAndCliffsUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle.DustOptions;
@@ -82,7 +82,7 @@ public class SpigotParticleSpawner extends ParticleSpawner {
         if (NMSUtil.getVersionNumber() < 17)
             return;
 
-        VibrationUtil.spawnParticles(particleEffect, vibration, offsetX, offsetY, offsetZ, amount, center, isLongRange, owner);
+        CavesAndCliffsUtil.spawnParticles(particleEffect, vibration, offsetX, offsetY, offsetZ, amount, center, isLongRange, owner);
     }
 
 }
