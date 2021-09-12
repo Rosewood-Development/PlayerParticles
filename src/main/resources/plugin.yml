@@ -9,5 +9,11 @@ softdepend: [PlaceholderAPI, WorldGuard, WorldEdit]
 commands:
   pp:
     description: The main PlayerParticles command. By default, opens the GUI.
+    permissions: playerparticles.basecommand
   ppo:
     description: Allows executing a /pp command for another player.
+    permissions: playerparticles.override
+permissions:
+  playerparticles.basecommand:
+    description: Allows using the PlayerParticles commands
+    default: true
