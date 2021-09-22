@@ -1,3 +1,22 @@
+=== v7.22 ===
++ Added a permission playerparticles.basecommand (granted by default) which can be revoked to block access to /pp
++ Added Polish (po_PO) translation
+* Fixed a ClassDefNotFoundError when editing particle data in the GUI on versions below 1.13
+* Fixed the dust-size not working for dust particles
+=== v7.21 ===
++ Added new API functionality for styles
+* Particles now center based on the player's eye height instead of 1 block above their feet
+* Fixed an issue where NPC deaths would spam errors in console
+=== v7.20 ===
++ Added 1.17 support
++ Added new style 'death'
++ Added new style 'icosphere' (Very experimental, not recommended to use)
++ Command blocks can now be used to create fixed particle effects
+* Fixed celebration style particles not appearing as a fixed effect when the owner is invisible
+* Optimized move and trail styles
+* Capitalized data type titles in the GUI
+* Color names are now capitalized and use hex codes
+* PParticles can now override the data that will be used (API usage only)
 === v7.19 ===
 + Added the ability to toggle particles from the main GUI
 * Fixed fixed effects always getting deleted on join when the check-permissions-on-login setting is enabled
