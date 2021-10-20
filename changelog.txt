@@ -1,6 +1,6 @@
 === v7.22 ===
 + Added a permission playerparticles.basecommand (granted by default) which can be revoked to block access to /pp
-+ Added Polish (po_PO) translation
++ Added Polish (pl_PL) translation
 * Fixed a ClassDefNotFoundError when editing particle data in the GUI on versions below 1.13
 * Fixed the dust-size not working for dust particles
 === v7.21 ===
