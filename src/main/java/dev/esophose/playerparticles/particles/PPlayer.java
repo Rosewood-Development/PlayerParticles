@@ -37,6 +37,11 @@ public class PPlayer {
      * If True, the player will not see any particles spawned by the plugin
      */
     private boolean particlesHidden;
+
+    /**
+     * If True, the player will not see their own particles spawned by the plugin (excludes fixed effects)
+     */
+    private boolean particlesHiddenSelf;
     
     /**
      * If the player is moving
@@ -60,13 +65,16 @@ public class PPlayer {
      * @param particleGroups The ParticleGroups this PPlayer has
      * @param fixedParticles The FixedParticleEffects this PPlayer has
      * @param particlesHidden If this player has all particles hidden from view
+     * @param particlesHiddenSelf If this player has their own particles hidden from view
      */
-    public PPlayer(UUID uuid, Map<String, ParticleGroup> particleGroups, Map<Integer, FixedParticleEffect> fixedParticles, boolean particlesHidden) {
+    public PPlayer(UUID uuid, Map<String, ParticleGroup> particleGroups, Map<Integer, FixedParticleEffect> fixedParticles, boolean particlesHidden, boolean particlesHiddenSelf) {
         this.playerUUID = uuid;
         this.particleGroups = particleGroups;
         this.fixedParticles = fixedParticles;
         
         this.particlesHidden = particlesHidden;
+        this.particlesHiddenSelf = particlesHiddenSelf;
+
         this.isMoving = false;
         this.inCombat = false;
         this.inAllowedRegion = true;
@@ -114,6 +122,15 @@ public class PPlayer {
     public boolean canSeeParticles() {
         return !this.particlesHidden;
     }
+
+    /**
+     * Gets if the Player can see their own particles spawned by the plugin or not
+     *
+     * @return True if the player can see their own particles, otherwise false
+     */
+    public boolean canSeeOwnParticles() {
+        return !this.particlesHiddenSelf;
+    }
     
     /**
      * Sets if the player can see particles spawned by the plugin or not
@@ -122,6 +139,15 @@ public class PPlayer {
      */
     public void setParticlesHidden(boolean hidden) {
         this.particlesHidden = hidden;
+    }
+
+    /**
+     * Sets if the player can see their own particles spawned by the plugin or not
+     *
+     * @param hidden True if the player can see their own particles, otherwise false
+     */
+    public void setParticlesHiddenSelf(boolean hidden) {
+        this.particlesHiddenSelf = hidden;
     }
 
     /**

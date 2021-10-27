@@ -6,6 +6,7 @@ import dev.esophose.playerparticles.database.DatabaseConnector;
 import dev.esophose.playerparticles.database.SQLiteConnector;
 import dev.esophose.playerparticles.database.migrations._1_InitialMigration;
 import dev.esophose.playerparticles.database.migrations._2_Add_Data_Columns;
+import dev.esophose.playerparticles.database.migrations._3_Add_Setting_Toggle_Self_Column;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Arrays;
@@ -15,14 +16,15 @@ import java.util.stream.Collectors;
 
 public class DataMigrationManager extends Manager {
 
-    private List<DataMigration> migrations;
+    private final List<DataMigration> migrations;
 
     public DataMigrationManager(PlayerParticles playerParticles) {
         super(playerParticles);
 
         this.migrations = Arrays.asList(
                 new _1_InitialMigration(),
-                new _2_Add_Data_Columns()
+                new _2_Add_Data_Columns(),
+                new _3_Add_Setting_Toggle_Self_Column()
         );
     }
 

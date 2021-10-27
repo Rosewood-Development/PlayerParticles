@@ -11,7 +11,7 @@ public class ConsolePPlayer extends PPlayer {
     private static final UUID uuid = UUID.fromString("ffffffff-ffff-ffff-ffff-ffffffffffff");
 
     public ConsolePPlayer(Map<String, ParticleGroup> particleGroups, Map<Integer, FixedParticleEffect> fixedParticles) {
-        super(uuid, particleGroups, fixedParticles, false);
+        super(uuid, particleGroups, fixedParticles, false, false);
     }
 
     /**

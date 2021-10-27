@@ -58,6 +58,11 @@ public class ParticleStyleSwords extends DefaultParticleStyle implements Listene
     }
 
     @Override
+    public boolean hasLongRangeVisibility() {
+        return true;
+    }
+
+    @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
         this.setIfNotExists("multiplier", 15, "The multiplier for the number of particles to spawn", "This style uses the same spawning as the 'normal' style");
         this.setIfNotExists("sword-materials", DEFAULT_SWORD_NAMES, "The materails that are considered swords", "Set to [] to allow everything to be considered a sword", "Use AIR to allow a bare hand to be considered a sword");

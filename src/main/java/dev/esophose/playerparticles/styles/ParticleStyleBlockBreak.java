@@ -50,6 +50,11 @@ public class ParticleStyleBlockBreak extends DefaultParticleStyle implements Lis
     }
 
     @Override
+    public boolean hasLongRangeVisibility() {
+        return true;
+    }
+
+    @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
         this.setIfNotExists("particle-amount", 10, "The number of particles to spawn");
         this.setIfNotExists("particle-spread", 0.5, "The distance to spread particles");

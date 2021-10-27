@@ -53,6 +53,11 @@ public class ParticleStyleTeleport extends DefaultParticleStyle implements Liste
     }
 
     @Override
+    public boolean hasLongRangeVisibility() {
+        return true;
+    }
+
+    @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
         this.setIfNotExists("before", true, "Spawn the particles at the teleporting position");
         this.setIfNotExists("after", true, "Spawn the particles after the teleport in the new position");

@@ -117,7 +117,7 @@ public abstract class ParticleSpawner {
 
         for (PPlayer pplayer : PlayerParticles.getInstance().getManager(ParticleManager.class).getPPlayers().values()) {
             Player p = pplayer.getPlayer();
-            if (!canSee(p, owner))
+            if (!canSee(p, owner) || (!pplayer.canSeeOwnParticles() && p == owner && !isLongRange))
                 continue;
 
             if (p != null && pplayer.canSeeParticles() && p.getWorld().equals(center.getWorld()) && center.distanceSquared(p.getLocation()) <= range)

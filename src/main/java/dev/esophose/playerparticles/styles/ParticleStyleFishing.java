@@ -69,7 +69,7 @@ public class ParticleStyleFishing extends DefaultParticleStyle implements Listen
 
     @Override
     public boolean hasLongRangeVisibility() {
-        return false;
+        return true;
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

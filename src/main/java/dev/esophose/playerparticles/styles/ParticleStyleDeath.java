@@ -51,6 +51,11 @@ public class ParticleStyleDeath extends DefaultParticleStyle implements Listener
     }
 
     @Override
+    public boolean hasLongRangeVisibility() {
+        return true;
+    }
+
+    @Override
     protected void setDefaultSettings(CommentedFileConfiguration config) {
         this.setIfNotExists("style", "whirl", "The name of the style to be displayed");
         this.setIfNotExists("target-duration", 60, "How long to display the particles for");

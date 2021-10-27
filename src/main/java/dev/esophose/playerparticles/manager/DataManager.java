@@ -118,20 +118,23 @@ public class DataManager extends Manager {
             this.databaseConnector.connect((connection) -> {
                 // Load settings
                 boolean particlesHidden = false;
-                String settingsQuery = "SELECT particles_hidden FROM " + this.getTablePrefix() + "settings WHERE player_uuid = ?";
+                boolean particlesHiddenSelf = false;
+                String settingsQuery = "SELECT particles_hidden, particles_hidden_self FROM " + this.getTablePrefix() + "settings WHERE player_uuid = ?";
                 try (PreparedStatement statement = connection.prepareStatement(settingsQuery)) {
                     statement.setString(1, playerUUID.toString());
 
                     ResultSet result = statement.executeQuery();
                     if (result.next()) {
                         particlesHidden = result.getBoolean("particles_hidden");
+                        particlesHiddenSelf = result.getBoolean("particles_hidden_self");
                     } else {
                         statement.close();
 
-                        String updateQuery = "INSERT INTO " + this.getTablePrefix() + "settings (player_uuid, particles_hidden) VALUES (?, ?)";
+                        String updateQuery = "INSERT INTO " + this.getTablePrefix() + "settings (player_uuid, particles_hidden, particles_hidden_self) VALUES (?, ?)";
                         try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
                             updateStatement.setString(1, playerUUID.toString());
                             updateStatement.setBoolean(2, false);
+                            updateStatement.setBoolean(3, false);
 
                             updateStatement.executeUpdate();
                         }
@@ -259,7 +262,7 @@ public class DataManager extends Manager {
 
                 PPlayer loadedPPlayer;
                 if (!playerUUID.equals(ConsolePPlayer.getUUID())) {
-                    loadedPPlayer = new PPlayer(playerUUID, groups, fixedParticles, particlesHidden);
+                    loadedPPlayer = new PPlayer(playerUUID, groups, fixedParticles, particlesHidden, particlesHiddenSelf);
                 } else {
                     loadedPPlayer = new ConsolePPlayer(groups, fixedParticles);
                 }
@@ -297,6 +300,24 @@ public class DataManager extends Manager {
     public void updateSettingParticlesHidden(UUID playerUUID, boolean particlesHidden) {
         this.async(() -> this.databaseConnector.connect((connection) -> {
             String updateQuery = "UPDATE " + this.getTablePrefix() + "settings SET particles_hidden = ? WHERE player_uuid = ?";
+            try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
+                updateStatement.setBoolean(1, particlesHidden);
+                updateStatement.setString(2, playerUUID.toString());
+
+                updateStatement.executeUpdate();
+            }
+        }));
+    }
+
+    /**
+     * Updates the particles_hidden_self setting in the database and for the PPlayer
+     *
+     * @param playerUUID The player to hide their own PlayerParticles from
+     * @param particlesHidden True if the particles should be hidden, otherwise False
+     */
+    public void updateSettingParticlesHiddenSelf(UUID playerUUID, boolean particlesHidden) {
+        this.async(() -> this.databaseConnector.connect((connection) -> {
+            String updateQuery = "UPDATE " + this.getTablePrefix() + "settings SET particles_hidden_self = ? WHERE player_uuid = ?";
             try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
                 updateStatement.setBoolean(1, particlesHidden);
                 updateStatement.setString(2, playerUUID.toString());

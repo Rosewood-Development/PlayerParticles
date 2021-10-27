@@ -1125,6 +1125,22 @@ public final class PlayerParticlesAPI {
         dataManager.updateSettingParticlesHidden(player.getUniqueId(), particlesHidden);
     }
 
+    /**
+     * Toggles a player's particle visibility for their own particles on/off
+     *
+     * @param player The player to toggle visibility for
+     * @param particlesHidden true if the player's own particles should be hidden, or false for visible
+     */
+    public void togglePlayerParticleSelfVisibility(@NotNull Player player, boolean particlesHidden) {
+        DataManager dataManager = this.playerParticles.getManager(DataManager.class);
+        PPlayer pplayer = this.getPPlayer(player);
+        if (pplayer == null)
+            return;
+
+        pplayer.setParticlesHiddenSelf(particlesHidden);
+        dataManager.updateSettingParticlesHiddenSelf(player.getUniqueId(), particlesHidden);
+    }
+
     //endregion
 
 }
