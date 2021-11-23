@@ -35,6 +35,7 @@ public enum ParticleEffect {
     ASH("ASH", Collections.singletonList("BLACKSTONE")),
     BARRIER("BARRIER", Collections.singletonList("BARRIER")),
     BLOCK("BLOCK_CRACK", Collections.singletonList("STONE"), ParticleProperty.REQUIRES_MATERIAL_DATA),
+    BLOCK_MARKER("BLOCK_MARKER", Collections.singletonList("LIGHT"), ParticleProperty.REQUIRES_MATERIAL_DATA),
     BUBBLE("WATER_BUBBLE", Arrays.asList("BUBBLE_CORAL", "GLASS")),
     BUBBLE_COLUMN_UP("BUBBLE_COLUMN_UP", Collections.singletonList("MAGMA_BLOCK")),
     BUBBLE_POP("BUBBLE_POP", Collections.singletonList("BUBBLE_CORAL_FAN")),

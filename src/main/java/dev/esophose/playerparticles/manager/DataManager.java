@@ -130,7 +130,7 @@ public class DataManager extends Manager {
                     } else {
                         statement.close();
 
-                        String updateQuery = "INSERT INTO " + this.getTablePrefix() + "settings (player_uuid, particles_hidden, particles_hidden_self) VALUES (?, ?)";
+                        String updateQuery = "INSERT INTO " + this.getTablePrefix() + "settings (player_uuid, particles_hidden, particles_hidden_self) VALUES (?, ?, ?)";
                         try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
                             updateStatement.setString(1, playerUUID.toString());
                             updateStatement.setBoolean(2, false);

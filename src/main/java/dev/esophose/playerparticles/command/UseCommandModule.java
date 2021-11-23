@@ -87,7 +87,7 @@ public class UseCommandModule implements CommandModule {
                         primaryParticle.setColor(colorData);
                     }
                 } else if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-                    if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST) {
+                    if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST || effect == ParticleEffect.BLOCK_MARKER) {
                         Material blockData = inputParser.next(Material.class);
                         if (blockData == null || !blockData.isBlock()) {
                             localeManager.sendMessage(pplayer, "data-invalid-block");
@@ -177,7 +177,7 @@ public class UseCommandModule implements CommandModule {
                             }
                         }
                     } else if (args.length == 2 && effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-                        if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST) { // Block material
+                        if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST || effect == ParticleEffect.BLOCK_MARKER) { // Block material
                             possibleValues.addAll(ParticleUtils.BLOCK_MATERIALS_STRING);
                         } else if (effect == ParticleEffect.ITEM) { // Item material
                             possibleValues.addAll(ParticleUtils.ITEM_MATERIALS_STRING);
