@@ -393,4 +393,24 @@ public class CommentedConfigurationSection implements ConfigurationSection {
         this.config.addDefault(s, o);
     }
 
+    @Override
+    public List<String> getComments(String path) {
+        throw new IllegalStateException("CommentedConfigurationSection does not support Spigot-API comment methods.");
+    }
+
+    @Override
+    public List<String> getInlineComments(String path) {
+        throw new IllegalStateException("CommentedConfigurationSection does not support Spigot-API comment methods.");
+    }
+
+    @Override
+    public void setComments(String path, List<String> comments) {
+        throw new IllegalStateException("CommentedConfigurationSection does not support Spigot-API comment methods.");
+    }
+
+    @Override
+    public void setInlineComments(String path, List<String> comments) {
+        throw new IllegalStateException("CommentedConfigurationSection does not support Spigot-API comment methods.");
+    }
+
 }

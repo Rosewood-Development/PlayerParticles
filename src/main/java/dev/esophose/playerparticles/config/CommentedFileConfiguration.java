@@ -76,13 +76,25 @@ public class CommentedFileConfiguration extends CommentedConfigurationSection {
 
         // Edit the configuration to how we want it
         try {
-            Field field_yamlOptions = YamlConfiguration.class.getDeclaredField("yamlOptions");
+            Field field_yamlOptions;
+            try {
+                field_yamlOptions = YamlConfiguration.class.getDeclaredField("yamlOptions");
+            } catch (NoSuchFieldException e) { // This is used for 1.18.1+
+                field_yamlOptions = YamlConfiguration.class.getDeclaredField("yamlDumperOptions");
+            }
+
             field_yamlOptions.setAccessible(true);
             DumperOptions yamlOptions = (DumperOptions) field_yamlOptions.get(yamlConfiguration);
             yamlOptions.setWidth(Integer.MAX_VALUE);
 
             if (Stream.of(DumperOptions.class.getDeclaredMethods()).anyMatch(x -> x.getName().equals("setIndicatorIndent")))
                 yamlOptions.setIndicatorIndent(2);
+
+            if (Stream.of(DumperOptions.class.getDeclaredMethods()).anyMatch(x -> x.getName().equals("setProcessComments")))
+                yamlOptions.setProcessComments(false);
+
+            if (Stream.of(DumperOptions.class.getDeclaredMethods()).anyMatch(x -> x.getName().equals("setSplitLines")))
+                yamlOptions.setSplitLines(false);
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
         }
