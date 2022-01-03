@@ -35,7 +35,7 @@ public class ParticleStyleArrows extends DefaultParticleStyle implements Listene
         Bukkit.getScheduler().runTaskTimer(PlayerParticles.getInstance(), () -> {
             for (int i = this.projectiles.size() - 1; i >= 0; i--) {
                 Projectile projectile = this.projectiles.get(i);
-                if ((this.arrowTrackingTime != -1 && projectile.getTicksLived() >= this.arrowTrackingTime) || !projectile.isValid() || projectile.getShooter() == null)
+                if (projectile == null || (this.arrowTrackingTime != -1 && projectile.getTicksLived() >= this.arrowTrackingTime) || !projectile.isValid() || projectile.getShooter() == null)
                     this.projectiles.remove(i);
             }
         }, 0L, 5L);
@@ -49,6 +49,9 @@ public class ParticleStyleArrows extends DefaultParticleStyle implements Listene
         List<Projectile> listCopy = new ArrayList<>(this.projectiles); // Copy in case of modification while looping due to async
         for (int i = listCopy.size() - 1; i >= 0; i--) { // Loop backwards so the last-fired projectiles are the ones that have particles if they go over the max
             Projectile projectile = listCopy.get(i);
+            if (projectile == null) // This shouldn't even be possible yet somebody sent me a stacktrace with the projectile null anyway
+                continue;
+
             if (this.onlySpawnIfFlying && projectile.isOnGround())
                 continue;
 
