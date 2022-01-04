@@ -10,7 +10,7 @@ For information about how to use the plugin or API within the plugin, please ref
 ### Server Compatibility 
 This plugin is compatible with [Spigot](https://www.spigotmc.org/) and any forks, I recommend using [Paper](https://papermc.io/). 
 Using CraftBukkit will not work. 
-The versions of Minecraft that are currently supported are `1.7.10-1.17`.
+The versions of Minecraft that are currently supported are `1.7.10-1.18.1`.
 
 ### Compilation
 
