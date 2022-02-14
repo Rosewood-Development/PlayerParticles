@@ -2,12 +2,17 @@ package dev.esophose.playerparticles.styles;
 
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
+import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.esophose.playerparticles.particles.data.ColorTransition;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
+import dev.esophose.playerparticles.util.HexUtils;
 import dev.esophose.playerparticles.util.VectorUtils;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -46,7 +51,24 @@ public class ParticleStyleIcosphere extends DefaultParticleStyle {
         double yRotation = multiplier * this.angularVelocityY;
         double zRotation = multiplier * this.angularVelocityZ;
 
-        if (particle.getColor().equals(OrdinaryColor.RAINBOW)) {
+        if (particle.getEffect() == ParticleEffect.DUST_COLOR_TRANSITION) {
+            ColorTransition colorTransition = particle.getColorTransition();
+            Color startColor = new Color(colorTransition.getStartColor().getRed(), colorTransition.getStartColor().getGreen(), colorTransition.getStartColor().getBlue());
+            Color endColor = new Color(colorTransition.getEndColor().getRed(), colorTransition.getEndColor().getGreen(), colorTransition.getEndColor().getBlue());
+
+            List<Vector> sortedPoints = new ArrayList<>(points);
+            sortedPoints.sort(Comparator.comparingDouble(Vector::getY));
+
+            HexUtils.AnimatedGradient gradient = new HexUtils.AnimatedGradient(Arrays.asList(startColor, endColor), sortedPoints.size(), 2);
+
+            for (Vector point : sortedPoints) {
+                Color color = gradient.next();
+                OrdinaryColor ordinaryColor = new OrdinaryColor(color.getRed(), color.getGreen(), color.getBlue());
+                ColorTransition optionalData = new ColorTransition(ordinaryColor, ordinaryColor);
+                VectorUtils.rotateVector(point, xRotation, yRotation, zRotation);
+                particles.add(new PParticle(location.clone().add(point), 0, 0, 0, 0, false, optionalData));
+            }
+        } else if (particle.getColor().equals(OrdinaryColor.RAINBOW)) {
             double lowest = points.stream().mapToDouble(Vector::getY).min().orElse(1);
             double highest = points.stream().mapToDouble(Vector::getY).max().orElse(2);
             double range = highest - lowest;

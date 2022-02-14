@@ -10,6 +10,9 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
+/*
+ * Equations Source: https://www.desmos.com/calculator/cscx2zcrlf
+ */
 public class ParticleStyleBatman extends DefaultParticleStyle {
     
     private int step = 0;
