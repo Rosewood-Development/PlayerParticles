@@ -17,7 +17,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
-public class ParticleStyleBlockBreak extends DefaultParticleStyle implements Listener {
+public class ParticleStyleBlockBreak extends ConfiguredParticleStyle implements Listener {
 
     private int particleAmount;
     private double particleSpread;

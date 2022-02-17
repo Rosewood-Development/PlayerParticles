@@ -10,7 +10,7 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-public class ParticleStylePopper extends DefaultParticleStyle {
+public class ParticleStylePopper extends ConfiguredParticleStyle {
 
     private int step = 0;
 

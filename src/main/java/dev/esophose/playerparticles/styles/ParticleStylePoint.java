@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import org.bukkit.Location;
 
-public class ParticleStylePoint extends DefaultParticleStyle {
+public class ParticleStylePoint extends ConfiguredParticleStyle {
 
     private double offset;
 

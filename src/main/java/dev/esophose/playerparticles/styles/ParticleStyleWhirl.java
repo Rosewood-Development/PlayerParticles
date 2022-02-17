@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import org.bukkit.Location;
 
-public class ParticleStyleWhirl extends DefaultParticleStyle {
+public class ParticleStyleWhirl extends ConfiguredParticleStyle {
 
     private double step = 0;
 

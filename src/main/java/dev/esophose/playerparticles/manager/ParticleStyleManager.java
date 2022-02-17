@@ -4,12 +4,12 @@ import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.event.ParticleStyleRegistrationEvent;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleGroup;
+import dev.esophose.playerparticles.styles.ConfiguredParticleStyle;
 import dev.esophose.playerparticles.styles.DefaultStyles;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -27,8 +27,8 @@ public class ParticleStyleManager extends Manager {
     public ParticleStyleManager(PlayerParticles playerParticles) {
         super(playerParticles);
 
-        this.stylesByName = new LinkedHashMap<>();
-        this.stylesByInternalName = new LinkedHashMap<>();
+        this.stylesByName = new HashMap<>();
+        this.stylesByInternalName = new HashMap<>();
         this.eventStyles = new ArrayList<>();
 
         DefaultStyles.initStyles();
@@ -57,7 +57,6 @@ public class ParticleStyleManager extends Manager {
             Collection<ParticleStyle> eventStyles = event.getRegisteredEventStyles().values();
             List<ParticleStyle> styles = new ArrayList<>(event.getRegisteredStyles().values());
             styles.addAll(eventStyles);
-            styles.sort(Comparator.comparing(ParticleStyle::getName));
 
             for (ParticleStyle style : styles) {
                 try {
@@ -72,6 +71,9 @@ public class ParticleStyleManager extends Manager {
 
                     if (this.stylesByInternalName.containsKey(style.getInternalName().toLowerCase()))
                         throw new IllegalArgumentException("Tried to register two styles with the same internal name spelling: '" + style.getInternalName() + "'");
+
+                    if (style instanceof ConfiguredParticleStyle)
+                        ((ConfiguredParticleStyle) style).loadSettings();
 
                     this.stylesByName.put(style.getName().toLowerCase(), style);
                     this.stylesByInternalName.put(style.getInternalName().toLowerCase(), style);
@@ -90,6 +92,11 @@ public class ParticleStyleManager extends Manager {
 
     }
 
+    /**
+     * Removes all references of a ParticleStyle from all PPlayers
+     *
+     * @param style The style to remove
+     */
     public void removeAllStyleReferences(ParticleStyle style) {
         Collection<PPlayer> pplayers = this.playerParticles.getManager(ParticleManager.class).getPPlayers().values();
         for (PPlayer pplayer : pplayers) {
@@ -115,10 +122,14 @@ public class ParticleStyleManager extends Manager {
     }
 
     /**
-     * @return A List of styles that are registered and enabled
+     * @return A List of styles that are registered, enabled, and sorted by name
      */
-    public Collection<ParticleStyle> getStyles() {
-        return this.stylesByName.values().stream().filter(ParticleStyle::isEnabled).collect(Collectors.toList());
+    public List<ParticleStyle> getStyles() {
+        return this.stylesByName.entrySet().stream()
+                .filter(x -> x.getValue().isEnabled())
+                .sorted(Map.Entry.comparingByKey())
+                .map(Map.Entry::getValue)
+                .collect(Collectors.toList());
     }
 
     /**

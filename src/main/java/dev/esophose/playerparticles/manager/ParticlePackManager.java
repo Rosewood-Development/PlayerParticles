@@ -2,6 +2,8 @@ package dev.esophose.playerparticles.manager;
 
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.pack.ParticlePack;
+import dev.esophose.playerparticles.pack.ParticlePackDescription;
+import dev.esophose.playerparticles.pack.ParticlePackInitializationException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,11 +53,29 @@ public class ParticlePackManager extends Manager {
             if (particlePack == null)
                 continue;
 
+            ParticlePackDescription description = particlePack.getDescription();
+            if (description.getName() == null || description.getName().isEmpty()) {
+                this.playerParticles.getLogger().warning("Particle pack '" + file.getName() + "' has no name, skipping!");
+                continue;
+            }
+
+            if (description.getVersion() == null || description.getVersion().isEmpty()) {
+                this.playerParticles.getLogger().warning("Particle pack '" + description.getName() + "' has no version, skipping!");
+                continue;
+            }
+
+            ParticlePack possibleDuplicate = this.getParticlePack(description.getName());
+            if (possibleDuplicate != null) {
+                this.playerParticles.getLogger().warning("Found duplicate particle pack '" + description.getName() + "', overwriting!");
+                this.loadedPacks.values().remove(possibleDuplicate);
+            }
+
             this.loadedPacks.put(particlePack.getName(), particlePack);
-            this.playerParticles.getLogger().info("Loaded particle pack '" + particlePack.getName() + "' with " + particlePack.getNumberOfStyles() + " styles");
+            this.playerParticles.getLogger().info("Loaded particle pack '" + particlePack.getName() + " v" + particlePack.getDescription().getVersion() + "' with " + particlePack.getNumberOfStyles() + " style" + (particlePack.getNumberOfStyles() > 1 ? "s" : ""));
         }
 
-        this.playerParticles.getLogger().info("Loaded " + this.loadedPacks.size() + " particle pack" + (this.loadedPacks.size() > 1 ? "s" : "") + " with " + this.loadedPacks.values().stream().mapToInt(ParticlePack::getNumberOfStyles).sum() + " styles");
+        int numStyles = this.loadedPacks.values().stream().mapToInt(ParticlePack::getNumberOfStyles).sum();
+        this.playerParticles.getLogger().info("Loaded " + this.loadedPacks.size() + " particle pack" + (this.loadedPacks.size() > 1 ? "s" : "") + " with " + numStyles + " style" + (numStyles > 1 ? "s" : ""));
     }
 
     @Override
@@ -71,10 +91,33 @@ public class ParticlePackManager extends Manager {
         this.loadedPacks.clear();
     }
 
+    /**
+     * Gets the particle pack with the given name, case-insensitive
+     *
+     * @param packName The name of the particle pack
+     * @return The particle pack with the given name, or null if not found
+     */
+    public ParticlePack getParticlePack(String packName) {
+        return this.loadedPacks.entrySet().stream()
+                .filter(x -> x.getKey().equalsIgnoreCase(packName))
+                .map(Map.Entry::getValue)
+                .findFirst()
+                .orElse(null);
+    }
+
+    /**
+     * @return A collection of all loaded particle packs
+     */
     public Collection<ParticlePack> getLoadedParticlePacks() {
         return this.loadedPacks.values();
     }
 
+    /**
+     * Attempts to load a particle pack from the given file
+     *
+     * @param packJar The file to load the particle pack from
+     * @return The loaded particle pack, or null if the file is not a valid particle pack
+     */
     public ParticlePack load(File packJar) {
         try {
             URL jar = packJar.toURI().toURL();
@@ -89,8 +132,6 @@ public class ParticlePackManager extends Manager {
                     if (name.endsWith(".class"))
                         matches.add(name.substring(0, name.lastIndexOf('.')).replace('/', '.'));
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
 
             for (String match : matches) {
@@ -118,22 +159,24 @@ public class ParticlePackManager extends Manager {
                  Reader fileReader = new InputStreamReader(inputStream)) {
                 FileConfiguration particlePackConfig = YamlConfiguration.loadConfiguration(fileReader);
                 ParticlePack particlePack = classes.get(0).getDeclaredConstructor().newInstance();
-                Method initMethod = ParticlePack.class.getDeclaredMethod("init", PlayerParticles.class, FileConfiguration.class, URLClassLoader.class);
+                Method initMethod = ParticlePack.class.getDeclaredMethod("init", PlayerParticles.class, ParticlePackDescription.class, URLClassLoader.class);
                 initMethod.setAccessible(true);
-                initMethod.invoke(particlePack, this.playerParticles, particlePackConfig, classLoader);
+                initMethod.invoke(particlePack, this.playerParticles, new ParticlePackDescription(particlePackConfig), classLoader);
                 return particlePack;
-            } catch (ReflectiveOperationException e) {
-                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            throw new ParticlePackInitializationException(packJar.getName(), e);
         }
-
-        return null;
     }
 
+    /**
+     * Attempts to unload a particle pack with the given name
+     *
+     * @param packName The name of the particle pack to unload
+     * @return True if the particle pack was unloaded, false if it was not found or something went wrong
+     */
     public boolean unload(String packName) {
-        ParticlePack particlePack = this.loadedPacks.entrySet().stream().filter(x -> x.getKey().equalsIgnoreCase(packName)).map(Map.Entry::getValue).findFirst().orElse(null);
+        ParticlePack particlePack = this.getParticlePack(packName);
         if (particlePack == null)
             return false;
 
@@ -148,9 +191,13 @@ public class ParticlePackManager extends Manager {
             e.printStackTrace();
             return false;
         }
+
         return true;
     }
 
+    /**
+     * Moves particle packs in the plugins directory to the packs directory
+     */
     private void moveParticlePacksFromPluginsFolder() {
         File pluginsDirectory = this.playerParticles.getDataFolder().getParentFile();
         File[] files = pluginsDirectory.listFiles();
@@ -165,7 +212,7 @@ public class ParticlePackManager extends Manager {
                 this.playerParticles.getLogger().warning("Found particle pack in plugins directory, attempting to move to packs directory: " + file.getName());
 
                 // Move the jar to the packs folder
-                File newFile = new File(this.playerParticles.getDataFolder(), PACK_DIRECTORY_NAME + "/" + file.getName());
+                File newFile = new File(this.playerParticles.getDataFolder(), PACK_DIRECTORY_NAME + File.separator + file.getName());
                 if (newFile.exists()) {
                     this.playerParticles.getLogger().warning("Found duplicate particle pack when moving to packs directory, deleting old version: " + file.getName());
                     newFile.delete();
@@ -176,13 +223,16 @@ public class ParticlePackManager extends Manager {
         }
     }
 
+    /**
+     * Checks if the given file is a particle pack
+     *
+     * @param file The file to check
+     * @return True if the file is a particle pack, false otherwise
+     */
     private boolean isParticlePack(File file) {
         try {
-            // Try to find a file named "particle_pack.yml" in the jar
-            InputStream inputStream = new URL("jar:file:" + file.getAbsolutePath() + "!/" + INFO_FILE_NAME).openStream();
-
-            // Don't actually need the file, just wanted to check if it exists
-            inputStream.close();
+            // Try to find a file named "particle_pack.yml" in the jar and immediately discard it
+            new URL("jar:file:" + file.getAbsolutePath() + "!/" + INFO_FILE_NAME).openStream().close();
             return true;
         } catch (IOException e) {
             return false;

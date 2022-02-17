@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Location;
 
-public class ParticleStyleInvocation extends DefaultParticleStyle {
+public class ParticleStyleInvocation extends ConfiguredParticleStyle {
 
     private double step = 0;
     private int circleStep = 0;

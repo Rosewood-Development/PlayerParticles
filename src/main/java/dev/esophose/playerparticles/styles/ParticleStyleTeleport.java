@@ -19,7 +19,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
-public class ParticleStyleTeleport extends DefaultParticleStyle implements Listener {
+public class ParticleStyleTeleport extends ConfiguredParticleStyle implements Listener {
 
     private boolean before;
     private boolean after;

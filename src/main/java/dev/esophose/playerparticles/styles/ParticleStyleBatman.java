@@ -13,7 +13,7 @@ import org.bukkit.util.Vector;
 /*
  * Equations Source: https://www.desmos.com/calculator/cscx2zcrlf
  */
-public class ParticleStyleBatman extends DefaultParticleStyle {
+public class ParticleStyleBatman extends ConfiguredParticleStyle {
     
     private int step = 0;
 

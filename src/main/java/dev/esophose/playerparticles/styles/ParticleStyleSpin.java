@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import org.bukkit.Location;
 
-public class ParticleStyleSpin extends DefaultParticleStyle {
+public class ParticleStyleSpin extends ConfiguredParticleStyle {
 
     private int step = 0;
 

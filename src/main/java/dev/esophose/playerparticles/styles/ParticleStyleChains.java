@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import org.bukkit.Location;
 
-public class ParticleStyleChains extends DefaultParticleStyle {
+public class ParticleStyleChains extends ConfiguredParticleStyle {
 
     private int chainParticleAmount;
 

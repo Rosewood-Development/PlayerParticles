@@ -33,7 +33,7 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-public class ParticleStyleVortex extends DefaultParticleStyle {
+public class ParticleStyleVortex extends ConfiguredParticleStyle {
 
     private int step = 0;
 

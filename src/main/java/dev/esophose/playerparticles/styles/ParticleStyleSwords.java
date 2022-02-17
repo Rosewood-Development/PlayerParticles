@@ -21,7 +21,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class ParticleStyleSwords extends DefaultParticleStyle implements Listener {
+public class ParticleStyleSwords extends ConfiguredParticleStyle implements Listener {
 
     private static final List<String> DEFAULT_SWORD_NAMES;
 

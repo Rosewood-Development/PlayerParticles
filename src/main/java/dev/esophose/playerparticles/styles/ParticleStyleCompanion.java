@@ -33,7 +33,7 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-public class ParticleStyleCompanion extends DefaultParticleStyle {
+public class ParticleStyleCompanion extends ConfiguredParticleStyle {
 
     private int step = 0;
 

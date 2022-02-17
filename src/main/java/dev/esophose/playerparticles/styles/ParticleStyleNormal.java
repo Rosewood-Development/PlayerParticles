@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import org.bukkit.Location;
 
-public class ParticleStyleNormal extends DefaultParticleStyle {
+public class ParticleStyleNormal extends ConfiguredParticleStyle {
 
     protected ParticleStyleNormal() {
         super("normal", true, false, 0);

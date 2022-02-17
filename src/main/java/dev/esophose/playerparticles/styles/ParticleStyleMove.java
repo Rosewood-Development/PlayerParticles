@@ -17,7 +17,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-public class ParticleStyleMove extends DefaultParticleStyle implements Listener {
+public class ParticleStyleMove extends ConfiguredParticleStyle implements Listener {
 
     private final ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
     private final DataManager dataManager = PlayerParticles.getInstance().getManager(DataManager.class);

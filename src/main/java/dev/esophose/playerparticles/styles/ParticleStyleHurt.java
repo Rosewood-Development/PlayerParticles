@@ -17,7 +17,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 
-public class ParticleStyleHurt extends DefaultParticleStyle implements Listener {
+public class ParticleStyleHurt extends ConfiguredParticleStyle implements Listener {
 
     private int thickMultiplier;
 
