@@ -19,6 +19,7 @@ import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.Manager;
 import dev.esophose.playerparticles.manager.ParticleGroupPresetManager;
 import dev.esophose.playerparticles.manager.ParticleManager;
+import dev.esophose.playerparticles.manager.ParticlePackManager;
 import dev.esophose.playerparticles.manager.ParticleStyleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.manager.PluginUpdateManager;
@@ -70,9 +71,8 @@ public class PlayerParticles extends JavaPlugin {
         pm.registerEvents(new PPlayerCombatListener(), this);
         pm.registerEvents(new PlayerChatHook(), this);
 
-        if (Setting.SEND_METRICS.getBoolean())
-            if (NMSUtil.getVersionNumber() > 7)
-                new MetricsLite(this, 3531);
+        if (Setting.SEND_METRICS.getBoolean() && NMSUtil.getVersionNumber() > 7)
+            new MetricsLite(this, 3531);
 
         if (PlaceholderAPIHook.enabled())
             new ParticlePlaceholderExpansion(this).register();
@@ -128,6 +128,7 @@ public class PlayerParticles extends JavaPlugin {
 
         this.getManager(ConfigurationManager.class);
         this.getManager(LocaleManager.class);
+        this.getManager(ParticlePackManager.class);
         this.getManager(DataManager.class);
         this.getManager(PermissionManager.class);
         this.getManager(CommandManager.class);

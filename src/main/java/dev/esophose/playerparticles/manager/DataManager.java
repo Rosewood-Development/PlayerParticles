@@ -103,7 +103,6 @@ public class DataManager extends Manager {
      * @param callback The callback to execute with the found pplayer, or a newly generated one
      */
     public void getPPlayer(UUID playerUUID, Consumer<PPlayer> callback) {
-
         // Try to get them from cache first
         PPlayer fromCache = this.getPPlayer(playerUUID);
         if (fromCache != null) {

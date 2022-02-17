@@ -2,6 +2,8 @@ package dev.esophose.playerparticles.manager;
 
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.event.ParticleStyleRegistrationEvent;
+import dev.esophose.playerparticles.particles.PPlayer;
+import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.styles.DefaultStyles;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import java.util.ArrayList;
@@ -43,6 +45,13 @@ public class ParticleStyleManager extends Manager {
             // Call registration event
             // We use this event internally, so no other action needs to be done for us to register the default styles
             ParticleStyleRegistrationEvent event = new ParticleStyleRegistrationEvent();
+
+            // Register styles from particle packs
+            this.playerParticles.getManager(ParticlePackManager.class).getLoadedParticlePacks().forEach(pack -> {
+                pack.getStyles().forEach(event::registerStyle);
+                pack.getEventStyles().forEach(event::registerEventStyle);
+            });
+
             Bukkit.getPluginManager().callEvent(event);
 
             Collection<ParticleStyle> eventStyles = event.getRegisteredEventStyles().values();
@@ -79,6 +88,20 @@ public class ParticleStyleManager extends Manager {
     @Override
     public void disable() {
 
+    }
+
+    public void removeAllStyleReferences(ParticleStyle style) {
+        Collection<PPlayer> pplayers = this.playerParticles.getManager(ParticleManager.class).getPPlayers().values();
+        for (PPlayer pplayer : pplayers) {
+            // Remove all references to style from groups
+            pplayer.getParticleGroups().values().removeIf(group -> {
+                group.getParticles().values().removeIf(particle -> particle.getStyle().equals(style));
+                return group.getParticles().isEmpty() && !group.getName().equals(ParticleGroup.DEFAULT_NAME);
+            });
+
+            // Remove all references to style from fixed effects
+            pplayer.getFixedParticlesMap().values().removeIf(x -> x.getParticlePair().getStyle().equals(style));
+        }
     }
 
     /**
