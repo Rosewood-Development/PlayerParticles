@@ -151,6 +151,9 @@ public class FixedCommandModule implements CommandModule {
         }
 
         if (player != null) {
+            location.setYaw(player.getLocation().getYaw());
+            location.setPitch(player.getLocation().getPitch());
+
             double distanceFromEffect = player.getLocation().distance(location);
             int maxCreationDistance = permissionManager.getMaxFixedEffectCreationDistance();
             if (maxCreationDistance != 0 && distanceFromEffect > maxCreationDistance) {
@@ -292,6 +295,9 @@ public class FixedCommandModule implements CommandModule {
                 }
 
                 if (player != null) {
+                    location.setYaw(player.getLocation().getYaw());
+                    location.setPitch(player.getLocation().getPitch());
+
                     double distanceFromEffect = player.getLocation().distance(location);
                     int maxCreationDistance = permissionManager.getMaxFixedEffectCreationDistance();
                     if (maxCreationDistance != 0 && distanceFromEffect > maxCreationDistance) {
@@ -300,7 +306,7 @@ public class FixedCommandModule implements CommandModule {
                     }
                 }
 
-                fixedEffect.setCoordinates(location.getX(), location.getY(), location.getZ());
+                fixedEffect.setCoordinates(location);
                 break;
             case "effect": {
                 ParticleEffect effect = inputParser.next(ParticleEffect.class);

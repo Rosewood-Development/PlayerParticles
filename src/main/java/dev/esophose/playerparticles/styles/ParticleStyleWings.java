@@ -17,7 +17,7 @@ public class ParticleStyleWings extends ConfiguredParticleStyle {
     private int spawnDelay;
 
     protected ParticleStyleWings() {
-        super("wings", false, true, 0);
+        super("wings", true, true, 0);
     }
 
     @Override

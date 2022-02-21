@@ -90,4 +90,13 @@ public class FixedParticleEffect {
         this.location.setZ(z);
     }
 
+    /**
+     * Updates the coordinates of the FixedParticleEffect
+     *
+     * @param location The new Location
+     */
+    public void setCoordinates(Location location) {
+        this.location = location;
+    }
+
 }

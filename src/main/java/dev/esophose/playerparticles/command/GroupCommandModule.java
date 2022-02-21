@@ -163,10 +163,11 @@ public class GroupCommandModule implements CommandModule {
         // Update group and notify player
         PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), activeGroup);
         
-        if (!isPreset)
+        if (!isPreset) {
             localeManager.sendMessage(pplayer, "group-load-success", StringPlaceholders.builder("amount", activeGroup.getParticles().size()).addPlaceholder("name", groupName).build());
-        else
+        } else {
             localeManager.sendMessage(pplayer, "group-load-preset-success", StringPlaceholders.builder("amount", activeGroup.getParticles().size()).addPlaceholder("name", groupName).build());
+        }
     }
     
     /**

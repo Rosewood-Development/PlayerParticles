@@ -865,7 +865,7 @@ public final class PlayerParticlesAPI {
         if (fixedEffect == null)
             return null;
 
-        fixedEffect.setCoordinates(location.getX(), location.getY(), location.getZ());
+        fixedEffect.setCoordinates(location);
         dataManager.saveFixedEffect(fixedEffect);
         return fixedEffect;
     }
