@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Location;
 
-public class ParticleStyleHalo extends DefaultParticleStyle {
+public class ParticleStyleHalo extends ConfiguredParticleStyle {
 
     private boolean skipNextSpawn = false;
 

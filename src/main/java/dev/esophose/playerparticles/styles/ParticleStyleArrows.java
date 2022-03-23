@@ -17,7 +17,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 
-public class ParticleStyleArrows extends DefaultParticleStyle implements Listener {
+public class ParticleStyleArrows extends ConfiguredParticleStyle implements Listener {
 
     private List<Projectile> projectiles;
 

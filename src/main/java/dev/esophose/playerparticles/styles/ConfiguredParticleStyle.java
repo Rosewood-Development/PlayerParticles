@@ -3,22 +3,24 @@ package dev.esophose.playerparticles.styles;
 import com.google.common.collect.ObjectArrays;
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
+import dev.esophose.playerparticles.pack.ParticlePack;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import java.io.File;
 import java.util.List;
 import org.bukkit.Material;
 
-public abstract class DefaultParticleStyle implements ParticleStyle {
+public abstract class ConfiguredParticleStyle implements ParticleStyle {
 
     protected PlayerParticles playerParticles;
     private CommentedFileConfiguration config;
     private boolean changed;
 
-    private String internalStyleName;
-    private boolean canBeFixedByDefault;
-    private boolean canToggleWithMovementByDefault;
-    private boolean canToggleWithCombatByDefault;
-    private double fixedEffectOffsetByDefault;
+    private final ParticlePack owningPack;
+    private final String internalStyleName;
+    private final boolean canBeFixedByDefault;
+    private final boolean canToggleWithMovementByDefault;
+    private final boolean canToggleWithCombatByDefault;
+    private final double fixedEffectOffsetByDefault;
 
     private String styleName;
     private boolean enabled;
@@ -28,23 +30,31 @@ public abstract class DefaultParticleStyle implements ParticleStyle {
     private double fixedEffectOffset;
     private Material guiIconMaterial;
 
-    protected DefaultParticleStyle(String internalStyleName, boolean canBeFixedByDefault, boolean canToggleWithMovementByDefault, double fixedEffectOffsetByDefault) {
+    protected ConfiguredParticleStyle(String internalStyleName, boolean canBeFixedByDefault, boolean canToggleWithMovementByDefault, double fixedEffectOffsetByDefault) {
+        this(null, internalStyleName, canBeFixedByDefault, canToggleWithMovementByDefault, fixedEffectOffsetByDefault);
+    }
+
+    protected ConfiguredParticleStyle(ParticlePack owningPack, String internalStyleName, boolean canBeFixedByDefault, boolean canToggleWithMovementByDefault, double fixedEffectOffsetByDefault) {
+        this.owningPack = owningPack;
         this.internalStyleName = internalStyleName;
         this.canBeFixedByDefault = canBeFixedByDefault;
         this.canToggleWithMovementByDefault = canToggleWithMovementByDefault;
         this.canToggleWithCombatByDefault = true;
         this.fixedEffectOffsetByDefault = fixedEffectOffsetByDefault;
         this.playerParticles = PlayerParticles.getInstance();
-
-        this.setDefaultSettings();
-        this.loadSettings(false);
     }
 
     /**
-     * Sets the default settings shared for each style then calls setDefaultSettings(CommentedFileConfiguration)
+     * Sets the default settings shared for each style then calls {@link #setDefaultSettings(CommentedFileConfiguration)}
      */
     private void setDefaultSettings() {
-        File directory = new File(this.playerParticles.getDataFolder(), "styles");
+        File directory;
+        if (this.owningPack == null) {
+            directory = new File(this.playerParticles.getDataFolder(), "styles");
+        } else {
+            directory = this.owningPack.getConfigDirectory();
+        }
+
         directory.mkdirs();
 
         File file = new File(directory, this.internalStyleName + ".yml");
@@ -66,13 +76,10 @@ public abstract class DefaultParticleStyle implements ParticleStyle {
     }
 
     /**
-     * Loads the settings shared for each style then calls loadSettings(CommentedFileConfiguration)
-     *
-     * @param reloadConfig If the settings should be reloaded or not
+     * Loads the settings shared for each style then calls {@link #loadSettings(CommentedFileConfiguration)}
      */
-    public final void loadSettings(boolean reloadConfig) {
-        if (reloadConfig)
-            this.setDefaultSettings();
+    public final void loadSettings() {
+        this.setDefaultSettings();
 
         this.styleName = this.config.getString("style-name");
         this.enabled = this.config.getBoolean("enabled");

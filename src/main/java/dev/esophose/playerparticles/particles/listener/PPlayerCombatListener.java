@@ -21,7 +21,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 public class PPlayerCombatListener implements Listener {
 
     private static final int CHECK_INTERVAL = 20;
-    private Map<UUID, Integer> timeSinceCombat = new HashMap<>();
+    private final Map<UUID, Integer> timeSinceCombat = new HashMap<>();
 
     public PPlayerCombatListener() {
         DataManager dataManager = PlayerParticles.getInstance().getManager(DataManager.class);
@@ -31,7 +31,6 @@ public class PPlayerCombatListener implements Listener {
                 return;
 
             List<UUID> toRemove = new ArrayList<>();
-
             for (UUID uuid : this.timeSinceCombat.keySet()) {
                 PPlayer pplayer = dataManager.getPPlayer(uuid);
                 if (pplayer == null) {
@@ -50,13 +49,15 @@ public class PPlayerCombatListener implements Listener {
     }
 
     /**
-     * Used to detect if the player is moving
+     * Used to detect if the player is in combat
      *
      * @param event The event
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerAttack(EntityDamageByEntityEvent event) {
-        if (event.getEntity().getType() != EntityType.PLAYER)
+        boolean attackedIsPlayer = event.getEntity().getType() == EntityType.PLAYER;
+        boolean includeMobs = Setting.TOGGLE_ON_COMBAT_INCLUDE_MOBS.getBoolean();
+        if (!attackedIsPlayer && !includeMobs)
             return;
 
         Player attacker;
@@ -70,10 +71,10 @@ public class PPlayerCombatListener implements Listener {
             attacker = (Player) event.getDamager();
         } else return;
 
-        Player damaged = (Player) event.getEntity();
+        if (attackedIsPlayer)
+            this.markInCombat((Player) event.getEntity());
 
         this.markInCombat(attacker);
-        this.markInCombat(damaged);
     }
 
     /**

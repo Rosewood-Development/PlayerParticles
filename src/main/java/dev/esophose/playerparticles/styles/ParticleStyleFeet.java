@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Location;
 
-public class ParticleStyleFeet extends DefaultParticleStyle {
+public class ParticleStyleFeet extends ConfiguredParticleStyle {
 
     private double feetOffset;
     private double particleSpreadX, particleSpreadY, particleSpreadZ;

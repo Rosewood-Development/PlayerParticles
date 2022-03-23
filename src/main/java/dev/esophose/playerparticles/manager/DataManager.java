@@ -103,7 +103,6 @@ public class DataManager extends Manager {
      * @param callback The callback to execute with the found pplayer, or a newly generated one
      */
     public void getPPlayer(UUID playerUUID, Consumer<PPlayer> callback) {
-
         // Try to get them from cache first
         PPlayer fromCache = this.getPPlayer(playerUUID);
         if (fromCache != null) {
@@ -201,7 +200,7 @@ public class DataManager extends Manager {
                 }
 
                 // Load fixed effects
-                String fixedQuery = "SELECT f.id AS f_id, f.world, f.xPos, f.yPos, f.zPos, p.id AS p_id, p.effect, p.style, p.item_material, p.block_material, p.note, p.r, p.g, p.b, p.r_end, p.g_end, p.b_end, p.duration FROM " + this.getTablePrefix() + "fixed f " +
+                String fixedQuery = "SELECT f.id AS f_id, f.world, f.xPos, f.yPos, f.zPos, f.yaw, f.pitch, p.id AS p_id, p.effect, p.style, p.item_material, p.block_material, p.note, p.r, p.g, p.b, p.r_end, p.g_end, p.b_end, p.duration FROM " + this.getTablePrefix() + "fixed f " +
         						    "JOIN " + this.getTablePrefix() + "particle p ON f.particle_uuid = p.uuid " +
         						    "WHERE f.owner_uuid = ?";
                 try (PreparedStatement statement = connection.prepareStatement(fixedQuery)) {
@@ -214,6 +213,8 @@ public class DataManager extends Manager {
                         double xPos = result.getDouble("xPos");
                         double yPos = result.getDouble("yPos");
                         double zPos = result.getDouble("zPos");
+                        double yaw = result.getDouble("yaw");
+                        double pitch = result.getDouble("pitch");
                         World world = Bukkit.getWorld(result.getString("world"));
                         if (world == null) {
                             // World was deleted, remove the fixed effect as it is no longer valid
@@ -241,7 +242,7 @@ public class DataManager extends Manager {
                             continue;
                         }
 
-                        fixedParticles.put(fixedEffectId, new FixedParticleEffect(playerUUID, fixedEffectId, new Location(world, xPos, yPos, zPos), particle));
+                        fixedParticles.put(fixedEffectId, new FixedParticleEffect(playerUUID, fixedEffectId, new Location(world, xPos, yPos, zPos, (float) yaw, (float) pitch), particle));
                     }
                 }
 
@@ -492,7 +493,7 @@ public class DataManager extends Manager {
                 statement.executeUpdate();
             }
 
-            String fixedEffectQuery = "INSERT INTO " + this.getTablePrefix() + "fixed (owner_uuid, id, particle_uuid, world, xPos, yPos, zPos) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String fixedEffectQuery = "INSERT INTO " + this.getTablePrefix() + "fixed (owner_uuid, id, particle_uuid, world, xPos, yPos, zPos, yaw, pitch) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement statement = connection.prepareStatement(fixedEffectQuery)) {
                 statement.setString(1, fixedEffect.getOwnerUniqueId().toString());
                 statement.setInt(2, fixedEffect.getId());
@@ -501,6 +502,8 @@ public class DataManager extends Manager {
                 statement.setDouble(5, fixedEffect.getLocation().getX());
                 statement.setDouble(6, fixedEffect.getLocation().getY());
                 statement.setDouble(7, fixedEffect.getLocation().getZ());
+                statement.setDouble(8, fixedEffect.getLocation().getYaw());
+                statement.setDouble(9, fixedEffect.getLocation().getPitch());
                 statement.executeUpdate();
             }
         }));
@@ -514,13 +517,15 @@ public class DataManager extends Manager {
     public void updateFixedEffect(FixedParticleEffect fixedEffect) {
         this.async(() -> this.databaseConnector.connect((connection) -> {
             // Update fixed effect
-            String fixedEffectQuery = "UPDATE " + this.getTablePrefix() + "fixed SET xPos = ?, yPos = ?, zPos = ? WHERE owner_uuid = ? AND id = ?";
+            String fixedEffectQuery = "UPDATE " + this.getTablePrefix() + "fixed SET xPos = ?, yPos = ?, zPos = ?, yaw = ?, pitch = ? WHERE owner_uuid = ? AND id = ?";
             try (PreparedStatement statement = connection.prepareStatement(fixedEffectQuery)) {
                 statement.setDouble(1, fixedEffect.getLocation().getX());
                 statement.setDouble(2, fixedEffect.getLocation().getY());
                 statement.setDouble(3, fixedEffect.getLocation().getZ());
-                statement.setString(4, fixedEffect.getOwnerUniqueId().toString());
-                statement.setInt(5, fixedEffect.getId());
+                statement.setDouble(4, fixedEffect.getLocation().getYaw());
+                statement.setDouble(5, fixedEffect.getLocation().getPitch());
+                statement.setString(6, fixedEffect.getOwnerUniqueId().toString());
+                statement.setInt(7, fixedEffect.getId());
                 statement.executeUpdate();
             }
 
@@ -589,7 +594,7 @@ public class DataManager extends Manager {
     }
 
     /**
-     * Asynchronizes the callback with it's own thread unless it is already not on the main thread
+     * Asynchronizes the callback with its own thread unless it is already not on the main thread
      *
      * @param asyncCallback The callback to run on a separate thread
      */

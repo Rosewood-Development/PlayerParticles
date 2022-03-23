@@ -94,15 +94,22 @@ public class GuiManager extends Manager implements Listener, Runnable {
      * Used for when the plugin unloads so players can't take items from the GUI
      */
     public void forceCloseAllOpenGUIs() {
+        List<Player> toClose = new ArrayList<>();
         for (Player player : Bukkit.getOnlinePlayers()) {
             for (GuiInventory inventory : this.guiInventories) {
                 if (inventory.getPPlayer().getUniqueId().equals(player.getUniqueId()) && inventory.getInventory().equals(player.getOpenInventory().getTopInventory())) {
-                    player.closeInventory();
+                    toClose.add(player);
                     break;
                 }
             }
         }
         this.guiInventories.clear();
+
+        if (Bukkit.isPrimaryThread()) {
+            toClose.forEach(Player::closeInventory);
+        } else {
+            Bukkit.getScheduler().runTask(this.playerParticles, x -> toClose.forEach(Player::closeInventory));
+        }
     }
     
     /**

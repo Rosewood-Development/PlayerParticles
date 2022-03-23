@@ -23,6 +23,7 @@ import dev.esophose.playerparticles.command.ToggleCommandModule;
 import dev.esophose.playerparticles.command.UseCommandModule;
 import dev.esophose.playerparticles.command.VersionCommandModule;
 import dev.esophose.playerparticles.command.WorldsCommandModule;
+import dev.esophose.playerparticles.hook.PlaceholderAPIHook;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import java.util.ArrayList;
@@ -178,7 +179,11 @@ public class CommandManager extends Manager implements CommandExecutor, TabCompl
 
             return true;
         } else if (cmd.getName().equalsIgnoreCase("ppo")) {
-            Bukkit.getScheduler().runTask(this.playerParticles, () -> this.ppoCommand.onCommandExecute(sender, args));
+            String[] replacedArgs = new String[args.length];
+            Player player = sender instanceof Player ? (Player) sender : null;
+            for (int i = 0; i < args.length; i++)
+                replacedArgs[i] = PlaceholderAPIHook.applyPlaceholders(player, args[i]);
+            Bukkit.getScheduler().runTask(this.playerParticles, () -> this.ppoCommand.onCommandExecute(sender, replacedArgs));
         }
         
         return true;

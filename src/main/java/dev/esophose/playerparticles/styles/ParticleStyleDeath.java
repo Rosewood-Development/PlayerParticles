@@ -20,7 +20,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class ParticleStyleDeath extends DefaultParticleStyle implements Listener {
+public class ParticleStyleDeath extends ConfiguredParticleStyle implements Listener {
 
     private String style;
     private List<EntityDamageEvent.DamageCause> causes;

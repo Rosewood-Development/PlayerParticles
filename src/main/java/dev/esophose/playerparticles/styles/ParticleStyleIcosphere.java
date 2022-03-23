@@ -19,7 +19,7 @@ import java.util.Set;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-public class ParticleStyleIcosphere extends DefaultParticleStyle {
+public class ParticleStyleIcosphere extends ConfiguredParticleStyle {
 
     private int ticksPerSpawn;
     private double radius;

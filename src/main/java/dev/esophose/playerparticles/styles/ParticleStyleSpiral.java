@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import org.bukkit.Location;
 
-public class ParticleStyleSpiral extends DefaultParticleStyle {
+public class ParticleStyleSpiral extends ConfiguredParticleStyle {
 
     private int stepX = 0;
 

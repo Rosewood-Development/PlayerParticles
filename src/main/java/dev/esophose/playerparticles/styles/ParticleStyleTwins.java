@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Location;
 
-public class ParticleStyleTwins extends DefaultParticleStyle {
+public class ParticleStyleTwins extends ConfiguredParticleStyle {
 
     private int stepX = 0;
     private int stepY = 0;

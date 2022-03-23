@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Location;
 
-public class ParticleStyleThick extends DefaultParticleStyle {
+public class ParticleStyleThick extends ConfiguredParticleStyle {
 
     private int multiplier;
 

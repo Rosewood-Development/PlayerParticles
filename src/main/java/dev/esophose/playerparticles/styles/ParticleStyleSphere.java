@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Location;
 
-public class ParticleStyleSphere extends DefaultParticleStyle {
+public class ParticleStyleSphere extends ConfiguredParticleStyle {
 
     private int density;
     private double radius;

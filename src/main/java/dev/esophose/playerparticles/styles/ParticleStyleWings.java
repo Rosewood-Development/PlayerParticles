@@ -11,14 +11,13 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-public class ParticleStyleWings extends DefaultParticleStyle {
+public class ParticleStyleWings extends ConfiguredParticleStyle {
 
-    private int spawnTimer = 0; // Spawn particles every 3 ticks
-
+    private int spawnTimer;
     private int spawnDelay;
 
     protected ParticleStyleWings() {
-        super("wings", false, true, 0);
+        super("wings", true, true, 0);
     }
 
     @Override

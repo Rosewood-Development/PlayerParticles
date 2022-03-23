@@ -21,7 +21,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class ParticleStyleCelebration extends DefaultParticleStyle {
+public class ParticleStyleCelebration extends ConfiguredParticleStyle {
 
     private int step = 0;
 

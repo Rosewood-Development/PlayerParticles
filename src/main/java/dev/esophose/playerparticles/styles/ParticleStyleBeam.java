@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import org.bukkit.Location;
 
-public class ParticleStyleBeam extends DefaultParticleStyle {
+public class ParticleStyleBeam extends ConfiguredParticleStyle {
 
     private int step = 0;
     private boolean reversed = false;

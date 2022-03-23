@@ -15,7 +15,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-public class ParticleStyleOutline extends DefaultParticleStyle {
+public class ParticleStyleOutline extends ConfiguredParticleStyle {
 
     private double particleDistance;
     private int spawnDelay;

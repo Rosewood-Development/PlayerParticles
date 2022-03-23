@@ -17,7 +17,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 
-public class ParticleStyleBlockPlace extends DefaultParticleStyle implements Listener {
+public class ParticleStyleBlockPlace extends ConfiguredParticleStyle implements Listener {
 
     private int particleAmount;
     private double particleSpread;

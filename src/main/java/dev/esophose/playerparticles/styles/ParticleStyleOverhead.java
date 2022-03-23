@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import org.bukkit.Location;
 
-public class ParticleStyleOverhead extends DefaultParticleStyle {
+public class ParticleStyleOverhead extends ConfiguredParticleStyle {
 
     private double headOffset;
     private double particleSpreadX, particleSpreadY, particleSpreadZ;
