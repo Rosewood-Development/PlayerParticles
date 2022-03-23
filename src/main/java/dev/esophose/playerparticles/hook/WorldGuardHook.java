@@ -4,7 +4,7 @@ import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.codemc.worldguardwrapper.WorldGuardWrapper;
@@ -42,24 +42,30 @@ public class WorldGuardHook {
      * @param location The location to check
      * @return true if the location is in an allowed region, otherwise false
      */
+    @SuppressWarnings("unchecked")
     public static boolean isInAllowedRegion(Location location) {
         if (!enabled())
             return true;
 
-        Set<IWrappedRegion> regions = worldGuardWrapper.getRegions(location);
+        List<IWrappedRegion> regions = worldGuardWrapper.getRegions(location).stream()
+                .sorted(Comparator.comparing(IWrappedRegion::getPriority))
+                .collect(Collectors.toList());
 
         // Get the "player-particles" flag.
         // This will use the region priority to determine which one takes precedence.
         if (flagPlayerParticles != null) {
-            Optional<WrappedState> flagState = regions.stream()
-                    .sorted(Comparator.comparingInt(IWrappedRegion::getPriority))
-                    .map(region -> region.getFlag(flagPlayerParticles))
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .findFirst();
-
-            if (flagState.isPresent())
-                return flagState.get() == WrappedState.ALLOW;
+            for (IWrappedRegion region : regions) {
+                Optional<WrappedState> flagState = region.getFlag(flagPlayerParticles);
+                if (flagState.isPresent()) {
+                    Object value = flagState.get();
+                    // Fix a weird mismatch where the type in the compiler does not match the runtime type
+                    if (value instanceof WrappedState && value == WrappedState.DENY) {
+                        return false;
+                    } else if (value instanceof Optional && ((Optional<WrappedState>) value).get() == WrappedState.DENY) {
+                        return false;
+                    }
+                }
+            }
         }
 
         // Legacy blocking by region name.
