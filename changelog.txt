@@ -1,3 +1,9 @@
+=== v8.0 ===
++ Added support for Particle Packs
++ Added setting toggle-on-combat-include-mobs
+* Fixed particle effects now save the pitch/yaw of the player when they are created
+* Fixed an error when doing /pp reload if a player has the GUI open
+* The icosphere style now fades between dust colors when using the dust_color_transition effect
 === v7.24 ===
 * Fixed configs not generating properly on newer versions of 1.18.1
 === v7.23 ===
