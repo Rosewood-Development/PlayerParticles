@@ -108,7 +108,7 @@ public class GuiManager extends Manager implements Listener, Runnable {
         if (Bukkit.isPrimaryThread()) {
             toClose.forEach(Player::closeInventory);
         } else {
-            Bukkit.getScheduler().runTask(this.playerParticles, x -> toClose.forEach(Player::closeInventory));
+            Bukkit.getScheduler().runTask(this.playerParticles, () -> toClose.forEach(Player::closeInventory));
         }
     }
     
