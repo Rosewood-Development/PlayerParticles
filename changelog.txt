@@ -1,3 +1,5 @@
+=== v8.1 ===
+* Fixed the /pp reload command throwing an error on 1.12.2 or lower
 === v8.0 ===
 + Added support for Particle Packs (more information on this coming soon)
 + Added setting toggle-on-combat-include-mobs
