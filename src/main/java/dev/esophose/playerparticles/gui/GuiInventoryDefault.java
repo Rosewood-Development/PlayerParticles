@@ -3,6 +3,7 @@ package dev.esophose.playerparticles.gui;
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.api.PlayerParticlesAPI;
 import dev.esophose.playerparticles.manager.ConfigurationManager.GuiIcon;
+import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.manager.GuiManager;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.ParticleGroupPresetManager;
@@ -29,7 +30,7 @@ public class GuiInventoryDefault extends GuiInventory {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         GuiManager guiManager = PlayerParticles.getInstance().getManager(GuiManager.class);
 
-        this.fillBorder(BorderColor.WHITE);
+        this.fillBorder(BorderColor.getOrDefault(Setting.GUI_GLASS_COLORS_DEFAULT.getString(), BorderColor.WHITE));
 
         // PPlayer information icon
         ItemStack headIcon;

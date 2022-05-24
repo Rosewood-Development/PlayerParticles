@@ -64,6 +64,16 @@ public class ConfigurationManager extends Manager {
         GUI_GROUP_CREATION_MESSAGE_DISPLAY_AREA("gui-group-creation-message-display-area", "ACTION_BAR", "Valid values: ACTION_BAR, TITLE, CHAT", "Where should the GUI group creation countdown message be displayed?", "Note: Server versions less than 1.11.2 will always use CHAT"),
         GUI_GROUP_CREATION_BUNGEE_SUPPORT("gui-group-creation-bungee-support", false, "If true, a message will be displayed in chat telling the player to enter the command", "This might be required for some servers using bungee chat plugins"),
 
+        GUI_GLASS_COLORS("gui-border-colors", null, "The colors of the glass in the GUI", "Valid colors: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/DyeColor.html"),
+        GUI_GLASS_COLORS_DEFAULT("gui-border-colors.default", "WHITE"),
+        GUI_GLASS_COLORS_EDIT_DATA("gui-border-colors.edit-data", "MAGENTA"),
+        GUI_GLASS_COLORS_EDIT_EFFECT("gui-border-colors.edit-effect", "LIGHT_BLUE"),
+        GUI_GLASS_COLORS_EDIT_PARTICLE("gui-border-colors.edit-particle", "RED"),
+        GUI_GLASS_COLORS_EDIT_STYLE("gui-border-colors.edit-style", "BLUE"),
+        GUI_GLASS_COLORS_LOAD_PRESET_GROUPS("gui-border-colors.load-preset-groups", "GREEN"),
+        GUI_GLASS_COLORS_MANAGE_GROUPS("gui-border-colors.manage-groups", "BROWN"),
+        GUI_GLASS_COLORS_MANAGE_PARTICLES("gui-border-colors.manage-particles", "ORANGE"),
+
         WORLDGUARD_SETTINGS("worldguard-settings", null, "Settings for WorldGuard", "If WorldGuard is not installed, these settings will do nothing"),
         WORLDGUARD_USE_ALLOWED_REGIONS("worldguard-settings.use-allowed-regions", false, "If true, particles will only be able to spawn if they are in an allowed region and not a disallowed region", "If false, particles will be able to spawn as long as they are not in a disallowed region"),
         WORLDGUARD_ALLOWED_REGIONS("worldguard-settings.allowed-regions", Arrays.asList("example_region_1", "example_region_2"), "Regions that particles will be allowed to spawn in", "WARNING: This setting is deprecated in favor of region flags, and will be removed in a future update."),

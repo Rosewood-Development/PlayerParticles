@@ -2,6 +2,7 @@ package dev.esophose.playerparticles.gui;
 
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.ConfigurationManager.GuiIcon;
+import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.manager.GuiManager;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
@@ -21,7 +22,7 @@ public class GuiInventoryEditStyle extends GuiInventory {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         GuiManager guiManager = PlayerParticles.getInstance().getManager(GuiManager.class);
 
-        this.fillBorder(BorderColor.BLUE);
+        this.fillBorder(BorderColor.getOrDefault(Setting.GUI_GLASS_COLORS_EDIT_STYLE.getString(), BorderColor.BLUE));
 
         // Select Style Buttons
         List<ParticleStyle> stylesUserHasPermissionFor = PlayerParticles.getInstance().getManager(PermissionManager.class).getStylesUserHasPermissionFor(pplayer);

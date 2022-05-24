@@ -34,7 +34,7 @@ public class GuiInventoryManageGroups extends GuiInventory {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         GuiManager guiManager = PlayerParticles.getInstance().getManager(GuiManager.class);
 
-        this.fillBorder(BorderColor.BROWN);
+        this.fillBorder(BorderColor.getOrDefault(Setting.GUI_GLASS_COLORS_MANAGE_GROUPS.getString(), BorderColor.BROWN));
 
         List<ParticleGroup> groups = pplayer.getParticleGroups().values().stream()
                 .filter(x -> !x.getName().equals(ParticleGroup.DEFAULT_NAME))

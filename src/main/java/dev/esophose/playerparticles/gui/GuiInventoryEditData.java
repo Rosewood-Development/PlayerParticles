@@ -2,6 +2,7 @@ package dev.esophose.playerparticles.gui;
 
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.ConfigurationManager.GuiIcon;
+import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.manager.GuiManager;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.particles.PPlayer;
@@ -128,7 +129,7 @@ public class GuiInventoryEditData extends GuiInventory {
 
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
 
-        this.fillBorder(BorderColor.MAGENTA);
+        this.fillBorder(BorderColor.getOrDefault(Setting.GUI_GLASS_COLORS_EDIT_DATA.getString(), BorderColor.MAGENTA));
 
         ParticleEffect pe = editingParticle.getEffect();
         if (pe.hasProperty(ParticleProperty.COLORABLE)) {

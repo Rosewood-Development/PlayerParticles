@@ -64,6 +64,14 @@ public abstract class GuiInventory {
             
             return borderIcon;
         }
+
+        public static BorderColor getOrDefault(String name, BorderColor defaultValue) {
+            for (BorderColor color : BorderColor.values()) {
+                if (color.name().equalsIgnoreCase(name))
+                    return color;
+            }
+            return defaultValue;
+        }
     }
     
     protected static final int INVENTORY_SIZE = 54;
