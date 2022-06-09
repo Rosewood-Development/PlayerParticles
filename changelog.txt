@@ -1,3 +1,5 @@
+=== v8.2 ===
++ Added new 1.19 particles: sculk_charge, sculk_charge_pop, sculk_soul, shriek, sonic_boom
 === v8.1 ===
 * Fixed the /pp reload command throwing an error on 1.12.2 or lower
 === v8.0 ===
