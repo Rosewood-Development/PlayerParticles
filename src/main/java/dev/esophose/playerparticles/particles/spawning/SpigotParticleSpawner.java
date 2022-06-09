@@ -20,11 +20,19 @@ public class SpigotParticleSpawner extends ParticleSpawner {
 
     @Override
     public void display(ParticleEffect particleEffect, double offsetX, double offsetY, double offsetZ, double speed, int amount, Location center, boolean isLongRange, Player owner) {
-        if (particleEffect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA))
+        if (particleEffect.hasProperties())
             throw new ParticleDataException("This particle effect requires additional data");
 
-        for (Player player : getPlayersInRange(center, isLongRange, owner))
-            player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed);
+        if (particleEffect == ParticleEffect.SCULK_CHARGE) {
+            for (Player player : getPlayersInRange(center, isLongRange, owner))
+                player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed, 0F);
+        } else if (particleEffect == ParticleEffect.SHRIEK) {
+            for (Player player : getPlayersInRange(center, isLongRange, owner))
+                player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed, 0);
+        } else {
+            for (Player player : getPlayersInRange(center, isLongRange, owner))
+                player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed);
+        }
     }
 
     @Override

@@ -105,6 +105,11 @@ public enum ParticleEffect {
     SMOKE("SMOKE_NORMAL", Collections.singletonList("TORCH")),
     SNEEZE("SNEEZE", Collections.singletonList("BAMBOO")),
     SNOWFLAKE("SNOWFLAKE", Collections.singletonList("POWDER_SNOW_BUCKET")),
+    SCULK_CHARGE("SCULK_CHARGE", Collections.singletonList("SCULK")),
+    SCULK_CHARGE_POP("SCULK_CHARGE_POP", Collections.singletonList("SCULK_VEIN")),
+    SCULK_SOUL("SCULK_SOUL", Collections.singletonList("SCULK_CATALYST")),
+    SHRIEK("SHRIEK", Collections.singletonList("SCULK_SHRIEKER")),
+    SONIC_BOOM("SONIC_BOOM", Collections.singletonList("WARDEN_SPAWN_EGG")),
     SOUL("SOUL", Collections.singletonList("SOUL_LANTERN")),
     SOUL_FIRE_FLAME("SOUL_FIRE_FLAME", Collections.singletonList("SOUL_CAMPFIRE")),
     SPELL("SPELL", Arrays.asList("POTION", "GLASS_BOTTLE")), // The Minecraft internal name for this is actually "effect", but that's the command name, so it's SPELL for the plugin instead

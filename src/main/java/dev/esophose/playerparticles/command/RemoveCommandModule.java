@@ -8,12 +8,12 @@ import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.styles.ParticleStyle;
+import dev.esophose.playerparticles.util.ParticleUtils;
 import dev.esophose.playerparticles.util.StringPlaceholders;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.util.StringUtil;
 
 public class RemoveCommandModule implements CommandModule {
@@ -27,7 +27,7 @@ public class RemoveCommandModule implements CommandModule {
             return;
         }
         
-        if (StringUtils.isNumeric(args[0])) { // Removing by ID
+        if (ParticleUtils.isNumeric(args[0])) { // Removing by ID
             int id;
             try {
                 id = Integer.parseInt(args[0]);

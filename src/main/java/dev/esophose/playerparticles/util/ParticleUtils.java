@@ -3,12 +3,12 @@ package dev.esophose.playerparticles.util;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -109,7 +109,9 @@ public final class ParticleUtils {
      * @return The input string but formatted with each word capitalized
      */
     public static String formatName(String string) {
-        return WordUtils.capitalizeFully(string.replaceAll("_", " "));
+        return Arrays.stream(string.replace('_', ' ').split("\\s+"))
+                .map(x -> x.substring(0, 1).toUpperCase() + x.substring(1).toLowerCase())
+                .collect(Collectors.joining(" "));
     }
 
     /**
@@ -131,6 +133,13 @@ public final class ParticleUtils {
             if (n[i] != i + 1) 
                 return i + 1;
         return n.length + 1;
+    }
+
+    public static boolean isNumeric(String string) {
+        for (char c : string.trim().toCharArray())
+            if (!Character.isDigit(c))
+                return false;
+        return true;
     }
 
     public static boolean containsConfigSpecialCharacters(String string) {
