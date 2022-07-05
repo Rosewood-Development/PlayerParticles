@@ -34,7 +34,7 @@ public class ParticleStyleBlockPlace extends ConfiguredParticleStyle implements 
         location.add(0.5, 0.5, 0.5); // Center around the block
 
         for (int i = 0; i < this.particleAmount; i++)
-            particles.add(new PParticle(location, this.particleSpread, this.particleSpread, this.particleSpread, this.particleSpeed));
+            particles.add(PParticle.builder(location).offsets(this.particleSpread, this.particleSpread, this.particleSpread).speed(this.particleSpeed).build());
 
         return particles;
     }

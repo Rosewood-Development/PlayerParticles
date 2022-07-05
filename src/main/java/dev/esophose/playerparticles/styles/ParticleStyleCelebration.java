@@ -135,7 +135,7 @@ public class ParticleStyleCelebration extends ConfiguredParticleStyle {
                     trail.setEffect(ParticleStyleCelebration.this.fuseEffect);
                     trail.setStyle(DefaultStyles.CELEBRATION);
 
-                    particleManager.displayParticles(pplayer, this.location.getWorld(), trail, Collections.singletonList(new PParticle(this.location)), true, true);
+                    particleManager.displayParticles(pplayer, this.location.getWorld(), trail, Collections.singletonList(PParticle.point(this.location)), true, true);
                     
                     this.location.add(0, ParticleStyleCelebration.this.fuseSpacing, 0);
                 } else {
@@ -150,7 +150,7 @@ public class ParticleStyleCelebration extends ConfiguredParticleStyle {
                         double dy = radius * MathL.sin(phi) * MathL.sin(theta);
                         double dz = radius * MathL.cos(phi);
                         
-                        particles.add(new PParticle(this.location.clone().add(dx, dy, dz)));
+                        particles.add(PParticle.point(this.location.clone().add(dx, dy, dz)));
                     }
                     particleManager.displayParticles(pplayer, this.location.getWorld(), particle, particles, true, true);
 

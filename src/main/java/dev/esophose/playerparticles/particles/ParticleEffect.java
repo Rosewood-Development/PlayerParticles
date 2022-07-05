@@ -353,7 +353,7 @@ public enum ParticleEffect {
      * @param owner The player that owns the particles
      */
     public static void display(ParticlePair particle, PParticle pparticle, boolean isLongRange, Player owner) {
-        ParticleEffect effect = particle.getEffect();
+        ParticleEffect effect = pparticle.getOverrideEffect() != null ? pparticle.getOverrideEffect() : particle.getEffect();
         int count = pparticle.isDirectional() ? 0 : 1;
 
         if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {

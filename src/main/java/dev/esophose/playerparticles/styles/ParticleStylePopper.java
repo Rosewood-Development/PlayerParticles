@@ -37,12 +37,12 @@ public class ParticleStylePopper extends ConfiguredParticleStyle {
             double angle = this.step * this.radials + (2 * Math.PI * i / this.helices);
             Vector v = new Vector(MathL.cos(angle) * radius, this.step * this.grow - 1, MathL.sin(angle) * radius);
 
-            particles.add(new PParticle(location.clone().add(v)));
+            particles.add(PParticle.point(location.clone().add(v)));
         }
 
         if (this.step == this.maxStep - 1)
             for (int i = 0; i < this.popParticleAmount; i++)
-                particles.add(new PParticle(location.clone().add(0, this.popOffset, 0), this.popSpread, this.popSpread, this.popSpread, this.popSpeed));
+                particles.add(PParticle.builder(location.clone().add(0, this.popOffset, 0)).offsets(this.popSpread, this.popSpread, this.popSpread).speed(this.popSpeed).build());
 
         return particles;
     }

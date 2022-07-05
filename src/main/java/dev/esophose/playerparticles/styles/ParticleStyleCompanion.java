@@ -62,7 +62,7 @@ public class ParticleStyleCompanion extends ConfiguredParticleStyle {
         vector.setY(this.yFactor * this.size * MathL.cos(t) + this.yOffset);
 
         for (int i = 0; i < this.particlesPerIteration; i++)
-            particles.add(new PParticle(location.clone().subtract(vector)));
+            particles.add(PParticle.point(location.clone().subtract(vector)));
 
         return particles;
     }

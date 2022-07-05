@@ -21,10 +21,10 @@ public class ParticleStyleChains extends ConfiguredParticleStyle {
         List<PParticle> particles = new ArrayList<>();
         
         for (double n = -0.2; n < 0.6; n += 0.8 / this.chainParticleAmount) {
-            particles.add(new PParticle(location.clone().add(1 - n, n - 1.1, 1 - n)));
-            particles.add(new PParticle(location.clone().add(1 - n, n - 1.1, -1 + n)));
-            particles.add(new PParticle(location.clone().add(-1 + n, n - 1.1, 1 - n)));
-            particles.add(new PParticle(location.clone().add(-1 + n, n - 1.1, -1 + n)));
+            particles.add(PParticle.point(location.clone().add(1 - n, n - 1.1, 1 - n)));
+            particles.add(PParticle.point(location.clone().add(1 - n, n - 1.1, -1 + n)));
+            particles.add(PParticle.point(location.clone().add(-1 + n, n - 1.1, 1 - n)));
+            particles.add(PParticle.point(location.clone().add(-1 + n, n - 1.1, -1 + n)));
         }
         
         return particles;

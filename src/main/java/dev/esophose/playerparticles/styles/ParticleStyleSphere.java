@@ -30,7 +30,7 @@ public class ParticleStyleSphere extends ConfiguredParticleStyle {
             double dx = this.radius * MathL.sin(phi) * MathL.cos(theta);
             double dy = this.radius * MathL.sin(phi) * MathL.sin(theta);
             double dz = this.radius * MathL.cos(phi);
-            particles.add(new PParticle(location.clone().add(dx, dy, dz)));
+            particles.add(PParticle.point(location.clone().add(dx, dy, dz)));
         }
 
         return particles;

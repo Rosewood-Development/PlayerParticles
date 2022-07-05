@@ -62,11 +62,11 @@ public class ParticleStyleIcosphere extends ConfiguredParticleStyle {
             HexUtils.AnimatedGradient gradient = new HexUtils.AnimatedGradient(Arrays.asList(startColor, endColor), sortedPoints.size(), 2);
 
             for (Vector point : sortedPoints) {
-                Color color = gradient.next();
+                Color color = gradient.nextColor();
                 OrdinaryColor ordinaryColor = new OrdinaryColor(color.getRed(), color.getGreen(), color.getBlue());
                 ColorTransition optionalData = new ColorTransition(ordinaryColor, ordinaryColor);
                 VectorUtils.rotateVector(point, xRotation, yRotation, zRotation);
-                particles.add(new PParticle(location.clone().add(point), 0, 0, 0, 0, false, optionalData));
+                particles.add(PParticle.builder(location.clone().add(point)).overrideData(optionalData).build());
             }
         } else if (particle.getColor().equals(OrdinaryColor.RAINBOW)) {
             double lowest = points.stream().mapToDouble(Vector::getY).min().orElse(1);
@@ -78,7 +78,7 @@ public class ParticleStyleIcosphere extends ConfiguredParticleStyle {
                 Color color = Color.getHSBColor((float) hue, 1.0F, 1.0F);
                 OrdinaryColor optionalData = new OrdinaryColor(color.getRed(), color.getGreen(), color.getBlue());
                 VectorUtils.rotateVector(point, xRotation, yRotation, zRotation);
-                particles.add(new PParticle(location.clone().add(point), 0, 0, 0, 0, false, optionalData));
+                particles.add(PParticle.builder(location.clone().add(point)).overrideData(optionalData).build());
             }
         } else if (particle.getColor().equals(new OrdinaryColor(0, 0, 0))) {
             double lowest = points.stream().mapToDouble(Vector::getY).min().orElse(1);
@@ -90,12 +90,12 @@ public class ParticleStyleIcosphere extends ConfiguredParticleStyle {
                 int value = (int) ((Math.cos(theta) + 1) / 2 * 255);
                 OrdinaryColor optionalData = new OrdinaryColor(value, value, value);
                 VectorUtils.rotateVector(point, xRotation, yRotation, zRotation);
-                particles.add(new PParticle(location.clone().add(point), 0, 0, 0, 0, false, optionalData));
+                particles.add(PParticle.builder(location.clone().add(point)).overrideData(optionalData).build());
             }
         } else {
             for (Vector point : points) {
                 VectorUtils.rotateVector(point, xRotation, yRotation, zRotation);
-                particles.add(new PParticle(location.clone().add(point), 0, 0, 0, 0, false, null));
+                particles.add(PParticle.point(location.clone().add(point)));
             }
         }
 

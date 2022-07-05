@@ -56,7 +56,7 @@ public class ParticleStyleVortex extends ConfiguredParticleStyle {
             double angle = this.step * this.radials + (2 * Math.PI * i / this.helices);
             Vector v = new Vector(MathL.cos(angle) * radius, this.step * this.grow - 1, MathL.sin(angle) * radius);
 
-            particles.add(new PParticle(location.clone().add(v)));
+            particles.add(PParticle.point(location.clone().add(v)));
         }
 
         return particles;

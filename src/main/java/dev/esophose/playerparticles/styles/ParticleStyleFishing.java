@@ -51,7 +51,7 @@ public class ParticleStyleFishing extends ConfiguredParticleStyle implements Lis
         for (Projectile projectile : listCopy) {
             ProjectileSource shooter = projectile.getShooter();
             if (shooter instanceof Player && ((Player) shooter).getUniqueId().equals(particle.getOwnerUniqueId()))
-                particles.add(new PParticle(projectile.getLocation(), 0.05F, 0.05F, 0.05F, 0.0F));
+                particles.add(PParticle.builder(projectile.getLocation()).offsets(0.05F, 0.05F, 0.05F).build());
         }
 
         return particles;

@@ -35,13 +35,13 @@ public class ParticleStyleBatman extends ConfiguredParticleStyle {
             double y = 3 * Math.sqrt(-Math.pow(x / 7, 2) + 1);
             Vector segment = new Vector(x, y, 0).multiply(0.3);
             VectorUtils.rotateAroundAxisY(segment, -Math.toRadians(location.getYaw()));
-            particles.add(new PParticle(location.clone().add(segment).add(0, 3, 0)));
+            particles.add(PParticle.point(location.clone().add(segment).add(0, 3, 0)));
         }
         for (double x = 3; x <= 7; x += 0.05) {
             double y = 3 * Math.sqrt(-Math.pow(x / 7, 2) + 1);
             Vector segment = new Vector(x, y, 0).multiply(0.3);
             VectorUtils.rotateAroundAxisY(segment, -Math.toRadians(location.getYaw()));
-            particles.add(new PParticle(location.clone().add(segment).add(0, 3, 0)));
+            particles.add(PParticle.point(location.clone().add(segment).add(0, 3, 0)));
         }
         
         // Segment 2
@@ -49,13 +49,13 @@ public class ParticleStyleBatman extends ConfiguredParticleStyle {
             double y = -3 * Math.sqrt(-Math.pow(x / 7, 2) + 1);
             Vector segment = new Vector(x, y, 0).multiply(0.3);
             VectorUtils.rotateAroundAxisY(segment, -Math.toRadians(location.getYaw()));
-            particles.add(new PParticle(location.clone().add(segment).add(0, 3, 0)));
+            particles.add(PParticle.point(location.clone().add(segment).add(0, 3, 0)));
         }
         for (double x = 4; x <= 7; x += 0.05) {
             double y = -3 * Math.sqrt(-Math.pow(x / 7, 2) + 1);
             Vector segment = new Vector(x, y, 0).multiply(0.3);
             VectorUtils.rotateAroundAxisY(segment, -Math.toRadians(location.getYaw()));
-            particles.add(new PParticle(location.clone().add(segment).add(0, 3, 0)));
+            particles.add(PParticle.point(location.clone().add(segment).add(0, 3, 0)));
         }
         
         // Segment 3
@@ -63,7 +63,7 @@ public class ParticleStyleBatman extends ConfiguredParticleStyle {
             double y = Math.abs(x / 2) - ((3 * Math.sqrt(33) - 7) / 112) * Math.pow(x, 2) + Math.sqrt(1 - Math.pow(Math.abs(Math.abs(x) - 2) - 1, 2)) - 3;
             Vector segment = new Vector(x, y, 0).multiply(0.3);
             VectorUtils.rotateAroundAxisY(segment, -Math.toRadians(location.getYaw()));
-            particles.add(new PParticle(location.clone().add(segment).add(0, 3, 0)));
+            particles.add(PParticle.point(location.clone().add(segment).add(0, 3, 0)));
         }
         
         // Segment 4
@@ -71,13 +71,13 @@ public class ParticleStyleBatman extends ConfiguredParticleStyle {
             double y = 9 - 8 * Math.abs(x);
             Vector segment = new Vector(x, y, 0).multiply(0.3);
             VectorUtils.rotateAroundAxisY(segment, -Math.toRadians(location.getYaw()));
-            particles.add(new PParticle(location.clone().add(segment).add(0, 3, 0)));
+            particles.add(PParticle.point(location.clone().add(segment).add(0, 3, 0)));
         }
         for (double x = 0.75; x <= 1; x += 0.025) {
             double y = 9 - 8 * Math.abs(x);
             Vector segment = new Vector(x, y, 0).multiply(0.3);
             VectorUtils.rotateAroundAxisY(segment, -Math.toRadians(location.getYaw()));
-            particles.add(new PParticle(location.clone().add(segment).add(0, 3, 0)));
+            particles.add(PParticle.point(location.clone().add(segment).add(0, 3, 0)));
         }
         
         // Segment 5
@@ -85,13 +85,13 @@ public class ParticleStyleBatman extends ConfiguredParticleStyle {
             double y = 3 * Math.abs(x) + 0.75;
             Vector segment = new Vector(x, y, 0).multiply(0.3);
             VectorUtils.rotateAroundAxisY(segment, -Math.toRadians(location.getYaw()));
-            particles.add(new PParticle(location.clone().add(segment).add(0, 3, 0)));
+            particles.add(PParticle.point(location.clone().add(segment).add(0, 3, 0)));
         }
         for (double x = 0.5; x <= 0.75; x += 0.05) {
             double y = 3 * Math.abs(x) + 0.75;
             Vector segment = new Vector(x, y, 0).multiply(0.3);
             VectorUtils.rotateAroundAxisY(segment, -Math.toRadians(location.getYaw()));
-            particles.add(new PParticle(location.clone().add(segment).add(0, 3, 0)));
+            particles.add(PParticle.point(location.clone().add(segment).add(0, 3, 0)));
         }
         
         // Segment 6
@@ -99,7 +99,7 @@ public class ParticleStyleBatman extends ConfiguredParticleStyle {
             double y = 2.25;
             Vector segment = new Vector(x, y, 0).multiply(0.3);
             VectorUtils.rotateAroundAxisY(segment, -Math.toRadians(location.getYaw()));
-            particles.add(new PParticle(location.clone().add(segment).add(0, 3, 0)));
+            particles.add(PParticle.point(location.clone().add(segment).add(0, 3, 0)));
         }
         
         // Segment 7
@@ -107,13 +107,13 @@ public class ParticleStyleBatman extends ConfiguredParticleStyle {
             double y = 1.5 - 0.5 * Math.abs(x) - ((6 * Math.sqrt(10)) / 14) * (Math.sqrt(3 - Math.pow(x, 2) + 2 * Math.abs(x)) - 2);
             Vector segment = new Vector(x, y, 0).multiply(0.3);
             VectorUtils.rotateAroundAxisY(segment, -Math.toRadians(location.getYaw()));
-            particles.add(new PParticle(location.clone().add(segment).add(0, 3, 0)));
+            particles.add(PParticle.point(location.clone().add(segment).add(0, 3, 0)));
         }
         for (double x = 1; x <= 3; x += 0.02) {
             double y = 1.5 - 0.5 * Math.abs(x) - ((6 * Math.sqrt(10)) / 14) * (Math.sqrt(3 - Math.pow(x, 2) + 2 * Math.abs(x)) - 2);
             Vector segment = new Vector(x, y, 0).multiply(0.3);
             VectorUtils.rotateAroundAxisY(segment, -Math.toRadians(location.getYaw()));
-            particles.add(new PParticle(location.clone().add(segment).add(0, 3, 0)));
+            particles.add(PParticle.point(location.clone().add(segment).add(0, 3, 0)));
         }
 
         return particles;

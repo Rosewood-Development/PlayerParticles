@@ -26,10 +26,10 @@ public class ParticleStyleRings extends ConfiguredParticleStyle {
         double ring1 = Math.PI / (this.maxStep / 2D) * this.step;
         double ring2 = Math.PI / (this.maxStep / 2D) * (((this.step + this.maxStep / 2D) % this.maxStep));
 
-        particles.add(new PParticle(location.clone().add(MathL.cos(ring1), MathL.sin(ring1), MathL.sin(ring1))));
-        particles.add(new PParticle(location.clone().add(MathL.cos(ring1 + Math.PI), MathL.sin(ring1), MathL.sin(ring1 + Math.PI))));
-        particles.add(new PParticle(location.clone().add(MathL.cos(ring2), MathL.sin(ring2), MathL.sin(ring2))));
-        particles.add(new PParticle(location.clone().add(MathL.cos(ring2 + Math.PI), MathL.sin(ring2), MathL.sin(ring2 + Math.PI))));
+        particles.add(PParticle.point(location.clone().add(MathL.cos(ring1), MathL.sin(ring1), MathL.sin(ring1))));
+        particles.add(PParticle.point(location.clone().add(MathL.cos(ring1 + Math.PI), MathL.sin(ring1), MathL.sin(ring1 + Math.PI))));
+        particles.add(PParticle.point(location.clone().add(MathL.cos(ring2), MathL.sin(ring2), MathL.sin(ring2))));
+        particles.add(PParticle.point(location.clone().add(MathL.cos(ring2 + Math.PI), MathL.sin(ring2), MathL.sin(ring2 + Math.PI))));
 
         return particles;
     }

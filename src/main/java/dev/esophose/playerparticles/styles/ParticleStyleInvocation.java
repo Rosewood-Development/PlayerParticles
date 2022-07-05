@@ -35,7 +35,7 @@ public class ParticleStyleInvocation extends ConfiguredParticleStyle {
                 double dx = MathL.cos(Math.PI * 2 * ((double) i / this.numSteps)) * this.radius;
                 double dy = this.playerOffset;
                 double dz = MathL.sin(Math.PI * 2 * ((double) i / this.numSteps)) * this.radius;
-                particles.add(new PParticle(location.clone().add(dx, dy, dz)));
+                particles.add(PParticle.point(location.clone().add(dx, dy, dz)));
             }
         }
 
@@ -47,7 +47,7 @@ public class ParticleStyleInvocation extends ConfiguredParticleStyle {
             double angle = Math.atan2(dz, dx);
             double xAng = -MathL.cos(angle);
             double zAng = -MathL.sin(angle);
-            particles.add(new PParticle(location.clone().add(dx, dy, dz), xAng, 0, zAng, speed, true));
+            particles.add(PParticle.builder(location.clone().add(dx, dy, dz)).offsets(xAng, 0, zAng).speed(speed).directional().build());
         }
 
         // Orbit going counter-clockwise
@@ -58,7 +58,7 @@ public class ParticleStyleInvocation extends ConfiguredParticleStyle {
             double angle = Math.atan2(dz, dx);
             double xAng = -MathL.cos(angle);
             double zAng = -MathL.sin(angle);
-            particles.add(new PParticle(location.clone().add(dx, dy, dz), xAng, 0, zAng, speed, true));
+            particles.add(PParticle.builder(location.clone().add(dx, dy, dz)).offsets(xAng, 0, zAng).speed(speed).directional().build());
         }
 
         return particles;

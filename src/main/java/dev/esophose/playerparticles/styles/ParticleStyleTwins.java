@@ -34,7 +34,7 @@ public class ParticleStyleTwins extends ConfiguredParticleStyle {
             double dx = -MathL.cos(slice * this.stepX + orbSlice * i) * this.radius;
             double dy = (this.stepY / (double) this.maxStepY);
             double dz = -MathL.sin(slice * this.stepX + orbSlice * i) * this.radius;
-            particles.add(new PParticle(location.clone().add(dx, dy, dz)));
+            particles.add(PParticle.point(location.clone().add(dx, dy, dz)));
         }
         return particles;
     }

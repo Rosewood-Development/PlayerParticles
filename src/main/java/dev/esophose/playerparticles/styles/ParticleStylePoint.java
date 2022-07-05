@@ -17,7 +17,7 @@ public class ParticleStylePoint extends ConfiguredParticleStyle {
 
     @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
-        return Collections.singletonList(new PParticle(location.clone().add(0.0, this.offset, 0.0)));
+        return Collections.singletonList(PParticle.point(location.clone().add(0.0, this.offset, 0.0)));
     }
 
     @Override

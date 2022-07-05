@@ -77,7 +77,7 @@ public final class HexUtils {
         return parsed;
     }
 
-    private static String parseRainbow(String message) {
+    public static String parseRainbow(String message) {
         String parsed = message;
 
         Matcher matcher = RAINBOW_PATTERN.matcher(parsed);
@@ -140,7 +140,7 @@ public final class HexUtils {
                         continue;
                     }
                 }
-                parsedRainbow.append(translateHex(rainbow.next())).append(compoundedFormat).append(c);
+                parsedRainbow.append(rainbow.nextChatColor()).append(compoundedFormat).append(c);
             }
 
             String before = parsed.substring(0, matcher.start());
@@ -152,7 +152,7 @@ public final class HexUtils {
         return parsed;
     }
 
-    private static String parseGradients(String message) {
+    public static String parseGradients(String message) {
         String parsed = message;
 
         Matcher matcher = GRADIENT_PATTERN.matcher(parsed);
@@ -202,7 +202,7 @@ public final class HexUtils {
                         continue;
                     }
                 }
-                parsedGradient.append(translateHex(gradient.next())).append(compoundedFormat).append(c);
+                parsedGradient.append(gradient.nextChatColor()).append(compoundedFormat).append(c);
             }
 
             String before = parsed.substring(0, matcher.start());
@@ -214,13 +214,13 @@ public final class HexUtils {
         return parsed;
     }
 
-    private static String parseHex(String message) {
+    public static String parseHex(String message) {
         String parsed = message;
 
         for (Pattern pattern : HEX_PATTERNS) {
             Matcher matcher = pattern.matcher(parsed);
             while (matcher.find()) {
-                String color = translateHex(cleanHex(matcher.group()));
+                String color = translateHex(cleanHex(matcher.group())).toString();
                 String before = parsed.substring(0, matcher.start());
                 String after = parsed.substring(matcher.end());
                 parsed = before + color + after;
@@ -231,7 +231,7 @@ public final class HexUtils {
         return parsed;
     }
 
-    private static String parseLegacy(String message) {
+    public static String parseLegacy(String message) {
         return ChatColor.translateAlternateColorCodes('&', message);
     }
 
@@ -267,15 +267,15 @@ public final class HexUtils {
      * @param hex The hex color
      * @return The closest ChatColor value
      */
-    private static String translateHex(String hex) {
+    public static ChatColor translateHex(String hex) {
         if (NMSUtil.getVersionNumber() >= 16)
-            return ChatColor.of(hex).toString();
+            return ChatColor.of(hex);
         return translateHex(Color.decode(hex));
     }
 
-    private static String translateHex(Color color) {
+    public static ChatColor translateHex(Color color) {
         if (NMSUtil.getVersionNumber() >= 16)
-            return ChatColor.of(color).toString();
+            return ChatColor.of(color);
 
         int minDist = Integer.MAX_VALUE;
         ChatColor legacy = ChatColor.WHITE;
@@ -290,13 +290,13 @@ public final class HexUtils {
             }
         }
 
-        return legacy.toString();
+        return legacy;
     }
 
     /**
      * Maps hex codes to ChatColors
      */
-    private enum ChatColorHexMapping {
+    public enum ChatColorHexMapping {
 
         BLACK(0x000000, ChatColor.BLACK),
         DARK_BLUE(0x0000AA, ChatColor.DARK_BLUE),
@@ -343,12 +343,17 @@ public final class HexUtils {
 
     }
 
-    private interface ColorGenerator {
+    public interface ColorGenerator {
 
         /**
-         * @return the next color in the sequence
+         * @return the next color in the sequence as a ChatColor
          */
-        Color next();
+        ChatColor nextChatColor();
+
+        /**
+         * @return the next color in the sequence as a Color
+         */
+        Color nextColor();
 
     }
 
@@ -366,20 +371,24 @@ public final class HexUtils {
                 throw new IllegalArgumentException("Must provide at least 2 colors");
 
             this.gradients = new ArrayList<>();
-            this.steps = steps - 1;
+            this.steps = steps;
             this.step = 0;
 
-            float increment = (float) this.steps / (colors.size() - 1);
+            float increment = (float) (this.steps - 1) / (colors.size() - 1);
             for (int i = 0; i < colors.size() - 1; i++)
                 this.gradients.add(new TwoStopGradient(colors.get(i), colors.get(i + 1), increment * i, increment * (i + 1)));
         }
 
         @Override
-        public Color next() {
+        public ChatColor nextChatColor() {
             // Gradients will use the first color if the entire spectrum won't be available to preserve prettiness
             if (NMSUtil.getVersionNumber() < 16 || this.steps <= 1)
-                return this.gradients.get(0).colorAt(0);
+                return translateHex(this.gradients.get(0).colorAt(0));
+            return translateHex(this.nextColor());
+        }
 
+        @Override
+        public Color nextColor() {
             // Do some wizardry to get a function that bounces back and forth between 0 and a cap given an increasing input
             // Thanks to BomBardyGamer for assisting with this
             int adjustedStep = (int) Math.round(Math.abs(((2 * Math.asin(Math.sin(this.step * (Math.PI / (2 * this.steps))))) / Math.PI) * this.steps));
@@ -397,7 +406,7 @@ public final class HexUtils {
             return color;
         }
 
-        private static class TwoStopGradient {
+        public static class TwoStopGradient {
 
             private final Color startColor;
             private final Color endColor;
@@ -427,6 +436,8 @@ public final class HexUtils {
 
             private int calculateHexPiece(int step, int channelStart, int channelEnd) {
                 float range = this.upperRange - this.lowerRange;
+                if (range == 0) // No range, don't divide by 0
+                    return channelStart;
                 float interval = (channelEnd - channelStart) / range;
                 return Math.round(interval * (step - this.lowerRange) + channelStart);
             }
@@ -467,7 +478,12 @@ public final class HexUtils {
         }
 
         @Override
-        public Color next() {
+        public ChatColor nextChatColor() {
+            return translateHex(this.nextColor());
+        }
+
+        @Override
+        public Color nextColor() {
             Color color = Color.getHSBColor(this.hue, this.saturation, this.brightness);
             this.hue += this.hueStep;
             return color;

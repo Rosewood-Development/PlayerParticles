@@ -27,7 +27,7 @@ public class ParticleStyleSpin extends ConfiguredParticleStyle {
         double newX = location.getX() + this.radius * MathL.cos(slice);
         double newY = location.getY() + this.offset;
         double newZ = location.getZ() + this.radius * MathL.sin(slice);
-        return Collections.singletonList(new PParticle(new Location(location.getWorld(), newX, newY, newZ)));
+        return Collections.singletonList(PParticle.point(new Location(location.getWorld(), newX, newY, newZ)));
     }
 
     @Override

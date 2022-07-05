@@ -24,7 +24,7 @@ public class ParticleStyleOverhead extends ConfiguredParticleStyle {
         List<PParticle> particles = new ArrayList<>();
 
         for (int i = 0; i < this.particlesPerTick; i++)
-            particles.add(new PParticle(location.clone().add(0, this.headOffset, 0), this.particleSpreadX, this.particleSpreadY, this.particleSpreadZ, this.particleSpeed));
+            particles.add(PParticle.builder(location.clone().add(0, this.headOffset, 0)).offsets(this.particleSpreadX, this.particleSpreadY, this.particleSpreadZ).speed(this.particleSpeed).build());
 
         return particles;
     }

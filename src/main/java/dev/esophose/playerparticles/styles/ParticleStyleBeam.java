@@ -31,7 +31,7 @@ public class ParticleStyleBeam extends ConfiguredParticleStyle {
             double newX = location.getX() + this.radius * MathL.cos(angle);
             double newY = location.getY() + (this.step / 10D) - 1;
             double newZ = location.getZ() + this.radius * MathL.sin(angle);
-            particles.add(new PParticle(new Location(location.getWorld(), newX, newY, newZ)));
+            particles.add(PParticle.point(new Location(location.getWorld(), newX, newY, newZ)));
         }
         return particles;
     }

@@ -37,7 +37,7 @@ public class ParticleStylePulse extends ConfiguredParticleStyle {
                 double angle = Math.atan2(dz, dx);
                 double xAng = MathL.cos(angle);
                 double zAng = MathL.sin(angle);
-                particles.add(new PParticle(location.clone().add(dx, dy, dz), xAng, 0, zAng, speed, true));
+                particles.add(PParticle.builder(location.clone().add(dx, dy, dz)).offsets(xAng, 0, zAng).speed(speed).directional().build());
             }
         }
 

@@ -31,7 +31,7 @@ public class ParticleStyleTrail extends ConfiguredParticleStyle implements Liste
 
     @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
-        return Collections.singletonList(new PParticle(location.clone().add(0.0, this.offset, 0.0), this.spread, this.spread, this.spread, this.speed));
+        return Collections.singletonList(PParticle.builder(location.clone().add(0.0, this.offset, 0.0)).offsets(this.spread, this.spread, this.spread).speed(this.speed).build());
     }
 
     @Override

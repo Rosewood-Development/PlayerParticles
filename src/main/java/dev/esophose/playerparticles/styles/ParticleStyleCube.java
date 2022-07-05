@@ -76,7 +76,7 @@ public class ParticleStyleCube extends ConfiguredParticleStyle {
                     VectorUtils.rotateAroundAxisX(v, angleX);
                     VectorUtils.rotateAroundAxisY(v, angleY);
                     VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
-                    pparticles.add(new PParticle(location.clone().add(v)));
+                    pparticles.add(PParticle.point(location.clone().add(v)));
                 }
             }
             for (int p = 0; p <= this.particlesPerEdge; p++) {
@@ -84,7 +84,7 @@ public class ParticleStyleCube extends ConfiguredParticleStyle {
                 v.setY(this.edgeLength * p / this.particlesPerEdge - a);
                 VectorUtils.rotateAroundAxisY(v, angleY);
                 VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
-                pparticles.add(new PParticle(location.clone().add(v)));
+                pparticles.add(PParticle.point(location.clone().add(v)));
             }
         }
 

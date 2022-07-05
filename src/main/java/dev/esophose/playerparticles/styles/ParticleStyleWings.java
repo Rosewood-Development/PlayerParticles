@@ -29,7 +29,7 @@ public class ParticleStyleWings extends ConfiguredParticleStyle {
                 double x = MathL.sin(t) * offset;
                 double y = MathL.cos(t) * offset;
                 Vector v = VectorUtils.rotateAroundAxisY(new Vector(x, y, -0.3), -Math.toRadians(location.getYaw()));
-                particles.add(new PParticle(location.clone().add(v.getX(), v.getY(), v.getZ())));
+                particles.add(PParticle.point(location.clone().add(v.getX(), v.getY(), v.getZ())));
             }
         }
         return particles;

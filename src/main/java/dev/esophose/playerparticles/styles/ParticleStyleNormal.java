@@ -22,111 +22,39 @@ public class ParticleStyleNormal extends ConfiguredParticleStyle {
 
         switch (particleEffect) {
             case AMBIENT_ENTITY_EFFECT:
-                return Collections.singletonList(new PParticle(location, 0.6, 0.6, 0.6, 0.0));
             case ANGRY_VILLAGER:
-                return Collections.singletonList(new PParticle(location, 0.6, 0.6, 0.6, 0.0));
             case BARRIER:
-                return Collections.singletonList(new PParticle(location, 0.6, 0.6, 0.6, 0.0));
             case BLOCK:
-                return Collections.singletonList(new PParticle(location, 0.6, 0.6, 0.6, 0.0));
-            case BUBBLE:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
-            case BUBBLE_COLUMN_UP:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
-            case BUBBLE_POP:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
-            case CLOUD:
-                return Collections.singletonList(new PParticle(location, 0.0, 0.0, 0.0, 0.0));
-            case CRIT:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
-            case CURRENT_DOWN:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
-            case DAMAGE_INDICATOR:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
-            case DOLPHIN:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
-            case DRAGON_BREATH:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
             case DRIPPING_LAVA:
-                return Collections.singletonList(new PParticle(location, 0.6, 0.6, 0.6, 0.0));
             case DRIPPING_WATER:
-                return Collections.singletonList(new PParticle(location, 0.6, 0.6, 0.6, 0.0));
+            case HEART:
+            case ITEM:
+            case NOTE:
+            case SPIT:
+            case SQUID_INK:
+            case TOTEM_OF_UNDYING:
+                return Collections.singletonList(PParticle.builder(location).offsets(0.6, 0.6, 0.6).build());
             case DUST:
-                return Collections.singletonList(new PParticle(location, 0.5, 0.5, 0.5, 0.0));
+            case HAPPY_VILLAGER:
+                return Collections.singletonList(PParticle.builder(location).offsets(0.5, 0.5, 0.5).build());
             case ENCHANT:
-                return Collections.singletonList(new PParticle(location, 0.6, 0.6, 0.6, 1.0));
-            case ENCHANTED_HIT:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
-            case END_ROD:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
-            case ENTITY_EFFECT:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
-            case EXPLOSION:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
-            case EXPLOSION_EMITTER:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
+                return Collections.singletonList(PParticle.builder(location).offsets(0.6, 0.6, 0.6).speed(1.0).build());
             case FALLING_DUST:
                 for (int i = 0; i < 2; i++)
-                    particles.add(new PParticle(location.add(0, 0.75, 0), 0.6, 0.4, 0.6, 0.0));
+                    particles.add(PParticle.builder(location.add(0, 0.75, 0)).offsets(0.6, 0.4, 0.6).build());
                 return particles;
-            case FIREWORK:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
-            case FISHING:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
             case FLAME:
-                return Collections.singletonList(new PParticle(location, 0.1, 0.1, 0.1, 0.05));
-            case FOOTSTEP:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
-            case HAPPY_VILLAGER:
-                return Collections.singletonList(new PParticle(location, 0.5, 0.5, 0.5, 0.0));
-            case HEART:
-                return Collections.singletonList(new PParticle(location, 0.6, 0.6, 0.6, 0.0));
-            case INSTANT_EFFECT:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
-            case ITEM:
-                return Collections.singletonList(new PParticle(location, 0.6, 0.6, 0.6, 0.0));
-            case ITEM_SLIME:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
-            case ITEM_SNOWBALL:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
-            case LARGE_SMOKE:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
-            case LAVA:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
-            case MYCELIUM:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
+            case CLOUD:
+                return Collections.singletonList(PParticle.builder(location).offsets(0.1, 0.1, 0.1).speed(0.05).build());
             case NAUTILUS:
-                return Collections.singletonList(new PParticle(location, 0.5, 0.5, 0.5, 1.0));
-            case NOTE:
-                return Collections.singletonList(new PParticle(location, 0.6, 0.6, 0.6, 0.0));
-            case POOF:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
             case PORTAL:
-                return Collections.singletonList(new PParticle(location, 0.5, 0.5, 0.5, 1.0));
-            case RAIN:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
-            case SMOKE:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
-            case SPELL:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
-            case SPIT:
-                return Collections.singletonList(new PParticle(location, 0.6, 0.6, 0.6, 0.0));
-            case SPLASH:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
-            case SQUID_INK:
-                return Collections.singletonList(new PParticle(location, 0.6, 0.6, 0.6, 0.0));
-            case SWEEP_ATTACK:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
-            case TOTEM_OF_UNDYING:
-                return Collections.singletonList(new PParticle(location, 0.6, 0.6, 0.6, 0.0));
+                return Collections.singletonList(PParticle.builder(location).offsets(0.5, 0.5, 0.5).speed(1.0).build());
             case UNDERWATER:
                 for (int i = 0; i < 5; i++)
-                    particles.add(new PParticle(location, 0.5, 0.5, 0.5, 0.0));
+                    particles.add(PParticle.builder(location).offsets(0.5, 0.5, 0.5).build());
                 return particles;
-            case WITCH:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
             default:
-                return Collections.singletonList(new PParticle(location, 0.4, 0.4, 0.4, 0.0));
+                return Collections.singletonList(PParticle.builder(location).offsets(0.4, 0.4, 0.4).build());
         }
     }
 

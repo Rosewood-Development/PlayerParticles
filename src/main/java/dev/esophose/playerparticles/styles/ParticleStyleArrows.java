@@ -56,7 +56,7 @@ public class ParticleStyleArrows extends ConfiguredParticleStyle implements List
                 continue;
 
             if (projectile.getShooter() != null && ((Player) projectile.getShooter()).getUniqueId().equals(particle.getOwnerUniqueId())) {
-                particles.add(new PParticle(projectile.getLocation(), 0.05F, 0.05F, 0.05F, 0.0F));
+                particles.add(PParticle.builder(projectile.getLocation()).offsets(0.05F, 0.05F, 0.05F).build());
                 count++;
             }
             
