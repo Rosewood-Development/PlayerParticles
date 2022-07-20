@@ -30,8 +30,6 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
         LocaleManager localeManager = playerParticles.getManager(LocaleManager.class);
         GuiManager guiManager = playerParticles.getManager(GuiManager.class);
 
-        this.fillBorder(BorderColor.getOrDefault(Setting.GUI_GLASS_COLORS_LOAD_PRESET_GROUPS.getString(), BorderColor.GREEN));
-
         ParticleGroupPresetPage pageInfo = presetManager.getPresetGroupPages(pplayer).get(pageNumber);
         Map<Integer, BorderColor> extraBorder = pageInfo.getExtraBorder();
 

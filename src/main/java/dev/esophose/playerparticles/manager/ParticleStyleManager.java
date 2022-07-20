@@ -52,6 +52,10 @@ public class ParticleStyleManager extends Manager {
                 pack.getEventStyles().forEach(event::registerEventStyle);
             });
 
+            // Register default styles
+            DefaultStyles.registerStyles(event);
+
+            // Call event for other plugins to register styles
             Bukkit.getPluginManager().callEvent(event);
 
             Collection<ParticleStyle> eventStyles = event.getRegisteredEventStyles().values();

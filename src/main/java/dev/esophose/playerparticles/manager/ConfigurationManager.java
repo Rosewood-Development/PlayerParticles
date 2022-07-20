@@ -70,7 +70,6 @@ public class ConfigurationManager extends Manager {
         GUI_GLASS_COLORS_EDIT_EFFECT("gui-border-colors.edit-effect", "LIGHT_BLUE"),
         GUI_GLASS_COLORS_EDIT_PARTICLE("gui-border-colors.edit-particle", "RED"),
         GUI_GLASS_COLORS_EDIT_STYLE("gui-border-colors.edit-style", "BLUE"),
-        GUI_GLASS_COLORS_LOAD_PRESET_GROUPS("gui-border-colors.load-preset-groups", "GREEN"),
         GUI_GLASS_COLORS_MANAGE_GROUPS("gui-border-colors.manage-groups", "BROWN"),
         GUI_GLASS_COLORS_MANAGE_PARTICLES("gui-border-colors.manage-particles", "ORANGE"),
 

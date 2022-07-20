@@ -4,8 +4,6 @@ import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.event.ParticleStyleRegistrationEvent;
 import dev.esophose.playerparticles.manager.ParticleStyleManager;
 import org.bukkit.Bukkit;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 
@@ -57,9 +55,6 @@ public class DefaultStyles implements Listener {
      * Initializes all the default styles
      */
     public static void initStyles() {
-        // Register event
-        Bukkit.getPluginManager().registerEvents(new DefaultStyles(), PlayerParticles.getInstance());
-
         // Register their events
         PluginManager pluginManager = Bukkit.getPluginManager();
         PlayerParticles playerParticles = PlayerParticles.getInstance();
@@ -75,8 +70,7 @@ public class DefaultStyles implements Listener {
         pluginManager.registerEvents((Listener) TRAIL, playerParticles);
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onParticleStyleRegistration(ParticleStyleRegistrationEvent event) {
+    public static void registerStyles(ParticleStyleRegistrationEvent event) {
         event.registerStyle(ARROWS);
         event.registerStyle(BATMAN);
         event.registerStyle(BEAM);
