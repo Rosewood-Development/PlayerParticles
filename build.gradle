@@ -27,7 +27,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'org.spigotmc:spigot-api:1.19-R0.1-SNAPSHOT'
+    compileOnly 'org.spigotmc:spigot-api:1.19.1-R0.1-SNAPSHOT'
     compileOnly 'org.jetbrains:annotations:23.0.0'
     compileOnly 'me.clip:placeholderapi:2.10.4'
     compileOnly 'org.xerial:sqlite-jdbc:3.36.0.3'

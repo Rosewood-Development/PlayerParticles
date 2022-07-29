@@ -282,8 +282,10 @@ public class VietnameseLocale implements Locale {
 
             this.put("#30", "GUI Manage Particles Messages");
             this.put("gui-manage-your-particles", "Quản lí Hạt hiệu ứng của bạn");
+            this.put("gui-manage-your-particles-name", "Quản lí Hạt hiệu ứng của bạn");
             this.put("gui-manage-your-particles-description", "Tạo, chỉnh sửa, và xóa Hạt hiệu ứng của bạn");
             this.put("gui-manage-your-groups", "Quản lí Group của bạn");
+            this.put("gui-manage-your-groups-name", "Quản lí Group của bạn");
             this.put("gui-manage-your-groups-description", "Tạo, xóa, và tải Group Hạt hiệu ứng của bạn");
 
             this.put("#31", "GUI Load Messages");

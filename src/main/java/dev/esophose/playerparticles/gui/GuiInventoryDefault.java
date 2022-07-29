@@ -92,7 +92,7 @@ public class GuiInventoryDefault extends GuiInventory {
         GuiActionButton manageYourParticlesButton = new GuiActionButton(
                 manageParticlesSlot,
                 GuiIcon.PARTICLES.get(),
-                localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("gui-manage-your-particles"),
+                localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("gui-manage-your-particles-name"),
                 new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-manage-your-particles-description")},
                 (button, isShiftClick) -> guiManager.transition(new GuiInventoryManageParticles(pplayer)));
         this.actionButtons.add(manageYourParticlesButton);
@@ -102,7 +102,7 @@ public class GuiInventoryDefault extends GuiInventory {
             GuiActionButton manageYourGroupsButton = new GuiActionButton(
                     manageGroupsSlot,
                     GuiIcon.GROUPS.get(),
-                    localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("gui-manage-your-groups"),
+                    localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("gui-manage-your-groups-name"),
                     new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-manage-your-groups-description")},
                     (button, isShiftClick) -> guiManager.transition(new GuiInventoryManageGroups(pplayer, 1)));
             this.actionButtons.add(manageYourGroupsButton);

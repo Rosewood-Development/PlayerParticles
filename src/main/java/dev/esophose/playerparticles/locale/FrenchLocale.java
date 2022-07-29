@@ -282,8 +282,10 @@ public class FrenchLocale implements Locale {
 
             this.put("#30", "GUI Manage Particles Messages");
             this.put("gui-manage-your-particles", "Gérez vos particules");
+            this.put("gui-manage-your-particles-name", "Gérez vos particules");
             this.put("gui-manage-your-particles-description", "Créez, éditez, et supprimez vos particules");
             this.put("gui-manage-your-groups", "Gérez vos groupes");
+            this.put("gui-manage-your-groups-name", "Gérez vos groupes");
             this.put("gui-manage-your-groups-description", "Créez, éditez, et supprimez vos groupes particules");
 
             this.put("#31", "GUI Load Messages");

@@ -282,8 +282,10 @@ public class SimplifiedChineseLocale implements Locale {
 
             this.put("#30", "GUI Manage Particles Messages");
             this.put("gui-manage-your-particles", "管理你的粒子特效");
+            this.put("gui-manage-your-particles-name", "管理你的粒子特效");
             this.put("gui-manage-your-particles-description", "创建、编辑和删除你的粒子特效");
             this.put("gui-manage-your-groups", "管理你的特效组");
+            this.put("gui-manage-your-groups-name", "管理你的特效组");
             this.put("gui-manage-your-groups-description", "创建、删除和加载你的粒子组");
 
             this.put("#31", "GUI Load Messages");

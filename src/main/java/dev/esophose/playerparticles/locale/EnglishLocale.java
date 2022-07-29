@@ -282,8 +282,10 @@ public class EnglishLocale implements Locale {
 
             this.put("#30", "GUI Manage Particles Messages");
             this.put("gui-manage-your-particles", "Manage Your Particles");
+            this.put("gui-manage-your-particles-name", "Manage Your Particles");
             this.put("gui-manage-your-particles-description", "Create, edit, and delete your particles");
             this.put("gui-manage-your-groups", "Manage Your Groups");
+            this.put("gui-manage-your-groups-name", "Manage Your Groups");
             this.put("gui-manage-your-groups-description", "Create, delete, and load your particle groups");
 
             this.put("#31", "GUI Load Messages");

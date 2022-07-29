@@ -282,8 +282,10 @@ public class PolishLocale implements Locale {
 
             this.put("#33", "GUI Manage Particles Messages");
             this.put("gui-manage-your-particles", "Zarządzaj Swoimi Efektami");
+            this.put("gui-manage-your-particles-name", "Zarządzaj Swoimi Efektami");
             this.put("gui-manage-your-particles-description", "Twórz, edytuj oraz usuwaj twoje efekty");
             this.put("gui-manage-your-groups", "Zarządzaj Swoimi Grupami");
+            this.put("gui-manage-your-groups-name", "Zarządzaj Swoimi Grupami");
             this.put("gui-manage-your-groups-description", "Twórz, edytuj oraz usuwaj twoje grupy efektów");
 
             this.put("#34", "GUI Load Messages");

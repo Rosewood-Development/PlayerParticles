@@ -282,8 +282,10 @@ public class GermanLocale implements Locale {
 
             this.put("#30", "GUI Manage Particles Messages");
             this.put("gui-manage-your-particles", "Verwalten Sie Ihre Partikel");
+            this.put("gui-manage-your-particles-name", "Verwalten Sie Ihre Partikel");
             this.put("gui-manage-your-particles-description", "Erstellen, bearbeiten und löschen Sie Ihre Partikel");
             this.put("gui-manage-your-groups", "Verwalten Sie Ihre Gruppen");
+            this.put("gui-manage-your-groups-name", "Verwalten Sie Ihre Gruppen");
             this.put("gui-manage-your-groups-description", "Erstellen, löschen und laden Sie Ihre Partikelgruppen");
 
             this.put("#31", "GUI Load Messages");
