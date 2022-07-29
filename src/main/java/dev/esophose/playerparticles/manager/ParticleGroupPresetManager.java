@@ -362,8 +362,9 @@ public class ParticleGroupPresetManager extends Manager {
             existingPresets.add(new PresetData(groupName, displayName, guiIcon, permission, allowPermissionOverride, particleData));
         }
 
-        // Delete existing file, going to overwrite it all
-        presetsFile.delete();
+        // Rename existing file to something else since we're going to remove it
+        this.playerParticles.getLogger().warning("Migrating preset_groups.yml from the old format to the new! A backup of the previous file will be created.");
+        presetsFile.renameTo(new File(presetsFile.getParentFile(), "preset_groups.yml-" + System.currentTimeMillis() + ".old"));
 
         // Copy over the new file
         try (InputStream inStream = PlayerParticles.getInstance().getResource(ParticleGroupPresetManager.FILE_NAME)) {
