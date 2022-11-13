@@ -62,6 +62,7 @@ public class PParticle {
      * @param directional If the particle should use the x, y, and z offsets as directions instead
      * @deprecated Use {@link PParticle#builder(Location)} instead
      */
+    @Deprecated
     public PParticle(Location location, double xOff, double yOff, double zOff, double speed, boolean directional) {
         this(location, xOff, yOff, zOff, speed, directional, 0, null, null);
     }
@@ -76,6 +77,7 @@ public class PParticle {
      * @param speed The speed the particle will move at
      * @deprecated Use {@link PParticle#builder(Location)} instead
      */
+    @Deprecated
     public PParticle(Location location, double xOff, double yOff, double zOff, double speed) {
         this(location, xOff, yOff, zOff, speed, false, 0, null, null);
     }
@@ -85,8 +87,9 @@ public class PParticle {
      * Useful for making shapes with the styles
      * 
      * @param location The location to display the particles at
-     * @deprecated Use {@link PParticle#builder(Location)} instead
+     * @deprecated Use {@link PParticle#point(Location)} instead
      */
+    @Deprecated
     public PParticle(Location location) {
         this(location, 0.0F, 0.0F, 0.0F, 0.0F, false, 0, null, null);
     }

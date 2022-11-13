@@ -342,9 +342,9 @@ public class ParticleManager extends Manager implements Listener, Runnable {
     }
 
     /**
-     * Gets the rainbow OrdinaryColor for particle spawning with data 'rainbow', shifted half way through the HSB spectrum
+     * Gets the rainbow OrdinaryColor for particle spawning with data 'rainbow', shifted half-way through the HSB spectrum
      *
-     * @return The rainbow OrdinaryColor for particle spawning with data 'rainbow', shifted half way through the HSB spectrum
+     * @return The rainbow OrdinaryColor for particle spawning with data 'rainbow', shifted half-way through the HSB spectrum
      */
     public OrdinaryColor getShiftedRainbowParticleColor() {
         Color rgb = Color.getHSBColor((this.hue / 360F) + 0.5F, 1.0F, 1.0F);
@@ -379,4 +379,5 @@ public class ParticleManager extends Manager implements Listener, Runnable {
     public NoteColor getRandomNoteParticleColor() {
         return new NoteColor(this.random.nextInt(25));
     }
+
 }
