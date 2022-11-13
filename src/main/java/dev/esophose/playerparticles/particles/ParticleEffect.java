@@ -192,7 +192,7 @@ public enum ParticleEffect {
         directory.mkdirs();
 
         File file = new File(directory, this.getInternalName() + ".yml");
-        this.config = CommentedFileConfiguration.loadConfiguration(PlayerParticles.getInstance(), file);
+        this.config = CommentedFileConfiguration.loadConfiguration(file);
 
         boolean changed = this.setIfNotExists("effect-name", this.getInternalName(), "The name the effect will display as");
         changed |= this.setIfNotExists("enabled", this.enabledByDefault, "If the effect is enabled or not");

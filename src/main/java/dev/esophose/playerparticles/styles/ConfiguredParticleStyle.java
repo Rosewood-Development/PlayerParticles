@@ -58,7 +58,7 @@ public abstract class ConfiguredParticleStyle implements ParticleStyle {
         directory.mkdirs();
 
         File file = new File(directory, this.internalStyleName + ".yml");
-        this.config = CommentedFileConfiguration.loadConfiguration(PlayerParticles.getInstance(), file);
+        this.config = CommentedFileConfiguration.loadConfiguration(file);
 
         this.changed = false;
         this.setIfNotExists("style-name", this.internalStyleName, "The name the style will display as");

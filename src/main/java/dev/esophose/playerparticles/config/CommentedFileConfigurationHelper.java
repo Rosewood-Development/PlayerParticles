@@ -14,20 +14,8 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class CommentedFileConfigurationHelper {
-
-    private JavaPlugin plugin;
-
-    /**
-     * Manage custom configurations and files
-     *
-     * @param plugin The JavaPlugin the configuration is for
-     */
-    public CommentedFileConfigurationHelper(JavaPlugin plugin) {
-        this.plugin = plugin;
-    }
 
     /**
      * Get new configuration
@@ -36,8 +24,12 @@ public class CommentedFileConfigurationHelper {
      * @return - New SimpleConfig
      */
     public CommentedFileConfiguration getNewConfig(File file) {
-        if (!this.plugin.getDataFolder().exists())
-            this.plugin.getDataFolder().mkdir();
+        if (file.isDirectory())
+            throw new IllegalArgumentException("Cannot create configuration from directory");
+
+        File parent = file.getParentFile();
+        if (!parent.exists())
+            parent.mkdirs();
 
         if (!file.exists()) {
             try {
@@ -47,7 +39,7 @@ public class CommentedFileConfigurationHelper {
             }
         }
 
-        return new CommentedFileConfiguration(this.getConfigContent(file), file, this.getCommentsNum(file), this.plugin);
+        return new CommentedFileConfiguration(this.getConfigContent(file), file, this.getCommentsNum(file));
     }
 
     /**
@@ -63,8 +55,6 @@ public class CommentedFileConfigurationHelper {
         try {
             int commentNum = 0;
 
-            String pluginName = this.getPluginName();
-
             StringBuilder whole = new StringBuilder();
             BufferedReader reader = Files.newBufferedReader(Paths.get(file.getAbsolutePath()), StandardCharsets.UTF_8);
 
@@ -73,7 +63,7 @@ public class CommentedFileConfigurationHelper {
                 // Convert comments into keys
                 if (currentLine.trim().startsWith("#")) {
                     String addLine = currentLine.replaceAll(Pattern.quote("'"), Matcher.quoteReplacement("''"))
-                            .replaceFirst("#", pluginName + "_COMMENT_" + commentNum++ + ": '") + "'";
+                            .replaceFirst("#", "_COMMENT_" + commentNum++ + ": '") + "'";
                     whole.append(addLine).append("\n");
                 } else {
                     whole.append(currentLine).append("\n");
@@ -126,7 +116,7 @@ public class CommentedFileConfigurationHelper {
         StringBuilder config = new StringBuilder();
 
         for (String line : lines) {
-            if (line.trim().startsWith(this.getPluginName() + "_COMMENT")) {
+            if (line.trim().startsWith("_COMMENT")) {
                 int whitespaceIndex = line.indexOf(line.trim());
                 String comment = line.substring(0, whitespaceIndex) + "#" + line.substring(line.indexOf(":") + 3, line.length() - 1);
 
@@ -187,16 +177,15 @@ public class CommentedFileConfigurationHelper {
                     commentSpacing = trimmed.indexOf(trimmed.trim());
                 } else if (!line.trim().isEmpty()) {
                     lineHadContent = true;
-
                     if (line.trim().startsWith("-"))
                         forceCompact = true;
                 }
 
                 if (!compactLines && !forceCompact && (
-                           (lastLineSpacing != -1 && lineSpacing != lastLineSpacing)
-                        || (commentSpacing != -1 && commentSpacing < lastCommentSpacing)
-                        || (lastLineHadContent && lineHadContent)
-                        || (lineWasComment && lastLineHadContent))
+                        (lastLineSpacing != -1 && lineSpacing != lastLineSpacing)
+                                || (commentSpacing != -1 && commentSpacing <= 3 && lastCommentSpacing > 3)
+                                || (lastLineHadContent && lineHadContent)
+                                || (lineWasComment && lastLineHadContent))
                         && !(lastLineHadContent && !lineWasComment)) {
                     stringBuilder.append('\n');
                 }
@@ -210,16 +199,30 @@ public class CommentedFileConfigurationHelper {
             }
         }
 
+        // Remove all spaces from "empty" lines and replace with a single newline
+        // Only allow at maximum two newlines in a row
+        StringBuilder compactedBuilder = new StringBuilder();
+        try (Scanner scanner = new Scanner(stringBuilder.toString())) {
+            int consecutiveNewlines = 0;
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if (line.trim().isEmpty()) {
+                    consecutiveNewlines++;
+                    if (consecutiveNewlines < 2)
+                        compactedBuilder.append('\n');
+                } else {
+                    consecutiveNewlines = 0;
+                    compactedBuilder.append(line).append('\n');
+                }
+            }
+        }
+
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(file.getAbsolutePath()), StandardCharsets.UTF_8)) {
-            writer.write(stringBuilder.toString());
+            writer.write(compactedBuilder.toString());
             writer.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public String getPluginName() {
-        return this.plugin.getDescription().getName();
     }
 
 }

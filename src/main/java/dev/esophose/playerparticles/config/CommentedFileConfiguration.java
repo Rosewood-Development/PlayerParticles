@@ -5,7 +5,6 @@ import java.io.Reader;
 import java.lang.reflect.Field;
 import java.util.stream.Stream;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.yaml.snakeyaml.DumperOptions;
 
 public class CommentedFileConfiguration extends CommentedConfigurationSection {
@@ -14,35 +13,38 @@ public class CommentedFileConfiguration extends CommentedConfigurationSection {
     private CommentedFileConfigurationHelper helper;
     private File file;
 
-    public CommentedFileConfiguration(Reader configStream, File configFile, int comments, JavaPlugin plugin) {
+    public CommentedFileConfiguration(Reader configStream, File configFile, int comments) {
         super(YamlConfiguration.loadConfiguration(configStream));
         this.comments = comments;
-        this.helper = new CommentedFileConfigurationHelper(plugin);
+        this.helper = new CommentedFileConfigurationHelper();
         this.file = configFile;
     }
 
-    public static CommentedFileConfiguration loadConfiguration(JavaPlugin plugin, File file) {
-        return new CommentedFileConfigurationHelper(plugin).getNewConfig(file);
+    public static CommentedFileConfiguration loadConfiguration(File file) {
+        return new CommentedFileConfigurationHelper().getNewConfig(file);
     }
 
     public void set(String path, Object value, String... comments) {
-        if (!this.contains(path)) {
-            int subpathIndex = path.lastIndexOf('.');
-            String subpath = subpathIndex == -1 ? "" : path.substring(0, subpathIndex) + '.';
-
-            for (String comment : comments) {
-                this.set(subpath + this.helper.getPluginName() + "_COMMENT_" + this.comments, " " + comment);
-                this.comments++;
-            }
-        }
-
+        this.addPathedComments(path, comments);
         this.set(path, value);
     }
 
     public void addComments(String... comments) {
         for (String comment : comments) {
-            this.set(this.helper.getPluginName() + "_COMMENT_" + this.comments, " " + comment);
+            this.set("_COMMENT_" + this.comments, " " + comment);
             this.comments++;
+        }
+    }
+
+    public void addPathedComments(String path, String... comments) {
+        if (!this.contains(path)) {
+            int subpathIndex = path.lastIndexOf('.');
+            String subpath = subpathIndex == -1 ? "" : path.substring(0, subpathIndex) + '.';
+
+            for (String comment : comments) {
+                this.set(subpath + "_COMMENT_" + this.comments, " " + comment);
+                this.comments++;
+            }
         }
     }
 

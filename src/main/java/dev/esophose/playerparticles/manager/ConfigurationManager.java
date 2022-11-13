@@ -273,7 +273,7 @@ public class ConfigurationManager extends Manager {
         boolean setHeaderFooter = !configFile.exists();
         boolean changed = setHeaderFooter;
 
-        this.configuration = CommentedFileConfiguration.loadConfiguration(this.playerParticles, configFile);
+        this.configuration = CommentedFileConfiguration.loadConfiguration(configFile);
 
         if (setHeaderFooter)
             this.configuration.addComments(HEADER);

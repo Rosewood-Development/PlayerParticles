@@ -50,7 +50,7 @@ public class LocaleManager extends Manager {
         }
 
         boolean changed = false;
-        CommentedFileConfiguration configuration = CommentedFileConfiguration.loadConfiguration(this.playerParticles, file);
+        CommentedFileConfiguration configuration = CommentedFileConfiguration.loadConfiguration(file);
         if (newFile) {
             configuration.addComments(locale.getLocaleName() + " translation by " + locale.getTranslatorName());
             Map<String, String> defaultLocaleStrings = locale.getDefaultLocaleStrings();
@@ -102,7 +102,7 @@ public class LocaleManager extends Manager {
             this.playerParticles.getLogger().severe("File " + targetLocaleFile.getName() + " does not exist. Defaulting to en_US.lang");
         }
 
-        this.locale = CommentedFileConfiguration.loadConfiguration(this.playerParticles, targetLocaleFile);
+        this.locale = CommentedFileConfiguration.loadConfiguration(targetLocaleFile);
     }
 
     @Override

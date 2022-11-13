@@ -322,7 +322,7 @@ public class ParticleGroupPresetManager extends Manager {
     }
 
     private void tryMigrateOld(File presetsFile) {
-        CommentedFileConfiguration presetsConfig = CommentedFileConfiguration.loadConfiguration(this.playerParticles, presetsFile);
+        CommentedFileConfiguration presetsConfig = CommentedFileConfiguration.loadConfiguration(presetsFile);
 
         // Check all keys to see if we have any that match both "presets" and "extra", that should be good enough
         boolean title = false;
