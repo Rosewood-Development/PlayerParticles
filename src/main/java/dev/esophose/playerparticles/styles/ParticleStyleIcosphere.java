@@ -1,6 +1,8 @@
 package dev.esophose.playerparticles.styles;
 
+import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.config.CommentedFileConfiguration;
+import dev.esophose.playerparticles.manager.ParticleManager;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticlePair;
@@ -30,9 +32,11 @@ public class ParticleStyleIcosphere extends ConfiguredParticleStyle {
     private double angularVelocityZ;
 
     private int step;
+    private final ParticleManager particleManager;
 
     protected ParticleStyleIcosphere() {
         super("icosphere", true, true, 0);
+        this.particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
     }
 
     @Override
@@ -53,8 +57,27 @@ public class ParticleStyleIcosphere extends ConfiguredParticleStyle {
 
         if (particle.getEffect() == ParticleEffect.DUST_COLOR_TRANSITION) {
             ColorTransition colorTransition = particle.getColorTransition();
-            Color startColor = new Color(colorTransition.getStartColor().getRed(), colorTransition.getStartColor().getGreen(), colorTransition.getStartColor().getBlue());
-            Color endColor = new Color(colorTransition.getEndColor().getRed(), colorTransition.getEndColor().getGreen(), colorTransition.getEndColor().getBlue());
+            Color startColor;
+            if (colorTransition.getStartColor().equals(OrdinaryColor.RAINBOW)) {
+                OrdinaryColor color = this.particleManager.getRainbowParticleColor();
+                startColor = new Color(color.getRed(), color.getGreen(), color.getBlue());
+            } else if (colorTransition.getStartColor().equals(OrdinaryColor.RANDOM)) {
+                OrdinaryColor color = this.particleManager.getRandomParticleColor();
+                startColor = new Color(color.getRed(), color.getGreen(), color.getBlue());
+            } else {
+                startColor = new Color(colorTransition.getStartColor().getRed(), colorTransition.getStartColor().getGreen(), colorTransition.getStartColor().getBlue());
+            }
+
+            Color endColor;
+            if (colorTransition.getEndColor().equals(OrdinaryColor.RAINBOW)) {
+                OrdinaryColor color = this.particleManager.getShiftedRainbowParticleColor();
+                endColor = new Color(color.getRed(), color.getGreen(), color.getBlue());
+            } else if (colorTransition.getEndColor().equals(OrdinaryColor.RANDOM)) {
+                OrdinaryColor color = this.particleManager.getRainbowParticleColor();
+                endColor = new Color(color.getRed(), color.getGreen(), color.getBlue());
+            } else {
+                endColor = new Color(colorTransition.getEndColor().getRed(), colorTransition.getEndColor().getGreen(), colorTransition.getEndColor().getBlue());
+            }
 
             List<Vector> sortedPoints = new ArrayList<>(points);
             sortedPoints.sort(Comparator.comparingDouble(Vector::getY));
