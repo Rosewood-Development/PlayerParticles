@@ -42,7 +42,7 @@ public class GuiInventoryManageParticles extends GuiInventory {
                     .build();
             GuiActionButton selectButton = new GuiActionButton(
                     index,
-                    GuiIcon.PARTICLES.get(),
+                    particle.getStyle().getGuiIconMaterial(),
                     localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("gui-particle-name", StringPlaceholders.single("id", particle.getId())),
                     new String[]{
                             localeManager.getLocaleMessage("gui-color-subtext") + localeManager.getLocaleMessage("gui-click-to-edit-particle"),

@@ -23,7 +23,7 @@ import org.bukkit.Material;
 public class ParticlePair {
 
     private UUID ownerUUID;
-    private int id;
+    private final int id;
 
     private ParticleEffect effect;
     private ParticleStyle style;
@@ -396,14 +396,17 @@ public class ParticlePair {
     }
 
     /**
-     * Gets a copy of this ParticlePair
+     * @return a copy of this ParticlePair
      */
     public ParticlePair clone() {
         return new ParticlePair(this.ownerUUID, this.id, this.effect, this.style, this.itemMaterial, this.blockMaterial, this.color, this.noteColor, this.colorTransition, this.vibration);
     }
 
     /**
-     * Gets a copy of this ParticlePair with a different ID
+     * Gets a copy of this ParticlePair with a specified ID
+     *
+     * @param id the new ID of the ParticlePair
+     * @return a copy of this ParticlePair with a different ID
      */
     public ParticlePair clone(int id) {
         return new ParticlePair(this.ownerUUID, id, this.effect, this.style, this.itemMaterial, this.blockMaterial, this.color, this.noteColor, this.colorTransition, this.vibration);
