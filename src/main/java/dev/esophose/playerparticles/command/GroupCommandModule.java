@@ -129,45 +129,42 @@ public class GroupCommandModule implements CommandModule {
         }
         
         // Get the group
-        boolean isPreset = false;
         ParticleGroup group = pplayer.getParticleGroupByName(groupName);
-        if (group == null) {
-            // Didn't find a saved group, look at the presets
-            ParticleGroupPreset presetGroup = PlayerParticles.getInstance().getManager(ParticleGroupPresetManager.class).getPresetGroup(groupName);
-            if (presetGroup == null) {
-                localeManager.sendMessage(pplayer, "group-invalid", StringPlaceholders.single("name", groupName));
+        if (group != null) {
+            if (!group.canPlayerUse(pplayer)) {
+                localeManager.sendMessage(pplayer, "group-no-permission", StringPlaceholders.single("group", groupName));
                 return;
             }
-            
-            if (!presetGroup.canPlayerUse(pplayer)) {
-                localeManager.sendMessage(pplayer, "group-preset-no-permission", StringPlaceholders.single("group", groupName));
-                return;
+
+            // Empty out the active group and fill it with clones from the target group
+            ParticleGroup activeGroup = pplayer.getActiveParticleGroup();
+            activeGroup.getParticles().clear();
+            for (ParticlePair particle : group.getParticles().values()) {
+                ParticlePair clonedParticle = particle.clone();
+                clonedParticle.setOwner(pplayer);
+                activeGroup.getParticles().put(clonedParticle.getId(), clonedParticle);
             }
-            
-            group = presetGroup.getGroup();
-            isPreset = true;
-        } else if (!group.canPlayerUse(pplayer)) {
-            localeManager.sendMessage(pplayer, "group-no-permission", StringPlaceholders.single("group", groupName));
+
+            // Update group and notify player
+            PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), activeGroup);
+            localeManager.sendMessage(pplayer, "group-load-success", StringPlaceholders.builder("amount", activeGroup.getParticles().size()).addPlaceholder("name", groupName).build());
             return;
         }
 
-        // Empty out the active group and fill it with clones from the target group
-        ParticleGroup activeGroup = pplayer.getActiveParticleGroup();
-        activeGroup.getParticles().clear();
-        for (ParticlePair particle : group.getParticles().values()) {
-            ParticlePair clonedParticle = particle.clone();
-            clonedParticle.setOwner(pplayer);
-            activeGroup.getParticles().put(clonedParticle.getId(), clonedParticle);
+        // Didn't find a saved group, look at the presets
+        ParticleGroupPreset presetGroup = PlayerParticles.getInstance().getManager(ParticleGroupPresetManager.class).getPresetGroup(groupName);
+        if (presetGroup == null) {
+            localeManager.sendMessage(pplayer, "group-invalid", StringPlaceholders.single("name", groupName));
+            return;
         }
-        
-        // Update group and notify player
-        PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), activeGroup);
-        
-        if (!isPreset) {
-            localeManager.sendMessage(pplayer, "group-load-success", StringPlaceholders.builder("amount", activeGroup.getParticles().size()).addPlaceholder("name", groupName).build());
-        } else {
-            localeManager.sendMessage(pplayer, "group-load-preset-success", StringPlaceholders.builder("amount", activeGroup.getParticles().size()).addPlaceholder("name", groupName).build());
+
+        if (!presetGroup.canPlayerUse(pplayer)) {
+            localeManager.sendMessage(pplayer, "group-preset-no-permission", StringPlaceholders.single("group", groupName));
+            return;
         }
+
+        pplayer.loadPresetGroup(presetGroup.getGroup().getParticles().values());
+        localeManager.sendMessage(pplayer, "group-load-preset-success", StringPlaceholders.builder("amount", presetGroup.getGroup().getParticles().size()).addPlaceholder("name", groupName).build());
     }
     
     /**

@@ -1,8 +1,12 @@
 package dev.esophose.playerparticles.particles;
 
+import dev.esophose.playerparticles.api.PlayerParticlesAPI;
+import dev.esophose.playerparticles.manager.ConfigurationManager;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import dev.esophose.playerparticles.util.ParticleUtils;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -338,6 +342,31 @@ public class PPlayer {
         if (primaryParticle == null)
             primaryParticle = ParticlePair.getNextDefault(this);
         return primaryParticle;
+    }
+
+    public void loadPresetGroup(Collection<ParticlePair> particles) {
+        ParticleGroup activeGroup = this.getActiveParticleGroup();
+        if (ConfigurationManager.Setting.PRESET_GROUPS_ALLOW_OVERLAPPING.getBoolean()) {
+            List<Integer> existingIds = new ArrayList<>(activeGroup.getParticles().keySet());
+            for (ParticlePair particle : particles) {
+                int newId = ParticleUtils.getSmallestPositiveInt(existingIds.stream().mapToInt(Integer::intValue).toArray());
+                existingIds.add(newId);
+                ParticlePair clonedParticle = particle.clone(newId);
+                clonedParticle.setOwner(this);
+                if (ConfigurationManager.Setting.PRESET_GROUPS_OVERLAPPING_ONE_PER_STYLE.getBoolean())
+                    activeGroup.getParticles().values().removeIf(p -> p.getStyle().equals(clonedParticle.getStyle()));
+                activeGroup.getParticles().put(clonedParticle.getId(), clonedParticle);
+            }
+        } else {
+            activeGroup.getParticles().clear();
+            for (ParticlePair particle : particles) {
+                ParticlePair clonedParticle = particle.clone();
+                clonedParticle.setOwner(this);
+                activeGroup.getParticles().put(clonedParticle.getId(), clonedParticle);
+            }
+        }
+
+        PlayerParticlesAPI.getInstance().savePlayerParticleGroup(this.getPlayer(), activeGroup);
     }
 
 }

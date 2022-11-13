@@ -68,15 +68,7 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
 
             // Load Group Buttons
             GuiActionButton groupButton = new GuiActionButton(slot, group.getGuiIcon(), localeManager.getLocaleMessage("gui-color-icon-name") + group.getDisplayName(), lore.toArray(new String[0]), (button, isShiftClick) -> {
-                ParticleGroup activeGroup = pplayer.getActiveParticleGroup();
-                activeGroup.getParticles().clear();
-                for (ParticlePair particle : particles) {
-                    ParticlePair clonedParticle = particle.clone();
-                    clonedParticle.setOwner(pplayer);
-                    activeGroup.getParticles().put(clonedParticle.getId(), clonedParticle);
-                }
-                PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), activeGroup);
-
+                pplayer.loadPresetGroup(particles);
                 if (Setting.GUI_CLOSE_AFTER_GROUP_SELECTED.getBoolean())
                     this.close();
             });

@@ -403,6 +403,13 @@ public class ParticlePair {
     }
 
     /**
+     * Gets a copy of this ParticlePair with a different ID
+     */
+    public ParticlePair clone(int id) {
+        return new ParticlePair(this.ownerUUID, id, this.effect, this.style, this.itemMaterial, this.blockMaterial, this.color, this.noteColor, this.colorTransition, this.vibration);
+    }
+
+    /**
      * Gets a ParticlePair with the default values applied
      * Used for getting internal default values in the cases that null is specified
      *
