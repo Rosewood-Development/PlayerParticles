@@ -39,6 +39,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.minecart.CommandMinecart;
 
 public class CommandManager extends Manager implements CommandExecutor, TabCompleter {
 
@@ -160,7 +161,7 @@ public class CommandManager extends Manager implements CommandExecutor, TabCompl
                         sender.sendMessage(ChatColor.RED + "Error: This command can only be executed by a player.");
                         return;
                     }
-                } else if (sender instanceof ConsoleCommandSender || sender instanceof BlockCommandSender) {
+                } else if (sender instanceof ConsoleCommandSender || sender instanceof BlockCommandSender || sender instanceof CommandMinecart) {
                     commandModule.onCommandExecute(PlayerParticlesAPI.getInstance().getConsolePPlayer(), cmdArgs);
                     return;
                 }
