@@ -13,7 +13,6 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.MetadataValue;
 
 public abstract class ParticleSpawner {
 
@@ -137,10 +136,6 @@ public abstract class ParticleSpawner {
     public static boolean canSee(Player player, Player target) {
         if (player == null || target == null)
             return true;
-
-        for (MetadataValue meta : target.getMetadata("vanished"))
-            if (meta.asBoolean())
-                return false;
 
         return player.canSee(target);
     }

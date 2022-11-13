@@ -17,6 +17,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffectType;
 
 public final class ParticleUtils {
@@ -157,7 +158,7 @@ public final class ParticleUtils {
 
     public static boolean isPlayerVisible(Player player) {
         return Setting.DISPLAY_WHEN_INVISIBLE.getBoolean() || ((NMSUtil.getVersionNumber() <= 8 || player.getGameMode() != GameMode.SPECTATOR)
-                && !player.hasPotionEffect(PotionEffectType.INVISIBILITY));
+                && !player.hasPotionEffect(PotionEffectType.INVISIBILITY)) || player.getMetadata("vanished").stream().anyMatch(MetadataValue::asBoolean);
     }
 
     public static String rgbToHex(int r, int g, int b) {
