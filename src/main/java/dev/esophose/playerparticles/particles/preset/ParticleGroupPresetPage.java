@@ -2,6 +2,7 @@ package dev.esophose.playerparticles.particles.preset;
 
 import dev.esophose.playerparticles.gui.GuiInventory.BorderColor;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,8 @@ public class ParticleGroupPresetPage {
         this.title = title;
         this.presets = presets;
         this.extraBorder = extraBorder;
+
+        this.presets.sort(Comparator.comparingInt(ParticleGroupPreset::getGuiSlot).reversed());
     }
 
     /**

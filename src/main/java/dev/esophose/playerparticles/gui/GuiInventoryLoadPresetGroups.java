@@ -44,6 +44,12 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
                 continue;
 
             int slot = group.getGuiSlot();
+            if (slot == -1) {
+                slot = this.getFirstEmptySlot();
+                if (slot == -1)
+                    break;
+            }
+
             List<ParticlePair> particles = new ArrayList<>(group.getGroup().getParticles().values());
             particles.sort(Comparator.comparingInt(ParticlePair::getId));
 

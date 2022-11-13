@@ -17,7 +17,7 @@
 # group-name: The name of the group, how it will be applied by using /pp group load <group-name>.
 # display-name: The display name of the group, how it will show up in the GUI.
 # gui-icon: The icon to use for the GUI.
-# gui-slot: The slot that will be filled in the GUI.
+# gui-slot: The slot that will be filled in the GUI. Use -1 to automatically fill in the next available slot.
 # lore: Extra text that will appear on the preset group button.
 # permission: The permission that the player must have to see this group, may be left blank as ''. The player must still have permission for all effects/styles within the group in order to use it.
 # allow-permission-override: Allow the player to see and apply the group even if they don't have access to all the effects/styles within it. This does nothing if the permission is set to ''. 
@@ -37,7 +37,7 @@ page1:
     raincloud:
       display-name: 'Raincloud'
       gui-icon: 'ENDER_CHEST'
-      gui-slot: 10
+      gui-slot: -1
       lore:
         - '&cExample extra lore'
         - '&cAnother extra lore line'
@@ -54,7 +54,7 @@ page1:
     rainbows:
       display-name: 'Rainbows'
       gui-icon: 'ENDER_CHEST'
-      gui-slot: 11
+      gui-slot: -1
       permission: ''
       allow-permission-override: false
       1:
