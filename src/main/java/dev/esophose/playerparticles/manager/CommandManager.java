@@ -38,6 +38,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.CommandMinecart;
 
@@ -180,11 +181,42 @@ public class CommandManager extends Manager implements CommandExecutor, TabCompl
 
             return true;
         } else if (cmd.getName().equalsIgnoreCase("ppo")) {
-            String[] replacedArgs = new String[args.length];
+            // Replace placeholders if somebody tried to use them
             Player player = sender instanceof Player ? (Player) sender : null;
             for (int i = 0; i < args.length; i++)
-                replacedArgs[i] = PlaceholderAPIHook.applyPlaceholders(player, args[i]);
-            Bukkit.getScheduler().runTask(this.playerParticles, () -> this.ppoCommand.onCommandExecute(sender, replacedArgs));
+                if (args[i].startsWith("%"))
+                    args[i] = PlaceholderAPIHook.applyPlaceholders(player, args[i]);
+
+            // Replace selectors if from command blocks
+            if ((sender instanceof BlockCommandSender || sender instanceof CommandMinecart) && args.length > 0 && args[0].startsWith("@")) {
+                String selector = args[0];
+                try {
+                    List<Entity> selectedEntities = Bukkit.selectEntities(sender, selector);
+                    if (selectedEntities.isEmpty()) {
+                        sender.sendMessage("Error: No entities found for selector '" + selector + "'");
+                        return true;
+                    }
+
+                    if (selectedEntities.size() > 1) {
+                        sender.sendMessage("Error: More than one entity found for selector '" + selector + "'");
+                        return true;
+                    }
+
+                    Entity entity = selectedEntities.get(0);
+                    if (!(entity instanceof Player)) {
+                        sender.sendMessage("Error: Entity '" + entity.getName() + "' is not a player");
+                        return true;
+                    }
+
+                    args[0] = entity.getName();
+                } catch (IllegalArgumentException e) {
+                    sender.sendMessage("Error: Invalid player selector '" + selector + "'");
+                    return true;
+                }
+            }
+
+            // Run the /ppo command
+            Bukkit.getScheduler().runTask(this.playerParticles, () -> this.ppoCommand.onCommandExecute(sender, args));
         }
         
         return true;
