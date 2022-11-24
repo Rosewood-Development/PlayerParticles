@@ -101,6 +101,7 @@ public class VietnameseLocale implements Locale {
             this.put("group-save-success-overwrite", "&aGroup tên&b%name% &ađã được cập nhật với hạt hiệu ứng hiện tại của bạn!");
             this.put("group-load-success", "&aĐã áp dụng &b%amount% &ahạt hiệu ứng từ group được lưu với tên &b%name%&a!");
             this.put("group-load-preset-success", "&aĐã áp dụng &b%amount% &ahạt hiệu ứng tự presen group với tên &b%name%&a!");
+            this.put("group-unload-success", "&aĐã loại bỏ các phần tử &b%amount% &aphù hợp với nhóm &b%name%&a!");
             this.put("group-remove-preset", "&cBạn không thể xóa một preset group!");
             this.put("group-remove-success", "&aĐã xóa một Nhóm hạt hiệu ứng với tên &b%name%&a!");
             this.put("group-info-header", "&eGroup &b%group% &eđang có những hạt hiệu ứng sau:");

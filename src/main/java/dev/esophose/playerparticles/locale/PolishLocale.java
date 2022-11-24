@@ -101,6 +101,7 @@ public class PolishLocale implements Locale {
             this.put("group-save-success-overwrite", "&agrupa efektówd &b%name% &azostała zaaktualizowana o twoje aktualne efekty!");
             this.put("group-load-success", "&aZaładowano &b%amount% &aefektów z grupy efektów &b%name%&a!");
             this.put("group-load-preset-success", "&aZaładowano &b%amount% &aefektów z presetu administracyjnego &b%name%&a!");
+            this.put("group-unload-success", "&aUsunięto &b%amount% &aparticle(s) pasujące do grupy &b%name%&a!");
             this.put("group-remove-preset", "&cNie możesz usuwać presetów administracyjnych!");
             this.put("group-remove-success", "&aUsunięto grupę efektów &b%name%&a!");
             this.put("group-info-header", "&eGrupa &b%group% &ema następujące efekty:");

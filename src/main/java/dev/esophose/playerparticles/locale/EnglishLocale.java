@@ -101,6 +101,7 @@ public class EnglishLocale implements Locale {
             this.put("group-save-success-overwrite", "&aThe group named &b%name% &ahas been updated with your current particles!");
             this.put("group-load-success", "&aApplied &b%amount% &aparticle(s) from your saved group named &b%name%&a!");
             this.put("group-load-preset-success", "&aApplied &b%amount% &aparticle(s) from the preset group named &b%name%&a!");
+            this.put("group-unload-success", "&aRemoved &b%amount% &aparticle(s) matching the group &b%name%&a!");
             this.put("group-remove-preset", "&cYou cannot remove a preset group!");
             this.put("group-remove-success", "&aRemoved the particle group named &b%name%&a!");
             this.put("group-info-header", "&eThe group &b%group% &ehas the following particles:");

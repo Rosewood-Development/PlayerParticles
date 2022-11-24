@@ -101,6 +101,7 @@ public class SpanishLocale implements Locale {
             this.put("group-save-success-overwrite", "&aEl grupo llamado &b%name% &ase ha actualizado con sus partículas actuales!");
             this.put("group-load-success", "&Aplicadas &b%amount% &aparticulas de tu grupo guardado llamado &b%name%&a!");
             this.put("group-load-preset-success", "&aAplicado &b%amount% &aparticulas del grupo preestablecido llamado &b%name%&a!");
+            this.put("group-unload-success", "&aSe han eliminado &b%amount% &aparticipación(es) que coinciden con el grupo &b%name%&a!");
             this.put("group-remove-preset", "&cNo puedes eliminar un grupo preestablecido!");
             this.put("group-remove-success", "&aSe eliminó el grupo de partículas llamado &b%name%&a!");
             this.put("group-info-header", "&eEl grupo &b%group% &etiene las siguientes partículas:");

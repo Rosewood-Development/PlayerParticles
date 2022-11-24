@@ -16,18 +16,21 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.bukkit.util.StringUtil;
 
 public class GroupCommandModule implements CommandModule {
+
+    private static final List<String> VALID_COMMANDS = Arrays.asList("save", "load", "unload", "remove", "info", "list");
 
     @Override
     public void onCommandExecute(PPlayer pplayer, String[] args) {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
 
-        List<String> validCommands = Arrays.asList("save", "load", "remove", "info", "list");
-        if (args.length == 0 || !validCommands.contains(args[0])) {
+        if (args.length == 0 || !VALID_COMMANDS.contains(args[0])) {
             localeManager.sendMessage(pplayer, "command-description-group-save");
             localeManager.sendMessage(pplayer, "command-description-group-load");
+            localeManager.sendMessage(pplayer, "command-description-group-unload");
             localeManager.sendMessage(pplayer, "command-description-group-remove");
             localeManager.sendMessage(pplayer, "command-description-group-info");
             localeManager.sendMessage(pplayer, "command-description-group-list");
@@ -46,6 +49,9 @@ public class GroupCommandModule implements CommandModule {
             case "load":
                 this.onLoad(pplayer, args[1].toLowerCase());
                 break;
+            case "unload":
+                this.onUnload(pplayer, args[1].toLowerCase());
+                break;
             case "remove":
                 this.onRemove(pplayer, args[1].toLowerCase());
                 break;
@@ -58,13 +64,14 @@ public class GroupCommandModule implements CommandModule {
             default:
                 localeManager.sendMessage(pplayer, "command-description-group-save");
                 localeManager.sendMessage(pplayer, "command-description-group-load");
+                localeManager.sendMessage(pplayer, "command-description-group-unload");
                 localeManager.sendMessage(pplayer, "command-description-group-remove");
                 localeManager.sendMessage(pplayer, "command-description-group-info");
                 localeManager.sendMessage(pplayer, "command-description-group-list");
                 break;
         }
     }
-    
+
     /**
      * Handles the command /pp group save
      * 
@@ -165,6 +172,73 @@ public class GroupCommandModule implements CommandModule {
 
         pplayer.loadPresetGroup(presetGroup.getGroup().getParticles().values());
         localeManager.sendMessage(pplayer, "group-load-preset-success", StringPlaceholders.builder("amount", presetGroup.getGroup().getParticles().size()).addPlaceholder("name", groupName).build());
+    }
+
+    /**
+     * Handles the command /pp group unload
+     *
+     * @param pplayer The PPlayer
+     * @param groupName The target group name
+     */
+    private void onUnload(PPlayer pplayer, String groupName) {
+        LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
+
+        // Check that the groupName isn't the reserved name
+        if (groupName.equalsIgnoreCase(ParticleGroup.DEFAULT_NAME)) {
+            localeManager.sendMessage(pplayer, "group-reserved");
+            return;
+        }
+
+        // Get the group
+        ParticleGroup group = pplayer.getParticleGroupByName(groupName);
+        if (group != null) {
+            if (!group.canPlayerUse(pplayer)) {
+                localeManager.sendMessage(pplayer, "group-no-permission", StringPlaceholders.single("group", groupName));
+                return;
+            }
+
+            // Remove all particles that match the group
+            AtomicInteger matches = new AtomicInteger(0);
+            ParticleGroup activeGroup = pplayer.getActiveParticleGroup();
+            for (ParticlePair particle : group.getParticles().values()) {
+                activeGroup.getParticles().values().removeIf(x -> {
+                    boolean match = x.getEffect() == particle.getEffect() && x.getStyle() == particle.getStyle();
+                    if (match) matches.incrementAndGet();
+                    return match;
+                });
+            }
+
+            // Update group and notify player
+            PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), activeGroup);
+            localeManager.sendMessage(pplayer, "group-unload-success", StringPlaceholders.builder("amount", matches.get()).addPlaceholder("name", groupName).build());
+            return;
+        }
+
+        // Didn't find a saved group, look at the presets
+        ParticleGroupPreset presetGroup = PlayerParticles.getInstance().getManager(ParticleGroupPresetManager.class).getPresetGroup(groupName);
+        if (presetGroup == null) {
+            localeManager.sendMessage(pplayer, "group-invalid", StringPlaceholders.single("name", groupName));
+            return;
+        }
+
+        if (!presetGroup.canPlayerUse(pplayer)) {
+            localeManager.sendMessage(pplayer, "group-preset-no-permission", StringPlaceholders.single("group", groupName));
+            return;
+        }
+
+        // Remove all particles that match the group
+        AtomicInteger matches = new AtomicInteger(0);
+        ParticleGroup activeGroup = pplayer.getActiveParticleGroup();
+        for (ParticlePair particle : presetGroup.getGroup().getParticles().values()) {
+            activeGroup.getParticles().values().removeIf(x -> {
+                boolean match = x.getEffect() == particle.getEffect() && x.getStyle() == particle.getStyle();
+                if (match) matches.incrementAndGet();
+                return match;
+            });
+        }
+
+        PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), activeGroup);
+        localeManager.sendMessage(pplayer, "group-unload-success", StringPlaceholders.builder("amount", matches.get()).addPlaceholder("name", groupName).build());
     }
     
     /**
@@ -289,11 +363,9 @@ public class GroupCommandModule implements CommandModule {
     @Override
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
         List<String> matches = new ArrayList<>();
-        List<String> subCommands = Arrays.asList("save", "load", "remove", "info", "list");
-        
         if (args.length <= 1) {
-            if (args.length == 0) matches = subCommands;
-            else StringUtil.copyPartialMatches(args[0], subCommands, matches);
+            if (args.length == 0) matches = VALID_COMMANDS;
+            else StringUtil.copyPartialMatches(args[0], VALID_COMMANDS, matches);
         } else if (args.length == 2 && !args[0].equalsIgnoreCase("list")) {
             if (args[0].equalsIgnoreCase("save")) {
                 matches.add("<groupName>");

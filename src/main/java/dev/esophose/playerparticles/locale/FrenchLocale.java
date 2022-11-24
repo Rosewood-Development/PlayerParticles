@@ -101,6 +101,7 @@ public class FrenchLocale implements Locale {
             this.put("group-save-success-overwrite", "&aLe groupe &b%name% &aa été mis à jour avec vos particules actuelle !");
             this.put("group-load-success", "&b%amount% &aparticule(s) appliqués venant du groupe sauvegardé nommé &b%name% &a!");
             this.put("group-load-preset-success", "&b%amount% &aparticule(s) appliqués venant du preset sauvegardé nommé &b%name% &a!");
+            this.put("group-unload-success", "&aEnlevé &b%amount% &aparticle(s) correspondant au groupe &b%name%&a !");
             this.put("group-remove-preset", "&cVous ne pouvez pas supprimer un groupe de presets !");
             this.put("group-remove-success", "&aGroupe de particules &b%name% &asupprimé !");
             this.put("group-info-header", "&eLe groupe &b%group% &eposséde les particules suivantes :");

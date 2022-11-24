@@ -101,6 +101,7 @@ public class GermanLocale implements Locale {
             this.put("group-save-success-overwrite", "&aDie Gruppe mit dem Namen &b%name% &awurde mit Ihren aktuellen Partikeln aktualisiert!");
             this.put("group-load-success", "&aAngewendete &b%amount% &aPartikel aus Ihrer gespeicherten Gruppe mit dem Namen &b%name%&a!");
             this.put("group-load-preset-success", "&aAngewendete &b%amount% &aPartikel aus der voreingestellten Gruppe mit dem Namen &b%name%&a!");
+            this.put("group-unload-success", "&b%amount% &aPartikel der Gruppe &b%name%&a wurden entfernt!");
             this.put("group-remove-preset", "&cSie können keine voreingestellte Gruppe entfernen!");
             this.put("group-remove-success", "&aDie Partikelgruppe mit dem Namen &b%name%&awurde entfernt!");
             this.put("group-info-header", "&eDie Gruppe &b%group% &eenthält die folgenden Partikel:");

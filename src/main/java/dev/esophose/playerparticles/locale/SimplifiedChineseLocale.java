@@ -101,6 +101,7 @@ public class SimplifiedChineseLocale implements Locale {
             this.put("group-save-success-overwrite", "&a已将你当前使用的粒子特效加入到粒子组&b%name%&a内!");
             this.put("group-load-success", "&a已将&b%amount%&a个粒子特效加入你已保存的粒子组&b%name%&a内!");
             this.put("group-load-preset-success", "&a已使用&b%name%&a预设组内的&b%amount%&a个粒子特效!");
+            this.put("group-unload-success", "&a删除了与组别&b%name%&a相匹配的&b%amount%&a粒子!");
             this.put("group-remove-preset", "&c你无法删除预设粒子组!");
             this.put("group-remove-success", "&a成功删除粒子组&b%name%&a!");
             this.put("group-info-header", "&e粒子组&b%group%&e拥有以下粒子特效:");
