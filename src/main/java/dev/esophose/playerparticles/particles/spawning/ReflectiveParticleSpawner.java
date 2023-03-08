@@ -9,11 +9,13 @@ import dev.esophose.playerparticles.particles.data.Vibration;
 import dev.esophose.playerparticles.particles.spawning.reflective.ReflectionUtils;
 import dev.esophose.playerparticles.particles.spawning.reflective.ReflectionUtils.PackageType;
 import dev.esophose.playerparticles.particles.spawning.reflective.ReflectiveParticleEffectMapping;
-import dev.esophose.playerparticles.util.NMSUtil;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
+
+import dev.rosewood.rosegarden.utils.NMSUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;

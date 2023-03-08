@@ -1,10 +1,10 @@
 package dev.esophose.playerparticles.manager;
 
 import dev.esophose.playerparticles.PlayerParticles;
-import dev.esophose.playerparticles.database.DatabaseConnector;
-import dev.esophose.playerparticles.database.MySQLConnector;
-import dev.esophose.playerparticles.database.SQLiteConnector;
-import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import dev.esophose.playerparticles.database.migrations._1_InitialMigration;
+import dev.esophose.playerparticles.database.migrations._2_Add_Data_Columns;
+import dev.esophose.playerparticles.database.migrations._3_Add_Setting_Toggle_Self_Column;
+import dev.esophose.playerparticles.database.migrations._4_Add_Fixed_Effect_Yaw_Pitch_Columns;
 import dev.esophose.playerparticles.particles.ConsolePPlayer;
 import dev.esophose.playerparticles.particles.FixedParticleEffect;
 import dev.esophose.playerparticles.particles.PPlayer;
@@ -19,12 +19,19 @@ import dev.esophose.playerparticles.styles.ParticleStyle;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
+
+import dev.rosewood.rosegarden.RosePlugin;
+import dev.rosewood.rosegarden.database.DataMigration;
+import dev.rosewood.rosegarden.database.SQLiteConnector;
+import dev.rosewood.rosegarden.manager.AbstractDataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -36,52 +43,23 @@ import org.bukkit.entity.Player;
  * All data changes to PPlayers such as group or fixed effect changes must be done through here,
  * rather than directly on the PPlayer object
  */
-public class DataManager extends Manager {
+public class DataManager extends AbstractDataManager {
 
-    private DatabaseConnector databaseConnector;
-
-    public DataManager(PlayerParticles playerParticles) {
+    public DataManager(RosePlugin playerParticles) {
         super(playerParticles);
     }
 
-    @Override
-    public void reload() {
-        Bukkit.getScheduler().runTaskAsynchronously(this.playerParticles, () -> {
-            try {
-                if (Setting.MYSQL_ENABLED.getBoolean()) {
-                    String hostname = Setting.MYSQL_HOSTNAME.getString();
-                    int port = Setting.MYSQL_PORT.getInt();
-                    String database = Setting.MYSQL_DATABASE_NAME.getString();
-                    String username = Setting.MYSQL_USER_NAME.getString();
-                    String password = Setting.MYSQL_USER_PASSWORD.getString();
-                    boolean useSSL = Setting.MYSQL_USE_SSL.getBoolean();
-
-                    this.databaseConnector = new MySQLConnector(this.playerParticles, hostname, port, database, username, password, useSSL);
-                    this.playerParticles.getLogger().info("Data handler connected using MySQL.");
-                } else {
-                    this.databaseConnector = new SQLiteConnector(this.playerParticles);
-                    this.playerParticles.getLogger().info("Data handler connected using SQLite.");
-                }
-            } catch (Exception ex) {
-                this.playerParticles.getLogger().severe("Fatal error trying to connect to database. Please make sure all your connection settings are correct and try again. Plugin has been disabled.");
-                Bukkit.getPluginManager().disablePlugin(this.playerParticles);
-                return;
-            }
-
-            // Migrate data after establishing connection
-            this.playerParticles.getManager(DataMigrationManager.class);
-
+    /**
+     * Loads all fixed effects and player particles from the database
+     */
+    public void loadEffects() {
+        Bukkit.getScheduler().runTaskAsynchronously(this.rosePlugin, () -> {
             this.loadFixedEffects();
             for (Player player : Bukkit.getOnlinePlayers())
                 this.getPPlayer(player.getUniqueId(), (pplayer) -> { }); // Loads the PPlayer from the database
+
             this.getPPlayer(ConsolePPlayer.getUUID(), (pplayer) -> { }); // Load the console PPlayer
         });
-    }
-
-    @Override
-    public void disable() {
-        if (this.databaseConnector != null)
-            this.databaseConnector.closeConnection();
     }
 
     /**
@@ -93,7 +71,7 @@ public class DataManager extends Manager {
      * @return The PPlayer from cache
      */
     public PPlayer getPPlayer(UUID playerUUID) {
-        return this.playerParticles.getManager(ParticleManager.class).getPPlayers().get(playerUUID);
+        return this.rosePlugin.getManager(ParticleManager.class).getPPlayers().get(playerUUID);
     }
 
     /**
@@ -269,7 +247,7 @@ public class DataManager extends Manager {
                 }
 
                 this.sync(() -> {
-                    this.playerParticles.getManager(ParticleManager.class).addPPlayer(loadedPPlayer);
+                    this.rosePlugin.getManager(ParticleManager.class).addPPlayer(loadedPPlayer);
                     callback.accept(loadedPPlayer);
                 });
             });
@@ -599,7 +577,7 @@ public class DataManager extends Manager {
      * @param asyncCallback The callback to run on a separate thread
      */
     private void async(Runnable asyncCallback) {
-        Bukkit.getScheduler().runTaskAsynchronously(this.playerParticles, asyncCallback);
+        Bukkit.getScheduler().runTaskAsynchronously(this.rosePlugin, asyncCallback);
     }
 
     /**
@@ -608,25 +586,17 @@ public class DataManager extends Manager {
      * @param syncCallback The callback to run on the main thread
      */
     private void sync(Runnable syncCallback) {
-        Bukkit.getScheduler().runTask(this.playerParticles, syncCallback);
+        Bukkit.getScheduler().runTask(this.rosePlugin, syncCallback);
     }
 
-    /**
-     * @return The connector to the database
-     */
-    public DatabaseConnector getDatabaseConnector() {
-        return this.databaseConnector;
-    }
-
-    /**
-     * @return the prefix to be used by all table names
-     */
-    public String getTablePrefix() {
-        if (this.databaseConnector instanceof MySQLConnector) {
-            return Setting.MYSQL_TABLE_PREFIX.getString();
-        } else {
-            return this.playerParticles.getDescription().getName().toLowerCase() + '_';
-        }
+    @Override
+    public List<Class<? extends DataMigration>> getDataMigrations() {
+        return Arrays.asList(
+                _1_InitialMigration.class,
+                _2_Add_Data_Columns.class,
+                _3_Add_Setting_Toggle_Self_Column.class,
+                _4_Add_Fixed_Effect_Yaw_Pitch_Columns.class
+        );
     }
 
 }

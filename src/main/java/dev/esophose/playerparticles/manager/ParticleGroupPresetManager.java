@@ -1,8 +1,9 @@
 package dev.esophose.playerparticles.manager;
 
 import dev.esophose.playerparticles.PlayerParticles;
-import dev.esophose.playerparticles.config.CommentedConfigurationSection;
-import dev.esophose.playerparticles.config.CommentedFileConfiguration;
+import dev.rosewood.rosegarden.RosePlugin;
+import dev.rosewood.rosegarden.config.CommentedConfigurationSection;
+import dev.rosewood.rosegarden.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.gui.GuiInventory.BorderColor;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
@@ -16,7 +17,6 @@ import dev.esophose.playerparticles.particles.data.Vibration;
 import dev.esophose.playerparticles.particles.preset.ParticleGroupPreset;
 import dev.esophose.playerparticles.particles.preset.ParticleGroupPresetPage;
 import dev.esophose.playerparticles.styles.ParticleStyle;
-import dev.esophose.playerparticles.util.HexUtils;
 import dev.esophose.playerparticles.util.inputparser.InputParser;
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +33,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import dev.rosewood.rosegarden.manager.Manager;
+import dev.rosewood.rosegarden.utils.HexUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -44,7 +47,7 @@ public class ParticleGroupPresetManager extends Manager {
     
     private Map<Integer, ParticleGroupPresetPage> presetGroupPages;
 
-    public ParticleGroupPresetManager(PlayerParticles playerParticles) {
+    public ParticleGroupPresetManager(RosePlugin playerParticles) {
         super(playerParticles);
     }
 
@@ -72,7 +75,7 @@ public class ParticleGroupPresetManager extends Manager {
             this.tryMigrateOld(presetsFile);
         }
         
-        Bukkit.getScheduler().runTaskLater(this.playerParticles, () -> this.tryParseFile(presetsFile), 3L);
+        Bukkit.getScheduler().runTaskLater(this.rosePlugin, () -> this.tryParseFile(presetsFile), 3L);
     }
 
     private void tryParseFile(File presetsFile) {
@@ -230,7 +233,7 @@ public class ParticleGroupPresetManager extends Manager {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            this.playerParticles.getLogger().severe("An error occurred while parsing the preset_groups.yml file!");
+            this.rosePlugin.getLogger().severe("An error occurred while parsing the preset_groups.yml file!");
         }
     }
 
@@ -261,7 +264,7 @@ public class ParticleGroupPresetManager extends Manager {
 
         // Use a default page
         if (presetGroupPages.isEmpty()) {
-            LocaleManager localeManager = this.playerParticles.getManager(LocaleManager.class);
+            LocaleManager localeManager = this.rosePlugin.getManager(LocaleManager.class);
             Map<Integer, BorderColor> extraBorder = new HashMap<>();
             IntStream.range(0, 9).forEach(x -> extraBorder.put(x, BorderColor.GREEN));
             IntStream.range(45, 54).forEach(x -> extraBorder.put(x, BorderColor.GREEN));
@@ -363,7 +366,7 @@ public class ParticleGroupPresetManager extends Manager {
         }
 
         // Rename existing file to something else since we're going to remove it
-        this.playerParticles.getLogger().warning("Migrating preset_groups.yml from the old format to the new! A backup of the previous file will be created.");
+        this.rosePlugin.getLogger().warning("Migrating preset_groups.yml from the old format to the new! A backup of the previous file will be created.");
         presetsFile.renameTo(new File(presetsFile.getParentFile(), "preset_groups.yml-" + System.currentTimeMillis() + ".old"));
 
         // Copy over the new file

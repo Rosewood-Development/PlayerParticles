@@ -5,7 +5,7 @@ import dev.esophose.playerparticles.api.PlayerParticlesAPI;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.particles.PPlayer;
-import dev.esophose.playerparticles.util.StringPlaceholders;
+import dev.rosewood.rosegarden.utils.StringPlaceholders;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

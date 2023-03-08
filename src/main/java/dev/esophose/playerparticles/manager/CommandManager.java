@@ -29,6 +29,9 @@ import dev.esophose.playerparticles.util.ParticleUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import dev.rosewood.rosegarden.RosePlugin;
+import dev.rosewood.rosegarden.manager.Manager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.BlockCommandSender;
@@ -50,14 +53,14 @@ public class CommandManager extends Manager implements CommandExecutor, TabCompl
     private List<CommandModule> commands;
     private CommandModuleSecondary ppoCommand;
 
-    public CommandManager(PlayerParticles playerParticles) {
+    public CommandManager(RosePlugin playerParticles) {
         super(playerParticles);
 
-        PluginCommand pp = this.playerParticles.getCommand("pp");
-        PluginCommand ppo = this.playerParticles.getCommand("ppo");
+        PluginCommand pp = playerParticles.getCommand("pp");
+        PluginCommand ppo = playerParticles.getCommand("ppo");
 
         if (pp == null || ppo == null) {
-            Bukkit.getPluginManager().disablePlugin(this.playerParticles);
+            Bukkit.getPluginManager().disablePlugin(playerParticles);
             return;
         }
 
@@ -154,7 +157,7 @@ public class CommandManager extends Manager implements CommandExecutor, TabCompl
                 return true;
             }
 
-            Bukkit.getScheduler().runTaskAsynchronously(this.playerParticles, () -> {
+            Bukkit.getScheduler().runTaskAsynchronously(this.rosePlugin, () -> {
                 String[] cmdArgs = args.length > 1 ? Arrays.copyOfRange(args, 1, args.length) : new String[0];
 
                 if (!commandModule.canConsoleExecute()) {
@@ -169,7 +172,7 @@ public class CommandManager extends Manager implements CommandExecutor, TabCompl
 
                 Player p = (Player) sender;
 
-                this.playerParticles.getManager(DataManager.class).getPPlayer(p.getUniqueId(), (pplayer) -> {
+                this.rosePlugin.getManager(DataManager.class).getPPlayer(p.getUniqueId(), (pplayer) -> {
                     PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
                     if (commandModule.requiresEffectsAndStyles() && (permissionManager.getEffectsUserHasPermissionFor(pplayer).isEmpty() || permissionManager.getStylesUserHasPermissionFor(pplayer).isEmpty())) {
                         localeManager.sendMessage(pplayer, "command-error-missing-effects-or-styles");
@@ -216,7 +219,7 @@ public class CommandManager extends Manager implements CommandExecutor, TabCompl
             }
 
             // Run the /ppo command
-            Bukkit.getScheduler().runTask(this.playerParticles, () -> this.ppoCommand.onCommandExecute(sender, args));
+            Bukkit.getScheduler().runTask(this.rosePlugin, () -> this.ppoCommand.onCommandExecute(sender, args));
         }
         
         return true;

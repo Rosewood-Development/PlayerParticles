@@ -15,7 +15,7 @@ import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.particles.data.Vibration;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import dev.esophose.playerparticles.util.ParticleUtils;
-import dev.esophose.playerparticles.util.StringPlaceholders;
+import dev.rosewood.rosegarden.utils.StringPlaceholders;
 import dev.esophose.playerparticles.util.inputparser.InputParser;
 import dev.esophose.playerparticles.util.inputparser.parsable.ParsableOrdinaryColor;
 import java.util.ArrayList;

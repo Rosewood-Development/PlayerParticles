@@ -2,7 +2,7 @@ package dev.esophose.playerparticles.particles;
 
 import com.google.common.collect.ObjectArrays;
 import dev.esophose.playerparticles.PlayerParticles;
-import dev.esophose.playerparticles.config.CommentedFileConfiguration;
+import dev.rosewood.rosegarden.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.data.ColorTransition;
 import dev.esophose.playerparticles.particles.data.NoteColor;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
@@ -14,7 +14,6 @@ import dev.esophose.playerparticles.particles.spawning.ParticleSpawner.ParticleD
 import dev.esophose.playerparticles.particles.spawning.ReflectiveParticleSpawner;
 import dev.esophose.playerparticles.particles.spawning.SpigotParticleSpawner;
 import dev.esophose.playerparticles.particles.spawning.reflective.ReflectiveParticleEffectMapping;
-import dev.esophose.playerparticles.util.NMSUtil;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import java.io.File;
 import java.util.ArrayList;
@@ -22,6 +21,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
+
+import dev.rosewood.rosegarden.utils.NMSUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;

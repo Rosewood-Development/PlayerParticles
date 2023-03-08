@@ -12,67 +12,55 @@ import dev.esophose.playerparticles.hook.PlaceholderAPIHook;
 import dev.esophose.playerparticles.hook.WorldGuardHook;
 import dev.esophose.playerparticles.manager.CommandManager;
 import dev.esophose.playerparticles.manager.ConfigurationManager;
-import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.manager.DataManager;
-import dev.esophose.playerparticles.manager.DataMigrationManager;
 import dev.esophose.playerparticles.manager.LocaleManager;
-import dev.esophose.playerparticles.manager.Manager;
 import dev.esophose.playerparticles.manager.ParticleGroupPresetManager;
 import dev.esophose.playerparticles.manager.ParticleManager;
 import dev.esophose.playerparticles.manager.ParticlePackManager;
 import dev.esophose.playerparticles.manager.ParticleStyleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
-import dev.esophose.playerparticles.manager.PluginUpdateManager;
 import dev.esophose.playerparticles.particles.listener.PPlayerCombatListener;
 import dev.esophose.playerparticles.particles.listener.PPlayerMovementListener;
-import dev.esophose.playerparticles.util.NMSUtil;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import org.bstats.bukkit.MetricsLite;
+
+import java.util.Arrays;
+import java.util.List;
+
+import dev.rosewood.rosegarden.RosePlugin;
+import dev.rosewood.rosegarden.manager.Manager;
+import dev.rosewood.rosegarden.utils.NMSUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * @author Esophose
  */
-public class PlayerParticles extends JavaPlugin {
+public class PlayerParticles extends RosePlugin {
 
     /**
      * The running instance of PlayerParticles on the server
      */
     private static PlayerParticles INSTANCE;
 
-    /*
-     * The plugin managers
-     */
-    private final Map<Class<?>, Manager> managers;
-
     public PlayerParticles() {
+        super(40261, 3531, ConfigurationManager.class, DataManager.class, LocaleManager.class, null);
         INSTANCE = this;
-        this.managers = new LinkedHashMap<>();
     }
 
     /**
      * Executes essential tasks for starting up the plugin
      */
     @Override
-    public void onEnable() {
-        if (!NMSUtil.isSpigot()) {
+    protected void enable() {
+        if (!this.isSpigot()) {
             this.getLogger().severe("This plugin is only compatible with Spigot and other forks. CraftBukkit is not supported. Disabling PlayerParticles.");
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
 
-        this.reload();
-
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new PPlayerMovementListener(), this);
         pm.registerEvents(new PPlayerCombatListener(), this);
         pm.registerEvents(new PlayerChatHook(), this);
-
-        if (Setting.SEND_METRICS.getBoolean() && NMSUtil.getVersionNumber() > 7)
-            new MetricsLite(this, 3531);
 
         if (PlaceholderAPIHook.enabled())
             new ParticlePlaceholderExpansion(this).register();
@@ -81,62 +69,26 @@ public class PlayerParticles extends JavaPlugin {
     }
 
     @Override
-    public void onDisable() {
-        this.managers.values().forEach(Manager::disable);
-        this.managers.clear();
+    protected void disable() {
+
     }
 
     @Override
     public void onLoad() {
-        if (NMSUtil.isSpigot())
+        if (this.isSpigot())
             WorldGuardHook.initialize();
     }
-    
-    /**
-     * Gets a manager instance
-     *
-     * @param managerClass The class of the manager instance to get
-     * @param <T> The manager type
-     * @return The manager instance or null if one does not exist
-     */
-    @SuppressWarnings("unchecked")
-    public <T extends Manager> T getManager(Class<T> managerClass) {
-        if (this.managers.containsKey(managerClass))
-            return (T) this.managers.get(managerClass);
 
-        try {
-            T manager = managerClass.getConstructor(this.getClass()).newInstance(this);
-            this.managers.put(managerClass, manager);
-            manager.reload();
-            return manager;
-        } catch (ReflectiveOperationException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
-    
-    /**
-     * Reloads the plugin
-     */
-    public void reload() {
-        this.managers.values().forEach(Manager::disable);
-
-        // This will be loaded after the DataManager connects to the database
-        this.managers.remove(DataMigrationManager.class);
-
-        this.managers.values().forEach(Manager::reload);
-
-        this.getManager(ConfigurationManager.class);
-        this.getManager(LocaleManager.class);
-        this.getManager(ParticlePackManager.class);
-        this.getManager(DataManager.class);
-        this.getManager(PermissionManager.class);
-        this.getManager(CommandManager.class);
-        this.getManager(ParticleStyleManager.class);
-        this.getManager(ParticleGroupPresetManager.class);
-        this.getManager(ConfigurationManager.class);
-        this.getManager(ParticleManager.class);
-        this.getManager(PluginUpdateManager.class);
+    @Override
+    protected List<Class<? extends Manager>> getManagerLoadPriority() {
+        return Arrays.asList(
+                ParticlePackManager.class,
+                PermissionManager.class,
+                CommandManager.class,
+                ParticleStyleManager.class,
+                ParticleGroupPresetManager.class,
+                ParticleManager.class
+        );
     }
 
     /**
@@ -147,5 +99,18 @@ public class PlayerParticles extends JavaPlugin {
     public static PlayerParticles getInstance() {
         return INSTANCE;
     }
+
+    /**
+     * @return true if the server is running Spigot or a fork, false otherwise
+     */
+    private boolean isSpigot() {
+        try {
+            Class.forName("org.spigotmc.SpigotConfig");
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
+
 
 }

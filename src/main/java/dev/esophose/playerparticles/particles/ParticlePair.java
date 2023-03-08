@@ -13,7 +13,8 @@ import dev.esophose.playerparticles.particles.data.Vibration;
 import dev.esophose.playerparticles.styles.DefaultStyles;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import dev.esophose.playerparticles.util.ParticleUtils;
-import dev.esophose.playerparticles.util.StringPlaceholders;
+import dev.rosewood.rosegarden.utils.StringPlaceholders;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;

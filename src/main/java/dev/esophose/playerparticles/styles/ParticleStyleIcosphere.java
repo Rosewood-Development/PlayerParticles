@@ -1,14 +1,13 @@
 package dev.esophose.playerparticles.styles;
 
 import dev.esophose.playerparticles.PlayerParticles;
-import dev.esophose.playerparticles.config.CommentedFileConfiguration;
+import dev.rosewood.rosegarden.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.manager.ParticleManager;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.particles.data.ColorTransition;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
-import dev.esophose.playerparticles.util.HexUtils;
 import dev.esophose.playerparticles.util.VectorUtils;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -18,6 +17,8 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import dev.rosewood.rosegarden.utils.HexUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 

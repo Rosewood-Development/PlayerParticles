@@ -1,5 +1,7 @@
 package dev.esophose.playerparticles.locale;
 
+import dev.rosewood.rosegarden.locale.Locale;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -14,10 +16,10 @@ public class EnglishLocale implements Locale {
     public String getTranslatorName() {
         return "Esophose";
     }
-
+    
     @Override
-    public Map<String, String> getDefaultLocaleStrings() {
-        return new LinkedHashMap<String, String>() {{
+    public Map<String, Object> getDefaultLocaleValues() {
+        return new LinkedHashMap<String, Object>() {{
             this.put("#0", "Plugin Message Prefix");
             this.put("prefix", "&7[<g:#00aaaa:#0066aa>PlayerParticles&7] ");
 

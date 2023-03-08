@@ -21,6 +21,9 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+
+import dev.rosewood.rosegarden.RosePlugin;
+import dev.rosewood.rosegarden.manager.Manager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -55,7 +58,7 @@ public class ParticleManager extends Manager implements Listener, Runnable {
     private int hue;
     private final Random random;
 
-    public ParticleManager(PlayerParticles playerParticles) {
+    public ParticleManager(RosePlugin playerParticles) {
         super(playerParticles);
 
         this.particlePlayers = new ConcurrentHashMap<>();
@@ -63,18 +66,20 @@ public class ParticleManager extends Manager implements Listener, Runnable {
         this.hue = 0;
         this.random = new Random();
 
-        Bukkit.getPluginManager().registerEvents(this, this.playerParticles);
+        Bukkit.getPluginManager().registerEvents(this, playerParticles);
     }
 
     @Override
     public void reload() {
-        Bukkit.getScheduler().runTaskLater(this.playerParticles, () -> {
+        this.rosePlugin.getManager(DataManager.class).loadEffects();
+        
+        Bukkit.getScheduler().runTaskLater(this.rosePlugin, () -> {
             long ticks = Setting.TICKS_PER_PARTICLE.getLong();
-            this.particleTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this.playerParticles, this, 0, ticks);
+            this.particleTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this.rosePlugin, this, 0, ticks);
 
             if (WorldGuardHook.enabled()) {
                 long worldGuardTicks = Setting.WORLDGUARD_CHECK_INTERVAL.getLong();
-                this.worldGuardTask = Bukkit.getScheduler().runTaskTimer(this.playerParticles, this::updateWorldGuardStatuses, 0, worldGuardTicks);
+                this.worldGuardTask = Bukkit.getScheduler().runTaskTimer(this.rosePlugin, this::updateWorldGuardStatuses, 0, worldGuardTicks);
             }
         }, 5);
     }
@@ -102,13 +107,13 @@ public class ParticleManager extends Manager implements Listener, Runnable {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent e) {
         // Loads the PPlayer from the database
-        this.playerParticles.getManager(DataManager.class).getPPlayer(e.getPlayer().getUniqueId(), pplayer -> {
+        this.rosePlugin.getManager(DataManager.class).getPPlayer(e.getPlayer().getUniqueId(), pplayer -> {
             // If enabled, check permissions for that player
             if (!Setting.CHECK_PERMISSIONS_ON_LOGIN.getBoolean())
                 return;
 
-            DataManager dataManager = this.playerParticles.getManager(DataManager.class);
-            PermissionManager permissionManager = this.playerParticles.getManager(PermissionManager.class);
+            DataManager dataManager = this.rosePlugin.getManager(DataManager.class);
+            PermissionManager permissionManager = this.rosePlugin.getManager(PermissionManager.class);
 
             // Check groups
             Iterator<ParticleGroup> groupIterator = pplayer.getParticleGroups().values().iterator();
@@ -147,7 +152,7 @@ public class ParticleManager extends Manager implements Listener, Runnable {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent e) {
-        PPlayer pplayer = this.playerParticles.getManager(DataManager.class).getPPlayer(e.getPlayer().getUniqueId());
+        PPlayer pplayer = this.rosePlugin.getManager(DataManager.class).getPPlayer(e.getPlayer().getUniqueId());
         if (pplayer != null) {
             pplayer.clearCachedPlayer();
             if (pplayer.getFixedEffectIds().isEmpty())
@@ -178,12 +183,12 @@ public class ParticleManager extends Manager implements Listener, Runnable {
      * Does not display particles if the world is disabled or if the player is in spectator mode
      */
     public void run() {
-        this.playerParticles.getManager(ParticleStyleManager.class).updateTimers();
+        this.rosePlugin.getManager(ParticleStyleManager.class).updateTimers();
 
         this.hue += Setting.RAINBOW_CYCLE_SPEED.getInt();
         this.hue %= 360;
 
-        PermissionManager permissionManager = this.playerParticles.getManager(PermissionManager.class);
+        PermissionManager permissionManager = this.rosePlugin.getManager(PermissionManager.class);
 
         // Spawn particles for each player
         for (PPlayer pplayer : this.particlePlayers.values()) {
@@ -207,7 +212,7 @@ public class ParticleManager extends Manager implements Listener, Runnable {
      * Updates the WorldGuard region statuses for players
      */
     private void updateWorldGuardStatuses() {
-        PermissionManager permissionManager = this.playerParticles.getManager(PermissionManager.class);
+        PermissionManager permissionManager = this.rosePlugin.getManager(PermissionManager.class);
 
         for (PPlayer pplayer : this.particlePlayers.values()) {
             Player player = pplayer.getPlayer();
@@ -230,7 +235,7 @@ public class ParticleManager extends Manager implements Listener, Runnable {
      * @param location The location to display at
      */
     private void displayParticles(PPlayer pplayer, ParticlePair particle, Location location) {
-        if (!this.playerParticles.getManager(ParticleStyleManager.class).isEventHandled(particle.getStyle())) {
+        if (!this.rosePlugin.getManager(ParticleStyleManager.class).isEventHandled(particle.getStyle())) {
             if (Setting.TOGGLE_ON_COMBAT.getBoolean() && particle.getStyle().canToggleWithCombat() && pplayer.isInCombat())
                 return;
 
@@ -302,7 +307,7 @@ public class ParticleManager extends Manager implements Listener, Runnable {
      * @param ignorePlayerState If the player's visibility state should be ignored
      */
     public void displayParticles(PPlayer pplayer, World world, ParticlePair particle, List<PParticle> particles, boolean isLongRange, boolean ignorePlayerState) {
-        PermissionManager permissionManager = this.playerParticles.getManager(PermissionManager.class);
+        PermissionManager permissionManager = this.rosePlugin.getManager(PermissionManager.class);
 
         Player player = null;
         if (!ignorePlayerState) {

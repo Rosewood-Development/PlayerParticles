@@ -1,6 +1,6 @@
 package dev.esophose.playerparticles.particles.spawning.reflective;
 
-import dev.esophose.playerparticles.util.NMSUtil;
+import dev.rosewood.rosegarden.utils.NMSUtil;
 
 public enum ReflectiveParticleEffectMapping {
 

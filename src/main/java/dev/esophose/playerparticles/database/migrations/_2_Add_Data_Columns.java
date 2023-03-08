@@ -1,7 +1,8 @@
 package dev.esophose.playerparticles.database.migrations;
 
-import dev.esophose.playerparticles.database.DataMigration;
-import dev.esophose.playerparticles.database.DatabaseConnector;
+import dev.rosewood.rosegarden.database.DataMigration;
+import dev.rosewood.rosegarden.database.DatabaseConnector;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;

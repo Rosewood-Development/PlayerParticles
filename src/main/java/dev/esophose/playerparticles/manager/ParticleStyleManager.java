@@ -13,6 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import dev.rosewood.rosegarden.RosePlugin;
+import dev.rosewood.rosegarden.manager.Manager;
 import org.bukkit.Bukkit;
 
 public class ParticleStyleManager extends Manager {
@@ -24,7 +27,7 @@ public class ParticleStyleManager extends Manager {
     private final Map<String, ParticleStyle> stylesByInternalName;
     private final List<ParticleStyle> eventStyles;
 
-    public ParticleStyleManager(PlayerParticles playerParticles) {
+    public ParticleStyleManager(RosePlugin playerParticles) {
         super(playerParticles);
 
         this.stylesByName = new HashMap<>();
@@ -41,13 +44,13 @@ public class ParticleStyleManager extends Manager {
         this.eventStyles.clear();
 
         // Run task a tick later to allow other plugins to finish registering to the event
-        Bukkit.getScheduler().runTask(this.playerParticles, () -> {
+        Bukkit.getScheduler().runTask(this.rosePlugin, () -> {
             // Call registration event
             // We use this event internally, so no other action needs to be done for us to register the default styles
             ParticleStyleRegistrationEvent event = new ParticleStyleRegistrationEvent();
 
             // Register styles from particle packs
-            this.playerParticles.getManager(ParticlePackManager.class).getLoadedParticlePacks().forEach(pack -> {
+            this.rosePlugin.getManager(ParticlePackManager.class).getLoadedParticlePacks().forEach(pack -> {
                 pack.getStyles().forEach(event::registerStyle);
                 pack.getEventStyles().forEach(event::registerEventStyle);
             });
@@ -102,7 +105,7 @@ public class ParticleStyleManager extends Manager {
      * @param style The style to remove
      */
     public void removeAllStyleReferences(ParticleStyle style) {
-        Collection<PPlayer> pplayers = this.playerParticles.getManager(ParticleManager.class).getPPlayers().values();
+        Collection<PPlayer> pplayers = this.rosePlugin.getManager(ParticleManager.class).getPPlayers().values();
         for (PPlayer pplayer : pplayers) {
             // Remove all references to style from groups
             pplayer.getParticleGroups().values().removeIf(group -> {

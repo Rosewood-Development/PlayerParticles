@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
+
+import dev.rosewood.rosegarden.RosePlugin;
+import dev.rosewood.rosegarden.manager.Manager;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -28,7 +31,7 @@ public class ParticlePackManager extends Manager {
     public static final String INFO_FILE_NAME = "particle_pack.yml";
     private final Map<String, ParticlePack> loadedPacks;
 
-    public ParticlePackManager(PlayerParticles playerParticles) {
+    public ParticlePackManager(RosePlugin playerParticles) {
         super(playerParticles);
         this.loadedPacks = new HashMap<>();
     }
@@ -37,7 +40,7 @@ public class ParticlePackManager extends Manager {
     public void reload() {
         this.moveParticlePacksFromPluginsFolder();
 
-        File packDirectory = new File(this.playerParticles.getDataFolder(), PACK_DIRECTORY_NAME);
+        File packDirectory = new File(this.rosePlugin.getDataFolder(), PACK_DIRECTORY_NAME);
         if (!packDirectory.exists())
             packDirectory.mkdirs();
 
@@ -55,27 +58,27 @@ public class ParticlePackManager extends Manager {
 
             ParticlePackDescription description = particlePack.getDescription();
             if (description.getName() == null || description.getName().isEmpty()) {
-                this.playerParticles.getLogger().warning("Particle pack '" + file.getName() + "' has no name, skipping!");
+                this.rosePlugin.getLogger().warning("Particle pack '" + file.getName() + "' has no name, skipping!");
                 continue;
             }
 
             if (description.getVersion() == null || description.getVersion().isEmpty()) {
-                this.playerParticles.getLogger().warning("Particle pack '" + description.getName() + "' has no version, skipping!");
+                this.rosePlugin.getLogger().warning("Particle pack '" + description.getName() + "' has no version, skipping!");
                 continue;
             }
 
             ParticlePack possibleDuplicate = this.getParticlePack(description.getName());
             if (possibleDuplicate != null) {
-                this.playerParticles.getLogger().warning("Found duplicate particle pack '" + description.getName() + "', overwriting!");
+                this.rosePlugin.getLogger().warning("Found duplicate particle pack '" + description.getName() + "', overwriting!");
                 this.loadedPacks.values().remove(possibleDuplicate);
             }
 
             this.loadedPacks.put(particlePack.getName(), particlePack);
-            this.playerParticles.getLogger().info("Loaded particle pack '" + particlePack.getName() + " v" + particlePack.getDescription().getVersion() + "' with " + particlePack.getNumberOfStyles() + " style" + (particlePack.getNumberOfStyles() > 1 ? "s" : ""));
+            this.rosePlugin.getLogger().info("Loaded particle pack '" + particlePack.getName() + " v" + particlePack.getDescription().getVersion() + "' with " + particlePack.getNumberOfStyles() + " style" + (particlePack.getNumberOfStyles() > 1 ? "s" : ""));
         }
 
         int numStyles = this.loadedPacks.values().stream().mapToInt(ParticlePack::getNumberOfStyles).sum();
-        this.playerParticles.getLogger().info("Loaded " + this.loadedPacks.size() + " particle pack" + (this.loadedPacks.size() > 1 ? "s" : "") + " with " + numStyles + " style" + (numStyles > 1 ? "s" : ""));
+        this.rosePlugin.getLogger().info("Loaded " + this.loadedPacks.size() + " particle pack" + (this.loadedPacks.size() > 1 ? "s" : "") + " with " + numStyles + " style" + (numStyles > 1 ? "s" : ""));
     }
 
     @Override
@@ -145,13 +148,13 @@ public class ParticlePackManager extends Manager {
             }
 
             if (classes.isEmpty()) {
-                this.playerParticles.getLogger().warning("Failed to load particle pack " + packJar.getName() + ": No particle pack found");
+                this.rosePlugin.getLogger().warning("Failed to load particle pack " + packJar.getName() + ": No particle pack found");
                 classLoader.close();
                 return null;
             }
 
             if (classes.size() > 1) {
-                this.playerParticles.getLogger().warning("Failed to load particle pack " + packJar.getName() + ": Multiple particle packs found");
+                this.rosePlugin.getLogger().warning("Failed to load particle pack " + packJar.getName() + ": Multiple particle packs found");
                 return null;
             }
 
@@ -161,7 +164,7 @@ public class ParticlePackManager extends Manager {
                 ParticlePack particlePack = classes.get(0).getDeclaredConstructor().newInstance();
                 Method initMethod = ParticlePack.class.getDeclaredMethod("init", PlayerParticles.class, ParticlePackDescription.class, URLClassLoader.class);
                 initMethod.setAccessible(true);
-                initMethod.invoke(particlePack, this.playerParticles, new ParticlePackDescription(particlePackConfig), classLoader);
+                initMethod.invoke(particlePack, (PlayerParticles) this.rosePlugin, new ParticlePackDescription(particlePackConfig), classLoader);
                 return particlePack;
             }
         } catch (Exception e) {
@@ -181,7 +184,7 @@ public class ParticlePackManager extends Manager {
             return false;
 
         try {
-            ParticleStyleManager particleStyleManager = this.playerParticles.getManager(ParticleStyleManager.class);
+            ParticleStyleManager particleStyleManager = this.rosePlugin.getManager(ParticleStyleManager.class);
             particlePack.getStyles().forEach(particleStyleManager::removeAllStyleReferences);
             particlePack.getEventStyles().forEach(particleStyleManager::removeAllStyleReferences);
 
@@ -199,7 +202,7 @@ public class ParticlePackManager extends Manager {
      * Moves particle packs in the plugins directory to the packs directory
      */
     private void moveParticlePacksFromPluginsFolder() {
-        File pluginsDirectory = this.playerParticles.getDataFolder().getParentFile();
+        File pluginsDirectory = this.rosePlugin.getDataFolder().getParentFile();
         File[] files = pluginsDirectory.listFiles();
         if (files == null || files.length == 0)
             return;
@@ -209,12 +212,12 @@ public class ParticlePackManager extends Manager {
                 continue;
 
             if (this.isParticlePack(file)) {
-                this.playerParticles.getLogger().warning("Found particle pack in plugins directory, attempting to move to packs directory: " + file.getName());
+                this.rosePlugin.getLogger().warning("Found particle pack in plugins directory, attempting to move to packs directory: " + file.getName());
 
                 // Move the jar to the packs folder
-                File newFile = new File(this.playerParticles.getDataFolder(), PACK_DIRECTORY_NAME + File.separator + file.getName());
+                File newFile = new File(this.rosePlugin.getDataFolder(), PACK_DIRECTORY_NAME + File.separator + file.getName());
                 if (newFile.exists()) {
-                    this.playerParticles.getLogger().warning("Found duplicate particle pack when moving to packs directory, deleting old version: " + file.getName());
+                    this.rosePlugin.getLogger().warning("Found duplicate particle pack when moving to packs directory, deleting old version: " + file.getName());
                     newFile.delete();
                 }
 

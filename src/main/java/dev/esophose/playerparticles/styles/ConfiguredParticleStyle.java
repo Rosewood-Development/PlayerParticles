@@ -2,7 +2,7 @@ package dev.esophose.playerparticles.styles;
 
 import com.google.common.collect.ObjectArrays;
 import dev.esophose.playerparticles.PlayerParticles;
-import dev.esophose.playerparticles.config.CommentedFileConfiguration;
+import dev.rosewood.rosegarden.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.pack.ParticlePack;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import java.io.File;

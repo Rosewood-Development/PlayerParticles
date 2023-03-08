@@ -8,7 +8,7 @@ import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.particles.data.ParticleColor;
 import dev.esophose.playerparticles.particles.data.Vibration;
 import dev.esophose.playerparticles.util.CavesAndCliffsUtil;
-import dev.esophose.playerparticles.util.NMSUtil;
+import dev.rosewood.rosegarden.utils.NMSUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle.DustOptions;

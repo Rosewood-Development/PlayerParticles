@@ -4,7 +4,7 @@ import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.particles.PPlayer;
-import dev.esophose.playerparticles.util.StringPlaceholders;
+import dev.rosewood.rosegarden.utils.StringPlaceholders;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class WorldsCommandModule implements CommandModule {
         if (worlds.length() > 2)
             worlds = new StringBuilder(worlds.substring(0, worlds.length() - 2));
 
-        localeManager.sendCustomMessage(pplayer, localeManager.getLocaleMessage("disabled-worlds", StringPlaceholders.single("worlds", worlds)));
+        localeManager.sendCustomMessage(pplayer.getUnderlyingExecutor(), localeManager.getLocaleMessage("disabled-worlds", StringPlaceholders.single("worlds", worlds)));
     }
 
     @Override

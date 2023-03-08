@@ -12,6 +12,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import dev.rosewood.rosegarden.RosePlugin;
+import dev.rosewood.rosegarden.manager.Manager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -84,7 +87,7 @@ public class PermissionManager extends Manager {
         }
     }
     
-    public PermissionManager(PlayerParticles playerParticles) {
+    public PermissionManager(RosePlugin playerParticles) {
         super(playerParticles);
 
         Bukkit.getScheduler().runTaskLater(playerParticles, () -> {
@@ -110,7 +113,7 @@ public class PermissionManager extends Manager {
 
                 // Styles
                 Map<String, Boolean> stylePermissions = new HashMap<>();
-                for (ParticleStyle style : this.playerParticles.getManager(ParticleStyleManager.class).getStylesWithDisabled()) {
+                for (ParticleStyle style : playerParticles.getManager(ParticleStyleManager.class).getStylesWithDisabled()) {
                     Permission permission = new Permission("playerparticles.style." + style.getInternalName());
                     pluginManager.addPermission(permission);
                     stylePermissions.put(permission.getName(), true);
@@ -340,7 +343,7 @@ public class PermissionManager extends Manager {
      */
     public List<String> getStyleNamesUserHasPermissionFor(PPlayer p) {
         List<String> list = new ArrayList<>();
-        for (ParticleStyle ps : this.playerParticles.getManager(ParticleStyleManager.class).getStyles())
+        for (ParticleStyle ps : this.rosePlugin.getManager(ParticleStyleManager.class).getStyles())
             if (this.hasStylePermission(p, ps))
                 list.add(ps.getName());
         return list;
@@ -354,7 +357,7 @@ public class PermissionManager extends Manager {
      */
     public List<String> getFixableStyleNamesUserHasPermissionFor(PPlayer p) {
         List<String> list = new ArrayList<>();
-        for (ParticleStyle ps : this.playerParticles.getManager(ParticleStyleManager.class).getStyles())
+        for (ParticleStyle ps : this.rosePlugin.getManager(ParticleStyleManager.class).getStyles())
             if (ps.canBeFixed() && this.hasStylePermission(p, ps))
                 list.add(ps.getName());
         return list;
@@ -382,7 +385,7 @@ public class PermissionManager extends Manager {
      */
     public List<ParticleStyle> getStylesUserHasPermissionFor(PPlayer p) {
         List<ParticleStyle> list = new ArrayList<>();
-        for (ParticleStyle ps : this.playerParticles.getManager(ParticleStyleManager.class).getStyles())
+        for (ParticleStyle ps : this.rosePlugin.getManager(ParticleStyleManager.class).getStyles())
             if (this.hasStylePermission(p, ps))
                 list.add(ps);
         return list;
@@ -476,7 +479,7 @@ public class PermissionManager extends Manager {
             if (this.isConsole(executor))
                 return null;
             Player executingPlayer = (Player) executor;
-            return this.playerParticles.getManager(DataManager.class).getPPlayer(executingPlayer.getUniqueId());
+            return this.rosePlugin.getManager(DataManager.class).getPPlayer(executingPlayer.getUniqueId());
         }
         return pplayer;
     }

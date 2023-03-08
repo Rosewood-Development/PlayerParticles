@@ -3,9 +3,11 @@ package dev.esophose.playerparticles.gui;
 import dev.esophose.playerparticles.gui.GuiInventoryEditData.ColorData;
 import dev.esophose.playerparticles.hook.PlaceholderAPIHook;
 import dev.esophose.playerparticles.particles.PPlayer;
-import dev.esophose.playerparticles.util.NMSUtil;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import dev.rosewood.rosegarden.utils.NMSUtil;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;

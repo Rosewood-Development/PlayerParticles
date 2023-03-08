@@ -1,40 +1,27 @@
 package dev.esophose.playerparticles.manager;
 
 import dev.esophose.playerparticles.PlayerParticles;
-import dev.esophose.playerparticles.config.CommentedFileConfiguration;
+import dev.rosewood.rosegarden.RosePlugin;
+import dev.rosewood.rosegarden.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.util.ParticleUtils;
-import java.io.File;
+
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import dev.rosewood.rosegarden.config.RoseSetting;
+import dev.rosewood.rosegarden.manager.AbstractConfigurationManager;
 import org.bukkit.Material;
 
-public class ConfigurationManager extends Manager {
+public class ConfigurationManager extends AbstractConfigurationManager {
 
-    private static final String[] HEADER = new String[] {
-            "     _________ __                           __________                __   __        __",
-            "     \\______  \\  | _____  ___ __  __________\\______   \\_____ ________/  |_|__| ____ |  |   ____   ______",
-            "     |     ___/  | \\__  \\<   |  |/ __ \\_  __ \\     ___/\\__  \\\\_  __ \\   __\\  |/ ___\\|  | _/ __ \\ /  ___/",
-            "     |    |   |  |__/ __ \\\\___  \\  ___/|  | \\/    |     / __ \\|  | \\/|  | |  \\  \\___|  |_\\  ___/ \\___ \\",
-            "     |____|   |____(____  / ____|\\___  >__|  |____|    (____  /__|   |__| |__|\\___  >____/\\___  >____  >",
-            "                        \\/\\/         \\/                     \\/                    \\/          \\/     \\/"
-    };
-
-    private static final String[] FOOTER = new String[] {
-            "That's everything! You reached the end of the configuration.",
-            "Enjoy the plugin!"
-    };
-
-    public enum Setting {
-        CHECK_UPDATES("check-updates", true, "Check for new versions of the plugin"),
-        SEND_METRICS("send-metrics", true, "If metrics should be sent to bStats", "I would appreciate it if you left this enabled, it helps me get statistics on how the plugin is used"),
-        LOCALE("locale", "en_US", "The locale to use in the /locale folder"),
+    public ConfigurationManager(RosePlugin playerParticles) {
+        super(playerParticles, Setting.class);
+    }
+    
+    public enum Setting implements RoseSetting {
         MESSAGES_ENABLED("message-enabled", true, "If you're using other plugins to execute commands you may wish to turn off messages"),
         USE_MESSAGE_PREFIX("use-message-prefix", true, "Whether or not to use the message-prefix field when displaying messages"),
         GUI_ENABLED("gui-enabled", true, "If the command /pp gui is enabled", "Disable this if you have your own custom GUI through another plugin"),
@@ -82,17 +69,6 @@ public class ConfigurationManager extends Manager {
         WORLDGUARD_CHECK_INTERVAL("worldguard-settings.check-interval", 10, "How often to check if a player is in a region that allows spawning particles", "Measured in ticks"),
         WORLDGUARD_ENABLE_BYPASS_PERMISSION("worldguard-settings.enable-bypass-permission", false, "If true, the permission playerparticles.worldguard.bypass will allow", "the player to bypass the region requirements"),
 
-        MYSQL_SETTINGS("mysql-settings", null, "Settings for if you want to use MySQL for data management"),
-        MYSQL_ENABLED("mysql-settings.enabled", false, "Enable MySQL", "If false, SQLite will be used instead"),
-        MYSQL_HOSTNAME("mysql-settings.hostname", "", "MySQL Database Hostname"),
-        MYSQL_PORT("mysql-settings.port", 3306, "MySQL Database Port"),
-        MYSQL_DATABASE_NAME("mysql-settings.database-name", "", "MySQL Database Name"),
-        MYSQL_USER_NAME("mysql-settings.user-name", "", "MySQL Database User Name"),
-        MYSQL_USER_PASSWORD("mysql-settings.user-password", "", "MySQL Database User Password"),
-        MYSQL_TABLE_PREFIX("mysql-settings.table-prefix", PlayerParticles.getInstance().getDescription().getName().toLowerCase() + "_", "The prefix of the tables in the database", "Do not change this after tables have already been created or you will have data loss"),
-        MYSQL_USE_SSL("mysql-settings.use-ssl", false, "If the database connection should use SSL", "You should enable this if your database supports SSL"),
-        MYSQL_CONNECTION_POOL_SIZE("mysql-settings.connection-pool-size", 5, "The size of the connection pool to the database", "Not recommended to go below 2 or above 5"),
-
         GUI_ICON("gui-icon", null,
                 "This configuration option allows you to change the GUI",
                 "icons to whatever block/item you want. If you want to change an effect",
@@ -128,193 +104,48 @@ public class ConfigurationManager extends Manager {
             this.comments = comments != null ? comments : new String[0];
         }
 
-        /**
-         * Gets the setting as a boolean
-         *
-         * @return The setting as a boolean
-         */
-        public boolean getBoolean() {
-            this.loadValue();
-            return (boolean) this.value;
+        @Override
+        public String getKey() {
+            return this.key;
         }
 
-        /**
-         * @return the setting as an int
-         */
-        public int getInt() {
-            this.loadValue();
-            return (int) this.getNumber();
+        @Override
+        public Object getDefaultValue() {
+            return this.defaultValue;
         }
 
-        /**
-         * @return the setting as a long
-         */
-        public long getLong() {
-            this.loadValue();
-            return (long) this.getNumber();
+        @Override
+        public String[] getComments() {
+            return this.comments;
         }
 
-        /**
-         * @return the setting as a double
-         */
-        public double getDouble() {
-            this.loadValue();
-            return this.getNumber();
+        @Override
+        public Object getCachedValue() {
+            return this.value;
         }
 
-        /**
-         * @return the setting as a float
-         */
-        public float getFloat() {
-            this.loadValue();
-            return (float) this.getNumber();
+        @Override
+        public void setCachedValue(Object value) {
+            this.value = value;
         }
 
-        /**
-         * @return the setting as a String
-         */
-        public String getString() {
-            this.loadValue();
-            return String.valueOf(this.value);
+        @Override
+        public CommentedFileConfiguration getBaseConfig() {
+            return PlayerParticles.getInstance().getManager(ConfigurationManager.class).getConfig();
         }
 
-        private double getNumber() {
-            if (this.value instanceof Integer) {
-                return (int) this.value;
-            } else if (this.value instanceof Short) {
-                return (short) this.value;
-            } else if (this.value instanceof Byte) {
-                return (byte) this.value;
-            } else if (this.value instanceof Float) {
-                return (float) this.value;
-            }
-
-            return (double) this.value;
-        }
-
-        /**
-         * @return the setting as a string list
-         */
-        @SuppressWarnings("unchecked")
-        public List<String> getStringList() {
-            this.loadValue();
-            return (List<String>) this.value;
-        }
-
-        public boolean setIfNotExists(CommentedFileConfiguration fileConfiguration) {
-            this.loadValue();
-
-            if (fileConfiguration.get(this.key) == null) {
-                List<String> comments = Stream.of(this.comments).collect(Collectors.toList());
-                if (!(this.defaultValue instanceof List) && this.defaultValue != null) {
-                    String defaultComment = "Default: ";
-                    if (this.defaultValue instanceof String) {
-                        if (ParticleUtils.containsConfigSpecialCharacters((String) this.defaultValue)) {
-                            defaultComment += "'" + this.defaultValue + "'";
-                        } else {
-                            defaultComment += this.defaultValue;
-                        }
-                    } else {
-                        defaultComment += this.defaultValue;
-                    }
-                    comments.add(defaultComment);
-                }
-
-                if (this.defaultValue != null) {
-                    fileConfiguration.set(this.key, this.defaultValue, comments.toArray(new String[0]));
-                } else {
-                    fileConfiguration.addComments(comments.toArray(new String[0]));
-                }
-
-                return true;
-            }
-
-            return false;
-        }
-
-        /**
-         * Resets the cached value
-         */
-        public void reset() {
-            this.value = null;
-        }
-
-        /**
-         * @return true if a setting is still its default value, otherwise false
-         */
-        public boolean isDefault() {
-            this.loadValue();
-
-            // Don't care about list ordering
-            if (this.defaultValue instanceof Collection && this.value instanceof Collection)
-                return (((Collection<?>) this.defaultValue).containsAll((Collection<?>) this.value));
-
-            return Objects.equals(this.defaultValue, this.value);
-        }
-
-        /**
-         * Loads the value from the config and caches it if it isn't set yet
-         */
-        private void loadValue() {
-            if (this.value != null)
-                return;
-
-            this.value = PlayerParticles.getInstance().getManager(ConfigurationManager.class).getConfig().get(this.key);
-        }
-    }
-
-    private CommentedFileConfiguration configuration;
-
-    public ConfigurationManager(PlayerParticles playerParticles) {
-        super(playerParticles);
     }
 
     @Override
-    public void reload() {
-        File configFile = new File(this.playerParticles.getDataFolder(), "config.yml");
-        boolean setHeaderFooter = !configFile.exists();
-        boolean changed = setHeaderFooter;
-
-        this.configuration = CommentedFileConfiguration.loadConfiguration(configFile);
-
-        if (setHeaderFooter)
-            this.configuration.addComments(HEADER);
-
-        for (Setting setting : Setting.values()) {
-            setting.reset();
-            changed |= setting.setIfNotExists(this.configuration);
-        }
-
-        for (GuiIcon icon : GuiIcon.values())
-            icon.resetDefault();
-
-        if (setHeaderFooter)
-            this.configuration.addComments(FOOTER);
-
-        if (changed)
-            this.configuration.save();
-        
-        // Legacy nag: WorldGuard Regions
-        if (!(Setting.WORLDGUARD_ALLOWED_REGIONS.isDefault() && Setting.WORLDGUARD_DISALLOWED_REGIONS.isDefault())) {
-            Arrays.asList(
-                    "It looks like you're using the 'allowed-regions' or 'disallowed-regions' settings.",
-                    "These settings are deprecated and will be removed in a future update.",
-                    "As an alternative, consider using the newer and more flexible 'player-particles' WorldGuard region flag."
-            ).forEach(PlayerParticles.getInstance().getLogger()::warning);
-        }
-    }
-
-    @Override
-    public void disable() {
-        for (Setting setting : Setting.values())
-            setting.reset();
-    }
-
-    /**
-     * @return the config.yml as a CommentedFileConfiguration
-     */
-    public CommentedFileConfiguration getConfig() {
-        return this.configuration;
+    protected String[] getHeader() {
+        return new String[] {
+                "     _________ __                           __________                __   __        __",
+                "     \\______  \\  | _____  ___ __  __________\\______   \\_____ ________/  |_|__| ____ |  |   ____   ______",
+                "     |     ___/  | \\__  \\<   |  |/ __ \\_  __ \\     ___/\\__  \\\\_  __ \\   __\\  |/ ___\\|  | _/ __ \\ /  ___/",
+                "     |    |   |  |__/ __ \\\\___  \\  ___/|  | \\/    |     / __ \\|  | \\/|  | |  \\  \\___|  |_\\  ___/ \\___ \\",
+                "     |____|   |____(____  / ____|\\___  >__|  |____|    (____  /__|   |__| |__|\\___  >____/\\___  >____  >",
+                "                        \\/\\/         \\/                     \\/                    \\/          \\/     \\/"
+        };
     }
 
     /**
@@ -364,7 +195,6 @@ public class ConfigurationManager extends Manager {
             ConfigurationManager configurationManager = PlayerParticles.getInstance().getManager(ConfigurationManager.class);
 
             List<String> materials = configurationManager.getConfig().getStringList(configPath);
-
             for (String name : materials) {
                 material = ParticleUtils.closestMatch(name);
                 if (material != null)
