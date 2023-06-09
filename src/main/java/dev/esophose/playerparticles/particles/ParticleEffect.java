@@ -42,6 +42,7 @@ public enum ParticleEffect {
     BUBBLE_POP("BUBBLE_POP", Collections.singletonList("BUBBLE_CORAL_FAN")),
     CAMPFIRE_COSY_SMOKE("CAMPFIRE_COSY_SMOKE", Collections.singletonList("CAMPFIRE")),
     CAMPFIRE_SIGNAL_SMOKE("CAMPFIRE_SIGNAL_SMOKE", Collections.singletonList("REDSTONE_TORCH")),
+    CHERRY_LEAVES("CHERRY_LEAVES", Collections.singletonList("CHERRY_LEAVES")),
     CLOUD("CLOUD", Arrays.asList("WHITE_WOOL", "WOOL")),
     COMPOSTER("COMPOSTER", Collections.singletonList("COMPOSTER")),
     CRIMSON_SPORE("CRIMSON_SPORE", Collections.singletonList("CRIMSON_FUNGUS")),
