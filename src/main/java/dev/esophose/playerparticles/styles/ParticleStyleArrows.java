@@ -1,13 +1,16 @@
 package dev.esophose.playerparticles.styles;
 
 import dev.esophose.playerparticles.PlayerParticles;
-import dev.rosewood.rosegarden.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.rosewood.rosegarden.config.CommentedFileConfiguration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -19,7 +22,7 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 
 public class ParticleStyleArrows extends ConfiguredParticleStyle implements Listener {
 
-    private List<Projectile> projectiles;
+    private final Deque<LaunchedProjectile> projectiles;
 
     private int maxArrowsPerPlayer;
     private boolean onlySpawnIfFlying;
@@ -29,15 +32,16 @@ public class ParticleStyleArrows extends ConfiguredParticleStyle implements List
     protected ParticleStyleArrows() {
         super("arrows", false, false, 0);
 
-        this.projectiles = new ArrayList<>();
+        this.projectiles = new ConcurrentLinkedDeque<>();
 
-        // Removes all arrows that are considered dead
+        // Removes all arrows that are considered dead or too old to be tracked
         Bukkit.getScheduler().runTaskTimer(PlayerParticles.getInstance(), () -> {
-            for (int i = this.projectiles.size() - 1; i >= 0; i--) {
-                Projectile projectile = this.projectiles.get(i);
-                if (projectile == null || (this.arrowTrackingTime != -1 && projectile.getTicksLived() >= this.arrowTrackingTime) || !projectile.isValid() || projectile.getShooter() == null)
-                    this.projectiles.remove(i);
-            }
+            this.projectiles.removeIf(launchedProjectile -> {
+                Projectile projectile = launchedProjectile.getProjectile();
+                if (!projectile.isValid())
+                    return true;
+                return this.arrowTrackingTime != -1 && projectile.getTicksLived() >= this.arrowTrackingTime;
+            });
         }, 0L, 5L);
     }
 
@@ -46,16 +50,13 @@ public class ParticleStyleArrows extends ConfiguredParticleStyle implements List
         List<PParticle> particles = new ArrayList<>();
 
         int count = 0;
-        List<Projectile> listCopy = new ArrayList<>(this.projectiles); // Copy in case of modification while looping due to async
-        for (int i = listCopy.size() - 1; i >= 0; i--) { // Loop backwards so the last-fired projectiles are the ones that have particles if they go over the max
-            Projectile projectile = listCopy.get(i);
-            if (projectile == null) // This shouldn't even be possible yet somebody sent me a stacktrace with the projectile null anyway
-                continue;
 
+        for (LaunchedProjectile launchedProjectile : this.projectiles) {
+            Projectile projectile = launchedProjectile.getProjectile();
             if (this.onlySpawnIfFlying && projectile.isOnGround())
                 continue;
 
-            if (projectile.getShooter() != null && ((Player) projectile.getShooter()).getUniqueId().equals(particle.getOwnerUniqueId())) {
+            if (launchedProjectile.getShooter().equals(particle.getOwnerUniqueId())) {
                 particles.add(PParticle.builder(projectile.getLocation()).offsets(0.05F, 0.05F, 0.05F).build());
                 count++;
             }
@@ -94,8 +95,11 @@ public class ParticleStyleArrows extends ConfiguredParticleStyle implements List
             return;
 
         String entityName = event.getEntity().getType().name();
-        if (this.projectileEntityNames.contains(entityName))
-            this.projectiles.add(event.getEntity());
+        if (this.projectileEntityNames.contains(entityName)) {
+            Projectile projectile = event.getEntity();
+            UUID shooter = ((Player) projectile.getShooter()).getUniqueId();
+            this.projectiles.addFirst(new LaunchedProjectile(projectile, shooter));
+        }
     }
 
     @Override
@@ -112,6 +116,26 @@ public class ParticleStyleArrows extends ConfiguredParticleStyle implements List
         this.onlySpawnIfFlying = config.getBoolean("only-spawn-if-flying");
         this.projectileEntityNames = config.getStringList("arrow-entities");
         this.arrowTrackingTime = config.getInt("arrow-tracking-time");
+    }
+
+    private static class LaunchedProjectile {
+
+        private final Projectile projectile;
+        private final UUID shooter;
+
+        public LaunchedProjectile(Projectile projectile, UUID shooter) {
+            this.projectile = projectile;
+            this.shooter = shooter;
+        }
+
+        public Projectile getProjectile() {
+            return this.projectile;
+        }
+
+        public UUID getShooter() {
+            return this.shooter;
+        }
+
     }
 
 }
