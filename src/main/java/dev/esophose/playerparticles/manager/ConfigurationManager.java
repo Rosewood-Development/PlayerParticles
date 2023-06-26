@@ -61,6 +61,7 @@ public class ConfigurationManager extends AbstractConfigurationManager {
         GUI_GLASS_COLORS_EDIT_STYLE("gui-border-colors.edit-style", "BLUE"),
         GUI_GLASS_COLORS_MANAGE_GROUPS("gui-border-colors.manage-groups", "BROWN"),
         GUI_GLASS_COLORS_MANAGE_PARTICLES("gui-border-colors.manage-particles", "ORANGE"),
+        GUI_GLASS_COLORS_LOAD_PRESET_GROUPS("gui-border-colors.load-preset-groups", "GREEN"),
 
         WORLDGUARD_SETTINGS("worldguard-settings", null, "Settings for WorldGuard", "If WorldGuard is not installed, these settings will do nothing"),
         WORLDGUARD_USE_ALLOWED_REGIONS("worldguard-settings.use-allowed-regions", false, "If true, particles will only be able to spawn if they are in an allowed region and not a disallowed region", "If false, particles will be able to spawn as long as they are not in a disallowed region"),
