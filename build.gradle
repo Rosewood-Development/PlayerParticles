@@ -31,7 +31,7 @@ dependencies {
     compileOnly 'org.jetbrains:annotations:23.0.0'
     compileOnly 'me.clip:placeholderapi:2.10.4'
     api 'org.bstats:bstats-bukkit-lite:1.7'
-    api 'org.codemc.worldguardwrapper:worldguardwrapper:1.2.0-SNAPSHOT'
+    api 'org.codemc.worldguardwrapper:worldguardwrapper:1.2.1-SNAPSHOT'
     api 'dev.rosewood:rosegarden:1.1.0.52-SNAPSHOT'
 }
 
