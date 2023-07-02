@@ -19,4 +19,4 @@ The plugin jar will be located in `./build/libs` when finished.
 
 ### Development Builds
 
-You can find development builds for this plugin [here](https://ci.codemc.io/job/Esophose/job/PlayerParticles/).
+You can find the latest stable development builds of this plugin [here](https://jenkins.rosewooddev.io/job/Rosewood%20Development/job/PlayerPoints/lastStableBuild/).
