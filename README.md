@@ -19,4 +19,4 @@ The plugin jar will be located in `./build/libs` when finished.
 
 ### Development Builds
 
-You can find the latest stable development builds of this plugin [here](https://jenkins.rosewooddev.io/job/Rosewood%20Development/job/PlayerPoints/lastStableBuild/).
+You can find the latest stable development builds of this plugin [here](https://jenkins.rosewooddev.io/job/Rosewood%20Development/job/PlayerParticles/lastStableBuild/).
