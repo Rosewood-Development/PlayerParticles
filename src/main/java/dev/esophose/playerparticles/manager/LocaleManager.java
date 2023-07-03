@@ -17,11 +17,18 @@ import dev.rosewood.rosegarden.utils.StringPlaceholders;
 
 import java.util.Arrays;
 import java.util.List;
+import org.bukkit.command.CommandSender;
 
 public class LocaleManager extends AbstractLocaleManager {
 
     public LocaleManager(RosePlugin playerParticles) {
         super(playerParticles);
+    }
+
+    @Override
+    protected void handleMessage(CommandSender sender, String message) {
+        if (Setting.MESSAGES_ENABLED.getBoolean())
+            super.handleMessage(sender, message);
     }
 
     /**
@@ -32,8 +39,7 @@ public class LocaleManager extends AbstractLocaleManager {
      * @param stringPlaceholders The placeholders to apply
      */
     public void sendMessage(PPlayer pplayer, String messageKey, StringPlaceholders stringPlaceholders) {
-        if (Setting.MESSAGES_ENABLED.getBoolean())
-            this.sendMessage(pplayer.getUnderlyingExecutor(), messageKey, stringPlaceholders);
+        this.sendMessage(pplayer.getUnderlyingExecutor(), messageKey, stringPlaceholders);
     }
 
     /**
@@ -43,8 +49,7 @@ public class LocaleManager extends AbstractLocaleManager {
      * @param messageKey The message key of the Locale to send
      */
     public void sendMessage(PPlayer pplayer, String messageKey) {
-        if (Setting.MESSAGES_ENABLED.getBoolean())
-            this.sendMessage(pplayer.getUnderlyingExecutor(), messageKey);
+        this.sendMessage(pplayer.getUnderlyingExecutor(), messageKey);
     }
 
     /**
