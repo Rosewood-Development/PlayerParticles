@@ -266,9 +266,9 @@ public class ParticleGroupPresetManager extends Manager {
         if (presetGroupPages.isEmpty()) {
             LocaleManager localeManager = this.rosePlugin.getManager(LocaleManager.class);
             Map<Integer, BorderColor> extraBorder = new HashMap<>();
-            IntStream.range(0, 9).forEach(x -> extraBorder.put(x, BorderColor.GREEN));
-            IntStream.range(45, 54).forEach(x -> extraBorder.put(x, BorderColor.GREEN));
             BorderColor borderColor = BorderColor.getOrDefault(ConfigurationManager.Setting.GUI_GLASS_COLORS_LOAD_PRESET_GROUPS.getString(), BorderColor.GREEN);
+            IntStream.range(0, 9).forEach(x -> extraBorder.put(x, borderColor));
+            IntStream.range(45, 54).forEach(x -> extraBorder.put(x, borderColor));
             Arrays.asList(9, 18, 27, 36, 17, 26, 35, 44).forEach(x -> extraBorder.put(x, borderColor));
             presetGroupPages.put(1, new ParticleGroupPresetPage(localeManager.getLocaleMessage("gui-load-a-preset-group"), Collections.emptyList(), extraBorder));
         }
