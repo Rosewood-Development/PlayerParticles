@@ -1,5 +1,6 @@
 package dev.esophose.playerparticles.manager;
 
+import dev.esophose.playerparticles.locale.BrazilianPortugueseLocale;
 import dev.esophose.playerparticles.locale.EnglishLocale;
 import dev.esophose.playerparticles.locale.FrenchLocale;
 import dev.esophose.playerparticles.locale.GermanLocale;
@@ -76,6 +77,7 @@ public class LocaleManager extends AbstractLocaleManager {
     @Override
     public List<Locale> getLocales() {
         return Arrays.asList(
+                new BrazilianPortugueseLocale(),
                 new EnglishLocale(),
                 new FrenchLocale(),
                 new GermanLocale(),
