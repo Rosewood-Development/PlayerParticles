@@ -23,7 +23,7 @@ public class ParticlePlaceholderExpansion extends PlaceholderExpansion {
 
         PPlayer pplayer = this.playerParticles.getManager(DataManager.class).getPPlayer(p.getUniqueId());
         if (pplayer == null)
-            return "none";
+            return null;
 
         switch (placeholder) {
             case "active_amount":
@@ -45,7 +45,7 @@ public class ParticlePlaceholderExpansion extends PlaceholderExpansion {
         if (placeholder.startsWith("particle_")) {
             ParticlePair particle = pplayer.getActiveParticle(this.parseId(placeholder));
             if (particle == null)
-                return null;
+                return "none";
 
             if (placeholder.startsWith("particle_effect_")) {
                 return particle.getEffect().getName();
