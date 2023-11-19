@@ -1,20 +1,18 @@
 package dev.esophose.playerparticles.manager;
 
-import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.particles.OtherPPlayer;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.styles.ParticleStyle;
+import dev.rosewood.rosegarden.RosePlugin;
+import dev.rosewood.rosegarden.manager.Manager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import dev.rosewood.rosegarden.RosePlugin;
-import dev.rosewood.rosegarden.manager.Manager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -429,6 +427,17 @@ public class PermissionManager extends Manager {
      */
     public boolean canOpenGui(PPlayer player) {
         return !Setting.GUI_REQUIRE_PERMISSION.getBoolean() || PPermission.GUI.check(player.getUnderlyingExecutor());
+    }
+
+    /**
+     * Checks if a player has permission to open a specific GUI
+     *
+     * @param player The player to check the permission for
+     * @param gui The gui name
+     * @return True if the player has permission to open the GUI
+     */
+    public boolean canOpenGui(PPlayer player, String gui) {
+        return !Setting.GUI_REQUIRE_PERMISSION.getBoolean() || PPermission.GUI.check(player.getUnderlyingExecutor(), gui);
     }
     
     /**

@@ -9,9 +9,12 @@ import dev.esophose.playerparticles.particles.PPlayer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.bukkit.util.StringUtil;
 
 public class GUICommandModule implements CommandModule {
+
+    private static final List<String> GUI_TYPES = Arrays.asList("presets", "groups", "particles");
 
     @Override
     public void onCommandExecute(PPlayer pplayer, String[] args) {
@@ -49,29 +52,35 @@ public class GUICommandModule implements CommandModule {
 
         if (args.length == 0) {
             guiManager.openDefault(pplayer);
-        } else {
-            switch (args[0].toLowerCase()) {
+            return;
+        }
+
+        String guiName = args[0].toLowerCase();
+        if (GUI_TYPES.contains(guiName) && permissionManager.canOpenGui(pplayer, guiName)) {
+            switch (guiName) {
                 case "presets":
                     guiManager.openPresetGroups(pplayer);
-                    break;
+                    return;
                 case "groups":
                     guiManager.openGroups(pplayer);
-                    break;
+                    return;
                 case "particles":
                     guiManager.openParticles(pplayer);
-                    break;
-                default:
-                    guiManager.openDefault(pplayer);
-                    break;
+                    return;
             }
         }
+
+        guiManager.openDefault(pplayer);
     }
 
     @Override
     public List<String> onTabComplete(PPlayer pplayer, String[] args) {
+        PermissionManager permissionManager = PlayerParticles.getInstance().getManager(PermissionManager.class);
         List<String> completions = new ArrayList<>();
         if (args.length == 1) {
-            List<String> possibilities = Arrays.asList("presets", "groups", "particles");
+            List<String> possibilities = GUI_TYPES.stream()
+                    .filter(x -> permissionManager.canOpenGui(pplayer, x))
+                    .collect(Collectors.toList());
             StringUtil.copyPartialMatches(args[0], possibilities, completions);
         }
         return completions;
