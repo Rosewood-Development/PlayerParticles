@@ -49,7 +49,7 @@ public class EditCommandModule implements CommandModule {
         }
         
         if (pplayer.getActiveParticle(id) == null) {
-            localeManager.sendMessage(pplayer, "id-unknown", StringPlaceholders.single("id", id));
+            localeManager.sendMessage(pplayer, "id-unknown", StringPlaceholders.of("id", id));
             return;
         }
         
@@ -67,7 +67,7 @@ public class EditCommandModule implements CommandModule {
             this.editData(pplayer, id, cmdArgs);
             break;
         default:
-            localeManager.sendMessage(pplayer, "edit-invalid-property", StringPlaceholders.single("prop", args[1]));
+            localeManager.sendMessage(pplayer, "edit-invalid-property", StringPlaceholders.of("prop", args[1]));
             break;
         }
     }
@@ -85,10 +85,10 @@ public class EditCommandModule implements CommandModule {
         InputParser inputParser = new InputParser(pplayer, args);
         ParticleEffect effect = inputParser.next(ParticleEffect.class);
         if (effect == null) {
-            localeManager.sendMessage(pplayer, "effect-invalid", StringPlaceholders.single("effect", args[0]));
+            localeManager.sendMessage(pplayer, "effect-invalid", StringPlaceholders.of("effect", args[0]));
             return;
         } else if (!PlayerParticles.getInstance().getManager(PermissionManager.class).hasEffectPermission(pplayer, effect)) {
-            localeManager.sendMessage(pplayer, "effect-no-permission", StringPlaceholders.single("effect", effect.getName()));
+            localeManager.sendMessage(pplayer, "effect-no-permission", StringPlaceholders.of("effect", effect.getName()));
             return;
         }
         
@@ -101,7 +101,7 @@ public class EditCommandModule implements CommandModule {
         }
         
         PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), group);
-        localeManager.sendMessage(pplayer, "edit-success-effect", StringPlaceholders.builder("id", id).addPlaceholder("effect", effect.getName()).build());
+        localeManager.sendMessage(pplayer, "edit-success-effect", StringPlaceholders.builder("id", id).add("effect", effect.getName()).build());
     }
     
     /**
@@ -117,10 +117,10 @@ public class EditCommandModule implements CommandModule {
         InputParser inputParser = new InputParser(pplayer, args);
         ParticleStyle style = inputParser.next(ParticleStyle.class);
         if (style == null) {
-            localeManager.sendMessage(pplayer, "style-invalid", StringPlaceholders.single("style", args[0]));
+            localeManager.sendMessage(pplayer, "style-invalid", StringPlaceholders.of("style", args[0]));
             return;
         } else if (!PlayerParticles.getInstance().getManager(PermissionManager.class).hasStylePermission(pplayer, style)) {
-            localeManager.sendMessage(pplayer, "style-no-permission", StringPlaceholders.single("style", style.getName()));
+            localeManager.sendMessage(pplayer, "style-no-permission", StringPlaceholders.of("style", style.getName()));
             return;
         }
         
@@ -133,7 +133,7 @@ public class EditCommandModule implements CommandModule {
         }
 
         PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), group);
-        localeManager.sendMessage(pplayer, "edit-success-style", StringPlaceholders.builder("id", id).addPlaceholder("style", style.getName()).build());
+        localeManager.sendMessage(pplayer, "edit-success-style", StringPlaceholders.builder("id", id).add("style", style.getName()).build());
     }
     
     /**
@@ -171,7 +171,7 @@ public class EditCommandModule implements CommandModule {
                 }
             }
         } else if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-            if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST || effect == ParticleEffect.BLOCK_MARKER) {
+            if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST || effect == ParticleEffect.BLOCK_MARKER || effect == ParticleEffect.DUST_PILLAR) {
                 blockData = inputParser.next(Material.class);
                 if (blockData == null || !blockData.isBlock()) {
                     localeManager.sendMessage(pplayer, "data-invalid-block");
@@ -214,7 +214,7 @@ public class EditCommandModule implements CommandModule {
         }
 
         PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), group);
-        localeManager.sendMessage(pplayer, "edit-success-data", StringPlaceholders.builder("id", id).addPlaceholder("data", updatedDataString).build());
+        localeManager.sendMessage(pplayer, "edit-success-data", StringPlaceholders.builder("id", id).add("data", updatedDataString).build());
     }
 
     @Override
@@ -277,7 +277,7 @@ public class EditCommandModule implements CommandModule {
                         }
                         StringUtil.copyPartialMatches(args[args.length - 1], possibleValues, matches);
                     } else if (args.length == 3 && effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-                        if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST || effect == ParticleEffect.BLOCK_MARKER) { // Block material
+                        if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST || effect == ParticleEffect.BLOCK_MARKER || effect == ParticleEffect.DUST_PILLAR) { // Block material
                             StringUtil.copyPartialMatches(args[2], ParticleUtils.BLOCK_MATERIALS_STRING, matches);
                         } else if (effect == ParticleEffect.ITEM) { // Item material
                             StringUtil.copyPartialMatches(args[2], ParticleUtils.ITEM_MATERIALS_STRING, matches);

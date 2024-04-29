@@ -175,7 +175,7 @@ public class ParticleGroupPresetManager extends Manager {
                                         }
                                     }
                                 } else if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-                                    if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST || effect == ParticleEffect.BLOCK_MARKER) {
+                                    if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST || effect == ParticleEffect.BLOCK_MARKER || effect == ParticleEffect.DUST_PILLAR) {
                                         blockData = inputParser.next(Material.class);
                                         if (blockData == null || !blockData.isBlock()) {
                                             PlayerParticles.getInstance().getLogger().severe("Invalid block: '" + dataString + "'!");
@@ -378,7 +378,7 @@ public class ParticleGroupPresetManager extends Manager {
         }
 
         // Reload the config
-        presetsConfig.reloadConfig();
+        presetsConfig = CommentedFileConfiguration.loadConfiguration(presetsFile);
 
         // Delete everything in the presets section
         presetsConfig.set("page1.presets", null);
@@ -416,7 +416,7 @@ public class ParticleGroupPresetManager extends Manager {
                 slot = maxSlot;
         }
 
-        presetsConfig.save();
+        presetsConfig.save(presetsFile);
     }
 
     private static class PresetData {

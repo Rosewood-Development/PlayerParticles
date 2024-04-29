@@ -26,7 +26,7 @@ public class WorldsCommandModule implements CommandModule {
         if (worlds.length() > 2)
             worlds = new StringBuilder(worlds.substring(0, worlds.length() - 2));
 
-        localeManager.sendCustomMessage(pplayer.getUnderlyingExecutor(), localeManager.getLocaleMessage("disabled-worlds", StringPlaceholders.single("worlds", worlds)));
+        localeManager.sendCustomMessage(pplayer.getUnderlyingExecutor(), localeManager.getLocaleMessage("disabled-worlds", StringPlaceholders.of("worlds", worlds)));
     }
 
     @Override

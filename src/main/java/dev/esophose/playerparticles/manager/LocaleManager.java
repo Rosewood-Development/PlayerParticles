@@ -1,23 +1,10 @@
 package dev.esophose.playerparticles.manager;
 
-import dev.esophose.playerparticles.locale.BrazilianPortugueseLocale;
-import dev.esophose.playerparticles.locale.EnglishLocale;
-import dev.esophose.playerparticles.locale.FrenchLocale;
-import dev.esophose.playerparticles.locale.GermanLocale;
-import dev.esophose.playerparticles.locale.PolishLocale;
-import dev.esophose.playerparticles.locale.RussianLocale;
-import dev.esophose.playerparticles.locale.SimplifiedChineseLocale;
-import dev.esophose.playerparticles.locale.SpanishLocale;
-import dev.esophose.playerparticles.locale.VietnameseLocale;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.rosewood.rosegarden.RosePlugin;
-import dev.rosewood.rosegarden.locale.Locale;
 import dev.rosewood.rosegarden.manager.AbstractLocaleManager;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
-
-import java.util.Arrays;
-import java.util.List;
 import org.bukkit.command.CommandSender;
 
 public class LocaleManager extends AbstractLocaleManager {
@@ -40,7 +27,9 @@ public class LocaleManager extends AbstractLocaleManager {
      * @param stringPlaceholders The placeholders to apply
      */
     public void sendMessage(PPlayer pplayer, String messageKey, StringPlaceholders stringPlaceholders) {
-        this.sendMessage(pplayer.getUnderlyingExecutor(), messageKey, stringPlaceholders);
+        String prefix = this.getLocaleMessage("prefix");
+        String message = this.getLocaleMessage(messageKey, stringPlaceholders);
+        this.sendUnparsedMessage(pplayer.getUnderlyingExecutor(), prefix + message);
     }
 
     /**
@@ -73,21 +62,5 @@ public class LocaleManager extends AbstractLocaleManager {
     public void sendSimpleMessage(PPlayer pplayer, String messageKey, StringPlaceholders stringPlaceholders) {
         this.sendSimpleMessage(pplayer.getUnderlyingExecutor(), messageKey, stringPlaceholders);
     }
-
-    @Override
-    public List<Locale> getLocales() {
-        return Arrays.asList(
-                new BrazilianPortugueseLocale(),
-                new EnglishLocale(),
-                new FrenchLocale(),
-                new GermanLocale(),
-                new PolishLocale(),
-                new RussianLocale(),
-                new SimplifiedChineseLocale(),
-                new SpanishLocale(),
-                new VietnameseLocale()
-        );
-    }
-
 
 }

@@ -12,6 +12,7 @@ import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.util.ParticleUtils;
+import dev.rosewood.rosegarden.utils.NMSUtil;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,9 +46,9 @@ public class GuiInventoryDefault extends GuiInventory {
         if (currentIconMeta != null) {
             currentIconMeta.setDisplayName(localeManager.getLocaleMessage("gui-color-icon-name") + pplayer.getPlayer().getName());
             String[] currentIconLore = new String[]{
-                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-active-particles", StringPlaceholders.single("amount", pplayer.getActiveParticles().size())),
-                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-saved-groups", StringPlaceholders.single("amount", pplayer.getParticleGroups().size() - 1)),
-                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-fixed-effects", StringPlaceholders.single("amount", pplayer.getFixedEffectIds().size())),
+                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-active-particles", StringPlaceholders.of("amount", pplayer.getActiveParticles().size())),
+                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-saved-groups", StringPlaceholders.of("amount", pplayer.getParticleGroups().size() - 1)),
+                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-fixed-effects", StringPlaceholders.of("amount", pplayer.getFixedEffectIds().size())),
                     " ",
                     localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-commands-info"),
                     " ",
@@ -55,7 +56,11 @@ public class GuiInventoryDefault extends GuiInventory {
                     localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-toggle-visibility-info")
             };
             currentIconMeta.setLore(GuiActionButton.parseLore(this.pplayer, currentIconLore));
-            currentIconMeta.setOwner(pplayer.getPlayer().getName());
+            if (NMSUtil.getVersionNumber() >= 13) {
+                currentIconMeta.setOwningPlayer(pplayer.getPlayer());
+            } else {
+                currentIconMeta.setOwner(pplayer.getPlayer().getName());
+            }
             headIcon.setItemMeta(currentIconMeta);
         }
 

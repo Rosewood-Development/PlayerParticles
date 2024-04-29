@@ -72,7 +72,7 @@ public abstract class ConfiguredParticleStyle implements ParticleStyle {
         this.setDefaultSettings(this.config);
 
         if (this.changed)
-            this.config.save();
+            this.config.save(file);
     }
 
     /**

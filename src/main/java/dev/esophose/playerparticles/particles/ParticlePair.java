@@ -350,10 +350,8 @@ public class ParticlePair {
      */
     public String getDataString() {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
-        if (this.effect == ParticleEffect.BLOCK || this.effect == ParticleEffect.FALLING_DUST) {
-            return this.blockMaterial.toString().toLowerCase();
-        } else if (this.effect == ParticleEffect.ITEM) {
-            return this.itemMaterial.toString().toLowerCase();
+        if (this.effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
+            return this.getSpawnMaterial().toString().toLowerCase();
         } else if (this.effect.hasProperty(ParticleProperty.COLORABLE)) {
             if (this.effect == ParticleEffect.NOTE) {
                 if (this.noteColor.equals(NoteColor.RAINBOW)) {
@@ -361,7 +359,7 @@ public class ParticlePair {
                 } else if (this.noteColor.equals(NoteColor.RANDOM)) {
                     return localeManager.getLocaleMessage("random");
                 }
-                return localeManager.getLocaleMessage("gui-select-data-note", StringPlaceholders.single("note", this.noteColor.getNote()));
+                return localeManager.getLocaleMessage("gui-select-data-note", StringPlaceholders.of("note", this.noteColor.getNote()));
             } else {
                 if (this.color.equals(OrdinaryColor.RAINBOW)) {
                     return localeManager.getLocaleMessage("rainbow");

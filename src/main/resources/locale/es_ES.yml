@@ -1,0 +1,338 @@
+# Plugin Message Prefix
+prefix: '&7[<g:#00aaaa:#0066aa>{{PLUGIN_NAME}}&7] '
+
+# Command Description Messages
+command-error-missing-effects-or-styles: '&c¡Debes tener acceso a efectos y estilos para usar este comando!'
+command-error-unknown: '&cComando desconocido, usa &b/pp help &cpara obtener una lista con los comandos.'
+command-descriptions: '&eLos siguientes comandos están disponibles:'
+command-descriptions-usage: '&e/pp %cmd% %args%'
+command-descriptions-help-1: '&7> &b/pp %cmd% &e- %desc%'
+command-descriptions-help-2: '&7> &b/pp %cmd% %args% &e- %desc%'
+command-descriptions-help-other: '&7> &b/ppo <jugador> <comando> &e- Ejecuta un comando /pp como un jugador'
+command-description-add: Añade una nueva partícula
+command-description-data: Compruebe qué tipo de datos utiliza un efecto
+command-description-default: El comando principal. De forma predeterminada, abre la GUI
+command-description-edit: Editar una partícula
+command-description-effects: Muestre una lista de efectos que puede usar
+command-description-fixed: Gestiona tus efectos fijos
+command-description-group: Gestiona tus grupos
+command-description-gui: Muestra la GUI para editar fácilmente las partículas
+command-description-help: Muestra el menú de ayuda ... Has llegado
+command-description-info: Obtiene la descripción de una de sus partículas activas
+command-description-list: Enumera los ID de sus partículas activas
+command-description-reload: Vuelve a cargar el archivo config.yml y lang
+command-description-remove: Elimina algunas partículas
+command-description-reset: Elimina todas tus partículas activas
+command-description-styles: Muestre una lista de estilos que puede usar
+command-description-toggle: Activa o desactiva la visibilidad de las partículas
+command-description-use: Modifica tu partícula primaria
+command-description-version: Muestra la versión y el autor del complemento
+command-description-worlds: Descubra en qué mundos están deshabilitadas las partículas
+
+# Fixed Particle Command Description Messages
+command-description-fixed-create: '&e/pp fixed create <<x> <y> <z>|<looking>> <effect> <style> [data] - Crea un nuevo efecto fijo'
+command-description-fixed-create-console: '&e/pp fixed create <x> <y> <z> <world> <effect> <style> [data] - Crea un nuevo efecto fijo'
+command-description-fixed-edit: '&e/pp fixed edit <id> <effect|style|data|location> <args> - Editar parte de un efecto fijo por su ID'
+command-description-fixed-remove: '&e/pp fixed remove <ID> - Elimina un efecto fijo por su ID'
+command-description-fixed-list: '&e/pp fixed list - Enumera todos los ID de sus efectos fijos'
+command-description-fixed-info: '&e/pp fixed info <ID> - Obtiene información sobre uno de sus efectos fijos'
+command-description-fixed-clear: '&e/pp fixed clear <radius> - Borra todos los efectos fijos de todos los jugadores dentro del radio dado'
+command-description-fixed-clear-console: '&e/pp fixed clear <radius> <x> <y> <z> <world> - Borra todos los efectos fijos de todos los jugadores dentro del radio dado'
+command-description-fixed-teleport: '&e/pp fixed teleport <id> - Te teletransporta a uno de tus efectos fijos'
+
+# Group Command Description Messages
+command-description-group-save: '&e/pp group save <name> - Guarda todas las partículas activas en un nuevo grupo'
+command-description-group-load: '&e/pp group load <name> - Carga todas las partículas guardadas en un grupo'
+command-description-group-remove: '&e/pp group remove <name> - Elimina un grupo que ha guardado'
+command-description-group-list: '&e/pp group list <name> - Enumere todos los grupos de partículas que ha guardado'
+command-description-group-info: '&e/pp group info <name> - Enumere las partículas guardadas en el grupo'
+
+# ID Messages
+id-invalid: '&cEl ID que ingresó no es válido, debe de ser un número entero positivo!'
+id-unknown: '&cNo tiene una partícula aplicada con el ID &b%id%&c!'
+
+# Other Messages
+other-no-permission: '&cNo tienes permiso para ejecutar comandos de particulas de otros jugadores!'
+other-missing-args: '&cTe faltan algunos argumentos. &b/ppo <player> <command>'
+other-unknown-player: '&cel jugador &b%player% &cno fue encontrado. Deben estar ofline.'
+other-unknown-command: '&cel comando &b/pp %cmd% &cNo existe.'
+other-success: '&eEjecuta /pp command for &b%player%&e. Output:'
+
+# Add Messages
+add-reached-max: '&cNo se puede aplicar la partícula, ha alcanzado la cantidad máxima de &b%amount% &cpermitido!'
+add-particle-applied: '&aSe ha aplicado una nueva partícula con el efecto &b%effect%&a, estilo &b%style%&a, y datos &b%data%&a!'
+data-no-args: '&c¡Falta argumento para el efecto! Usa el comando: &b/pp data <effect>'
+
+# Edit Messages
+edit-invalid-property: '&cUna propiedad inválida &b%prop% &cfue dado. Propiedades válidas: &beffect&c, &bstyle&c, &bdata'
+edit-success-effect: '&aTu partícula con un ID de &b%id% &aha cambiado sus efectos a &b%effect%&a!'
+edit-success-style: '&aTu partícula con un ID de &b%id% &aha cambiado su estilo a &b%style%&a!'
+edit-success-data: '&aTu partícula con un ID de &b%id% &aha cambiado sus datos a &b%data%&a!'
+
+# Group Messages
+group-invalid: '&cNo existe un grupo guardado o un grupo preestablecido con el nombre &b%name%&c!'
+group-no-permission: '&cTe falta permiso para que un efecto o estilo use el grupo. &b%group%&c!'
+group-preset-no-permission: '&cLe falta permiso para que un efecto o estilo use el grupo preestablecido &b%group%&c!'
+group-reserved: '&cel grupo llamado &bactivado &cEstá reservado y no puede ser utilizado!'
+group-no-name: '&cNo proporcionaste un nombre de grupo! &b/pp %cmd% <groupName>'
+group-save-reached-max: '&cNo se puede guardar el grupo, has alcanzado el número máximo de grupos!'
+group-save-no-particles: '&cNo se puede guardar el grupo, no tiene ninguna partícula aplicada!'
+group-save-success: '&aSus partículas actuales se han guardado en el grupo llamado &b%name%&a!'
+group-save-success-overwrite: '&aEl grupo llamado &b%name% &ase ha actualizado con sus partículas actuales!'
+group-load-success: '&Aplicadas &b%amount% &aparticulas de tu grupo guardado llamado &b%name%&a!'
+group-load-preset-success: '&aAplicado &b%amount% &aparticulas del grupo preestablecido llamado &b%name%&a!'
+group-unload-success: '&aSe han eliminado &b%amount% &aparticipación(es) que coinciden con el grupo &b%name%&a!'
+group-remove-preset: '&cNo puedes eliminar un grupo preestablecido!'
+group-remove-success: '&aSe eliminó el grupo de partículas llamado &b%name%&a!'
+group-info-header: '&eEl grupo &b%group% &etiene las siguientes partículas:'
+group-list-none: '&eNo tienes ningún grupo de partículas guardado!'
+group-list-output: '&eTienes los siguientes grupos guardados: &b%info%'
+group-list-presets: '&eLos siguientes grupos preestablecidos están disponibles: &b%info%'
+
+# Reload Messages
+reload-success: '&aEl complemento se ha recargado!'
+reload-no-permission: '&cNo tienes permiso para volver a cargar la configuración del complemento.!'
+
+# Remove Messages
+remove-no-args: '&cNo especificó un ID para eliminar! &b/pp remove <ID>'
+remove-id-success: '&aTu partícula con la id &b%id% &afueron removidas!'
+remove-effect-success: '&aRemovidasde tus partículas con el efecto de &b%amount% &aof your particles with the effect of &b%effect%&a!'
+remove-effect-none: '&cNo tiene ninguna partícula aplicada con el efecto &b%effect%&c!'
+remove-style-success: '&aRemovidas &b%amount% &ade tus partículas con el estilo de &b%style%&a!'
+remove-style-none: '&cNo tienes ninguna partícula aplicada con el estilo &b%style%&c!'
+remove-effect-style-none: '&cNo tiene ninguna partícula aplicada con el efecto o estilo &b%name%&c!'
+remove-unknown: '&cUn efecto o estilo con el nombre de &b%name% &cNo existe!'
+
+# List Messages
+list-none: '&eNo tienes partículas activas.!'
+list-you-have: '&eTiene las siguientes partículas aplicadas:'
+list-output: '&eID: &b%id% &eEfecto: &b%effect% &eEstilo: &b%style% &eDatos: &b%data%'
+
+# Toggle Messages
+toggle-on: '&eLas partículas se han cambiado &aON&e!'
+toggle-off: '&eLas partículas se han cambiado &cOFF&e!'
+
+# Use Messages
+use-particle-modified: '&aTu partícula primaria ha sido modificada para usar el efecto. &b%effect%&a, estilo &b%style%&a, y datos &b%data%&a!'
+
+# Color Messages
+rainbow: '&cR&6a&ei&an&bb&9o&dw'
+random: Aleatorio
+
+# Effect Messages
+effect-no-permission: '&cNo tienes permiso para usar el efecto. &b%effect%&c!'
+effect-invalid: '&cEl efecto &b%effect% &cNo existe! Usa &b/pp effects &cpara ver la lista de efectos.'
+effect-list: '&ePuedes usar los siguientes efectos: &b%effects%'
+effect-list-empty: '&cNo tienes permiso para usar ningún efecto.!'
+
+# Style Messages
+style-no-permission: '&cNo tienes permiso para usar el estilo: &b%style%&c!'
+style-event-spawning-info: '&eNota: el estilo &b%style% &espawnea particulas basado en un evento.'
+style-invalid: '&cEl estilo &b%style% &cNo existe! Usa &b/pp styles &cpara ver la lista de comandos de los estilos.'
+style-list: '&ePuedes usar los siguientes estilos: &b%styles%'
+
+# Data Messages
+data-usage-none: '&eEl efecto &b%effect% &eno usa ningún dato!'
+data-usage-block: '&eEl efecto &b%effect% &erequiere &bbloque &edato! &bFormato: <blockName>'
+data-usage-item: '&eEl efecto &b%effect% &erequiere &bitem &edato! &bFormato: <itemName>'
+data-usage-color: '&eEl efecto &b%effect% &erequiere &bcolor &edato! &bFormato: <<0-255> <0-255> <0-255>>|<&brainbow>|<random>'
+data-usage-note: '&eEl efecto &b%effect% &erequiere &bNota &edato! &bFormato: <0-24>|<&brainbow>|<random>'
+data-usage-color-transition: '&eEl efecto &b%effect% &erequiere los datos de &btransición de color&e! &bFormato: <<0-255> <0-255> <0-255>>|<&brainbow>|<random> <<0-255> <0-255> <0-255>>|<&brainbow>|<random>'
+data-usage-vibration: '&eEl efecto &b%effect% &erequiere datos de &bvibración&e! &bFormato: <duración>'
+data-invalid-block: '&cEl &bblock &clos datos que ingresaste no son válidos! &bFormato: <blockName>'
+data-invalid-item: '&cEl &bitem &clos datos que ingresaste no son válidos! &bFormato: <itemName>'
+data-invalid-color: '&cEl &bcolor &clos datos que ingresaste no son válidos! &bFormato: <<0-255> <0-255> <0-255>>|<&brainbow>|<random>'
+data-invalid-note: '&cEl &bNota &clos datos que ingresaste no son válidos! &bFormato: <0-24>|<&brainbow>|<random>'
+data-invalid-color-transition: '&cLos datos de &btransición de color &cque has introducido son inválidos! &bFormato: <<0-255> <0-255> <0-255>>|<&brainbow>|<random> <<0-255> <0-255> <0-255>>|<&brainbow>|<random>'
+data-invalid-vibration: '&cLos datos de &bvibración &cque has intruducidos son inválidos! &bFormato: <duración>'
+data-invalid-material-not-item: '&cel &bitem &cmaterial &b%material% &cque ingresaste no es un item!'
+data-invalid-material-not-block: '&cel &bbloque &cmaterial &b%material% &cque ingresaste no es un bloque!'
+data-invalid-material-item: '&cel &bitem &cmaterial &b%material% que ingresaste no existe!'
+data-invalid-material-block: '&cel &bbloque &cmaterial &b%material%que ingresaste no existe!'
+
+# World Messages
+disabled-worlds: '&eLas partículas están desactivadas en estos mundos: &b%worlds%'
+disabled-worlds-none: '&eLas partículas no están deshabilitadas en ningún mundo..'
+
+# Reset Message
+reset-success: '&aRemovidas &b%amount% &aparticulas activas!'
+reset-others-success: '&aPartículas eliminadas para &b%other%&a!'
+reset-others-none: '&eNo se eliminaron partículas a &b%other%&e.'
+
+# Fixed Create Messages
+fixed-create-missing-args: '&cNo se puede crear un efecto fijo, estás perdido &b%amount% &crequerido argumentos!'
+fixed-create-invalid-coords: '&cNo se puede crear un efecto fijo,una o más coordenadas que ingresaste no son válidas!'
+fixed-create-out-of-range: '&cNo se puede crear un efecto fijo, debes estar dentro &b%range% &cbloques de su ubicación!'
+fixed-create-looking-too-far: '&cNo se puede crear un efecto fijo, ¡Estás parado demasiado lejos del bloque que estás mirando!'
+fixed-create-effect-invalid: '&cNo se puede crear un efecto fijo, un efecto con el nombre &b%effect% &c¡no existe!'
+fixed-create-effect-no-permission: '&cNo se puede crear un efecto fijo,no tienes permiso para usar el efecto &b%effect%&c!'
+fixed-create-style-invalid: '&cNo se puede crear un efecto fijo, un estilo con el nombre &b%style% &c¡no existe!'
+fixed-create-style-no-permission: '&cNo se puede crear un efecto fijo,no tienes permiso para usar el estilo &b%style%&c!'
+fixed-create-style-non-fixable: '&cNo se puede crear un efecto fijo, el estilo &b%style% &cno se puede utilizar en efectos fijos!'
+fixed-create-data-error: '&cNo se puede crear un efecto fijo, ¡Los datos proporcionados no son correctos! usa &b/pp data <effect> &cpara encontrar el formato de datos correcto!'
+fixed-create-success: '&a¡Tu efecto fijo ha sido creado!'
+
+# Fixed Edit Messages
+fixed-edit-missing-args: '&cNo se puede editar el efecto fijo,te faltan algunos argumentos!'
+fixed-edit-invalid-id: '&cNo se puede editar el efecto fijo, el ID especificado no es válido o ¡no existe!'
+fixed-edit-invalid-property: '&cNo se puede editar el efecto fijo, ¡Se especificó una propiedad no válida! Solo &blocalización&c, &befecto&c, &bestilo&c, y &bdato &cSon válidos.'
+fixed-edit-invalid-coords: '&cNo se puede editar el efecto fijo, una o más coordenadas que ingresaste no son válidas!'
+fixed-edit-out-of-range: '&cNo se puede editar el efecto fijo, debes estar dentro &b%range% &cbloques de su ubicación!'
+fixed-edit-looking-too-far: '&cNo se puede editar el efecto fijo, ¡Estás parado demasiado lejos del bloque que estás mirando!'
+fixed-edit-effect-invalid: '&cNo se puede editar el efecto fijo, un efecto con el nombre &b%effect% &c¡no existe!'
+fixed-edit-effect-no-permission: '&cNo se puede editar el efecto fijo, no tienes permiso para usar el efecto &b%effect%&c!'
+fixed-edit-style-invalid: '&cNo se puede editar el efecto fijo, un estilo con el nombre &b%style% &c¡no existe!'
+fixed-edit-style-no-permission: '&cNo se puede editar el efecto fijo, no tienes permiso para usar el estilo &b%style%&c!'
+fixed-edit-style-non-fixable: '&cNo se puede editar el efecto fijo,el estilo &b%style% &cno se puede utilizar en efectos fijos!'
+fixed-edit-data-error: '&cNo se puede editar el efecto fijo, ¡Los datos proporcionados no son correctos! Usar &b/pp data <effect> &cpara encontrar el formato de datos correcto!'
+fixed-edit-data-none: '&cNo se puede editar el efecto fijo, el efecto no requiere ningún dato!'
+fixed-edit-success: '&aActualizado el &b%prop% &adel efecto fijo con un ID de &b%id%&a!'
+
+# Fixed Remove Messages
+fixed-remove-invalid: '&cNo se puede eliminar el efecto fijo, no tiene un efecto fijo con el ID de &b%id%&c!'
+fixed-remove-no-args: '&cNo especificó un ID para eliminar!'
+fixed-remove-args-invalid: '&cNo se puede eliminar, el ID especificado debe ser un número!'
+fixed-remove-success: '&aTu efecto fijo con el ID &b%id% &aha sido removido!'
+
+# Fixed List Messages
+fixed-list-none: '&eNo tienes efectos fijos!'
+fixed-list-success: '&eYou have fixed effects with these IDs: &b%ids%'
+
+# Fixed Info Messages
+fixed-info-invalid: '&cNo se puede obtener información, no tiene un efecto fijo con el ID de &b%id%&c!'
+fixed-info-no-args: '&cNo especificó un ID para mostrar información !'
+fixed-info-invalid-args: '&cNo se puede obtener información, el ID especificado debe ser un número!'
+fixed-info-success: '&eID: &b%id% &eMundo: &b%world% &eX: &b%x% &eY: &b%y% &eZ: &b%z% &eEffecto: &b%effect% &eEstilo: &b%style% &eDato: &b%data%'
+
+# Fixed Clear Messages
+fixed-clear-no-permission: '&c¡No tienes permiso para borrar efectos fijos cercanos!'
+fixed-clear-no-args: '&c¡No proporcionaste un radio para borrar efectos fijos!'
+fixed-clear-invalid-args: '&cEl radio que proporcionó no es válido, debe ser un número entero y positivo.'
+fixed-clear-success: '&aDespejado &b%amount% &aeffectos fijos &b%range% &abloques de tu ubicación!'
+
+# Fixed Teleport Message
+fixed-teleport-no-permission: '&c¡No tienes permiso para teletransportarte!'
+fixed-teleport-no-args: '&c¡No especificó una identificación para teletransportarse!'
+fixed-teleport-invalid-args: '&cIncapaz de teletransportarse, la ID especificada no es válida!'
+fixed-teleport-success: '&eTeletransportado a su efecto fijo con un ID de &b%id%&e!'
+
+# Fixed Other Messages
+fixed-no-permission: '&c¡No tienes permiso para usar efectos fijos!'
+fixed-max-reached: '&c¡Has alcanzado el máximo de efectos fijos permitidos!'
+fixed-invalid-command: '&cSubcomando no válido para &b/pp fijo&c!'
+
+# Plugin Update Message
+update-available: '&e¡Una actualización (&bv%new%&e) está disponible! Estas corriendo &bv%current%&e. https://www.spigotmc.org/resources/playerparticles.40261/'
+
+# GUI Messages
+gui-disabled: '&cLos administradores del server an Deshabilitado el GUI!'
+gui-no-permission: '&ctu no tienes permisos para abrir el GUI!'
+
+# GUI Color Messages
+gui-color-icon-name: '&a'
+gui-color-info: '&e'
+gui-color-subtext: '&b'
+gui-color-unavailable: '&c'
+
+# GUI Info Messages
+gui-commands-info: Encuentra información sobre los comandos con &b/pp help
+gui-toggle-visibility-on: Las particulas ahora estan &avisibles
+gui-toggle-visibility-off: Las particulas ahora estan &cocultas
+gui-toggle-visibility-info: Haga clickk para alternar la visibilidad de las partículas
+gui-back-button: volver atras
+gui-next-page-button: siguiente pagina (%start%/%end%)
+gui-previous-page-button: pagina anterior (%start%/%end%)
+gui-click-to-load: 'Haga clickk para cargar lo siguiente %amount% particle(s):'
+gui-shift-clickkk-to-delete: Shift clickkk para suprimir
+gui-particle-info: '  - ID: &b%id% &eEffectos: &b%effect% &eEstilos: &b%style% &eDatos: &b%data%'
+gui-playerparticles: PlayerParticles
+gui-active-particles: 'Particulas activadas: &b%amount%'
+gui-saved-groups: 'Grupos Guardados: &b%amount%'
+gui-fixed-effects: 'Efectos fijos: &b%amount%'
+
+# GUI Edit Primary Messages
+gui-edit-primary-effect: Editar efectos primarios
+gui-edit-primary-effect-description: Edita el efecto de tu partícula primaria
+gui-edit-primary-style: Editar estilos primarios
+gui-edit-primary-style-missing-effect: Primero debes seleccionar un efecto
+gui-edit-primary-style-description: Edite el estilo de su partícula primaria
+gui-edit-primary-data: Editar datos primarios
+gui-edit-primary-data-missing-effect: Primero debes seleccionar un efecto
+gui-edit-primary-data-unavailable: Su efecto principal no usa ningún dato
+gui-edit-primary-data-description: Edite los datos de su partícula primaria
+
+# GUI Manage Particles Messages
+gui-manage-your-particles: Administra tus particulas
+gui-manage-your-particles-name: Administra tus particulas
+gui-manage-your-particles-description: Crea, edita y elimina tus partículas
+gui-manage-your-groups: Administra tus grupos
+gui-manage-your-groups-name: Administra tus grupos
+gui-manage-your-groups-description: Cree, elimine y cargue sus grupos de partículas
+
+# GUI Load Messages
+gui-load-a-preset-group: Cargar un grupo preestablecido
+gui-load-a-preset-group-description: Cargar un grupo de partículas prefabricado
+
+# GUI Save Messages
+gui-save-group: Guardar Nuevo Grupo
+gui-save-group-description: |-
+  Haga clickk para guardar un nuevo grupo. Se le preguntara
+  para ingresar el nuevo nombre del grupo en el chat.
+gui-save-group-full: Has alcanzado el número máximo de grupos
+gui-save-group-no-particles: No tiene ninguna partícula aplicada
+gui-save-group-hotbar-message: '&eTipo &b1 &epalabra en el chat para el nuevo nombre del grupo.  &ccancelar&e para cancelar. (&b%seconds%&es restantes)'
+gui-save-group-chat-message: '&eUse &b/pp group save <name> &eto save a new particle group.'
+
+# GUI Reset Messages
+gui-reset-particles: Resetear tus particulas
+gui-reset-particles-description: Elimina todas sus partículas activas
+
+# GUI Misc Messages
+gui-particle-name: 'Particula #%id%'
+gui-clickkk-to-edit-particle: Haga clickk para editar el efecto, el estilo o los datos de esta partícula
+gui-editing-particle: 'Editando Particula #%id%'
+
+# GUI Edit Messages
+gui-edit-effect: Editar Effecto
+gui-edit-effect-description: Haga clickk para editar el effecto de esta partícula
+gui-edit-style: Editar estilo
+gui-edit-style-description: Haga clickk para editar el estilo de esta partícula
+gui-edit-data: Editar Datos
+gui-edit-data-description: Haga clickk para editar los datos de esta partícula
+gui-edit-data-unavailable: El efecto de esta partícula no utiliza ningún dato.
+gui-data-none: ninguno
+
+# GUI Create Messages
+gui-create-particle: Crear nuevas particulas
+gui-create-particle-description: Crea una nueva partícula con efecto, estilo y datos.
+gui-create-particle-unavailable: Ha alcanzado la cantidad máxima de partículas que puede crear.
+
+# GUI Select Messages
+gui-select-effect: Seleccionar efecto de partículas
+gui-select-effect-description: Establece el efecto de partículas &b%effect%
+gui-select-style: Seleccionar estilo de partícula
+gui-select-style-description: Establece el estilo de partícula &b%style%
+gui-select-data: Seleccionar datos de partículas
+gui-select-data-description: Establece los datos de partículas &b%data%
+gui-select-data-note: 'note #%note%'
+gui-select-data-color-transition-start: '&eSelecciona el color del &binicio'
+gui-select-data-color-transition-end: '&eSelecciona el color del &bfinal'
+gui-select-data-vibration: '&b%ticks% &eticks'
+
+# GUI Color Name Messages
+gui-edit-data-color-red: '#ff0000Rojo'
+gui-edit-data-color-orange: '#ff8c00Naranja'
+gui-edit-data-color-yellow: '#ffff00Amarillo'
+gui-edit-data-color-lime-green: '#32cd32Verde Lima'
+gui-edit-data-color-green: '#008000Verde'
+gui-edit-data-color-blue: '#0000ffAzul'
+gui-edit-data-color-cyan: '#008b8bCian'
+gui-edit-data-color-light-blue: '#add8e6Azul Claro'
+gui-edit-data-color-purple: '#8a2be2Morado'
+gui-edit-data-color-magenta: '#ca1f7bMagenta'
+gui-edit-data-color-pink: '#ffb6c1Rosa'
+gui-edit-data-color-brown: '#8b4513Marron'
+gui-edit-data-color-black: '#000000Negro'
+gui-edit-data-color-gray: '#808080Gris'
+gui-edit-data-color-light-gray: '#c0c0c0Gris Claro'
+gui-edit-data-color-white: '#ffffffBlanco'

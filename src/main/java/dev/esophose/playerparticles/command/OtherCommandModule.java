@@ -35,13 +35,13 @@ public class OtherCommandModule implements CommandModuleSecondary {
         
         Player other = Bukkit.getPlayer(args[0]);
         if (other == null) {
-            localeManager.sendMessage(sender, "other-unknown-player", StringPlaceholders.single("player", args[0]));
+            localeManager.sendMessage(sender, "other-unknown-player", StringPlaceholders.of("player", args[0]));
             return;
         }
         
         CommandModule commandModule = PlayerParticles.getInstance().getManager(CommandManager.class).findMatchingCommand(args[1]);
         if (commandModule == null) {
-            localeManager.sendMessage(sender, "other-unknown-command", StringPlaceholders.single("cmd", args[1]));
+            localeManager.sendMessage(sender, "other-unknown-command", StringPlaceholders.of("cmd", args[1]));
             return;
         }
         
@@ -49,12 +49,12 @@ public class OtherCommandModule implements CommandModuleSecondary {
             OtherPPlayer otherPPlayer = new OtherPPlayer(sender, pplayer);
 
             if (commandModule.requiresEffectsAndStyles() && (permissionManager.getEffectsUserHasPermissionFor(otherPPlayer).isEmpty() || permissionManager.getStylesUserHasPermissionFor(otherPPlayer).isEmpty())) {
-                localeManager.sendMessage(sender, "other-success", StringPlaceholders.single("player", other.getName()));
+                localeManager.sendMessage(sender, "other-success", StringPlaceholders.of("player", other.getName()));
                 localeManager.sendMessage(sender, "command-error-missing-effects-or-styles");
                 return;
             }
 
-            localeManager.sendMessage(sender, "other-success", StringPlaceholders.single("player", other.getName()));
+            localeManager.sendMessage(sender, "other-success", StringPlaceholders.of("player", other.getName()));
             
             String[] cmdArgs = Arrays.copyOfRange(args, 2, args.length);
             commandModule.onCommandExecute(otherPPlayer, cmdArgs);

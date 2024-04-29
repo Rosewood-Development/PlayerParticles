@@ -138,7 +138,7 @@ public class GuiActionButton {
             itemMeta.setDisplayName(PlaceholderAPIHook.applyPlaceholders(pplayer.getPlayer(), this.name));
             itemMeta.setLore(parseLore(pplayer, this.lore));
             if (NMSUtil.getVersionNumber() > 7)
-                itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_POTION_EFFECTS);
+                itemMeta.addItemFlags(ItemFlag.values());
             itemStack.setItemMeta(itemMeta);
         }
         

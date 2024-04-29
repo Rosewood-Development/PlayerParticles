@@ -39,7 +39,7 @@ public class GuiInventoryEditEffect extends GuiInventory {
                     slot,
                     effect.getGuiIconMaterial(),
                     localeManager.getLocaleMessage("gui-color-icon-name") + ParticleUtils.formatName(effect.getName()),
-                    new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-effect-description", StringPlaceholders.single("effect", ParticleUtils.formatName(effect.getName())))},
+                    new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-effect-description", StringPlaceholders.of("effect", ParticleUtils.formatName(effect.getName())))},
                     (button, isShiftClick) -> {
                         editingParticle.setEffect(effect);
                         callbackList.get(callbackListPosition + 1).run();
@@ -68,7 +68,7 @@ public class GuiInventoryEditEffect extends GuiInventory {
             GuiActionButton previousPageButton = new GuiActionButton(
                     INVENTORY_SIZE - 6,
                     GuiIcon.PREVIOUS_PAGE.get(),
-                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-previous-page-button", StringPlaceholders.builder("start", pageNumber - 1).addPlaceholder("end", maxPages).build()),
+                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-previous-page-button", StringPlaceholders.builder("start", pageNumber - 1).add("end", maxPages).build()),
                     new String[]{},
                     (button, isShiftClick) -> guiManager.transition(new GuiInventoryEditEffect(pplayer, editingParticle, pageNumber - 1, callbackList, callbackListPosition)));
             this.actionButtons.add(previousPageButton);
@@ -79,7 +79,7 @@ public class GuiInventoryEditEffect extends GuiInventory {
             GuiActionButton nextPageButton = new GuiActionButton(
                     INVENTORY_SIZE - 4,
                     GuiIcon.NEXT_PAGE.get(),
-                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-next-page-button", StringPlaceholders.builder("start", pageNumber + 1).addPlaceholder("end", maxPages).build()),
+                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-next-page-button", StringPlaceholders.builder("start", pageNumber + 1).add("end", maxPages).build()),
                     new String[]{},
                     (button, isShiftClick) -> guiManager.transition(new GuiInventoryEditEffect(pplayer, editingParticle, pageNumber + 1, callbackList, callbackListPosition)));
             this.actionButtons.add(nextPageButton);

@@ -182,7 +182,7 @@ public class GuiInventoryEditData extends GuiInventory {
                     index,
                     colorData,
                     colorData.getName(),
-                    new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", formattedDisplayColor))},
+                    new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.of("data", formattedDisplayColor))},
                     (button, isShiftClick) -> {
                         editingParticle.setColor(colorData.getOrdinaryColor());
                         callbackList.get(callbackListPosition + 1).run();
@@ -201,7 +201,7 @@ public class GuiInventoryEditData extends GuiInventory {
                 39,
                 rainbowColorMapping,
                 localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("rainbow"),
-                new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", localeManager.getLocaleMessage("rainbow")))},
+                new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.of("data", localeManager.getLocaleMessage("rainbow")))},
                 (button, isShiftClick) -> {
                     editingParticle.setColor(OrdinaryColor.RAINBOW);
                     callbackList.get(callbackListPosition + 1).run();
@@ -216,7 +216,7 @@ public class GuiInventoryEditData extends GuiInventory {
         GuiActionButton setRandomColorButton = new GuiActionButton(41,
                 randomizedColors,
                 localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("random"),
-                new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", localeManager.getLocaleMessage("random")))},
+                new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.of("data", localeManager.getLocaleMessage("random")))},
                 (button, isShiftClick) -> {
                     editingParticle.setColor(OrdinaryColor.RANDOM);
                     callbackList.get(callbackListPosition + 1).run();
@@ -245,8 +245,8 @@ public class GuiInventoryEditData extends GuiInventory {
 
         for (int i = (pageNumber - 1) * itemsPerPage; i < numberOfItems; i++) {
             ColorData colorData = NMSUtil.getVersionNumber() > 13 ? noteColorMapping[i] : noteColorMappingOld[i];
-            String formattedDisplayName = localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("gui-select-data-note", StringPlaceholders.single("note", i)) + " (" + colorData.getName() + localeManager.getLocaleMessage("gui-color-icon-name") + ")";
-            String formattedDescription = localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", localeManager.getLocaleMessage("gui-select-data-note", StringPlaceholders.single("note", i))));
+            String formattedDisplayName = localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("gui-select-data-note", StringPlaceholders.of("note", i)) + " (" + colorData.getName() + localeManager.getLocaleMessage("gui-color-icon-name") + ")";
+            String formattedDescription = localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.of("data", localeManager.getLocaleMessage("gui-select-data-note", StringPlaceholders.of("note", i))));
 
             // Note Color Buttons
             int noteIndex = i;
@@ -274,7 +274,7 @@ public class GuiInventoryEditData extends GuiInventory {
                 39,
                 rainbowColorMapping,
                 localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("rainbow"),
-                new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", localeManager.getLocaleMessage("rainbow")))},
+                new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.of("data", localeManager.getLocaleMessage("rainbow")))},
                 (button, isShiftClick) -> {
                     editingParticle.setNoteColor(NoteColor.RAINBOW);
                     callbackList.get(callbackListPosition + 1).run();
@@ -290,7 +290,7 @@ public class GuiInventoryEditData extends GuiInventory {
                 41,
                 randomizedColors,
                 localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("random"),
-                new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", localeManager.getLocaleMessage("random")))},
+                new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.of("data", localeManager.getLocaleMessage("random")))},
                 (button, isShiftClick) -> {
                     editingParticle.setNoteColor(NoteColor.RANDOM);
                     callbackList.get(callbackListPosition + 1).run();
@@ -302,7 +302,7 @@ public class GuiInventoryEditData extends GuiInventory {
             GuiActionButton previousPageButton = new GuiActionButton(
                     INVENTORY_SIZE - 6,
                     GuiIcon.PREVIOUS_PAGE.get(),
-                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-previous-page-button", StringPlaceholders.builder("start", pageNumber - 1).addPlaceholder("end", maxPages).build()),
+                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-previous-page-button", StringPlaceholders.builder("start", pageNumber - 1).add("end", maxPages).build()),
                     new String[]{},
                     (button, isShiftClick) -> guiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber - 1, callbackList, callbackListPosition, null)));
             this.actionButtons.add(previousPageButton);
@@ -313,7 +313,7 @@ public class GuiInventoryEditData extends GuiInventory {
             GuiActionButton nextPageButton = new GuiActionButton(
                     INVENTORY_SIZE - 4,
                     GuiIcon.NEXT_PAGE.get(),
-                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-next-page-button", StringPlaceholders.builder("start", pageNumber + 1).addPlaceholder("end", maxPages).build()),
+                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-next-page-button", StringPlaceholders.builder("start", pageNumber + 1).add("end", maxPages).build()),
                     new String[]{},
                     (button, isShiftClick) -> guiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber + 1, callbackList, callbackListPosition, null)));
             this.actionButtons.add(nextPageButton);
@@ -346,7 +346,7 @@ public class GuiInventoryEditData extends GuiInventory {
                     slot,
                     material,
                     localeManager.getLocaleMessage("gui-color-icon-name") + material.name().toLowerCase(),
-                    new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", material.name().toLowerCase()))},
+                    new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.of("data", material.name().toLowerCase()))},
                     (button, isShiftClick) -> {
                         editingParticle.setItemMaterial(material);
                         callbackList.get(callbackListPosition + 1).run();
@@ -366,7 +366,7 @@ public class GuiInventoryEditData extends GuiInventory {
             GuiActionButton previousPageButton = new GuiActionButton(
                     INVENTORY_SIZE - 6,
                     GuiIcon.PREVIOUS_PAGE.get(),
-                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-previous-page-button", StringPlaceholders.builder("start", pageNumber - 1).addPlaceholder("end", maxPages).build()),
+                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-previous-page-button", StringPlaceholders.builder("start", pageNumber - 1).add("end", maxPages).build()),
                     new String[]{},
                     (button, isShiftClick) -> guiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber - 1, callbackList, callbackListPosition, null)));
             this.actionButtons.add(previousPageButton);
@@ -377,7 +377,7 @@ public class GuiInventoryEditData extends GuiInventory {
             GuiActionButton nextPageButton = new GuiActionButton(
                     INVENTORY_SIZE - 4,
                     GuiIcon.NEXT_PAGE.get(),
-                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-next-page-button", StringPlaceholders.builder("start", pageNumber + 1).addPlaceholder("end", maxPages).build()),
+                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-next-page-button", StringPlaceholders.builder("start", pageNumber + 1).add("end", maxPages).build()),
                     new String[]{},
                     (button, isShiftClick) -> guiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber + 1, callbackList, callbackListPosition, null)));
             this.actionButtons.add(nextPageButton);
@@ -410,7 +410,7 @@ public class GuiInventoryEditData extends GuiInventory {
                     slot,
                     material,
                     localeManager.getLocaleMessage("gui-color-icon-name") + material.name().toLowerCase(),
-                    new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", material.name().toLowerCase()))},
+                    new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.of("data", material.name().toLowerCase()))},
                     (button, isShiftClick) -> {
                         editingParticle.setBlockMaterial(material);
                         callbackList.get(callbackListPosition + 1).run();
@@ -430,7 +430,7 @@ public class GuiInventoryEditData extends GuiInventory {
             GuiActionButton previousPageButton = new GuiActionButton(
                     INVENTORY_SIZE - 6,
                     GuiIcon.PREVIOUS_PAGE.get(),
-                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-previous-page-button", StringPlaceholders.builder("start", pageNumber - 1).addPlaceholder("end", maxPages).build()),
+                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-previous-page-button", StringPlaceholders.builder("start", pageNumber - 1).add("end", maxPages).build()),
                     new String[]{},
                     (button, isShiftClick) -> guiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber - 1, callbackList, callbackListPosition, null)));
             this.actionButtons.add(previousPageButton);
@@ -441,7 +441,7 @@ public class GuiInventoryEditData extends GuiInventory {
             GuiActionButton nextPageButton = new GuiActionButton(
                     INVENTORY_SIZE - 4,
                     GuiIcon.NEXT_PAGE.get(),
-                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-next-page-button", StringPlaceholders.builder("start", pageNumber + 1).addPlaceholder("end", maxPages).build()),
+                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-next-page-button", StringPlaceholders.builder("start", pageNumber + 1).add("end", maxPages).build()),
                     new String[]{},
                     (button, isShiftClick) -> guiManager.transition(new GuiInventoryEditData(this.pplayer, editingParticle, pageNumber + 1, callbackList, callbackListPosition, null)));
             this.actionButtons.add(nextPageButton);
@@ -470,7 +470,7 @@ public class GuiInventoryEditData extends GuiInventory {
                     index,
                     colorData,
                     colorData.getName(),
-                    new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", formattedDisplayColor))},
+                    new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.of("data", formattedDisplayColor))},
                     (button, isShiftClick) -> {
                         if (startColor == null) {
                             PlayerParticles.getInstance().getManager(GuiManager.class).transition(new GuiInventoryEditData(this.pplayer, editingParticle, 1, callbackList, callbackListPosition, colorData.getOrdinaryColor()));
@@ -493,7 +493,7 @@ public class GuiInventoryEditData extends GuiInventory {
                 39,
                 rainbowColorMapping,
                 localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("rainbow"),
-                new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", localeManager.getLocaleMessage("rainbow")))},
+                new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.of("data", localeManager.getLocaleMessage("rainbow")))},
                 (button, isShiftClick) -> {
                     if (startColor == null) {
                         PlayerParticles.getInstance().getManager(GuiManager.class).transition(new GuiInventoryEditData(this.pplayer, editingParticle, 1, callbackList, callbackListPosition, OrdinaryColor.RAINBOW));
@@ -512,7 +512,7 @@ public class GuiInventoryEditData extends GuiInventory {
         GuiActionButton setRandomColorButton = new GuiActionButton(41,
                 randomizedColors,
                 localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("random"),
-                new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", localeManager.getLocaleMessage("random")))},
+                new String[]{localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.of("data", localeManager.getLocaleMessage("random")))},
                 (button, isShiftClick) -> {
                     if (startColor == null) {
                         PlayerParticles.getInstance().getManager(GuiManager.class).transition(new GuiInventoryEditData(this.pplayer, editingParticle, 1, callbackList, callbackListPosition, OrdinaryColor.RANDOM));
@@ -549,8 +549,8 @@ public class GuiInventoryEditData extends GuiInventory {
         int slot = 21;
         for (int i = 1; i <= 6; i++) {
             int vibration = i * 10;
-            String formattedDisplayName = localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("gui-select-data-vibration", StringPlaceholders.single("ticks", vibration));
-            String formattedDescription = localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.single("data", localeManager.getLocaleMessage("gui-select-data-vibration", StringPlaceholders.single("ticks", vibration))));
+            String formattedDisplayName = localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("gui-select-data-vibration", StringPlaceholders.of("ticks", vibration));
+            String formattedDescription = localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-select-data-description", StringPlaceholders.of("data", localeManager.getLocaleMessage("gui-select-data-vibration", StringPlaceholders.of("ticks", vibration))));
 
             // Vibration Buttons
             GuiActionButton setColorButton = new GuiActionButton(

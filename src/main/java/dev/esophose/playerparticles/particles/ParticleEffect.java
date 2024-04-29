@@ -2,7 +2,6 @@ package dev.esophose.playerparticles.particles;
 
 import com.google.common.collect.ObjectArrays;
 import dev.esophose.playerparticles.PlayerParticles;
-import dev.rosewood.rosegarden.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.data.ColorTransition;
 import dev.esophose.playerparticles.particles.data.NoteColor;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
@@ -15,14 +14,14 @@ import dev.esophose.playerparticles.particles.spawning.ReflectiveParticleSpawner
 import dev.esophose.playerparticles.particles.spawning.SpigotParticleSpawner;
 import dev.esophose.playerparticles.particles.spawning.reflective.ReflectiveParticleEffectMapping;
 import dev.esophose.playerparticles.util.ParticleUtils;
+import dev.rosewood.rosegarden.config.CommentedFileConfiguration;
+import dev.rosewood.rosegarden.utils.NMSUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
-
-import dev.rosewood.rosegarden.utils.NMSUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -31,10 +30,10 @@ import org.bukkit.entity.Player;
 public enum ParticleEffect {
 
     // Ordered and named by their Minecraft 1.13+ internal names
-    AMBIENT_ENTITY_EFFECT("SPELL_MOB_AMBIENT", Collections.singletonList("BEACON"), ParticleProperty.COLORABLE),
+    AMBIENT_ENTITY_EFFECT("SPELL_MOB_AMBIENT", Collections.singletonList("BEACON"), ParticleProperty.COLORABLE), // Removed in 1.20.5
     ANGRY_VILLAGER("VILLAGER_ANGRY", Collections.singletonList("IRON_DOOR")),
     ASH("ASH", Collections.singletonList("BLACKSTONE")),
-    BARRIER("BARRIER", Collections.singletonList("BARRIER")),
+    BARRIER("BARRIER", Collections.singletonList("BARRIER")), // Removed in 1.18 and replaced with BLOCK_MARKER
     BLOCK("BLOCK_CRACK", Collections.singletonList("STONE"), ParticleProperty.REQUIRES_MATERIAL_DATA),
     BLOCK_MARKER("BLOCK_MARKER", Collections.singletonList("LIGHT"), ParticleProperty.REQUIRES_MATERIAL_DATA),
     BUBBLE("WATER_BUBBLE", Arrays.asList("BUBBLE_CORAL", "GLASS")),
@@ -59,6 +58,9 @@ public enum ParticleEffect {
     DRIPPING_WATER("DRIP_WATER", Collections.singletonList("WATER_BUCKET")),
     DUST("REDSTONE", Collections.singletonList("REDSTONE"), ParticleProperty.COLORABLE),
     DUST_COLOR_TRANSITION("DUST_COLOR_TRANSITION", Collections.singletonList("DEEPSLATE_REDSTONE_ORE"), ParticleProperty.COLORABLE_TRANSITION),
+    DUST_PILLAR("DUST_PILLAR", Collections.singletonList("CRACKED_STONE_BRICKS"), ParticleProperty.REQUIRES_MATERIAL_DATA),
+    DUST_PLUME("DUST_PLUME", Collections.singletonList("BONE_MEAL")),
+    EGG_CRACK("EGG_CRACK", Collections.singletonList("EGG")),
     ELDER_GUARDIAN("MOB_APPEARANCE", Arrays.asList("ELDER_GUARDIAN_SPAWN_EGG", "PRISMARINE_CRYSTALS"), false), // No thank you
     ELECTRIC_SPARK("ELECTRIC_SPARK", Collections.singletonList("LIGHTNING_ROD")),
     ENCHANT("ENCHANTMENT_TABLE", Arrays.asList("ENCHANTING_TABLE", "ENCHANTMENT_TABLE")),
@@ -82,35 +84,43 @@ public enum ParticleEffect {
     FLASH("FLASH", Collections.singletonList("GOLD_INGOT"), false), // Also no thank you
     GLOW("GLOW", Collections.singletonList("GLOW_ITEM_FRAME")),
     GLOW_SQUID_INK("GLOW_SQUID_INK", Collections.singletonList("GLOW_INK_SAC")),
+    GUST("GUST", Collections.singletonList("FLOW_ARMOR_TRIM_SMITHING_TEMPLATE")),
+    GUST_EMITTER_LARGE("GUST_EMITTER_LARGE", Collections.singletonList("MACE")),
+    GUST_EMITTER_SMALL("GUST_EMITTER_SMALL", Collections.singletonList("HEAVY_CORE")),
     FOOTSTEP("FOOTSTEP", Collections.singletonList("GRASS")), // Removed in Minecraft 1.13 :(
     HAPPY_VILLAGER("VILLAGER_HAPPY", Arrays.asList("DARK_OAK_DOOR_ITEM", "DARK_OAK_DOOR")),
     HEART("HEART", Arrays.asList("POPPY", "RED_ROSE")),
+    INFESTED("INFESTED", Collections.singletonList("INFESTED_MOSSY_STONE_BRICKS")),
     INSTANT_EFFECT("SPELL_INSTANT", Arrays.asList("SPLASH_POTION", "POTION")),
     ITEM("ITEM_CRACK", Collections.singletonList("ITEM_FRAME"), ParticleProperty.REQUIRES_MATERIAL_DATA),
+    ITEM_COBWEB("ITEM_COBWEB", Arrays.asList("COBWEB", "WEB")),
     ITEM_SLIME("SLIME", Collections.singletonList("SLIME_BALL")),
     ITEM_SNOWBALL("SNOWBALL", Arrays.asList("SNOWBALL", "SNOW_BALL")),
     LANDING_HONEY("LANDING_HONEY", Collections.singletonList("HONEY_BLOCK")),
     LANDING_LAVA("LANDING_LAVA", Collections.singletonList("ORANGE_DYE")),
     LANDING_OBSIDIAN_TEAR("LANDING_OBSIDIAN_TEAR", Collections.singletonList("NETHERITE_BLOCK")),
-    LARGE_SMOKE("SMOKE_LARGE", Arrays.asList("COBWEB", "WEB")),
+    LARGE_SMOKE("SMOKE_LARGE", Collections.singletonList("STRING")),
     LAVA("LAVA", Collections.singletonList("MAGMA_CREAM")),
-    LIGHT("LIGHT", Collections.singletonList("LIGHT")),
+    LIGHT("LIGHT", Collections.singletonList("LIGHT")), // Removed in 1.18 and replaced with BLOCK_MARKER
     MYCELIUM("TOWN_AURA", Arrays.asList("MYCELIUM", "MYCEL")),
     NAUTILUS("NAUTILUS", Collections.singletonList("HEART_OF_THE_SEA")),
     NOTE("NOTE", Collections.singletonList("NOTE_BLOCK"), ParticleProperty.COLORABLE),
+    OMINOUS_SPAWNING("OMINOUS_SPAWNING", Collections.singletonList("TRIAL_SPAWNER")),
     POOF("EXPLOSION_NORMAL", Arrays.asList("FIREWORK_STAR", "FIREWORK_CHARGE")), // The 1.13 combination of explode and showshovel
     PORTAL("PORTAL", Collections.singletonList("OBSIDIAN")),
+    RAID_OMEN("RAID_OMEN", Collections.singletonList("OMINOUS_BOTTLE")),
     RAIN("WATER_DROP", Arrays.asList("PUFFERFISH_BUCKET", "LAPIS_BLOCK")),
     REVERSE_PORTAL("REVERSE_PORTAL", Collections.singletonList("FLINT_AND_STEEL")),
     SCRAPE("SCRAPE", Collections.singletonList("GOLDEN_AXE")),
-    SMALL_FLAME("SMALL_FLAME", Collections.singletonList("CANDLE")),
-    SMOKE("SMOKE_NORMAL", Collections.singletonList("TORCH")),
-    SNEEZE("SNEEZE", Collections.singletonList("BAMBOO")),
-    SNOWFLAKE("SNOWFLAKE", Collections.singletonList("POWDER_SNOW_BUCKET")),
     SCULK_CHARGE("SCULK_CHARGE", Collections.singletonList("SCULK")),
     SCULK_CHARGE_POP("SCULK_CHARGE_POP", Collections.singletonList("SCULK_VEIN")),
     SCULK_SOUL("SCULK_SOUL", Collections.singletonList("SCULK_CATALYST")),
     SHRIEK("SHRIEK", Collections.singletonList("SCULK_SHRIEKER")),
+    SMALL_FLAME("SMALL_FLAME", Collections.singletonList("CANDLE")),
+    SMALL_GUST("SMALL_GUST", Collections.singletonList("WIND_CHARGE")),
+    SMOKE("SMOKE_NORMAL", Collections.singletonList("TORCH")),
+    SNEEZE("SNEEZE", Collections.singletonList("BAMBOO")),
+    SNOWFLAKE("SNOWFLAKE", Collections.singletonList("POWDER_SNOW_BUCKET")),
     SONIC_BOOM("SONIC_BOOM", Collections.singletonList("WARDEN_SPAWN_EGG")),
     SOUL("SOUL", Collections.singletonList("SOUL_LANTERN")),
     SOUL_FIRE_FLAME("SOUL_FIRE_FLAME", Collections.singletonList("SOUL_CAMPFIRE")),
@@ -121,7 +131,10 @@ public enum ParticleEffect {
     SQUID_INK("SQUID_INK", Collections.singletonList("INK_SAC")),
     SWEEP_ATTACK("SWEEP_ATTACK", Arrays.asList("GOLDEN_SWORD", "GOLD_SWORD")),
     TOTEM_OF_UNDYING("TOTEM", Arrays.asList("TOTEM_OF_UNDYING", "TOTEM")),
+    TRIAL_SPAWNER_DETECTION("TRIAL_SPAWNER_DETECTION", Collections.singletonList("TRIAL_KEY")),
+    TRIAL_SPAWNER_DETECTION_OMINOUS("TRIAL_SPAWNER_DETECTION_OMINOUS", Collections.singletonList("OMINOUS_TRIAL_KEY")),
     UNDERWATER("SUSPENDED_DEPTH", Arrays.asList("TURTLE_HELMET", "SPONGE")),
+    VAULT_CONNECTION("VAULT_CONNECTION", Collections.singletonList("VAULT")),
     VIBRATION("VIBRATION", Collections.singletonList("SCULK_SENSOR"), false, ParticleProperty.VIBRATION),
     WARPED_SPORE("WARPED_SPORE", Collections.singletonList("WARPED_FUNGUS")),
     WAX_OFF("WAX_OFF", Collections.singletonList("OXIDIZED_COPPER")),
@@ -169,7 +182,17 @@ public enum ParticleEffect {
 
         // Will be null if this server's version doesn't support this particle type
         if (NMSUtil.getVersionNumber() > 8) {
-            this.internalEnum = Stream.of(Particle.values()).filter(x -> x.name().equals(enumName)).findFirst().orElse(null);
+            if (enumName.equals("SPELL"))
+                enumName = "EFFECT"; // Special case
+
+            for (Particle value : Particle.values()) {
+                String key = value.name();
+                // Look up by enum name then by old enum name
+                if (key.equals(this.name()) || key.equals(enumName)) {
+                    this.internalEnum = value;
+                    break;
+                }
+            }
             this.supported = this.internalEnum != null;
         } else {
             try {
@@ -201,7 +224,7 @@ public enum ParticleEffect {
         changed |= this.setIfNotExists("gui-icon-material", this.defaultIconMaterialNames);
 
         if (changed)
-            this.config.save();
+            this.config.save(file);
     }
 
     /**

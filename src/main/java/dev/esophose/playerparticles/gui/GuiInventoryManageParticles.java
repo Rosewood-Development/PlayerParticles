@@ -36,14 +36,14 @@ public class GuiInventoryManageParticles extends GuiInventory {
         int maxIndex = 35;
         for (ParticlePair particle : particles) {
             StringPlaceholders stringPlaceholders = StringPlaceholders.builder("id", particle.getId())
-                    .addPlaceholder("effect", ParticleUtils.formatName(particle.getEffect().getName()))
-                    .addPlaceholder("style", ParticleUtils.formatName(particle.getStyle().getName()))
-                    .addPlaceholder("data", particle.getDataString())
+                    .add("effect", ParticleUtils.formatName(particle.getEffect().getName()))
+                    .add("style", ParticleUtils.formatName(particle.getStyle().getName()))
+                    .add("data", particle.getDataString())
                     .build();
             GuiActionButton selectButton = new GuiActionButton(
                     index,
                     particle.getStyle().getGuiIconMaterial(),
-                    localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("gui-particle-name", StringPlaceholders.single("id", particle.getId())),
+                    localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("gui-particle-name", StringPlaceholders.of("id", particle.getId())),
                     new String[]{
                             localeManager.getLocaleMessage("gui-color-subtext") + localeManager.getLocaleMessage("gui-click-to-edit-particle"),
                             localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-particle-info", stringPlaceholders),

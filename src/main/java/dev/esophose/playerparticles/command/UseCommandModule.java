@@ -45,10 +45,10 @@ public class UseCommandModule implements CommandModule {
             case "effect": {
                 ParticleEffect effect = inputParser.next(ParticleEffect.class);
                 if (effect == null) {
-                    localeManager.sendMessage(pplayer, "effect-invalid", StringPlaceholders.single("effect", args[1]));
+                    localeManager.sendMessage(pplayer, "effect-invalid", StringPlaceholders.of("effect", args[1]));
                     return;
                 } else if (!permissionManager.hasEffectPermission(pplayer, effect)) {
-                    localeManager.sendMessage(pplayer, "effect-no-permission", StringPlaceholders.single("effect", effect.getName()));
+                    localeManager.sendMessage(pplayer, "effect-no-permission", StringPlaceholders.of("effect", effect.getName()));
                     return;
                 }
 
@@ -58,10 +58,10 @@ public class UseCommandModule implements CommandModule {
             case "style": {
                 ParticleStyle style = inputParser.next(ParticleStyle.class);
                 if (style == null) {
-                    localeManager.sendMessage(pplayer, "style-invalid", StringPlaceholders.single("style", args[1]));
+                    localeManager.sendMessage(pplayer, "style-invalid", StringPlaceholders.of("style", args[1]));
                     return;
                 } else if (!permissionManager.hasStylePermission(pplayer, style)) {
-                    localeManager.sendMessage(pplayer, "style-no-permission", StringPlaceholders.single("style", style.getName()));
+                    localeManager.sendMessage(pplayer, "style-no-permission", StringPlaceholders.of("style", style.getName()));
                     return;
                 }
 
@@ -87,7 +87,7 @@ public class UseCommandModule implements CommandModule {
                         primaryParticle.setColor(colorData);
                     }
                 } else if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-                    if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST || effect == ParticleEffect.BLOCK_MARKER) {
+                    if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST || effect == ParticleEffect.BLOCK_MARKER || effect == ParticleEffect.DUST_PILLAR) {
                         Material blockData = inputParser.next(Material.class);
                         if (blockData == null || !blockData.isBlock()) {
                             localeManager.sendMessage(pplayer, "data-invalid-block");
@@ -130,8 +130,8 @@ public class UseCommandModule implements CommandModule {
         PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), activeGroup);
 
         StringPlaceholders addParticlePlaceholders = StringPlaceholders.builder("effect", primaryParticle.getEffect().getName())
-                .addPlaceholder("style", primaryParticle.getStyle().getName())
-                .addPlaceholder("data", primaryParticle.getDataString()).build();
+                .add("style", primaryParticle.getStyle().getName())
+                .add("data", primaryParticle.getDataString()).build();
         localeManager.sendMessage(pplayer, "use-particle-modified", addParticlePlaceholders);
     }
 
@@ -177,7 +177,7 @@ public class UseCommandModule implements CommandModule {
                             }
                         }
                     } else if (args.length == 2 && effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-                        if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST || effect == ParticleEffect.BLOCK_MARKER) { // Block material
+                        if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST || effect == ParticleEffect.BLOCK_MARKER || effect == ParticleEffect.DUST_PILLAR) { // Block material
                             possibleValues.addAll(ParticleUtils.BLOCK_MATERIALS_STRING);
                         } else if (effect == ParticleEffect.ITEM) { // Item material
                             possibleValues.addAll(ParticleUtils.ITEM_MATERIALS_STRING);

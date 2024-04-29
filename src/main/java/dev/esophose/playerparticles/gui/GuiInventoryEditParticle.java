@@ -17,7 +17,7 @@ import org.bukkit.Bukkit;
 public class GuiInventoryEditParticle extends GuiInventory {
 
     public GuiInventoryEditParticle(PPlayer pplayer, ParticlePair editingParticle) {
-        super(pplayer, Bukkit.createInventory(pplayer.getPlayer(), INVENTORY_SIZE, PlayerParticles.getInstance().getManager(LocaleManager.class).getLocaleMessage("gui-editing-particle", StringPlaceholders.single("id", editingParticle.getId()))));
+        super(pplayer, Bukkit.createInventory(pplayer.getPlayer(), INVENTORY_SIZE, PlayerParticles.getInstance().getManager(LocaleManager.class).getLocaleMessage("gui-editing-particle", StringPlaceholders.of("id", editingParticle.getId()))));
 
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         GuiManager guiManager = PlayerParticles.getInstance().getManager(GuiManager.class);
@@ -26,15 +26,15 @@ public class GuiInventoryEditParticle extends GuiInventory {
 
         // Particle Info Icon
         StringPlaceholders stringPlaceholders = StringPlaceholders.builder("id", editingParticle.getId())
-                .addPlaceholder("effect", editingParticle.getEffect().getName())
-                .addPlaceholder("style", editingParticle.getStyle().getName())
-                .addPlaceholder("data", editingParticle.getDataString())
+                .add("effect", editingParticle.getEffect().getName())
+                .add("style", editingParticle.getStyle().getName())
+                .add("data", editingParticle.getDataString())
                 .build();
         String particleInfo = localeManager.getLocaleMessage("gui-particle-info", stringPlaceholders);
         GuiActionButton particleInfoIcon = new GuiActionButton(
                 13,
                 GuiIcon.PARTICLES.get(),
-                localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("gui-particle-name", StringPlaceholders.single("id", editingParticle.getId())),
+                localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("gui-particle-name", StringPlaceholders.of("id", editingParticle.getId())),
                 new String[]{localeManager.getLocaleMessage("gui-color-info") + particleInfo},
                 (button, isShiftClick) -> { });
         this.actionButtons.add(particleInfoIcon);

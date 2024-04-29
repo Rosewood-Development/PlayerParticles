@@ -28,13 +28,13 @@ public class ResetCommandModule implements CommandModule {
         if (args.length == 0 || !PlayerParticles.getInstance().getManager(PermissionManager.class).canResetOthers(pplayer)) {
             Integer particleCount = PlayerParticlesAPI.getInstance().resetActivePlayerParticles(pplayer.getPlayer());
             if (particleCount != null)
-                localeManager.sendMessage(pplayer, "reset-success", StringPlaceholders.single("amount", particleCount));
+                localeManager.sendMessage(pplayer, "reset-success", StringPlaceholders.of("amount", particleCount));
         } else {
             PlayerParticlesAPI.getInstance().resetActivePlayerParticles(args[0], success -> {
                 if (success) {
-                    localeManager.sendMessage(pplayer, "reset-others-success", StringPlaceholders.single("other", args[0]));
+                    localeManager.sendMessage(pplayer, "reset-others-success", StringPlaceholders.of("other", args[0]));
                 } else {
-                    localeManager.sendMessage(pplayer, "reset-others-none", StringPlaceholders.single("other", args[0]));
+                    localeManager.sendMessage(pplayer, "reset-others-none", StringPlaceholders.of("other", args[0]));
                 }
             });
         }

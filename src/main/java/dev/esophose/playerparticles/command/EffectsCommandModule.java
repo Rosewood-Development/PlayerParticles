@@ -29,7 +29,7 @@ public class EffectsCommandModule implements CommandModule {
             toSend = new StringBuilder(toSend.substring(0, toSend.length() - 2));
         }
 
-        localeManager.sendMessage(pplayer, "effect-list", StringPlaceholders.single("effects", toSend.toString()));
+        localeManager.sendMessage(pplayer, "effect-list", StringPlaceholders.of("effects", toSend.toString()));
     }
 
     @Override

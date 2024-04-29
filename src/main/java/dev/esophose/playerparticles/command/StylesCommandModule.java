@@ -22,7 +22,7 @@ public class StylesCommandModule implements CommandModule {
             toSend = new StringBuilder(toSend.substring(0, toSend.length() - 2));
         }
 
-        PlayerParticles.getInstance().getManager(LocaleManager.class).sendMessage(pplayer, "style-list", StringPlaceholders.single("styles", toSend.toString()));
+        PlayerParticles.getInstance().getManager(LocaleManager.class).sendMessage(pplayer, "style-list", StringPlaceholders.of("styles", toSend.toString()));
     }
 
     @Override

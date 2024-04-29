@@ -68,12 +68,12 @@ public class PlayerChatHook extends BukkitRunnable implements Listener {
                 hooksToRemove.remove(hook);
             } else {
                 LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
-                String message = localeManager.getLocaleMessage("gui-save-group-hotbar-message", StringPlaceholders.single("seconds", hook.getTimeRemaining()));
+                String message = localeManager.getLocaleMessage("gui-save-group-hotbar-message", StringPlaceholders.of("seconds", hook.getTimeRemaining()));
 
                 if (NMSUtil.getVersionNumber() >= 11) {
                     switch (Setting.GUI_GROUP_CREATION_MESSAGE_DISPLAY_AREA.getString().toUpperCase()) {
                         case "ACTION_BAR":
-                            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(localeManager.getLocaleMessage("gui-save-group-hotbar-message", StringPlaceholders.single("seconds", hook.getTimeRemaining()))));
+                            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(localeManager.getLocaleMessage("gui-save-group-hotbar-message", StringPlaceholders.of("seconds", hook.getTimeRemaining()))));
                             break;
                         case "TITLE":
                             player.sendTitle("", message, 5, 40, 10);

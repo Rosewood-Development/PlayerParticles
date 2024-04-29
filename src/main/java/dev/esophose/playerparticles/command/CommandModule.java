@@ -65,7 +65,7 @@ public interface CommandModule {
      * @param command The command to display usage for
      */
     static void printUsage(PPlayer pplayer, CommandModule command) {
-        StringPlaceholders placeholders = StringPlaceholders.builder("cmd", command.getName()).addPlaceholder("args", command.getArguments()).build();
+        StringPlaceholders placeholders = StringPlaceholders.builder("cmd", command.getName()).add("args", command.getArguments()).build();
         PlayerParticles.getInstance().getManager(LocaleManager.class).sendMessage(pplayer, "command-descriptions-usage", placeholders);
     }
     
@@ -79,13 +79,13 @@ public interface CommandModule {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         if (command.getArguments().length() == 0) {
             StringPlaceholders placeholders = StringPlaceholders.builder("cmd", command.getName())
-                    .addPlaceholder("desc", localeManager.getLocaleMessage(command.getDescriptionKey()))
+                    .add("desc", localeManager.getLocaleMessage(command.getDescriptionKey()))
                     .build();
             localeManager.sendSimpleMessage(pplayer, "command-descriptions-help-1", placeholders);
         } else {
             StringPlaceholders placeholders = StringPlaceholders.builder("cmd", command.getName())
-                    .addPlaceholder("args", command.getArguments())
-                    .addPlaceholder("desc", localeManager.getLocaleMessage(command.getDescriptionKey()))
+                    .add("args", command.getArguments())
+                    .add("desc", localeManager.getLocaleMessage(command.getDescriptionKey()))
                     .build();
             localeManager.sendSimpleMessage(pplayer, "command-descriptions-help-2", placeholders);
         }

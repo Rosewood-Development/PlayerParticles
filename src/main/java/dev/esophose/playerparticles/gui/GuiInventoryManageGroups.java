@@ -57,13 +57,13 @@ public class GuiInventoryManageGroups extends GuiInventory {
             particles.sort(Comparator.comparingInt(ParticlePair::getId));
 
             String[] lore = new String[particles.size() + 2];
-            lore[0] = localeManager.getLocaleMessage("gui-color-subtext") + localeManager.getLocaleMessage("gui-click-to-load", StringPlaceholders.single("amount", particles.size()));
+            lore[0] = localeManager.getLocaleMessage("gui-color-subtext") + localeManager.getLocaleMessage("gui-click-to-load", StringPlaceholders.of("amount", particles.size()));
             int n = 1;
             for (ParticlePair particle : particles) {
                 StringPlaceholders stringPlaceholders = StringPlaceholders.builder("id", particle.getId())
-                        .addPlaceholder("effect", ParticleUtils.formatName(particle.getEffect().getName()))
-                        .addPlaceholder("style", ParticleUtils.formatName(particle.getStyle().getName()))
-                        .addPlaceholder("data", particle.getDataString())
+                        .add("effect", ParticleUtils.formatName(particle.getEffect().getName()))
+                        .add("style", ParticleUtils.formatName(particle.getStyle().getName()))
+                        .add("data", particle.getDataString())
                         .build();
                 lore[n] = localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-particle-info", stringPlaceholders);
                 n++;
@@ -108,7 +108,7 @@ public class GuiInventoryManageGroups extends GuiInventory {
             GuiActionButton previousPageButton = new GuiActionButton(
                     INVENTORY_SIZE - 6,
                     GuiIcon.PREVIOUS_PAGE.get(),
-                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-previous-page-button", StringPlaceholders.builder("start", pageNumber - 1).addPlaceholder("end", maxPages).build()),
+                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-previous-page-button", StringPlaceholders.builder("start", pageNumber - 1).add("end", maxPages).build()),
                     new String[]{},
                     (button, isShiftClick) -> guiManager.transition(new GuiInventoryManageGroups(pplayer, pageNumber - 1)));
             this.actionButtons.add(previousPageButton);
@@ -119,7 +119,7 @@ public class GuiInventoryManageGroups extends GuiInventory {
             GuiActionButton nextPageButton = new GuiActionButton(
                     INVENTORY_SIZE - 4,
                     GuiIcon.NEXT_PAGE.get(),
-                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-next-page-button", StringPlaceholders.builder("start", pageNumber + 1).addPlaceholder("end", maxPages).build()),
+                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-next-page-button", StringPlaceholders.builder("start", pageNumber + 1).add("end", maxPages).build()),
                     new String[]{},
                     (button, isShiftClick) -> guiManager.transition(new GuiInventoryManageGroups(pplayer, pageNumber + 1)));
             this.actionButtons.add(nextPageButton);
@@ -183,9 +183,9 @@ public class GuiInventoryManageGroups extends GuiInventory {
                                 // Apply changes and notify player
                                 PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), group);
                                 if (groupUpdated) {
-                                    localeManager.sendMessage(pplayer, "group-save-success-overwrite", StringPlaceholders.single("name", groupName));
+                                    localeManager.sendMessage(pplayer, "group-save-success-overwrite", StringPlaceholders.of("name", groupName));
                                 } else {
-                                    localeManager.sendMessage(pplayer, "group-save-success", StringPlaceholders.single("name", groupName));
+                                    localeManager.sendMessage(pplayer, "group-save-success", StringPlaceholders.of("name", groupName));
                                 }
 
                             }

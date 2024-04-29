@@ -1,0 +1,336 @@
+# Plugin Message Prefix
+prefix: '&7[<g:#00aaaa:#0066aa>{{PLUGIN_NAME}}&7] '
+
+# Command Description Messages
+command-error-missing-effects-or-styles: '&cSie müssen Zugriff auf Effekte und Stile haben, um diesen Befehl verwenden zu können!'
+command-error-unknown: '&cUnbekannter Befehl. Verwenden Sie &b/pp help &c, um eine Liste der Befehle anzuzeigen.'
+command-descriptions: 'Die folgenden Befehle stehen zur Auswahl:'
+command-descriptions-usage: '&e/pp %cmd% %args%'
+command-descriptions-help-1: '&7> &b/pp %cmd% &e- %desc%'
+command-descriptions-help-2: '&7> &b/pp %cmd% %args% &e- %desc%'
+command-descriptions-help-other: '&7> &b/ppo <player> <command> &e- Führe /pp als einen Spieler aus'
+command-description-add: Fügen Sie einen neuen Partikel hinzu
+command-description-data: Üprüfen Sie, welche Art von Daten ein Effekt verwendet
+command-description-default: Der Hauptbefehl. Standardmäßig wird die GUI geöffnet
+command-description-edit: Bearbeiten Sie ein Partikel
+command-description-effects: Zeigen Sie eine Liste der Effekte an, die Sie verwenden können
+command-description-fixed: Verwalten Sie Ihre festen Effekte
+command-description-group: Verwalten Sie Ihre Gruppen
+command-description-gui: Zeigen Sie die GUI zum einfachen Bearbeiten von Partikeln an
+command-description-help: Zeigt das Hilfemenü an ... Sie sind angekommen
+command-description-info: Ruft die Beschreibung eines Ihrer aktiven Partikel ab
+command-description-list: Listet die IDs Ihrer aktiven Partikel auf
+command-description-reload: Lädt die Dateien config.yml und Sprache neu
+command-description-remove: Entfernt einen Partikel
+command-description-reset: Entfernt alle aktiven Partikel
+command-description-styles: Zeigen Sie eine Liste der Stile an, die Sie verwenden können
+command-description-toggle: Schaltet die Partikelsichtbarkeit ein / aus
+command-description-use: Modifizieren Sie Ihr Primärteilchen
+command-description-version: Zeigen Sie die Plugin-Version und den Autor an
+command-description-worlds: Finde heraus, in welchen Welten Partikel deaktiviert sind
+
+# Fixed Particle Command Description Messages
+command-description-fixed-create: '&e/pp fixed create <<x> <y> <z>|<looking>> <effect> <style> [data] - Erstellt einen neun fixen Effekt'
+command-description-fixed-create-console: '&e/pp fixed create <x> <y> <z> <world> <effect> <style> [data] - Erstellt einen neun fixen Effekt'
+command-description-fixed-edit: '&e/pp fixed edit <id> <effect|style|data|location> <args> - Bearbeiten Sie einen Teil eines festen Effekts anhand seiner ID'
+command-description-fixed-remove: '&e/pp fixed remove <id> - Entfernt einen festen Effekt anhand seiner ID'
+command-description-fixed-list: '&e/pp fixed list - Listet alle IDs Ihrer festen Effekte auf'
+command-description-fixed-info: '&e/pp fixed info <id> - Ruft Informationen zu einem Ihrer Fixen Effekte ab'
+command-description-fixed-clear: '&e/pp fixed clear <radius> - Löscht alle festen Effekte aller Spieler innerhalb des angegebenen Radius'
+command-description-fixed-clear-console: '&e/pp fixed clear <radius> <x> <y> <z> <world> - Löscht alle festen Effekte aller Spieler innerhalb des angegebenen Radius'
+command-description-fixed-teleport: '&e/pp fixed teleport <id> - Teleportiert Sie zu einem Ihrer festen Effekte'
+
+# Group Command Description Messages
+command-description-group-save: '&e/pp group save <name> - Speichert alle aktiven Partikel in einer neuen Gruppe'
+command-description-group-load: '&e/pp group load <name> - Lädt alle in einer Gruppe gespeicherten Partikel'
+command-description-group-remove: '&e/pp group remove <name> - Entfernt eine gespeicherte Gruppe'
+command-description-group-list: '&e/pp group list <name> - Listen Sie alle Partikelgruppen auf, die Sie gespeichert haben'
+command-description-group-info: '&e/pp group info <name> - Listen Sie die in der Gruppe gespeicherten Partikel auf'
+
+# ID Messages
+id-invalid: '&cDie eingegebene ID ist ungültig, es muss eine positive ganze Zahl sein!'
+id-unknown: '&cSie haben kein Partikel mit der ID &b%id%&cangelegt!'
+
+# Other Messages
+other-no-permission: '&cSie haben keine Berechtigung, PlayerParticles-Befehle für andere Spieler auszuführen!'
+other-missing-args: '&cEs fehlen einige Argumente. &b/ppo <player> <command>'
+other-unknown-player: '&cDer Spieler &b%player% &cwurde nicht gefunden. Der Spieler mussen online sein.'
+other-unknown-command: '&cDer Befehl &b/pp %cmd% &cexistiert nicht.'
+other-success: '&eBefehl /pp command für &b%player%&eausgeführt. Ausgabe:'
+
+# Add Messages
+add-reached-max: '&cPartikel kann nicht angewendet werden, Sie haben die maximal zulässige Menge von &b%amount% &cerreicht!'
+add-particle-applied: '&aEs wurde ein neues Partikel mit dem Effekt &b%effect%&a, dem Stil &b%style%&aund den Daten &b%data%&aangewendet!'
+data-no-args: '&cFehlendes Argument für die Wirkung! Befehlsverwendung: &b/pp data <effect>'
+
+# Edit Messages
+edit-invalid-property: '&cEine ungültige Eigenschaft &b%prop% &cwurde angegeben. Gültige Eigenschaften: &beffect&c, &bstyle&c, &bdata'
+edit-success-effect: '&aDer Effekt Ihres Partikels mit der ID &b%id% &awurde in &b%effect%&ageändert!'
+edit-success-style: '&aDer Stil Ihres Partikels mit der ID &b%id% &awurde in &b%style%&ageändert!'
+edit-success-data: '&aDie Daten Ihres Partikels mit der ID &b%id% &awurden in &b%data%&ageändert!'
+
+# Group Messages
+group-invalid: '&cEs existiert keine gespeicherte Gruppe oder Voreinstellungsgruppe mit dem Namen &b%name%&c!'
+group-no-permission: '&cSie haben keine Berechtigung für einen Effekt oder Stil, um die Gruppe &b%group%&czu verwenden!'
+group-preset-no-permission: '&cEs fehlt die Berechtigung für einen Effekt oder Stil, um die voreingestellte Gruppe &b%group%&czu verwenden!'
+group-reserved: '&cDer Gruppenname &bactive &cist reserviert und kann nicht verwendet werden!'
+group-no-name: '&cSie haben keinen Gruppennamen angegeben! &b/pp %cmd% <groupName>'
+group-save-reached-max: '&cDie Gruppe kann nicht gespeichert werden, Sie haben die maximale Anzahl von Gruppen erreicht!'
+group-save-no-particles: '&cGruppe kann nicht gespeichert werden, es wurden keine Partikel angewendet!'
+group-save-success: '&aIhre aktuellen Partikel wurden unter der Gruppe &b%name%&agespeichert!'
+group-save-success-overwrite: '&aDie Gruppe mit dem Namen &b%name% &awurde mit Ihren aktuellen Partikeln aktualisiert!'
+group-load-success: '&aAngewendete &b%amount% &aPartikel aus Ihrer gespeicherten Gruppe mit dem Namen &b%name%&a!'
+group-load-preset-success: '&aAngewendete &b%amount% &aPartikel aus der voreingestellten Gruppe mit dem Namen &b%name%&a!'
+group-unload-success: '&b%amount% &aPartikel der Gruppe &b%name%&a wurden entfernt!'
+group-remove-preset: '&cSie können keine voreingestellte Gruppe entfernen!'
+group-remove-success: '&aDie Partikelgruppe mit dem Namen &b%name%&awurde entfernt!'
+group-info-header: '&eDie Gruppe &b%group% &eenthält die folgenden Partikel:'
+group-list-none: '&eSie haben keine Partikelgruppen gespeichert!'
+group-list-output: '&eFolgende Gruppen wurden gespeichert: &b%info%'
+group-list-presets: '&eDie folgenden voreingestellten Gruppen sind verfügbar: &b%info%'
+
+# Reload Messages
+reload-success: '&aDas Plugin wurde neu geladen!'
+reload-no-permission: '&cSie haben keine Berechtigung, die Plugin-Einstellungen neu zu laden!'
+
+# Remove Messages
+remove-no-args: '&cSie haben keine ID zum Entfernen angegeben! &b/pp remove <ID>'
+remove-id-success: '&aDein Partikel mit der ID &b%id% &awurde entfernt!'
+remove-effect-success: '&aEntferne &b%amount% &adeiner Partikel mit dem Effekt von &b%effect%&a!'
+remove-effect-none: '&cSie haben keine Partikel mit dem Effekt &b%effect%&cangelegt!'
+remove-style-success: '&b%amount% &adeiner Partikel im Stil von &b%style% &aentfernt!'
+remove-style-none: '&cSie haben keine Partikel mit dem Stil &b%style%&cangelegt!'
+remove-effect-style-none: '&cSie haben keine Partikel mit der Wirkung oder dem Stil &b%name% &cangewendet!'
+remove-unknown: '&cEs existiert kein Effekt oder Stil mit dem Namen &b%name%&c!'
+
+# List Messages
+list-none: '&eSie haben keine aktiven Partikel!'
+list-you-have: '&eSie haben die folgenden Partikel angewendet:'
+list-output: '&eID: &b%id% &eEffekt: &b%effect% &eStil: &b%style% &eDaten: &b%data%'
+
+# Toggle Messages
+toggle-on: '&ePartikel wurden umgeschaltet &aAN&e!'
+toggle-off: '&ePartikel wurden umgeschaltet &cAUS&e!'
+
+# Use Messages
+use-particle-modified: '&aIhr Primärpartikel wurde modifiziert, um den Effekt &b%effect%&a, style &b%style%&a und data &b%data%&a zu verwenden!'
+
+# Color Messages
+rainbow: '&cR&6e&eg&ae&bn&9b&do&cg&4e&2n'
+random: Zufällig
+
+# Effect Messages
+effect-no-permission: '&cSie haben keine Berechtigung, den Effekt &b%effect% &czu verwenden!'
+effect-invalid: '&cDer Effekt &b%effect% &cexistiert nicht! Verwenden Sie &b/pp effects &c, um eine Liste der Effekte anzuzeigen, die Sie verwenden können.'
+effect-list: '&eSie können die folgenden Effekte verwenden: &b%effects%'
+effect-list-empty: '&cSie haben keine Berechtigung, Effekte zu verwenden!'
+
+# Style Messages
+style-no-permission: '&cSie haben keine Berechtigung, den Stil &b%style% &czu verwenden!'
+style-event-spawning-info: '&eHinweis: Der Stil &b%style% &eerzeugt Partikel basierend auf einem Ereignis.'
+style-invalid: '&cDer Stil &b%style% &cexistiert nicht! Verwenden Sie &b/pp styles &cfür eine Liste der Stile, die Sie verwenden können.'
+style-list: '&eSie können die folgenden Stile verwenden: &b%styles%'
+
+# Data Messages
+data-usage-none: '&eDer Effekt &b%effect% &everwendet keine Daten!'
+data-usage-block: '&eFür den Effekt &b%effect% &ewerden &bBlockdaten &ebenötigt! &bFormat: <blockName>'
+data-usage-item: '&eFür den Effekt &b%effect% &esind &bItem &eDaten erforderlich! &bFormat: <itemName>'
+data-usage-color: '&eFür den Effekt &b%effect% &esind &bFarbdaten &eerforderlich! &bFormat: <<0-255> <0-255> <0-255>>|<&brainbow>|<random>'
+data-usage-note: '&eFür den Effekt &b%effect% &esind &bAnmeldedaten &eerforderlich! &bFormat: <0-24>|<&brainbow>|<random>'
+data-usage-color-transition: '&eFür den Effekt &b%effect% &esind &bFarbübergang &eerforderlich! &bFormat: <<0-255> <0-255> <0-255>>|<&brainbow>|<random> <<0-255> <0-255> <0-255>>|<&brainbow>|<random>'
+data-usage-vibration: '&eFür den Effekt &b%effect% &esind &bVibration &eerforderlich! &bFormat: <duration>'
+data-invalid-block: '&cDie von Ihnen eingegebenen &bBlock &cDaten sind ungültig! &bFormat: <blockName>'
+data-invalid-item: '&cDie von Ihnen eingegebenen &bItem &cDaten sind ungültig! &bFormat: <itemName>'
+data-invalid-color: '&cDie von Ihnen eingegebenen &bFarbdaten &csind ungültig! &bFormat: <<0-255> <0-255> <0-255>>|<&brainbow>|<random>'
+data-invalid-note: '&cDie von Ihnen eingegebenen &bNotizdaten &csind ungültig! &bFormat: <0-24>|<&brainbow>|<random>'
+data-invalid-color-transition: '&cDie von Ihnen eingegebenen &bFarbübergang &csind ungültig! &bFormat: <<0-255> <0-255> <0-255>>|<&brainbow>|<random> <<0-255> <0-255> <0-255>>|<&brainbow>|<random>'
+data-invalid-vibration: '&cDie von Ihnen eingegebenen &bVibration &csind ungültig! &bFormat: <duration>'
+data-invalid-material-not-item: '&cDas von Ihnen eingegebene &bItem &cMaterial &b%material% &cist kein Item!'
+data-invalid-material-not-block: '&cDas von Ihnen eingegebene &bBlock &cMaterial &b%material% &cist kein Block!'
+data-invalid-material-item: '&cDas von Ihnen eingegebene &bItem &cMaterial &b%material% &cexistiert nicht!'
+data-invalid-material-block: '&cDas von Ihnen eingegebene &bBlock &cMaterial &b%material% &cexistiert nicht!'
+
+# World Messages
+disabled-worlds: '&ePartikel sind in diesen Welten deaktiviert: &b%worlds%'
+disabled-worlds-none: '&ePartikel sind in keiner Welt deaktiviert.'
+
+# Reset Message
+reset-success: '&b%amount% &aaktive Partikel entfernt!'
+reset-others-success: '&aEntfertigte Partikel für &b%other%&a!'
+reset-others-none: '&eFür &b%other%&e wurden keine Partikel entfernt.'
+
+# Fixed Create Messages
+fixed-create-missing-args: '&cFixer Effekt kann nicht erstellt werden, es fehlen &b%amount% &cerforderliche Argumente!'
+fixed-create-invalid-coords: '&cEin fester Effekt kann nicht erstellt werden, eine oder mehrere von Ihnen eingegebene Koordinaten sind ungültig!'
+fixed-create-out-of-range: '&cSie können keinen festen Effekt erstellen. Sie müssen sich innerhalb von &b%range% &cBlöcken von Ihrem gewünschten Standort befinden.'
+fixed-create-looking-too-far: '&cSie können keinen festen Effekt erzielen, da Sie zu weit von dem Block entfernt sind, den Sie gerade betrachten.'
+fixed-create-effect-invalid: '&cEs kann kein fester Effekt erstellt werden, ein Effekt mit dem Namen &b%effect% &cist nicht vorhanden!'
+fixed-create-effect-no-permission: '&cSie können keinen festen Effekt erstellen. Sie haben keine Berechtigung, den Effekt zu verwenden. &b%effect%&c!'
+fixed-create-style-invalid: '&cEs kann kein fester Effekt erstellt werden. Ein Stil mit dem Namen &b%style% &cist nicht vorhanden.'
+fixed-create-style-no-permission: '&cEs kann kein fester Effekt erstellt werden. Sie haben keine Berechtigung, den Stil &b%style%&czu verwenden.'
+fixed-create-style-non-fixable: '&cFeste Effekte können nicht erstellt werden. Der Stil &b%style% &ckann nicht für feste Effekte verwendet werden!'
+fixed-create-data-error: '&cEs kann kein fester Effekt erstellt werden, die angegebenen Daten sind nicht korrekt! Verwenden Sie &b/pp data <effect> &c, um das richtige Datenformat zu finden!'
+fixed-create-success: '&aDein fester Effekt wurde erstellt!'
+
+# Fixed Edit Messages
+fixed-edit-missing-args: '&cFixer Effekt kann nicht bearbeitet werden, es fehlen einige Argumente!'
+fixed-edit-invalid-id: '&cDer festgelegte Effekt kann nicht bearbeitet werden, die angegebene ID ist ungültig oder existiert nicht!'
+fixed-edit-invalid-property: '&cFixeffekt kann nicht bearbeitet werden, es wurde eine ungültige Eigenschaft angegeben! Es sind nur &bPositionsdaten&c, &bEffektdaten&c, &bStildaten&cund &bDaten &cgültig.'
+fixed-edit-invalid-coords: '&cFixer Effekt kann nicht bearbeitet werden, eine oder mehrere von Ihnen eingegebene Koordinaten sind ungültig!'
+fixed-edit-out-of-range: '&cFixierter Effekt kann nicht bearbeitet werden. Sie müssen sich innerhalb von &b%range% &cBlöcken von Ihrem gewünschten Standort befinden!'
+fixed-edit-looking-too-far: '&cEin fester Effekt kann nicht bearbeitet werden. Sie befinden sich zu weit entfernt von dem Block, den Sie gerade ansehen.'
+fixed-edit-effect-invalid: '&cFixer Effekt kann nicht bearbeitet werden, ein Effekt mit dem Namen &b%effect% &cist nicht vorhanden!'
+fixed-edit-effect-no-permission: '&cFixierter Effekt kann nicht bearbeitet werden. Sie haben keine Berechtigung, den Effekt zu verwenden. &b%effect%&c!'
+fixed-edit-style-invalid: '&cEin fester Effekt kann nicht bearbeitet werden, ein Stil mit dem Namen &b%style% &cist nicht vorhanden!'
+fixed-edit-style-no-permission: '&cFixierter Effekt kann nicht bearbeitet werden. Sie haben keine Berechtigung, den Stil &b%style%&czu verwenden.'
+fixed-edit-style-non-fixable: '&cFixer Effekt kann nicht bearbeitet werden. Der Stil &b%style% &ckann nicht für fixe Effekte verwendet werden!'
+fixed-edit-data-error: '&cFixeffekt kann nicht bearbeitet werden, die angegebenen Daten sind nicht korrekt! Verwenden Sie &b/pp data <effect> &c, um das richtige Datenformat zu finden!'
+fixed-edit-data-none: '&cFixierter Effekt kann nicht bearbeitet werden, für den Effekt sind keine Daten erforderlich!'
+fixed-edit-success: '&aAktualisiert die &b%prop% &ades festen Effekts mit einer ID von &b%id%&a!'
+
+# Fixed Remove Messages
+fixed-remove-invalid: '&cFixierter Effekt kann nicht entfernt werden, Sie haben keinen Fixierten Effekt mit der ID &b%id%&c!'
+fixed-remove-no-args: '&cSie haben keine ID zum Entfernen angegeben!'
+fixed-remove-args-invalid: '&cKann nicht entfernt werden, die angegebene ID muss eine Zahl sein!'
+fixed-remove-success: '&aDein fester Effekt mit der ID &b%id% &awurde entfernt!'
+
+# Fixed List Messages
+fixed-list-none: '&eDu hast keine festen Effekte!'
+fixed-list-success: '&eSie haben feste Effekte mit der ID: &b%ids%'
+
+# Fixed Info Messages
+fixed-info-invalid: '&cInformationen können nicht abgerufen werden. Sie haben keinen festen Effekt mit der ID &b%id%&c.'
+fixed-info-no-args: '&cSie haben keine ID angegeben, für die Informationen angezeigt werden sollen!'
+fixed-info-invalid-args: '&cInformationen können nicht abgerufen werden, die angegebene ID muss eine Zahl sein!'
+fixed-info-success: '&eID: &b%id% &eWelt: &b%world% &eX: &b%x% &eY: &b%y% &eZ: %z% &b &eEffekt: &b%effect% &eStil: &b%style% &eDaten: &b%data%'
+
+# Fixed Clear Messages
+fixed-clear-no-permission: '&cSie haben keine Berechtigung, in der Nähe befindliche Fixeffekte zu löschen!'
+fixed-clear-no-args: '&cSie haben keinen Radius zum Löschen fester Effekte für angegeben!'
+fixed-clear-invalid-args: '&cDer von Ihnen angegebene Radius ist ungültig. Es muss sich um eine positive ganze Zahl handeln.'
+fixed-clear-success: '&aEntfernte &b%amount% &aEffekte in &b%range% &aBlöcken von Ihrem Standort entfernt!'
+
+# Fixed Teleport Message
+fixed-teleport-no-permission: '&cSie haben nicht die Erlaubnis, sich zu festen Effekten zu teleportieren!'
+fixed-teleport-no-args: '&cSie haben keine ID zum Teleportieren angegeben!'
+fixed-teleport-invalid-args: '&cEs kann nicht teleportiert werden, die angegebene ID ist ungültig!'
+fixed-teleport-success: '&eTeleportiert zu Ihrem festen Effekt mit einer ID von &b%id%&e!'
+
+# Fixed Other Messages
+fixed-no-permission: '&cSie haben keine Berechtigung, Fixeffekte zu verwenden!'
+fixed-max-reached: '&cSie haben die maximal zulässigen festen Effekte erreicht!'
+fixed-invalid-command: '&cUngültiger Parameter für &b/pp fixed&c!'
+
+# Plugin Update Message
+update-available: '&eEin Update (&bv%new%&e) ist verfügbar! Aktuelle Version: &bv%current%&e. https://www.spigotmc.org/resources/playerparticles.40261/'
+
+# GUI Messages
+gui-disabled: '&cDer Serveradministrator hat die GUI deaktiviert!'
+gui-no-permission: '&cSie haben keine Berechtigung, das GUI zu öffnen!'
+
+# GUI Color Messages
+gui-color-icon-name: '&a'
+gui-color-info: '&e'
+gui-color-subtext: '&b'
+gui-color-unavailable: '&c'
+
+# GUI Info Messages
+gui-commands-info: Informationen zu Befehlen finden Sie mit Hilfe von &b/pp help
+gui-toggle-visibility-on: Partikel sind derzeit &asichtbar
+gui-toggle-visibility-off: Partikel sind derzeit &causgeblendet
+gui-toggle-visibility-info: Klicken Sie, um die Sichtbarkeit der Partikel einzuschalten
+gui-back-button: Zurück
+gui-next-page-button: Nächste Seite (%start%/%end%)
+gui-previous-page-button: Vorherige Seite (%start%/%end%)
+gui-click-to-load: 'Klicken Sie, um die folgenden %amount% Partikel zu laden:'
+gui-shift-click-to-delete: Umschaltklick zum Löschen
+gui-particle-info: '- ID: &b%id% &eEffekt: &b%effect% &eStil: &b%style% &eDaten: &b%data%'
+gui-playerparticles: PlayerParticles
+gui-active-particles: 'Aktive Partikel: &b%amount%'
+gui-saved-groups: 'Gespeicherte Gruppen: &b%amount%'
+gui-fixed-effects: 'feste Effekte: &b%amount%'
+
+# GUI Edit Primary Messages
+gui-edit-primary-effect: Primäreffekt bearbeiten
+gui-edit-primary-effect-description: Bearbeiten Sie den Effekt Ihres Primärpartikel
+gui-edit-primary-style: Primärer Stil
+gui-edit-primary-style-missing-effect: Sie müssen zuerst einen Effekt auswählen
+gui-edit-primary-style-description: Bearbeiten Sie den Stil Ihres Primärpartikel
+gui-edit-primary-data: Primärdaten
+gui-edit-primary-data-missing-effect: Sie müssen zuerst einen Effekt auswählen
+gui-edit-primary-data-unavailable: Ihr primärer Effekt verwendet keine Daten
+gui-edit-primary-data-description: Bearbeiten Sie die Daten Ihres Primärpartikel
+
+# GUI Manage Particles Messages
+gui-manage-your-particles: Verwalten Sie Ihre Partikel
+gui-manage-your-particles-name: Verwalten Sie Ihre Partikel
+gui-manage-your-particles-description: Erstellen, bearbeiten und löschen Sie Ihre Partikel
+gui-manage-your-groups: Verwalten Sie Ihre Gruppen
+gui-manage-your-groups-name: Verwalten Sie Ihre Gruppen
+gui-manage-your-groups-description: Erstellen, löschen und laden Sie Ihre Partikelgruppen
+
+# GUI Load Messages
+gui-load-a-preset-group: Laden Sie eine vorgefertigte Gruppe
+gui-load-a-preset-group-description: Laden Sie eine vorgefertigte Partikelgruppe
+
+# GUI Save Messages
+gui-save-group: Neue Gruppe
+gui-save-group-description: Klicken Sie hier, um eine neue Gruppe zu speichern. Sie werden aufgefordert, den neuen Gruppennamen im Chat einzugeben.
+gui-save-group-full: Sie haben die maximale Anzahl von Gruppen erreicht
+gui-save-group-no-particles: Sie haben keine Partikel
+gui-save-group-hotbar-message: '&eGeben Sie im Chat &b1 &eWort für den neuen Gruppennamen ein. Geben Sie &ccancel&e ein, um den Vorgang abzubrechen. (Noch&b%seconds%&e)'
+gui-save-group-chat-message: '&eVerwenden Sie /pp group save <name>&e, um eine neue Partikelgruppe zu speichern.'
+
+# GUI Reset Messages
+gui-reset-particles: Setzen Sie Ihre Partikel zurück
+gui-reset-particles-description: Löscht alle Ihre aktiven Partikel
+
+# GUI Misc Messages
+gui-particle-name: Partikel
+gui-click-to-edit-particle: Klicken Sie hier, um den Effekt, den Stil oder die Daten dieses Partikels zu bearbeiten
+gui-editing-particle: 'Partikel #%id% bearbeiten'
+
+# GUI Edit Messages
+gui-edit-effect: Effekt bearbeiten
+gui-edit-effect-description: Klicken Sie, um den Effekt dieses Partikels zu bearbeiten
+gui-edit-style: Stil bearbeiten
+gui-edit-style-description: Klicken Sie, um den Stil dieses Partikels zu bearbeiten
+gui-edit-data: Daten bearbeiten
+gui-edit-data-description: Klicken Sie, um die Daten dieses Partikels zu bearbeiten
+gui-edit-data-unavailable: Für die Wirkung dieses Partikels werden keine Daten verwendet
+gui-data-none: kein
+
+# GUI Create Messages
+gui-create-particle: Erstellen Sie einen neuen Partikel
+gui-create-particle-description: Erstellen Sie ein neues Partikel mit einem Effekt, einem Stil und Daten
+gui-create-particle-unavailable: Sie haben die maximale Partikelmenge erreicht, die Sie erstellen können
+
+# GUI Select Messages
+gui-select-effect: Wählen Sie Partikeleffekt
+gui-select-effect-description: Setzt den Partikeleffekt auf &b%effect%
+gui-select-style: Wählen Sie Partikelstil
+gui-select-style-description: Legt den Partikelstil auf &b%style% fest
+gui-select-data: Wählen Sie Partikeldaten
+gui-select-data-description: Setzt die Partikeldaten auf &b%data%
+gui-select-data-note: 'Hinweis #%note%'
+gui-select-data-color-transition-start: '&eWählen Sie die &bStartfarbe'
+gui-select-data-color-transition-end: '&eWählen Sie die &bEndfarbe'
+gui-select-data-vibration: '&b%ticks% &eticks'
+
+# GUI Color Name Messages
+gui-edit-data-color-red: '#ff0000Rot'
+gui-edit-data-color-orange: '#ff8c00Orange'
+gui-edit-data-color-yellow: '#ffff00Gelb'
+gui-edit-data-color-lime-green: '#32cd32Limetten-Grün'
+gui-edit-data-color-green: '#008000Grün'
+gui-edit-data-color-blue: '#0000ffBlau'
+gui-edit-data-color-cyan: '#008b8bCyan'
+gui-edit-data-color-light-blue: '#add8e6Hellblau'
+gui-edit-data-color-purple: '#8a2be2Lila'
+gui-edit-data-color-magenta: '#ca1f7bMagenta'
+gui-edit-data-color-pink: '#ffb6c1Pink'
+gui-edit-data-color-brown: '#8b4513Braun'
+gui-edit-data-color-black: '#000000Schwarz'
+gui-edit-data-color-gray: '#808080Grau'
+gui-edit-data-color-light-gray: '#c0c0c0Hellgrau'
+gui-edit-data-color-white: '#ffffffWeiss'

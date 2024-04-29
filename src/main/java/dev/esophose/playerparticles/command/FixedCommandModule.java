@@ -135,7 +135,7 @@ public class FixedCommandModule implements CommandModule {
             } else {
                 amount = String.valueOf((isLooking ? argAmount - 2 : argAmount) - args.length);
             }
-            localeManager.sendMessage(pplayer, "fixed-create-missing-args", StringPlaceholders.single("amount", amount));
+            localeManager.sendMessage(pplayer, "fixed-create-missing-args", StringPlaceholders.of("amount", amount));
             return;
         }
 
@@ -157,7 +157,7 @@ public class FixedCommandModule implements CommandModule {
             double distanceFromEffect = player.getLocation().distance(location);
             int maxCreationDistance = permissionManager.getMaxFixedEffectCreationDistance();
             if (maxCreationDistance != 0 && distanceFromEffect > maxCreationDistance) {
-                localeManager.sendMessage(pplayer, "fixed-create-out-of-range", StringPlaceholders.single("range", maxCreationDistance));
+                localeManager.sendMessage(pplayer, "fixed-create-out-of-range", StringPlaceholders.of("range", maxCreationDistance));
                 return;
             }
         }
@@ -174,24 +174,24 @@ public class FixedCommandModule implements CommandModule {
 
         ParticleEffect effect = inputParser.next(ParticleEffect.class);
         if (effect == null) {
-            localeManager.sendMessage(pplayer, "fixed-create-effect-invalid", StringPlaceholders.single("effect", args[3]));
+            localeManager.sendMessage(pplayer, "fixed-create-effect-invalid", StringPlaceholders.of("effect", args[3]));
             return;
         } else if (!permissionManager.hasEffectPermission(pplayer, effect)) {
-            localeManager.sendMessage(pplayer, "fixed-create-effect-no-permission", StringPlaceholders.single("effect", effect.getName()));
+            localeManager.sendMessage(pplayer, "fixed-create-effect-no-permission", StringPlaceholders.of("effect", effect.getName()));
             return;
         }
 
         ParticleStyle style = inputParser.next(ParticleStyle.class);
         if (style == null) {
-            localeManager.sendMessage(pplayer, "fixed-create-style-invalid", StringPlaceholders.single("style", args[4]));
+            localeManager.sendMessage(pplayer, "fixed-create-style-invalid", StringPlaceholders.of("style", args[4]));
             return;
         } else if (!permissionManager.hasStylePermission(pplayer, style)) {
-            localeManager.sendMessage(pplayer, "fixed-create-style-no-permission", StringPlaceholders.single("style", style.getName()));
+            localeManager.sendMessage(pplayer, "fixed-create-style-no-permission", StringPlaceholders.of("style", style.getName()));
             return;
         }
 
         if (!style.canBeFixed()) {
-            localeManager.sendMessage(pplayer, "fixed-create-style-non-fixable", StringPlaceholders.single("style", style.getName()));
+            localeManager.sendMessage(pplayer, "fixed-create-style-non-fixable", StringPlaceholders.of("style", style.getName()));
             return;
         }
 
@@ -218,7 +218,7 @@ public class FixedCommandModule implements CommandModule {
                     }
                 }
             } else if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-                if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST || effect == ParticleEffect.BLOCK_MARKER) {
+                if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST || effect == ParticleEffect.BLOCK_MARKER || effect == ParticleEffect.DUST_PILLAR) {
                     blockData = inputParser.next(Material.class);
                     if (blockData == null || !blockData.isBlock()) {
                         localeManager.sendMessage(pplayer, "fixed-create-data-error");
@@ -301,7 +301,7 @@ public class FixedCommandModule implements CommandModule {
                     double distanceFromEffect = player.getLocation().distance(location);
                     int maxCreationDistance = permissionManager.getMaxFixedEffectCreationDistance();
                     if (maxCreationDistance != 0 && distanceFromEffect > maxCreationDistance) {
-                        localeManager.sendMessage(pplayer, "fixed-edit-out-of-range", StringPlaceholders.single("range", maxCreationDistance));
+                        localeManager.sendMessage(pplayer, "fixed-edit-out-of-range", StringPlaceholders.of("range", maxCreationDistance));
                         return;
                     }
                 }
@@ -311,10 +311,10 @@ public class FixedCommandModule implements CommandModule {
             case "effect": {
                 ParticleEffect effect = inputParser.next(ParticleEffect.class);
                 if (effect == null) {
-                    localeManager.sendMessage(pplayer, "fixed-edit-effect-invalid", StringPlaceholders.single("effect", args[2]));
+                    localeManager.sendMessage(pplayer, "fixed-edit-effect-invalid", StringPlaceholders.of("effect", args[2]));
                     return;
                 } else if (!permissionManager.hasEffectPermission(pplayer, effect)) {
-                    localeManager.sendMessage(pplayer, "fixed-edit-effect-no-permission", StringPlaceholders.single("effect", effect.getName()));
+                    localeManager.sendMessage(pplayer, "fixed-edit-effect-no-permission", StringPlaceholders.of("effect", effect.getName()));
                     return;
                 }
 
@@ -324,13 +324,13 @@ public class FixedCommandModule implements CommandModule {
             case "style":
                 ParticleStyle style = inputParser.next(ParticleStyle.class);
                 if (style == null) {
-                    localeManager.sendMessage(pplayer, "fixed-edit-style-invalid", StringPlaceholders.single("style", args[2]));
+                    localeManager.sendMessage(pplayer, "fixed-edit-style-invalid", StringPlaceholders.of("style", args[2]));
                     return;
                 } else if (!permissionManager.hasStylePermission(pplayer, style)) {
-                    localeManager.sendMessage(pplayer, "fixed-edit-style-no-permission", StringPlaceholders.single("style", style.getName()));
+                    localeManager.sendMessage(pplayer, "fixed-edit-style-no-permission", StringPlaceholders.of("style", style.getName()));
                     return;
                 } else if (!style.canBeFixed()) {
-                    localeManager.sendMessage(pplayer, "fixed-edit-style-non-fixable", StringPlaceholders.single("style", style.getName()));
+                    localeManager.sendMessage(pplayer, "fixed-edit-style-non-fixable", StringPlaceholders.of("style", style.getName()));
                     return;
                 }
 
@@ -360,7 +360,7 @@ public class FixedCommandModule implements CommandModule {
                         }
                     }
                 } else if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-                    if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST || effect == ParticleEffect.BLOCK_MARKER) {
+                    if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST || effect == ParticleEffect.BLOCK_MARKER || effect == ParticleEffect.DUST_PILLAR) {
                         blockData = inputParser.next(Material.class);
                         if (blockData == null || !blockData.isBlock()) {
                             localeManager.sendMessage(pplayer, "fixed-edit-data-error");
@@ -404,7 +404,7 @@ public class FixedCommandModule implements CommandModule {
         }
 
         PlayerParticlesAPI.getInstance().editFixedParticleEffect(player == null ? Bukkit.getConsoleSender() : player, fixedEffect);
-        localeManager.sendMessage(pplayer, "fixed-edit-success", StringPlaceholders.builder("prop", editType).addPlaceholder("id", id).build());
+        localeManager.sendMessage(pplayer, "fixed-edit-success", StringPlaceholders.builder("prop", editType).add("id", id).build());
     }
 
     /**
@@ -432,9 +432,9 @@ public class FixedCommandModule implements CommandModule {
 
         if (pplayer.getFixedEffectById(id) != null) {
             PlayerParticlesAPI.getInstance().removeFixedEffect(player == null ? Bukkit.getConsoleSender() : player, id);
-            localeManager.sendMessage(pplayer, "fixed-remove-success", StringPlaceholders.single("id", id));
+            localeManager.sendMessage(pplayer, "fixed-remove-success", StringPlaceholders.of("id", id));
         } else {
-            localeManager.sendMessage(pplayer, "fixed-remove-invalid", StringPlaceholders.single("id", id));
+            localeManager.sendMessage(pplayer, "fixed-remove-invalid", StringPlaceholders.of("id", id));
         }
     }
 
@@ -463,7 +463,7 @@ public class FixedCommandModule implements CommandModule {
             msg.append(id);
         }
 
-        localeManager.sendMessage(pplayer, "fixed-list-success", StringPlaceholders.single("ids", msg.toString()));
+        localeManager.sendMessage(pplayer, "fixed-list-success", StringPlaceholders.of("ids", msg.toString()));
     }
 
     /**
@@ -490,7 +490,7 @@ public class FixedCommandModule implements CommandModule {
 
         FixedParticleEffect fixedEffect = pplayer.getFixedEffectById(id);
         if (fixedEffect == null) {
-            localeManager.sendMessage(pplayer, "fixed-info-invalid", StringPlaceholders.single("id", id));
+            localeManager.sendMessage(pplayer, "fixed-info-invalid", StringPlaceholders.of("id", id));
             return;
         }
 
@@ -498,13 +498,13 @@ public class FixedCommandModule implements CommandModule {
 
         DecimalFormat df = new DecimalFormat("0.##"); // Decimal formatter so the coords aren't super long
         StringPlaceholders stringPlaceholders = StringPlaceholders.builder("id", fixedEffect.getId())
-                .addPlaceholder("world", fixedEffect.getLocation().getWorld().getName())
-                .addPlaceholder("x", df.format(fixedEffect.getLocation().getX()))
-                .addPlaceholder("y", df.format(fixedEffect.getLocation().getY()))
-                .addPlaceholder("z", df.format(fixedEffect.getLocation().getZ()))
-                .addPlaceholder("effect", particle.getEffect().getName())
-                .addPlaceholder("style", particle.getStyle().getName())
-                .addPlaceholder("data", particle.getDataString())
+                .add("world", fixedEffect.getLocation().getWorld().getName())
+                .add("x", df.format(fixedEffect.getLocation().getX()))
+                .add("y", df.format(fixedEffect.getLocation().getY()))
+                .add("z", df.format(fixedEffect.getLocation().getZ()))
+                .add("effect", particle.getEffect().getName())
+                .add("style", particle.getStyle().getName())
+                .add("data", particle.getDataString())
                 .build();
         localeManager.sendMessage(pplayer, "fixed-info-success", stringPlaceholders);
     }
@@ -552,7 +552,7 @@ public class FixedCommandModule implements CommandModule {
         }
 
         int amountRemoved = PlayerParticlesAPI.getInstance().removeFixedEffectsInRange(location, radius);
-        localeManager.sendMessage(pplayer, "fixed-clear-success", StringPlaceholders.builder("amount", amountRemoved).addPlaceholder("range", radius).build());
+        localeManager.sendMessage(pplayer, "fixed-clear-success", StringPlaceholders.builder("amount", amountRemoved).add("range", radius).build());
     }
 
     /**
@@ -591,7 +591,7 @@ public class FixedCommandModule implements CommandModule {
         }
 
         Bukkit.getScheduler().runTask(PlayerParticles.getInstance(), () -> player.teleport(fixedEffect.getLocation()));
-        localeManager.sendMessage(pplayer, "fixed-teleport-success", StringPlaceholders.single("id", id));
+        localeManager.sendMessage(pplayer, "fixed-teleport-success", StringPlaceholders.of("id", id));
     }
 
     @Override
@@ -686,7 +686,7 @@ public class FixedCommandModule implements CommandModule {
                                 }
                                 StringUtil.copyPartialMatches(args[args.length - 1], possibleValues, matches);
                             } else if (args.length == 7 && effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-                                if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST || effect == ParticleEffect.BLOCK_MARKER) { // Block material
+                                if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST || effect == ParticleEffect.BLOCK_MARKER || effect == ParticleEffect.DUST_PILLAR) { // Block material
                                     StringUtil.copyPartialMatches(args[6], ParticleUtils.BLOCK_MATERIALS_STRING, matches);
                                 } else if (effect == ParticleEffect.ITEM) { // Item material
                                     StringUtil.copyPartialMatches(args[6], ParticleUtils.ITEM_MATERIALS_STRING, matches);
@@ -796,7 +796,7 @@ public class FixedCommandModule implements CommandModule {
                                     }
                                     StringUtil.copyPartialMatches(args[args.length - 1], possibleValues, matches);
                                 } else if (args.length == 4 && effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-                                    if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST || effect == ParticleEffect.BLOCK_MARKER) { // Block material
+                                    if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST || effect == ParticleEffect.BLOCK_MARKER || effect == ParticleEffect.DUST_PILLAR) { // Block material
                                         StringUtil.copyPartialMatches(args[3], ParticleUtils.BLOCK_MATERIALS_STRING, matches);
                                     } else if (effect == ParticleEffect.ITEM) { // Item material
                                         StringUtil.copyPartialMatches(args[3], ParticleUtils.ITEM_MATERIALS_STRING, matches);

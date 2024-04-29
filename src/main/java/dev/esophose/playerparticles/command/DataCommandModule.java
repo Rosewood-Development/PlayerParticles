@@ -20,28 +20,28 @@ public class DataCommandModule implements CommandModule {
         if (args.length > 0) {
             ParticleEffect effect = ParticleEffect.fromName(args[0]);
             if (effect == null) {
-                localeManager.sendMessage(pplayer, "effect-invalid", StringPlaceholders.single("effect", args[0]));
+                localeManager.sendMessage(pplayer, "effect-invalid", StringPlaceholders.of("effect", args[0]));
                 return;
             }
 
             if (effect.hasProperty(ParticleProperty.COLORABLE)) {
                 if (effect == ParticleEffect.NOTE) {
-                    localeManager.sendMessage(pplayer, "data-usage-note", StringPlaceholders.single("effect", effect.getName()));
+                    localeManager.sendMessage(pplayer, "data-usage-note", StringPlaceholders.of("effect", effect.getName()));
                 } else {
-                    localeManager.sendMessage(pplayer, "data-usage-color", StringPlaceholders.single("effect", effect.getName()));
+                    localeManager.sendMessage(pplayer, "data-usage-color", StringPlaceholders.of("effect", effect.getName()));
                 }
             } else if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
                 if (effect == ParticleEffect.ITEM) {
-                    localeManager.sendMessage(pplayer, "data-usage-item", StringPlaceholders.single("effect", effect.getName()));
+                    localeManager.sendMessage(pplayer, "data-usage-item", StringPlaceholders.of("effect", effect.getName()));
                 } else {
-                    localeManager.sendMessage(pplayer, "data-usage-block", StringPlaceholders.single("effect", effect.getName()));
+                    localeManager.sendMessage(pplayer, "data-usage-block", StringPlaceholders.of("effect", effect.getName()));
                 }
             } else if (effect.hasProperty(ParticleProperty.COLORABLE_TRANSITION)) {
-                localeManager.sendMessage(pplayer, "data-usage-color-transition", StringPlaceholders.single("effect", effect.getName()));
+                localeManager.sendMessage(pplayer, "data-usage-color-transition", StringPlaceholders.of("effect", effect.getName()));
             } else if (effect.hasProperty(ParticleProperty.VIBRATION)) {
-                localeManager.sendMessage(pplayer, "data-usage-vibration", StringPlaceholders.single("effect", effect.getName()));
+                localeManager.sendMessage(pplayer, "data-usage-vibration", StringPlaceholders.of("effect", effect.getName()));
             } else {
-                localeManager.sendMessage(pplayer, "data-usage-none", StringPlaceholders.single("effect", effect.getName()));
+                localeManager.sendMessage(pplayer, "data-usage-none", StringPlaceholders.of("effect", effect.getName()));
             }
         } else {
             localeManager.sendMessage(pplayer, "data-no-args");

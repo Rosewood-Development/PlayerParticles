@@ -59,7 +59,7 @@ public abstract class GuiInventory {
             if (meta != null) {
                 meta.setDisplayName(" ");
                 if (NMSUtil.getVersionNumber() > 7)
-                    meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_ENCHANTS);
+                    meta.addItemFlags(ItemFlag.values());
                 borderIcon.setItemMeta(meta);
             }
             

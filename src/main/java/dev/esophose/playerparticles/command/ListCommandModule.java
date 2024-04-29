@@ -26,9 +26,9 @@ public class ListCommandModule implements CommandModule {
         localeManager.sendMessage(pplayer, "list-you-have");
         for (ParticlePair particle : particles) {
             StringPlaceholders stringPlaceholders = StringPlaceholders.builder("id", particle.getId())
-                    .addPlaceholder("effect", particle.getEffect().getName())
-                    .addPlaceholder("style", particle.getStyle().getName())
-                    .addPlaceholder("data", particle.getDataString())
+                    .add("effect", particle.getEffect().getName())
+                    .add("style", particle.getStyle().getName())
+                    .add("data", particle.getDataString())
                     .build();
             localeManager.sendMessage(pplayer, "list-output", stringPlaceholders);
         }

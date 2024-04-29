@@ -55,12 +55,12 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
 
             List<String> lore = new ArrayList<>(group.getLore());
             if (!Setting.GUI_PRESETS_HIDE_PARTICLES_DESCRIPTIONS.getBoolean()) {
-                lore.add(localeManager.getLocaleMessage("gui-color-subtext") + localeManager.getLocaleMessage("gui-click-to-load", StringPlaceholders.single("amount", particles.size())));
+                lore.add(localeManager.getLocaleMessage("gui-color-subtext") + localeManager.getLocaleMessage("gui-click-to-load", StringPlaceholders.of("amount", particles.size())));
                 for (ParticlePair particle : particles) {
                     StringPlaceholders stringPlaceholders = StringPlaceholders.builder("id", particle.getId())
-                            .addPlaceholder("effect", ParticleUtils.formatName(particle.getEffect().getName()))
-                            .addPlaceholder("style", ParticleUtils.formatName(particle.getStyle().getName()))
-                            .addPlaceholder("data", particle.getDataString())
+                            .add("effect", ParticleUtils.formatName(particle.getEffect().getName()))
+                            .add("style", ParticleUtils.formatName(particle.getStyle().getName()))
+                            .add("data", particle.getDataString())
                             .build();
                     lore.add(localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-particle-info", stringPlaceholders));
                 }
@@ -80,7 +80,7 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
             GuiActionButton previousPageButton = new GuiActionButton(
                     INVENTORY_SIZE - 6,
                     GuiIcon.PREVIOUS_PAGE.get(),
-                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-previous-page-button", StringPlaceholders.builder("start", pageNumber - 1).addPlaceholder("end", maxPages).build()),
+                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-previous-page-button", StringPlaceholders.builder("start", pageNumber - 1).add("end", maxPages).build()),
                     new String[]{},
                     (button, isShiftClick) -> guiManager.transition(new GuiInventoryLoadPresetGroups(pplayer, isEndPoint, pageNumber - 1)));
             this.actionButtons.add(previousPageButton);
@@ -91,7 +91,7 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
             GuiActionButton nextPageButton = new GuiActionButton(
                     INVENTORY_SIZE - 4,
                     GuiIcon.NEXT_PAGE.get(),
-                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-next-page-button", StringPlaceholders.builder("start", pageNumber + 1).addPlaceholder("end", maxPages).build()),
+                    localeManager.getLocaleMessage("gui-color-info") + localeManager.getLocaleMessage("gui-next-page-button", StringPlaceholders.builder("start", pageNumber + 1).add("end", maxPages).build()),
                     new String[]{},
                     (button, isShiftClick) -> guiManager.transition(new GuiInventoryLoadPresetGroups(pplayer, isEndPoint, pageNumber + 1)));
             this.actionButtons.add(nextPageButton);

@@ -38,7 +38,7 @@ public class GroupCommandModule implements CommandModule {
         }
         
         if (args.length == 1 && !args[0].equalsIgnoreCase("list")) {
-            localeManager.sendMessage(pplayer, "group-no-name", StringPlaceholders.single("cmd", args[0].toLowerCase()));
+            localeManager.sendMessage(pplayer, "group-no-name", StringPlaceholders.of("cmd", args[0].toLowerCase()));
             return;
         }
 
@@ -114,9 +114,9 @@ public class GroupCommandModule implements CommandModule {
         // Apply changes and notify player
         PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), group);
         if (groupUpdated) {
-            localeManager.sendMessage(pplayer, "group-save-success-overwrite", StringPlaceholders.single("name", groupName));
+            localeManager.sendMessage(pplayer, "group-save-success-overwrite", StringPlaceholders.of("name", groupName));
         } else {
-            localeManager.sendMessage(pplayer, "group-save-success", StringPlaceholders.single("name", groupName));
+            localeManager.sendMessage(pplayer, "group-save-success", StringPlaceholders.of("name", groupName));
         }
     }
     
@@ -139,7 +139,7 @@ public class GroupCommandModule implements CommandModule {
         ParticleGroup group = pplayer.getParticleGroupByName(groupName);
         if (group != null) {
             if (!group.canPlayerUse(pplayer)) {
-                localeManager.sendMessage(pplayer, "group-no-permission", StringPlaceholders.single("group", groupName));
+                localeManager.sendMessage(pplayer, "group-no-permission", StringPlaceholders.of("group", groupName));
                 return;
             }
 
@@ -154,24 +154,24 @@ public class GroupCommandModule implements CommandModule {
 
             // Update group and notify player
             PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), activeGroup);
-            localeManager.sendMessage(pplayer, "group-load-success", StringPlaceholders.builder("amount", activeGroup.getParticles().size()).addPlaceholder("name", groupName).build());
+            localeManager.sendMessage(pplayer, "group-load-success", StringPlaceholders.builder("amount", activeGroup.getParticles().size()).add("name", groupName).build());
             return;
         }
 
         // Didn't find a saved group, look at the presets
         ParticleGroupPreset presetGroup = PlayerParticles.getInstance().getManager(ParticleGroupPresetManager.class).getPresetGroup(groupName);
         if (presetGroup == null) {
-            localeManager.sendMessage(pplayer, "group-invalid", StringPlaceholders.single("name", groupName));
+            localeManager.sendMessage(pplayer, "group-invalid", StringPlaceholders.of("name", groupName));
             return;
         }
 
         if (!presetGroup.canPlayerUse(pplayer)) {
-            localeManager.sendMessage(pplayer, "group-preset-no-permission", StringPlaceholders.single("group", groupName));
+            localeManager.sendMessage(pplayer, "group-preset-no-permission", StringPlaceholders.of("group", groupName));
             return;
         }
 
         pplayer.loadPresetGroup(presetGroup.getGroup().getParticles().values());
-        localeManager.sendMessage(pplayer, "group-load-preset-success", StringPlaceholders.builder("amount", presetGroup.getGroup().getParticles().size()).addPlaceholder("name", groupName).build());
+        localeManager.sendMessage(pplayer, "group-load-preset-success", StringPlaceholders.builder("amount", presetGroup.getGroup().getParticles().size()).add("name", groupName).build());
     }
 
     /**
@@ -193,7 +193,7 @@ public class GroupCommandModule implements CommandModule {
         ParticleGroup group = pplayer.getParticleGroupByName(groupName);
         if (group != null) {
             if (!group.canPlayerUse(pplayer)) {
-                localeManager.sendMessage(pplayer, "group-no-permission", StringPlaceholders.single("group", groupName));
+                localeManager.sendMessage(pplayer, "group-no-permission", StringPlaceholders.of("group", groupName));
                 return;
             }
 
@@ -210,19 +210,19 @@ public class GroupCommandModule implements CommandModule {
 
             // Update group and notify player
             PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), activeGroup);
-            localeManager.sendMessage(pplayer, "group-unload-success", StringPlaceholders.builder("amount", matches.get()).addPlaceholder("name", groupName).build());
+            localeManager.sendMessage(pplayer, "group-unload-success", StringPlaceholders.builder("amount", matches.get()).add("name", groupName).build());
             return;
         }
 
         // Didn't find a saved group, look at the presets
         ParticleGroupPreset presetGroup = PlayerParticles.getInstance().getManager(ParticleGroupPresetManager.class).getPresetGroup(groupName);
         if (presetGroup == null) {
-            localeManager.sendMessage(pplayer, "group-invalid", StringPlaceholders.single("name", groupName));
+            localeManager.sendMessage(pplayer, "group-invalid", StringPlaceholders.of("name", groupName));
             return;
         }
 
         if (!presetGroup.canPlayerUse(pplayer)) {
-            localeManager.sendMessage(pplayer, "group-preset-no-permission", StringPlaceholders.single("group", groupName));
+            localeManager.sendMessage(pplayer, "group-preset-no-permission", StringPlaceholders.of("group", groupName));
             return;
         }
 
@@ -238,7 +238,7 @@ public class GroupCommandModule implements CommandModule {
         }
 
         PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), activeGroup);
-        localeManager.sendMessage(pplayer, "group-unload-success", StringPlaceholders.builder("amount", matches.get()).addPlaceholder("name", groupName).build());
+        localeManager.sendMessage(pplayer, "group-unload-success", StringPlaceholders.builder("amount", matches.get()).add("name", groupName).build());
     }
     
     /**
@@ -262,7 +262,7 @@ public class GroupCommandModule implements CommandModule {
             ParticleGroupPreset presetGroup = PlayerParticles.getInstance().getManager(ParticleGroupPresetManager.class).getPresetGroup(groupName);
             
             if (presetGroup == null) {
-                localeManager.sendMessage(pplayer, "group-invalid", StringPlaceholders.single("name", groupName));
+                localeManager.sendMessage(pplayer, "group-invalid", StringPlaceholders.of("name", groupName));
             } else {
                 localeManager.sendMessage(pplayer, "group-remove-preset");
             }
@@ -271,7 +271,7 @@ public class GroupCommandModule implements CommandModule {
         
         // Delete the group and notify player
         PlayerParticlesAPI.getInstance().removePlayerParticleGroup(pplayer.getPlayer(), group.getName());
-        localeManager.sendMessage(pplayer, "group-remove-success", StringPlaceholders.single("name", groupName));
+        localeManager.sendMessage(pplayer, "group-remove-success", StringPlaceholders.of("name", groupName));
     }
     
     /**
@@ -294,12 +294,12 @@ public class GroupCommandModule implements CommandModule {
             // Didn't find a saved group, look at the presets
             ParticleGroupPreset presetGroup = PlayerParticles.getInstance().getManager(ParticleGroupPresetManager.class).getPresetGroup(groupName);
             if (presetGroup == null) {
-                localeManager.sendMessage(pplayer, "group-invalid", StringPlaceholders.single("name", groupName));
+                localeManager.sendMessage(pplayer, "group-invalid", StringPlaceholders.of("name", groupName));
                 return;
             }
             
             if (!presetGroup.canPlayerUse(pplayer)) {
-                localeManager.sendMessage(pplayer, "group-preset-no-permission", StringPlaceholders.single("group", groupName));
+                localeManager.sendMessage(pplayer, "group-preset-no-permission", StringPlaceholders.of("group", groupName));
                 return;
             }
             
@@ -309,12 +309,12 @@ public class GroupCommandModule implements CommandModule {
         List<ParticlePair> particles = new ArrayList<>(group.getParticles().values());
         particles.sort(Comparator.comparingInt(ParticlePair::getId));
         
-        localeManager.sendMessage(pplayer, "group-info-header", StringPlaceholders.single("group", groupName));
+        localeManager.sendMessage(pplayer, "group-info-header", StringPlaceholders.of("group", groupName));
         for (ParticlePair particle : particles) {
             StringPlaceholders stringPlaceholders = StringPlaceholders.builder("id", particle.getId())
-                    .addPlaceholder("effect", particle.getEffect().getName())
-                    .addPlaceholder("style", particle.getStyle().getName())
-                    .addPlaceholder("data", particle.getDataString())
+                    .add("effect", particle.getEffect().getName())
+                    .add("style", particle.getStyle().getName())
+                    .add("data", particle.getDataString())
                     .build();
             localeManager.sendMessage(pplayer, "list-output", stringPlaceholders);
         }
@@ -352,11 +352,11 @@ public class GroupCommandModule implements CommandModule {
         }
         
         if (groupsList.length() > 0) {
-            localeManager.sendMessage(pplayer, "group-list-output", StringPlaceholders.single("info", groupsList.toString()));
+            localeManager.sendMessage(pplayer, "group-list-output", StringPlaceholders.of("info", groupsList.toString()));
         }
         
         if (presetsList.length() > 0) {
-            localeManager.sendMessage(pplayer, "group-list-presets", StringPlaceholders.single("info", presetsList.toString()));
+            localeManager.sendMessage(pplayer, "group-list-presets", StringPlaceholders.of("info", presetsList.toString()));
         }
     }
 
