@@ -9,6 +9,7 @@ import dev.esophose.playerparticles.particles.data.ParticleColor;
 import dev.esophose.playerparticles.particles.data.Vibration;
 import dev.esophose.playerparticles.util.CavesAndCliffsUtil;
 import dev.rosewood.rosegarden.utils.NMSUtil;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle.DustOptions;
@@ -45,6 +46,10 @@ public class SpigotParticleSpawner extends ParticleSpawner {
             DustOptions dustOptions = new DustOptions(dustColor.toSpigot(), size > 0 ? size : Setting.DUST_SIZE.getFloat());
             for (Player player : getPlayersInRange(center, isLongRange, owner))
                 player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), 1, 0, 0, 0, 0, dustOptions);
+        } else if (particleEffect == ParticleEffect.ENTITY_EFFECT && (NMSUtil.getVersionNumber() > 20 || (NMSUtil.getVersionNumber() == 20 && NMSUtil.getMinorVersionNumber() >= 5))) { // ENTITY_EFFECT uses a Color object for spawning in 1.20.5+
+            OrdinaryColor ordinaryColor = (OrdinaryColor) color;
+            for (Player player : getPlayersInRange(center, isLongRange, owner))
+                player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), 1, 0, 0, 0, 0, Color.fromRGB(ordinaryColor.getRed(), ordinaryColor.getGreen(), ordinaryColor.getBlue()));
         } else {
             for (Player player : getPlayersInRange(center, isLongRange, owner)) {
                 // Minecraft clients require that you pass a non-zero value if the Red value should be zero
