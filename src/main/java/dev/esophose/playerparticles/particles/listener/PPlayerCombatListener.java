@@ -53,7 +53,7 @@ public class PPlayerCombatListener implements Listener {
      *
      * @param event The event
      */
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerAttack(EntityDamageByEntityEvent event) {
         boolean attackedIsPlayer = event.getEntity().getType() == EntityType.PLAYER;
         boolean includeMobs = Setting.TOGGLE_ON_COMBAT_INCLUDE_MOBS.getBoolean();
