@@ -108,9 +108,9 @@ public class ParticleStyleArrows extends ConfiguredParticleStyle implements List
             if (this.disableCritParticles && event.getEntity() instanceof AbstractArrow) {
                 AbstractArrow arrow = (AbstractArrow) event.getEntity();
                 isCritical = arrow.isCritical();
-                if (this.criticalOnly && !isCritical) {
+                if (this.criticalOnly && !isCritical)
                     return;
-                }
+                
                 arrow.setCritical(false);
             }
             
@@ -126,15 +126,16 @@ public class ParticleStyleArrows extends ConfiguredParticleStyle implements List
      */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onProjectileHit(ProjectileHitEvent event) {
-        if (!(event.getEntity() instanceof AbstractArrow)) {
+        if (!this.disableCritParticles)
             return;
-        }
+        
+        if (!(event.getEntity() instanceof AbstractArrow))
+            return;
         
         AbstractArrow arrow = (AbstractArrow) event.getEntity();
         for (LaunchedProjectile launchedProjectile : this.projectiles) {
-            if (!launchedProjectile.getProjectile().equals(arrow)) {
+            if (!launchedProjectile.getProjectile().equals(arrow))
                 continue;
-            }
             
             arrow.setCritical(launchedProjectile.isCritical());
             break;
