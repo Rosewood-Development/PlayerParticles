@@ -15,10 +15,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 
 public class ParticleStyleArrows extends ConfiguredParticleStyle implements Listener {
 
@@ -28,6 +30,8 @@ public class ParticleStyleArrows extends ConfiguredParticleStyle implements List
     private boolean onlySpawnIfFlying;
     private List<String> projectileEntityNames;
     private int arrowTrackingTime;
+    private boolean disableCritParticles;
+    private boolean criticalOnly;
 
     protected ParticleStyleArrows() {
         super("arrows", false, false, 0);
@@ -98,7 +102,42 @@ public class ParticleStyleArrows extends ConfiguredParticleStyle implements List
         if (this.projectileEntityNames.contains(entityName)) {
             Projectile projectile = event.getEntity();
             UUID shooter = ((Player) projectile.getShooter()).getUniqueId();
-            this.projectiles.addFirst(new LaunchedProjectile(projectile, shooter));
+            
+            // To disable crit particles, set arrow crit to false, and restore on ProjectileHitEvent
+            boolean isCritical = false;
+            if (this.disableCritParticles && event.getEntity() instanceof AbstractArrow) {
+                AbstractArrow arrow = (AbstractArrow) event.getEntity();
+                isCritical = arrow.isCritical();
+                if (this.criticalOnly && !isCritical) {
+                    return;
+                }
+                arrow.setCritical(false);
+            }
+            
+            this.projectiles.addFirst(new LaunchedProjectile(projectile, shooter, isCritical));
+        }
+    }
+    
+    /**
+     * Restores the criticality of arrows as they hit something,
+     * if the arrow was set no longer critical by the plugin
+     *
+     * @param event The ProjectileHitEvent
+     */
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onProjectileHit(ProjectileHitEvent event) {
+        if (!(event.getEntity() instanceof AbstractArrow)) {
+            return;
+        }
+        
+        AbstractArrow arrow = (AbstractArrow) event.getEntity();
+        for (LaunchedProjectile launchedProjectile : this.projectiles) {
+            if (!launchedProjectile.getProjectile().equals(arrow)) {
+                continue;
+            }
+            
+            arrow.setCritical(launchedProjectile.isCritical());
+            break;
         }
     }
 
@@ -108,6 +147,8 @@ public class ParticleStyleArrows extends ConfiguredParticleStyle implements List
         this.setIfNotExists("only-spawn-if-flying", false, "Only spawn particles while the arrow is still in the air");
         this.setIfNotExists("arrow-entities", Arrays.asList("ARROW", "SPECTRAL_ARROW", "TIPPED_ARROW"), "The name of the projectile entities that are counted as arrows");
         this.setIfNotExists("arrow-tracking-time", 1200, "The maximum number of ticks to track an arrow for", "Set to -1 to disable (not recommended)");
+        this.setIfNotExists("disable-crit-particles", false, "Disable vanilla critical particles of crossbow/fully", "charged bow arrows to make the trail more visible");
+        this.setIfNotExists("critical-only", false, "Only show particles on arrows when they are critical", "Requires disable-crit-particles = true.");
     }
 
     @Override
@@ -116,16 +157,20 @@ public class ParticleStyleArrows extends ConfiguredParticleStyle implements List
         this.onlySpawnIfFlying = config.getBoolean("only-spawn-if-flying");
         this.projectileEntityNames = config.getStringList("arrow-entities");
         this.arrowTrackingTime = config.getInt("arrow-tracking-time");
+        this.disableCritParticles = config.getBoolean("disable-crit-particles");
+        this.criticalOnly = config.getBoolean("critical-only");
     }
 
     private static class LaunchedProjectile {
 
         private final Projectile projectile;
         private final UUID shooter;
+        private final boolean isCritical;
 
-        public LaunchedProjectile(Projectile projectile, UUID shooter) {
+        public LaunchedProjectile(Projectile projectile, UUID shooter, boolean isCritical) {
             this.projectile = projectile;
             this.shooter = shooter;
+            this.isCritical = isCritical;
         }
 
         public Projectile getProjectile() {
@@ -134,6 +179,10 @@ public class ParticleStyleArrows extends ConfiguredParticleStyle implements List
 
         public UUID getShooter() {
             return this.shooter;
+        }
+        
+        public boolean isCritical() {
+            return isCritical;
         }
 
     }
