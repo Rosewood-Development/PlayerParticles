@@ -148,7 +148,7 @@ public class ParticleStyleArrows extends ConfiguredParticleStyle implements List
         this.setIfNotExists("arrow-entities", Arrays.asList("ARROW", "SPECTRAL_ARROW", "TIPPED_ARROW"), "The name of the projectile entities that are counted as arrows");
         this.setIfNotExists("arrow-tracking-time", 1200, "The maximum number of ticks to track an arrow for", "Set to -1 to disable (not recommended)");
         this.setIfNotExists("disable-crit-particles", false, "Disable vanilla critical particles of crossbow/fully", "charged bow arrows to make the trail more visible");
-        this.setIfNotExists("critical-only", false, "Only show particles on arrows when they are critical", "Requires disable-crit-particles = true.");
+        this.setIfNotExists("critical-only", false, "Only show particles on arrows when they are critical", "Requires disable-crit-particles: true.");
     }
 
     @Override
