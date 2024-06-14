@@ -4,6 +4,7 @@ import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.rosewood.rosegarden.config.CommentedFileConfiguration;
+import dev.rosewood.rosegarden.utils.NMSUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,26 +14,33 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.AbstractArrow;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 
 public class ParticleStyleArrows extends ConfiguredParticleStyle implements Listener {
 
     private final Deque<LaunchedProjectile> projectiles;
+    private final boolean is114;
 
     private int maxArrowsPerPlayer;
     private boolean onlySpawnIfFlying;
     private List<String> projectileEntityNames;
     private int arrowTrackingTime;
+    private boolean disableCritParticles;
+    private boolean criticalOnly;
 
     protected ParticleStyleArrows() {
         super("arrows", false, false, 0);
 
         this.projectiles = new ConcurrentLinkedDeque<>();
+        this.is114 = NMSUtil.getVersionNumber() >= 14;
 
         // Removes all arrows that are considered dead or too old to be tracked
         Bukkit.getScheduler().runTaskTimer(PlayerParticles.getInstance(), () -> {
@@ -98,8 +106,61 @@ public class ParticleStyleArrows extends ConfiguredParticleStyle implements List
         if (this.projectileEntityNames.contains(entityName)) {
             Projectile projectile = event.getEntity();
             UUID shooter = ((Player) projectile.getShooter()).getUniqueId();
-            this.projectiles.addFirst(new LaunchedProjectile(projectile, shooter));
+            
+            // To disable crit particles, set arrow crit to false, and restore on ProjectileHitEvent
+            boolean isCritical = false;
+            if (this.disableCritParticles && isArrow(projectile)) {
+                isCritical = isArrowCritical(projectile);
+                if (this.criticalOnly && !isCritical)
+                    return;
+                
+                setArrowCritical(projectile, false);
+            }
+            
+            this.projectiles.addFirst(new LaunchedProjectile(projectile, shooter, isCritical));
         }
+    }
+    
+    /**
+     * Restores the criticality of arrows as they hit something,
+     * if the arrow was set no longer critical by the plugin
+     *
+     * @param event The ProjectileHitEvent
+     */
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onProjectileHit(ProjectileHitEvent event) {
+        if (!this.disableCritParticles)
+            return;
+        
+        Projectile projectile = event.getEntity();
+        if (!isArrow(projectile))
+            return;
+        
+        for (LaunchedProjectile launchedProjectile : this.projectiles) {
+            if (!launchedProjectile.getProjectile().equals(projectile))
+                continue;
+            
+            setArrowCritical(projectile, launchedProjectile.isCritical());
+            break;
+        }
+    }
+    
+    private boolean isArrow(Projectile projectile) {
+        return projectile.getType().name().contains("ARROW");
+    }
+    
+    // Should only be called if the entity is an arrow
+    private boolean isArrowCritical(Projectile projectile) {
+        return is114 ? ((AbstractArrow) projectile).isCritical() : ((Arrow) projectile).isCritical();
+    }
+    
+    // Should only be called if the entity is an arrow
+    private void setArrowCritical(Projectile projectile, boolean critical) {
+        if (is114) {
+            ((AbstractArrow) projectile).setCritical(critical);
+        } else {
+            ((Arrow) projectile).setCritical(critical);
+        }           
     }
 
     @Override
@@ -108,6 +169,8 @@ public class ParticleStyleArrows extends ConfiguredParticleStyle implements List
         this.setIfNotExists("only-spawn-if-flying", false, "Only spawn particles while the arrow is still in the air");
         this.setIfNotExists("arrow-entities", Arrays.asList("ARROW", "SPECTRAL_ARROW", "TIPPED_ARROW"), "The name of the projectile entities that are counted as arrows");
         this.setIfNotExists("arrow-tracking-time", 1200, "The maximum number of ticks to track an arrow for", "Set to -1 to disable (not recommended)");
+        this.setIfNotExists("disable-crit-particles", false, "Disable vanilla critical particles of crossbow/fully", "charged bow arrows to make the trail more visible");
+        this.setIfNotExists("critical-only", false, "Only show particles on arrows when they are critical", "Requires disable-crit-particles: true.");
     }
 
     @Override
@@ -116,16 +179,20 @@ public class ParticleStyleArrows extends ConfiguredParticleStyle implements List
         this.onlySpawnIfFlying = config.getBoolean("only-spawn-if-flying");
         this.projectileEntityNames = config.getStringList("arrow-entities");
         this.arrowTrackingTime = config.getInt("arrow-tracking-time");
+        this.disableCritParticles = config.getBoolean("disable-crit-particles");
+        this.criticalOnly = config.getBoolean("critical-only");
     }
 
     private static class LaunchedProjectile {
 
         private final Projectile projectile;
         private final UUID shooter;
+        private final boolean isCritical;
 
-        public LaunchedProjectile(Projectile projectile, UUID shooter) {
+        public LaunchedProjectile(Projectile projectile, UUID shooter, boolean isCritical) {
             this.projectile = projectile;
             this.shooter = shooter;
+            this.isCritical = isCritical;
         }
 
         public Projectile getProjectile() {
@@ -134,6 +201,10 @@ public class ParticleStyleArrows extends ConfiguredParticleStyle implements List
 
         public UUID getShooter() {
             return this.shooter;
+        }
+        
+        public boolean isCritical() {
+            return isCritical;
         }
 
     }
