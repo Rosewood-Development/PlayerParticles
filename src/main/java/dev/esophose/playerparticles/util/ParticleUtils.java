@@ -41,14 +41,25 @@ public final class ParticleUtils {
 
         Inventory tempInventory = Bukkit.createInventory(null, 9);
         for (Material mat : Material.values()) {
-            // Verify an ItemStack of the material can be placed into an inventory. In 1.12 and up this can easily be checked with mat.isItem(), but that doesn't exist pre-1.12
-            tempInventory.clear();
-            tempInventory.setItem(0, new ItemStack(mat, 1));
-            ItemStack itemStack = tempInventory.getItem(0);
-            if (itemStack != null) {
-                if (mat.isBlock())
-                    BLOCK_MATERIALS.add(mat);
-                ITEM_MATERIALS.add(mat); // Items allow both items and blocks to be selected
+            if (mat == Material.AIR)
+                continue;
+
+            // Material#isItem only exists in 1.12+
+            if (NMSUtil.getVersionNumber() >= 12) {
+                if (mat.isItem()) {
+                    if (mat.isBlock())
+                        BLOCK_MATERIALS.add(mat);
+                    ITEM_MATERIALS.add(mat);
+                }
+            } else {
+                tempInventory.clear();
+                tempInventory.setItem(0, new ItemStack(mat, 1));
+                ItemStack itemStack = tempInventory.getItem(0);
+                if (itemStack != null) {
+                    if (mat.isBlock())
+                        BLOCK_MATERIALS.add(mat);
+                    ITEM_MATERIALS.add(mat);
+                }
             }
         }
 

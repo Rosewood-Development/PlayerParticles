@@ -9,7 +9,7 @@ plugins {
 targetCompatibility = 1.8
 sourceCompatibility = 1.8
 group = 'dev.esophose'
-version = '8.5'
+version = '8.6'
 
 java {
     disableAutoTargetJvm() // Allows depending on Paper's newer APIs even though they use Java 17
