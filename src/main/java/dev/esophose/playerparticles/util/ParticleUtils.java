@@ -171,7 +171,7 @@ public final class ParticleUtils {
 
     public static boolean isPlayerVisible(Player player) {
         return Setting.DISPLAY_WHEN_INVISIBLE.getBoolean() || ((NMSUtil.getVersionNumber() <= 8 || player.getGameMode() != GameMode.SPECTATOR)
-                && !player.hasPotionEffect(PotionEffectType.INVISIBILITY)) || player.getMetadata("vanished").stream().anyMatch(MetadataValue::asBoolean);
+                && !player.hasPotionEffect(PotionEffectType.INVISIBILITY)) || player.getMetadata("vanished").stream().noneMatch(MetadataValue::asBoolean);
     }
 
     public static String rgbToHex(int r, int g, int b) {
