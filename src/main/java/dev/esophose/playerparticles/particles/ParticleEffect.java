@@ -131,6 +131,7 @@ public enum ParticleEffect {
     SQUID_INK("SQUID_INK", Collections.singletonList("INK_SAC")),
     SWEEP_ATTACK("SWEEP_ATTACK", Arrays.asList("GOLDEN_SWORD", "GOLD_SWORD")),
     TOTEM_OF_UNDYING("TOTEM", Arrays.asList("TOTEM_OF_UNDYING", "TOTEM")),
+    TRIAL_OMEN("TRIAL_OMEN", Collections.singletonList("COPPER_BULB")),
     TRIAL_SPAWNER_DETECTION("TRIAL_SPAWNER_DETECTION", Collections.singletonList("TRIAL_KEY")),
     TRIAL_SPAWNER_DETECTION_OMINOUS("TRIAL_SPAWNER_DETECTION_OMINOUS", Collections.singletonList("OMINOUS_TRIAL_KEY")),
     UNDERWATER("SUSPENDED_DEPTH", Arrays.asList("TURTLE_HELMET", "SPONGE")),
