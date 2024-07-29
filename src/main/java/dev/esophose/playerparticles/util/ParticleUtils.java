@@ -169,9 +169,14 @@ public final class ParticleUtils {
         return false;
     }
 
-    public static boolean isPlayerVisible(Player player) {
-        return Setting.DISPLAY_WHEN_INVISIBLE.getBoolean() || ((NMSUtil.getVersionNumber() <= 8 || player.getGameMode() != GameMode.SPECTATOR)
-                && !player.hasPotionEffect(PotionEffectType.INVISIBILITY)) || player.getMetadata("vanished").stream().noneMatch(MetadataValue::asBoolean);
+    public static boolean isPlayerInvisible(Player player) {
+        if (Setting.DISPLAY_WHEN_INVISIBLE.getBoolean())
+            return false;
+        if (NMSUtil.getVersionNumber() >= 8 && player.getGameMode() == GameMode.SPECTATOR)
+            return true;
+        if (player.hasPotionEffect(PotionEffectType.INVISIBILITY))
+            return true;
+        return player.getMetadata("vanished").stream().anyMatch(MetadataValue::asBoolean);
     }
 
     public static String rgbToHex(int r, int g, int b) {

@@ -1,22 +1,19 @@
 # PlayerParticles
 
-A Spigot particles plugin with more customizability than any other. Create particles around players 
+A particles plugin with more customizability than any other. Create particles around players 
 or blocks with any particle effect in the game with a plethora of skillfully crafted styles.
 
-### Wiki
+### Documentation
+For information about how to use the plugin or API within the plugin, please refer to the [Wiki](https://github.com/Rosewood-Development/PlayerParticles/wiki).
 
-For information about how to use the plugin or API within the plugin, please refer to the [Wiki](https://github.com/Rosewood-Development/PlayerParticles/wiki)
+### Support
+If there's anything we left out, you have a question, you want to report a bug, or anything else, please [join our Discord server](https://discord.gg/MgUsTBK).  We offer any and all support in our server.
 
-### Server Compatibility 
-This plugin is compatible with [Spigot](https://www.spigotmc.org/) and any forks, I recommend using [Paper](https://papermc.io/). 
-Using CraftBukkit will not work. 
-The versions of Minecraft that are currently supported are `1.7.10-1.19` and newer.
+### Server Compatibility
+PlayerParticles is compatible with Spigot and any forks. We recommend using [Paper](https://papermc.io/) to run your server.  CraftBukkit servers will not be compatible with the plugin.
 
-### Compilation
-
-PlayerParticles uses Gradle to compile and build the plugin. Run `./gradlew build` in the project's root directory to build the jar.
-The plugin jar will be located in `./build/libs` when finished.
+We support Minecraft versions **1.7.10-1.21** and newer running **Java 8** or newer.
 
 ### Development Builds
 
-You can find the latest stable development builds of this plugin [here](https://jenkins.rosewooddev.io/job/Rosewood%20Development/job/PlayerParticles/lastStableBuild/).
+You can find the latest development build of the plugin [here](https://jenkins.rosewooddev.io/job/Rosewood%20Development/job/PlayerParticles/lastStableBuild/).

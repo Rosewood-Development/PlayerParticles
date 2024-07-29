@@ -1,6 +1,5 @@
 package dev.esophose.playerparticles.manager;
 
-import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.hook.WorldGuardHook;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.particles.FixedParticleEffect;
@@ -13,6 +12,8 @@ import dev.esophose.playerparticles.particles.data.NoteColor;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.styles.DefaultStyles;
 import dev.esophose.playerparticles.util.ParticleUtils;
+import dev.rosewood.rosegarden.RosePlugin;
+import dev.rosewood.rosegarden.manager.Manager;
 import java.awt.Color;
 import java.util.Collections;
 import java.util.Iterator;
@@ -21,9 +22,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-
-import dev.rosewood.rosegarden.RosePlugin;
-import dev.rosewood.rosegarden.manager.Manager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -196,7 +194,7 @@ public class ParticleManager extends Manager implements Listener, Runnable {
 
             // Don't show their particles if they are invisible
             // Don't spawn particles if the world doesn't allow it
-            if (player != null && ParticleUtils.isPlayerVisible(player) && permissionManager.isWorldEnabled(player.getWorld().getName()))
+            if (player != null && !ParticleUtils.isPlayerInvisible(player) && permissionManager.isWorldEnabled(player.getWorld().getName()))
                 for (ParticlePair particles : pplayer.getActiveParticles())
                     this.displayParticles(pplayer, particles, player.getEyeLocation().add(0, -0.6, 0));
             
@@ -317,7 +315,7 @@ public class ParticleManager extends Manager implements Listener, Runnable {
                 player = pplayer.getPlayer();
             }
 
-            if ((player != null && !ParticleUtils.isPlayerVisible(player)) || !permissionManager.isWorldEnabled(world.getName()))
+            if ((player != null && ParticleUtils.isPlayerInvisible(player)) || !permissionManager.isWorldEnabled(world.getName()))
                 return;
         }
 
