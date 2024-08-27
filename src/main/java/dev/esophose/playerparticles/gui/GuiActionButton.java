@@ -1,13 +1,12 @@
 package dev.esophose.playerparticles.gui;
 
+import com.google.common.collect.ImmutableMultimap;
 import dev.esophose.playerparticles.gui.GuiInventoryEditData.ColorData;
-import dev.esophose.playerparticles.hook.PlaceholderAPIHook;
 import dev.esophose.playerparticles.particles.PPlayer;
-
+import dev.rosewood.rosegarden.hook.PlaceholderAPIHook;
+import dev.rosewood.rosegarden.utils.NMSUtil;
 import java.util.ArrayList;
 import java.util.List;
-
-import dev.rosewood.rosegarden.utils.NMSUtil;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
@@ -17,12 +16,13 @@ import org.bukkit.material.Dye;
 
 public class GuiActionButton {
 
-    private int slot;
+    private final int slot;
     private ItemStack itemStack;
     private Material[] icons;
     private ColorData[] colors;
     private String name;
     private String[] lore;
+    private Integer customModelData;
     private GuiActionButtonClickCallback onClick;
     private int iconIndex;
 
@@ -38,10 +38,10 @@ public class GuiActionButton {
         this.itemStack = itemStack;
         this.onClick = onClick;
     }
-    
+
     /**
      * Constructor for creating animated icons
-     * 
+     *
      * @param slot The slot ID of the inventory
      * @param icons The Materials that this icon will cycle through
      * @param name The name that this icon will use
@@ -68,6 +68,21 @@ public class GuiActionButton {
      */
     public GuiActionButton(int slot, Material icon, String name, String[] lore, GuiActionButtonClickCallback onClick) {
         this(slot, new Material[] { icon }, name, lore, onClick);
+    }
+
+    /**
+     * Constructor for creating non-animated icons with custom model data
+     *
+     * @param slot The slot ID of the inventory
+     * @param icon The Material that this icon will use
+     * @param name The name that this icon will use
+     * @param lore The lore of this icon
+     * @param customModelData The custom model data to apply to the item, nullable
+     * @param onClick The callback to execute when this button is clicked
+     */
+    public GuiActionButton(int slot, Material icon, String name, String[] lore, Integer customModelData, GuiActionButtonClickCallback onClick) {
+        this(slot, new Material[] { icon }, name, lore, onClick);
+        this.customModelData = customModelData;
     }
     
     /**
@@ -137,8 +152,12 @@ public class GuiActionButton {
         if (itemMeta != null) {
             itemMeta.setDisplayName(PlaceholderAPIHook.applyPlaceholders(pplayer.getPlayer(), this.name));
             itemMeta.setLore(parseLore(pplayer, this.lore));
-            if (NMSUtil.getVersionNumber() > 7)
+            if (this.customModelData != null) itemMeta.setCustomModelData(this.customModelData);
+            if (NMSUtil.getVersionNumber() > 7) {
                 itemMeta.addItemFlags(ItemFlag.values());
+                if (NMSUtil.getVersionNumber() >= 21)
+                    itemMeta.setAttributeModifiers(ImmutableMultimap.of());
+            }
             itemStack.setItemMeta(itemMeta);
         }
         

@@ -572,7 +572,7 @@ public class GuiInventoryEditData extends GuiInventory {
     /**
      * A data class used for storing information about the color data
      */
-    protected static class ColorData {
+    public static class ColorData {
         private final DyeColor dyeColor;
         private final Material material;
         private final OrdinaryColor ordinaryColor;

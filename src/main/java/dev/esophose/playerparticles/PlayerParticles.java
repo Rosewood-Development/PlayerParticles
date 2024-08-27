@@ -8,7 +8,6 @@ package dev.esophose.playerparticles;
 
 import dev.esophose.playerparticles.gui.hook.PlayerChatHook;
 import dev.esophose.playerparticles.hook.ParticlePlaceholderExpansion;
-import dev.esophose.playerparticles.hook.PlaceholderAPIHook;
 import dev.esophose.playerparticles.hook.WorldGuardHook;
 import dev.esophose.playerparticles.manager.CommandManager;
 import dev.esophose.playerparticles.manager.ConfigurationManager;
@@ -21,13 +20,11 @@ import dev.esophose.playerparticles.manager.ParticleStyleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.particles.listener.PPlayerCombatListener;
 import dev.esophose.playerparticles.particles.listener.PPlayerMovementListener;
-
+import dev.rosewood.rosegarden.RosePlugin;
+import dev.rosewood.rosegarden.hook.PlaceholderAPIHook;
+import dev.rosewood.rosegarden.manager.Manager;
 import java.util.Arrays;
 import java.util.List;
-
-import dev.rosewood.rosegarden.RosePlugin;
-import dev.rosewood.rosegarden.manager.Manager;
-import dev.rosewood.rosegarden.utils.NMSUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 

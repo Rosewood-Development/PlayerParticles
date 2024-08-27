@@ -23,15 +23,14 @@ import dev.esophose.playerparticles.command.ToggleCommandModule;
 import dev.esophose.playerparticles.command.UseCommandModule;
 import dev.esophose.playerparticles.command.VersionCommandModule;
 import dev.esophose.playerparticles.command.WorldsCommandModule;
-import dev.esophose.playerparticles.hook.PlaceholderAPIHook;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.util.ParticleUtils;
+import dev.rosewood.rosegarden.RosePlugin;
+import dev.rosewood.rosegarden.hook.PlaceholderAPIHook;
+import dev.rosewood.rosegarden.manager.Manager;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import dev.rosewood.rosegarden.RosePlugin;
-import dev.rosewood.rosegarden.manager.Manager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.BlockCommandSender;

@@ -97,6 +97,7 @@ public class ParticleGroupPresetManager extends Manager {
                         List<String> lore = new ArrayList<>();
                         String permission = "";
                         boolean allowPermissionOverride = false;
+                        Integer customModelData = null;
                         ConfigurationSection groupSection = presetsSection.getConfigurationSection(groupName);
 
                         Set<String> particleKeys = groupSection.getKeys(false);
@@ -129,6 +130,11 @@ public class ParticleGroupPresetManager extends Manager {
 
                             if (stringId.equalsIgnoreCase("allow-permission-override")) {
                                 allowPermissionOverride = groupSection.getBoolean(stringId);
+                                continue;
+                            }
+
+                            if (stringId.equalsIgnoreCase("custom-model-data")) {
+                                customModelData = groupSection.getInt(stringId);
                                 continue;
                             }
 
@@ -206,7 +212,7 @@ public class ParticleGroupPresetManager extends Manager {
                             particles.put(id, new ParticlePair(null, id, effect, style, itemData, blockData, colorData, noteColorData, colorTransitionData, vibrationData));
                         }
 
-                        presets.add(new ParticleGroupPreset(displayName, guiIcon, guiSlot, lore, permission, allowPermissionOverride, new ParticleGroup(groupName, particles)));
+                        presets.add(new ParticleGroupPreset(displayName, guiIcon, guiSlot, lore, permission, allowPermissionOverride, new ParticleGroup(groupName, particles), customModelData));
                     }
                 }
 

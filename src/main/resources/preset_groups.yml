@@ -21,7 +21,8 @@
 # lore: Extra text that will appear on the preset group button.
 # permission: The permission that the player must have to see this group, may be left blank as ''. The player must still have permission for all effects/styles within the group in order to use it.
 # allow-permission-override: Allow the player to see and apply the group even if they don't have access to all the effects/styles within it. This does nothing if the permission is set to ''. 
-# 1 (or any positive whole number n): The particle ID. You may have as many of these as you want, they must contain an effect, style, and data property below them. 
+# custom-model-data: The custom model data to set on the gui-icon.
+# 1 (or any positive whole number n): The particle ID. You may have as many of these as you want, they must contain an effect, style, and data property below them.
 # effect: The effect that the particle will have.
 # style: The style that the particle will have.
 # data: The data that the particle will have.

@@ -16,8 +16,9 @@ public class ParticleGroupPreset {
     private final String permission;
     private final boolean allowPermissionOverride;
     private final ParticleGroup group;
+    private final Integer customModelData;
     
-    public ParticleGroupPreset(String displayName, Material guiIcon, int guiSlot, List<String> lore, String permission, boolean allowPermissionOverride, ParticleGroup group) {
+    public ParticleGroupPreset(String displayName, Material guiIcon, int guiSlot, List<String> lore, String permission, boolean allowPermissionOverride, ParticleGroup group, Integer customModelData) {
         this.displayName = displayName;
         this.guiIcon = guiIcon;
         this.guiSlot = guiSlot;
@@ -25,6 +26,7 @@ public class ParticleGroupPreset {
         this.permission = permission;
         this.allowPermissionOverride = allowPermissionOverride;
         this.group = group;
+        this.customModelData = customModelData;
     }
     
     /**
@@ -88,6 +90,15 @@ public class ParticleGroupPreset {
      */
     public ParticleGroup getGroup() {
         return this.group;
+    }
+
+    /**
+     * Gets the custom model data for displaying this preset in the GUI
+     *
+     * @return the custom model data to set for the GUI item, or null if none
+     */
+    public Integer getCustomModelData() {
+        return this.customModelData;
     }
 
 }

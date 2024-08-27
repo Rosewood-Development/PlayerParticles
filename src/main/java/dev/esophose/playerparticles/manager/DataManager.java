@@ -1,6 +1,5 @@
 package dev.esophose.playerparticles.manager;
 
-import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.database.migrations._1_InitialMigration;
 import dev.esophose.playerparticles.database.migrations._2_Add_Data_Columns;
 import dev.esophose.playerparticles.database.migrations._3_Add_Setting_Toggle_Self_Column;
@@ -17,6 +16,10 @@ import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.particles.data.Vibration;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import dev.esophose.playerparticles.util.ParticleUtils;
+import dev.rosewood.rosegarden.RosePlugin;
+import dev.rosewood.rosegarden.database.DataMigration;
+import dev.rosewood.rosegarden.database.SQLiteConnector;
+import dev.rosewood.rosegarden.manager.AbstractDataManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Arrays;
@@ -27,11 +30,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
-
-import dev.rosewood.rosegarden.RosePlugin;
-import dev.rosewood.rosegarden.database.DataMigration;
-import dev.rosewood.rosegarden.database.SQLiteConnector;
-import dev.rosewood.rosegarden.manager.AbstractDataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -429,7 +427,6 @@ public class DataManager extends AbstractDataManager {
      */
     public void resetActiveParticleGroup(String playerName, Consumer<Boolean> callback) {
         this.async(() -> this.databaseConnector.connect((connection) -> {
-            @SuppressWarnings("deprecation")
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerName);
 
             String query = "DELETE FROM " + this.getTablePrefix() + "particle WHERE group_uuid IN (SELECT uuid FROM " + this.getTablePrefix() + "group WHERE owner_uuid = ? AND name = ?)";
