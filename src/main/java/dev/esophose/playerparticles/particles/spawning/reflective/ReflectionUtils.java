@@ -485,7 +485,7 @@ public final class ReflectionUtils {
      * @author DarkBlade12
      * @since 1.0
      */
-    public enum DataType {
+    private enum DataType {
         BYTE(byte.class, Byte.class), SHORT(short.class, Short.class), INTEGER(int.class, Integer.class), LONG(long.class, Long.class), CHARACTER(char.class, Character.class), FLOAT(float.class, Float.class), DOUBLE(double.class, Double.class), BOOLEAN(boolean.class, Boolean.class);
 
         private static final Map<Class<?>, DataType> CLASS_MAP = new HashMap<Class<?>, DataType>();

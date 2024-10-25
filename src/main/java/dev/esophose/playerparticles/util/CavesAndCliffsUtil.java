@@ -19,7 +19,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class CavesAndCliffsUtil {
 
     public static void spawnParticles(ParticleEffect particleEffect, Vibration vibration, double offsetX, double offsetY, double offsetZ, int amount, Location center, boolean isLongRange, Player owner) {
-        if (!particleEffect.hasProperty(ParticleEffect.ParticleProperty.VIBRATION))
+        if (particleEffect.getDataType() != ParticleEffect.ParticleDataType.VIBRATION)
             throw new ParticleSpawner.ParticleDataException("This particle effect does not require additional data");
 
         org.bukkit.Vibration data = vibration.getVibration() != null ? vibration.getVibration() : new org.bukkit.Vibration(center, new org.bukkit.Vibration.Destination.BlockDestination(center), vibration.getDuration());

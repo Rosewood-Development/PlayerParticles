@@ -7,7 +7,6 @@ import dev.esophose.playerparticles.manager.GuiManager;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
-import dev.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.particles.data.ColorTransition;
 import dev.esophose.playerparticles.particles.data.NoteColor;
@@ -131,23 +130,27 @@ public class GuiInventoryEditData extends GuiInventory {
 
         this.fillBorder(BorderColor.getOrDefault(Setting.GUI_GLASS_COLORS_EDIT_DATA.getString(), BorderColor.MAGENTA));
 
-        ParticleEffect pe = editingParticle.getEffect();
-        if (pe.hasProperty(ParticleProperty.COLORABLE)) {
-            if (pe == ParticleEffect.NOTE) { // Note data
-                this.populateNoteData(editingParticle, pageNumber, callbackList, callbackListPosition);
-            } else { // Color data
-                this.populateColorData(editingParticle, callbackList, callbackListPosition);
-            }
-        } else if (pe.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-            if (pe == ParticleEffect.ITEM) { // Item data
-                this.populateItemData(editingParticle, pageNumber, callbackList, callbackListPosition);
-            } else { // Block data
+        ParticleEffect effect = editingParticle.getEffect();
+        switch (effect.getDataType()) {
+            case COLORABLE:
+                if (effect == ParticleEffect.NOTE) { // Note data
+                    this.populateNoteData(editingParticle, pageNumber, callbackList, callbackListPosition);
+                } else { // Color data
+                    this.populateColorData(editingParticle, callbackList, callbackListPosition);
+                }
+                break;
+            case BLOCK:
                 this.populateBlockData(editingParticle, pageNumber, callbackList, callbackListPosition);
-            }
-        } else if (pe.hasProperty(ParticleProperty.COLORABLE_TRANSITION)) {
-            this.populateColorTransitionData(editingParticle, callbackList, callbackListPosition, startColor);
-        } else if (pe.hasProperty(ParticleProperty.VIBRATION)) {
-            this.populateVibrationData(editingParticle, callbackList, callbackListPosition);
+                break;
+            case ITEM:
+                this.populateItemData(editingParticle, pageNumber, callbackList, callbackListPosition);
+                break;
+            case COLORABLE_TRANSITION:
+                this.populateColorTransitionData(editingParticle, callbackList, callbackListPosition, startColor);
+                break;
+            case VIBRATION:
+                this.populateVibrationData(editingParticle, callbackList, callbackListPosition);
+                break;
         }
 
         // Back Button

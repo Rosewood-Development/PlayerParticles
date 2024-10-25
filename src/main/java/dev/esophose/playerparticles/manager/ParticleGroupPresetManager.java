@@ -1,13 +1,9 @@
 package dev.esophose.playerparticles.manager;
 
 import dev.esophose.playerparticles.PlayerParticles;
-import dev.rosewood.rosegarden.RosePlugin;
-import dev.rosewood.rosegarden.config.CommentedConfigurationSection;
-import dev.rosewood.rosegarden.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.gui.GuiInventory.BorderColor;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
-import dev.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
 import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.particles.data.ColorTransition;
@@ -18,6 +14,11 @@ import dev.esophose.playerparticles.particles.preset.ParticleGroupPreset;
 import dev.esophose.playerparticles.particles.preset.ParticleGroupPresetPage;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import dev.esophose.playerparticles.util.inputparser.InputParser;
+import dev.rosewood.rosegarden.RosePlugin;
+import dev.rosewood.rosegarden.config.CommentedConfigurationSection;
+import dev.rosewood.rosegarden.config.CommentedFileConfiguration;
+import dev.rosewood.rosegarden.manager.Manager;
+import dev.rosewood.rosegarden.utils.HexUtils;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,9 +34,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import dev.rosewood.rosegarden.manager.Manager;
-import dev.rosewood.rosegarden.utils.HexUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -166,46 +164,50 @@ public class ParticleGroupPresetManager extends Manager {
                                 String[] args = dataString.split(" ");
                                 InputParser inputParser = new InputParser(null, args);
 
-                                if (effect.hasProperty(ParticleProperty.COLORABLE)) {
-                                    if (effect == ParticleEffect.NOTE) {
-                                        noteColorData = inputParser.next(NoteColor.class);
-                                        if (noteColorData == null) {
-                                            PlayerParticles.getInstance().getLogger().severe("Invalid note: '" + dataString + "'!");
-                                            continue;
+                                switch (effect.getDataType()) {
+                                    case COLORABLE:
+                                        if (effect == ParticleEffect.NOTE) {
+                                            noteColorData = inputParser.next(NoteColor.class);
+                                            if (noteColorData == null) {
+                                                PlayerParticles.getInstance().getLogger().severe("Invalid note: '" + dataString + "'!");
+                                                continue;
+                                            }
+                                        } else {
+                                            colorData = inputParser.next(OrdinaryColor.class);
+                                            if (colorData == null) {
+                                                PlayerParticles.getInstance().getLogger().severe("Invalid color: '" + dataString + "'!");
+                                                continue;
+                                            }
                                         }
-                                    } else {
-                                        colorData = inputParser.next(OrdinaryColor.class);
-                                        if (colorData == null) {
-                                            PlayerParticles.getInstance().getLogger().severe("Invalid color: '" + dataString + "'!");
-                                            continue;
-                                        }
-                                    }
-                                } else if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-                                    if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST || effect == ParticleEffect.BLOCK_MARKER || effect == ParticleEffect.DUST_PILLAR) {
+                                        break;
+                                    case BLOCK:
                                         blockData = inputParser.next(Material.class);
                                         if (blockData == null || !blockData.isBlock()) {
                                             PlayerParticles.getInstance().getLogger().severe("Invalid block: '" + dataString + "'!");
                                             continue;
                                         }
-                                    } else if (effect == ParticleEffect.ITEM) {
+                                        break;
+                                    case ITEM:
                                         itemData = inputParser.next(Material.class);
                                         if (itemData == null || itemData.isBlock()) {
                                             PlayerParticles.getInstance().getLogger().severe("Invalid item: '" + dataString + "'!");
                                             continue;
                                         }
-                                    }
-                                } else if (effect.hasProperty(ParticleProperty.COLORABLE_TRANSITION)) {
-                                    colorTransitionData = inputParser.next(ColorTransition.class);
-                                    if (colorTransitionData == null) {
-                                        PlayerParticles.getInstance().getLogger().severe("Invalid color transition: '" + dataString + "'!");
-                                        return;
-                                    }
-                                } else if (effect.hasProperty(ParticleProperty.VIBRATION)) {
-                                    vibrationData = inputParser.next(Vibration.class);
-                                    if (vibrationData == null) {
-                                        PlayerParticles.getInstance().getLogger().severe("Invalid vibration: '" + dataString + "'!");
-                                        return;
-                                    }
+                                        break;
+                                    case COLORABLE_TRANSITION:
+                                        colorTransitionData = inputParser.next(ColorTransition.class);
+                                        if (colorTransitionData == null) {
+                                            PlayerParticles.getInstance().getLogger().severe("Invalid color transition: '" + dataString + "'!");
+                                            return;
+                                        }
+                                        break;
+                                    case VIBRATION:
+                                        vibrationData = inputParser.next(Vibration.class);
+                                        if (vibrationData == null) {
+                                            PlayerParticles.getInstance().getLogger().severe("Invalid vibration: '" + dataString + "'!");
+                                            return;
+                                        }
+                                        break;
                                 }
                             }
 

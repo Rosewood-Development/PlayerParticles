@@ -5,7 +5,6 @@ import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
-import dev.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,24 +23,29 @@ public class DataCommandModule implements CommandModule {
                 return;
             }
 
-            if (effect.hasProperty(ParticleProperty.COLORABLE)) {
-                if (effect == ParticleEffect.NOTE) {
-                    localeManager.sendMessage(pplayer, "data-usage-note", StringPlaceholders.of("effect", effect.getName()));
-                } else {
-                    localeManager.sendMessage(pplayer, "data-usage-color", StringPlaceholders.of("effect", effect.getName()));
-                }
-            } else if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-                if (effect == ParticleEffect.ITEM) {
-                    localeManager.sendMessage(pplayer, "data-usage-item", StringPlaceholders.of("effect", effect.getName()));
-                } else {
+            switch (effect.getDataType()) {
+                case COLORABLE:
+                    if (effect == ParticleEffect.NOTE) {
+                        localeManager.sendMessage(pplayer, "data-usage-note", StringPlaceholders.of("effect", effect.getName()));
+                    } else {
+                        localeManager.sendMessage(pplayer, "data-usage-color", StringPlaceholders.of("effect", effect.getName()));
+                    }
+                    break;
+                case BLOCK:
                     localeManager.sendMessage(pplayer, "data-usage-block", StringPlaceholders.of("effect", effect.getName()));
-                }
-            } else if (effect.hasProperty(ParticleProperty.COLORABLE_TRANSITION)) {
-                localeManager.sendMessage(pplayer, "data-usage-color-transition", StringPlaceholders.of("effect", effect.getName()));
-            } else if (effect.hasProperty(ParticleProperty.VIBRATION)) {
-                localeManager.sendMessage(pplayer, "data-usage-vibration", StringPlaceholders.of("effect", effect.getName()));
-            } else {
-                localeManager.sendMessage(pplayer, "data-usage-none", StringPlaceholders.of("effect", effect.getName()));
+                    break;
+                case ITEM:
+                    localeManager.sendMessage(pplayer, "data-usage-item", StringPlaceholders.of("effect", effect.getName()));
+                    break;
+                case COLORABLE_TRANSITION:
+                    localeManager.sendMessage(pplayer, "data-usage-color-transition", StringPlaceholders.of("effect", effect.getName()));
+                    break;
+                case VIBRATION:
+                    localeManager.sendMessage(pplayer, "data-usage-vibration", StringPlaceholders.of("effect", effect.getName()));
+                    break;
+                default:
+                    localeManager.sendMessage(pplayer, "data-usage-none", StringPlaceholders.of("effect", effect.getName()));
+                    break;
             }
         } else {
             localeManager.sendMessage(pplayer, "data-no-args");

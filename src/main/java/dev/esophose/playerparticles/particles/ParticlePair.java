@@ -4,7 +4,7 @@ import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.ParticleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
-import dev.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
+import dev.esophose.playerparticles.particles.ParticleEffect.ParticleDataType;
 import dev.esophose.playerparticles.particles.data.ColorTransition;
 import dev.esophose.playerparticles.particles.data.NoteColor;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
@@ -271,28 +271,25 @@ public class ParticlePair {
      * @return The ParticleColor the current particle effect will spawn with
      */
     public ParticleColor getSpawnColor() {
+        if (this.effect.getDataType() != ParticleDataType.COLORABLE)
+            return null;
+
         ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
-
-        if (this.effect.hasProperty(ParticleProperty.COLORABLE)) {
-            if (this.effect == ParticleEffect.NOTE) {
-                if (this.noteColor.equals(NoteColor.RAINBOW)) {
-                    return particleManager.getRainbowNoteParticleColor();
-                } else if (this.noteColor.equals(NoteColor.RANDOM)) {
-                    return particleManager.getRandomNoteParticleColor();
-                }
-                return this.noteColor;
-            } else {
-                if (this.color.equals(OrdinaryColor.RAINBOW)) {
-                    return particleManager.getRainbowParticleColor();
-                } else if (this.color.equals(OrdinaryColor.RANDOM)) {
-                    return particleManager.getRandomParticleColor();
-                } else {
-                    return this.color;
-                }
+        if (this.effect == ParticleEffect.NOTE) {
+            if (this.noteColor.equals(NoteColor.RAINBOW)) {
+                return particleManager.getRainbowNoteParticleColor();
+            } else if (this.noteColor.equals(NoteColor.RANDOM)) {
+                return particleManager.getRandomNoteParticleColor();
             }
+            return this.noteColor;
+        } else {
+            if (this.color.equals(OrdinaryColor.RAINBOW)) {
+                return particleManager.getRainbowParticleColor();
+            } else if (this.color.equals(OrdinaryColor.RANDOM)) {
+                return particleManager.getRandomParticleColor();
+            }
+            return this.color;
         }
-
-        return null;
     }
 
     /**
@@ -301,30 +298,28 @@ public class ParticlePair {
      * @return The ColorTransition the current particle effect will spawn with
      */
     public ColorTransition getSpawnColorTransition() {
+        if (this.effect.getDataType() != ParticleDataType.COLORABLE_TRANSITION)
+            return null;
+
         ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
-
-        if (this.effect.hasProperty(ParticleProperty.COLORABLE_TRANSITION)) {
-            OrdinaryColor startColor, endColor;
-            if (this.colorTransition.getStartColor().equals(OrdinaryColor.RAINBOW)) {
-                startColor = particleManager.getRainbowParticleColor();
-            } else if (this.colorTransition.getStartColor().equals(OrdinaryColor.RANDOM)) {
-                startColor = particleManager.getRandomParticleColor();
-            } else {
-                startColor = this.colorTransition.getStartColor();
-            }
-
-            if (this.colorTransition.getEndColor().equals(OrdinaryColor.RAINBOW)) {
-                endColor = particleManager.getShiftedRainbowParticleColor();
-            } else if (this.colorTransition.getEndColor().equals(OrdinaryColor.RANDOM)) {
-                endColor = particleManager.getRandomParticleColor();
-            } else {
-                endColor = this.colorTransition.getEndColor();
-            }
-
-            return new ColorTransition(startColor, endColor);
+        OrdinaryColor startColor, endColor;
+        if (this.colorTransition.getStartColor().equals(OrdinaryColor.RAINBOW)) {
+            startColor = particleManager.getRainbowParticleColor();
+        } else if (this.colorTransition.getStartColor().equals(OrdinaryColor.RANDOM)) {
+            startColor = particleManager.getRandomParticleColor();
+        } else {
+            startColor = this.colorTransition.getStartColor();
         }
 
-        return null;
+        if (this.colorTransition.getEndColor().equals(OrdinaryColor.RAINBOW)) {
+            endColor = particleManager.getShiftedRainbowParticleColor();
+        } else if (this.colorTransition.getEndColor().equals(OrdinaryColor.RANDOM)) {
+            endColor = particleManager.getRandomParticleColor();
+        } else {
+            endColor = this.colorTransition.getEndColor();
+        }
+
+        return new ColorTransition(startColor, endColor);
     }
 
     /**
@@ -333,12 +328,10 @@ public class ParticlePair {
      * @return The Material the current particle effect requires
      */
     public Material getSpawnMaterial() {
-        if (this.effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-            if (this.effect == ParticleEffect.ITEM) {
-                return this.itemMaterial;
-            } else {
-                return this.blockMaterial;
-            }
+        if (this.effect.getDataType() == ParticleDataType.BLOCK) {
+            return this.blockMaterial;
+        } else if (this.effect.getDataType() == ParticleDataType.ITEM) {
+            return this.itemMaterial;
         }
         return null;
     }
@@ -350,48 +343,51 @@ public class ParticlePair {
      */
     public String getDataString() {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
-        if (this.effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-            return this.getSpawnMaterial().toString().toLowerCase();
-        } else if (this.effect.hasProperty(ParticleProperty.COLORABLE)) {
-            if (this.effect == ParticleEffect.NOTE) {
-                if (this.noteColor.equals(NoteColor.RAINBOW)) {
-                    return localeManager.getLocaleMessage("rainbow");
-                } else if (this.noteColor.equals(NoteColor.RANDOM)) {
-                    return localeManager.getLocaleMessage("random");
-                }
-                return localeManager.getLocaleMessage("gui-select-data-note", StringPlaceholders.of("note", this.noteColor.getNote()));
-            } else {
-                if (this.color.equals(OrdinaryColor.RAINBOW)) {
-                    return localeManager.getLocaleMessage("rainbow");
-                } else if (this.color.equals(OrdinaryColor.RANDOM)) {
-                    return localeManager.getLocaleMessage("random");
+        switch (this.effect.getDataType()) {
+            case BLOCK:
+            case ITEM:
+                return this.getSpawnMaterial().toString().toLowerCase();
+            case COLORABLE:
+                if (this.effect == ParticleEffect.NOTE) {
+                    if (this.noteColor.equals(NoteColor.RAINBOW)) {
+                        return localeManager.getLocaleMessage("rainbow");
+                    } else if (this.noteColor.equals(NoteColor.RANDOM)) {
+                        return localeManager.getLocaleMessage("random");
+                    }
+                    return localeManager.getLocaleMessage("gui-select-data-note", StringPlaceholders.of("note", this.noteColor.getNote()));
                 } else {
-                    return ChatColor.AQUA + "#" + ChatColor.AQUA + ParticleUtils.rgbToHex(this.color.getRed(), this.color.getGreen(), this.color.getBlue());
+                    if (this.color.equals(OrdinaryColor.RAINBOW)) {
+                        return localeManager.getLocaleMessage("rainbow");
+                    } else if (this.color.equals(OrdinaryColor.RANDOM)) {
+                        return localeManager.getLocaleMessage("random");
+                    } else {
+                        return ChatColor.AQUA + "#" + ChatColor.AQUA + ParticleUtils.rgbToHex(this.color.getRed(), this.color.getGreen(), this.color.getBlue());
+                    }
                 }
-            }
-        } else if (this.effect.hasProperty(ParticleProperty.COLORABLE_TRANSITION)) {
-            String start, end;
-            if (this.colorTransition.getStartColor().equals(OrdinaryColor.RAINBOW)) {
-                start = localeManager.getLocaleMessage("rainbow");
-            } else if (this.colorTransition.getStartColor().equals(OrdinaryColor.RANDOM)) {
-                start = localeManager.getLocaleMessage("random");
-            } else {
-                start = "#" + ChatColor.AQUA + ParticleUtils.rgbToHex(this.colorTransition.getStartColor().getRed(), this.colorTransition.getStartColor().getGreen(), this.colorTransition.getStartColor().getBlue());
-            }
+            case COLORABLE_TRANSITION:
+                String start, end;
+                if (this.colorTransition.getStartColor().equals(OrdinaryColor.RAINBOW)) {
+                    start = localeManager.getLocaleMessage("rainbow");
+                } else if (this.colorTransition.getStartColor().equals(OrdinaryColor.RANDOM)) {
+                    start = localeManager.getLocaleMessage("random");
+                } else {
+                    start = "#" + ChatColor.AQUA + ParticleUtils.rgbToHex(this.colorTransition.getStartColor().getRed(), this.colorTransition.getStartColor().getGreen(), this.colorTransition.getStartColor().getBlue());
+                }
 
-            if (this.colorTransition.getEndColor().equals(OrdinaryColor.RAINBOW)) {
-                end = localeManager.getLocaleMessage("rainbow");
-            } else if (this.colorTransition.getEndColor().equals(OrdinaryColor.RANDOM)) {
-                end = localeManager.getLocaleMessage("random");
-            } else {
-                end = "#" + ChatColor.AQUA + ParticleUtils.rgbToHex(this.colorTransition.getEndColor().getRed(), this.colorTransition.getEndColor().getGreen(), this.colorTransition.getEndColor().getBlue());
-            }
+                if (this.colorTransition.getEndColor().equals(OrdinaryColor.RAINBOW)) {
+                    end = localeManager.getLocaleMessage("rainbow");
+                } else if (this.colorTransition.getEndColor().equals(OrdinaryColor.RANDOM)) {
+                    end = localeManager.getLocaleMessage("random");
+                } else {
+                    end = "#" + ChatColor.AQUA + ParticleUtils.rgbToHex(this.colorTransition.getEndColor().getRed(), this.colorTransition.getEndColor().getGreen(), this.colorTransition.getEndColor().getBlue());
+                }
 
-            return ChatColor.AQUA + start + " " + ChatColor.AQUA + end;
-        } else if (this.effect.hasProperty(ParticleProperty.VIBRATION)) {
-            return String.valueOf(this.vibration.getDuration());
+                return ChatColor.AQUA + start + " " + ChatColor.AQUA + end;
+            case VIBRATION:
+                return String.valueOf(this.vibration.getDuration());
+            default:
+                return localeManager.getLocaleMessage("gui-data-none");
         }
-        return localeManager.getLocaleMessage("gui-data-none");
     }
 
     /**

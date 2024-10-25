@@ -30,12 +30,13 @@ import org.bukkit.entity.Player;
 public enum ParticleEffect {
 
     // Ordered and named by their Minecraft 1.13+ internal names
-    AMBIENT_ENTITY_EFFECT("SPELL_MOB_AMBIENT", Collections.singletonList("BEACON"), ParticleProperty.COLORABLE), // Removed in 1.20.5
+    AMBIENT_ENTITY_EFFECT("SPELL_MOB_AMBIENT", Collections.singletonList("BEACON"), ParticleDataType.COLORABLE), // Removed in 1.20.5
     ANGRY_VILLAGER("VILLAGER_ANGRY", Collections.singletonList("IRON_DOOR")),
     ASH("ASH", Collections.singletonList("BLACKSTONE")),
     BARRIER("BARRIER", Collections.singletonList("BARRIER")), // Removed in 1.18 and replaced with BLOCK_MARKER
-    BLOCK("BLOCK_CRACK", Collections.singletonList("STONE"), ParticleProperty.REQUIRES_MATERIAL_DATA),
-    BLOCK_MARKER("BLOCK_MARKER", Collections.singletonList("LIGHT"), ParticleProperty.REQUIRES_MATERIAL_DATA),
+    BLOCK("BLOCK_CRACK", Collections.singletonList("STONE"), ParticleDataType.BLOCK),
+    BLOCK_CRUMBLE("BLOCK_CRUMBLE", Arrays.asList("COOKIE", "CREAKING_HEART"), ParticleDataType.BLOCK),
+    BLOCK_MARKER("BLOCK_MARKER", Collections.singletonList("LIGHT"), ParticleDataType.BLOCK),
     BUBBLE("WATER_BUBBLE", Arrays.asList("BUBBLE_CORAL", "GLASS")),
     BUBBLE_COLUMN_UP("BUBBLE_COLUMN_UP", Collections.singletonList("MAGMA_BLOCK")),
     BUBBLE_POP("BUBBLE_POP", Collections.singletonList("BUBBLE_CORAL_FAN")),
@@ -56,22 +57,22 @@ public enum ParticleEffect {
     DRIPPING_LAVA("DRIP_LAVA", Collections.singletonList("LAVA_BUCKET")),
     DRIPPING_OBSIDIAN_TEAR("DRIPPING_OBSIDIAN_TEAR", Collections.singletonList("CRYING_OBSIDIAN")),
     DRIPPING_WATER("DRIP_WATER", Collections.singletonList("WATER_BUCKET")),
-    DUST("REDSTONE", Collections.singletonList("REDSTONE"), ParticleProperty.COLORABLE),
-    DUST_COLOR_TRANSITION("DUST_COLOR_TRANSITION", Collections.singletonList("DEEPSLATE_REDSTONE_ORE"), ParticleProperty.COLORABLE_TRANSITION),
-    DUST_PILLAR("DUST_PILLAR", Collections.singletonList("CRACKED_STONE_BRICKS"), ParticleProperty.REQUIRES_MATERIAL_DATA),
+    DUST("REDSTONE", Collections.singletonList("REDSTONE"), ParticleDataType.COLORABLE),
+    DUST_COLOR_TRANSITION("DUST_COLOR_TRANSITION", Collections.singletonList("DEEPSLATE_REDSTONE_ORE"), ParticleDataType.COLORABLE_TRANSITION),
+    DUST_PILLAR("DUST_PILLAR", Collections.singletonList("CRACKED_STONE_BRICKS"), ParticleDataType.BLOCK),
     DUST_PLUME("DUST_PLUME", Collections.singletonList("BONE_MEAL")),
     EGG_CRACK("EGG_CRACK", Collections.singletonList("EGG")),
-    ELDER_GUARDIAN("MOB_APPEARANCE", Arrays.asList("ELDER_GUARDIAN_SPAWN_EGG", "PRISMARINE_CRYSTALS"), false), // No thank you
+    ELDER_GUARDIAN("MOB_APPEARANCE", Arrays.asList("ELDER_GUARDIAN_SPAWN_EGG", "PRISMARINE_CRYSTALS"), false, ParticleDataType.NONE), // No thank you
     ELECTRIC_SPARK("ELECTRIC_SPARK", Collections.singletonList("LIGHTNING_ROD")),
     ENCHANT("ENCHANTMENT_TABLE", Arrays.asList("ENCHANTING_TABLE", "ENCHANTMENT_TABLE")),
     ENCHANTED_HIT("CRIT_MAGIC", Collections.singletonList("DIAMOND_SWORD")),
     END_ROD("END_ROD", Collections.singletonList("END_ROD")),
-    ENTITY_EFFECT("SPELL_MOB", Collections.singletonList("GLOWSTONE_DUST"), ParticleProperty.COLORABLE),
+    ENTITY_EFFECT("SPELL_MOB", Collections.singletonList("GLOWSTONE_DUST"), ParticleDataType.COLORABLE),
     EXPLOSION("EXPLOSION_LARGE", Arrays.asList("FIRE_CHARGE", "FIREBALL")),
     EXPLOSION_EMITTER("EXPLOSION_HUGE", Collections.singletonList("TNT")),
     FALLING_DRIPSTONE_LAVA("FALLING_DRIPSTONE_LAVA", Collections.singletonList("SMOOTH_BASALT")),
     FALLING_DRIPSTONE_WATER("FALLING_DRIPSTONE_WATER", Collections.singletonList("CALCITE")),
-    FALLING_DUST("FALLING_DUST", Collections.singletonList("SAND"), ParticleProperty.REQUIRES_MATERIAL_DATA),
+    FALLING_DUST("FALLING_DUST", Collections.singletonList("SAND"), ParticleDataType.BLOCK),
     FALLING_HONEY("FALLING_HONEY", Collections.singletonList("HONEY_BOTTLE")),
     FALLING_LAVA("FALLING_LAVA", Collections.singletonList("RED_DYE")),
     FALLING_NECTAR("FALLING_NECTAR", Collections.singletonList("HONEYCOMB")),
@@ -81,7 +82,7 @@ public enum ParticleEffect {
     FIREWORK("FIREWORKS_SPARK", Arrays.asList("FIREWORK_ROCKET", "FIREWORK")),
     FISHING("WATER_WAKE", Collections.singletonList("FISHING_ROD")),
     FLAME("FLAME", Collections.singletonList("BLAZE_POWDER")),
-    FLASH("FLASH", Collections.singletonList("GOLD_INGOT"), false), // Also no thank you
+    FLASH("FLASH", Collections.singletonList("GOLD_INGOT"), false, ParticleDataType.NONE), // Also no thank you
     GLOW("GLOW", Collections.singletonList("GLOW_ITEM_FRAME")),
     GLOW_SQUID_INK("GLOW_SQUID_INK", Collections.singletonList("GLOW_INK_SAC")),
     GUST("GUST", Collections.singletonList("FLOW_ARMOR_TRIM_SMITHING_TEMPLATE")),
@@ -92,7 +93,7 @@ public enum ParticleEffect {
     HEART("HEART", Arrays.asList("POPPY", "RED_ROSE")),
     INFESTED("INFESTED", Collections.singletonList("INFESTED_MOSSY_STONE_BRICKS")),
     INSTANT_EFFECT("SPELL_INSTANT", Arrays.asList("SPLASH_POTION", "POTION")),
-    ITEM("ITEM_CRACK", Collections.singletonList("ITEM_FRAME"), ParticleProperty.REQUIRES_MATERIAL_DATA),
+    ITEM("ITEM_CRACK", Collections.singletonList("ITEM_FRAME"), ParticleDataType.ITEM),
     ITEM_COBWEB("ITEM_COBWEB", Arrays.asList("COBWEB", "WEB")),
     ITEM_SLIME("SLIME", Collections.singletonList("SLIME_BALL")),
     ITEM_SNOWBALL("SNOWBALL", Arrays.asList("SNOWBALL", "SNOW_BALL")),
@@ -104,7 +105,7 @@ public enum ParticleEffect {
     LIGHT("LIGHT", Collections.singletonList("LIGHT")), // Removed in 1.18 and replaced with BLOCK_MARKER
     MYCELIUM("TOWN_AURA", Arrays.asList("MYCELIUM", "MYCEL")),
     NAUTILUS("NAUTILUS", Collections.singletonList("HEART_OF_THE_SEA")),
-    NOTE("NOTE", Collections.singletonList("NOTE_BLOCK"), ParticleProperty.COLORABLE),
+    NOTE("NOTE", Collections.singletonList("NOTE_BLOCK"), ParticleDataType.COLORABLE),
     OMINOUS_SPAWNING("OMINOUS_SPAWNING", Collections.singletonList("TRIAL_SPAWNER")),
     POOF("EXPLOSION_NORMAL", Arrays.asList("FIREWORK_STAR", "FIREWORK_CHARGE")), // The 1.13 combination of explode and showshovel
     PORTAL("PORTAL", Collections.singletonList("OBSIDIAN")),
@@ -131,12 +132,13 @@ public enum ParticleEffect {
     SQUID_INK("SQUID_INK", Collections.singletonList("INK_SAC")),
     SWEEP_ATTACK("SWEEP_ATTACK", Arrays.asList("GOLDEN_SWORD", "GOLD_SWORD")),
     TOTEM_OF_UNDYING("TOTEM", Arrays.asList("TOTEM_OF_UNDYING", "TOTEM")),
+    TRAIL("TRAIL", Collections.singletonList("DIRT_PATH"), ParticleDataType.COLORABLE),
     TRIAL_OMEN("TRIAL_OMEN", Collections.singletonList("COPPER_BULB")),
     TRIAL_SPAWNER_DETECTION("TRIAL_SPAWNER_DETECTION", Collections.singletonList("TRIAL_KEY")),
     TRIAL_SPAWNER_DETECTION_OMINOUS("TRIAL_SPAWNER_DETECTION_OMINOUS", Collections.singletonList("OMINOUS_TRIAL_KEY")),
     UNDERWATER("SUSPENDED_DEPTH", Arrays.asList("TURTLE_HELMET", "SPONGE")),
     VAULT_CONNECTION("VAULT_CONNECTION", Collections.singletonList("VAULT")),
-    VIBRATION("VIBRATION", Collections.singletonList("SCULK_SENSOR"), false, ParticleProperty.VIBRATION),
+    VIBRATION("VIBRATION", Collections.singletonList("SCULK_SENSOR"), false, ParticleDataType.VIBRATION),
     WARPED_SPORE("WARPED_SPORE", Collections.singletonList("WARPED_FUNGUS")),
     WAX_OFF("WAX_OFF", Collections.singletonList("OXIDIZED_COPPER")),
     WAX_ON("WAX_ON", Collections.singletonList("WAXED_COPPER_BLOCK")),
@@ -146,40 +148,50 @@ public enum ParticleEffect {
     private final static ParticleSpawner particleSpawner = NMSUtil.getVersionNumber() >= 9 ? new SpigotParticleSpawner() : new ReflectiveParticleSpawner();
 
     private Particle internalEnum;
-    private List<ParticleProperty> properties;
+    private final ParticleDataType dataType;
     private boolean supported;
 
     private CommentedFileConfiguration config;
-    private boolean enabledByDefault;
-    private List<String> defaultIconMaterialNames;
+    private final boolean enabledByDefault;
+    private final List<String> defaultIconMaterialNames;
 
     private String effectName;
     private boolean enabled;
     private Material guiIconMaterial;
 
     /**
-     * Construct a new particle effect
+     * Construct a new particle effect with a required data type
      * 
      * @param enumName Name of the Spigot Particle enum
      * @param defaultIconMaterialNames The names of the Materials to display as GUI icons
-     * @param properties Properties of this particle effect
+     * @param dataType Data type of this particle effect
      */
-    ParticleEffect(String enumName, List<String> defaultIconMaterialNames, ParticleProperty... properties) {
-        this(enumName, defaultIconMaterialNames, true, properties);
+    ParticleEffect(String enumName, List<String> defaultIconMaterialNames, ParticleDataType dataType) {
+        this(enumName, defaultIconMaterialNames, true, dataType);
     }
 
     /**
-     * Construct a new particle effect
+     * Construct a new particle effect with no data
+     *
+     * @param enumName Name of the Spigot Particle enum
+     * @param defaultIconMaterialNames The names of the Materials to display as GUI icons
+     */
+    ParticleEffect(String enumName, List<String> defaultIconMaterialNames) {
+        this(enumName, defaultIconMaterialNames, true, ParticleDataType.NONE);
+    }
+
+    /**
+     * Construct a new particle effect with a required data type
      *
      * @param enumName Name of the Spigot Particle enum
      * @param defaultIconMaterialNames The names of the Materials to display as GUI icons
      * @param enabledByDefault If the particle type is enabled by default
-     * @param properties Properties of this particle effect
+     * @param dataType Data type of this particle effect
      */
-    ParticleEffect(String enumName, List<String> defaultIconMaterialNames, boolean enabledByDefault, ParticleProperty... properties) {
+    ParticleEffect(String enumName, List<String> defaultIconMaterialNames, boolean enabledByDefault, ParticleDataType dataType) {
         this.defaultIconMaterialNames = defaultIconMaterialNames;
         this.enabledByDefault = enabledByDefault;
-        this.properties = Arrays.asList(properties);
+        this.dataType = dataType;
 
         // Will be null if this server's version doesn't support this particle type
         if (NMSUtil.getVersionNumber() > 8) {
@@ -305,20 +317,10 @@ public enum ParticleEffect {
     }
 
     /**
-     * Determine if this particle effect has a specific property
-     * 
-     * @param property The property to check
-     * @return Whether it has the property or not
+     * @return the data type this particle effect requires
      */
-    public boolean hasProperty(ParticleProperty property) {
-        return this.properties.contains(property);
-    }
-
-    /**
-     * @return true if this effect has any properties
-     */
-    public boolean hasProperties() {
-        return !this.properties.isEmpty();
+    public ParticleDataType getDataType() {
+        return this.dataType;
     }
 
     /**
@@ -382,42 +384,50 @@ public enum ParticleEffect {
         ParticleEffect effect = pparticle.getOverrideEffect() != null ? pparticle.getOverrideEffect() : particle.getEffect();
         int count = pparticle.isDirectional() ? 0 : 1;
 
-        if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-            Material data;
-            if (pparticle.getOverrideData() instanceof Material) {
-                data = (Material) pparticle.getOverrideData();
-            } else {
-                data = particle.getSpawnMaterial();
-            }
-            effect.display(data, pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), 1, pparticle.getLocation(false), isLongRange, owner);
-        } else if (effect.hasProperty(ParticleProperty.COLORABLE)) {
-            ParticleColor data;
-            if (pparticle.getOverrideData() instanceof NoteColor && particle.getEffect() == ParticleEffect.NOTE) {
-                data = (NoteColor) pparticle.getOverrideData();
-            } else if (pparticle.getOverrideData() instanceof OrdinaryColor && particle.getEffect() != ParticleEffect.NOTE) {
-                data = (OrdinaryColor) pparticle.getOverrideData();
-            } else {
-                data = particle.getSpawnColor();
-            }
-            effect.display(data, pparticle.getLocation(true), isLongRange, owner, pparticle.getSize());
-        } else if (effect.hasProperty(ParticleProperty.COLORABLE_TRANSITION)) {
-            ColorTransition data;
-            if (pparticle.getOverrideData() instanceof ColorTransition) {
-                data = (ColorTransition) pparticle.getOverrideData();
-            } else {
-                data = particle.getSpawnColorTransition();
-            }
-            effect.display(data, pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), 1, pparticle.getLocation(false), isLongRange, owner, pparticle.getSize());
-        } else if (effect.hasProperty(ParticleProperty.VIBRATION)) {
-            Vibration data;
-            if (pparticle.getOverrideData() instanceof Vibration) {
-                data = (Vibration) pparticle.getOverrideData();
-            } else {
-                data = particle.getVibration();
-            }
-            effect.display(data, pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), 1, pparticle.getLocation(false), isLongRange, owner);
-        } else {
-            effect.display(pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), count, pparticle.getLocation(false), isLongRange, owner);
+        ParticleDataType dataType = effect.getDataType();
+        switch (dataType) {
+            case BLOCK:
+            case ITEM:
+                Material material;
+                if (pparticle.getOverrideData() instanceof Material) {
+                    material = (Material) pparticle.getOverrideData();
+                } else {
+                    material = particle.getSpawnMaterial();
+                }
+                effect.display(material, pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), 1, pparticle.getLocation(false), isLongRange, owner);
+                break;
+            case COLORABLE:
+                ParticleColor color;
+                if (pparticle.getOverrideData() instanceof NoteColor && particle.getEffect() == ParticleEffect.NOTE) {
+                    color = (NoteColor) pparticle.getOverrideData();
+                } else if (pparticle.getOverrideData() instanceof OrdinaryColor && particle.getEffect() != ParticleEffect.NOTE) {
+                    color = (OrdinaryColor) pparticle.getOverrideData();
+                } else {
+                    color = particle.getSpawnColor();
+                }
+                effect.display(color, pparticle.getLocation(true), isLongRange, owner, pparticle.getSize());
+                break;
+            case COLORABLE_TRANSITION:
+                ColorTransition colorTransition;
+                if (pparticle.getOverrideData() instanceof ColorTransition) {
+                    colorTransition = (ColorTransition) pparticle.getOverrideData();
+                } else {
+                    colorTransition = particle.getSpawnColorTransition();
+                }
+                effect.display(colorTransition, pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), 1, pparticle.getLocation(false), isLongRange, owner, pparticle.getSize());
+                break;
+            case VIBRATION:
+                Vibration vibration;
+                if (pparticle.getOverrideData() instanceof Vibration) {
+                    vibration = (Vibration) pparticle.getOverrideData();
+                } else {
+                    vibration = particle.getVibration();
+                }
+                effect.display(vibration, pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), 1, pparticle.getLocation(false), isLongRange, owner);
+                break;
+            default:
+                effect.display(pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), count, pparticle.getLocation(false), isLongRange, owner);
+                break;
         }
     }
 
@@ -512,13 +522,17 @@ public enum ParticleEffect {
     }
 
     /**
-     * Represents the property of a particle effect
+     * Represents the type of data that a particle effect can have applied
      */
-    public enum ParticleProperty {
+    public enum ParticleDataType {
         /**
-         * The particle effect requires block or item material data to be displayed
+         * The particle effect requires blockdata to be displayed
          */
-        REQUIRES_MATERIAL_DATA,
+        BLOCK,
+        /**
+         * The particle effect requires an itemstack to be displayed
+         */
+        ITEM,
         /**
          * The particle effect uses the offsets as color values
          */
@@ -530,7 +544,11 @@ public enum ParticleEffect {
         /**
          * The particle effect uses an origin location, destination location, and duration in ticks
          */
-        VIBRATION
+        VIBRATION,
+        /**
+         * The particle effect does not have any data
+         */
+        NONE
     }
 
 }

@@ -7,6 +7,7 @@ import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.manager.GuiManager;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.particles.PPlayer;
+import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
@@ -93,7 +94,7 @@ public class GuiInventoryEditParticle extends GuiInventory {
         this.actionButtons.add(editStyleButton);
 
         // Edit Data Button
-        boolean usesData = editingParticle.getEffect().hasProperties();
+        boolean usesData = editingParticle.getEffect().getDataType() != ParticleEffect.ParticleDataType.NONE;
         GuiActionButton editDataButton = new GuiActionButton(42,
                 GuiIcon.EDIT_DATA.get(),
                 localeManager.getLocaleMessage("gui-color-icon-name") + localeManager.getLocaleMessage("gui-edit-data"),

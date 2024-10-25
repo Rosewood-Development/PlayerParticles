@@ -1,7 +1,7 @@
 package dev.esophose.playerparticles.particles.spawning;
 
 import dev.esophose.playerparticles.particles.ParticleEffect;
-import dev.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
+import dev.esophose.playerparticles.particles.ParticleEffect.ParticleDataType;
 import dev.esophose.playerparticles.particles.data.ColorTransition;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.particles.data.ParticleColor;
@@ -25,9 +25,6 @@ public class ReflectiveParticleSpawner extends ParticleSpawner {
 
     @Override
     public void display(ParticleEffect particleEffect, double offsetX, double offsetY, double offsetZ, double speed, int amount, Location center, boolean isLongRange, Player owner) {
-        if (particleEffect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA))
-            throw new ParticleDataException("This particle effect requires additional data");
-
         List<Player> players = getPlayersInRange(center, isLongRange, owner);
         if (players.isEmpty())
             return;
@@ -37,7 +34,7 @@ public class ReflectiveParticleSpawner extends ParticleSpawner {
 
     @Override
     public void display(ParticleEffect particleEffect, ParticleColor color, Location center, boolean isLongRange, Player owner, float size) {
-        if (!particleEffect.hasProperty(ParticleProperty.COLORABLE))
+        if (particleEffect.getDataType() != ParticleDataType.COLORABLE)
             throw new ParticleColorException("This particle effect is not colorable");
 
         List<Player> players = getPlayersInRange(center, isLongRange, owner);
@@ -49,8 +46,8 @@ public class ReflectiveParticleSpawner extends ParticleSpawner {
 
     @Override
     public void display(ParticleEffect particleEffect, Material spawnMaterial, double offsetX, double offsetY, double offsetZ, double speed, int amount, Location center, boolean isLongRange, Player owner) {
-        if (!particleEffect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA))
-            throw new ParticleDataException("This particle effect does not require additional data");
+        if (particleEffect.getDataType() != ParticleDataType.BLOCK && particleEffect.getDataType() != ParticleDataType.ITEM)
+            throw new ParticleDataException("This particle effect requires additional data");
 
         List<Player> players = getPlayersInRange(center, isLongRange, owner);
         if (players.isEmpty())
@@ -60,7 +57,7 @@ public class ReflectiveParticleSpawner extends ParticleSpawner {
     }
 
     @Override
-    public void display(ParticleEffect particleEffect, ColorTransition colorTransition, double offsetX, double offsetY, double offsetZ, int amount, Location center, boolean isLongRange, Player owner,float size) {
+    public void display(ParticleEffect particleEffect, ColorTransition colorTransition, double offsetX, double offsetY, double offsetZ, int amount, Location center, boolean isLongRange, Player owner, float size) {
         throw new IllegalStateException("This method is unavailable for legacy versions");
     }
 

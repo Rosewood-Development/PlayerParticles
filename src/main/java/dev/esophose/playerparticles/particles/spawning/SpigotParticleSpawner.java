@@ -2,7 +2,7 @@ package dev.esophose.playerparticles.particles.spawning;
 
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.particles.ParticleEffect;
-import dev.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
+import dev.esophose.playerparticles.particles.ParticleEffect.ParticleDataType;
 import dev.esophose.playerparticles.particles.data.ColorTransition;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.particles.data.ParticleColor;
@@ -13,6 +13,7 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle.DustOptions;
+import org.bukkit.Particle.TargetColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
@@ -21,7 +22,7 @@ public class SpigotParticleSpawner extends ParticleSpawner {
 
     @Override
     public void display(ParticleEffect particleEffect, double offsetX, double offsetY, double offsetZ, double speed, int amount, Location center, boolean isLongRange, Player owner) {
-        if (particleEffect.hasProperties())
+        if (particleEffect.getDataType() != ParticleDataType.NONE)
             throw new ParticleDataException("This particle effect requires additional data");
 
         if (particleEffect == ParticleEffect.SCULK_CHARGE) {
@@ -38,7 +39,7 @@ public class SpigotParticleSpawner extends ParticleSpawner {
 
     @Override
     public void display(ParticleEffect particleEffect, ParticleColor color, Location center, boolean isLongRange, Player owner, float size) {
-        if (!particleEffect.hasProperty(ParticleProperty.COLORABLE))
+        if (particleEffect.getDataType() != ParticleDataType.COLORABLE)
             throw new ParticleColorException("This particle effect is not colorable");
 
         if (particleEffect == ParticleEffect.DUST && NMSUtil.getVersionNumber() >= 13) { // DUST uses a special data object for spawning in 1.13+
@@ -50,6 +51,11 @@ public class SpigotParticleSpawner extends ParticleSpawner {
             OrdinaryColor ordinaryColor = (OrdinaryColor) color;
             for (Player player : getPlayersInRange(center, isLongRange, owner))
                 player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), 1, 0, 0, 0, 0, Color.fromRGB(ordinaryColor.getRed(), ordinaryColor.getGreen(), ordinaryColor.getBlue()));
+        } else if (particleEffect == ParticleEffect.TRAIL) {
+            OrdinaryColor ordinaryColor = (OrdinaryColor) color;
+            TargetColor targetColor = new TargetColor(center.clone().add(0, -1, 0), ordinaryColor.toSpigot());
+            for (Player player : getPlayersInRange(center, isLongRange, owner))
+                player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), 1, 0, 0, 0, 0, targetColor);
         } else {
             for (Player player : getPlayersInRange(center, isLongRange, owner)) {
                 // Minecraft clients require that you pass a non-zero value if the Red value should be zero
@@ -61,7 +67,7 @@ public class SpigotParticleSpawner extends ParticleSpawner {
     @SuppressWarnings("deprecation")
     @Override
     public void display(ParticleEffect particleEffect, Material spawnMaterial, double offsetX, double offsetY, double offsetZ, double speed, int amount, Location center, boolean isLongRange, Player owner) {
-        if (!particleEffect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA))
+        if (particleEffect.getDataType() != ParticleDataType.BLOCK && particleEffect.getDataType() != ParticleDataType.ITEM)
             throw new ParticleDataException("This particle effect does not require additional data");
 
         Object extraData = null;
@@ -82,7 +88,7 @@ public class SpigotParticleSpawner extends ParticleSpawner {
         if (NMSUtil.getVersionNumber() < 17)
             return;
 
-        if (!particleEffect.hasProperty(ParticleProperty.COLORABLE_TRANSITION))
+        if (particleEffect.getDataType() != ParticleDataType.COLORABLE_TRANSITION)
             throw new ParticleDataException("This particle effect does not require additional data");
 
         org.bukkit.Particle.DustTransition dustTransition = new org.bukkit.Particle.DustTransition(colorTransition.getStartColor().toSpigot(), colorTransition.getEndColor().toSpigot(), size > 0 ? size : Setting.DUST_SIZE.getFloat());

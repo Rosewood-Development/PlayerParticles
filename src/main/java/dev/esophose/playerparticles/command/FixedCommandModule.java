@@ -7,7 +7,6 @@ import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.particles.FixedParticleEffect;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
-import dev.esophose.playerparticles.particles.ParticleEffect.ParticleProperty;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.particles.data.ColorTransition;
 import dev.esophose.playerparticles.particles.data.NoteColor;
@@ -15,9 +14,9 @@ import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.particles.data.Vibration;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import dev.esophose.playerparticles.util.ParticleUtils;
-import dev.rosewood.rosegarden.utils.StringPlaceholders;
 import dev.esophose.playerparticles.util.inputparser.InputParser;
 import dev.esophose.playerparticles.util.inputparser.parsable.ParsableOrdinaryColor;
+import dev.rosewood.rosegarden.utils.StringPlaceholders;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -203,46 +202,50 @@ public class FixedCommandModule implements CommandModule {
         Vibration vibrationData = null;
 
         if (inputParser.hasNext()) {
-            if (effect.hasProperty(ParticleProperty.COLORABLE)) {
-                if (effect == ParticleEffect.NOTE) {
-                    noteColorData = inputParser.next(NoteColor.class);
-                    if (noteColorData == null) {
-                        localeManager.sendMessage(pplayer, "fixed-create-data-error");
-                        return;
+            switch (effect.getDataType()) {
+                case COLORABLE:
+                    if (effect == ParticleEffect.NOTE) {
+                        noteColorData = inputParser.next(NoteColor.class);
+                        if (noteColorData == null) {
+                            localeManager.sendMessage(pplayer, "fixed-create-data-error");
+                            return;
+                        }
+                    } else {
+                        colorData = inputParser.next(OrdinaryColor.class);
+                        if (colorData == null) {
+                            localeManager.sendMessage(pplayer, "fixed-create-data-error");
+                            return;
+                        }
                     }
-                } else {
-                    colorData = inputParser.next(OrdinaryColor.class);
-                    if (colorData == null) {
-                        localeManager.sendMessage(pplayer, "fixed-create-data-error");
-                        return;
-                    }
-                }
-            } else if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-                if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST || effect == ParticleEffect.BLOCK_MARKER || effect == ParticleEffect.DUST_PILLAR) {
+                    break;
+                case BLOCK:
                     blockData = inputParser.next(Material.class);
                     if (blockData == null || !blockData.isBlock()) {
                         localeManager.sendMessage(pplayer, "fixed-create-data-error");
                         return;
                     }
-                } else if (effect == ParticleEffect.ITEM) {
+                    break;
+                case ITEM:
                     itemData = inputParser.next(Material.class);
                     if (itemData == null || itemData.isBlock()) {
                         localeManager.sendMessage(pplayer, "fixed-create-data-error");
                         return;
                     }
-                }
-            } else if (effect.hasProperty(ParticleProperty.COLORABLE_TRANSITION)) {
-                colorTransitionData = inputParser.next(ColorTransition.class);
-                if (colorTransitionData == null) {
-                    localeManager.sendMessage(pplayer, "fixed-create-data-error");
-                    return;
-                }
-            } else if (effect.hasProperty(ParticleProperty.VIBRATION)) {
-                vibrationData = inputParser.next(Vibration.class);
-                if (vibrationData == null) {
-                    localeManager.sendMessage(pplayer, "fixed-create-data-error");
-                    return;
-                }
+                    break;
+                case COLORABLE_TRANSITION:
+                    colorTransitionData = inputParser.next(ColorTransition.class);
+                    if (colorTransitionData == null) {
+                        localeManager.sendMessage(pplayer, "fixed-create-data-error");
+                        return;
+                    }
+                    break;
+                case VIBRATION:
+                    vibrationData = inputParser.next(Vibration.class);
+                    if (vibrationData == null) {
+                        localeManager.sendMessage(pplayer, "fixed-create-data-error");
+                        return;
+                    }
+                    break;
             }
         }
 
@@ -345,49 +348,53 @@ public class FixedCommandModule implements CommandModule {
                 Vibration vibrationData = null;
 
                 ParticleEffect effect = fixedEffect.getParticlePair().getEffect();
-                if (effect.hasProperty(ParticleProperty.COLORABLE)) {
-                    if (effect == ParticleEffect.NOTE) {
-                        noteColorData = inputParser.next(NoteColor.class);
-                        if (noteColorData == null) {
-                            localeManager.sendMessage(pplayer, "fixed-edit-data-error");
-                            return;
+                switch (effect.getDataType()) {
+                    case COLORABLE:
+                        if (effect == ParticleEffect.NOTE) {
+                            noteColorData = inputParser.next(NoteColor.class);
+                            if (noteColorData == null) {
+                                localeManager.sendMessage(pplayer, "fixed-edit-data-error");
+                                return;
+                            }
+                        } else {
+                            colorData = inputParser.next(OrdinaryColor.class);
+                            if (colorData == null) {
+                                localeManager.sendMessage(pplayer, "fixed-edit-data-error");
+                                return;
+                            }
                         }
-                    } else {
-                        colorData = inputParser.next(OrdinaryColor.class);
-                        if (colorData == null) {
-                            localeManager.sendMessage(pplayer, "fixed-edit-data-error");
-                            return;
-                        }
-                    }
-                } else if (effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-                    if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST || effect == ParticleEffect.BLOCK_MARKER || effect == ParticleEffect.DUST_PILLAR) {
+                        break;
+                    case BLOCK:
                         blockData = inputParser.next(Material.class);
                         if (blockData == null || !blockData.isBlock()) {
                             localeManager.sendMessage(pplayer, "fixed-edit-data-error");
                             return;
                         }
-                    } else if (effect == ParticleEffect.ITEM) {
+                        break;
+                    case ITEM:
                         itemData = inputParser.next(Material.class);
                         if (itemData == null || itemData.isBlock()) {
                             localeManager.sendMessage(pplayer, "fixed-edit-data-error");
                             return;
                         }
-                    }
-                } else if (effect.hasProperty(ParticleProperty.COLORABLE_TRANSITION)) {
-                    colorTransitionData = inputParser.next(ColorTransition.class);
-                    if (colorTransitionData == null) {
-                        localeManager.sendMessage(pplayer, "fixed-edit-data-error");
+                        break;
+                    case COLORABLE_TRANSITION:
+                        colorTransitionData = inputParser.next(ColorTransition.class);
+                        if (colorTransitionData == null) {
+                            localeManager.sendMessage(pplayer, "fixed-edit-data-error");
+                            return;
+                        }
+                        break;
+                    case VIBRATION:
+                        vibrationData = inputParser.next(Vibration.class);
+                        if (vibrationData == null) {
+                            localeManager.sendMessage(pplayer, "fixed-edit-data-error");
+                            return;
+                        }
+                        break;
+                    default:
+                        localeManager.sendMessage(pplayer, "fixed-edit-data-none");
                         return;
-                    }
-                } else if (effect.hasProperty(ParticleProperty.VIBRATION)) {
-                    vibrationData = inputParser.next(Vibration.class);
-                    if (vibrationData == null) {
-                        localeManager.sendMessage(pplayer, "fixed-edit-data-error");
-                        return;
-                    }
-                } else {
-                    localeManager.sendMessage(pplayer, "fixed-edit-data-none");
-                    return;
                 }
 
                 fixedEffect.getParticlePair().setColor(colorData);
@@ -665,63 +672,65 @@ public class FixedCommandModule implements CommandModule {
                     } else if (args.length >= 7) {
                         ParticleEffect effect = ParticleEffect.fromName(args[4]);
                         if (effect != null) {
-                            if (effect.hasProperty(ParticleProperty.COLORABLE)) {
-                                List<String> possibleValues = new ArrayList<>();
-                                if (effect == ParticleEffect.NOTE) { // Note data
-                                    if (args.length == 7) {
-                                        possibleValues.add("<0-24>");
-                                        possibleValues.add("rainbow");
-                                        possibleValues.add("random");
+                            List<String> possibleValues = new ArrayList<>();
+                            switch (effect.getDataType()) {
+                                case COLORABLE:
+                                    if (effect == ParticleEffect.NOTE) { // Note data
+                                        if (args.length == 7) {
+                                            possibleValues.add("<0-24>");
+                                            possibleValues.add("rainbow");
+                                            possibleValues.add("random");
+                                        }
+                                    } else { // Color data
+                                        if (args.length <= 7) {
+                                            possibleValues.add("<0-255> <0-255> <0-255>");
+                                            possibleValues.addAll(ParsableOrdinaryColor.COLOR_NAME_MAP.keySet());
+                                            possibleValues.add("<#hexCode>");
+                                        } else if (args.length <= 8 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[6].toLowerCase())) {
+                                            possibleValues.add("<0-255> <0-255>");
+                                        } else if (args.length <= 9 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[6].toLowerCase())) {
+                                            possibleValues.add("<0-255>");
+                                        }
                                     }
-                                } else { // Color data
-                                    if (args.length <= 7) {
-                                        possibleValues.add("<0-255> <0-255> <0-255>");
-                                        possibleValues.addAll(ParsableOrdinaryColor.COLOR_NAME_MAP.keySet());
-                                        possibleValues.add("<#hexCode>");
-                                    } else if (args.length <= 8 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[6].toLowerCase())) {
-                                        possibleValues.add("<0-255> <0-255>");
-                                    } else if (args.length <= 9 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[6].toLowerCase())) {
-                                        possibleValues.add("<0-255>");
-                                    }
-                                }
-                                StringUtil.copyPartialMatches(args[args.length - 1], possibleValues, matches);
-                            } else if (args.length == 7 && effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-                                if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST || effect == ParticleEffect.BLOCK_MARKER || effect == ParticleEffect.DUST_PILLAR) { // Block material
+                                    StringUtil.copyPartialMatches(args[args.length - 1], possibleValues, matches);
+                                    break;
+                                case BLOCK:
                                     StringUtil.copyPartialMatches(args[6], ParticleUtils.BLOCK_MATERIALS_STRING, matches);
-                                } else if (effect == ParticleEffect.ITEM) { // Item material
+                                    break;
+                                case ITEM:
                                     StringUtil.copyPartialMatches(args[6], ParticleUtils.ITEM_MATERIALS_STRING, matches);
-                                }
-                            } else if (effect.hasProperty(ParticleProperty.COLORABLE_TRANSITION)) {
-                                String[] dataArgs = Arrays.copyOfRange(args, 6, args.length);
-                                InputParser inputParser = new InputParser(pplayer, dataArgs);
-                                List<String> possibleValues = new ArrayList<>();
-                                boolean firstComplete = inputParser.next(OrdinaryColor.class) == null;
-                                int argsRemaining = inputParser.numRemaining();
-                                int nextStart = 6 + dataArgs.length - argsRemaining;
-                                if (firstComplete) {
-                                    if (args.length <= 7) {
-                                        possibleValues.add("<0-255> <0-255> <0-255>");
-                                        possibleValues.addAll(ParsableOrdinaryColor.COLOR_NAME_MAP.keySet());
-                                        possibleValues.add("<#hexCode>");
-                                    } else if (args.length <= 8 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[6].toLowerCase())) {
-                                        possibleValues.add("<0-255> <0-255>");
-                                    } else if (args.length <= 9 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[6].toLowerCase())) {
-                                        possibleValues.add("<0-255>");
+                                    break;
+                                case COLORABLE_TRANSITION:
+                                    String[] dataArgs = Arrays.copyOfRange(args, 6, args.length);
+                                    InputParser inputParser = new InputParser(pplayer, dataArgs);
+                                    boolean firstComplete = inputParser.next(OrdinaryColor.class) == null;
+                                    int argsRemaining = inputParser.numRemaining();
+                                    int nextStart = 6 + dataArgs.length - argsRemaining;
+                                    if (firstComplete) {
+                                        if (args.length <= 7) {
+                                            possibleValues.add("<0-255> <0-255> <0-255>");
+                                            possibleValues.addAll(ParsableOrdinaryColor.COLOR_NAME_MAP.keySet());
+                                            possibleValues.add("<#hexCode>");
+                                        } else if (args.length <= 8 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[6].toLowerCase())) {
+                                            possibleValues.add("<0-255> <0-255>");
+                                        } else if (args.length <= 9 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[6].toLowerCase())) {
+                                            possibleValues.add("<0-255>");
+                                        }
+                                    } else if (inputParser.next(OrdinaryColor.class) == null) {
+                                        if (argsRemaining == 1) {
+                                            possibleValues.add("<0-255> <0-255> <0-255>");
+                                            possibleValues.addAll(ParsableOrdinaryColor.COLOR_NAME_MAP.keySet());
+                                            possibleValues.add("<#hexCode>");
+                                        } else if (argsRemaining == 2 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[nextStart].toLowerCase())) {
+                                            possibleValues.add("<0-255> <0-255>");
+                                        } else if (argsRemaining == 3 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[nextStart].toLowerCase())) {
+                                            possibleValues.add("<0-255>");
+                                        }
                                     }
-                                } else if (inputParser.next(OrdinaryColor.class) == null) {
-                                    if (argsRemaining == 1) {
-                                        possibleValues.add("<0-255> <0-255> <0-255>");
-                                        possibleValues.addAll(ParsableOrdinaryColor.COLOR_NAME_MAP.keySet());
-                                        possibleValues.add("<#hexCode>");
-                                    } else if (argsRemaining == 2 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[nextStart].toLowerCase())) {
-                                        possibleValues.add("<0-255> <0-255>");
-                                    } else if (argsRemaining == 3 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[nextStart].toLowerCase())) {
-                                        possibleValues.add("<0-255>");
-                                    }
-                                }
-                                StringUtil.copyPartialMatches(args[args.length - 1], possibleValues, matches);
-                            } else if (args.length == 7 && effect.hasProperty(ParticleProperty.VIBRATION)) {
-                                return Arrays.asList("<duration>", "20", "40", "60");
+                                    StringUtil.copyPartialMatches(args[args.length - 1], possibleValues, matches);
+                                    break;
+                                case VIBRATION:
+                                    return Arrays.asList("<duration>", "20", "40", "60");
                             }
                         }
                     }
@@ -775,63 +784,65 @@ public class FixedCommandModule implements CommandModule {
                             FixedParticleEffect fixedEffect = pplayer.getFixedEffectById(id);
                             if (fixedEffect != null) {
                                 ParticleEffect effect = fixedEffect.getParticlePair().getEffect();
-                                if (effect.hasProperty(ParticleProperty.COLORABLE)) {
-                                    List<String> possibleValues = new ArrayList<>();
-                                    if (effect == ParticleEffect.NOTE) { // Note data
-                                        if (args.length == 4) {
-                                            possibleValues.add("<0-24>");
-                                            possibleValues.add("rainbow");
-                                            possibleValues.add("random");
+                                List<String> possibleValues = new ArrayList<>();
+                                switch (effect.getDataType()) {
+                                    case COLORABLE:
+                                        if (effect == ParticleEffect.NOTE) { // Note data
+                                            if (args.length == 4) {
+                                                possibleValues.add("<0-24>");
+                                                possibleValues.add("rainbow");
+                                                possibleValues.add("random");
+                                            }
+                                        } else { // Color data
+                                            if (args.length <= 4) {
+                                                possibleValues.add("<0-255> <0-255> <0-255>");
+                                                possibleValues.addAll(ParsableOrdinaryColor.COLOR_NAME_MAP.keySet());
+                                                possibleValues.add("<#hexCode>");
+                                            } else if (args.length <= 5 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[3].toLowerCase())) {
+                                                possibleValues.add("<0-255> <0-255>");
+                                            } else if (args.length <= 6 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[3].toLowerCase())) {
+                                                possibleValues.add("<0-255>");
+                                            }
                                         }
-                                    } else { // Color data
-                                        if (args.length <= 4) {
-                                            possibleValues.add("<0-255> <0-255> <0-255>");
-                                            possibleValues.addAll(ParsableOrdinaryColor.COLOR_NAME_MAP.keySet());
-                                            possibleValues.add("<#hexCode>");
-                                        } else if (args.length <= 5 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[3].toLowerCase())) {
-                                            possibleValues.add("<0-255> <0-255>");
-                                        } else if (args.length <= 6 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[3].toLowerCase())) {
-                                            possibleValues.add("<0-255>");
-                                        }
-                                    }
-                                    StringUtil.copyPartialMatches(args[args.length - 1], possibleValues, matches);
-                                } else if (args.length == 4 && effect.hasProperty(ParticleProperty.REQUIRES_MATERIAL_DATA)) {
-                                    if (effect == ParticleEffect.BLOCK || effect == ParticleEffect.FALLING_DUST || effect == ParticleEffect.BLOCK_MARKER || effect == ParticleEffect.DUST_PILLAR) { // Block material
+                                        StringUtil.copyPartialMatches(args[args.length - 1], possibleValues, matches);
+                                        break;
+                                    case BLOCK:
                                         StringUtil.copyPartialMatches(args[3], ParticleUtils.BLOCK_MATERIALS_STRING, matches);
-                                    } else if (effect == ParticleEffect.ITEM) { // Item material
+                                        break;
+                                    case ITEM:
                                         StringUtil.copyPartialMatches(args[3], ParticleUtils.ITEM_MATERIALS_STRING, matches);
-                                    }
-                                } else if (effect.hasProperty(ParticleProperty.COLORABLE_TRANSITION)) {
-                                    String[] dataArgs = Arrays.copyOfRange(args, 3, args.length);
-                                    InputParser inputParser = new InputParser(pplayer, dataArgs);
-                                    List<String> possibleValues = new ArrayList<>();
-                                    boolean firstComplete = inputParser.next(OrdinaryColor.class) == null;
-                                    int argsRemaining = inputParser.numRemaining();
-                                    int nextStart = 3 + dataArgs.length - argsRemaining;
-                                    if (firstComplete) {
-                                        if (args.length <= 4) {
-                                            possibleValues.add("<0-255> <0-255> <0-255>");
-                                            possibleValues.addAll(ParsableOrdinaryColor.COLOR_NAME_MAP.keySet());
-                                            possibleValues.add("<#hexCode>");
-                                        } else if (args.length <= 5 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[3].toLowerCase())) {
-                                            possibleValues.add("<0-255> <0-255>");
-                                        } else if (args.length <= 6 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[3].toLowerCase())) {
-                                            possibleValues.add("<0-255>");
+                                        break;
+                                    case COLORABLE_TRANSITION:
+                                        String[] dataArgs = Arrays.copyOfRange(args, 3, args.length);
+                                        InputParser inputParser = new InputParser(pplayer, dataArgs);
+                                        boolean firstComplete = inputParser.next(OrdinaryColor.class) == null;
+                                        int argsRemaining = inputParser.numRemaining();
+                                        int nextStart = 3 + dataArgs.length - argsRemaining;
+                                        if (firstComplete) {
+                                            if (args.length <= 4) {
+                                                possibleValues.add("<0-255> <0-255> <0-255>");
+                                                possibleValues.addAll(ParsableOrdinaryColor.COLOR_NAME_MAP.keySet());
+                                                possibleValues.add("<#hexCode>");
+                                            } else if (args.length <= 5 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[3].toLowerCase())) {
+                                                possibleValues.add("<0-255> <0-255>");
+                                            } else if (args.length <= 6 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[3].toLowerCase())) {
+                                                possibleValues.add("<0-255>");
+                                            }
+                                        } else if (inputParser.next(OrdinaryColor.class) == null) {
+                                            if (argsRemaining == 1) {
+                                                possibleValues.add("<0-255> <0-255> <0-255>");
+                                                possibleValues.addAll(ParsableOrdinaryColor.COLOR_NAME_MAP.keySet());
+                                                possibleValues.add("<#hexCode>");
+                                            } else if (argsRemaining == 2 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[nextStart].toLowerCase())) {
+                                                possibleValues.add("<0-255> <0-255>");
+                                            } else if (argsRemaining == 3 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[nextStart].toLowerCase())) {
+                                                possibleValues.add("<0-255>");
+                                            }
                                         }
-                                    } else if (inputParser.next(OrdinaryColor.class) == null) {
-                                        if (argsRemaining == 1) {
-                                            possibleValues.add("<0-255> <0-255> <0-255>");
-                                            possibleValues.addAll(ParsableOrdinaryColor.COLOR_NAME_MAP.keySet());
-                                            possibleValues.add("<#hexCode>");
-                                        } else if (argsRemaining == 2 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[nextStart].toLowerCase())) {
-                                            possibleValues.add("<0-255> <0-255>");
-                                        } else if (argsRemaining == 3 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[nextStart].toLowerCase())) {
-                                            possibleValues.add("<0-255>");
-                                        }
-                                    }
-                                    StringUtil.copyPartialMatches(args[args.length - 1], possibleValues, matches);
-                                } else if (args.length == 4 && effect.hasProperty(ParticleProperty.VIBRATION)) {
-                                    return Arrays.asList("<duration>", "20", "40", "60");
+                                        StringUtil.copyPartialMatches(args[args.length - 1], possibleValues, matches);
+                                        break;
+                                    case VIBRATION:
+                                        return Arrays.asList("<duration>", "20", "40", "60");
                                 }
                             }
                         }

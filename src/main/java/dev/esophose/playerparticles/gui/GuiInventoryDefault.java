@@ -9,6 +9,7 @@ import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.ParticleGroupPresetManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.particles.PPlayer;
+import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.util.ParticleUtils;
@@ -126,7 +127,7 @@ public class GuiInventoryDefault extends GuiInventory {
 
         final ParticlePair editingParticle = pplayer.getPrimaryParticle();
         boolean canEditPrimaryStyleAndData = pplayer.getActiveParticle(1) != null;
-        boolean doesEffectUseData = editingParticle.getEffect().hasProperties();
+        boolean doesEffectUseData = editingParticle.getEffect().getDataType() != ParticleEffect.ParticleDataType.NONE;
 
         // Edit Primary Effect
         GuiActionButton editPrimaryEffect = new GuiActionButton(
