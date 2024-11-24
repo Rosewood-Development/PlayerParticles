@@ -53,9 +53,15 @@ public class SpigotParticleSpawner extends ParticleSpawner {
                 player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), 1, 0, 0, 0, 0, Color.fromRGB(ordinaryColor.getRed(), ordinaryColor.getGreen(), ordinaryColor.getBlue()));
         } else if (particleEffect == ParticleEffect.TRAIL) {
             OrdinaryColor ordinaryColor = (OrdinaryColor) color;
-            TargetColor targetColor = new TargetColor(center.clone().add(0, -1, 0), ordinaryColor.toSpigot());
+            Location target;
+            if (owner != null && Setting.TRAIL_MOVE_TO_PLAYER.getBoolean()) {
+                target = owner.getLocation().clone().add(0, 1, 0);
+            } else {
+                target = center.clone().add(0, -1, 0);
+            }
+            TargetColor targetColor = new TargetColor(target, ordinaryColor.toSpigot());
             for (Player player : getPlayersInRange(center, isLongRange, owner))
-                player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), 1, 0, 0, 0, 0, targetColor);
+                player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), 1, 0, 0, 0, 0, targetColor, true);
         } else {
             for (Player player : getPlayersInRange(center, isLongRange, owner)) {
                 // Minecraft clients require that you pass a non-zero value if the Red value should be zero

@@ -48,6 +48,7 @@ public class ConfigurationManager extends AbstractConfigurationManager {
         PARTICLE_RENDER_RANGE_FIXED_EFFECT("particle-render-range-fixed-effect", 192, "From how many blocks away should a player be able to see the particles from a fixed effect?"),
         RAINBOW_CYCLE_SPEED("rainbow-cycle-speed", 2, "How many out of 360 hue ticks to move per game tick", "Higher values make the rainbow cycle faster", "Note: Must be a positive whole number"),
         DUST_SIZE("dust-size", 1.0, "How large should dust particles appear?", "Note: Can include decimals", "Only works in 1.13+"),
+        TRAIL_MOVE_TO_PLAYER("trail-move-to-player", false, "Should the 'trail' effect have its target at the player's location?", "This setting only works on 1.20.2+"),
         GUI_GROUP_CREATION_MESSAGE_DISPLAY_AREA("gui-group-creation-message-display-area", "ACTION_BAR", "Valid values: ACTION_BAR, TITLE, CHAT", "Where should the GUI group creation countdown message be displayed?", "Note: Server versions less than 1.11.2 will always use CHAT"),
         GUI_GROUP_CREATION_BUNGEE_SUPPORT("gui-group-creation-bungee-support", false, "If true, a message will be displayed in chat telling the player to enter the command", "This might be required for some servers using bungee chat plugins"),
         PRESET_GROUPS_ALLOW_OVERLAPPING("preset-groups-allow-overlapping", false, "If true, applying a preset group will not overwrite the current active particles", "Note: This does not check permissions against the max particles setting, use with caution"),
