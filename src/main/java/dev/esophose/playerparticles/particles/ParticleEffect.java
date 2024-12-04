@@ -107,6 +107,7 @@ public enum ParticleEffect {
     NAUTILUS("NAUTILUS", Collections.singletonList("HEART_OF_THE_SEA")),
     NOTE("NOTE", Collections.singletonList("NOTE_BLOCK"), ParticleDataType.COLORABLE),
     OMINOUS_SPAWNING("OMINOUS_SPAWNING", Collections.singletonList("TRIAL_SPAWNER")),
+    PALE_OAK_LEAVES("PALE_OAK_LEAVES", Collections.singletonList("PALE_OAK_LEAVES")),
     POOF("EXPLOSION_NORMAL", Arrays.asList("FIREWORK_STAR", "FIREWORK_CHARGE")), // The 1.13 combination of explode and showshovel
     PORTAL("PORTAL", Collections.singletonList("OBSIDIAN")),
     RAID_OMEN("RAID_OMEN", Collections.singletonList("OMINOUS_BOTTLE")),

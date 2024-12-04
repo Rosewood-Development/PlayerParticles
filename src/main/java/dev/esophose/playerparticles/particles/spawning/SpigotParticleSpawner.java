@@ -9,14 +9,17 @@ import dev.esophose.playerparticles.particles.data.ParticleColor;
 import dev.esophose.playerparticles.particles.data.Vibration;
 import dev.esophose.playerparticles.util.CavesAndCliffsUtil;
 import dev.rosewood.rosegarden.utils.NMSUtil;
+import java.lang.reflect.Constructor;
+import java.util.concurrent.ThreadLocalRandom;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle.DustOptions;
-import org.bukkit.Particle.TargetColor;
+import org.bukkit.Particle.Trail;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
+import org.bukkit.util.Vector;
 
 public class SpigotParticleSpawner extends ParticleSpawner {
 
@@ -57,11 +60,11 @@ public class SpigotParticleSpawner extends ParticleSpawner {
             if (owner != null && Setting.TRAIL_MOVE_TO_PLAYER.getBoolean()) {
                 target = owner.getLocation().clone().add(0, 1, 0);
             } else {
-                target = center.clone().add(0, -1, 0);
+                target = center.clone().add(0, -1, 0).add(Vector.getRandom().subtract(new Vector(0.5, 0.5, 0.5)).multiply(0.2));
             }
-            TargetColor targetColor = new TargetColor(target, ordinaryColor.toSpigot());
+            Object trailData = createTrailData(target, ordinaryColor.toSpigot());
             for (Player player : getPlayersInRange(center, isLongRange, owner))
-                player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), 1, 0, 0, 0, 0, targetColor, true);
+                player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), 1, 0, 0, 0, 0, trailData, true);
         } else {
             for (Player player : getPlayersInRange(center, isLongRange, owner)) {
                 // Minecraft clients require that you pass a non-zero value if the Red value should be zero
@@ -108,6 +111,22 @@ public class SpigotParticleSpawner extends ParticleSpawner {
             return;
 
         CavesAndCliffsUtil.spawnParticles(particleEffect, vibration, offsetX, offsetY, offsetZ, amount, center, isLongRange, owner);
+    }
+
+    private static Constructor<?> trailDataConstructor;
+    private static Object createTrailData(Location location, Color color) {
+        if (NMSUtil.getVersionNumber() > 21 || (NMSUtil.getVersionNumber() == 21 && NMSUtil.getMinorVersionNumber() >= 4)) {
+            return new Trail(location, color, ThreadLocalRandom.current().nextInt(15, 40));
+        } else {
+            try {
+                if (trailDataConstructor == null)
+                    trailDataConstructor = Class.forName("org.bukkit.Particle$TargetColor").getConstructor(Location.class, Color.class);
+                return trailDataConstructor.newInstance(location, color);
+            } catch (ReflectiveOperationException e) {
+                e.printStackTrace();
+                throw new RuntimeException("The Trail effect is not supported on this server version", e);
+            }
+        }
     }
 
 }
