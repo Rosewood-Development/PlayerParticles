@@ -44,7 +44,7 @@ dependencies {
 }
 
 shadowJar {
-    archiveClassifier.set(null)
+    archiveClassifier.set('')
     minimize()
 
     relocate('dev.rosewood.rosegarden', 'dev.esophose.playerparticles.libs.rosegarden')
@@ -93,4 +93,4 @@ javadoc {
 }
 
 build.dependsOn shadowJar
-publishShadowPublicationToMavenRepository.dependsOn jar
+generateMetadataFileForShadowPublication.dependsOn jar
