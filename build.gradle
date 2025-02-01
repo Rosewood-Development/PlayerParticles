@@ -6,12 +6,12 @@ plugins {
     id 'java-library'
 }
 
-targetCompatibility = 1.8
-sourceCompatibility = 1.8
 group = 'dev.esophose'
 version = '8.8'
 
 java {
+    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_1_8
     disableAutoTargetJvm() // Allows depending on Paper's newer APIs even though they use Java 17
 
     withJavadocJar()
@@ -38,7 +38,7 @@ repositories {
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.21.4-R0.1-SNAPSHOT'
     compileOnly 'org.jetbrains:annotations:23.0.0'
-    compileOnly 'me.clip:placeholderapi:2.10.4'
+    compileOnly 'me.clip:placeholderapi:2.11.6'
     api 'org.bstats:bstats-bukkit-lite:1.7'
     api 'org.codemc.worldguardwrapper:worldguardwrapper:1.2.1-SNAPSHOT'
     api 'dev.rosewood:rosegarden:1.3.0.36-DEV-SNAPSHOT'
@@ -57,7 +57,7 @@ processResources {
     from (sourceSets.main.resources.srcDirs) {
         include '**/*.yml'
         filter ReplaceTokens, tokens: ["version": project.property("version")]
-        duplicatesStrategy DuplicatesStrategy.INCLUDE
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
 }
 
@@ -75,8 +75,8 @@ publishing {
         if (project.hasProperty('mavenUser') && project.hasProperty('mavenPassword')) {
             maven {
                 credentials {
-                    username project.mavenUser
-                    password project.mavenPassword
+                    username = project.mavenUser
+                    password = project.mavenPassword
                 }
 
                 def releasesRepoUrl = 'https://repo.rosewooddev.io/repository/public-releases/'
