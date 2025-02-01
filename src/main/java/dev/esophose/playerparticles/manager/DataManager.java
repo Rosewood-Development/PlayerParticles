@@ -175,6 +175,8 @@ public class DataManager extends AbstractDataManager {
                     }
                 }
 
+                boolean deleteInvalidFixedEffects = ConfigurationManager.Setting.DELETE_INVALID_FIXED_EFFECTS.getBoolean();
+
                 // Load fixed effects
                 String fixedQuery = "SELECT f.id AS f_id, f.world, f.xPos, f.yPos, f.zPos, f.yaw, f.pitch, p.id AS p_id, p.effect, p.style, p.item_material, p.block_material, p.note, p.r, p.g, p.b, p.r_end, p.g_end, p.b_end, p.duration FROM " + this.getTablePrefix() + "fixed f " +
         						    "JOIN " + this.getTablePrefix() + "particle p ON f.particle_uuid = p.uuid " +
@@ -195,7 +197,7 @@ public class DataManager extends AbstractDataManager {
                         if (world == null) {
                             // World was deleted, remove the fixed effect as it is no longer valid
                             // Only delete on SQLite, as a MySQL server may have fixed effects from other servers saved
-                            if (this.databaseConnector instanceof SQLiteConnector)
+                            if (this.databaseConnector instanceof SQLiteConnector && deleteInvalidFixedEffects)
                                 this.removeFixedEffect(playerUUID, fixedEffectId);
                             continue;
                         }
@@ -214,7 +216,8 @@ public class DataManager extends AbstractDataManager {
 
                         // Effect or style is now missing or disabled, remove the fixed effect
                         if (effect == null || style == null) {
-                            this.removeFixedEffect(playerUUID, fixedEffectId);
+                            if (deleteInvalidFixedEffects)
+                                this.removeFixedEffect(playerUUID, fixedEffectId);
                             continue;
                         }
 

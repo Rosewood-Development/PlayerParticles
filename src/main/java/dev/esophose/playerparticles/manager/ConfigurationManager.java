@@ -53,6 +53,7 @@ public class ConfigurationManager extends AbstractConfigurationManager {
         GUI_GROUP_CREATION_BUNGEE_SUPPORT("gui-group-creation-bungee-support", false, "If true, a message will be displayed in chat telling the player to enter the command", "This might be required for some servers using bungee chat plugins"),
         PRESET_GROUPS_ALLOW_OVERLAPPING("preset-groups-allow-overlapping", false, "If true, applying a preset group will not overwrite the current active particles", "Note: This does not check permissions against the max particles setting, use with caution"),
         PRESET_GROUPS_OVERLAPPING_ONE_PER_STYLE("preset-groups-overlapping-one-per-style", false, "If true, applying a preset group with overlapping enabled will only allow one particle per style", "Existing particles that cause duplicate styles will be overwritten", "This setting has no effect if preset-groups-allow-overlapping is set to false"),
+        DELETE_INVALID_FIXED_EFFECTS("delete-invalid-fixed-effects", false, "If true, fixed effects will be deleted if the world, effect, or style does not exist upon a player joining thes erver"),
 
         GUI_GLASS_COLORS("gui-border-colors", null, "The colors of the glass in the GUI", "Valid colors: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/DyeColor.html"),
         GUI_GLASS_COLORS_DEFAULT("gui-border-colors.default", "WHITE"),
