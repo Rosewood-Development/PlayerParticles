@@ -42,7 +42,13 @@ public class ParticlePlaceholderExpansion extends PlaceholderExpansion {
                 return String.valueOf(pplayer.canSeeParticles());
         }
 
-        if (placeholder.startsWith("particle_")) {
+        if (placeholder.startsWith("has_effect_")) {
+            String effectName = placeholder.substring(11);
+            return Boolean.toString(pplayer.getActiveParticles().stream().anyMatch(x -> x.getEffect().getName().equalsIgnoreCase(effectName)));
+        } else if (placeholder.startsWith("has_style_")) {
+            String styleName = placeholder.substring(10);
+            return Boolean.toString(pplayer.getActiveParticles().stream().anyMatch(x -> x.getStyle().getName().equalsIgnoreCase(styleName)));
+        } else if (placeholder.startsWith("particle_")) {
             ParticlePair particle = pplayer.getActiveParticle(this.parseId(placeholder));
             if (particle == null)
                 return "none";
