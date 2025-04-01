@@ -1,3 +1,5 @@
+=== vI-Give-Up-On-Updating-This-File-Check-The-Git-Commit-History-Or-Plugin-Releases-Page-Instead
+- Future changelog.txt updates
 === v8.2 ===
 + Added new 1.19 particles: sculk_charge, sculk_charge_pop, sculk_soul, shriek, sonic_boom
 === v8.1 ===

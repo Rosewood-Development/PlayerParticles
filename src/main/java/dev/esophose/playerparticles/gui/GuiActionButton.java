@@ -154,7 +154,11 @@ public class GuiActionButton {
             itemMeta.setLore(parseLore(pplayer, this.lore));
             if (this.customModelData != null) itemMeta.setCustomModelData(this.customModelData);
             if (NMSUtil.getVersionNumber() > 7) {
-                itemMeta.addItemFlags(ItemFlag.values());
+                if (NMSUtil.getVersionNumber() > 21 || (NMSUtil.getVersionNumber() == 21 && NMSUtil.getMinorVersionNumber() >= 5)) {
+                    itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ADDITIONAL_TOOLTIP, ItemFlag.HIDE_DYE);
+                } else {
+                    itemMeta.addItemFlags(ItemFlag.values());
+                }
                 if (NMSUtil.getVersionNumber() >= 21)
                     itemMeta.setAttributeModifiers(ImmutableMultimap.of());
             }

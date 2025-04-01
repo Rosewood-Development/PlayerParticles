@@ -79,6 +79,7 @@ public enum ParticleEffect {
     FALLING_OBSIDIAN_TEAR("FALLING_OBSIDIAN_TEAR", Collections.singletonList("ANCIENT_DEBRIS")),
     FALLING_SPORE_BLOSSOM("FALLING_SPORE_BLOSSOM", Collections.singletonList("FLOWERING_AZALEA")),
     FALLING_WATER("FALLING_WATER", Collections.singletonList("BLUE_DYE")),
+    FIREFLY("FIREFLY", Collections.singletonList("FIREFLY_BUSH")),
     FIREWORK("FIREWORKS_SPARK", Arrays.asList("FIREWORK_ROCKET", "FIREWORK")),
     FISHING("WATER_WAKE", Collections.singletonList("FISHING_ROD")),
     FLAME("FLAME", Collections.singletonList("BLAZE_POWDER")),
@@ -132,6 +133,7 @@ public enum ParticleEffect {
     SPORE_BLOSSOM_AIR("SPORE_BLOSSOM_AIR", Collections.singletonList("SPORE_BLOSSOM")),
     SQUID_INK("SQUID_INK", Collections.singletonList("INK_SAC")),
     SWEEP_ATTACK("SWEEP_ATTACK", Arrays.asList("GOLDEN_SWORD", "GOLD_SWORD")),
+    TINTED_LEAVES("TINTED_LEAVES", Collections.singletonList("LEAF_LITTER"), ParticleDataType.COLORABLE),
     TOTEM_OF_UNDYING("TOTEM", Arrays.asList("TOTEM_OF_UNDYING", "TOTEM")),
     TRAIL("TRAIL", Collections.singletonList("DIRT_PATH"), ParticleDataType.COLORABLE),
     TRIAL_OMEN("TRIAL_OMEN", Collections.singletonList("COPPER_BULB")),
@@ -535,7 +537,7 @@ public enum ParticleEffect {
          */
         ITEM,
         /**
-         * The particle effect uses the offsets as color values
+         * The particle effect uses a color value
          */
         COLORABLE,
         /**

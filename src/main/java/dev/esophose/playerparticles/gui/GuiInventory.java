@@ -4,10 +4,9 @@ import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.util.ParticleUtils;
+import dev.rosewood.rosegarden.utils.NMSUtil;
 import java.util.ArrayList;
 import java.util.List;
-
-import dev.rosewood.rosegarden.utils.NMSUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -58,8 +57,13 @@ public abstract class GuiInventory {
             ItemMeta meta = borderIcon.getItemMeta();
             if (meta != null) {
                 meta.setDisplayName(" ");
-                if (NMSUtil.getVersionNumber() > 7)
-                    meta.addItemFlags(ItemFlag.values());
+                if (NMSUtil.getVersionNumber() > 7) {
+                    if (NMSUtil.getVersionNumber() > 21 || (NMSUtil.getVersionNumber() == 21 && NMSUtil.getMinorVersionNumber() >= 5)) {
+                        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ADDITIONAL_TOOLTIP, ItemFlag.HIDE_DYE);
+                    } else {
+                        meta.addItemFlags(ItemFlag.values());
+                    }
+                }
                 borderIcon.setItemMeta(meta);
             }
             
