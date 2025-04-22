@@ -93,7 +93,7 @@ public class ParticleStyleArrows extends ConfiguredParticleStyle implements List
 
     /**
      * The event used to get all projectiles fired by players
-     * Adds all projectiles fired from players to the array
+     * Adds all projectiles fired from players to the queue
      *
      * @param event The ProjectileLaunchEvent
      */

@@ -1,15 +1,16 @@
 package dev.esophose.playerparticles.styles;
 
 import dev.esophose.playerparticles.PlayerParticles;
-import dev.rosewood.rosegarden.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.rosewood.rosegarden.config.CommentedFileConfiguration;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.Deque;
 import java.util.List;
-import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -18,7 +19,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.projectiles.ProjectileSource;
 
 public class ParticleStyleFishing extends ConfiguredParticleStyle implements Listener {
 
@@ -32,26 +32,28 @@ public class ParticleStyleFishing extends ConfiguredParticleStyle implements Lis
         }
     }
 
-    private Set<Projectile> projectiles;
+    private final Deque<LaunchedFishingHook> projectiles;
 
     protected ParticleStyleFishing() {
         super("fishing", false, false, 0);
 
-        this.projectiles = new HashSet<>();
+        this.projectiles = new ConcurrentLinkedDeque<>();
 
         // Removes all fish hooks that are considered dead
-        Bukkit.getScheduler().runTaskTimer(PlayerParticles.getInstance(), () -> this.projectiles.removeIf(x -> !x.isValid()), 0L, 5L);
+        Bukkit.getScheduler().runTaskTimer(PlayerParticles.getInstance(), () -> {
+            this.projectiles.removeIf(x -> !x.getProjectile().isValid());
+        }, 0L, 5L);
     }
 
     @Override
     public List<PParticle> getParticles(ParticlePair particle, Location location) {
         List<PParticle> particles = new ArrayList<>();
 
-        List<Projectile> listCopy = new ArrayList<>(this.projectiles); // Copy in case of modification while looping due to async
-        for (Projectile projectile : listCopy) {
-            ProjectileSource shooter = projectile.getShooter();
-            if (shooter instanceof Player && ((Player) shooter).getUniqueId().equals(particle.getOwnerUniqueId()))
-                particles.add(PParticle.builder(projectile.getLocation()).offsets(0.05F, 0.05F, 0.05F).build());
+        List<LaunchedFishingHook> listCopy = new ArrayList<>(this.projectiles); // Copy in case of modification while looping due to async
+        for (LaunchedFishingHook projectile : listCopy) {
+            UUID shooter = projectile.getShooter();
+            if (shooter.equals(particle.getOwnerUniqueId()))
+                particles.add(PParticle.builder(projectile.getProjectile().getLocation()).offsets(0.05F, 0.05F, 0.05F).build());
         }
 
         return particles;
@@ -74,19 +76,25 @@ public class ParticleStyleFishing extends ConfiguredParticleStyle implements Lis
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerFish(PlayerFishEvent event) {
+        Projectile projectile = null;
+        try {
+            projectile = (Projectile) PlayerFishEvent_getHook.invoke(event);
+        } catch (ReflectiveOperationException ignored) { }
+
+        if (projectile == null || !(projectile.getShooter() instanceof Player))
+            return;
+
+        UUID shooter = ((Player) projectile.getShooter()).getUniqueId();
+
         // Done through a string switch for 1.9.4 compatibility
         switch (event.getState().toString()) {
             case "FISHING":
-                try {
-                    this.projectiles.add((Projectile) PlayerFishEvent_getHook.invoke(event));
-                } catch (ReflectiveOperationException ignored) { }
+                this.projectiles.add(new LaunchedFishingHook(projectile, shooter));
                 break;
             case "CAUGHT_FISH":
             case "CAUGHT_ENTITY":
             case "REEL_IN":
-                try {
-                    this.projectiles.remove((Projectile) PlayerFishEvent_getHook.invoke(event));
-                } catch (ReflectiveOperationException ignored) { }
+                this.projectiles.removeIf(x -> x.getShooter().equals(shooter));
                 break;
         }
     }
@@ -98,6 +106,26 @@ public class ParticleStyleFishing extends ConfiguredParticleStyle implements Lis
 
     @Override
     protected void loadSettings(CommentedFileConfiguration config) {
+
+    }
+
+    private static class LaunchedFishingHook {
+
+        private final Projectile projectile;
+        private final UUID shooter;
+
+        public LaunchedFishingHook(Projectile projectile, UUID shooter) {
+            this.projectile = projectile;
+            this.shooter = shooter;
+        }
+
+        public Projectile getProjectile() {
+            return this.projectile;
+        }
+
+        public UUID getShooter() {
+            return this.shooter;
+        }
 
     }
 
