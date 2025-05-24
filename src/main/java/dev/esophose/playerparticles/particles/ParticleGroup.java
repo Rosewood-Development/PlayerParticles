@@ -9,8 +9,8 @@ public class ParticleGroup {
     
     public static final String DEFAULT_NAME = "active";
 
-    private String name;
-    private Map<Integer, ParticlePair> particles;
+    private final String name;
+    private final Map<Integer, ParticlePair> particles;
 
     public ParticleGroup(String name, Map<Integer, ParticlePair> particles) {
         this.name = name;

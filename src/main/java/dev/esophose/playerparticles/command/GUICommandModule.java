@@ -1,7 +1,7 @@
 package dev.esophose.playerparticles.command;
 
 import dev.esophose.playerparticles.PlayerParticles;
-import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import dev.esophose.playerparticles.config.Settings;
 import dev.esophose.playerparticles.manager.GuiManager;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
@@ -41,7 +41,7 @@ public class GUICommandModule implements CommandModule {
         }
 
         boolean hasEffectsAndStyles = !permissionManager.getEffectsUserHasPermissionFor(pplayer).isEmpty() && !permissionManager.getStylesUserHasPermissionFor(pplayer).isEmpty();
-        if (!Setting.GUI_PRESETS_ONLY.getBoolean() && (Setting.GUI_REQUIRE_EFFECTS_AND_STYLES.getBoolean() && !hasEffectsAndStyles)) {
+        if (!Settings.GUI_PRESETS_ONLY.get() && (Settings.GUI_REQUIRE_EFFECTS_AND_STYLES.get() && !hasEffectsAndStyles)) {
             if (openedFromGuiCommand) {
                 localeManager.sendMessage(pplayer, "command-error-missing-effects-or-styles");
             } else {

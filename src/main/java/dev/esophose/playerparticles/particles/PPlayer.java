@@ -1,7 +1,7 @@
 package dev.esophose.playerparticles.particles;
 
 import dev.esophose.playerparticles.api.PlayerParticlesAPI;
-import dev.esophose.playerparticles.manager.ConfigurationManager;
+import dev.esophose.playerparticles.config.Settings;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import java.util.ArrayList;
@@ -346,14 +346,14 @@ public class PPlayer {
 
     public void loadPresetGroup(Collection<ParticlePair> particles) {
         ParticleGroup activeGroup = this.getActiveParticleGroup();
-        if (ConfigurationManager.Setting.PRESET_GROUPS_ALLOW_OVERLAPPING.getBoolean()) {
+        if (Settings.PRESET_GROUPS_ALLOW_OVERLAPPING.get()) {
             List<Integer> existingIds = new ArrayList<>(activeGroup.getParticles().keySet());
             for (ParticlePair particle : particles) {
                 int newId = ParticleUtils.getSmallestPositiveInt(existingIds.stream().mapToInt(Integer::intValue).toArray());
                 existingIds.add(newId);
                 ParticlePair clonedParticle = particle.clone(newId);
                 clonedParticle.setOwner(this);
-                if (ConfigurationManager.Setting.PRESET_GROUPS_OVERLAPPING_ONE_PER_STYLE.getBoolean())
+                if (Settings.PRESET_GROUPS_OVERLAPPING_ONE_PER_STYLE.get())
                     activeGroup.getParticles().values().removeIf(p -> p.getStyle().equals(clonedParticle.getStyle()));
                 activeGroup.getParticles().put(clonedParticle.getId(), clonedParticle);
             }

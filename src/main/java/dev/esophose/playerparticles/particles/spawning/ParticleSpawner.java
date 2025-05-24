@@ -1,7 +1,7 @@
 package dev.esophose.playerparticles.particles.spawning;
 
 import dev.esophose.playerparticles.PlayerParticles;
-import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import dev.esophose.playerparticles.config.Settings;
 import dev.esophose.playerparticles.manager.ParticleManager;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
@@ -111,7 +111,7 @@ public abstract class ParticleSpawner {
      */
     public static List<Player> getPlayersInRange(Location center, boolean isLongRange, Player owner) {
         List<Player> players = new ArrayList<>();
-        int range = !isLongRange ? Setting.PARTICLE_RENDER_RANGE_PLAYER.getInt() : Setting.PARTICLE_RENDER_RANGE_FIXED_EFFECT.getInt();
+        int range = !isLongRange ? Settings.PARTICLE_RENDER_RANGE_PLAYER.get() : Settings.PARTICLE_RENDER_RANGE_FIXED_EFFECT.get();
         range *= range;
 
         for (PPlayer pplayer : PlayerParticles.getInstance().getManager(ParticleManager.class).getPPlayers().values()) {

@@ -2,8 +2,8 @@ package dev.esophose.playerparticles.gui;
 
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.api.PlayerParticlesAPI;
-import dev.esophose.playerparticles.manager.ConfigurationManager.GuiIcon;
-import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import dev.esophose.playerparticles.config.Settings;
+import dev.esophose.playerparticles.config.Settings.GuiIcon;
 import dev.esophose.playerparticles.manager.GuiManager;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.ParticleGroupPresetManager;
@@ -54,7 +54,7 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
             particles.sort(Comparator.comparingInt(ParticlePair::getId));
 
             List<String> lore = new ArrayList<>(group.getLore());
-            if (!Setting.GUI_PRESETS_HIDE_PARTICLES_DESCRIPTIONS.getBoolean()) {
+            if (!Settings.GUI_PRESETS_HIDE_PARTICLES_DESCRIPTIONS.get()) {
                 lore.add(localeManager.getLocaleMessage("gui-color-subtext") + localeManager.getLocaleMessage("gui-click-to-load", StringPlaceholders.of("amount", particles.size())));
                 for (ParticlePair particle : particles) {
                     StringPlaceholders stringPlaceholders = StringPlaceholders.builder("id", particle.getId())
@@ -69,7 +69,7 @@ public class GuiInventoryLoadPresetGroups extends GuiInventory {
             // Load Group Buttons
             GuiActionButton groupButton = new GuiActionButton(slot, group.getGuiIcon(), localeManager.getLocaleMessage("gui-color-icon-name") + group.getDisplayName(), lore.toArray(new String[0]), group.getCustomModelData(), (button, isShiftClick) -> {
                 pplayer.loadPresetGroup(particles);
-                if (Setting.GUI_CLOSE_AFTER_GROUP_SELECTED.getBoolean())
+                if (Settings.GUI_CLOSE_AFTER_GROUP_SELECTED.get())
                     this.close();
             });
             this.actionButtons.add(groupButton);

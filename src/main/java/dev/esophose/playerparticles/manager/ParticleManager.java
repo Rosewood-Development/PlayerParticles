@@ -1,7 +1,7 @@
 package dev.esophose.playerparticles.manager;
 
+import dev.esophose.playerparticles.config.Settings;
 import dev.esophose.playerparticles.hook.WorldGuardHook;
-import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.particles.FixedParticleEffect;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.PPlayer;
@@ -72,11 +72,11 @@ public class ParticleManager extends Manager implements Listener, Runnable {
         this.rosePlugin.getManager(DataManager.class).loadEffects();
         
         Bukkit.getScheduler().runTaskLater(this.rosePlugin, () -> {
-            long ticks = Setting.TICKS_PER_PARTICLE.getLong();
+            long ticks = Settings.TICKS_PER_PARTICLE.get();
             this.particleTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this.rosePlugin, this, 0, ticks);
 
             if (WorldGuardHook.enabled()) {
-                long worldGuardTicks = Setting.WORLDGUARD_CHECK_INTERVAL.getLong();
+                long worldGuardTicks = Settings.WORLDGUARD_CHECK_INTERVAL.get();
                 this.worldGuardTask = Bukkit.getScheduler().runTaskTimer(this.rosePlugin, this::updateWorldGuardStatuses, 0, worldGuardTicks);
             }
         }, 5);
@@ -107,7 +107,7 @@ public class ParticleManager extends Manager implements Listener, Runnable {
         // Loads the PPlayer from the database
         this.rosePlugin.getManager(DataManager.class).getPPlayer(e.getPlayer().getUniqueId(), pplayer -> {
             // If enabled, check permissions for that player
-            if (!Setting.CHECK_PERMISSIONS_ON_LOGIN.getBoolean())
+            if (!Settings.CHECK_PERMISSIONS_ON_LOGIN.get())
                 return;
 
             DataManager dataManager = this.rosePlugin.getManager(DataManager.class);
@@ -140,7 +140,7 @@ public class ParticleManager extends Manager implements Listener, Runnable {
                     fixedParticleEffectIterator.remove();
                 }
             }
-        });
+        }, false);
     }
 
     /**
@@ -173,7 +173,9 @@ public class ParticleManager extends Manager implements Listener, Runnable {
      * @param pplayer The PPlayer to add
      */
     public void addPPlayer(PPlayer pplayer) {
-        this.particlePlayers.put(pplayer.getUniqueId(), pplayer);
+        PPlayer existing = this.particlePlayers.put(pplayer.getUniqueId(), pplayer);
+        if (existing != null)
+            existing.clearCachedPlayer();
     }
 
     /**
@@ -183,7 +185,7 @@ public class ParticleManager extends Manager implements Listener, Runnable {
     public void run() {
         this.rosePlugin.getManager(ParticleStyleManager.class).updateTimers();
 
-        this.hue += Setting.RAINBOW_CYCLE_SPEED.getInt();
+        this.hue += Settings.RAINBOW_CYCLE_SPEED.get();
         this.hue %= 360;
 
         PermissionManager permissionManager = this.rosePlugin.getManager(PermissionManager.class);
@@ -218,7 +220,7 @@ public class ParticleManager extends Manager implements Listener, Runnable {
                 continue;
 
             boolean inAllowedRegion = WorldGuardHook.isInAllowedRegion(player.getLocation());
-            if (!inAllowedRegion && Setting.WORLDGUARD_ENABLE_BYPASS_PERMISSION.getBoolean())
+            if (!inAllowedRegion && Settings.WORLDGUARD_ENABLE_BYPASS_PERMISSION.get())
                 inAllowedRegion = permissionManager.hasWorldGuardBypass(player);
 
             pplayer.setInAllowedRegion(inAllowedRegion);
@@ -234,14 +236,14 @@ public class ParticleManager extends Manager implements Listener, Runnable {
      */
     private void displayParticles(PPlayer pplayer, ParticlePair particle, Location location) {
         if (!this.rosePlugin.getManager(ParticleStyleManager.class).isEventHandled(particle.getStyle())) {
-            if (Setting.TOGGLE_ON_COMBAT.getBoolean() && particle.getStyle().canToggleWithCombat() && pplayer.isInCombat())
+            if (Settings.TOGGLE_ON_COMBAT.get() && particle.getStyle().canToggleWithCombat() && pplayer.isInCombat())
                 return;
 
             if (!pplayer.isInAllowedRegion())
                 return;
 
             if (particle.getStyle().canToggleWithMovement() && pplayer.isMoving()) {
-                switch (Setting.TOGGLE_ON_MOVE.getString().toUpperCase()) {
+                switch (Settings.TOGGLE_ON_MOVE.get().toUpperCase()) {
                     case "DISPLAY_FEET":
                     case "TRUE": // Old default value, keep here for legacy config compatibility
                         for (PParticle pparticle : DefaultStyles.FEET.getParticles(particle, location))

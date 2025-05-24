@@ -1,6 +1,6 @@
 package dev.esophose.playerparticles.particles.spawning;
 
-import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import dev.esophose.playerparticles.config.Settings;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticleEffect.ParticleDataType;
 import dev.esophose.playerparticles.particles.data.ColorTransition;
@@ -47,7 +47,7 @@ public class SpigotParticleSpawner extends ParticleSpawner {
 
         if (particleEffect == ParticleEffect.DUST && NMSUtil.getVersionNumber() >= 13) { // DUST uses a special data object for spawning in 1.13+
             OrdinaryColor dustColor = (OrdinaryColor) color;
-            DustOptions dustOptions = new DustOptions(dustColor.toSpigot(), size > 0 ? size : Setting.DUST_SIZE.getFloat());
+            DustOptions dustOptions = new DustOptions(dustColor.toSpigot(), size > 0 ? size : Settings.DUST_SIZE.get());
             for (Player player : getPlayersInRange(center, isLongRange, owner))
                 player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), 1, 0, 0, 0, 0, dustOptions);
         } else if ((particleEffect == ParticleEffect.ENTITY_EFFECT && (NMSUtil.getVersionNumber() > 20 || (NMSUtil.getVersionNumber() == 20 && NMSUtil.getMinorVersionNumber() >= 5))) || particleEffect == ParticleEffect.TINTED_LEAVES) { // ENTITY_EFFECT uses a Color object for spawning in 1.20.5+
@@ -57,7 +57,7 @@ public class SpigotParticleSpawner extends ParticleSpawner {
         } else if (particleEffect == ParticleEffect.TRAIL) {
             OrdinaryColor ordinaryColor = (OrdinaryColor) color;
             Location target;
-            if (owner != null && Setting.TRAIL_MOVE_TO_PLAYER.getBoolean()) {
+            if (owner != null && Settings.TRAIL_MOVE_TO_PLAYER.get()) {
                 target = owner.getLocation().clone().add(0, 1, 0);
             } else {
                 target = center.clone().add(0, -1, 0).add(Vector.getRandom().subtract(new Vector(0.5, 0.5, 0.5)).multiply(0.2));
@@ -100,7 +100,7 @@ public class SpigotParticleSpawner extends ParticleSpawner {
         if (particleEffect.getDataType() != ParticleDataType.COLORABLE_TRANSITION)
             throw new ParticleDataException("This particle effect does not require additional data");
 
-        org.bukkit.Particle.DustTransition dustTransition = new org.bukkit.Particle.DustTransition(colorTransition.getStartColor().toSpigot(), colorTransition.getEndColor().toSpigot(), size > 0 ? size : Setting.DUST_SIZE.getFloat());
+        org.bukkit.Particle.DustTransition dustTransition = new org.bukkit.Particle.DustTransition(colorTransition.getStartColor().toSpigot(), colorTransition.getEndColor().toSpigot(), size > 0 ? size : Settings.DUST_SIZE.get());
         for (Player player : getPlayersInRange(center, isLongRange, owner))
             player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, dustTransition);
     }

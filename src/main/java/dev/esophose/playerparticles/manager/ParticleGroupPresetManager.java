@@ -1,6 +1,7 @@
 package dev.esophose.playerparticles.manager;
 
 import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.config.Settings;
 import dev.esophose.playerparticles.gui.GuiInventory.BorderColor;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
@@ -274,7 +275,7 @@ public class ParticleGroupPresetManager extends Manager {
         if (presetGroupPages.isEmpty()) {
             LocaleManager localeManager = this.rosePlugin.getManager(LocaleManager.class);
             Map<Integer, BorderColor> extraBorder = new HashMap<>();
-            BorderColor borderColor = BorderColor.getOrDefault(ConfigurationManager.Setting.GUI_GLASS_COLORS_LOAD_PRESET_GROUPS.getString(), BorderColor.GREEN);
+            BorderColor borderColor = BorderColor.getOrDefault(Settings.GUI_GLASS_COLORS_LOAD_PRESET_GROUPS.get(), BorderColor.GREEN);
             IntStream.range(0, 9).forEach(x -> extraBorder.put(x, borderColor));
             IntStream.range(45, 54).forEach(x -> extraBorder.put(x, borderColor));
             Arrays.asList(9, 18, 27, 36, 17, 26, 35, 44).forEach(x -> extraBorder.put(x, borderColor));

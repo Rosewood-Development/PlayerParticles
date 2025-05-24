@@ -2,10 +2,10 @@ package dev.esophose.playerparticles.gui;
 
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.api.PlayerParticlesAPI;
+import dev.esophose.playerparticles.config.Settings;
+import dev.esophose.playerparticles.config.Settings.GuiIcon;
 import dev.esophose.playerparticles.gui.hook.PlayerChatHook;
 import dev.esophose.playerparticles.gui.hook.PlayerChatHookData;
-import dev.esophose.playerparticles.manager.ConfigurationManager.GuiIcon;
-import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.manager.GuiManager;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
@@ -34,7 +34,7 @@ public class GuiInventoryManageGroups extends GuiInventory {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         GuiManager guiManager = PlayerParticles.getInstance().getManager(GuiManager.class);
 
-        this.fillBorder(BorderColor.getOrDefault(Setting.GUI_GLASS_COLORS_MANAGE_GROUPS.getString(), BorderColor.BROWN));
+        this.fillBorder(BorderColor.getOrDefault(Settings.GUI_GLASS_COLORS_MANAGE_GROUPS.get(), BorderColor.BROWN));
 
         List<ParticleGroup> groups = pplayer.getParticleGroups().values().stream()
                 .filter(x -> !x.getName().equals(ParticleGroup.DEFAULT_NAME))
@@ -89,7 +89,7 @@ public class GuiInventoryManageGroups extends GuiInventory {
                                 activeGroup.getParticles().put(particle.getId(), particle.clone());
                             PlayerParticlesAPI.getInstance().savePlayerParticleGroup(pplayer.getPlayer(), activeGroup);
 
-                            if (Setting.GUI_CLOSE_AFTER_GROUP_SELECTED.getBoolean())
+                            if (Settings.GUI_CLOSE_AFTER_GROUP_SELECTED.get())
                                 this.close();
                         }
                     });
@@ -152,7 +152,7 @@ public class GuiInventoryManageGroups extends GuiInventory {
                     if (hasReachedMax || !hasParticles)
                         return;
 
-                    if (!Setting.GUI_GROUP_CREATION_BUNGEE_SUPPORT.getBoolean()) {
+                    if (!Settings.GUI_GROUP_CREATION_BUNGEE_SUPPORT.get()) {
                         PlayerChatHook.addHook(new PlayerChatHookData(pplayer.getUniqueId(), 15, (textEntered) -> {
                             if (textEntered != null && !textEntered.equalsIgnoreCase("cancel")) {
                                 String groupName = textEntered.split(" ")[0];
@@ -195,7 +195,7 @@ public class GuiInventoryManageGroups extends GuiInventory {
                         if (NMSUtil.getVersionNumber() >= 8) {
                             String message = localeManager.getLocaleMessage("gui-save-group-chat-message");
                             String prefix = "";
-                            if (Setting.USE_MESSAGE_PREFIX.getBoolean())
+                            if (Settings.USE_MESSAGE_PREFIX.get())
                                 prefix = localeManager.getLocaleMessage("prefix");
 
                             TextComponent component = new TextComponent(TextComponent.fromLegacyText(prefix + message));

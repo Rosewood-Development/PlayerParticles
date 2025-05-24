@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 public class ParticlePlaceholderExpansion extends PlaceholderExpansion {
 
-    private PlayerParticles playerParticles;
+    private final PlayerParticles playerParticles;
 
     public ParticlePlaceholderExpansion(PlayerParticles playerParticles) {
         this.playerParticles = playerParticles;

@@ -15,8 +15,8 @@ public class ParticleStyleRegistrationEvent extends Event {
 
     private static final HandlerList HANDLER_LIST = new HandlerList();
 
-    private Map<String, ParticleStyle> registeredStyles;
-    private Map<String, ParticleStyle> registeredEventStyles;
+    private final Map<String, ParticleStyle> registeredStyles;
+    private final Map<String, ParticleStyle> registeredEventStyles;
 
     public ParticleStyleRegistrationEvent() {
         super(!Bukkit.isPrimaryThread());

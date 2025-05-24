@@ -27,7 +27,7 @@ import org.bukkit.Material;
 
 public class InputParser {
 
-    private static Map<Class<?>, Parsable<?>> inputTypes;
+    private static final Map<Class<?>, Parsable<?>> inputTypes;
 
     static {
         inputTypes = new HashMap<Class<?>, Parsable<?>>() {{

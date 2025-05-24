@@ -23,7 +23,7 @@ public class GuiActionButton {
     private String name;
     private String[] lore;
     private Integer customModelData;
-    private GuiActionButtonClickCallback onClick;
+    private final GuiActionButtonClickCallback onClick;
     private int iconIndex;
 
     /**

@@ -1,8 +1,8 @@
 package dev.esophose.playerparticles.gui;
 
 import dev.esophose.playerparticles.PlayerParticles;
-import dev.esophose.playerparticles.manager.ConfigurationManager.GuiIcon;
-import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import dev.esophose.playerparticles.config.Settings;
+import dev.esophose.playerparticles.config.Settings.GuiIcon;
 import dev.esophose.playerparticles.manager.GuiManager;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.particles.PPlayer;
@@ -29,9 +29,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 @SuppressWarnings("deprecation")
 public class GuiInventoryEditData extends GuiInventory {
 
-    private static ColorData[] colorMapping;
-    private static ColorData[] rainbowColorMapping;
-    private static ColorData[] noteColorMapping, noteColorMappingOld;
+    private static final ColorData[] colorMapping;
+    private static final ColorData[] rainbowColorMapping;
+    private static final ColorData[] noteColorMapping, noteColorMappingOld;
 
     static {
         colorMapping = new ColorData[]{
@@ -128,7 +128,7 @@ public class GuiInventoryEditData extends GuiInventory {
 
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
 
-        this.fillBorder(BorderColor.getOrDefault(Setting.GUI_GLASS_COLORS_EDIT_DATA.getString(), BorderColor.MAGENTA));
+        this.fillBorder(BorderColor.getOrDefault(Settings.GUI_GLASS_COLORS_EDIT_DATA.get(), BorderColor.MAGENTA));
 
         ParticleEffect effect = editingParticle.getEffect();
         switch (effect.getDataType()) {

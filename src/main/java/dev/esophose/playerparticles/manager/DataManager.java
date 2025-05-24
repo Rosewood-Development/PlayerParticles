@@ -30,6 +30,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -54,9 +55,9 @@ public class DataManager extends AbstractDataManager {
         Bukkit.getScheduler().runTaskAsynchronously(this.rosePlugin, () -> {
             this.loadFixedEffects();
             for (Player player : Bukkit.getOnlinePlayers())
-                this.getPPlayer(player.getUniqueId(), (pplayer) -> { }); // Loads the PPlayer from the database
+                this.getPPlayer(player.getUniqueId(), (pplayer) -> { }, false); // Loads the PPlayer from the database
 
-            this.getPPlayer(ConsolePPlayer.getUUID(), (pplayer) -> { }); // Load the console PPlayer
+            this.getPPlayer(ConsolePPlayer.getUUID(), (pplayer) -> { }, false); // Load the console PPlayer
         });
     }
 
@@ -79,11 +80,23 @@ public class DataManager extends AbstractDataManager {
      * @param callback The callback to execute with the found pplayer, or a newly generated one
      */
     public void getPPlayer(UUID playerUUID, Consumer<PPlayer> callback) {
-        // Try to get them from cache first
-        PPlayer fromCache = this.getPPlayer(playerUUID);
-        if (fromCache != null) {
-            callback.accept(fromCache);
-            return;
+        this.getPPlayer(playerUUID, callback, true);
+    }
+
+    /**
+     * Gets a player from the save data, creates one if it doesn't exist and caches it
+     *
+     * @param playerUUID The pplayer to get
+     * @param callback The callback to execute with the found pplayer, or a newly generated one
+     */
+    public void getPPlayer(UUID playerUUID, Consumer<PPlayer> callback, boolean useCache) {
+        // Try to get them from cache first if allowed
+        if (useCache) {
+            PPlayer fromCache = this.getPPlayer(playerUUID);
+            if (fromCache != null) {
+                callback.accept(fromCache);
+                return;
+            }
         }
 
         this.async(() -> {
@@ -175,7 +188,7 @@ public class DataManager extends AbstractDataManager {
                     }
                 }
 
-                boolean deleteInvalidFixedEffects = ConfigurationManager.Setting.DELETE_INVALID_FIXED_EFFECTS.getBoolean();
+                boolean deleteInvalidFixedEffects = dev.esophose.playerparticles.config.Settings.DELETE_INVALID_FIXED_EFFECTS.get();
 
                 // Load fixed effects
                 String fixedQuery = "SELECT f.id AS f_id, f.world, f.xPos, f.yPos, f.zPos, f.yaw, f.pitch, p.id AS p_id, p.effect, p.style, p.item_material, p.block_material, p.note, p.r, p.g, p.b, p.r_end, p.g_end, p.b_end, p.duration FROM " + this.getTablePrefix() + "fixed f " +
@@ -265,7 +278,7 @@ public class DataManager extends AbstractDataManager {
                 ResultSet result = statement.executeQuery();
                 while (result.next()) {
                     UUID playerUUID = UUID.fromString(result.getString("owner_uuid"));
-                    this.sync(() -> this.getPPlayer(playerUUID, (pplayer) -> { }));
+                    this.sync(() -> this.getPPlayer(playerUUID, (pplayer) -> { }, false));
                 }
             }
         }));
@@ -590,12 +603,12 @@ public class DataManager extends AbstractDataManager {
     }
 
     @Override
-    public List<Class<? extends DataMigration>> getDataMigrations() {
+    public List<Supplier<? extends DataMigration>> getDataMigrations() {
         return Arrays.asList(
-                _1_InitialMigration.class,
-                _2_Add_Data_Columns.class,
-                _3_Add_Setting_Toggle_Self_Column.class,
-                _4_Add_Fixed_Effect_Yaw_Pitch_Columns.class
+                _1_InitialMigration::new,
+                _2_Add_Data_Columns::new,
+                _3_Add_Setting_Toggle_Self_Column::new,
+                _4_Add_Fixed_Effect_Yaw_Pitch_Columns::new
         );
     }
 

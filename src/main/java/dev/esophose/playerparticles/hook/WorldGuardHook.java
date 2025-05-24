@@ -1,6 +1,6 @@
 package dev.esophose.playerparticles.hook;
 
-import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import dev.esophose.playerparticles.config.Settings;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -69,14 +69,14 @@ public class WorldGuardHook {
         }
 
         // Legacy blocking by region name.
-        List<String> disallowedRegionIds = Setting.WORLDGUARD_DISALLOWED_REGIONS.getStringList();
+        List<String> disallowedRegionIds = Settings.WORLDGUARD_DISALLOWED_REGIONS.get();
         if (regions.stream().map(IWrappedRegion::getId).anyMatch(disallowedRegionIds::contains))
             return false;
 
-        if (!Setting.WORLDGUARD_USE_ALLOWED_REGIONS.getBoolean())
+        if (!Settings.WORLDGUARD_USE_ALLOWED_REGIONS.get())
             return true;
 
-        List<String> allowedRegionIds = Setting.WORLDGUARD_ALLOWED_REGIONS.getStringList();
+        List<String> allowedRegionIds = Settings.WORLDGUARD_ALLOWED_REGIONS.get();
         return regions.stream().map(IWrappedRegion::getId).anyMatch(allowedRegionIds::contains);
     }
 

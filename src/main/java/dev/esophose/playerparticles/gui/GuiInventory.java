@@ -1,7 +1,7 @@
 package dev.esophose.playerparticles.gui;
 
 import dev.esophose.playerparticles.PlayerParticles;
-import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import dev.esophose.playerparticles.config.Settings;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import dev.rosewood.rosegarden.utils.NMSUtil;
@@ -180,7 +180,7 @@ public abstract class GuiInventory {
         for (GuiActionButton button : this.actionButtons) {
             if (button.getSlot() == slot) {
                 button.handleClick(isShiftClick);
-                if (Setting.GUI_BUTTON_SOUND.getBoolean() && event.getWhoClicked() instanceof Player) {
+                if (Settings.GUI_BUTTON_SOUND.get() && event.getWhoClicked() instanceof Player) {
                     Player player = (Player) event.getWhoClicked();
                     if (NMSUtil.getVersionNumber() > 8) {
                         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1);

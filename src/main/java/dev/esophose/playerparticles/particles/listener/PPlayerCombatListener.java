@@ -1,7 +1,7 @@
 package dev.esophose.playerparticles.particles.listener;
 
 import dev.esophose.playerparticles.PlayerParticles;
-import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import dev.esophose.playerparticles.config.Settings;
 import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.particles.PPlayer;
 import java.util.ArrayList;
@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -26,8 +25,8 @@ public class PPlayerCombatListener implements Listener {
     public PPlayerCombatListener() {
         DataManager dataManager = PlayerParticles.getInstance().getManager(DataManager.class);
 
-        Bukkit.getScheduler().runTaskTimer(PlayerParticles.getInstance(), () -> {
-            if (!Setting.TOGGLE_ON_COMBAT.getBoolean())
+        PlayerParticles.getInstance().getScheduler().runTaskTimer(() -> {
+            if (!Settings.TOGGLE_ON_COMBAT.get())
                 return;
 
             List<UUID> toRemove = new ArrayList<>();
@@ -37,7 +36,7 @@ public class PPlayerCombatListener implements Listener {
                     toRemove.add(uuid);
                 } else {
                     int idleTime = this.timeSinceCombat.get(uuid);
-                    pplayer.setInCombat(idleTime < Setting.TOGGLE_ON_COMBAT_DELAY.getInt());
+                    pplayer.setInCombat(idleTime < Settings.TOGGLE_ON_COMBAT_DELAY.get());
                     if (pplayer.isInCombat())
                         this.timeSinceCombat.replace(uuid, idleTime + 1);
                 }
@@ -56,7 +55,7 @@ public class PPlayerCombatListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerAttack(EntityDamageByEntityEvent event) {
         boolean attackedIsPlayer = event.getEntity().getType() == EntityType.PLAYER;
-        boolean includeMobs = Setting.TOGGLE_ON_COMBAT_INCLUDE_MOBS.getBoolean();
+        boolean includeMobs = Settings.TOGGLE_ON_COMBAT_INCLUDE_MOBS.get();
         if (!attackedIsPlayer && !includeMobs)
             return;
 

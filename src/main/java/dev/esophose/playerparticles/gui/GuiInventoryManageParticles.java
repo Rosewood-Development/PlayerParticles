@@ -2,8 +2,8 @@ package dev.esophose.playerparticles.gui;
 
 import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.api.PlayerParticlesAPI;
-import dev.esophose.playerparticles.manager.ConfigurationManager.GuiIcon;
-import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import dev.esophose.playerparticles.config.Settings;
+import dev.esophose.playerparticles.config.Settings.GuiIcon;
 import dev.esophose.playerparticles.manager.GuiManager;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
@@ -26,7 +26,7 @@ public class GuiInventoryManageParticles extends GuiInventory {
         LocaleManager localeManager = PlayerParticles.getInstance().getManager(LocaleManager.class);
         GuiManager guiManager = PlayerParticles.getInstance().getManager(GuiManager.class);
 
-        this.fillBorder(BorderColor.getOrDefault(Setting.GUI_GLASS_COLORS_MANAGE_PARTICLES.getString(), BorderColor.ORANGE));
+        this.fillBorder(BorderColor.getOrDefault(Settings.GUI_GLASS_COLORS_MANAGE_PARTICLES.get(), BorderColor.ORANGE));
 
         // Manage/Delete Particle Buttons
         List<ParticlePair> particles = new ArrayList<>(pplayer.getActiveParticles());

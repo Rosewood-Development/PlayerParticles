@@ -1,6 +1,6 @@
 package dev.esophose.playerparticles.manager;
 
-import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import dev.esophose.playerparticles.config.Settings;
 import dev.esophose.playerparticles.particles.OtherPPlayer;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
@@ -191,7 +191,7 @@ public class PermissionManager extends Manager {
         if (executor != pplayer)
             return false;
 
-        return pplayer.getActiveParticles().size() >= this.getPermissionAmount(pplayer.getUnderlyingExecutor(), PPermission.PARTICLES_MAX, Setting.MAX_PARTICLES.getInt());
+        return pplayer.getActiveParticles().size() >= this.getPermissionAmount(pplayer.getUnderlyingExecutor(), PPermission.PARTICLES_MAX, Settings.MAX_PARTICLES.get());
     }
     
     /**
@@ -208,7 +208,7 @@ public class PermissionManager extends Manager {
         if (executor != pplayer)
             return false;
 
-        return executor.getParticleGroups().size() - 1 >= this.getPermissionAmount(pplayer.getUnderlyingExecutor(), PPermission.GROUPS_MAX, Setting.MAX_GROUPS.getInt());
+        return executor.getParticleGroups().size() - 1 >= this.getPermissionAmount(pplayer.getUnderlyingExecutor(), PPermission.GROUPS_MAX, Settings.MAX_GROUPS.get());
     }
     
     /**
@@ -221,7 +221,7 @@ public class PermissionManager extends Manager {
         if (PPermission.GROUPS_UNLIMITED.check(pplayer.getUnderlyingExecutor()))
             return true;
 
-        return this.getPermissionAmount(pplayer.getUnderlyingExecutor(), PPermission.GROUPS_MAX, Setting.MAX_GROUPS.getInt()) != 0;
+        return this.getPermissionAmount(pplayer.getUnderlyingExecutor(), PPermission.GROUPS_MAX, Settings.MAX_GROUPS.get()) != 0;
     }
     
     /**
@@ -238,7 +238,7 @@ public class PermissionManager extends Manager {
         if (executor != pplayer)
             return false;
 
-        return pplayer.getFixedEffectIds().size() >= this.getPermissionAmount(pplayer.getUnderlyingExecutor(), PPermission.FIXED_MAX, Setting.MAX_FIXED_EFFECTS.getInt());
+        return pplayer.getFixedEffectIds().size() >= this.getPermissionAmount(pplayer.getUnderlyingExecutor(), PPermission.FIXED_MAX, Settings.MAX_FIXED_EFFECTS.get());
     }
 
     /**
@@ -247,7 +247,7 @@ public class PermissionManager extends Manager {
      * @return The max distance a fixed effect can be created from the player
      */
     public int getMaxFixedEffectCreationDistance() {
-        return Setting.MAX_FIXED_EFFECT_CREATION_DISTANCE.getInt();
+        return Settings.MAX_FIXED_EFFECT_CREATION_DISTANCE.get();
     }
     
     /**
@@ -264,7 +264,7 @@ public class PermissionManager extends Manager {
         if (executor != pplayer)
             return Integer.MAX_VALUE;
 
-        return this.getPermissionAmount(pplayer.getUnderlyingExecutor(), PPermission.PARTICLES_MAX, Setting.MAX_PARTICLES.getInt());
+        return this.getPermissionAmount(pplayer.getUnderlyingExecutor(), PPermission.PARTICLES_MAX, Settings.MAX_PARTICLES.get());
     }
 
     /**
@@ -283,7 +283,7 @@ public class PermissionManager extends Manager {
      * @return All world names that are disabled
      */
     public List<String> getDisabledWorlds() {
-        return Setting.DISABLED_WORLDS.getStringList();
+        return Settings.DISABLED_WORLDS.get();
     }
 
     /**
@@ -426,7 +426,7 @@ public class PermissionManager extends Manager {
      * @return True if the player has permission to open the GUI
      */
     public boolean canOpenGui(PPlayer player) {
-        return !Setting.GUI_REQUIRE_PERMISSION.getBoolean() || PPermission.GUI.check(player.getUnderlyingExecutor());
+        return !Settings.GUI_REQUIRE_PERMISSION.get() || PPermission.GUI.check(player.getUnderlyingExecutor());
     }
 
     /**
@@ -437,7 +437,7 @@ public class PermissionManager extends Manager {
      * @return True if the player has permission to open the GUI
      */
     public boolean canOpenGui(PPlayer player, String gui) {
-        return !Setting.GUI_REQUIRE_PERMISSION.getBoolean() || PPermission.GUI.check(player.getUnderlyingExecutor(), gui);
+        return !Settings.GUI_REQUIRE_PERMISSION.get() || PPermission.GUI.check(player.getUnderlyingExecutor(), gui);
     }
     
     /**

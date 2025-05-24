@@ -5,10 +5,10 @@ import java.util.function.Consumer;
 
 public class PlayerChatHookData {
     
-    private UUID playerUUID;
-    private int maxHookLength;
+    private final UUID playerUUID;
+    private final int maxHookLength;
     private int hookLength;
-    private Consumer<String> hookCallback;
+    private final Consumer<String> hookCallback;
     
     public PlayerChatHookData(UUID playerUUID, int hookLength, Consumer<String> hookCallback) {
         this.playerUUID = playerUUID;

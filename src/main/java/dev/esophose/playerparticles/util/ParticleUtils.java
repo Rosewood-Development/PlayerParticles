@@ -1,6 +1,7 @@
 package dev.esophose.playerparticles.util;
 
-import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import dev.esophose.playerparticles.config.Settings;
+import dev.rosewood.rosegarden.utils.NMSUtil;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,8 +10,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import dev.rosewood.rosegarden.utils.NMSUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -170,7 +169,7 @@ public final class ParticleUtils {
     }
 
     public static boolean isPlayerInvisible(Player player) {
-        if (Setting.DISPLAY_WHEN_INVISIBLE.getBoolean())
+        if (Settings.DISPLAY_WHEN_INVISIBLE.get())
             return false;
         if (NMSUtil.getVersionNumber() >= 8 && player.getGameMode() == GameMode.SPECTATOR)
             return true;

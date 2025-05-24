@@ -1,7 +1,7 @@
 package dev.esophose.playerparticles.gui.hook;
 
 import dev.esophose.playerparticles.PlayerParticles;
-import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import dev.esophose.playerparticles.config.Settings;
 import dev.esophose.playerparticles.manager.LocaleManager;
 import dev.rosewood.rosegarden.utils.NMSUtil;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
@@ -71,7 +71,7 @@ public class PlayerChatHook extends BukkitRunnable implements Listener {
                 String message = localeManager.getLocaleMessage("gui-save-group-hotbar-message", StringPlaceholders.of("seconds", hook.getTimeRemaining()));
 
                 if (NMSUtil.getVersionNumber() >= 11) {
-                    switch (Setting.GUI_GROUP_CREATION_MESSAGE_DISPLAY_AREA.getString().toUpperCase()) {
+                    switch (Settings.GUI_GROUP_CREATION_MESSAGE_DISPLAY_AREA.get().toUpperCase()) {
                         case "ACTION_BAR":
                             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(localeManager.getLocaleMessage("gui-save-group-hotbar-message", StringPlaceholders.of("seconds", hook.getTimeRemaining()))));
                             break;

@@ -1,6 +1,5 @@
 package dev.esophose.playerparticles.manager;
 
-import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.rosewood.rosegarden.RosePlugin;
 import dev.rosewood.rosegarden.manager.AbstractLocaleManager;
@@ -15,7 +14,7 @@ public class LocaleManager extends AbstractLocaleManager {
 
     @Override
     protected void handleMessage(CommandSender sender, String message) {
-        if (Setting.MESSAGES_ENABLED.getBoolean())
+        if (dev.esophose.playerparticles.config.Settings.MESSAGES_ENABLED.get())
             super.handleMessage(sender, message);
     }
 

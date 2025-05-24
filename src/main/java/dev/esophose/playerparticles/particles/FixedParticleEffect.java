@@ -8,12 +8,12 @@ public class FixedParticleEffect {
     /**
      * The UUID of the player who owns this effect
      */
-    private UUID pplayerUUID;
+    private final UUID pplayerUUID;
 
     /**
      * The ID of this effect, unique to the owner's UUID
      */
-    private int id;
+    private final int id;
 
     /**
      * The location for this effect to be displayed
@@ -23,7 +23,7 @@ public class FixedParticleEffect {
     /**
      * The effect and style this effect uses
      */
-    private ParticlePair particlePair;
+    private final ParticlePair particlePair;
 
     /**
      * Constructs a new FixedParticleEffect

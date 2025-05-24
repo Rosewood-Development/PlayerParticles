@@ -1,7 +1,7 @@
 package dev.esophose.playerparticles.particles.listener;
 
 import dev.esophose.playerparticles.PlayerParticles;
-import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
+import dev.esophose.playerparticles.config.Settings;
 import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.particles.PPlayer;
 import java.util.ArrayList;
@@ -18,8 +18,8 @@ import org.bukkit.util.Vector;
 public class PPlayerMovementListener implements Listener {
     
     private static final int CHECK_INTERVAL = 3;
-    private Map<UUID, Integer> timeSinceLastMovement;
-    private Map<UUID, Vector> previousVectors;
+    private final Map<UUID, Integer> timeSinceLastMovement;
+    private final Map<UUID, Vector> previousVectors;
     
     public PPlayerMovementListener() {
         DataManager dataManager = PlayerParticles.getInstance().getManager(DataManager.class);
@@ -51,7 +51,7 @@ public class PPlayerMovementListener implements Listener {
                     toRemove.add(uuid);
                 } else {
                     int standingTime = this.timeSinceLastMovement.get(uuid);
-                    pplayer.setMoving(standingTime < Setting.TOGGLE_ON_MOVE_DELAY.getInt());
+                    pplayer.setMoving(standingTime < Settings.TOGGLE_ON_MOVE_DELAY.get());
                     if (pplayer.isMoving())
                         this.timeSinceLastMovement.replace(uuid, standingTime + CHECK_INTERVAL);
                 }

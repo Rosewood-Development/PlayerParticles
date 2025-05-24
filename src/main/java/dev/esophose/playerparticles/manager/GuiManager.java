@@ -1,19 +1,17 @@
 package dev.esophose.playerparticles.manager;
 
-import dev.esophose.playerparticles.PlayerParticles;
+import dev.esophose.playerparticles.config.Settings;
 import dev.esophose.playerparticles.gui.GuiInventory;
 import dev.esophose.playerparticles.gui.GuiInventoryDefault;
 import dev.esophose.playerparticles.gui.GuiInventoryLoadPresetGroups;
 import dev.esophose.playerparticles.gui.GuiInventoryManageGroups;
 import dev.esophose.playerparticles.gui.GuiInventoryManageParticles;
-import dev.esophose.playerparticles.manager.ConfigurationManager.Setting;
 import dev.esophose.playerparticles.particles.PPlayer;
+import dev.rosewood.rosegarden.RosePlugin;
+import dev.rosewood.rosegarden.manager.Manager;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import dev.rosewood.rosegarden.RosePlugin;
-import dev.rosewood.rosegarden.manager.Manager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,7 +23,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 public class GuiManager extends Manager implements Listener, Runnable {
 
-    private List<GuiInventory> guiInventories;
+    private final List<GuiInventory> guiInventories;
     private BukkitTask guiTask;
 
     public GuiManager(RosePlugin playerParticles) {
@@ -89,7 +87,7 @@ public class GuiManager extends Manager implements Listener, Runnable {
      * @return True if the GUI is disabled
      */
     public boolean isGuiDisabled() {
-        return !Setting.GUI_ENABLED.getBoolean();
+        return !Settings.GUI_ENABLED.get();
     }
 
     /**
@@ -121,7 +119,7 @@ public class GuiManager extends Manager implements Listener, Runnable {
      * @param pplayer The PPlayer to open the GUI screen for
      */
     public void openDefault(PPlayer pplayer) {
-        if (Setting.GUI_PRESETS_ONLY.getBoolean()) {
+        if (Settings.GUI_PRESETS_ONLY.get()) {
             this.openPresetGroups(pplayer);
             return;
         }

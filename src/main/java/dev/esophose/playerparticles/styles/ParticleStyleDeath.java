@@ -1,13 +1,13 @@
 package dev.esophose.playerparticles.styles;
 
 import dev.esophose.playerparticles.PlayerParticles;
-import dev.rosewood.rosegarden.config.CommentedFileConfiguration;
-import dev.esophose.playerparticles.manager.ConfigurationManager;
+import dev.esophose.playerparticles.config.Settings;
 import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.ParticleManager;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.rosewood.rosegarden.config.CommentedFileConfiguration;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +25,7 @@ public class ParticleStyleDeath extends ConfiguredParticleStyle implements Liste
     private String style;
     private List<EntityDamageEvent.DamageCause> causes;
     private int targetDuration;
-    private final long ticksPerParticle = ConfigurationManager.Setting.TICKS_PER_PARTICLE.getLong();
+    private final long ticksPerParticle = Settings.TICKS_PER_PARTICLE.get();
 
     protected ParticleStyleDeath() {
         super("death", false, false, 0);
@@ -84,7 +84,7 @@ public class ParticleStyleDeath extends ConfiguredParticleStyle implements Liste
 
         Location location = event.getEntity().getLocation().add(0, 1, 0);
         new BukkitRunnable() {
-            private int totalDuration = 0;
+            private long totalDuration = 0;
 
             @Override
             public void run() {
