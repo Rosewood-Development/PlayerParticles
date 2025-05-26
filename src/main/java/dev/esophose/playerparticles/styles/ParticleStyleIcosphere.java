@@ -33,11 +33,10 @@ public class ParticleStyleIcosphere extends ConfiguredParticleStyle {
     private double angularVelocityZ;
 
     private int step;
-    private final ParticleManager particleManager;
+    private ParticleManager particleManager;
 
     protected ParticleStyleIcosphere() {
         super("icosphere", true, true, 0);
-        this.particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
     }
 
     @Override
@@ -45,6 +44,9 @@ public class ParticleStyleIcosphere extends ConfiguredParticleStyle {
         List<PParticle> particles = new ArrayList<>();
         if (this.step % this.ticksPerSpawn != 0)
             return particles;
+
+        if (this.particleManager == null)
+            this.particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
 
         Icosahedron icosahedron = new Icosahedron(this.divisions, this.radius);
         Set<Vector> points = new HashSet<>();
