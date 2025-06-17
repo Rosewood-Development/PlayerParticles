@@ -93,7 +93,6 @@ public class DataManager extends AbstractDataManager {
      */
     public void getPPlayer(UUID playerUUID, Consumer<PPlayer> callback, boolean readCache) {
         // Try to get them from cache first if allowed
-        this.rosePlugin.getLogger().warning(playerUUID + " getPPlayer " + readCache);
         if (readCache) {
             PPlayer fromCache = this.getPPlayer(playerUUID);
             if (fromCache != null) {
