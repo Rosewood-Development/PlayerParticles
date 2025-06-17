@@ -88,7 +88,7 @@ public class PermissionManager extends Manager {
     public PermissionManager(RosePlugin playerParticles) {
         super(playerParticles);
 
-        Bukkit.getScheduler().runTaskLater(playerParticles, () -> {
+        playerParticles.getScheduler().runTaskLater(() -> {
             try {
                 // Register plugin permissions to Bukkit
                 PluginManager pluginManager = Bukkit.getPluginManager();

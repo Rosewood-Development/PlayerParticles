@@ -14,6 +14,7 @@ import dev.esophose.playerparticles.styles.DefaultStyles;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import dev.rosewood.rosegarden.RosePlugin;
 import dev.rosewood.rosegarden.manager.Manager;
+import dev.rosewood.rosegarden.scheduler.task.ScheduledTask;
 import java.awt.Color;
 import java.util.Collections;
 import java.util.Iterator;
@@ -31,7 +32,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.scheduler.BukkitTask;
 
 public class ParticleManager extends Manager implements Listener, Runnable {
 
@@ -43,12 +43,12 @@ public class ParticleManager extends Manager implements Listener, Runnable {
     /**
      * The task that spawns the particles
      */
-    private BukkitTask particleTask;
+    private ScheduledTask particleTask;
 
     /**
      * The task that checks player worldguard region statuses
      */
-    private BukkitTask worldGuardTask;
+    private ScheduledTask worldGuardTask;
 
     /**
      * Rainbow particle effect hue and note color used for rainbow colorable effects
@@ -71,13 +71,13 @@ public class ParticleManager extends Manager implements Listener, Runnable {
     public void reload() {
         this.rosePlugin.getManager(DataManager.class).loadEffects();
         
-        Bukkit.getScheduler().runTaskLater(this.rosePlugin, () -> {
+        this.rosePlugin.getScheduler().runTaskLater(() -> {
             long ticks = Settings.TICKS_PER_PARTICLE.get();
-            this.particleTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this.rosePlugin, this, 0, ticks);
+            this.particleTask = this.rosePlugin.getScheduler().runTaskTimerAsync(this, 0, ticks);
 
             if (WorldGuardHook.enabled()) {
                 long worldGuardTicks = Settings.WORLDGUARD_CHECK_INTERVAL.get();
-                this.worldGuardTask = Bukkit.getScheduler().runTaskTimer(this.rosePlugin, this::updateWorldGuardStatuses, 0, worldGuardTicks);
+                this.worldGuardTask = this.rosePlugin.getScheduler().runTaskTimer(this::updateWorldGuardStatuses, 0, worldGuardTicks);
             }
         }, 5);
     }
@@ -105,6 +105,8 @@ public class ParticleManager extends Manager implements Listener, Runnable {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent e) {
         // Loads the PPlayer from the database
+        PPlayer removed = this.particlePlayers.remove(e.getPlayer().getUniqueId());
+        removed.clearCachedPlayer();
         this.rosePlugin.getManager(DataManager.class).getPPlayer(e.getPlayer().getUniqueId(), pplayer -> {
             // If enabled, check permissions for that player
             if (!Settings.CHECK_PERMISSIONS_ON_LOGIN.get())

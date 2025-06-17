@@ -12,7 +12,6 @@ import java.util.Deque;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedDeque;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Arrow;
@@ -21,8 +20,8 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 
 public class ParticleStyleArrows extends ConfiguredParticleStyle implements Listener {
 
@@ -43,7 +42,7 @@ public class ParticleStyleArrows extends ConfiguredParticleStyle implements List
         this.is114 = NMSUtil.getVersionNumber() >= 14;
 
         // Removes all arrows that are considered dead or too old to be tracked
-        Bukkit.getScheduler().runTaskTimer(PlayerParticles.getInstance(), () -> {
+        PlayerParticles.getInstance().getScheduler().runTaskTimer(() -> {
             this.projectiles.removeIf(launchedProjectile -> {
                 Projectile projectile = launchedProjectile.getProjectile();
                 if (!projectile.isValid())

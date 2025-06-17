@@ -9,6 +9,7 @@ import dev.esophose.playerparticles.gui.GuiInventoryManageParticles;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.rosewood.rosegarden.RosePlugin;
 import dev.rosewood.rosegarden.manager.Manager;
+import dev.rosewood.rosegarden.scheduler.task.ScheduledTask;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,12 +20,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.scheduler.BukkitTask;
 
 public class GuiManager extends Manager implements Listener, Runnable {
 
     private final List<GuiInventory> guiInventories;
-    private BukkitTask guiTask;
+    private ScheduledTask guiTask;
 
     public GuiManager(RosePlugin playerParticles) {
         super(playerParticles);
@@ -39,7 +39,7 @@ public class GuiManager extends Manager implements Listener, Runnable {
     public void reload() {
         if (this.guiTask != null)
             this.guiTask.cancel();
-        this.guiTask = Bukkit.getScheduler().runTaskTimer(this.rosePlugin, this, 0, 10);
+        this.guiTask = this.rosePlugin.getScheduler().runTaskTimer(this, 0, 10);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class GuiManager extends Manager implements Listener, Runnable {
             return;
         
         event.setCancelled(true);
-        Bukkit.getScheduler().runTaskAsynchronously(this.rosePlugin, () -> inventory.onClick(event));
+        this.rosePlugin.getScheduler().runTaskAsync(() -> inventory.onClick(event));
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -109,7 +109,7 @@ public class GuiManager extends Manager implements Listener, Runnable {
         if (Bukkit.isPrimaryThread()) {
             toClose.forEach(Player::closeInventory);
         } else {
-            Bukkit.getScheduler().runTask(this.rosePlugin, () -> toClose.forEach(Player::closeInventory));
+            this.rosePlugin.getScheduler().runTask(() -> toClose.forEach(Player::closeInventory));
         }
     }
     
@@ -124,7 +124,7 @@ public class GuiManager extends Manager implements Listener, Runnable {
             return;
         }
 
-        Bukkit.getScheduler().runTask(this.rosePlugin, () ->
+        this.rosePlugin.getScheduler().runTask(() ->
                 this.openGui(pplayer, new GuiInventoryDefault(pplayer)));
     }
 
@@ -134,7 +134,7 @@ public class GuiManager extends Manager implements Listener, Runnable {
      * @param pplayer The PPlayer to open the GUI screen for
      */
     public void openPresetGroups(PPlayer pplayer) {
-        Bukkit.getScheduler().runTask(this.rosePlugin, () ->
+        this.rosePlugin.getScheduler().runTask(() ->
                 this.openGui(pplayer, new GuiInventoryLoadPresetGroups(pplayer, true, 1)));
     }
 
@@ -144,7 +144,7 @@ public class GuiManager extends Manager implements Listener, Runnable {
      * @param pplayer The PPlayer to open the GUI screen for
      */
     public void openGroups(PPlayer pplayer) {
-        Bukkit.getScheduler().runTask(this.rosePlugin, () ->
+        this.rosePlugin.getScheduler().runTask(() ->
                 this.openGui(pplayer, new GuiInventoryManageGroups(pplayer, 1)));
     }
 
@@ -154,7 +154,7 @@ public class GuiManager extends Manager implements Listener, Runnable {
      * @param pplayer The PPlayer to open the GUI screen for
      */
     public void openParticles(PPlayer pplayer) {
-        Bukkit.getScheduler().runTask(this.rosePlugin, () ->
+        this.rosePlugin.getScheduler().runTask(() ->
                 this.openGui(pplayer, new GuiInventoryManageParticles(pplayer)));
     }
 
@@ -175,7 +175,7 @@ public class GuiManager extends Manager implements Listener, Runnable {
      * @param nextInventory The GuiInventory to transition to
      */
     public void transition(GuiInventory nextInventory) {
-        Bukkit.getScheduler().runTask(this.rosePlugin, () -> {
+        this.rosePlugin.getScheduler().runTask(() -> {
             nextInventory.getPPlayer().getPlayer().openInventory(nextInventory.getInventory());
             this.guiInventories.add(nextInventory);
         });

@@ -22,6 +22,7 @@ import dev.rosewood.rosegarden.database.SQLiteConnector;
 import dev.rosewood.rosegarden.manager.AbstractDataManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -52,12 +53,12 @@ public class DataManager extends AbstractDataManager {
      * Loads all fixed effects and player particles from the database
      */
     public void loadEffects() {
-        Bukkit.getScheduler().runTaskAsynchronously(this.rosePlugin, () -> {
-            this.loadFixedEffects();
+        this.rosePlugin.getScheduler().runTaskAsync(() -> {
             for (Player player : Bukkit.getOnlinePlayers())
                 this.getPPlayer(player.getUniqueId(), (pplayer) -> { }, false); // Loads the PPlayer from the database
 
             this.getPPlayer(ConsolePPlayer.getUUID(), (pplayer) -> { }, false); // Load the console PPlayer
+            this.loadFixedEffects();
         });
     }
 
@@ -88,10 +89,12 @@ public class DataManager extends AbstractDataManager {
      *
      * @param playerUUID The pplayer to get
      * @param callback The callback to execute with the found pplayer, or a newly generated one
+     * @param readCache If true, tries to read from the cache first, otherwise always forcefully reloads the player data
      */
-    public void getPPlayer(UUID playerUUID, Consumer<PPlayer> callback, boolean useCache) {
+    public void getPPlayer(UUID playerUUID, Consumer<PPlayer> callback, boolean readCache) {
         // Try to get them from cache first if allowed
-        if (useCache) {
+        this.rosePlugin.getLogger().warning(playerUUID + " getPPlayer " + readCache);
+        if (readCache) {
             PPlayer fromCache = this.getPPlayer(playerUUID);
             if (fromCache != null) {
                 callback.accept(fromCache);
@@ -99,7 +102,7 @@ public class DataManager extends AbstractDataManager {
             }
         }
 
-        this.async(() -> {
+        Runnable task = () -> {
             Map<String, ParticleGroup> groups = new ConcurrentHashMap<>();
             Map<Integer, FixedParticleEffect> fixedParticles = new ConcurrentHashMap<>();
 
@@ -131,8 +134,8 @@ public class DataManager extends AbstractDataManager {
 
                 // Load particle groups
                 String groupQuery = "SELECT * FROM " + this.getTablePrefix() + "group g " +
-        					   	    "JOIN " + this.getTablePrefix() + "particle p ON g.uuid = p.group_uuid " +
-        					   	    "WHERE g.owner_uuid = ?";
+                        "JOIN " + this.getTablePrefix() + "particle p ON g.uuid = p.group_uuid " +
+                        "WHERE g.owner_uuid = ?";
                 try (PreparedStatement statement = connection.prepareStatement(groupQuery)) {
                     statement.setString(1, playerUUID.toString());
 
@@ -192,8 +195,8 @@ public class DataManager extends AbstractDataManager {
 
                 // Load fixed effects
                 String fixedQuery = "SELECT f.id AS f_id, f.world, f.xPos, f.yPos, f.zPos, f.yaw, f.pitch, p.id AS p_id, p.effect, p.style, p.item_material, p.block_material, p.note, p.r, p.g, p.b, p.r_end, p.g_end, p.b_end, p.duration FROM " + this.getTablePrefix() + "fixed f " +
-        						    "JOIN " + this.getTablePrefix() + "particle p ON f.particle_uuid = p.uuid " +
-        						    "WHERE f.owner_uuid = ?";
+                        "JOIN " + this.getTablePrefix() + "particle p ON f.particle_uuid = p.uuid " +
+                        "WHERE f.owner_uuid = ?";
                 try (PreparedStatement statement = connection.prepareStatement(fixedQuery)) {
                     statement.setString(1, playerUUID.toString());
 
@@ -265,7 +268,13 @@ public class DataManager extends AbstractDataManager {
                     callback.accept(loadedPPlayer);
                 });
             });
-        });
+        };
+
+        if (!Bukkit.isPrimaryThread()) {
+            this.async(task);
+        } else {
+            task.run();
+        }
     }
 
     /**
@@ -274,13 +283,16 @@ public class DataManager extends AbstractDataManager {
     public void loadFixedEffects() {
         this.async(() -> this.databaseConnector.connect((connection) -> {
             String query = "SELECT DISTINCT owner_uuid FROM " + this.getTablePrefix() + "fixed";
+            List<UUID> uuids = new ArrayList<>();
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 ResultSet result = statement.executeQuery();
                 while (result.next()) {
                     UUID playerUUID = UUID.fromString(result.getString("owner_uuid"));
-                    this.sync(() -> this.getPPlayer(playerUUID, (pplayer) -> { }, false));
+                    uuids.add(playerUUID);
                 }
             }
+            for (UUID uuid : uuids)
+                this.getPPlayer(uuid, (pplayer) -> { });
         }));
     }
 
@@ -508,15 +520,17 @@ public class DataManager extends AbstractDataManager {
     public void updateFixedEffect(FixedParticleEffect fixedEffect) {
         this.async(() -> this.databaseConnector.connect((connection) -> {
             // Update fixed effect
-            String fixedEffectQuery = "UPDATE " + this.getTablePrefix() + "fixed SET xPos = ?, yPos = ?, zPos = ?, yaw = ?, pitch = ? WHERE owner_uuid = ? AND id = ?";
+            String fixedEffectQuery = "UPDATE " + this.getTablePrefix() + "fixed SET world = ?, xPos = ?, yPos = ?, zPos = ?, yaw = ?, pitch = ? WHERE owner_uuid = ? AND id = ?";
             try (PreparedStatement statement = connection.prepareStatement(fixedEffectQuery)) {
-                statement.setDouble(1, fixedEffect.getLocation().getX());
-                statement.setDouble(2, fixedEffect.getLocation().getY());
-                statement.setDouble(3, fixedEffect.getLocation().getZ());
-                statement.setDouble(4, fixedEffect.getLocation().getYaw());
-                statement.setDouble(5, fixedEffect.getLocation().getPitch());
-                statement.setString(6, fixedEffect.getOwnerUniqueId().toString());
-                statement.setInt(7, fixedEffect.getId());
+                Location location = fixedEffect.getLocation();
+                statement.setString(1, location.getWorld().getName());
+                statement.setDouble(2, location.getX());
+                statement.setDouble(3, location.getY());
+                statement.setDouble(4, location.getZ());
+                statement.setDouble(5, location.getYaw());
+                statement.setDouble(6, location.getPitch());
+                statement.setString(7, fixedEffect.getOwnerUniqueId().toString());
+                statement.setInt(8, fixedEffect.getId());
                 statement.executeUpdate();
             }
 
@@ -590,7 +604,7 @@ public class DataManager extends AbstractDataManager {
      * @param asyncCallback The callback to run on a separate thread
      */
     private void async(Runnable asyncCallback) {
-        Bukkit.getScheduler().runTaskAsynchronously(this.rosePlugin, asyncCallback);
+        this.rosePlugin.getScheduler().runTaskAsync(asyncCallback);
     }
 
     /**
@@ -599,7 +613,7 @@ public class DataManager extends AbstractDataManager {
      * @param syncCallback The callback to run on the main thread
      */
     private void sync(Runnable syncCallback) {
-        Bukkit.getScheduler().runTask(this.rosePlugin, syncCallback);
+        this.rosePlugin.getScheduler().runTask(syncCallback);
     }
 
     @Override

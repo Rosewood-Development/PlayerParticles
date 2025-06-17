@@ -11,7 +11,6 @@ import java.util.Deque;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedDeque;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -40,7 +39,7 @@ public class ParticleStyleFishing extends ConfiguredParticleStyle implements Lis
         this.projectiles = new ConcurrentLinkedDeque<>();
 
         // Removes all fish hooks that are considered dead
-        Bukkit.getScheduler().runTaskTimer(PlayerParticles.getInstance(), () -> {
+        PlayerParticles.getInstance().getScheduler().runTaskTimer(() -> {
             this.projectiles.removeIf(x -> !x.getProjectile().isValid());
         }, 0L, 5L);
     }

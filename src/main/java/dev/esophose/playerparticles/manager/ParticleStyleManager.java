@@ -1,21 +1,19 @@
 package dev.esophose.playerparticles.manager;
 
-import dev.esophose.playerparticles.PlayerParticles;
 import dev.esophose.playerparticles.event.ParticleStyleRegistrationEvent;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.styles.ConfiguredParticleStyle;
 import dev.esophose.playerparticles.styles.DefaultStyles;
 import dev.esophose.playerparticles.styles.ParticleStyle;
+import dev.rosewood.rosegarden.RosePlugin;
+import dev.rosewood.rosegarden.manager.Manager;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import dev.rosewood.rosegarden.RosePlugin;
-import dev.rosewood.rosegarden.manager.Manager;
 import org.bukkit.Bukkit;
 
 public class ParticleStyleManager extends Manager {
@@ -44,7 +42,7 @@ public class ParticleStyleManager extends Manager {
         this.eventStyles.clear();
 
         // Run task a tick later to allow other plugins to finish registering to the event
-        Bukkit.getScheduler().runTask(this.rosePlugin, () -> {
+        this.rosePlugin.getScheduler().runTask(() -> {
             // Call registration event
             // We use this event internally, so no other action needs to be done for us to register the default styles
             ParticleStyleRegistrationEvent event = new ParticleStyleRegistrationEvent();

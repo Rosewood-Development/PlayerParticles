@@ -35,7 +35,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -73,8 +72,8 @@ public class ParticleGroupPresetManager extends Manager {
         } else {
             this.tryMigrateOld(presetsFile);
         }
-        
-        Bukkit.getScheduler().runTaskLater(this.rosePlugin, () -> this.tryParseFile(presetsFile), 3L);
+
+        this.rosePlugin.getScheduler().runTaskLater(() -> this.tryParseFile(presetsFile), 3L);
     }
 
     private void tryParseFile(File presetsFile) {

@@ -597,7 +597,7 @@ public class FixedCommandModule implements CommandModule {
             return;
         }
 
-        Bukkit.getScheduler().runTask(PlayerParticles.getInstance(), () -> player.teleport(fixedEffect.getLocation()));
+        PlayerParticles.getInstance().getScheduler().runTask(() -> player.teleport(fixedEffect.getLocation()));
         localeManager.sendMessage(pplayer, "fixed-teleport-success", StringPlaceholders.of("id", id));
     }
 

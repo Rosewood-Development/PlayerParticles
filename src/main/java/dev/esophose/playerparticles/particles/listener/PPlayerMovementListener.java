@@ -26,7 +26,7 @@ public class PPlayerMovementListener implements Listener {
         this.timeSinceLastMovement = new HashMap<>();
         this.previousVectors = new HashMap<>();
 
-        Bukkit.getScheduler().runTaskTimer(PlayerParticles.getInstance(), () -> {
+        PlayerParticles.getInstance().getScheduler().runTaskTimer(() -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 UUID playerUUID = player.getUniqueId();
                 Vector previousVector = this.previousVectors.get(playerUUID);

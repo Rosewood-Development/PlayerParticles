@@ -1,16 +1,15 @@
 package dev.esophose.playerparticles.styles;
 
 import dev.esophose.playerparticles.PlayerParticles;
-import dev.rosewood.rosegarden.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.ParticleManager;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.rosewood.rosegarden.config.CommentedFileConfiguration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -96,7 +95,7 @@ public class ParticleStyleTeleport extends ConfiguredParticleStyle implements Li
             }
 
             if (this.after) {
-                Bukkit.getScheduler().runTaskLater(PlayerParticles.getInstance(), () -> {
+                PlayerParticles.getInstance().getScheduler().runTaskLater(() -> {
                     Location loc2 = player.getLocation();
                     loc2.setY(loc2.getY() + 1);
                     particleManager.displayParticles(pplayer, player.getWorld(), particle, DefaultStyles.TELEPORT.getParticles(particle, loc2), false);

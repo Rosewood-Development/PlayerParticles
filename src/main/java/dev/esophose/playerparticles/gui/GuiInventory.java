@@ -7,7 +7,6 @@ import dev.esophose.playerparticles.util.ParticleUtils;
 import dev.rosewood.rosegarden.utils.NMSUtil;
 import java.util.ArrayList;
 import java.util.List;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -194,7 +193,7 @@ public abstract class GuiInventory {
     }
 
     public void close() {
-        Bukkit.getScheduler().runTask(PlayerParticles.getInstance(), () -> this.pplayer.getPlayer().closeInventory());
+        PlayerParticles.getInstance().getScheduler().runTask(() -> this.pplayer.getPlayer().closeInventory());
     }
 
 }

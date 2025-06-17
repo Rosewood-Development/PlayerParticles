@@ -156,7 +156,7 @@ public class CommandManager extends Manager implements CommandExecutor, TabCompl
                 return true;
             }
 
-            Bukkit.getScheduler().runTaskAsynchronously(this.rosePlugin, () -> {
+            this.rosePlugin.getScheduler().runTaskAsync(() -> {
                 String[] cmdArgs = args.length > 1 ? Arrays.copyOfRange(args, 1, args.length) : new String[0];
 
                 if (!commandModule.canConsoleExecute()) {
@@ -218,7 +218,7 @@ public class CommandManager extends Manager implements CommandExecutor, TabCompl
             }
 
             // Run the /ppo command
-            Bukkit.getScheduler().runTask(this.rosePlugin, () -> this.ppoCommand.onCommandExecute(sender, args));
+            this.rosePlugin.getScheduler().runTask(() -> this.ppoCommand.onCommandExecute(sender, args));
         }
         
         return true;
