@@ -106,7 +106,8 @@ public class ParticleManager extends Manager implements Listener, Runnable {
     public void onPlayerJoin(PlayerJoinEvent e) {
         // Loads the PPlayer from the database
         PPlayer removed = this.particlePlayers.remove(e.getPlayer().getUniqueId());
-        removed.clearCachedPlayer();
+        if (removed != null)
+            removed.clearCachedPlayer();
         this.rosePlugin.getManager(DataManager.class).getPPlayer(e.getPlayer().getUniqueId(), pplayer -> {
             // If enabled, check permissions for that player
             if (!Settings.CHECK_PERMISSIONS_ON_LOGIN.get())
