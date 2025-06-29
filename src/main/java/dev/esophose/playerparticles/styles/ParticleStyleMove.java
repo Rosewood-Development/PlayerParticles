@@ -1,12 +1,12 @@
 package dev.esophose.playerparticles.styles;
 
 import dev.esophose.playerparticles.PlayerParticles;
-import dev.rosewood.rosegarden.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.manager.DataManager;
 import dev.esophose.playerparticles.manager.ParticleManager;
 import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticlePair;
+import dev.rosewood.rosegarden.config.CommentedFileConfiguration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,8 +19,8 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 public class ParticleStyleMove extends ConfiguredParticleStyle implements Listener {
 
-    private final ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
-    private final DataManager dataManager = PlayerParticles.getInstance().getManager(DataManager.class);
+    private ParticleManager particleManager;
+    private DataManager dataManager;
 
     private int multiplier;
 
@@ -64,7 +64,12 @@ public class ParticleStyleMove extends ConfiguredParticleStyle implements Listen
         Location to = event.getTo();
         if (to == null || (from.getX() == to.getX() && from.getY() == to.getY() && from.getZ() == to.getZ()))
             return;
-        
+
+        if (this.particleManager == null || this.dataManager == null) {
+            this.particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
+            this.dataManager = PlayerParticles.getInstance().getManager(DataManager.class);
+        }
+
         Player player = event.getPlayer();
         PPlayer pplayer = this.dataManager.getPPlayer(player.getUniqueId());
         if (pplayer == null)
