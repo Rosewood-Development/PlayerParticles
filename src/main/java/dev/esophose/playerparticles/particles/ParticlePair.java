@@ -390,6 +390,10 @@ public class ParticlePair {
         }
     }
 
+    public boolean isHiddenWhenLimited() {
+        return this.effect.isHiddenWhenLimited() || this.style.isHiddenWhenLimited();
+    }
+
     /**
      * @return a copy of this ParticlePair
      */

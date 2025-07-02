@@ -106,6 +106,13 @@ public interface ParticleStyle {
     }
 
     /**
+     * @return true if this effect is hidden when the player is in a limited region
+     */
+    default boolean isHiddenWhenLimited() {
+        return false;
+    }
+
+    /**
      * Gets the ParticleStyle with the name given, returns null if not found
      * 
      * @param styleName The name of the style to search for

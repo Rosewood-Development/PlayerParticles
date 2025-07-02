@@ -161,6 +161,7 @@ public enum ParticleEffect {
     private String effectName;
     private boolean enabled;
     private Material guiIconMaterial;
+    private boolean hiddenWhenLimited;
 
     /**
      * Construct a new particle effect with a required data type
@@ -195,6 +196,7 @@ public enum ParticleEffect {
         this.defaultIconMaterialNames = defaultIconMaterialNames;
         this.enabledByDefault = enabledByDefault;
         this.dataType = dataType;
+        this.hiddenWhenLimited = false;
 
         // Will be null if this server's version doesn't support this particle type
         if (NMSUtil.getVersionNumber() > 8) {
@@ -238,6 +240,7 @@ public enum ParticleEffect {
         boolean changed = this.setIfNotExists("effect-name", this.getInternalName(), "The name the effect will display as");
         changed |= this.setIfNotExists("enabled", this.enabledByDefault, "If the effect is enabled or not");
         changed |= this.setIfNotExists("gui-icon-material", this.defaultIconMaterialNames);
+        changed |= this.setIfNotExists("hide-in-limited-region", false, "If true, this effect will be hidden when a player is in a WorldGuard region with the flag 'player-particles-limited' denied");
 
         if (changed)
             this.config.save(file);
@@ -258,6 +261,7 @@ public enum ParticleEffect {
         this.effectName = this.config.getString("effect-name");
         this.enabled = this.config.getBoolean("enabled");
         this.guiIconMaterial = ParticleUtils.closestMatchWithFallback(true, this.config.getStringList("gui-icon-material").toArray(new String[0]));
+        this.hiddenWhenLimited = this.config.getBoolean("hide-in-limited-region");
     }
 
     /**
@@ -317,6 +321,13 @@ public enum ParticleEffect {
      */
     public Material getGuiIconMaterial() {
         return this.guiIconMaterial;
+    }
+
+    /**
+     * @return true if this effect is hidden when the player is in a limited region
+     */
+    public boolean isHiddenWhenLimited() {
+        return this.hiddenWhenLimited;
     }
 
     /**

@@ -222,11 +222,18 @@ public class ParticleManager extends Manager implements Listener, Runnable {
             if (player == null)
                 continue;
 
-            boolean inAllowedRegion = WorldGuardHook.isInAllowedRegion(player.getLocation());
-            if (!inAllowedRegion && Settings.WORLDGUARD_ENABLE_BYPASS_PERMISSION.get())
-                inAllowedRegion = permissionManager.hasWorldGuardBypass(player);
+            boolean inAllowedRegion;
+            boolean inLimitedRegion;
+            if (Settings.WORLDGUARD_ENABLE_BYPASS_PERMISSION.get() && permissionManager.hasWorldGuardBypass(player)) {
+                inAllowedRegion = true;
+                inLimitedRegion = false;
+            } else {
+                inAllowedRegion = WorldGuardHook.isInAllowedRegion(player.getLocation());
+                inLimitedRegion = WorldGuardHook.isInLimitedRegion(player.getLocation());
+            }
 
             pplayer.setInAllowedRegion(inAllowedRegion);
+            pplayer.setInLimitedRegion(inLimitedRegion);
         }
     }
 
@@ -238,39 +245,43 @@ public class ParticleManager extends Manager implements Listener, Runnable {
      * @param location The location to display at
      */
     private void displayParticles(PPlayer pplayer, ParticlePair particle, Location location) {
-        if (!this.rosePlugin.getManager(ParticleStyleManager.class).isEventHandled(particle.getStyle())) {
-            if (Settings.TOGGLE_ON_COMBAT.get() && particle.getStyle().canToggleWithCombat() && pplayer.isInCombat())
-                return;
+        if (this.rosePlugin.getManager(ParticleStyleManager.class).isEventHandled(particle.getStyle()))
+            return;
 
-            if (!pplayer.isInAllowedRegion())
-                return;
+        if (Settings.TOGGLE_ON_COMBAT.get() && particle.getStyle().canToggleWithCombat() && pplayer.isInCombat())
+            return;
 
-            if (particle.getStyle().canToggleWithMovement() && pplayer.isMoving()) {
-                switch (Settings.TOGGLE_ON_MOVE.get().toUpperCase()) {
-                    case "DISPLAY_FEET":
-                    case "TRUE": // Old default value, keep here for legacy config compatibility
-                        for (PParticle pparticle : DefaultStyles.FEET.getParticles(particle, location))
-                            ParticleEffect.display(particle, pparticle, particle.getStyle().hasLongRangeVisibility(), pplayer.getPlayer());
-                        return;
-                    case "DISPLAY_NORMAL":
-                        for (PParticle pparticle : DefaultStyles.NORMAL.getParticles(particle, location))
-                            ParticleEffect.display(particle, pparticle, particle.getStyle().hasLongRangeVisibility(), pplayer.getPlayer());
-                        return;
-                    case "DISPLAY_OVERHEAD":
-                        for (PParticle pparticle : DefaultStyles.OVERHEAD.getParticles(particle, location))
-                            ParticleEffect.display(particle, pparticle, particle.getStyle().hasLongRangeVisibility(), pplayer.getPlayer());
-                        return;
-                    case "NONE":
-                    case "FALSE": // Old default value, keep here for legacy config compatibility
-                        break;
-                    default:
-                        return;
-                }
+        if (!pplayer.isInAllowedRegion())
+            return;
+
+        if (pplayer.isInLimitedRegion() && particle.isHiddenWhenLimited())
+            return;
+
+        if (particle.getStyle().canToggleWithMovement() && pplayer.isMoving()) {
+            switch (Settings.TOGGLE_ON_MOVE.get().toUpperCase()) {
+                case "DISPLAY_FEET":
+                case "TRUE": // Old default value, keep here for legacy config compatibility
+                    for (PParticle pparticle : DefaultStyles.FEET.getParticles(particle, location))
+                        ParticleEffect.display(particle, pparticle, particle.getStyle().hasLongRangeVisibility(), pplayer.getPlayer());
+                    return;
+                case "DISPLAY_NORMAL":
+                    for (PParticle pparticle : DefaultStyles.NORMAL.getParticles(particle, location))
+                        ParticleEffect.display(particle, pparticle, particle.getStyle().hasLongRangeVisibility(), pplayer.getPlayer());
+                    return;
+                case "DISPLAY_OVERHEAD":
+                    for (PParticle pparticle : DefaultStyles.OVERHEAD.getParticles(particle, location))
+                        ParticleEffect.display(particle, pparticle, particle.getStyle().hasLongRangeVisibility(), pplayer.getPlayer());
+                    return;
+                case "NONE":
+                case "FALSE": // Old default value, keep here for legacy config compatibility
+                    break;
+                default:
+                    return;
             }
-
-            for (PParticle pparticle : this.getParticlesWithPlayer(particle, location, pplayer.getPlayer()))
-                ParticleEffect.display(particle, pparticle, particle.getStyle().hasLongRangeVisibility(), pplayer.getPlayer());
         }
+
+        for (PParticle pparticle : this.getParticlesWithPlayer(particle, location, pplayer.getPlayer()))
+            ParticleEffect.display(particle, pparticle, particle.getStyle().hasLongRangeVisibility(), pplayer.getPlayer());
     }
 
     /**
@@ -316,6 +327,8 @@ public class ParticleManager extends Manager implements Listener, Runnable {
         if (!ignorePlayerState) {
             if (pplayer != null) {
                 if (!pplayer.isInAllowedRegion())
+                    return;
+                if (!pplayer.isInLimitedRegion() && particle.isHiddenWhenLimited())
                     return;
                 player = pplayer.getPlayer();
             }

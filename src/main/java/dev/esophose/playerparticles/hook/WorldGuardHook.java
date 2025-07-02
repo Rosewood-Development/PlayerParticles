@@ -1,6 +1,5 @@
 package dev.esophose.playerparticles.hook;
 
-import dev.esophose.playerparticles.config.Settings;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +15,7 @@ public class WorldGuardHook {
 
     private static WorldGuardWrapper worldGuardWrapper;
     private static IWrappedFlag<WrappedState> flagPlayerParticles;
+    private static IWrappedFlag<WrappedState> flagPlayerParticlesLimited;
 
     /**
      * Initializes the WorldGuard hook.
@@ -27,6 +27,7 @@ public class WorldGuardHook {
         
         worldGuardWrapper = WorldGuardWrapper.getInstance();
         flagPlayerParticles = worldGuardWrapper.registerFlag("player-particles", WrappedState.class, WrappedState.ALLOW).orElse(null);
+        flagPlayerParticlesLimited = worldGuardWrapper.registerFlag("player-particles-limited", WrappedState.class, WrappedState.ALLOW).orElse(null);
     }
     
     /**
@@ -44,7 +45,7 @@ public class WorldGuardHook {
      */
     @SuppressWarnings("unchecked")
     public static boolean isInAllowedRegion(Location location) {
-        if (!enabled())
+        if (!enabled() || flagPlayerParticles == null)
             return true;
 
         List<IWrappedRegion> regions = worldGuardWrapper.getRegions(location).stream()
@@ -53,31 +54,50 @@ public class WorldGuardHook {
 
         // Get the "player-particles" flag.
         // This will use the region priority to determine which one takes precedence.
-        if (flagPlayerParticles != null) {
-            for (IWrappedRegion region : regions) {
-                Optional<WrappedState> flagState = region.getFlag(flagPlayerParticles);
-                if (flagState.isPresent()) {
-                    Object value = flagState.get();
-                    // Fix a weird mismatch where the type in the compiler does not match the runtime type
-                    if (value instanceof WrappedState && value == WrappedState.DENY) {
-                        return false;
-                    } else if (value instanceof Optional && ((Optional<WrappedState>) value).get() == WrappedState.DENY) {
-                        return false;
-                    }
+        for (IWrappedRegion region : regions) {
+            Optional<WrappedState> flagState = region.getFlag(flagPlayerParticles);
+            if (flagState.isPresent()) {
+                Object value = flagState.get();
+                // Fix a weird mismatch where the type in the compiler does not match the runtime type
+                if (value instanceof WrappedState && value == WrappedState.DENY) {
+                    return false;
+                } else if (value instanceof Optional && ((Optional<WrappedState>) value).get() == WrappedState.DENY) {
+                    return false;
                 }
             }
         }
 
-        // Legacy blocking by region name.
-        List<String> disallowedRegionIds = Settings.WORLDGUARD_DISALLOWED_REGIONS.get();
-        if (regions.stream().map(IWrappedRegion::getId).anyMatch(disallowedRegionIds::contains))
+        return true;
+    }
+
+    /**
+     * Checks if a location is in a region that has limited particles allowed
+     *
+     * @param location The location to check
+     * @return true if the location only allows limited particles, otherwise false
+     */
+    public static boolean isInLimitedRegion(Location location) {
+        if (!enabled() || flagPlayerParticlesLimited == null)
             return false;
 
-        if (!Settings.WORLDGUARD_USE_ALLOWED_REGIONS.get())
-            return true;
+        List<IWrappedRegion> regions = worldGuardWrapper.getRegions(location).stream()
+                .sorted(Comparator.comparing(IWrappedRegion::getPriority))
+                .collect(Collectors.toList());
 
-        List<String> allowedRegionIds = Settings.WORLDGUARD_ALLOWED_REGIONS.get();
-        return regions.stream().map(IWrappedRegion::getId).anyMatch(allowedRegionIds::contains);
+        for (IWrappedRegion region : regions) {
+            Optional<WrappedState> flagState = region.getFlag(flagPlayerParticlesLimited);
+            if (flagState.isPresent()) {
+                Object value = flagState.get();
+                // Fix a weird mismatch where the type in the compiler does not match the runtime type
+                if (value instanceof WrappedState && value == WrappedState.DENY) {
+                    return true;
+                } else if (value instanceof Optional && ((Optional<WrappedState>) value).get() == WrappedState.DENY) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
 }

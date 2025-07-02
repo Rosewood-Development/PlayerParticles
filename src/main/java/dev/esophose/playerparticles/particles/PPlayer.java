@@ -63,6 +63,11 @@ public class PPlayer {
     private boolean inAllowedRegion;
 
     /**
+     * If the player is in a limited region
+     */
+    private boolean inLimitedRegion;
+
+    /**
      * Constructs a new PPlayer
      * 
      * @param uuid The player UUID
@@ -82,6 +87,7 @@ public class PPlayer {
         this.isMoving = false;
         this.inCombat = false;
         this.inAllowedRegion = true;
+        this.inLimitedRegion = false;
     }
 
     /**
@@ -196,7 +202,7 @@ public class PPlayer {
     }
 
     /**
-     * Sets the player's region state
+     * Sets the player's allowed region state
      *
      * @param inAllowedRegion true if the player is in an allowed region, otherwise false
      */
@@ -209,6 +215,22 @@ public class PPlayer {
      */
     public boolean isInAllowedRegion() {
         return this.inAllowedRegion;
+    }
+
+    /**
+     * Sets the player's limited region state
+     *
+     * @param inLimitedRegion true if the player is in an allowed region, otherwise false
+     */
+    public void setInLimitedRegion(boolean inLimitedRegion) {
+        this.inLimitedRegion = inLimitedRegion;
+    }
+
+    /**
+     * @return true if the player is in a limited region, otherwise false
+     */
+    public boolean isInLimitedRegion() {
+        return this.inLimitedRegion;
     }
 
     /**

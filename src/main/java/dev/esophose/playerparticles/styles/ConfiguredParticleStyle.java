@@ -29,6 +29,7 @@ public abstract class ConfiguredParticleStyle implements ParticleStyle {
     private boolean canToggleWithCombat;
     private double fixedEffectOffset;
     private Material guiIconMaterial;
+    private boolean hiddenWhenLimited;
 
     protected ConfiguredParticleStyle(String internalStyleName, boolean canBeFixedByDefault, boolean canToggleWithMovementByDefault, double fixedEffectOffsetByDefault) {
         this(null, internalStyleName, canBeFixedByDefault, canToggleWithMovementByDefault, fixedEffectOffsetByDefault);
@@ -68,6 +69,7 @@ public abstract class ConfiguredParticleStyle implements ParticleStyle {
         this.setIfNotExists("can-toggle-with-combat", this.canToggleWithCombatByDefault, "If particles for this style will be hidden if the player is in combat", "Also requires the setting in the config.yml to be enabled");
         this.setIfNotExists("fixed-effect-offset", this.fixedEffectOffsetByDefault, "How far vertically to offset the style position for fixed effects");
         this.setIfNotExists("gui-icon-material", this.getGuiIconMaterialNames(), "The material of the icon to display in the GUI");
+        this.setIfNotExists("hide-in-limited-region", false, "If true, this style will be hidden when a player is in a WorldGuard region with the flag 'player-particles-limited' denied");
 
         this.setDefaultSettings(this.config);
 
@@ -88,6 +90,7 @@ public abstract class ConfiguredParticleStyle implements ParticleStyle {
         this.canToggleWithCombat = this.config.getBoolean("can-toggle-with-combat");
         this.fixedEffectOffset = this.config.getDouble("fixed-effect-offset");
         this.guiIconMaterial = ParticleUtils.closestMatchWithFallback(true, this.config.getStringList("gui-icon-material").toArray(new String[0]));
+        this.hiddenWhenLimited = this.config.getBoolean("hide-in-limited-region");
 
         this.loadSettings(this.config);
     }
@@ -152,6 +155,11 @@ public abstract class ConfiguredParticleStyle implements ParticleStyle {
     @Override
     public final double getFixedEffectOffset() {
         return this.fixedEffectOffset;
+    }
+
+    @Override
+    public final boolean isHiddenWhenLimited() {
+        return this.hiddenWhenLimited;
     }
 
     /**
