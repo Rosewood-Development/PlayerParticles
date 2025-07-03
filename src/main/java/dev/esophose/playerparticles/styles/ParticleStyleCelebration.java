@@ -10,6 +10,7 @@ import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.util.MathL;
+import dev.esophose.playerparticles.config.Settings;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,11 +64,17 @@ public class ParticleStyleCelebration extends ConfiguredParticleStyle {
             Random random = new Random();
             for (PPlayer pplayer : particleManager.getPPlayers().values()) {
                 Player player = pplayer.getPlayer();
-                if (player != null && (NMSUtil.getVersionNumber() < 8 || player.getGameMode() != GameMode.SPECTATOR) && permissionManager.isWorldEnabled(player.getWorld().getName()))
+                if (player != null && (NMSUtil.getVersionNumber() < 8 || player.getGameMode() != GameMode.SPECTATOR) && permissionManager.isWorldEnabled(player.getWorld().getName())) {
+                    if (Settings.TOGGLE_ON_COMBAT.get() && this.canToggleWithCombat() && pplayer.isInCombat())
+                        continue;
+                    if (Settings.TOGGLE_ON_MOVE.get().equalsIgnoreCase("NONE") || Settings.TOGGLE_ON_MOVE.get().equalsIgnoreCase("FALSE")) {
+                    } else if (this.canToggleWithMovement() && pplayer.isMoving()) {
+                        continue;
+                    }
                     for (ParticlePair particle : pplayer.getActiveParticles())
                         if (particle.getStyle() == this)
                             this.spawnFirework(player.getLocation(), pplayer, particle, random);
-                
+                }
                 for (FixedParticleEffect fixedEffect : pplayer.getFixedParticles())
                     if (fixedEffect.getParticlePair().getStyle() == this && permissionManager.isWorldEnabled(fixedEffect.getLocation().getWorld().getName()))
                         this.spawnFirework(fixedEffect.getLocation(), pplayer, fixedEffect.getParticlePair(), random);
