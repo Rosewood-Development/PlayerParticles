@@ -28,7 +28,8 @@ public class LocaleManager extends AbstractLocaleManager {
     public void sendMessage(PPlayer pplayer, String messageKey, StringPlaceholders stringPlaceholders) {
         String prefix = this.getLocaleMessage("prefix");
         String message = this.getLocaleMessage(messageKey, stringPlaceholders);
-        this.sendUnparsedMessage(pplayer.getUnderlyingExecutor(), prefix + message);
+        if (!message.isEmpty())
+            this.sendUnparsedMessage(pplayer.getUnderlyingExecutor(), prefix + message);
     }
 
     /**
