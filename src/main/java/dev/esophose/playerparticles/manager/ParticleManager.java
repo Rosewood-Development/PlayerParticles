@@ -328,7 +328,7 @@ public class ParticleManager extends Manager implements Listener, Runnable {
             if (pplayer != null) {
                 if (!pplayer.isInAllowedRegion())
                     return;
-                if (!pplayer.isInLimitedRegion() && particle.isHiddenWhenLimited())
+                if (pplayer.isInLimitedRegion() && particle.isHiddenWhenLimited())
                     return;
                 player = pplayer.getPlayer();
             }
