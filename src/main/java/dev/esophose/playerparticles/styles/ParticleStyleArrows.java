@@ -47,7 +47,7 @@ public class ParticleStyleArrows extends ConfiguredParticleStyle implements List
                 Projectile projectile = launchedProjectile.getProjectile();
                 if (!projectile.isValid())
                     return true;
-                return this.arrowTrackingTime != -1 && projectile.getTicksLived() >= this.arrowTrackingTime;
+                return !NMSUtil.isFolia() && this.arrowTrackingTime != -1 && projectile.getTicksLived() >= this.arrowTrackingTime;
             });
         }, 0L, 5L);
     }

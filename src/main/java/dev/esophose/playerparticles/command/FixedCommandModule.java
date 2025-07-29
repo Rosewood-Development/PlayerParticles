@@ -16,6 +16,7 @@ import dev.esophose.playerparticles.styles.ParticleStyle;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import dev.esophose.playerparticles.util.inputparser.InputParser;
 import dev.esophose.playerparticles.util.inputparser.parsable.ParsableOrdinaryColor;
+import dev.rosewood.rosegarden.utils.NMSUtil;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -597,7 +598,13 @@ public class FixedCommandModule implements CommandModule {
             return;
         }
 
-        PlayerParticles.getInstance().getScheduler().runTask(() -> player.teleport(fixedEffect.getLocation()));
+        PlayerParticles.getInstance().getScheduler().runTask(() -> {
+            if (!NMSUtil.isFolia()) {
+                player.teleport(fixedEffect.getLocation());
+            } else {
+                player.teleportAsync(fixedEffect.getLocation());
+            }
+        });
         localeManager.sendMessage(pplayer, "fixed-teleport-success", StringPlaceholders.of("id", id));
     }
 

@@ -36,7 +36,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'org.spigotmc:spigot-api:1.21.7-R0.1-SNAPSHOT'
+    compileOnly 'io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT'
     compileOnly 'org.jetbrains:annotations:24.0.1'
     compileOnly 'me.clip:placeholderapi:2.11.6'
     api 'org.codemc.worldguardwrapper:worldguardwrapper:1.2.1-SNAPSHOT'
