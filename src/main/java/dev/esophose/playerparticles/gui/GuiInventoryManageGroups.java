@@ -153,7 +153,7 @@ public class GuiInventoryManageGroups extends GuiInventory {
                         return;
 
                     if (!Settings.GUI_GROUP_CREATION_BUNGEE_SUPPORT.get()) {
-                        PlayerChatHook.addHook(new PlayerChatHookData(pplayer.getUniqueId(), 15, (textEntered) -> {
+                        PlayerChatHook.getInstance().addHook(new PlayerChatHookData(pplayer.getUniqueId(), 15, (textEntered) -> {
                             if (textEntered != null && !textEntered.equalsIgnoreCase("cancel")) {
                                 String groupName = textEntered.split(" ")[0];
 

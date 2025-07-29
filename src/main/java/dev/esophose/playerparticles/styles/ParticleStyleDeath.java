@@ -8,9 +8,11 @@ import dev.esophose.playerparticles.particles.PParticle;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.rosewood.rosegarden.config.CommentedFileConfiguration;
+import dev.rosewood.rosegarden.scheduler.task.ScheduledTask;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
@@ -18,7 +20,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class ParticleStyleDeath extends ConfiguredParticleStyle implements Listener {
 
@@ -82,10 +83,10 @@ public class ParticleStyleDeath extends ConfiguredParticleStyle implements Liste
         if (pplayer == null)
             return;
 
+        AtomicReference<ScheduledTask> scheduledTask = new AtomicReference<>();
         Location location = event.getEntity().getLocation().add(0, 1, 0);
-        new BukkitRunnable() {
+        scheduledTask.set(PlayerParticles.getInstance().getScheduler().runTaskTimer(new Runnable() {
             private long totalDuration = 0;
-
             @Override
             public void run() {
                 for (ParticlePair particle : pplayer.getActiveParticlesForStyle(DefaultStyles.DEATH))
@@ -93,9 +94,9 @@ public class ParticleStyleDeath extends ConfiguredParticleStyle implements Liste
 
                 this.totalDuration += ParticleStyleDeath.this.ticksPerParticle;
                 if (this.totalDuration > ParticleStyleDeath.this.targetDuration)
-                    this.cancel();
+                    scheduledTask.get().cancel();
             }
-        }.runTaskTimer(PlayerParticles.getInstance(), 0, this.ticksPerParticle);
+        }, 0, this.ticksPerParticle));
     }
 
 }

@@ -7,7 +7,6 @@
 package dev.esophose.playerparticles;
 
 import dev.esophose.playerparticles.config.Settings;
-import dev.esophose.playerparticles.gui.hook.PlayerChatHook;
 import dev.esophose.playerparticles.hook.ParticlePlaceholderExpansion;
 import dev.esophose.playerparticles.hook.WorldGuardHook;
 import dev.esophose.playerparticles.manager.CommandManager;
@@ -58,12 +57,10 @@ public class PlayerParticles extends RosePlugin {
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new PPlayerMovementListener(), this);
         pm.registerEvents(new PPlayerCombatListener(), this);
-        pm.registerEvents(new PlayerChatHook(), this);
 
         if (PlaceholderAPIHook.enabled())
             new ParticlePlaceholderExpansion(this).register();
 
-        PlayerChatHook.setup();
         Settings.GuiIcon.reset();
     }
 

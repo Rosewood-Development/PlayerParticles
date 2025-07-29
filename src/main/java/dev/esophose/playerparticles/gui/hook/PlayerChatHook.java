@@ -15,54 +15,55 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
-public class PlayerChatHook extends BukkitRunnable implements Listener {
+public class PlayerChatHook implements Listener {
 
-    private static Set<PlayerChatHookData> hooks;
-    private static BukkitTask hookTask = null;
+    private static PlayerChatHook INSTANCE;
 
-    /**
-     * Initializes all the static values for this class
-     */
-    public static void setup() {
-        hooks = Collections.synchronizedSet(new HashSet<>());
-        if (hookTask != null)
-            hookTask.cancel();
-        hookTask = new PlayerChatHook().runTaskTimer(PlayerParticles.getInstance(), 0, 20);
+    private final Set<PlayerChatHookData> hooks;
+
+    private PlayerChatHook() {
+        this.hooks = Collections.synchronizedSet(new HashSet<>());
+        PlayerParticles.getInstance().getScheduler().runTaskTimer(this::run, 0, 20);
+        Bukkit.getPluginManager().registerEvents(this, PlayerParticles.getInstance());
     }
-    
+
+    public static PlayerChatHook getInstance() {
+        if (INSTANCE == null)
+            INSTANCE = new PlayerChatHook();
+        return INSTANCE;
+    }
+
     /**
      * Called when a player sends a message in chat
-     * 
+     *
      * @param event The AsyncPlayerChatEvent
      */
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
-        for (PlayerChatHookData hook : hooks) {
+        for (PlayerChatHookData hook : this.hooks) {
             if (hook.getPlayerUUID().equals(event.getPlayer().getUniqueId())) {
                 event.setCancelled(true);
-                hooks.remove(hook);
+                this.hooks.remove(hook);
                 hook.triggerCallback(event.getMessage());
                 return;
             }
         }
     }
-    
+
     /**
      * Ticked every second to decrease the seconds remaining on each hook
      */
     public void run() {
         Set<PlayerChatHookData> hooksToRemove = new HashSet<>();
-        
-        for (PlayerChatHookData hook : hooks) {
+
+        for (PlayerChatHookData hook : this.hooks) {
             if (hook.timedOut()) {
                 hook.triggerCallback(null);
                 hooksToRemove.add(hook);
                 continue;
             }
-            
+
             Player player = Bukkit.getPlayer(hook.getPlayerUUID());
             if (player == null) {
                 hooksToRemove.remove(hook);
@@ -91,24 +92,24 @@ public class PlayerChatHook extends BukkitRunnable implements Listener {
 
             hook.decrementHookLength();
         }
-        
-        for (PlayerChatHookData hookToRemove : hooksToRemove) 
-            hooks.remove(hookToRemove);
+
+        for (PlayerChatHookData hookToRemove : hooksToRemove)
+            this.hooks.remove(hookToRemove);
     }
-    
+
     /**
      * Adds a player chat hook
-     * 
+     *
      * @param newHook The new hook to add
      */
-    public static void addHook(PlayerChatHookData newHook) {
-        for (PlayerChatHookData hook : hooks) {
+    public void addHook(PlayerChatHookData newHook) {
+        for (PlayerChatHookData hook : this.hooks) {
             if (hook.getPlayerUUID().equals(newHook.getPlayerUUID())) {
-                hooks.remove(hook);
+                this.hooks.remove(hook);
                 break;
             }
         }
-        hooks.add(newHook);
+        this.hooks.add(newHook);
     }
 
 }

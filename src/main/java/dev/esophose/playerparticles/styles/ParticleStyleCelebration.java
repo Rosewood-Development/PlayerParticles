@@ -1,7 +1,6 @@
 package dev.esophose.playerparticles.styles;
 
 import dev.esophose.playerparticles.PlayerParticles;
-import dev.rosewood.rosegarden.config.CommentedFileConfiguration;
 import dev.esophose.playerparticles.manager.ParticleManager;
 import dev.esophose.playerparticles.manager.PermissionManager;
 import dev.esophose.playerparticles.particles.FixedParticleEffect;
@@ -10,18 +9,18 @@ import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.util.MathL;
-
+import dev.rosewood.rosegarden.config.CommentedFileConfiguration;
+import dev.rosewood.rosegarden.scheduler.task.ScheduledTask;
+import dev.rosewood.rosegarden.utils.NMSUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-
-import dev.rosewood.rosegarden.utils.NMSUtil;
+import java.util.concurrent.atomic.AtomicReference;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class ParticleStyleCelebration extends ConfiguredParticleStyle {
 
@@ -116,19 +115,21 @@ public class ParticleStyleCelebration extends ConfiguredParticleStyle {
         double distanceFrom = this.baseDistanceFrom + random.nextDouble() * this.distanceFromRandomizer;
         double dx = MathL.sin(angle) * distanceFrom;
         double dz = MathL.cos(angle) * distanceFrom;
-        final Location loc = location.clone().add(dx, 1, dz);
-        final int fuse = this.baseFuseLength + random.nextInt(this.fuseLengthRandomizer);
+        Location loc = location.clone().add(dx, 1, dz);
+        int fuse = this.baseFuseLength + random.nextInt(this.fuseLengthRandomizer);
         ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
 
-        new BukkitRunnable() {
-            private Location location = loc;
-            private int fuseLength = fuse;
+        AtomicReference<ScheduledTask> scheduledTask = new AtomicReference<>();
+        scheduledTask.set(PlayerParticles.getInstance().getScheduler().runTaskTimer(new Runnable() {
+            private final Location location = loc;
+            private final int fuseLength = fuse;
             private int fuseTimer = 0;
             private boolean finished = false;
 
+            @Override
             public void run() {
                 if (this.finished) {
-                    this.cancel();
+                    scheduledTask.get().cancel();
                     return;
                 }
 
@@ -138,7 +139,7 @@ public class ParticleStyleCelebration extends ConfiguredParticleStyle {
                     trail.setStyle(DefaultStyles.CELEBRATION);
 
                     particleManager.displayParticles(pplayer, this.location.getWorld(), trail, Collections.singletonList(PParticle.point(this.location)), true, true);
-                    
+
                     this.location.add(0, ParticleStyleCelebration.this.fuseSpacing, 0);
                 } else {
                     List<PParticle> particles = new ArrayList<>();
@@ -151,7 +152,7 @@ public class ParticleStyleCelebration extends ConfiguredParticleStyle {
                         double dx = radius * MathL.sin(phi) * MathL.cos(theta);
                         double dy = radius * MathL.sin(phi) * MathL.sin(theta);
                         double dz = radius * MathL.cos(phi);
-                        
+
                         particles.add(PParticle.point(this.location.clone().add(dx, dy, dz)));
                     }
                     particleManager.displayParticles(pplayer, this.location.getWorld(), particle, particles, true, true);
@@ -160,7 +161,7 @@ public class ParticleStyleCelebration extends ConfiguredParticleStyle {
                 }
                 this.fuseTimer++;
             }
-        }.runTaskTimer(PlayerParticles.getInstance(), 0, 1);
+        }, 0, 1));
     }
 
 }
