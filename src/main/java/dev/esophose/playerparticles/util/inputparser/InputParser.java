@@ -5,6 +5,7 @@ import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.data.ColorTransition;
 import dev.esophose.playerparticles.particles.data.NoteColor;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
+import dev.esophose.playerparticles.particles.data.TransparentColor;
 import dev.esophose.playerparticles.particles.data.Vibration;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import dev.esophose.playerparticles.util.inputparser.parsable.ParsableColorTransition;
@@ -16,6 +17,7 @@ import dev.esophose.playerparticles.util.inputparser.parsable.ParsableOrdinaryCo
 import dev.esophose.playerparticles.util.inputparser.parsable.ParsableParticleEffect;
 import dev.esophose.playerparticles.util.inputparser.parsable.ParsableParticleStyle;
 import dev.esophose.playerparticles.util.inputparser.parsable.ParsableString;
+import dev.esophose.playerparticles.util.inputparser.parsable.ParsableTransparentColor;
 import dev.esophose.playerparticles.util.inputparser.parsable.ParsableVibration;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,15 +29,16 @@ import org.bukkit.Material;
 
 public class InputParser {
 
-    private static final Map<Class<?>, Parsable<?>> inputTypes;
+    private static final Map<Class<?>, Parsable<?>> INPUT_TYPES;
 
     static {
-        inputTypes = new HashMap<Class<?>, Parsable<?>>() {{
+        INPUT_TYPES = new HashMap<Class<?>, Parsable<?>>() {{
             this.put(Integer.class, new ParsableInteger());
             this.put(Location.class, new ParsableLocation());
             this.put(Material.class, new ParsableMaterial());
             this.put(NoteColor.class, new ParsableNoteColor());
             this.put(OrdinaryColor.class, new ParsableOrdinaryColor());
+            this.put(TransparentColor.class, new ParsableTransparentColor());
             this.put(ColorTransition.class, new ParsableColorTransition());
             this.put(Vibration.class, new ParsableVibration());
             this.put(ParticleEffect.class, new ParsableParticleEffect());
@@ -44,8 +47,8 @@ public class InputParser {
         }};
     }
 
-    private PPlayer pplayer;
-    private List<String> input;
+    private final PPlayer pplayer;
+    private final List<String> input;
 
     public InputParser(PPlayer pplayer, String[] inputs) {
         this.pplayer = pplayer;
@@ -53,19 +56,19 @@ public class InputParser {
     }
 
     /**
-     * Gets the next input parsed and casted to the desired type
+     * Gets the next input parsed and cast to the desired type
      *
      * @param type The type of input to parse
      * @param <T> The input class type
-     * @return The parsed input, casted to the desired type, or null if it was unable to be parsed
+     * @return The parsed input, cast to the desired type, or null if it was unable to be parsed
      */
     @SuppressWarnings("unchecked")
     public <T> T next(Class<T> type) {
-        if (!inputTypes.containsKey(type))
+        if (!INPUT_TYPES.containsKey(type))
             throw new IllegalArgumentException("Cannot handle given type: " + type.getName());
 
         try {
-            return (T) inputTypes.get(type).parse(this.pplayer, this.input);
+            return (T) INPUT_TYPES.get(type).parse(this.pplayer, this.input);
         } catch (Exception e) {
             return null;
         }

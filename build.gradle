@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'dev.esophose'
-version = '8.10'
+version = '8.11-SNAPSHOT'
 
 java {
     targetCompatibility = JavaVersion.VERSION_1_8
@@ -36,7 +36,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT'
+    compileOnly 'io.papermc.paper:paper-api:1.21.10-R0.1-SNAPSHOT'
     compileOnly 'org.jetbrains:annotations:24.0.1'
     compileOnly 'me.clip:placeholderapi:2.11.6'
     api 'org.codemc.worldguardwrapper:worldguardwrapper:1.2.1-SNAPSHOT'

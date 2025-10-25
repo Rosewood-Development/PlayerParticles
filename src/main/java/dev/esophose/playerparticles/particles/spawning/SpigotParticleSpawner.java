@@ -7,7 +7,7 @@ import dev.esophose.playerparticles.particles.data.ColorTransition;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.particles.data.ParticleColor;
 import dev.esophose.playerparticles.particles.data.Vibration;
-import dev.esophose.playerparticles.util.CavesAndCliffsUtil;
+import dev.esophose.playerparticles.util.VersionUtils;
 import dev.rosewood.rosegarden.utils.NMSUtil;
 import java.lang.reflect.Constructor;
 import java.util.concurrent.ThreadLocalRandom;
@@ -34,6 +34,9 @@ public class SpigotParticleSpawner extends ParticleSpawner {
         } else if (particleEffect == ParticleEffect.SHRIEK) {
             for (Player player : getPlayersInRange(center, isLongRange, owner))
                 player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed, 0);
+        } else if ((NMSUtil.getVersionNumber() > 21 || (NMSUtil.getVersionNumber() == 21 && NMSUtil.getMinorVersionNumber() >= 9) && particleEffect == ParticleEffect.DRAGON_BREATH)) {
+            for (Player player : getPlayersInRange(center, isLongRange, owner))
+                player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed, 1.0F);
         } else {
             for (Player player : getPlayersInRange(center, isLongRange, owner))
                 player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed);
@@ -42,7 +45,7 @@ public class SpigotParticleSpawner extends ParticleSpawner {
 
     @Override
     public void display(ParticleEffect particleEffect, ParticleColor color, Location center, boolean isLongRange, Player owner, float size) {
-        if (particleEffect.getDataType() != ParticleDataType.COLORABLE)
+        if (particleEffect.getDataType() != ParticleDataType.COLORABLE && particleEffect.getDataType() != ParticleDataType.COLORABLE_TRANSPARENCY)
             throw new ParticleColorException("This particle effect is not colorable");
 
         if (particleEffect == ParticleEffect.DUST && NMSUtil.getVersionNumber() >= 13) { // DUST uses a special data object for spawning in 1.13+
@@ -50,10 +53,10 @@ public class SpigotParticleSpawner extends ParticleSpawner {
             DustOptions dustOptions = new DustOptions(dustColor.toSpigot(), size > 0 ? size : Settings.DUST_SIZE.get());
             for (Player player : getPlayersInRange(center, isLongRange, owner))
                 player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), 1, 0, 0, 0, 0, dustOptions);
-        } else if ((particleEffect == ParticleEffect.ENTITY_EFFECT && (NMSUtil.getVersionNumber() > 20 || (NMSUtil.getVersionNumber() == 20 && NMSUtil.getMinorVersionNumber() >= 5))) || particleEffect == ParticleEffect.TINTED_LEAVES) { // ENTITY_EFFECT uses a Color object for spawning in 1.20.5+
+        } else if (particleEffect.getDataType() == ParticleDataType.COLORABLE_TRANSPARENCY) {
             OrdinaryColor ordinaryColor = (OrdinaryColor) color;
             for (Player player : getPlayersInRange(center, isLongRange, owner))
-                player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), 1, 0, 0, 0, 0, Color.fromRGB(ordinaryColor.getRed(), ordinaryColor.getGreen(), ordinaryColor.getBlue()));
+                player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), 1, 0, 0, 0, 0, ordinaryColor.toSpigot());
         } else if (particleEffect == ParticleEffect.TRAIL) {
             OrdinaryColor ordinaryColor = (OrdinaryColor) color;
             Location target;
@@ -65,9 +68,14 @@ public class SpigotParticleSpawner extends ParticleSpawner {
             Object trailData = createTrailData(target, ordinaryColor.toSpigot());
             for (Player player : getPlayersInRange(center, isLongRange, owner))
                 player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), 1, 0, 0, 0, 0, trailData, true);
+        } if (particleEffect == ParticleEffect.INSTANT_EFFECT && NMSUtil.getVersionNumber() > 21 || (NMSUtil.getVersionNumber() == 21 && NMSUtil.getMinorVersionNumber() >= 9)) {
+            VersionUtils.spawnSpellParticles(particleEffect, center, (OrdinaryColor) color, isLongRange, owner); // INSTANT_EFFECT uses a Spell object for spawning in 1.21.9+
+        } else if (particleEffect == ParticleEffect.ENTITY_EFFECT && (NMSUtil.getVersionNumber() > 20 || (NMSUtil.getVersionNumber() == 20 && NMSUtil.getMinorVersionNumber() >= 5))) {
+            for (Player player : getPlayersInRange(center, isLongRange, owner)) // ENTITY_EFFECT uses a Color object for spawning in 1.20.5+
+                player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), 0, 0, 0, 0, 1, color.toSpigot());
         } else {
             for (Player player : getPlayersInRange(center, isLongRange, owner)) {
-                // Minecraft clients require that you pass a non-zero value if the Red value should be zero
+                // Minecraft clients require that you pass a non-zero value if the red value should be exactly zero for dust
                 player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), 0, particleEffect == ParticleEffect.DUST && color.getValueX() == 0 ? Float.MIN_VALUE : color.getValueX(), color.getValueY(), color.getValueZ(), 1);
             }
         }
@@ -110,7 +118,10 @@ public class SpigotParticleSpawner extends ParticleSpawner {
         if (NMSUtil.getVersionNumber() < 17)
             return;
 
-        CavesAndCliffsUtil.spawnParticles(particleEffect, vibration, offsetX, offsetY, offsetZ, amount, center, isLongRange, owner);
+        if (particleEffect.getDataType() != ParticleEffect.ParticleDataType.VIBRATION)
+            throw new ParticleSpawner.ParticleDataException("This particle effect does not require additional data");
+
+        VersionUtils.spawnVibrationParticles(particleEffect, vibration, offsetX, offsetY, offsetZ, amount, center, isLongRange, owner);
     }
 
     private static Constructor<?> trailDataConstructor;

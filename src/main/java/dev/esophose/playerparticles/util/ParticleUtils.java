@@ -182,6 +182,10 @@ public final class ParticleUtils {
         return String.format("%02x%02x%02x", r, g, b);
     }
 
+    public static String rgbaToHex(int r, int g, int b, int a) {
+        return String.format("%02x%02x%02x%02x", r, g, b, a);
+    }
+
     public static Block getTargetBlock(Player player) {
         if (NMSUtil.getVersionNumber() > 7) {
             return player.getTargetBlock((Set<Material>) null, 8); // Need the Set<Material> cast for 1.9 support

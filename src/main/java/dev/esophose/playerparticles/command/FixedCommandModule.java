@@ -11,11 +11,13 @@ import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.particles.data.ColorTransition;
 import dev.esophose.playerparticles.particles.data.NoteColor;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
+import dev.esophose.playerparticles.particles.data.TransparentColor;
 import dev.esophose.playerparticles.particles.data.Vibration;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import dev.esophose.playerparticles.util.inputparser.InputParser;
 import dev.esophose.playerparticles.util.inputparser.parsable.ParsableOrdinaryColor;
+import dev.esophose.playerparticles.util.inputparser.parsable.ParsableTransparentColor;
 import dev.rosewood.rosegarden.utils.NMSUtil;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
 import java.text.DecimalFormat;
@@ -219,6 +221,13 @@ public class FixedCommandModule implements CommandModule {
                         }
                     }
                     break;
+                case COLORABLE_TRANSPARENCY:
+                    colorData = inputParser.next(TransparentColor.class);
+                    if (colorData == null) {
+                        localeManager.sendMessage(pplayer, "fixed-create-data-error");
+                        return;
+                    }
+                    break;
                 case BLOCK:
                     blockData = inputParser.next(Material.class);
                     if (blockData == null || !blockData.isBlock()) {
@@ -365,6 +374,12 @@ public class FixedCommandModule implements CommandModule {
                             }
                         }
                         break;
+                    case COLORABLE_TRANSPARENCY:
+                        colorData = inputParser.next(TransparentColor.class);
+                        if (colorData == null) {
+                            localeManager.sendMessage(pplayer, "fixed-edit-data-error");
+                            return;
+                        }
                     case BLOCK:
                         blockData = inputParser.next(Material.class);
                         if (blockData == null || !blockData.isBlock()) {
@@ -701,6 +716,20 @@ public class FixedCommandModule implements CommandModule {
                                     }
                                     StringUtil.copyPartialMatches(args[args.length - 1], possibleValues, matches);
                                     break;
+                                case COLORABLE_TRANSPARENCY:
+                                    if (args.length <= 7) {
+                                        possibleValues.add("<0-255> <0-255> <0-255> [0-255]");
+                                        possibleValues.addAll(ParsableTransparentColor.COLOR_NAME_MAP.keySet());
+                                        possibleValues.add("<#hexCode>");
+                                    } else if (args.length <= 8 && !ParsableTransparentColor.COLOR_NAME_MAP.containsKey(args[6].toLowerCase())) {
+                                        possibleValues.add("<0-255> <0-255> [0-255]");
+                                    } else if (args.length <= 9 && !ParsableTransparentColor.COLOR_NAME_MAP.containsKey(args[6].toLowerCase())) {
+                                        possibleValues.add("<0-255> [0-255]");
+                                    } else if (args.length <= 10 && !ParsableTransparentColor.COLOR_NAME_MAP.containsKey(args[6].toLowerCase())) {
+                                        possibleValues.add("[0-255]");
+                                    }
+                                    StringUtil.copyPartialMatches(args[args.length - 1], possibleValues, matches);
+                                    break;
                                 case BLOCK:
                                     StringUtil.copyPartialMatches(args[6], ParticleUtils.BLOCK_MATERIALS_STRING, matches);
                                     break;
@@ -810,6 +839,20 @@ public class FixedCommandModule implements CommandModule {
                                             } else if (args.length <= 6 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[3].toLowerCase())) {
                                                 possibleValues.add("<0-255>");
                                             }
+                                        }
+                                        StringUtil.copyPartialMatches(args[args.length - 1], possibleValues, matches);
+                                        break;
+                                    case COLORABLE_TRANSPARENCY:
+                                        if (args.length <= 4) {
+                                            possibleValues.add("<0-255> <0-255> <0-255> [0-255]");
+                                            possibleValues.addAll(ParsableTransparentColor.COLOR_NAME_MAP.keySet());
+                                            possibleValues.add("<#hexCode>");
+                                        } else if (args.length <= 5 && !ParsableTransparentColor.COLOR_NAME_MAP.containsKey(args[3].toLowerCase())) {
+                                            possibleValues.add("<0-255> <0-255> [0-255]");
+                                        } else if (args.length <= 6 && !ParsableTransparentColor.COLOR_NAME_MAP.containsKey(args[3].toLowerCase())) {
+                                            possibleValues.add("<0-255> [0-255]");
+                                        } else if (args.length <= 7 && !ParsableTransparentColor.COLOR_NAME_MAP.containsKey(args[3].toLowerCase())) {
+                                            possibleValues.add("[0-255]");
                                         }
                                         StringUtil.copyPartialMatches(args[args.length - 1], possibleValues, matches);
                                         break;

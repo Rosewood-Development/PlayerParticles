@@ -25,6 +25,7 @@ public class DataCommandModule implements CommandModule {
 
             switch (effect.getDataType()) {
                 case COLORABLE:
+                case COLORABLE_TRANSPARENCY:
                     if (effect == ParticleEffect.NOTE) {
                         localeManager.sendMessage(pplayer, "data-usage-note", StringPlaceholders.of("effect", effect.getName()));
                     } else {

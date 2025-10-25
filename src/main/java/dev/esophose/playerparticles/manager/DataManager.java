@@ -4,15 +4,19 @@ import dev.esophose.playerparticles.database.migrations._1_InitialMigration;
 import dev.esophose.playerparticles.database.migrations._2_Add_Data_Columns;
 import dev.esophose.playerparticles.database.migrations._3_Add_Setting_Toggle_Self_Column;
 import dev.esophose.playerparticles.database.migrations._4_Add_Fixed_Effect_Yaw_Pitch_Columns;
+import dev.esophose.playerparticles.database.migrations._5_Add_Data_Transparency_Column;
 import dev.esophose.playerparticles.particles.ConsolePPlayer;
 import dev.esophose.playerparticles.particles.FixedParticleEffect;
 import dev.esophose.playerparticles.particles.PPlayer;
 import dev.esophose.playerparticles.particles.ParticleEffect;
+import dev.esophose.playerparticles.particles.ParticleEffect.ParticleDataType;
 import dev.esophose.playerparticles.particles.ParticleGroup;
 import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.particles.data.ColorTransition;
 import dev.esophose.playerparticles.particles.data.NoteColor;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
+import dev.esophose.playerparticles.particles.data.ParticleColor;
+import dev.esophose.playerparticles.particles.data.TransparentColor;
 import dev.esophose.playerparticles.particles.data.Vibration;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import dev.esophose.playerparticles.util.ParticleUtils;
@@ -151,8 +155,13 @@ public class DataManager extends AbstractDataManager {
                         Material itemMaterial = ParticleUtils.closestMatchWithFallback(true, result.getString("item_material"));
                         Material blockMaterial = ParticleUtils.closestMatchWithFallback(true, result.getString("block_material"));
                         NoteColor noteColor = new NoteColor(result.getInt("note"));
-                        OrdinaryColor color = new OrdinaryColor(result.getInt("r"), result.getInt("g"), result.getInt("b"));
-                        ColorTransition colorTransition = new ColorTransition(new OrdinaryColor(result.getInt("r"), result.getInt("g"), result.getInt("b")), new OrdinaryColor(result.getInt("r_end"), result.getInt("g_end"), result.getInt("b_end")));
+                        OrdinaryColor color;
+                        if (effect != null && effect.getDataType() == ParticleDataType.COLORABLE_TRANSPARENCY) {
+                            color = new TransparentColor(result.getInt("r"), result.getInt("g"), result.getInt("b"), result.getInt("a"));
+                        } else {
+                            color = new OrdinaryColor(result.getInt("r"), result.getInt("g"), result.getInt("b"));
+                        }
+                        ColorTransition colorTransition = new ColorTransition(color, new OrdinaryColor(result.getInt("r_end"), result.getInt("g_end"), result.getInt("b_end")));
                         Vibration vibration = new Vibration(result.getInt("duration"));
                         ParticlePair particle = new ParticlePair(playerUUID, id, effect, style, itemMaterial, blockMaterial, color, noteColor, colorTransition, vibration);
 
@@ -193,7 +202,7 @@ public class DataManager extends AbstractDataManager {
                 boolean deleteInvalidFixedEffects = dev.esophose.playerparticles.config.Settings.DELETE_INVALID_FIXED_EFFECTS.get();
 
                 // Load fixed effects
-                String fixedQuery = "SELECT f.id AS f_id, f.world, f.xPos, f.yPos, f.zPos, f.yaw, f.pitch, p.id AS p_id, p.effect, p.style, p.item_material, p.block_material, p.note, p.r, p.g, p.b, p.r_end, p.g_end, p.b_end, p.duration FROM " + this.getTablePrefix() + "fixed f " +
+                String fixedQuery = "SELECT f.id AS f_id, f.world, f.xPos, f.yPos, f.zPos, f.yaw, f.pitch, p.id AS p_id, p.effect, p.style, p.item_material, p.block_material, p.note, p.r, p.g, p.b, p.a, p.r_end, p.g_end, p.b_end, p.duration FROM " + this.getTablePrefix() + "fixed f " +
                         "JOIN " + this.getTablePrefix() + "particle p ON f.particle_uuid = p.uuid " +
                         "WHERE f.owner_uuid = ?";
                 try (PreparedStatement statement = connection.prepareStatement(fixedQuery)) {
@@ -224,8 +233,13 @@ public class DataManager extends AbstractDataManager {
                         Material itemMaterial = ParticleUtils.closestMatchWithFallback(true, result.getString("item_material"));
                         Material blockMaterial = ParticleUtils.closestMatchWithFallback(true, result.getString("block_material"));
                         NoteColor noteColor = new NoteColor(result.getInt("note"));
-                        OrdinaryColor color = new OrdinaryColor(result.getInt("r"), result.getInt("g"), result.getInt("b"));
-                        ColorTransition colorTransition = new ColorTransition(new OrdinaryColor(result.getInt("r"), result.getInt("g"), result.getInt("b")), new OrdinaryColor(result.getInt("r_end"), result.getInt("g_end"), result.getInt("b_end")));
+                        OrdinaryColor color;
+                        if (effect != null && effect.getDataType() == ParticleDataType.COLORABLE_TRANSPARENCY) {
+                            color = new TransparentColor(result.getInt("r"), result.getInt("g"), result.getInt("b"), result.getInt("a"));
+                        } else {
+                            color = new OrdinaryColor(result.getInt("r"), result.getInt("g"), result.getInt("b"));
+                        }
+                        ColorTransition colorTransition = new ColorTransition(color, new OrdinaryColor(result.getInt("r_end"), result.getInt("g_end"), result.getInt("b_end")));
                         Vibration vibration = new Vibration(result.getInt("duration"));
                         ParticlePair particle = new ParticlePair(playerUUID, particleId, effect, style, itemMaterial, blockMaterial, color, noteColor, colorTransition, vibration);
 
@@ -379,7 +393,7 @@ public class DataManager extends AbstractDataManager {
             }
 
             // Fill group with new particles
-            String createParticlesQuery = "INSERT INTO " + this.getTablePrefix() + "particle (uuid, group_uuid, id, effect, style, item_material, block_material, note, r, g, b, r_end, g_end, b_end, duration) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String createParticlesQuery = "INSERT INTO " + this.getTablePrefix() + "particle (uuid, group_uuid, id, effect, style, item_material, block_material, note, r, g, b, a, r_end, g_end, b_end, duration) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement particlesStatement = connection.prepareStatement(createParticlesQuery)) {
                 for (ParticlePair particle : group.getParticles().values()) {
                     particlesStatement.setString(1, UUID.randomUUID().toString());
@@ -393,10 +407,13 @@ public class DataManager extends AbstractDataManager {
                     particlesStatement.setInt(9, particle.getColor().getRed());
                     particlesStatement.setInt(10, particle.getColor().getGreen());
                     particlesStatement.setInt(11, particle.getColor().getBlue());
-                    particlesStatement.setInt(12, particle.getColorTransition().getEndColor().getRed());
-                    particlesStatement.setInt(13, particle.getColorTransition().getEndColor().getGreen());
-                    particlesStatement.setInt(14, particle.getColorTransition().getEndColor().getBlue());
-                    particlesStatement.setInt(15, particle.getVibration().getDuration());
+                    ParticleColor color = particle.getColor();
+                    int alpha = color instanceof TransparentColor ? ((TransparentColor) color).getAlpha() : 255;
+                    particlesStatement.setInt(12, alpha);
+                    particlesStatement.setInt(13, particle.getColorTransition().getEndColor().getRed());
+                    particlesStatement.setInt(14, particle.getColorTransition().getEndColor().getGreen());
+                    particlesStatement.setInt(15, particle.getColorTransition().getEndColor().getBlue());
+                    particlesStatement.setInt(16, particle.getVibration().getDuration());
                     particlesStatement.addBatch();
                 }
 
@@ -475,7 +492,7 @@ public class DataManager extends AbstractDataManager {
         this.async(() -> this.databaseConnector.connect((connection) -> {
             String particleUUID = UUID.randomUUID().toString();
 
-            String particleQuery = "INSERT INTO " + this.getTablePrefix() + "particle (uuid, id, effect, style, item_material, block_material, note, r, g, b, r_end, g_end, b_end, duration) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String particleQuery = "INSERT INTO " + this.getTablePrefix() + "particle (uuid, id, effect, style, item_material, block_material, note, r, g, b, a, r_end, g_end, b_end, duration) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement statement = connection.prepareStatement(particleQuery)) {
                 ParticlePair particle = fixedEffect.getParticlePair();
                 statement.setString(1, particleUUID);
@@ -488,10 +505,13 @@ public class DataManager extends AbstractDataManager {
                 statement.setInt(8, particle.getColor().getRed());
                 statement.setInt(9, particle.getColor().getGreen());
                 statement.setInt(10, particle.getColor().getBlue());
-                statement.setInt(11, particle.getColorTransition().getEndColor().getRed());
-                statement.setInt(12, particle.getColorTransition().getEndColor().getGreen());
-                statement.setInt(13, particle.getColorTransition().getEndColor().getBlue());
-                statement.setInt(14, particle.getVibration().getDuration());
+                ParticleColor color = particle.getColor();
+                int alpha = color instanceof TransparentColor ? ((TransparentColor) color).getAlpha() : 255;
+                statement.setInt(11, alpha);
+                statement.setInt(12, particle.getColorTransition().getEndColor().getRed());
+                statement.setInt(13, particle.getColorTransition().getEndColor().getGreen());
+                statement.setInt(14, particle.getColorTransition().getEndColor().getBlue());
+                statement.setInt(15, particle.getVibration().getDuration());
                 statement.executeUpdate();
             }
 
@@ -621,7 +641,8 @@ public class DataManager extends AbstractDataManager {
                 _1_InitialMigration::new,
                 _2_Add_Data_Columns::new,
                 _3_Add_Setting_Toggle_Self_Column::new,
-                _4_Add_Fixed_Effect_Yaw_Pitch_Columns::new
+                _4_Add_Fixed_Effect_Yaw_Pitch_Columns::new,
+                _5_Add_Data_Transparency_Column::new
         );
     }
 

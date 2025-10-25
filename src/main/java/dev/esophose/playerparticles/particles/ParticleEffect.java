@@ -45,6 +45,7 @@ public enum ParticleEffect {
     CHERRY_LEAVES("CHERRY_LEAVES", Collections.singletonList("CHERRY_LEAVES")),
     CLOUD("CLOUD", Arrays.asList("WHITE_WOOL", "WOOL")),
     COMPOSTER("COMPOSTER", Collections.singletonList("COMPOSTER")),
+    COPPER_FIRE_FLAME("COPPER_FIRE_FLAME", Collections.singletonList("OXIDIZED_COPPER_LANTERN")),
     CRIMSON_SPORE("CRIMSON_SPORE", Collections.singletonList("CRIMSON_FUNGUS")),
     CRIT("CRIT", Collections.singletonList("IRON_SWORD")),
     CURRENT_DOWN("CURRENT_DOWN", Collections.singletonList("SOUL_SAND")),
@@ -67,7 +68,7 @@ public enum ParticleEffect {
     ENCHANT("ENCHANTMENT_TABLE", Arrays.asList("ENCHANTING_TABLE", "ENCHANTMENT_TABLE")),
     ENCHANTED_HIT("CRIT_MAGIC", Collections.singletonList("DIAMOND_SWORD")),
     END_ROD("END_ROD", Collections.singletonList("END_ROD")),
-    ENTITY_EFFECT("SPELL_MOB", Collections.singletonList("GLOWSTONE_DUST"), ParticleDataType.COLORABLE),
+    ENTITY_EFFECT("SPELL_MOB", Collections.singletonList("GLOWSTONE_DUST"), NMSUtil.getVersionNumber() > 20 || (NMSUtil.getVersionNumber() == 20 && NMSUtil.getMinorVersionNumber() >= 5) ? ParticleDataType.COLORABLE_TRANSPARENCY : ParticleDataType.COLORABLE),
     EXPLOSION("EXPLOSION_LARGE", Arrays.asList("FIRE_CHARGE", "FIREBALL")),
     EXPLOSION_EMITTER("EXPLOSION_HUGE", Collections.singletonList("TNT")),
     FALLING_DRIPSTONE_LAVA("FALLING_DRIPSTONE_LAVA", Collections.singletonList("SMOOTH_BASALT")),
@@ -83,7 +84,7 @@ public enum ParticleEffect {
     FIREWORK("FIREWORKS_SPARK", Arrays.asList("FIREWORK_ROCKET", "FIREWORK")),
     FISHING("WATER_WAKE", Collections.singletonList("FISHING_ROD")),
     FLAME("FLAME", Collections.singletonList("BLAZE_POWDER")),
-    FLASH("FLASH", Collections.singletonList("GOLD_INGOT"), false, ParticleDataType.NONE), // Also no thank you
+    FLASH("FLASH", Collections.singletonList("GOLD_INGOT"), false, NMSUtil.getVersionNumber() > 21 || (NMSUtil.getVersionNumber() == 21 && NMSUtil.getMinorVersionNumber() >= 9) ? ParticleDataType.COLORABLE_TRANSPARENCY : ParticleDataType.NONE), // Also no thank you
     GLOW("GLOW", Collections.singletonList("GLOW_ITEM_FRAME")),
     GLOW_SQUID_INK("GLOW_SQUID_INK", Collections.singletonList("GLOW_INK_SAC")),
     GUST("GUST", Collections.singletonList("FLOW_ARMOR_TRIM_SMITHING_TEMPLATE")),
@@ -93,7 +94,7 @@ public enum ParticleEffect {
     HAPPY_VILLAGER("VILLAGER_HAPPY", Arrays.asList("DARK_OAK_DOOR_ITEM", "DARK_OAK_DOOR")),
     HEART("HEART", Arrays.asList("POPPY", "RED_ROSE")),
     INFESTED("INFESTED", Collections.singletonList("INFESTED_MOSSY_STONE_BRICKS")),
-    INSTANT_EFFECT("SPELL_INSTANT", Arrays.asList("SPLASH_POTION", "POTION")),
+    INSTANT_EFFECT("SPELL_INSTANT", Arrays.asList("SPLASH_POTION", "POTION"), ParticleDataType.COLORABLE),
     ITEM("ITEM_CRACK", Collections.singletonList("ITEM_FRAME"), ParticleDataType.ITEM),
     ITEM_COBWEB("ITEM_COBWEB", Arrays.asList("COBWEB", "WEB")),
     ITEM_SLIME("SLIME", Collections.singletonList("SLIME_BALL")),
@@ -133,7 +134,7 @@ public enum ParticleEffect {
     SPORE_BLOSSOM_AIR("SPORE_BLOSSOM_AIR", Collections.singletonList("SPORE_BLOSSOM")),
     SQUID_INK("SQUID_INK", Collections.singletonList("INK_SAC")),
     SWEEP_ATTACK("SWEEP_ATTACK", Arrays.asList("GOLDEN_SWORD", "GOLD_SWORD")),
-    TINTED_LEAVES("TINTED_LEAVES", Collections.singletonList("LEAF_LITTER"), ParticleDataType.COLORABLE),
+    TINTED_LEAVES("TINTED_LEAVES", Collections.singletonList("LEAF_LITTER"), ParticleDataType.COLORABLE_TRANSPARENCY),
     TOTEM_OF_UNDYING("TOTEM", Arrays.asList("TOTEM_OF_UNDYING", "TOTEM")),
     TRAIL("TRAIL", Collections.singletonList("DIRT_PATH"), ParticleDataType.COLORABLE),
     TRIAL_OMEN("TRIAL_OMEN", Collections.singletonList("COPPER_BULB")),
@@ -148,7 +149,7 @@ public enum ParticleEffect {
     WHITE_ASH("WHITE_ASH", Collections.singletonList("BASALT")),
     WITCH("SPELL_WITCH", Collections.singletonList("CAULDRON"));
 
-    private final static ParticleSpawner particleSpawner = NMSUtil.getVersionNumber() >= 9 ? new SpigotParticleSpawner() : new ReflectiveParticleSpawner();
+    private static final ParticleSpawner PARTICLE_SPAWNER = NMSUtil.getVersionNumber() >= 9 ? new SpigotParticleSpawner() : new ReflectiveParticleSpawner();
 
     private Particle internalEnum;
     private final ParticleDataType dataType;
@@ -411,13 +412,14 @@ public enum ParticleEffect {
                 effect.display(material, pparticle.getXOff(), pparticle.getYOff(), pparticle.getZOff(), pparticle.getSpeed(), 1, pparticle.getLocation(false), isLongRange, owner);
                 break;
             case COLORABLE:
+            case COLORABLE_TRANSPARENCY:
                 ParticleColor color;
                 if (pparticle.getOverrideData() instanceof NoteColor && particle.getEffect() == ParticleEffect.NOTE) {
                     color = (NoteColor) pparticle.getOverrideData();
                 } else if (pparticle.getOverrideData() instanceof OrdinaryColor && particle.getEffect() != ParticleEffect.NOTE) {
                     color = (OrdinaryColor) pparticle.getOverrideData();
                 } else {
-                    color = particle.getSpawnColor();
+                    color = particle.getSpawnColor(effect);
                 }
                 effect.display(color, pparticle.getLocation(true), isLongRange, owner, pparticle.getSize());
                 break;
@@ -459,7 +461,7 @@ public enum ParticleEffect {
      * @throws ParticleDataException If the particle effect requires additional data
      */
     public void display(double offsetX, double offsetY, double offsetZ, double speed, int amount, Location center, boolean isLongRange, Player owner) {
-        particleSpawner.display(this, offsetX, offsetY, offsetZ, speed, amount, center, isLongRange, owner);
+        PARTICLE_SPAWNER.display(this, offsetX, offsetY, offsetZ, speed, amount, center, isLongRange, owner);
     }
 
     /**
@@ -473,7 +475,7 @@ public enum ParticleEffect {
      * @throws ParticleColorException If the particle effect is not colorable or the color type is incorrect
      */
     public void display(ParticleColor color, Location center, boolean isLongRange, Player owner, float size) {
-        particleSpawner.display(this, color, center, isLongRange, owner, size);
+        PARTICLE_SPAWNER.display(this, color, center, isLongRange, owner, size);
     }
 
     /**
@@ -493,7 +495,7 @@ public enum ParticleEffect {
      * @throws ParticleDataException If the particle effect does not require additional data or if the data type is incorrect
      */
     public void display(Material spawnMaterial, double offsetX, double offsetY, double offsetZ, double speed, int amount, Location center, boolean isLongRange, Player owner) {
-        particleSpawner.display(this, spawnMaterial, offsetX, offsetY, offsetZ, speed, amount, center, isLongRange, owner);
+        PARTICLE_SPAWNER.display(this, spawnMaterial, offsetX, offsetY, offsetZ, speed, amount, center, isLongRange, owner);
     }
 
     /**
@@ -513,7 +515,7 @@ public enum ParticleEffect {
      * @throws ParticleDataException If the particle effect does not require additional data or if the data type is incorrect
      */
     public void display(ColorTransition colorTransition, double offsetX, double offsetY, double offsetZ, int amount, Location center, boolean isLongRange, Player owner, float size) {
-        particleSpawner.display(this, colorTransition, offsetX, offsetY, offsetZ, amount, center, isLongRange, owner, size);
+        PARTICLE_SPAWNER.display(this, colorTransition, offsetX, offsetY, offsetZ, amount, center, isLongRange, owner, size);
     }
 
     /**
@@ -532,7 +534,7 @@ public enum ParticleEffect {
      * @throws ParticleDataException If the particle effect does not require additional data or if the data type is incorrect
      */
     public void display(Vibration vibration, double offsetX, double offsetY, double offsetZ, int amount, Location center, boolean isLongRange, Player owner) {
-        particleSpawner.display(this, vibration, offsetX, offsetY, offsetZ, amount, center, isLongRange, owner);
+        PARTICLE_SPAWNER.display(this, vibration, offsetX, offsetY, offsetZ, amount, center, isLongRange, owner);
     }
 
     /**
@@ -551,6 +553,10 @@ public enum ParticleEffect {
          * The particle effect uses a color value
          */
         COLORABLE,
+        /**
+         * The particle effect uses a color value that supports transparency
+         */
+        COLORABLE_TRANSPARENCY,
         /**
          * The particle effect uses two color values to transition between
          */

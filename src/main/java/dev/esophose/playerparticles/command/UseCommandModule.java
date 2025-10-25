@@ -11,6 +11,7 @@ import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.particles.data.ColorTransition;
 import dev.esophose.playerparticles.particles.data.NoteColor;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
+import dev.esophose.playerparticles.particles.data.TransparentColor;
 import dev.esophose.playerparticles.particles.data.Vibration;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import dev.esophose.playerparticles.util.ParticleUtils;
@@ -86,6 +87,14 @@ public class UseCommandModule implements CommandModule {
                             }
                             primaryParticle.setColor(colorData);
                         }
+                        break;
+                    case COLORABLE_TRANSPARENCY:
+                        TransparentColor colorData = inputParser.next(TransparentColor.class);
+                        if (colorData == null) {
+                            localeManager.sendMessage(pplayer, "data-invalid-color");
+                            return;
+                        }
+                        primaryParticle.setColor(colorData);
                         break;
                     case BLOCK:
                         Material blockData = inputParser.next(Material.class);
@@ -179,6 +188,19 @@ public class UseCommandModule implements CommandModule {
                                 } else if (args.length <= 4 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[1].toLowerCase())) {
                                     possibleValues.add("<0-255>");
                                 }
+                            }
+                            break;
+                        case COLORABLE_TRANSPARENCY:
+                            if (args.length == 2) {
+                                possibleValues.add("<0-255> <0-255> <0-255> [0-255]");
+                                possibleValues.addAll(ParsableOrdinaryColor.COLOR_NAME_MAP.keySet());
+                                possibleValues.add("<#hexCode>");
+                            } else if (args.length <= 3 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[1].toLowerCase())) {
+                                possibleValues.add("<0-255> <0-255> [0-255]");
+                            } else if (args.length <= 4 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[1].toLowerCase())) {
+                                possibleValues.add("<0-255> [0-255]");
+                            } else if (args.length <= 5 && !ParsableOrdinaryColor.COLOR_NAME_MAP.containsKey(args[1].toLowerCase())) {
+                                possibleValues.add("[0-255]");
                             }
                             break;
                         case BLOCK:

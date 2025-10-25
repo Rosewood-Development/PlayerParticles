@@ -9,12 +9,12 @@ import dev.esophose.playerparticles.particles.data.ColorTransition;
 import dev.esophose.playerparticles.particles.data.NoteColor;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.particles.data.ParticleColor;
+import dev.esophose.playerparticles.particles.data.TransparentColor;
 import dev.esophose.playerparticles.particles.data.Vibration;
 import dev.esophose.playerparticles.styles.DefaultStyles;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -22,6 +22,19 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 
 public class ParticlePair {
+
+    private static final ParticlePair DEFAULT = new ParticlePair(
+            null,
+            -1,
+            ParticleEffect.FLAME,
+            DefaultStyles.NORMAL,
+            ParticleUtils.closestMatchWithFallback(true, "IRON_SHOVEL", "IRON_SPADE"),
+            Material.STONE,
+            new OrdinaryColor(0, 0, 0),
+            new NoteColor(0),
+            new ColorTransition(new OrdinaryColor(0, 0, 0), new OrdinaryColor(255, 255, 255)),
+            new Vibration(20)
+    );
 
     private UUID ownerUUID;
     private final int id;
@@ -75,7 +88,7 @@ public class ParticlePair {
      */
     public void setEffect(ParticleEffect effect) {
         if (effect == null) {
-            this.effect = getDefault().getEffect();
+            this.effect = DEFAULT.getEffect();
         } else {
             this.effect = effect;
         }
@@ -88,7 +101,7 @@ public class ParticlePair {
      */
     public void setStyle(ParticleStyle style) {
         if (style == null) {
-            this.style = getDefault().getStyle();
+            this.style = DEFAULT.getStyle();
         } else {
             this.style = style;
         }
@@ -101,7 +114,7 @@ public class ParticlePair {
      */
     public void setItemMaterial(Material itemMaterial) {
         if (itemMaterial == null || itemMaterial.isBlock()) {
-            this.itemMaterial = getDefault().getItemMaterial();
+            this.itemMaterial = DEFAULT.getItemMaterial();
         } else {
             this.itemMaterial = itemMaterial;
         }
@@ -114,7 +127,7 @@ public class ParticlePair {
      */
     public void setBlockMaterial(Material blockMaterial) {
         if (blockMaterial == null || !blockMaterial.isBlock()) {
-            this.blockMaterial = getDefault().getBlockMaterial();
+            this.blockMaterial = DEFAULT.getBlockMaterial();
         } else {
             this.blockMaterial = blockMaterial;
         }
@@ -127,7 +140,7 @@ public class ParticlePair {
      */
     public void setColor(OrdinaryColor colorData) {
         if (colorData == null) {
-            this.color = getDefault().getColor();
+            this.color = DEFAULT.getColor();
         } else {
             this.color = colorData;
             if (this.colorTransition != null)
@@ -142,7 +155,7 @@ public class ParticlePair {
      */
     public void setNoteColor(NoteColor noteColorData) {
         if (noteColorData == null) {
-            this.noteColor = getDefault().getNoteColor();
+            this.noteColor = DEFAULT.getNoteColor();
         } else {
             this.noteColor = noteColorData;
         }
@@ -155,7 +168,7 @@ public class ParticlePair {
      */
     public void setColorTransition(ColorTransition colorTransitionData) {
         if (colorTransitionData == null) {
-            this.colorTransition = new ColorTransition(this.getColor(), getDefault().getColorTransition().getEndColor());
+            this.colorTransition = new ColorTransition(this.getColor(), DEFAULT.getColorTransition().getEndColor());
         } else {
             this.color = colorTransitionData.getStartColor();
             this.colorTransition = colorTransitionData;
@@ -169,7 +182,7 @@ public class ParticlePair {
      */
     public void setVibration(Vibration vibrationData) {
         if (vibrationData == null) {
-            this.vibration = getDefault().getVibration();
+            this.vibration = DEFAULT.getVibration();
         } else {
             this.vibration = vibrationData;
         }
@@ -270,8 +283,8 @@ public class ParticlePair {
      *
      * @return The ParticleColor the current particle effect will spawn with
      */
-    public ParticleColor getSpawnColor() {
-        if (this.effect.getDataType() != ParticleDataType.COLORABLE)
+    public ParticleColor getSpawnColor(ParticleEffect effect) {
+        if (this.effect.getDataType() != ParticleDataType.COLORABLE && this.effect.getDataType() != ParticleDataType.COLORABLE_TRANSPARENCY)
             return null;
 
         ParticleManager particleManager = PlayerParticles.getInstance().getManager(ParticleManager.class);
@@ -283,10 +296,19 @@ public class ParticlePair {
             }
             return this.noteColor;
         } else {
+            boolean transparent = effect.getDataType() == ParticleDataType.COLORABLE_TRANSPARENCY;
             if (this.color.equals(OrdinaryColor.RAINBOW)) {
-                return particleManager.getRainbowParticleColor();
+                if (transparent) {
+                    return new TransparentColor(particleManager.getRainbowParticleColor(), 255);
+                } else {
+                    return particleManager.getRainbowParticleColor();
+                }
             } else if (this.color.equals(OrdinaryColor.RANDOM)) {
-                return particleManager.getRandomParticleColor();
+                if (transparent) {
+                    return new TransparentColor(particleManager.getRandomParticleColor(), 255);
+                } else {
+                    return particleManager.getRandomParticleColor();
+                }
             }
             return this.color;
         }
@@ -364,6 +386,18 @@ public class ParticlePair {
                         return ChatColor.AQUA + "#" + ChatColor.AQUA + ParticleUtils.rgbToHex(this.color.getRed(), this.color.getGreen(), this.color.getBlue());
                     }
                 }
+            case COLORABLE_TRANSPARENCY:
+                if (this.color.equals(OrdinaryColor.RAINBOW)) {
+                    return localeManager.getLocaleMessage("rainbow");
+                } else if (this.color.equals(OrdinaryColor.RANDOM)) {
+                    return localeManager.getLocaleMessage("random");
+                } else {
+                    if (this.color instanceof TransparentColor) {
+                        return ChatColor.AQUA + "#" + ChatColor.AQUA + ParticleUtils.rgbaToHex(this.color.getRed(), this.color.getGreen(), this.color.getBlue(), ((TransparentColor) this.color).getAlpha());
+                    } else {
+                        return ChatColor.AQUA + "#" + ChatColor.AQUA + ParticleUtils.rgbToHex(this.color.getRed(), this.color.getGreen(), this.color.getBlue());
+                    }
+                }
             case COLORABLE_TRANSITION:
                 String start, end;
                 if (this.colorTransition.getStartColor().equals(OrdinaryColor.RAINBOW)) {
@@ -409,26 +443,6 @@ public class ParticlePair {
      */
     public ParticlePair clone(int id) {
         return new ParticlePair(this.ownerUUID, id, this.effect, this.style, this.itemMaterial, this.blockMaterial, this.color, this.noteColor, this.colorTransition, this.vibration);
-    }
-
-    /**
-     * Gets a ParticlePair with the default values applied
-     * Used for getting internal default values in the cases that null is specified
-     *
-     * @return A ParticlePair with default values
-     */
-    private static ParticlePair getDefault() {
-        return new ParticlePair(null,
-                -1,
-                ParticleEffect.FLAME,
-                DefaultStyles.NORMAL,
-                ParticleUtils.closestMatchWithFallback(true, "IRON_SHOVEL", "IRON_SPADE"),
-                Material.STONE,
-                new OrdinaryColor(0, 0, 0),
-                new NoteColor(0),
-                new ColorTransition(new OrdinaryColor(0, 0, 0), new OrdinaryColor(255, 255, 255)),
-                new Vibration(20)
-        );
     }
 
     /**

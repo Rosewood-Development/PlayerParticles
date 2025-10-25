@@ -12,7 +12,7 @@ import dev.esophose.playerparticles.particles.data.ColorTransition;
 import dev.esophose.playerparticles.particles.data.NoteColor;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.particles.data.Vibration;
-import dev.esophose.playerparticles.util.CavesAndCliffsUtil;
+import dev.esophose.playerparticles.util.VersionUtils;
 import dev.esophose.playerparticles.util.ParticleUtils;
 import dev.rosewood.rosegarden.utils.NMSUtil;
 import dev.rosewood.rosegarden.utils.StringPlaceholders;
@@ -133,6 +133,7 @@ public class GuiInventoryEditData extends GuiInventory {
         ParticleEffect effect = editingParticle.getEffect();
         switch (effect.getDataType()) {
             case COLORABLE:
+            case COLORABLE_TRANSPARENCY:
                 if (effect == ParticleEffect.NOTE) { // Note data
                     this.populateNoteData(editingParticle, pageNumber, callbackList, callbackListPosition);
                 } else { // Color data
@@ -531,7 +532,7 @@ public class GuiInventoryEditData extends GuiInventory {
         ItemStack light = new ItemStack(Material.LIGHT);
         ItemMeta itemMeta = light.getItemMeta();
         if (itemMeta != null) {
-            CavesAndCliffsUtil.setLightLevel(itemMeta, startColor == null ? 1 : 2);
+            VersionUtils.setLightLevel(itemMeta, startColor == null ? 1 : 2);
             itemMeta.setDisplayName(localeManager.getLocaleMessage("gui-select-data-color-transition-" + (startColor == null ? "start" : "end")));
             light.setItemMeta(itemMeta);
         }
