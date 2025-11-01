@@ -68,7 +68,7 @@ public class SpigotParticleSpawner extends ParticleSpawner {
             Object trailData = createTrailData(target, ordinaryColor.toSpigot());
             for (Player player : getPlayersInRange(center, isLongRange, owner))
                 player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), 1, 0, 0, 0, 0, trailData, true);
-        } if (particleEffect == ParticleEffect.INSTANT_EFFECT && NMSUtil.getVersionNumber() > 21 || (NMSUtil.getVersionNumber() == 21 && NMSUtil.getMinorVersionNumber() >= 9)) {
+        } else if (particleEffect == ParticleEffect.INSTANT_EFFECT && (NMSUtil.getVersionNumber() > 21 || (NMSUtil.getVersionNumber() == 21 && NMSUtil.getMinorVersionNumber() >= 9))) {
             VersionUtils.spawnSpellParticles(particleEffect, center, (OrdinaryColor) color, isLongRange, owner); // INSTANT_EFFECT uses a Spell object for spawning in 1.21.9+
         } else if (particleEffect == ParticleEffect.ENTITY_EFFECT && (NMSUtil.getVersionNumber() > 20 || (NMSUtil.getVersionNumber() == 20 && NMSUtil.getMinorVersionNumber() >= 5))) {
             for (Player player : getPlayersInRange(center, isLongRange, owner)) // ENTITY_EFFECT uses a Color object for spawning in 1.20.5+
@@ -81,7 +81,6 @@ public class SpigotParticleSpawner extends ParticleSpawner {
         }
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void display(ParticleEffect particleEffect, Material spawnMaterial, double offsetX, double offsetY, double offsetZ, double speed, int amount, Location center, boolean isLongRange, Player owner) {
         if (particleEffect.getDataType() != ParticleDataType.BLOCK && particleEffect.getDataType() != ParticleDataType.ITEM)

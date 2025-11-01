@@ -182,9 +182,9 @@ public class AddCommandModule implements CommandModule {
                             possibleValues.addAll(ParsableTransparentColor.COLOR_NAME_MAP.keySet());
                             possibleValues.add("<#hexCode>");
                         } else if (args.length <= 4 && !ParsableTransparentColor.COLOR_NAME_MAP.containsKey(args[2].toLowerCase())) {
-                            possibleValues.add("<0-255> <0-255>");
+                            possibleValues.add("<0-255> <0-255> [0-255]");
                         } else if (args.length <= 5 && !ParsableTransparentColor.COLOR_NAME_MAP.containsKey(args[2].toLowerCase())) {
-                            possibleValues.add("<0-255>");
+                            possibleValues.add("<0-255> [0-255]");
                         } else if (args.length <= 6 && !ParsableTransparentColor.COLOR_NAME_MAP.containsKey(args[2].toLowerCase())) {
                             possibleValues.add("[0-255]");
                         }
