@@ -94,7 +94,7 @@ public enum ParticleEffect {
     HAPPY_VILLAGER("VILLAGER_HAPPY", Arrays.asList("DARK_OAK_DOOR_ITEM", "DARK_OAK_DOOR")),
     HEART("HEART", Arrays.asList("POPPY", "RED_ROSE")),
     INFESTED("INFESTED", Collections.singletonList("INFESTED_MOSSY_STONE_BRICKS")),
-    INSTANT_EFFECT("SPELL_INSTANT", Arrays.asList("SPLASH_POTION", "POTION"), ParticleDataType.COLORABLE),
+    INSTANT_EFFECT("SPELL_INSTANT", Arrays.asList("SPLASH_POTION", "POTION"), NMSUtil.getVersionNumber() > 21 || (NMSUtil.getVersionNumber() == 21 && NMSUtil.getMinorVersionNumber() >= 9) ? ParticleDataType.COLORABLE : ParticleDataType.NONE),
     ITEM("ITEM_CRACK", Collections.singletonList("ITEM_FRAME"), ParticleDataType.ITEM),
     ITEM_COBWEB("ITEM_COBWEB", Arrays.asList("COBWEB", "WEB")),
     ITEM_SLIME("SLIME", Collections.singletonList("SLIME_BALL")),
@@ -128,7 +128,7 @@ public enum ParticleEffect {
     SONIC_BOOM("SONIC_BOOM", Collections.singletonList("WARDEN_SPAWN_EGG")),
     SOUL("SOUL", Collections.singletonList("SOUL_LANTERN")),
     SOUL_FIRE_FLAME("SOUL_FIRE_FLAME", Collections.singletonList("SOUL_CAMPFIRE")),
-    SPELL("SPELL", Arrays.asList("POTION", "GLASS_BOTTLE")), // The Minecraft internal name for this is actually "effect", but that's the command name, so it's SPELL for the plugin instead
+    SPELL("SPELL", Arrays.asList("POTION", "GLASS_BOTTLE"), NMSUtil.getVersionNumber() > 21 || (NMSUtil.getVersionNumber() == 21 && NMSUtil.getMinorVersionNumber() >= 9) ? ParticleDataType.COLORABLE : ParticleDataType.NONE), // The Minecraft internal name for this is actually "effect", but that's the command name, so it's SPELL for the plugin instead
     SPIT("SPIT", Arrays.asList("LLAMA_SPAWN_EGG", "PUMPKIN_SEEDS")),
     SPLASH("WATER_SPLASH", Arrays.asList("SALMON", "FISH", "RAW_FISH")),
     SPORE_BLOSSOM_AIR("SPORE_BLOSSOM_AIR", Collections.singletonList("SPORE_BLOSSOM")),
