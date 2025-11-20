@@ -65,11 +65,11 @@ public class ParticleStyleCelebration extends ConfiguredParticleStyle {
                 if (player != null && (NMSUtil.getVersionNumber() < 8 || player.getGameMode() != GameMode.SPECTATOR) && permissionManager.isWorldEnabled(player.getWorld().getName()))
                     for (ParticlePair particle : pplayer.getActiveParticles())
                         if (particle.getStyle() == this)
-                            this.spawnFirework(player.getLocation(), pplayer, particle, random);
+                            this.spawnFirework(player.getLocation(), pplayer, particle, random, false);
                 
                 for (FixedParticleEffect fixedEffect : pplayer.getFixedParticles())
                     if (fixedEffect.getParticlePair().getStyle() == this && permissionManager.isWorldEnabled(fixedEffect.getLocation().getWorld().getName()))
-                        this.spawnFirework(fixedEffect.getLocation(), pplayer, fixedEffect.getParticlePair(), random);
+                        this.spawnFirework(fixedEffect.getLocation(), pplayer, fixedEffect.getParticlePair(), random, true);
             }
         }
     }
@@ -110,7 +110,7 @@ public class ParticleStyleCelebration extends ConfiguredParticleStyle {
             this.fuseEffect = ParticleEffect.FIREWORK;
     }
     
-    private void spawnFirework(final Location location, final PPlayer pplayer, final ParticlePair particle, final Random random) {
+    private void spawnFirework(final Location location, final PPlayer pplayer, final ParticlePair particle, final Random random, boolean ignorePlayerState) {
         double angle = random.nextDouble() * Math.PI * 2;
         double distanceFrom = this.baseDistanceFrom + random.nextDouble() * this.distanceFromRandomizer;
         double dx = MathL.sin(angle) * distanceFrom;
@@ -138,7 +138,7 @@ public class ParticleStyleCelebration extends ConfiguredParticleStyle {
                     trail.setEffect(ParticleStyleCelebration.this.fuseEffect);
                     trail.setStyle(DefaultStyles.CELEBRATION);
 
-                    particleManager.displayParticles(pplayer, this.location.getWorld(), trail, Collections.singletonList(PParticle.point(this.location)), true, true);
+                    particleManager.displayParticles(pplayer, this.location.getWorld(), trail, Collections.singletonList(PParticle.point(this.location.clone())), true, ignorePlayerState);
 
                     this.location.add(0, ParticleStyleCelebration.this.fuseSpacing, 0);
                 } else {
@@ -155,7 +155,7 @@ public class ParticleStyleCelebration extends ConfiguredParticleStyle {
 
                         particles.add(PParticle.point(this.location.clone().add(dx, dy, dz)));
                     }
-                    particleManager.displayParticles(pplayer, this.location.getWorld(), particle, particles, true, true);
+                    particleManager.displayParticles(pplayer, this.location.getWorld(), particle, particles, true, ignorePlayerState);
 
                     this.finished = true;
                 }
