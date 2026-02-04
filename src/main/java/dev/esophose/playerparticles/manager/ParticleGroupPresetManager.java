@@ -10,6 +10,7 @@ import dev.esophose.playerparticles.particles.ParticlePair;
 import dev.esophose.playerparticles.particles.data.ColorTransition;
 import dev.esophose.playerparticles.particles.data.NoteColor;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
+import dev.esophose.playerparticles.particles.data.TransparentColor;
 import dev.esophose.playerparticles.particles.data.Vibration;
 import dev.esophose.playerparticles.particles.preset.ParticleGroupPreset;
 import dev.esophose.playerparticles.particles.preset.ParticleGroupPresetPage;
@@ -178,6 +179,13 @@ public class ParticleGroupPresetManager extends Manager {
                                                 PlayerParticles.getInstance().getLogger().severe("Invalid color: '" + dataString + "'!");
                                                 continue;
                                             }
+                                        }
+                                        break;
+                                    case COLORABLE_TRANSPARENCY:
+                                        colorData = inputParser.next(TransparentColor.class);
+                                        if (colorData == null) {
+                                            PlayerParticles.getInstance().getLogger().severe("Invalid color with transparency: '" + dataString + "'!");
+                                            continue;
                                         }
                                         break;
                                     case BLOCK:
