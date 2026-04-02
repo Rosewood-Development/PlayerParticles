@@ -110,10 +110,12 @@ public enum ParticleEffect {
     NOTE("NOTE", Collections.singletonList("NOTE_BLOCK"), ParticleDataType.COLORABLE),
     OMINOUS_SPAWNING("OMINOUS_SPAWNING", Collections.singletonList("TRIAL_SPAWNER")),
     PALE_OAK_LEAVES("PALE_OAK_LEAVES", Collections.singletonList("PALE_OAK_LEAVES")),
+    PAUSE_MOB_GROWTH("PAUSE_MOB_GROWTH", Collections.singletonList("GOLDEN_DANDELION")),
     POOF("EXPLOSION_NORMAL", Arrays.asList("FIREWORK_STAR", "FIREWORK_CHARGE")), // The 1.13 combination of explode and showshovel
     PORTAL("PORTAL", Collections.singletonList("OBSIDIAN")),
     RAID_OMEN("RAID_OMEN", Collections.singletonList("OMINOUS_BOTTLE")),
     RAIN("WATER_DROP", Arrays.asList("PUFFERFISH_BUCKET", "LAPIS_BLOCK")),
+    RESET_MOB_GROWTH("RESET_MOB_GROWTH", Collections.singletonList("DANDELION")),
     REVERSE_PORTAL("REVERSE_PORTAL", Collections.singletonList("FLINT_AND_STEEL")),
     SCRAPE("SCRAPE", Collections.singletonList("GOLDEN_AXE")),
     SCULK_CHARGE("SCULK_CHARGE", Collections.singletonList("SCULK")),

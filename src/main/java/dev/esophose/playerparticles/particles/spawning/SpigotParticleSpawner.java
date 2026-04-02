@@ -34,7 +34,7 @@ public class SpigotParticleSpawner extends ParticleSpawner {
         } else if (particleEffect == ParticleEffect.SHRIEK) {
             for (Player player : getPlayersInRange(center, isLongRange, owner))
                 player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed, 0);
-        } else if ((NMSUtil.getVersionNumber() > 21 || (NMSUtil.getVersionNumber() == 21 && NMSUtil.getMinorVersionNumber() >= 9) && particleEffect == ParticleEffect.DRAGON_BREATH)) {
+        } else if ((NMSUtil.getVersionNumber() > 21 || (NMSUtil.getVersionNumber() == 21 && NMSUtil.getMinorVersionNumber() >= 9)) && particleEffect == ParticleEffect.DRAGON_BREATH) {
             for (Player player : getPlayersInRange(center, isLongRange, owner))
                 player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed, 1.0F);
         } else {
