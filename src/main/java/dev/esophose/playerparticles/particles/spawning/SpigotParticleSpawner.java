@@ -15,6 +15,8 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle.DustOptions;
+import org.bukkit.Particle.Geyser;
+import org.bukkit.Particle.GeyserBase;
 import org.bukkit.Particle.Trail;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -26,21 +28,31 @@ public class SpigotParticleSpawner extends ParticleSpawner {
     @Override
     public void display(ParticleEffect particleEffect, double offsetX, double offsetY, double offsetZ, double speed, int amount, Location center, boolean isLongRange, Player owner) {
         if (particleEffect.getDataType() != ParticleDataType.NONE)
-            throw new ParticleDataException("This particle effect requires additional data");
+            throw new ParticleDataException("This particle effect does not use additional data");
 
+        Object data;
         if (particleEffect == ParticleEffect.SCULK_CHARGE) {
-            for (Player player : getPlayersInRange(center, isLongRange, owner))
-                player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed, 0F);
+            data = 0F;
         } else if (particleEffect == ParticleEffect.SHRIEK) {
-            for (Player player : getPlayersInRange(center, isLongRange, owner))
-                player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed, 0);
+            data = 0;
         } else if ((NMSUtil.getVersionNumber() > 21 || (NMSUtil.getVersionNumber() == 21 && NMSUtil.getMinorVersionNumber() >= 9)) && particleEffect == ParticleEffect.DRAGON_BREATH) {
-            for (Player player : getPlayersInRange(center, isLongRange, owner))
-                player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed, 1.0F);
+            data = 1F;
+        } else if (particleEffect == ParticleEffect.GEYSER || particleEffect == ParticleEffect.GEYSER_PLUME) {
+            if (NMSUtil.isPaper()) {
+                data = new Geyser(1);
+            } else {
+                data = 1;
+            }
+        } else if (particleEffect == ParticleEffect.GEYSER_BASE) {
+            data = new GeyserBase(1, 0F);
+        } else if (particleEffect == ParticleEffect.GEYSER_POOF) {
+            data = new GeyserBase(1, 1.0F);
         } else {
-            for (Player player : getPlayersInRange(center, isLongRange, owner))
-                player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed);
+            data = null;
         }
+
+        for (Player player : getPlayersInRange(center, isLongRange, owner))
+            player.spawnParticle(particleEffect.getSpigotEnum(), center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed, data);
     }
 
     @Override

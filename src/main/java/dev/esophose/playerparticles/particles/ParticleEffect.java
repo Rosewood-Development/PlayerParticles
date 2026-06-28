@@ -85,6 +85,10 @@ public enum ParticleEffect {
     FISHING("WATER_WAKE", Collections.singletonList("FISHING_ROD")),
     FLAME("FLAME", Collections.singletonList("BLAZE_POWDER")),
     FLASH("FLASH", Collections.singletonList("GOLD_INGOT"), false, NMSUtil.getVersionNumber() > 21 || (NMSUtil.getVersionNumber() == 21 && NMSUtil.getMinorVersionNumber() >= 9) ? ParticleDataType.COLORABLE_TRANSPARENCY : ParticleDataType.NONE), // Also no thank you
+    GEYSER("GEYSER", Collections.singletonList("POTENT_SULFUR"), false, ParticleDataType.NONE), // Disabled by default, spawns way too many particles
+    GEYSER_BASE("GEYSER_BASE", Collections.singletonList("SULFUR")),
+    GEYSER_POOF("GEYSER_POOF", Collections.singletonList("MUSIC_DISC_BOUNCE")),
+    GEYSER_PLUME("GEYSER_PLUME", Collections.singletonList("SULFUR_SPIKE")),
     GLOW("GLOW", Collections.singletonList("GLOW_ITEM_FRAME")),
     GLOW_SQUID_INK("GLOW_SQUID_INK", Collections.singletonList("GLOW_INK_SAC")),
     GUST("GUST", Collections.singletonList("FLOW_ARMOR_TRIM_SMITHING_TEMPLATE")),
@@ -135,6 +139,7 @@ public enum ParticleEffect {
     SPLASH("WATER_SPLASH", Arrays.asList("SALMON", "FISH", "RAW_FISH")),
     SPORE_BLOSSOM_AIR("SPORE_BLOSSOM_AIR", Collections.singletonList("SPORE_BLOSSOM")),
     SQUID_INK("SQUID_INK", Collections.singletonList("INK_SAC")),
+    SULFUR_CUBE_GOO("SULFUR_CUBE_GOO", Collections.singletonList("SULFUR_CUBE_SPAWN_EGG")),
     SWEEP_ATTACK("SWEEP_ATTACK", Arrays.asList("GOLDEN_SWORD", "GOLD_SWORD")),
     TINTED_LEAVES("TINTED_LEAVES", Collections.singletonList("LEAF_LITTER"), ParticleDataType.COLORABLE_TRANSPARENCY),
     TOTEM_OF_UNDYING("TOTEM", Arrays.asList("TOTEM_OF_UNDYING", "TOTEM")),
