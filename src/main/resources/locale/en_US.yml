@@ -23,6 +23,7 @@ command-description-list: Lists the IDs of your active particles
 command-description-reload: Reloads the config.yml and lang file
 command-description-remove: Removes some particles
 command-description-reset: Removes all your active particles
+command-description-set: Set the effect or style of a player's particles
 command-description-styles: Display a list of styles you can use
 command-description-toggle: Toggles particle visibility on/off
 command-description-use: Modify your primary particle
@@ -153,6 +154,15 @@ data-invalid-material-block: '&cThe &bblock &cmaterial &b%material% you entered 
 # World Messages
 disabled-worlds: '&eParticles are disabled in these worlds: &b%worlds%'
 disabled-worlds-none: '&eParticles are not disabled in any worlds.'
+
+# Set Messages
+set-no-permission: '&cYou do not have permission to set particles for other players!'
+set-unknown-player: '&cThe player &b%player% &cwas not found. They must be online.'
+set-invalid-property: '&cAn invalid property &b%prop% &cwas provided. Valid properties: &beffect&c, &bstyle'
+set-effect-no-permission: '&cThe player &b%player% &cdoes not have permission to use the effect &b%effect%&c!'
+set-effect-success: '&aSet all particles for &b%player% &ato use the effect &b%effect%&a!'
+set-style-no-permission: '&cThe player &b%player% &cdoes not have permission to use the style &b%style%&c!'
+set-style-success: '&aSet all particles for &b%player% &ato use the style &b%style%&a!'
 
 # Reset Message
 reset-success: '&aRemoved &b%amount% &aactive particle(s)!'

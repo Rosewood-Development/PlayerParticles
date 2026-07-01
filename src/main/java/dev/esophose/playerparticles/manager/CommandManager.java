@@ -18,6 +18,7 @@ import dev.esophose.playerparticles.command.OtherCommandModule;
 import dev.esophose.playerparticles.command.ReloadCommandModule;
 import dev.esophose.playerparticles.command.RemoveCommandModule;
 import dev.esophose.playerparticles.command.ResetCommandModule;
+import dev.esophose.playerparticles.command.SetCommandModule;
 import dev.esophose.playerparticles.command.StylesCommandModule;
 import dev.esophose.playerparticles.command.ToggleCommandModule;
 import dev.esophose.playerparticles.command.UseCommandModule;
@@ -85,6 +86,7 @@ public class CommandManager extends Manager implements CommandExecutor, TabCompl
             this.add(new ReloadCommandModule());
             this.add(new RemoveCommandModule());
             this.add(new ResetCommandModule());
+            this.add(new SetCommandModule());
             this.add(new StylesCommandModule());
             this.add(new ToggleCommandModule());
             this.add(new UseCommandModule());
