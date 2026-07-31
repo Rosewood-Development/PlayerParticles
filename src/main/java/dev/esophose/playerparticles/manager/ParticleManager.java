@@ -212,7 +212,15 @@ public class ParticleManager extends Manager implements Listener, Runnable {
     }
 
     /**
-     * Updates the WorldGuard region statuses for players
+     * The minimum distance squared a player must move before WorldGuard regions are re-checked.
+     * Using squared distance to avoid expensive sqrt calculations.
+     * 1 block = 1.0 distance squared threshold.
+     */
+    private static final double WORLDGUARD_RECHECK_DISTANCE_SQ = 1.0;
+
+    /**
+     * Updates the WorldGuard region statuses for players.
+     * Skips players who haven't moved significantly since the last check.
      */
     private void updateWorldGuardStatuses() {
         PermissionManager permissionManager = this.rosePlugin.getManager(PermissionManager.class);
@@ -222,14 +230,28 @@ public class ParticleManager extends Manager implements Listener, Runnable {
             if (player == null)
                 continue;
 
+            Location currentLocation = player.getLocation();
+
+            // Skip the check if the player hasn't moved significantly since the last check
+            Location lastLocation = pplayer.getLastWorldGuardLocation();
+            if (lastLocation != null
+                    && lastLocation.getWorld() == currentLocation.getWorld()
+                    && lastLocation.distanceSquared(currentLocation) < WORLDGUARD_RECHECK_DISTANCE_SQ)
+                continue;
+
+            // Update the stored location
+            pplayer.setLastWorldGuardLocation(currentLocation);
+
             boolean inAllowedRegion;
             boolean inLimitedRegion;
             if (Settings.WORLDGUARD_ENABLE_BYPASS_PERMISSION.get() && permissionManager.hasWorldGuardBypass(player)) {
                 inAllowedRegion = true;
                 inLimitedRegion = false;
             } else {
-                inAllowedRegion = WorldGuardHook.isInAllowedRegion(player.getLocation());
-                inLimitedRegion = WorldGuardHook.isInLimitedRegion(player.getLocation());
+                // Use the combined method to fetch regions only once
+                WorldGuardHook.RegionStatus status = WorldGuardHook.getRegionStatuses(currentLocation);
+                inAllowedRegion = status.allowed;
+                inLimitedRegion = status.limited;
             }
 
             pplayer.setInAllowedRegion(inAllowedRegion);

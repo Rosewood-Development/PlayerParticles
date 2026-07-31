@@ -1,9 +1,10 @@
 package dev.esophose.playerparticles.hook;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.codemc.worldguardwrapper.WorldGuardWrapper;
@@ -38,36 +39,89 @@ public class WorldGuardHook {
     }
 
     /**
+     * Result of a combined region status check.
+     * Avoids calling getRegions() twice for each player.
+     */
+    public static class RegionStatus {
+        public final boolean allowed;
+        public final boolean limited;
+
+        public RegionStatus(boolean allowed, boolean limited) {
+            this.allowed = allowed;
+            this.limited = limited;
+        }
+    }
+
+    /**
+     * Checks both allowed and limited region flags in a single pass.
+     * This is more efficient than calling isInAllowedRegion() and isInLimitedRegion() separately
+     * because it only fetches and sorts regions once.
+     *
+     * @param location The location to check
+     * @return A RegionStatus containing both allowed and limited states
+     */
+    @SuppressWarnings("unchecked")
+    public static RegionStatus getRegionStatuses(Location location) {
+        boolean allowed = true;
+        boolean limited = false;
+
+        if (!enabled())
+            return new RegionStatus(allowed, limited);
+
+        // Only fetch regions if at least one flag is registered
+        if (flagPlayerParticles == null && flagPlayerParticlesLimited == null)
+            return new RegionStatus(allowed, limited);
+
+        // Fetch regions once and sort without streams to avoid unnecessary allocations
+        Set<IWrappedRegion> regionSet = worldGuardWrapper.getRegions(location);
+        List<IWrappedRegion> regions = new ArrayList<>(regionSet);
+        regions.sort(Comparator.comparingInt(IWrappedRegion::getPriority));
+
+        // Check "player-particles" flag
+        if (flagPlayerParticles != null) {
+            for (IWrappedRegion region : regions) {
+                Optional<WrappedState> flagState = region.getFlag(flagPlayerParticles);
+                if (flagState.isPresent()) {
+                    Object value = flagState.get();
+                    if (value instanceof WrappedState && value == WrappedState.DENY) {
+                        allowed = false;
+                        break;
+                    } else if (value instanceof Optional && ((Optional<WrappedState>) value).get() == WrappedState.DENY) {
+                        allowed = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Check "player-particles-limited" flag
+        if (flagPlayerParticlesLimited != null) {
+            for (IWrappedRegion region : regions) {
+                Optional<WrappedState> flagState = region.getFlag(flagPlayerParticlesLimited);
+                if (flagState.isPresent()) {
+                    Object value = flagState.get();
+                    if (value instanceof WrappedState && value == WrappedState.DENY) {
+                        limited = true;
+                        break;
+                    } else if (value instanceof Optional && ((Optional<WrappedState>) value).get() == WrappedState.DENY) {
+                        limited = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return new RegionStatus(allowed, limited);
+    }
+
+    /**
      * Checks if a location is in a region that allows particles to spawn
      *
      * @param location The location to check
      * @return true if the location is in an allowed region, otherwise false
      */
-    @SuppressWarnings("unchecked")
     public static boolean isInAllowedRegion(Location location) {
-        if (!enabled() || flagPlayerParticles == null)
-            return true;
-
-        List<IWrappedRegion> regions = worldGuardWrapper.getRegions(location).stream()
-                .sorted(Comparator.comparing(IWrappedRegion::getPriority))
-                .collect(Collectors.toList());
-
-        // Get the "player-particles" flag.
-        // This will use the region priority to determine which one takes precedence.
-        for (IWrappedRegion region : regions) {
-            Optional<WrappedState> flagState = region.getFlag(flagPlayerParticles);
-            if (flagState.isPresent()) {
-                Object value = flagState.get();
-                // Fix a weird mismatch where the type in the compiler does not match the runtime type
-                if (value instanceof WrappedState && value == WrappedState.DENY) {
-                    return false;
-                } else if (value instanceof Optional && ((Optional<WrappedState>) value).get() == WrappedState.DENY) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
+        return getRegionStatuses(location).allowed;
     }
 
     /**
@@ -77,27 +131,7 @@ public class WorldGuardHook {
      * @return true if the location only allows limited particles, otherwise false
      */
     public static boolean isInLimitedRegion(Location location) {
-        if (!enabled() || flagPlayerParticlesLimited == null)
-            return false;
-
-        List<IWrappedRegion> regions = worldGuardWrapper.getRegions(location).stream()
-                .sorted(Comparator.comparing(IWrappedRegion::getPriority))
-                .collect(Collectors.toList());
-
-        for (IWrappedRegion region : regions) {
-            Optional<WrappedState> flagState = region.getFlag(flagPlayerParticlesLimited);
-            if (flagState.isPresent()) {
-                Object value = flagState.get();
-                // Fix a weird mismatch where the type in the compiler does not match the runtime type
-                if (value instanceof WrappedState && value == WrappedState.DENY) {
-                    return true;
-                } else if (value instanceof Optional && ((Optional<WrappedState>) value).get() == WrappedState.DENY) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return getRegionStatuses(location).limited;
     }
 
 }
