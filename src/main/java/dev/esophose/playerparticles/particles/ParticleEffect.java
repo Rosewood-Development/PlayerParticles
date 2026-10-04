@@ -113,12 +113,14 @@ public enum ParticleEffect {
     NAUTILUS("NAUTILUS", Collections.singletonList("HEART_OF_THE_SEA")),
     NOTE("NOTE", Collections.singletonList("NOTE_BLOCK"), ParticleDataType.COLORABLE),
     OMINOUS_SPAWNING("OMINOUS_SPAWNING", Collections.singletonList("TRIAL_SPAWNER")),
+    ORANGE_POPLAR_LEAVES("ORANGE_POPLAR_LEAVES", Collections.singletonList("ORANGE_POPLAR_LEAVES")),
     PALE_OAK_LEAVES("PALE_OAK_LEAVES", Collections.singletonList("PALE_OAK_LEAVES")),
     PAUSE_MOB_GROWTH("PAUSE_MOB_GROWTH", Collections.singletonList("GOLDEN_DANDELION")),
     POOF("EXPLOSION_NORMAL", Arrays.asList("FIREWORK_STAR", "FIREWORK_CHARGE")), // The 1.13 combination of explode and showshovel
     PORTAL("PORTAL", Collections.singletonList("OBSIDIAN")),
     RAID_OMEN("RAID_OMEN", Collections.singletonList("OMINOUS_BOTTLE")),
     RAIN("WATER_DROP", Arrays.asList("PUFFERFISH_BUCKET", "LAPIS_BLOCK")),
+    RED_POPLAR_LEAVES("RED_POPLAR_LEAVES", Collections.singletonList("RED_POPLAR_LEAVES")),
     RESET_MOB_GROWTH("RESET_MOB_GROWTH", Collections.singletonList("DANDELION")),
     REVERSE_PORTAL("REVERSE_PORTAL", Collections.singletonList("FLINT_AND_STEEL")),
     SCRAPE("SCRAPE", Collections.singletonList("GOLDEN_AXE")),
@@ -154,7 +156,8 @@ public enum ParticleEffect {
     WAX_OFF("WAX_OFF", Collections.singletonList("OXIDIZED_COPPER")),
     WAX_ON("WAX_ON", Collections.singletonList("WAXED_COPPER_BLOCK")),
     WHITE_ASH("WHITE_ASH", Collections.singletonList("BASALT")),
-    WITCH("SPELL_WITCH", Collections.singletonList("CAULDRON"));
+    WITCH("SPELL_WITCH", Collections.singletonList("CAULDRON")),
+    YELLOW_POPLAR_LEAVES("YELLOW_POPLAR_LEAVES", Collections.singletonList("YELLOW_POPLAR_LEAVES"));
 
     private static final ParticleSpawner PARTICLE_SPAWNER = NMSUtil.getVersionNumber() >= 9 ? new SpigotParticleSpawner() : new ReflectiveParticleSpawner();
 
