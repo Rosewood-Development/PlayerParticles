@@ -265,31 +265,69 @@ public class ParticleGroupPresetManager extends Manager {
      * @return a Map of page numbers to preset pages for a PPlayer
      */
     public Map<Integer, ParticleGroupPresetPage> getPresetGroupPages(PPlayer pplayer) {
-        // Hide pages the player doesn't have access to anything for
-        Map<Integer, ParticleGroupPresetPage> presetGroupPages = new HashMap<>();
+        List<Integer> configPageNumbers = this.presetGroupPages.keySet().stream().sorted().collect(Collectors.toList());
 
-        List<Integer> pageNumbers = this.presetGroupPages.keySet().stream().sorted().collect(Collectors.toList());
-        int pageNumber = 1;
-        for (int key : pageNumbers) {
+        // Collect all "globally-packed" (gui-slot = -2) presets visible to the player, preserving config page order
+        List<ParticleGroupPreset> globalPresets = new ArrayList<>();
+        for (int key : configPageNumbers) {
             ParticleGroupPresetPage page = this.presetGroupPages.get(key);
-            if (page.getPresets().stream().noneMatch(x -> x.canPlayerUse(pplayer)))
+            page.getPresets().stream()
+                    .filter(p -> p.getGuiSlot() == -2 && p.canPlayerUse(pplayer))
+                    .forEach(globalPresets::add);
+        }
+
+        Map<Integer, ParticleGroupPresetPage> result = new HashMap<>();
+        int pageNumber = 1;
+
+        // Pack "globally-packed" presets into pages, using each config page's title and border
+        if (!globalPresets.isEmpty()) {
+            int presetIndex = 0;
+            for (int key : configPageNumbers) {
+                if (presetIndex >= globalPresets.size()) break;
+
+                ParticleGroupPresetPage configPage = this.presetGroupPages.get(key);
+                Map<Integer, BorderColor> extraBorder = configPage.getExtraBorder();
+
+                long freeSlotCount = IntStream.range(0, 54)
+                        .filter(i -> !extraBorder.containsKey(i))
+                        .count();
+                if (freeSlotCount == 0)
+                    continue;
+
+                List<ParticleGroupPreset> pagePresets = new ArrayList<>();
+                for (int i = 0; i < freeSlotCount && presetIndex < globalPresets.size(); i++)
+                    pagePresets.add(globalPresets.get(presetIndex++));
+
+                result.put(pageNumber++, new ParticleGroupPresetPage(configPage.getTitle(), pagePresets, extraBorder));
+            }
+        }
+
+        // Handle regular pages (presets with gui-slot != -2), skipping pages with nothing visible
+        for (int key : configPageNumbers) {
+            ParticleGroupPresetPage page = this.presetGroupPages.get(key);
+
+            List<ParticleGroupPreset> nonGlobalPresets = page.getPresets().stream()
+                    .filter(p -> p.getGuiSlot() != -2)
+                    .collect(Collectors.toList());
+
+            if (nonGlobalPresets.stream().noneMatch(x -> x.canPlayerUse(pplayer)))
                 continue;
 
-            presetGroupPages.put(pageNumber++, page);
+            result.put(pageNumber++, new ParticleGroupPresetPage(page.getTitle(), nonGlobalPresets, page.getExtraBorder()));
         }
 
         // Use a default page
-        if (presetGroupPages.isEmpty()) {
+        if (result.isEmpty()) {
             LocaleManager localeManager = this.rosePlugin.getManager(LocaleManager.class);
             Map<Integer, BorderColor> extraBorder = new HashMap<>();
             BorderColor borderColor = BorderColor.getOrDefault(Settings.GUI_GLASS_COLORS_LOAD_PRESET_GROUPS.get(), BorderColor.GREEN);
             IntStream.range(0, 9).forEach(x -> extraBorder.put(x, borderColor));
             IntStream.range(45, 54).forEach(x -> extraBorder.put(x, borderColor));
             Arrays.asList(9, 18, 27, 36, 17, 26, 35, 44).forEach(x -> extraBorder.put(x, borderColor));
-            presetGroupPages.put(1, new ParticleGroupPresetPage(localeManager.getLocaleMessage("gui-load-a-preset-group"), Collections.emptyList(), extraBorder));
+            result.put(1, new ParticleGroupPresetPage(localeManager.getLocaleMessage("gui-load-a-preset-group"), Collections.emptyList(), extraBorder));
         }
 
-        return Collections.unmodifiableMap(presetGroupPages);
+        return Collections.unmodifiableMap(result);
     }
 
     /**
