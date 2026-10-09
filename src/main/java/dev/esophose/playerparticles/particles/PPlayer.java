@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -66,6 +67,12 @@ public class PPlayer {
      * If the player is in a limited region
      */
     private boolean inLimitedRegion;
+
+    /**
+     * The last location used for WorldGuard region checks.
+     * Used to skip redundant checks when the player hasn't moved significantly.
+     */
+    private Location lastWorldGuardLocation;
 
     /**
      * Constructs a new PPlayer
@@ -231,6 +238,24 @@ public class PPlayer {
      */
     public boolean isInLimitedRegion() {
         return this.inLimitedRegion;
+    }
+
+    /**
+     * Gets the last location used for WorldGuard region checks
+     *
+     * @return The last checked location, or null if never checked
+     */
+    public Location getLastWorldGuardLocation() {
+        return this.lastWorldGuardLocation;
+    }
+
+    /**
+     * Sets the last location used for WorldGuard region checks
+     *
+     * @param location The location to store
+     */
+    public void setLastWorldGuardLocation(Location location) {
+        this.lastWorldGuardLocation = location;
     }
 
     /**
