@@ -63,6 +63,8 @@ public class PermissionManager extends Manager {
          * @return True if the Player has permission
          */
         public boolean check(Permissible p) {
+            if (p == null) return false;
+
             String permission = PERMISSION_PREFIX + this.permissionString;
             return p.hasPermission(permission);
         }
